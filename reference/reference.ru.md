@@ -842,8 +842,7 @@ block b1, !this.ctx._randomflag: {
 
 На рисунке ниже схематически отражено, в каких модах генерируются различные фрагменты выходного HTML-элемента.
  
-![mode-default](http://downloader.disk.yandex.ru/disk/bb5e3f9c6504c3211a3d278b1622da04/50bf1872/NDUwMC55YWRpc2s6Mjc3Ni42MjgyMjkyMTUxNTcxNzE1NTk5MTM1MjY1MDA2NDg=?uid=126583832&filename=reference_mode-default.png&content_type=image/png&disposition=inline&hash=&limit=0)
-
+![mode-default](http://cloud.github.com/downloads/bem/bemhtml/reference_mode-default.png)
 Схема отражает вариант обработки элемента, имеющего пару открывающий—закрывающий тег и вложенное содержимое. Обработка коротких (самозакрытых) элементов аналогична и отличается только отсутствием закрывающего тега и рекурсии. Следует ли обрабатывать данный элемент как короткий, определяет вспомогательная функция контекста `this._.isShortTag` на основании имени элемента (тега).
 
 Определение шаблона по моде `default` (подпредикат `default`) необходимо в тех случаях, когда нужно переопределить процедуру генерации выходного HTML-элемента, например, добавить DOCTYPE к тегу HTML:
