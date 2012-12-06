@@ -842,7 +842,7 @@ block b1, !this.ctx._randomflag: {
 
 На рисунке ниже схематически отражено, в каких модах генерируются различные фрагменты выходного HTML-элемента.
  
-![mode-default](reference_mode_default.png)
+![mode-default](https://raw.github.com/bem/bemhtml/master/common.docs/reference/reference_mode_default.png)
 
 Схема отражает вариант обработки элемента, имеющего пару открывающий—закрывающий тег и вложенное содержимое. Обработка коротких (самозакрытых) элементов аналогична и отличается только отсутствием закрывающего тега и рекурсии. Следует ли обрабатывать данный элемент как короткий, определяет вспомогательная функция контекста `this._.isShortTag` на основании имени элемента (тега).
 
@@ -866,7 +866,7 @@ block b-page {
 
 Мода `tag` задает имя выходного HTML-элемента (тег). По умолчанию имя элемента равно `div`. Фрагменты HTML, за генерацию которых отвечает мода `tag`, выделены на рисунке:
 
-![mode-tag](reference_mode_tag.png)
+![mode-tag](https://raw.github.com/bem/bemhtml/master/common.docs/reference/reference_mode_tag.png)
 
 ***
 **NB** Если в качестве значения `tag` указать пустую строку, для данной сущности будет пропущен этап генерации HTML-элемента (тега и всех атрибутов), но содержимое элемента (`content`) будет обработано обычным образом.
@@ -931,7 +931,7 @@ block b-page {
   
 Фрагменты HTML, за генерацию которых отвечает мода `js`, выделены на рисунке:
 
-![mode-js](reference_mode_js.png)
+![mode-js](https://raw.github.com/bem/bemhtml/master/common.docs/reference/reference_mode_js.png)
 
 Определение шаблона по моде `js` (подпредикат `js`) имеет смысл только в том случае, если у блока имеется клиентский JavaScript.
 
@@ -968,7 +968,7 @@ block b-page {
 
 Мода `bem` указывает, нужно ли при формировании HTML-атрибута `class` включать автоматически сгенерированные имена классов, описывающие данную БЭМ-сущность. По умолчанию генерация БЭМ-классов выполняется. Фрагмент HTML, за генерацию которого отвечает мода `bem`, выделен на рисунке:
 
-![mode-bem](reference_mode_bem.png)
+![mode-bem](https://raw.github.com/bem/bemhtml/master/common.docs/reference/reference_mode_bem.png)
 
 Определение шаблона по моде `bem` (подпредикат `bem`) имеет смысл только в том случае, если для данной сущности **не нужно** генерировать HTML-классы, относящиеся к БЭМ-предметной области. Это может быть необходимо для соблюдения синтаксических требований HTML. Например, теги `html`, `meta`, `link`, `script`, `style` не могут иметь атрибута `class`.
 
@@ -1010,7 +1010,7 @@ block b-page {
 
 Мода `cls` позволяет определить произвольную строку, добавляемую в значение атрибута `class` помимо автоматически генерируемых значений. Фрагмент HTML, за генерацию которого отвечает мода `cls`, выделен на рисунке:
 
-![mode-cls](reference_mode_cls.png)
+![mode-cls](https://raw.github.com/bem/bemhtml/master/common.docs/reference/reference_mode_cls.png)
 
 Определение шаблона по моде `cls` (подпредикат `cls`) имеет смысл в том случае, если для данного элемента необходимы специфические HTML-классы, не относящиеся к предметной области БЭМ. 
 
@@ -1060,7 +1060,7 @@ block b-page {
 
 Фрагмент HTML, за генерацию которого отвечает мода `mix`, выделен на рисунке:
 
-![mode-mix](reference_mode_mix.png)
+![mode-mix](https://raw.github.com/bem/bemhtml/master/common.docs/reference/reference_mode_mix.png)
 
 Определение шаблона по моде `mix` (подпредикат `mix`) требуется, когда необходимо выполнить примешивание блока или элемента на уровне шаблонизатора.
 
@@ -1125,7 +1125,7 @@ block b1, mix: ({
 
 Мода `jsAttr` определяет имя HTML-атрибута, в значении которого будут переданы параметры клиентского JavaScript для данного блока. По умолчанию используется атрибут `onclick`. Фрагмент HTML, за генерацию которого отвечает мода `jsAttr`, выделен на рисунке:
 
-![mode-jsattr](reference_mode_jsattr.png)
+![mode-jsattr](https://raw.github.com/bem/bemhtml/master/common.docs/reference/reference_mode_jsattr.png)
 
 Определение шаблона по моде `jsAttr` (подпредикат `jsAttr`), необходимо в том случае, если требуется передавать параметры JavaScript в нестандартном атрибуте. Например, для тач-сайтов в этих целях используется атрибут `ondblclick`.
 
@@ -1159,7 +1159,7 @@ block b1, mix: ({
 
 Мода `attrs` позволяет задать имена и значения произвольных HTML-атрибутов для данного элемента. По умолчанию дополнительные атрибуты не генерируются. Фрагмент HTML, за генерацию которого отвечает мода `attrs`, выделен на рисунке:
 
-![mode-attrs](reference_mode_attrs.png)
+![mode-attrs](https://raw.github.com/bem/bemhtml/master/common.docs/reference/reference_mode_attrs.png)
 
 Значением тела шаблона для данной моды должен быть объект (хэш), содержащий имена и значения атрибутов в качестве пар ключ—значение. В качестве ключа должен выступать валидный идентификатор HTML-атрибута, а в качестве значения — строка или число. При выводе HTML специальные символы в значениях атрибутов экранируются вспомогательной функцией `this._.attrEscape()`.
 
@@ -1240,7 +1240,7 @@ block input {
 
 Фрагмент HTML, за генерацию которого отвечает мода `content`, выделен на рисунке:
 
-![mode-content](reference_mode_content.png)
+![mode-content](https://raw.github.com/bem/bemhtml/master/common.docs/reference/reference_mode_content.png)
 
 Определение шаблона по моде `content` (подпредикат `content`) необходимо, если: 
 
@@ -1724,8 +1724,8 @@ block box, content: applyCtx({
 **См. также**:
 
   * [Конструкция apply](#apply)
-  * [Конструкция applyNext]((#applynext)
-  * [Конструкция applyCtx]((#applyctx)
+  * [Конструкция applyNext](#applynext)
+  * [Конструкция applyCtx](#applyctx)
 
 <a name="use_bem"></a>
 #### Использование позиции БЭМ-сущности
