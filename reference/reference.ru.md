@@ -126,10 +126,10 @@ block menu {
         </td>
         <td>
         <pre><code>
-&lt;;ul class="menu"&gt;;
-    &lt;;li class="menu__item"&gt;;1&lt;;/li&gt;;
-    &lt;;li class="menu__item"&gt;;2&lt;;/li&gt;;
-&lt;;/ul&gt;;
+&lt;ul class="menu"&gt;
+    &lt;li class="menu__item"&gt;1&lt;/li&gt;
+    &lt;li class="menu__item"&gt;2&lt;/li&gt;
+&lt;/ul&gt;
         </code></pre>
         </td>
     </tr>
