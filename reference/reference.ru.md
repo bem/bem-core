@@ -277,12 +277,13 @@ HTML-дерева не потребуется изменений в наборе
 Типы данных в BEMJSON аналогичны соответствующим типам в JavaScript.
 
 * Строки и числа:
-
  * **Строка** `` 'a' `` `"a"`;
  * **Число** `1` `0.1`;    
-    Структура данных, состоящая из строки или числа, является валидным BEMJSON.
+
+   Структура данных, состоящая из строки или числа, является валидным BEMJSON.
 
 * **Объект** (ассоциативный массив) '{ключ: значение}' и остальные типы, кроме массива.
+
 * **Массив** — список, может содержать элементы различных типов (строки, числа, объекты, массивы)
   `[ "a", 1, {ключ: значение}, [ "b", 2, ... ] ]`.
 
@@ -611,25 +612,25 @@ BEMJSON является менее ограниченным форматом, �
     <td><code>block</code></td>
     <td>имя блока</td>
     <td>идентификатор <code>[a-zA-Z0-9-]+ </code> или произвольное js-выражение</td>
-    <td><code>block b-menu, block 'b-menu', block 'b' + '-menu'</code></td>
+    <td><code><pre>block b-menu, block 'b-menu', block 'b' + '-menu'</pre></code></td>
 </tr>
 <tr>
     <td><code>elem</code></td>
     <td>имя элемента</td>
     <td>идентификатор <code>[a-zA-Z0-9-]+</code> или произвольное js-выражение</td>
-    <td><code>block b-menu, elem item</code></td>
+    <td><code><pre>block b-menu, elem item</pre></code></td>
 </tr>
 <tr>
     <td><code>mod</code></td>
     <td>имя и значение модификатора блока</td>
     <td>идентификатор <code>[a-zA-Z0-9-]+ </code>или произвольное js-выражение</td>
-    <td><code>block b-head-logo, mod size big</code></td>
+    <td><code><pre>block b-head-logo, mod size big</pre></code></td>
 </tr>
 <tr>
    <td><code>elemMod</code></td>
    <td>имя и значение модификатора элемента</td>
    <td>идентификатор <code>[a-zA-Z0-9-]+ </code>или произвольное js-выражение</td>
-   <td><code>block b-head-logo, elem text, elemMod size big</code></td>
+   <td><code><pre>block b-head-logo, elem text, elemMod size big</pre></code></td>
 </tr>
 </table>
 
@@ -716,7 +717,7 @@ BEMJSON является менее ограниченным форматом, �
 * Блок JavaScript-кода, заключенный в фигурные скобки:
 
   ```
-  предикат:   { JS-блок }
+  предикат: { JS-блок }
   ```
 
 ***
@@ -860,9 +861,9 @@ block b1: {
 
 ```js
 var _randomflag = ~~(Math.random() * 1e9)
-block b1, !this.ctx._randomflag: {   
+block b1, !this.ctx[_randomflag]: {
     statements   
-    local(this.ctx._randomflag = true) apply()   
+    local(this.ctx[_randomflag] = true) apply()
 }
 ```
 
@@ -1052,8 +1053,7 @@ HTML-элемента (тега и всех атрибутов), но содер
 
 <tr>
     <td>
-        <pre><code>
-        {
+        <pre><code>{
   block: 'b1', 
   content: 'text'
 }</code></pre>
@@ -1066,8 +1066,7 @@ HTML-элемента (тега и всех атрибутов), но содер
 
 <tr>
     <td>
-        <pre><code>
-        {
+        <pre><code>{
   block: 'b1',
   content: {
     block: 'b2'
@@ -1115,14 +1114,14 @@ JavaScript.
 <tr>
     <td><code>{block: 'b1'}</code></td>
     <td><code>block b1, js: true</code></td>
-    <td>&lt;div class="b1 i-bem" onclick="return { 'b1': {} }"&gt;&lt;/div&gt;</td>
+    <td><pre><code>&lt;div class="b1 i-bem" onclick="return { 'b1': {} }"&gt;&lt;/div&gt;</code></pre></td>
 
 </tr>
 
 <tr>
     <td><code>{block: 'b1'}</code></td>
     <td><code>block b1, js: {param: 'value'}</code></td>
-    <td>&lt;div class="b1 i-bem" onclick="return { 'b1': { 'param': 'value' } }"&gt;&lt;/div&gt;</td>
+    <td><pre><code>&lt;div class="b1 i-bem" onclick="return { 'b1': { 'param': 'value' } }"&gt;&lt;/div&gt;</code></pre></td>
 </tr>
 </table>
 
@@ -1156,23 +1155,18 @@ JavaScript.
 
 <tr>
     <td>
-        <pre><code>
-{
+        <pre><code>{
   block: 'b-page'
-}
-       
-        </code></pre>
+}</code></pre>
     </td>
     
     <td>
-        <pre><code>
-block b-page {
+        <pre><code>block b-page {
   tag: 'html'
   bem: false
-  }
-        </code></pre>
+  }</code></pre>
     </td>
-    <td>&lt;html&gt;&lt;/html&gt;</td>
+    <td><pre><code>&lt;html&gt;&lt;/html&gt;</code></pre></td>
 </tr>
 </table>
 
@@ -1201,17 +1195,15 @@ block b-page {
 
 <tr>
     <td>
-        <pre><code>
-{
+        <pre><code>{
   block: 'b1'
-}       
-        </code></pre>
+}</code></pre>
     </td>
-    
+
     <td>
         <code>block b1, cls: 'custom'</code>
     </td>
-    <td>&lt;div class="b1 custom"&gt;&lt;/div&gt;</td>
+    <td><pre><code>&lt;div class="b1 custom"&gt;&lt;/div&gt;</code></pre></td>
 </tr>
 </table>
 
@@ -1272,34 +1264,28 @@ block b-page {
     </td>
     
     <td>
-        <pre><code>
-block b1, mix: ({
+        <pre><code>block b1, mix: ({
   block: 'b2', 
   js: { p: 2 }
-  })
-        </code></pre>
+})</code></pre>
     </td>
-    <td>&tdiv class="b1 b2 i-bem" onclick="return { 'b1': { 'p': 1}, 'b2': { 'p': 2} }"&gt;&lt;/div&gt;</td>
+    <td><pre><code>&lt;div class="b1 b2 i-bem" onclick="return { 'b1': { 'p': 1}, 'b2': { 'p': 2} }"&gt;&lt;/div&gt;</code></pre></td>
 </tr>
 
 <tr>
     <td>
-        <pre><code>
-{
+        <pre><code>{
   block: 'b1'
-}
-        </code></pre>
+}</code></pre>
     </td>
     
     <td>
-        <pre><code>
-              block b1, mix: [ { block: 'b2' } ]
-              block b2, mix: [ { block: 'b3' } ]
-            block b3, mix: [ { block: 'b4' } ]
-            block b4, mix: [ { block: 'b1' } ]
-        </code></pre>
+        <pre><code>block b1, mix: [ { block: 'b2' } ]
+block b2, mix: [ { block: 'b3' } ]
+block b3, mix: [ { block: 'b4' } ]
+block b4, mix: [ { block: 'b1' } ]</code></pre>
     </td>
-    <td>&lt;div class="b1 b2 b3 b4"&gt;&lt;/div&gt;</td>
+    <td><pre><code>&lt;div class="b1 b2 b3 b4"&gt;&lt;/div&gt;</code></pre></td>
 </tr>
 </table>
 
@@ -1328,16 +1314,14 @@ block b1, mix: ({
 
 <tr>
     <td>
-        <pre><code>
-{
+        <pre><code>{
   block: 'b1',
   js: true
-}
-        </code></pre>
+}</code></pre>
     </td>
-    
+
     <td><code>block b1, jsAttr: 'ondblclick'</code></td>
-    <td>&lt;div class="b1 i-bem" ondblclick="return {'b1': {} }"&gt;&lt;/div&gt;</td>
+    <td><pre><code>&lt;div class="b1 i-bem" ondblclick="return {'b1': {} }"&gt;&lt;/div&gt;</code></pre></td>
 </tr>
 </table>
 
@@ -1374,43 +1358,33 @@ block b1, mix: ({
 
 <tr>
     <td>
-        <pre><code> 
-{
+        <pre><code>{
   block: 'logo',
-}
-        </code></pre>
+}</code></pre>
     </td>
-
     <td>
-        <pre><code>
- block logo {
+        <pre><code>block logo {
   tag: 'img'
   attrs: ({alt: 'logo', href: 'http://...'})  
-}
-        </code></pre>
+}</code></pre>
     </td>
-    <td>&lt;img alt="logo" href="http://..." /&gt;</td>
+    <td><pre><code>&lt;img alt="logo" href="http://..." /&gt;</code></pre></td>
 </tr>
 
 <tr>
     <td>
-        <pre><code>
-{
+        <pre><code>{
   block: 'input',
   disabled: true
-}
-        </code></pre>
+}</code></pre>
     </td>
-
     <td>
-        <pre><code>
-block input {
+        <pre><code>block input {
   tag: 'input'
   attrs: ({ disabled: this.ctx.disabled ? 'disabled' : undefined })
-}
-        </code></pre>
+}</code></pre>
     </td>
-    <td>&lt;input class="input" disabled="disabled"/&gt;</td>
+    <td><pre><code>&lt;input class="input" disabled="disabled"/&gt;</code></pre></td>
 </tr>
 
 <tr>
@@ -1419,7 +1393,7 @@ block input {
     </td>
 
     <td>Тот же шаблон</td>
-    <td>&lt;input class="input"/&gt;</td>
+    <td><pre><code>&lt;input class="input"/&gt;</code></pre></td>
 </tr>
 </table>
 
@@ -1453,21 +1427,16 @@ block input {
 
 <tr>
     <td>
-        <pre><code>
-{
+        <pre><code>{
   block: 'b1'
-}
-        </code></pre>
+}</code></pre>
     </td>
     <td>
-        <pre><code>
-block b1, content: ({
+        <pre><code>block b1, content: ({
   block: 'b2'
-  })
-        </code></pre>
+})</code></pre>
     </td>
-
-    <td>&lt;div class="b1"&gt;&lt;div class="b2"&gt;&lt;/div&gt;&lt;/div&gt;</td>
+    <td><pre><code>&lt;div class="b1"&gt;&lt;div class="b2"&gt;&lt;/div&gt;&lt;/div&gt;</code></pre></td>
 </tr>
 </table>
 
@@ -1596,7 +1565,7 @@ block b1, content: ({
   block: 'menu',     
   content: {     
     elem: 'item'     
-    }     
+  }
 }
 ```
 
@@ -1621,11 +1590,15 @@ this.ctx.elem: 'item'
 
 Достраивание выполняется также для элементов, примешанных внутри блоков. Например, в приведенном БЭМ-дереве:
 
-`{ block: 'b1', mix: { elem: 'e1' } }`
+```js
+{ block: 'b1', mix: { elem: 'e1' } }
+```
 
 В примешанном элементе будет достроено имя блока:
 
-`{ block: 'b1', mix: { block: 'b1', elem: 'e1' } }`
+```js
+{ block: 'b1', mix: { block: 'b1', elem: 'e1' } }
+```
 
 Достраивание БЭМ-сущностей необходимо для корректного срабатывания предикатов на элементы блоков вида
 `block menu, elem item`, так как в таких предикатах проверяются значения полей контекста `this.block` и `this.elem`.
@@ -1826,7 +1799,9 @@ block b-link {
 
 **Неправильно** использовать для решения этой задачи условные конструкции JavaScript в теле шаблона:
 
-`` block b-link, tag: this.ctx.url ? 'a' : 'span' ``
+```js
+block b-link, tag: this.ctx.url ? 'a' : 'span'
+```
 
 При компиляции это выражение не будет оптимизировано, что отрицательно скажется на скорости работы шаблона.
 
@@ -1869,7 +1844,9 @@ block b1, content, !this._myGuard: [
 
 В результате применения шаблонов к блоку `b1` будет получен HTML:
 
-`<div class="b1">text1text2</div>`
+```html
+<div class="b1">text1text2</div>
+```
 
 В bem-bl версии 0.3 добавлена конструкция `applyNext`, которая автоматически генерирует уникальное имя флага против
 зацикливания.
@@ -1920,7 +1897,9 @@ block b-inner, default, !this.ctx._wrap: apply(
 *В bem-bl начиная с версии 0.3* добавлена конструкция `applyCtx()`, которая автоматически добавляет флаг от зацикливания,
 присваивает `this.ctx` и применяет шаблоны по пустой моде:
 
-`block b-inner, default: applyCtx({ block: 'b-wrapper', content: this.ctx })`
+```js
+block b-inner, default: applyCtx({ block: 'b-wrapper', content: this.ctx })
+```
 
 ***
 **NB** Конструкцию `applyCtx()` можно применять для **замены** БЭМ-сущности в исходном дереве, если не использовать
