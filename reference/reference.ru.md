@@ -1043,7 +1043,7 @@ HTML-элемента (тега и всех атрибутов), но содер
   content: 'text'
 }</code></pre>
     </td>
-    <td><code>block b1, tag: 'span'</td>
+    <td><pre><code>block b1, tag: 'span'</code></pre></td>
     <td><pre><code>&lt;span class="b1"&gt;text&lt;/span&gt;</code></pre></td>
 </tr>
 <tr>
@@ -1055,7 +1055,7 @@ HTML-элемента (тега и всех атрибутов), но содер
   }
 }</code></pre>
     </td>
-    <td><code>b1, tag: ''</code></td>
+    <td><pre><code>b1, tag: ''</code></pre></td>
     <td><pre><code>&lt;div class="b2"&gt;&lt;/div&gt;</code></pre></td>
 </tr>
 </table>
@@ -1090,13 +1090,13 @@ JavaScript.
     <th>HTML-результат</th>
 </tr>
 <tr>
-    <td><code>{block: 'b1'}</code></td>
-    <td><code>block b1, js: true</code></td>
+    <td><pre><code>{block: 'b1'}</code></pre></td>
+    <td><pre><code>block b1, js: true</code></pre></td>
     <td><pre><code>&lt;div class="b1 i-bem" onclick="return { 'b1': {} }"&gt;&lt;/div&gt;</code></pre></td>
 </tr>
 <tr>
-    <td><code>{block: 'b1'}</code></td>
-    <td><code>block b1, js: {param: 'value'}</code></td>
+    <td><pre><code>{block: 'b1'}</code></pre></td>
+    <td><pre><code>block b1, js: {param: 'value'}</code></pre></td>
     <td><pre><code>&lt;div class="b1 i-bem" onclick="return { 'b1': { 'param': 'value' } }"&gt;&lt;/div&gt;</code></pre></td>
 </tr>
 </table>
@@ -1808,7 +1808,7 @@ block b1, content, !this._myGuard: [
 <div class="b1">text1text2</div>
 ```
 
-В bem-bl версии 0.3 добавлена конструкция `applyNext`, которая автоматически генерирует уникальное имя флага против
+*В bem-bl версии 0.3* добавлена конструкция `applyNext`, которая автоматически генерирует уникальное имя флага против
 зацикливания.
 
 ```js
