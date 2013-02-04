@@ -15,14 +15,14 @@
 Здесь выполняется: 
  
  * копирование заготовки проекта в локальный каталог `project-hello`;
- * локальная установка `bem-tools` (`./project-hello/node_modules/bem/bin/bem`);
+ * локальная установка `bem-tools` (`./project-hello/node_modules/.bin/bem`);
 
 **NB: Необходимый инструментарий — утилита `bem` (bem-tools)**
 
 Организовать цикл разработки (правка—компиляция—просмотр—правка...) поможет `bem server`. 
 Запустить его нужно, находясь в корневой папке проекта:
 
-    $ ./node_modules/bem/bin/bem server
+    $ ./node_modules/.bin/bem server
 
 Сервер слушает по адресу (http://localhost:8080/), и выполняет сборку страницы по
 запросу от браузера, например (http://localhost:8080/desktop.bundles/index).
@@ -39,7 +39,7 @@
 
 Создать макет пустой страницы (назовём её `test`):
 
-    $ ./node_modules/bem/bin/bem create -l desktop.bundles -b test 
+    $ ./node_modules/.bin/bem create -l desktop.bundles -b test 
 
 **NB: Язык описания макета статической страницы (БЭМ-дерева) — BEMJSON**
 
@@ -69,9 +69,9 @@
 
 ### Подробнее:
 
- * [Справочник по BEMJSON]()
- * [Документация по bem-bl]()
- * [Документация по bem-tools]()
+ * [Справочник по BEMJSON](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%A1%D0%B8%D0%BD%D1%82%D0%B0%D0%BA%D1%81%D0%B8%D1%81-bemjson)
+ * [Библиотека блоков bem-bl](http://bem.github.com/bem-bl/index.en.html)
+ * [Документация по bem-tools](http://ru.bem.info/tools/)
 
 ## Шаг 3. Добавить блок
 
@@ -132,7 +132,7 @@
 
 Создадим блок `b-hello`. Блоки, определённые в проекте, размещаются в каталоге `desktop.blocks`:
 
-    $ ./node_modules/bem/bin/bem create -l desktop.blocks -b b-hello
+    $ ./node_modules/.bin/bem create -l desktop.blocks -b b-hello
 
 Напишем шаблон для блока `b-hello` в файле `desktop.blocks/b-hello/b-hello.bemhtml`:
 
@@ -155,9 +155,9 @@ HTML-результат:
 
 ### Подробнее:
 
- * [Справочное руководство по BEMHTML. Синтаксис BEMHTML]()
- * [Справочное руководство по BEMHTML. Стандартные моды]()
- * [Справочное руководство по BEMHTML. Поля контекста]()
+ * [Справочное руководство по BEMHTML. Синтаксис BEMHTML](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%A1%D0%B8%D0%BD%D1%82%D0%B0%D0%BA%D1%81%D0%B8%D1%81-bemhtml)
+ * [Справочное руководство по BEMHTML. Стандартные моды](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%A1%D1%82%D0%B0%D0%BD%D0%B4%D0%B0%D1%80%D1%82%D0%BD%D1%8B%D0%B5-%D0%BC%D0%BE%D0%B4%D1%8B)
+ * [Справочное руководство по BEMHTML. Поля контекста](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%9F%D0%BE%D0%BB%D1%8F-%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0)
 
 ## Шаг 5. Переписать шаблон: генерация списка по массиву элементов
 
@@ -169,7 +169,8 @@ HTML-результат:
 
     { block: 'b-hello', names: ['BEM', 'BEMJSON', 'BEMHTML'] }
 
-Следуя БЭМ-методологии, каждое приветствие правильнее представить как элемент `item`, вложенный в блок `b-hello`:
+Следуя БЭМ-методологии, каждое приветствие правильнее представить как элемент `item`, вложенный в блок `b-hello`. 
+Иначе говоря, мы хотели бы получить такое БЭМ-дерево при наложении шаблона:
 
     {
         block: 'b-hello',
@@ -186,9 +187,7 @@ HTML-результат:
 сгенерировать элемент `item`, вложенный в `b-hello`. Файл `b-hello.bemhtml`:
 
     block b-hello {
-        content: applyCtx(
-            this.ctx.names.map(function(user) { return { elem: 'item', content: name } })
-            )
+        content: this.ctx.names.map(function(user) { return { elem: 'item', content: name } })
 
         elem item, content: ['Hello, ', applyNext(), '!']
     }
@@ -198,9 +197,9 @@ HTML-результат:
 
  * сокращенная запись предикатов с использованием `{}`. Эквивалентно двум шаблонам с предикатами: `block b-hello, content`, 
    `block b-hello, elem item, content`;
- * конструкция [`applyCtx`]() — вызов процедуры применения шаблонов в модифицированном контексте;
- * конструкция [`applyNext`]() — рекурсивный вызов процедуры применения шаблонов;
- * конструкция [`Array.prototype.map`](http://h.yandex.net/?https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FJavaScript%2FReference%2FGlobal_Objects%2FArray%2Fmap), определённая в стандарте EcmaScript 5.
+ * шаблоны по моде [`content`](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#content);
+ * конструкция [`applyNext`](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#applynext) — рекурсивный вызов процедуры применения шаблонов;
+ * конструкция [`Array.prototype.map`](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/map), определённая в стандарте EcmaScript 5.
 
 **NB: В предикате и теле шаблона можно использовать произвольные JS-выражения**
 
@@ -226,9 +225,7 @@ HTML-результат:
 
         tag: 'ul'
 
-        content: applyCtx(
-            this.ctx.names.map(function(user) { return { elem: 'item', content: name } })
-            )
+        content: this.ctx.names.map(function(user) { return { elem: 'item', content: name } })
 
         elem item {
 
@@ -241,7 +238,8 @@ HTML-результат:
 Здесь:
  
  * снова используется вложенная запись предикатов, всего четыре шаблона: `block b-hello, tag`, `block b-hello, content`,
-   `block b-hello, elem item, tag`, `block b-hello, elem item, content`.
+   `block b-hello, elem item, tag`, `block b-hello, elem item, content`;
+ * шаблоны по моде [`tag`](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#tag).
 
 **NB: Число шаблонов в bemhtml-файле равно числу двоеточий, отделяющих предикат от тела шаблона**
 
@@ -277,14 +275,13 @@ BEMHTML, однако используeтся вместе с ним в любо
 
 
 Чтобы включить клиентский JavaScript для блока, **необходимо** определить для блока шаблон 
-по моде `js`: 
+по моде [`js`](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#js): 
     
     block b-hello, js: true
 
-Если для блока был инициализирован клиентский JS, BEMHTML добавляет в атрибут `class` значения `i-bem` и
-`b-hello_js_inited`, а также атрибут со значением параметров клиентского JS (по умолчанию — `onclick`):
+Если для блока был инициализирован клиентский JS, BEMHTML добавляет в список HTML-классов `i-bem`, а также атрибут со значением параметров клиентского JS (по умолчанию — `onclick`, см. [мода `jsAttr`](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#jsattr)). JS-фреймворк при инициализации добавляет HTML-класс `b-hello_js_inited`:
 
-    <div class="b-hello i-bem b-hello_js_inited" onclick="return {"b-hello":{}}">
+    <div class="b-hello i-bem b-hello_js_inited" onclick="return {&quot;b-hello&quot;:{}}">
 
 **NB: Блок `i-bem` (часть библиотеки `bem-bl`) — JS-фреймфорк, позволяющий писать клиентский JavaScript 
 в терминах БЭМ**
@@ -305,7 +302,7 @@ BEMHTML, однако используeтся вместе с ним в любо
 
 ### Подробнее: 
 
- * [Описание блока `i-bem`](http://h.yandex.net/?http%3A%2F%2Fbem.github.com%2Fbem-bl%2Fsets%2Fcommon-desktop%2Fi-bem%2Fi-bem.ru.html)
+ * [Описание JS-фреймворка `i-bem.js`](http://h.yandex.net/?http%3A%2F%2Fbem.github.com%2Fbem-bl%2Fsets%2Fcommon-desktop%2Fi-bem%2Fi-bem.ru.html)
 
 
 ## Дальнейшее чтение
