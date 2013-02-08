@@ -1,0 +1,21 @@
+!(function(global, bem_) {
+
+    if(bem_.I18N) {
+        return;
+    }
+
+    /** @global points to global context */
+    global.BEM = bem_;
+
+    /**
+     * `BEM.I18N` API stub
+     */
+    var i18n = bem_.I18N = function(keyset, key) {
+        return key;
+    };
+
+    i18n.keyset = function() { return i18n }
+    i18n.key = function(key) { return key }
+    i18n.lang = function() { return }
+
+})(this, typeof BEM === 'undefined' ? {} : BEM);
