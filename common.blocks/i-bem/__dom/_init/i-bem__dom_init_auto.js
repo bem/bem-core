@@ -1,4 +1,6 @@
 /* дефолтная инициализация */
 $(function() {
-    BEM.DOM.init();
+    BEM.afterCurrentEvent(function() {
+        BEM.DOM.init();
+    });
 });
