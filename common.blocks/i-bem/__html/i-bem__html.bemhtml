@@ -260,7 +260,7 @@ exports.apply = BEMContext.apply = function _apply() {
 }();
 return exports;
 
-!this._mode {
+this._mode === '' {
 
     true: {
         var vBlock = this.ctx.block,
@@ -491,6 +491,10 @@ cache && this.ctx && this.ctx.cache: {
     }
 
     if (cached = cache.get(this.ctx.cache)) {
+        // get new links from context
+        var oldLinks = this._links;
+        if (this.ctx.links) this._links = this.ctx.links;
+
         // Cache hit
         for (var i = 0; i < cached.log.length; i++) {
             if (typeof cached.log[i] === 'string') {
@@ -519,6 +523,10 @@ cache && this.ctx && this.ctx.cache: {
                 setProperty(this, entry.key, entry.value)
             }, this);
         }
+
+        // restore links
+        this._links = oldLinks;
+
         return cached.res;
     }
 
