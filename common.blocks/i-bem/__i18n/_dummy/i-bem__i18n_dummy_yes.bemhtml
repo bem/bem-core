@@ -10,7 +10,7 @@
     /**
      * `BEM.I18N` API stub
      */
-    var i18n = bem_.I18N = function(keyset, key) {
+    var i18n = global.BEM.I18N = function(keyset, key) {
         return key;
     };
 
