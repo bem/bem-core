@@ -1,0 +1,28 @@
+block i-bem, elem i18n {
+
+    default: {
+        if(!this.ctx) return '';
+
+        var ctx = this.ctx,
+            keyset = ctx.keyset,
+            key = ctx.key,
+            params = ctx.params || {};
+
+        if(!(keyset || key))
+            return '';
+
+        /**
+         * Consider `content` is a reserved param that contains
+         * valid bemjson data
+         */
+        if(ctx.content) {
+            var cnt;
+            params.content = (cnt = [],
+                apply(this._buf = cnt, this._mode = '',
+                    this.ctx = ctx.content), cnt.join(''));
+        }
+
+        this._buf.push(BEM.I18N(keyset, key, params));
+    }
+
+}
