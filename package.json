@@ -14,11 +14,12 @@
   "author": "Sergey Belov <peimei@ya.ru>",
   "license": "MIT",
   "dependencies": {
-    "bem": "~0.5.24",
     "xjst": "~0.4.2",
     "ometajs": "~3.2.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "bem": "git://github.com/bem/bem-tools.git#introspect"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }

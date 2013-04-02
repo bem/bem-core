@@ -1,1 +1,10 @@
-node_modules/
+.project
+.settings
+
+.bem/cache
+.bem/snapshots
+
+vendor
+node_modules
+
+*.sets/*.examples
