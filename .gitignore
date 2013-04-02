@@ -8,7 +8,7 @@ vendor
 node_modules
 
 *.bundles/*/*
-!*.bundles/.bem
+!*.bundles/.bem/*
 !*.bundles/*/blocks
 !*.bundles/*/*.bemjson.js
 
