@@ -18,7 +18,7 @@
     "ometajs": "~3.2.2"
   },
   "devDependencies": {
-    "bem": "git://github.com/bem/bem-tools.git#introspect"
+    "bem": "~0.5.29"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
