@@ -8,6 +8,9 @@ var PATH = require('path'),
 try {
     var setsNodes = require(environ.getLibPath('bem-pr', 'bem/nodes/sets'));
 } catch(e) {
+    if(e.code !== 'MODULE_NOT_FOUND')
+        throw e;
+
     require('bem/lib/logger').warn('"bem-pr" is not installer');
 }
 
