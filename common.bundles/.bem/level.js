@@ -1,0 +1,21 @@
+var PATH = require('path'),
+    BEM = require('bem'),
+    environ = require('../../.bem/environ');
+
+exports.baseLevelPath = require.resolve('../../.bem/levels/bundles.js');
+
+exports.getConfig = function() {
+
+    return BEM.util.extend(this.__base() || {}, {
+
+        bundleBuildLevels : [
+                'common.blocks'
+            ]
+            .map(function(path) { return PATH.resolve(this.root, path); })
+            .concat([
+                    'bem-bl/blocks-desktop'
+                ].map(function(path) { return PATH.resolve(environ.LIB_ROOT, path); }))
+
+    });
+
+};
