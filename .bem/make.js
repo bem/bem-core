@@ -48,6 +48,23 @@ MAKE.decl('SetsNode', {
 });
 
 
+MAKE.decl('BundleNode', {
+
+    getTechs : function() {
+        return [
+            'bemjson.js',
+            'bemdecl.js',
+            'deps.js',
+            'css',
+            'js',
+            'bemhtml',
+            'html'
+        ];
+    }
+
+});
+
+
 MAKE.decl('ExampleNode', {
 
     /**
