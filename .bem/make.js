@@ -94,7 +94,7 @@ MAKE.decl('ExampleNode', {
         [].push.apply(levels, [
                 'bem-bl/blocks-desktop'
             ]
-            .map(function(path) { return PATH.resolve(environ.LIB_ROOT, path) }));
+            .map(function(path) { return PATH.resolve(environ.LIB_ROOT, path); }));
 
         // Подключаем %examplename%.blocks из папки с примерами блока
         levels.push(
@@ -102,7 +102,7 @@ MAKE.decl('ExampleNode', {
                 .getTech('blocks')
                 .getPath(this.getSourceNodePrefix()));
 
-        return levels.map(function(path) { return PATH.resolve(this.root, path) }, this);
+        return levels.map(function(path) { return PATH.resolve(this.root, path); }, this);
     }
 
 });
