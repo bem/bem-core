@@ -3,6 +3,9 @@
  * Implementation of BEM.DOM methods for array of blocks
  * @implement BEM.DOM
  */
+
+modules.require(['i-bem'], function(BEM) {
+
 BEM.decl({ name : 'i-bem__collection_type_dom', baseBlock : 'i-bem__collection' }, null, {
 
     /**
@@ -19,3 +22,5 @@ BEM.decl({ name : 'i-bem__collection_type_dom', baseBlock : 'i-bem__collection' 
     }
 
 });
+
+})();

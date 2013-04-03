@@ -1,20 +1,11 @@
 ({
     mustDeps: [
-        {
-            block: 'i-jquery',
-            elems: [
-                'inherit',
-                'identify',
-                'is-empty-object',
-                'debounce',
-                'observable'
-            ]
-        }
+        'utils',
+        'events'
     ],
     shouldDeps: [
         { block: 'i-ecma', elem: 'object' },
         { block: 'i-ecma', elem: 'array' },
-        { block: 'i-ecma', elem: 'function' },
-        { elem: 'internal' }
+        { block: 'i-ecma', elem: 'function' }
     ]
 })

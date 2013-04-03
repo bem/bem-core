@@ -2,6 +2,9 @@
  * Overrides BEM.DOM.findBlocks* methods
  *  that they return i-bem__collection_type_dom
  */
+
+modules.require(['i-bem', 'i-bem__dom'], function(BEM) {
+
 BEM.decl('i-bem__dom', (function() {
 
     var decl = {},
@@ -17,3 +20,5 @@ BEM.decl('i-bem__dom', (function() {
     return decl;
 
 }()));
+
+});

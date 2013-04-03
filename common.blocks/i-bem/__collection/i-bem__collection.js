@@ -4,6 +4,9 @@
  * @abstract
  * @inherit Array
  */
+
+modules.require(['i-bem'], function(BEM) {
+
 BEM.decl('i-bem__collection', null, {
 
     /**
@@ -80,5 +83,7 @@ BEM.decl('i-bem__collection', null, {
         return this.create(a);
 
     }
+
+});
 
 });

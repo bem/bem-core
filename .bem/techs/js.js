@@ -1,12 +1,12 @@
 var BEM = require('bem'),
+    FS = require('fs'),
+    PATH = require('path'),
     Template = BEM.require('./template');
 
 exports.baseTechPath = BEM.require.resolve('./techs/js.js');
 
 exports.techMixin = {
-
     getCreateResult : function(path, suffix, vars) {
-
         vars.BemObj = 'BEM' + (/^i-/.test(vars.BlockName) ? '' : '.DOM');
         vars.DeclObj = "'" + vars.BlockName + "'";
 
@@ -42,7 +42,17 @@ exports.techMixin = {
             '});',
             '',
             '})();'], vars);
+    },
 
+    getBuildResult : function(prefixes, suffix, outputDir, outputName) {
+        return this.__base.apply(this, arguments)
+            .then(function(res) {
+                return [
+                    FS.readFileSync(
+                        PATH.join(
+                            __dirname, '..', '..',
+                            'common.blocks', 'modules', 'modules.js'))
+                ].concat(res);
+            });
     }
-
 };

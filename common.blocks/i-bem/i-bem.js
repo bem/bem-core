@@ -1,16 +1,12 @@
-/** @requires jquery.inherit */
-/** @requires jquery.isEmptyObject */
-/** @requires jquery.identify */
-/** @requires jquery.observable */
+modules.define('i-bem', ['utils', 'events'], function(provide, utils, events) {
 
-(function($, undefined) {
-
+var undefined,
 /**
  * Storage for deferred functions
  * @private
  * @type Array
  */
-var afterCurrentEventFns = [],
+    afterCurrentEventFns = [],
 
 /**
  * Storage for block declarations (hash by block name)
@@ -37,12 +33,10 @@ var afterCurrentEventFns = [],
  * @returns {String}
  */
 function buildModFnName(elemName, modName, modVal) {
-
     return (elemName? '__elem_' + elemName : '') +
-           '__mod' +
-           (modName? '_' + modName : '') +
-           (modVal? '_' + modVal : '');
-
+       '__mod' +
+       (modName? '_' + modName : '') +
+       (modVal? '_' + modVal : '');
 }
 
 /**
@@ -54,21 +48,30 @@ function buildModFnName(elemName, modName, modVal) {
  * @param {String} [elemName]
  */
 function modFnsToProps(modFns, props, elemName) {
-
-    $.isFunction(modFns)?
-        (props[buildModFnName(elemName, '*', '*')] = modFns) :
-        $.each(modFns, function(modName, modFn) {
-            $.isFunction(modFn)?
-                (props[buildModFnName(elemName, modName, '*')] = modFn) :
-                $.each(modFn, function(modVal, modFn) {
-                    props[buildModFnName(elemName, modName, modVal)] = modFn;
-                });
-        });
-
+    if(utils.isFunction(modFns)) {
+        props[buildModFnName(elemName, '*', '*')] = modFns;
+    }
+    else {
+        var modName, modVal, modFn;
+        for(modName in modFns) {
+            if(modFns.hasOwnProperty(modName)) {
+                modFn = modFns[modName];
+                if(utils.isFunction(modFn)) {
+                    props[buildModFnName(elemName, modName, '*')] = modFn;
+                }
+                else {
+                    for(modVal in modFn) {
+                        if(modFn.hasOwnProperty(modVal)) {
+                            props[buildModFnName(elemName, modName, modVal)] = modFn[modVal];
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 function buildCheckMod(modName, modVal) {
-
     return modVal?
         Array.isArray(modVal)?
             function(block) {
@@ -84,12 +87,10 @@ function buildCheckMod(modName, modVal) {
         function(block) {
             return block.hasMod(modName);
         };
-
 }
 
 /** @namespace */
-this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
-
+this.BEM = utils.inherit(events.Emitter, /** @lends BEM.prototype */ {
     /**
      * @class Base block for creating BEM blocks
      * @constructs
@@ -99,7 +100,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @param {Boolean} [initImmediately=true]
      */
     __constructor : function(mods, params, initImmediately) {
-
         var _this = this;
 
         /**
@@ -129,7 +129,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
             _this.afterCurrentEvent(function() {
                 _this._init();
             });
-
     },
 
     /**
@@ -137,12 +136,11 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @private
      */
     _init : function() {
-
         if(!this._initing && !this.hasMod('js', 'inited')) {
             this._initing = true;
 
             if(!this.params) {
-                this.params = $.extend(this.getDefaultParams(), this._params);
+                this.params = utils.extend(this.getDefaultParams(), this._params);
                 delete this._params;
             }
 
@@ -152,7 +150,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
         }
 
         return this;
-
     },
 
     /**
@@ -163,9 +160,7 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {Function} Function with a modified context
      */
     changeThis : function(fn, ctx) {
-
         return fn.bind(ctx || this);
-
     },
 
     /**
@@ -175,9 +170,7 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @param {Object} [ctx] Context
      */
     afterCurrentEvent : function(fn, ctx) {
-
         this.__self.afterCurrentEvent(this.changeThis(fn, ctx));
-
     },
 
     /**
@@ -188,22 +181,18 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {BEM}
      */
     trigger : function(e, data) {
-
         this
             .__base(e = this.buildEvent(e), data)
             .__self.trigger(e, data);
 
         return this;
-
     },
 
     buildEvent : function(e) {
-
-        typeof e == 'string' && (e = $.Event(e));
+        typeof e == 'string' && (e = new events.Event(e));
         e.block = this;
 
         return e;
-
     },
 
     /**
@@ -215,7 +204,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {Boolean}
      */
     hasMod : function(elem, modName, modVal) {
-
         var len = arguments.length,
             invert = false;
 
@@ -239,7 +227,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
 
         var res = this.getMod(elem, modName) === modVal;
         return invert? !res : res;
-
     },
 
     /**
@@ -250,7 +237,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {String} Modifier value
      */
     getMod : function(elem, modName) {
-
         var type = typeof elem;
         if(type === 'string' || type === 'undefined') { // elem either omitted or undefined
             modName = elem || modName;
@@ -261,7 +247,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
         }
 
         return this._getElemMod(modName, elem);
-
     },
 
     /**
@@ -273,9 +258,7 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {String} Modifier value
      */
     _getElemMod : function(modName, elem, elemName) {
-
         return this._extractModVal(modName, elem, elemName);
-
     },
 
     /**
@@ -286,7 +269,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {Object} Hash of modifier values
      */
     getMods : function(elem) {
-
         var hasElem = elem && typeof elem != 'string',
             _this = this,
             modNames = [].slice.call(arguments, hasElem? 1 : 0),
@@ -301,7 +283,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
         }
 
         return res;
-
     },
 
     /**
@@ -313,7 +294,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {BEM}
      */
     setMod : function(elem, modName, modVal) {
-
         if(typeof modVal == 'undefined') {
             modVal = modName;
             modName = elem;
@@ -324,7 +304,7 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
 
         if(!elem || elem[0]) {
 
-            var modId = (elem && elem[0]? $.identify(elem[0]) : '') + '_' + modName;
+            var modId = (elem && elem[0]? utils.identify(elem[0]) : '') + '_' + modName;
 
             if(this._processingMods[modId]) return _this;
 
@@ -354,7 +334,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
         }
 
         return _this;
-
     },
 
     /**
@@ -381,7 +360,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {BEM}
      */
     toggleMod : function(elem, modName, modVal1, modVal2, condition) {
-
         if(typeof elem == 'string') { // if this is a block
             condition = modVal2;
             modVal2 = modVal1;
@@ -406,7 +384,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
                     this.hasMod(elem, modName, modVal1)? modVal2 : modVal1);
 
         return this;
-
     },
 
     /**
@@ -417,29 +394,12 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {BEM}
      */
     delMod : function(elem, modName) {
-
         if(!modName) {
             modName = elem;
             elem = undefined;
         }
 
         return this.setMod(elem, modName, '');
-
-    },
-
-    /**
-     * Shortcut for getMod/setMod
-     * @param {Object} [elem] Nested element
-     * @param {String} modName Modifier name
-     * @param {String} [modVal] Modifier value
-     * @returns {BEM}
-     */
-    mod : function(elem, modName, modVal) {
-
-        return typeof modVal !== 'undefined' || (typeof modName !== 'undefined' && typeof elem === 'string')?
-            this.setMod(elem, modName, modVal) :
-            this.getMod(elem, modName, modVal);
-
     },
 
     /**
@@ -451,12 +411,10 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @param {Array} modFnParams Handler parameters
      */
     _callModFn : function(elemName, modName, modVal, modFnParams) {
-
         var modFnName = buildModFnName(elemName, modName, modVal);
         return this[modFnName]?
            this[modFnName].apply(this, modFnParams) :
            undefined;
-
     },
 
     /**
@@ -467,9 +425,7 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {String} Modifier value
      */
     _extractModVal : function(modName, elem) {
-
         return '';
-
     },
 
     /**
@@ -480,21 +436,17 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {Object} Hash of modifier values by name
      */
     _extractMods : function(modNames, elem) {
-
         return {};
-
     },
 
     /**
      * Returns a named communication channel
      * @param {String} [id='default'] Channel ID
      * @param {Boolean} [drop=false] Destroy the channel
-     * @returns {$.observable|undefined} Communication channel
+     * @returns {observable|undefined} Communication channel
      */
     channel : function(id, drop) {
-
         return this.__self.channel(id, drop);
-
     },
 
     /**
@@ -502,9 +454,7 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {Object}
      */
     getDefaultParams : function() {
-
         return {};
-
     },
 
     /**
@@ -512,12 +462,10 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @param {Object} [obj=this]
      */
     del : function(obj) {
-
         var args = [].slice.call(arguments);
         typeof obj == 'string' && args.unshift(this);
         this.__self.del.apply(this.__self, args);
         return this;
-
 	},
 
     /**
@@ -550,12 +498,10 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @param {Object} [staticProps] Static methods
      */
     decl : function(decl, props, staticProps) {
-
         if(typeof decl == 'string')
             decl = { block : decl };
-        else if(decl.name) {
+        else if(decl.name)
             decl.block = decl.name;
-        }
 
         if(decl.baseBlock && !blocks[decl.baseBlock])
             throw('baseBlock "' + decl.baseBlock + '" for "' + decl.block + '" is undefined');
@@ -568,9 +514,11 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
         }
 
         if(props.onElemSetMod) {
-            $.each(props.onElemSetMod, function(elemName, modFns) {
-                modFnsToProps(modFns, props, elemName);
-            });
+            for(var elemName in props.onElemSetMod) {
+                if(props.onElemSetMod.hasOwnProperty(elemName)) {
+                    modFnsToProps(props.onElemSetMod[elemName], props, elemName);
+                }
+            }
             delete props.onElemSetMod;
         }
 
@@ -578,22 +526,25 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
 
         if(decl.modName) {
             var checkMod = buildCheckMod(decl.modName, decl.modVal);
-            $.each(props, function(name, prop) {
-                $.isFunction(prop) &&
-                    (props[name] = function() {
-                        var method;
-                        if(checkMod(this)) {
-                            method = prop;
-                        } else {
-                            var baseMethod = baseBlock.prototype[name];
-                            baseMethod && baseMethod !== props[name] &&
-                                (method = this.__base);
-                        }
-                        return method?
-                            method.apply(this, arguments) :
-                            undefined;
-                    });
-            });
+            for(var name in props) {
+                if(props.hasOwnProperty(name)) {
+                    var prop = props[name];
+                    utils.isFunction() &&
+                        (props[name] = function() {
+                            var method;
+                            if(checkMod(this)) {
+                                method = prop;
+                            } else {
+                                var baseMethod = baseBlock.prototype[name];
+                                baseMethod && baseMethod !== props[name] &&
+                                    (method = this.__base);
+                            }
+                            return method?
+                                method.apply(this, arguments) :
+                                undefined;
+                        });
+                }
+            }
         }
 
         if(staticProps && typeof staticProps.live === 'boolean') {
@@ -606,11 +557,10 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
         var block;
         decl.block == baseBlock._name?
             // makes a new "live" if the old one was already executed
-            (block = $.inheritSelf(baseBlock, props, staticProps))._processLive(true) :
-            (block = blocks[decl.block] = $.inherit(baseBlock, props, staticProps))._name = decl.block;
+            (block = utils.inheritSelf(baseBlock, props, staticProps))._processLive(true) :
+            (block = blocks[decl.block] = utils.inherit(baseBlock, props, staticProps))._name = decl.block;
 
         return block;
-
     },
 
     /**
@@ -620,9 +570,7 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {Boolean} Whether the block is a live block
      */
     _processLive : function(heedLive) {
-
         return false;
-
     },
 
     /**
@@ -633,11 +581,9 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {BEM}
      */
     create : function(block, params) {
-
         typeof block == 'string' && (block = { block : block });
 
         return new blocks[block.block](block.mods, params);
-
     },
 
     /**
@@ -647,9 +593,7 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {String}
      */
     getName : function() {
-
         return this._name;
-
     },
 
     /**
@@ -669,10 +613,8 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @param {Object} ctx
      */
     afterCurrentEvent : function(fn, ctx) {
-
-        afterCurrentEventFns.push({ fn : fn, ctx : ctx }) == 1 &&
-            setTimeout(this._runAfterCurrentEventFns, 0);
-
+        afterCurrentEventFns.push({ fn : fn, ctx : ctx }) === 1 &&
+            utils.nextTick(this._runAfterCurrentEventFns);
     },
 
     /**
@@ -680,7 +622,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @private
      */
     _runAfterCurrentEventFns : function() {
-
         var fnsLen = afterCurrentEventFns.length;
         if(fnsLen) {
             var fnObj,
@@ -688,7 +629,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
 
             while(fnObj = fnsCopy.shift()) fnObj.fn.call(fnObj.ctx || this);
         }
-
     },
 
     /**
@@ -699,9 +639,7 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @returns {Function} Function with a modified context
      */
     changeThis : function(fn, ctx) {
-
         return fn.bind(ctx || this);
-
     },
 
     /**
@@ -709,7 +647,6 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
      * @param {Object} [obj=this]
      */
     del : function(obj) {
-
         var delInThis = typeof obj == 'string',
             i = delInThis? 0 : 1,
             len = arguments.length;
@@ -718,17 +655,15 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
         while(i < len) delete obj[arguments[i++]];
 
         return this;
-
 	},
 
     /**
      * Returns/destroys a named communication channel
      * @param {String} [id='default'] Channel ID
      * @param {Boolean} [drop=false] Destroy the channel
-     * @returns {$.observable|undefined} Communication channel
+     * @returns {events.Emitter|undefined} Communication channel
      */
     channel : function(id, drop) {
-
         if(typeof id == 'boolean') {
             drop = id;
             id = undefined;
@@ -744,10 +679,10 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
             return;
         }
 
-        return channels[id] || (channels[id] = new $.observable());
-
+        return channels[id] || (channels[id] = new events.Emitter());
     }
-
 });
 
-})(jQuery);
+provide(this.BEM);
+
+});

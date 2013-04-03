@@ -1,5 +1,3 @@
-(function() {
-
 /**
  * The block's BEM declaration can state which block (a block with a modifier or a block
  * with a specific modifier value)
@@ -7,7 +5,10 @@
  *
  * You can find various declarations on the i-bem block's wiki page, blocks/i-bem/i-bem.wiki
  */
-BEM.DOM.decl('b-square', {
+
+modules.require(['i-bem__dom'], function(DOM) {
+
+DOM.decl('b-square', {
 
     onSquareClick : function(e) {
 
@@ -44,4 +45,4 @@ BEM.DOM.decl('b-square', {
 
 });
 
-}());
+});

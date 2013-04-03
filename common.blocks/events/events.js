@@ -1,5 +1,5 @@
 /**
- * Observable plugin
+ * Observable module
  *
  * Copyright (c) 2010 Filatov Dmitry (alpha@zforms.ru)
  * Dual licensed under the MIT and GPL licenses:
@@ -7,18 +7,43 @@
  * http://www.gnu.org/licenses/gpl.html
  *
  * @version 1.0.0
- * @requires $.identify
- * @requires $.inherit
  */
 
-(function($) {
+modules.define('events', ['identify', 'inherit'], function(provide, identify, inherit) {
 
-var storageExpando = '__' + +new Date + 'storage',
+var undef,
+    storageExpando = '__' + +new Date + 'storage',
     getFnId = function(fn, ctx) {
-        return $.identify(fn) + (ctx? $.identify(ctx) : '');
+        return identify(fn) + (ctx? identify(ctx) : '');
     },
-    Observable = /** @lends $.observable.prototype */{
 
+    Event = /** @lends Event.prototype */ inherit.inherit({
+        __constructor : function(type, target) {
+            this.type = type;
+            this.target = target;
+
+            this._isDefaultPrevented = false;
+            this._isPropagationStopped = false;
+        },
+
+        preventDefault : function() {
+            this._isDefaultPrevented = true;
+        },
+
+        isDefaultPrevented : function() {
+            return this._isDefaultPrevented;
+        },
+
+        stopPropagation : function() {
+            this._isPropagationStopped = true;
+        },
+
+        isPropagationStopped : function() {
+            return this._isPropagationStopped;
+        }
+    }),
+
+    Emmiter = /** @lends Emmiter.prototype */{
         /**
          * Builds full event name
          * @protected
@@ -26,9 +51,7 @@ var storageExpando = '__' + +new Date + 'storage',
          * @returns {String}
          */
         buildEventName : function(e) {
-
             return e;
-
         },
 
         /**
@@ -37,21 +60,20 @@ var storageExpando = '__' + +new Date + 'storage',
          * @param {Object} [data] Additional data that the handler gets as e.data
          * @param {Function} fn Handler
          * @param {Object} [ctx] Handler context
-         * @returns {$.observable}
+         * @returns {this}
          */
         on : function(e, data, fn, ctx, _special) {
-
             if(typeof e == 'string') {
-                if($.isFunction(data)) {
+                if(typeof data === 'function') {
                     ctx = fn;
                     fn = data;
-                    data = undefined;
+                    data = undef;
                 }
 
                 var id = getFnId(fn, ctx),
                     storage = this[storageExpando] || (this[storageExpando] = {}),
                     eList = e.split(' '),
-                    i = 0,
+                    i = 0, list, item,
                     eStorage;
 
                 while(e = eList[i++]) {
@@ -59,8 +81,8 @@ var storageExpando = '__' + +new Date + 'storage',
                     eStorage = storage[e] || (storage[e] = { ids : {}, list : {} });
 
                     if(!(id in eStorage.ids)) {
-                        var list = eStorage.list,
-                            item = { fn : fn, data : data, ctx : ctx, special : _special };
+                        list = eStorage.list;
+                        item = { fn : fn, data : data, ctx : ctx, special : _special };
                         if(list.last) {
                             list.last.next = item;
                             item.prev = list.last;
@@ -73,19 +95,16 @@ var storageExpando = '__' + +new Date + 'storage',
                 }
             } else {
                 var _this = this;
-                $.each(e, function(e, fn) {
-                    _this.on(e, fn, data, _special);
+                Object.keys(e).forEach(function(key) {
+                    _this.on(key, e[key], data, _special);
                 });
             }
 
             return this;
-
         },
 
-        onFirst : function(e, data, fn, ctx) {
-
-            return this.on(e, data, fn, ctx, { one : true });
-
+        once : function(e, data, fn, ctx) {
+            return this.on(e, data, fn, ctx, { once : true });
         },
 
         /**
@@ -93,10 +112,9 @@ var storageExpando = '__' + +new Date + 'storage',
          * @param {String} [e] Event type
          * @param {Function} [fn] Handler
          * @param {Object} [ctx] Handler context
-         * @returns {$.observable}
+         * @returns {this}
          */
         un : function(e, fn, ctx) {
-
             if(typeof e == 'string' || typeof e == 'undefined') {
                 var storage = this[storageExpando];
                 if(storage) {
@@ -143,29 +161,27 @@ var storageExpando = '__' + +new Date + 'storage',
                 }
             } else {
                 var _this = this;
-                $.each(e, function(e, fn) {
-                    _this.un(e, fn, ctx);
+                Object.keys(e).forEach(function(key) {
+                    _this.un(e, e[key], ctx);
                 });
             }
 
             return this;
-
         },
 
         /**
          * Fires event handlers
-         * @param {String|$.Event} e Event
+         * @param {String|Event} e Event
          * @param {Object} [data] Additional data
-         * @returns {$.observable}
+         * @returns {this}
          */
-        trigger : function(e, data) {
-
+        emit : function(e, data) {
             var _this = this,
                 storage = _this[storageExpando],
                 rawType;
 
             typeof e === 'string'?
-                e = $.Event(_this.buildEventName(rawType = e)) :
+                e = new Event(_this.buildEventName(rawType = e)) :
                 e.type = _this.buildEventName(rawType = e.type);
 
             e.target || (e.target = _this);
@@ -175,7 +191,7 @@ var storageExpando = '__' + +new Date + 'storage',
                     ret;
                 while(item) {
                     e.data = item.data;
-                    ret = item.fn.call(item.ctx || _this, e, data);
+                    ret = item.fn.apply(item.ctx || _this, arguments);
                     if(typeof ret !== 'undefined') {
                         e.result = ret;
                         if(ret === false) {
@@ -184,18 +200,22 @@ var storageExpando = '__' + +new Date + 'storage',
                         }
                     }
 
-                    item.special && item.special.one &&
+                    item.special && item.special.once &&
                         _this.un(rawType, item.fn, item.ctx);
                     item = item.next;
                 }
             }
 
-            return this;
-
+            return _this;
         }
-
     };
 
-$.observable = $.inherit(Observable, Observable);
+Emmiter.trigger = Emmiter.emit;
+Emmiter.onFirst = Emmiter.once;
 
-})(jQuery);
+provide({
+    Emitter : inherit.inherit(Emmiter, Emmiter),
+    Event   : Event
+});
+
+});
