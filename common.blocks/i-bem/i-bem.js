@@ -13,15 +13,7 @@ var undefined,
  * @private
  * @type Object
  */
-    blocks = {},
-
-/**
- * Communication channels
- * @static
- * @private
- * @type Object
- */
-    channels = {};
+    blocks = {};
 
 /**
  * Builds the name of the handler method for setting a modifier
@@ -440,16 +432,6 @@ this.BEM = utils.inherit(events.Emitter, /** @lends BEM.prototype */ {
     },
 
     /**
-     * Returns a named communication channel
-     * @param {String} [id='default'] Channel ID
-     * @param {Boolean} [drop=false] Destroy the channel
-     * @returns {observable|undefined} Communication channel
-     */
-    channel : function(id, drop) {
-        return this.__self.channel(id, drop);
-    },
-
-    /**
      * Returns a block's default parameters
      * @returns {Object}
      */
@@ -655,32 +637,7 @@ this.BEM = utils.inherit(events.Emitter, /** @lends BEM.prototype */ {
         while(i < len) delete obj[arguments[i++]];
 
         return this;
-	},
-
-    /**
-     * Returns/destroys a named communication channel
-     * @param {String} [id='default'] Channel ID
-     * @param {Boolean} [drop=false] Destroy the channel
-     * @returns {events.Emitter|undefined} Communication channel
-     */
-    channel : function(id, drop) {
-        if(typeof id == 'boolean') {
-            drop = id;
-            id = undefined;
-        }
-
-        id || (id = 'default');
-
-        if(drop) {
-            if(channels[id]) {
-                channels[id].un();
-                delete channels[id];
-            }
-            return;
-        }
-
-        return channels[id] || (channels[id] = new events.Emitter());
-    }
+	}
 });
 
 provide(this.BEM);
