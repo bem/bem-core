@@ -1,3 +1,0 @@
-({
-    shouldDeps : ['channel', 'i-jquery']
-})
