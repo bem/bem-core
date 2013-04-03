@@ -1,5 +1,3 @@
 ({
-    mustDeps: [
-        { block: 'i-bem'}
-    ]
+    shouldDeps : ['channel', 'i-jquery']
 })

@@ -43,7 +43,7 @@ var undef,
         }
     }),
 
-    Emmiter = /** @lends Emmiter.prototype */{
+    Emitter = /** @lends Emitter.prototype */{
         /**
          * Builds full event name
          * @protected
@@ -210,11 +210,11 @@ var undef,
         }
     };
 
-Emmiter.trigger = Emmiter.emit;
-Emmiter.onFirst = Emmiter.once;
+Emitter.trigger = Emitter.emit;
+Emitter.onFirst = Emitter.once;
 
 provide({
-    Emitter : inherit.inherit(Emmiter, Emmiter),
+    Emitter : inherit.inherit(Emitter, Emitter),
     Event   : Event
 });
 

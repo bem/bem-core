@@ -6,9 +6,16 @@
  * You can find various declarations on the i-bem block's wiki page, blocks/i-bem/i-bem.wiki
  */
 
-modules.require(['i-bem__dom'], function(DOM) {
+modules.require(['i-bem__dom', 'idle'], function(DOM, idle) {
 
 DOM.decl('b-square', {
+
+    onSetMod : {
+        js : function() {
+            idle.on('idle', function() {console.log('idle')});
+            idle.on('wakeup', function() {console.log('wakeup')});
+        }
+    },
 
     onSquareClick : function(e) {
 
@@ -40,6 +47,8 @@ DOM.decl('b-square', {
         this.liveBindTo('click', function(e) {
             this.onSquareClick();
         });
+
+        return false;
 
     }
 

@@ -1,4 +1,4 @@
-(function() {
+modules.define('system', function() {
 
 var timer,
     counter = 0,

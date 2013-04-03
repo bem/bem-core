@@ -9,6 +9,7 @@
         {
             block : 'b-square',
             mods : { color : 'green' }
-        }
+        },
+        { block : 'idle', mods : {'start' : 'auto'}}
     ]
 })
