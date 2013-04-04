@@ -3,8 +3,8 @@
 
 modules.define(
     'i-bem__dom',
-    ['i-bem', 'i-bem__internal', 'utils', 'functions', 'jQuery'],
-    function(provide, BEM, INTERNAL, utils, functions, $) {
+    ['i-bem', 'i-bem__internal', 'identify', 'objects', 'functions', 'jQuery'],
+    function(provide, BEM, INTERNAL, identify, objects, functions, $) {
 
 var undefined,
     win = $(window),
@@ -71,7 +71,7 @@ function init(domElem, uniqInitId) {
         if(block) {
             if(block.domElem.index(domNode) < 0) {
                 block.domElem = block.domElem.add(domElem);
-                utils.extend(block._params, params);
+                objects.extend(block._params, params);
             }
         } else {
             initBlock(blockName, domElem, params);
@@ -135,9 +135,9 @@ function initBlock(blockName, domElem, params, forceLive, callback) {
 function processParams(params, domNode, blockName, uniqInitId) {
 
     (params || (params = {})).uniqId ||
-        (params.uniqId = (params.id? blockName + '-id-' + params.id : utils.identify()) + (uniqInitId || utils.identify()));
+        (params.uniqId = (params.id? blockName + '-id-' + params.id : identify()) + (uniqInitId || identify()));
 
-    var domUniqId = utils.identify(domNode),
+    var domUniqId = identify(domNode),
         domParams = domElemToParams[domUniqId] || (domElemToParams[domUniqId] = {});
 
     domParams[blockName] || (domParams[blockName] = params);
@@ -171,7 +171,7 @@ function findDomElem(ctx, selector, excludeSelf) {
  */
 function getParams(domNode) {
 
-    var uniqId = utils.identify(domNode);
+    var uniqId = identify(domNode);
     return domElemToParams[uniqId] ||
            (domElemToParams[uniqId] = extractParams(domNode));
 
@@ -202,7 +202,7 @@ function extractParams(domNode) {
  */
 function cleanupDomNode(domNode) {
 
-    delete domElemToParams[utils.identify(domNode)];
+    delete domElemToParams[identify(domNode)];
 
 }
 
@@ -283,7 +283,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
          * @private
          * @type String
          */
-        uniqIdToBlock[_this._uniqId = params.uniqId || utils.identify(_this)] = _this;
+        uniqIdToBlock[_this._uniqId = params.uniqId || identify(_this)] = _this;
 
         /**
          * Flag for whether it's necessary to unbind from the document and window when destroying the block
@@ -619,7 +619,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
             var ctx = this,
                 counter = storage.counter;
             while(ctx && counter) {
-                var ctxId = utils.identify(ctx, true);
+                var ctxId = identify(ctx, true);
                 if(ctxId) {
                     if(ctxIds[ctxId]) break;
                     var storageCtx = storage.ctxs[ctxId];
@@ -930,7 +930,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
                     delete uniqIdToDomElems[blockParams.uniqId];
                 }
             });
-            utils.isObjectEmpty(params) && cleanupDomNode(domNode);
+            objects.isEmpty(params) && cleanupDomNode(domNode);
         });
 
         keepDOM || _this.domElem.remove();
@@ -998,7 +998,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
             ctx = doc;
         }
 
-        var uniqInitId = utils.identify();
+        var uniqInitId = identify();
         findDomElem(ctx, '.i-bem').each(function() {
             init($(this), uniqInitId);
         });
@@ -1045,7 +1045,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
                     }
                 }
             });
-            utils.isObjectEmpty(params) && cleanupDomNode(this);
+            objects.isEmpty(params) && cleanupDomNode(this);
         });
         keepDOM || (excludeSelf? ctx.empty() : ctx.remove());
 
@@ -1146,7 +1146,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
         }
         else {
             var storage = liveClassEventStorage[e],
-                uniqId = utils.identify(callback);
+                uniqId = identify(callback);
 
             if(!storage) {
                 storage = liveClassEventStorage[e] = {};
@@ -1171,7 +1171,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
         if(storage) {
             if(callback) {
                 if(storage = storage[className]) {
-                    var uniqId = utils.identify(callback);
+                    var uniqId = identify(callback);
                     if(uniqId in storage.uniqIds) {
                         var i = storage.uniqIds[uniqId],
                             len = storage.fns.length - 1;
@@ -1479,13 +1479,13 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
                         (liveEventCtxStorage[ctxE] = { counter : 0, ctxs : {} });
 
                 ctx.each(function() {
-                    var ctxId = utils.identify(this),
+                    var ctxId = identify(this),
                         ctxStorage = storage.ctxs[ctxId];
                     if(!ctxStorage) {
                         ctxStorage = storage.ctxs[ctxId] = {};
                         ++storage.counter;
                     }
-                    ctxStorage[utils.identify(fn) + (fnCtx? utils.identify(fnCtx) : '')] = {
+                    ctxStorage[identify(fn) + (fnCtx? identify(fnCtx) : '')] = {
                         fn   : fn,
                         data : data,
                         ctx  : fnCtx
@@ -1534,11 +1534,11 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 
         if(storage) {
             ctx.each(function() {
-                var ctxId = utils.identify(this, true),
+                var ctxId = identify(this, true),
                     ctxStorage;
                 if(ctxId && (ctxStorage = storage.ctxs[ctxId])) {
-                    fn && delete ctxStorage[utils.identify(fn) + (fnCtx? utils.identify(fnCtx) : '')];
-                    if(!fn || utils.isObjectEmpty(ctxStorage)) {
+                    fn && delete ctxStorage[identify(fn) + (fnCtx? identify(fnCtx) : '')];
+                    if(!fn || objects.isEmpty(ctxStorage)) {
                         storage.counter--;
                         delete storage.ctxs[ctxId];
                     }

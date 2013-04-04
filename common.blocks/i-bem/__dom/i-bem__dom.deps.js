@@ -1,7 +1,7 @@
 ({
     mustDeps: [
         'i-jquery',
-        'utils',
+        'objects',
         'functions',
         { block: 'i-bem', elems: ['internal', 'html'] }
     ],

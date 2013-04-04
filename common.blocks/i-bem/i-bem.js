@@ -1,4 +1,7 @@
-modules.define('i-bem', ['utils', 'functions', 'events'], function(provide, utils, functions, events) {
+modules.define(
+    'i-bem',
+    ['utils', 'objects', 'functions', 'events'],
+    function(provide, utils, objects, functions, events) {
 
 var undefined,
 /**
@@ -132,7 +135,7 @@ this.BEM = utils.inherit(events.Emitter, /** @lends BEM.prototype */ {
             this._initing = true;
 
             if(!this.params) {
-                this.params = utils.extend(this.getDefaultParams(), this._params);
+                this.params = objects.extend(this.getDefaultParams(), this._params);
                 delete this._params;
             }
 
