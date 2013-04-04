@@ -51,7 +51,7 @@ exports.techMixin = {
                     FS.readFileSync(
                         PATH.join(
                             __dirname, '..', '..',
-                            'common.blocks', 'modules', 'modules.js'))
+                            'node_modules', 'ym', 'modules.js'))
                 ].concat(res);
             });
     }

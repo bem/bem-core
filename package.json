@@ -15,7 +15,8 @@
   "license": "MIT",
   "dependencies": {
     "xjst": "~0.4.2",
-    "ometajs": "~3.2.2"
+    "ometajs": "~3.2.2",
+    "ym": "~0.0.1"
   },
   "devDependencies": {
     "bem": "~0.5.29"
