@@ -3,11 +3,6 @@ modules.define(
     ['identify', 'inherit', 'nextTick'],
     function(provide, identify, inherit, nextTick) {
 
-var bindCall = function(fn) {
-        return fn.call.bind(fn);
-    },
-    toStr = bindCall(Object.prototype.toString);
-
 provide({
     extend : function(target) {
         for(var i = 1, len = arguments.length; i < len; i++) {
@@ -35,10 +30,6 @@ provide({
         }
 
         return true;
-    },
-
-    isFunction : function(obj) {
-        return toStr(obj) === '[object Function]';
     },
 
     nextTick : nextTick

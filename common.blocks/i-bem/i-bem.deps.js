@@ -1,6 +1,7 @@
 ({
     mustDeps: [
         'utils',
+        'functions',
         'events'
     ],
     shouldDeps: [

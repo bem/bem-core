@@ -3,8 +3,8 @@
 
 modules.define(
     'i-bem__dom',
-    ['i-bem', 'i-bem__internal', 'utils', 'jQuery'],
-    function(provide, BEM, INTERNAL, utils, $) {
+    ['i-bem', 'i-bem__internal', 'utils', 'functions', 'jQuery'],
+    function(provide, BEM, INTERNAL, utils, functions, $) {
 
 var undefined,
     win = $(window),
@@ -480,7 +480,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      */
     bindTo : function(elem, event, fn) {
 
-        if(!event || utils.isFunction(event)) { // if there is no element
+        if(!event || functions.isFunction(event)) { // if there is no element
             fn = event;
             event = elem;
             elem = this.domElem;
@@ -992,7 +992,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      */
     init : function(ctx, callback, callbackCtx) {
 
-        if(!ctx || utils.isFunction(ctx)) {
+        if(!ctx || functions.isFunction(ctx)) {
             callbackCtx = callback;
             callback = ctx;
             ctx = doc;
@@ -1254,7 +1254,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      */
     liveBindTo : function(to, event, callback, invokeOnInit) {
 
-        if(!event || utils.isFunction(event)) {
+        if(!event || functions.isFunction(event)) {
             callback = event;
             event = to;
             to = undefined;
@@ -1463,7 +1463,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
         var _this = this;
 
         if(typeof e == 'string') {
-            if(utils.isFunction(data)) {
+            if(functions.isFunction(data)) {
                 fnCtx = fn;
                 fn = data;
                 data = undefined;

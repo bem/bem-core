@@ -1,4 +1,4 @@
-modules.define('i-bem', ['utils', 'events'], function(provide, utils, events) {
+modules.define('i-bem', ['utils', 'functions', 'events'], function(provide, utils, functions, events) {
 
 var undefined,
 /**
@@ -40,7 +40,7 @@ function buildModFnName(elemName, modName, modVal) {
  * @param {String} [elemName]
  */
 function modFnsToProps(modFns, props, elemName) {
-    if(utils.isFunction(modFns)) {
+    if(functions.isFunction(modFns)) {
         props[buildModFnName(elemName, '*', '*')] = modFns;
     }
     else {
@@ -48,7 +48,7 @@ function modFnsToProps(modFns, props, elemName) {
         for(modName in modFns) {
             if(modFns.hasOwnProperty(modName)) {
                 modFn = modFns[modName];
-                if(utils.isFunction(modFn)) {
+                if(functions.isFunction(modFn)) {
                     props[buildModFnName(elemName, modName, '*')] = modFn;
                 }
                 else {
@@ -511,7 +511,7 @@ this.BEM = utils.inherit(events.Emitter, /** @lends BEM.prototype */ {
             for(var name in props) {
                 if(props.hasOwnProperty(name)) {
                     var prop = props[name];
-                    utils.isFunction() &&
+                    functions.isFunction() &&
                         (props[name] = function() {
                             var method;
                             if(checkMod(this)) {

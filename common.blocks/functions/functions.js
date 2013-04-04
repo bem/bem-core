@@ -1,28 +1,23 @@
-/**
- * Debounce and throttle function's decorator plugin 1.0.6
- *
- * Copyright (c) 2009 Filatov Dmitry (alpha@zforms.ru)
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- *
- */
+modules.define('functions', function(provide) {
 
-(function($) {
+var bindCall = function(fn) {
+        return fn.call.bind(fn);
+    },
+    toStr = bindCall(Object.prototype.toString);
 
-$.extend({
+provide({
+    isFunction : function(obj) {
+        return toStr(obj) === '[object Function]';
+    },
 
     debounce : function(fn, timeout, invokeAsap, ctx) {
-
         if(arguments.length == 3 && typeof invokeAsap != 'boolean') {
             ctx = invokeAsap;
             invokeAsap = false;
         }
 
         var timer;
-
         return function() {
-
             var args = arguments;
             ctx = ctx || this;
 
@@ -34,17 +29,12 @@ $.extend({
                 invokeAsap || fn.apply(ctx, args);
                 timer = null;
             }, timeout);
-
         };
-
     },
 
     throttle : function(fn, timeout, ctx) {
-
         var timer, args, needInvoke;
-
         return function() {
-
             args = arguments;
             needInvoke = true;
             ctx = ctx || this;
@@ -59,11 +49,8 @@ $.extend({
                     timer = null;
                 }
             })();
-
         };
-
     }
-
 });
 
-})(jQuery);
+});
