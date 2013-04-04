@@ -1,7 +1,8 @@
 var BEM = require('bem'),
     FS = require('fs'),
     PATH = require('path'),
-    Template = BEM.require('./template');
+    Template = BEM.require('./template'),
+    Q = BEM.require('Q');
 
 exports.baseTechPath = BEM.require.resolve('./techs/js.js');
 
@@ -45,14 +46,15 @@ exports.techMixin = {
     },
 
     getBuildResult : function(prefixes, suffix, outputDir, outputName) {
-        return this.__base.apply(this, arguments)
-            .then(function(res) {
-                return [
-                    FS.readFileSync(
-                        PATH.join(
-                            __dirname, '..', '..',
-                            'node_modules', 'ym', 'modules.js'))
-                ].concat(res);
+        var modulesRelPath = PATH.join('..', '..', 'node_modules', 'ym', 'modules.js');
+        return Q.all(
+            [
+                this.getBuildResultChunk(
+                    modulesRelPath,
+                    PATH.join(__dirname, modulesRelPath)),
+                this.__base.apply(this, arguments)
+            ]).then(function(res) {
+                return [res[0]].concat(res[1]);
             });
     }
 };
