@@ -19,6 +19,8 @@ api.translate = function translate(source, options) {
       xjstPre = BEMHTMLToXJST.match(tree, 'topLevel'),
       vars = [];
 
+  options || (options = {});
+
   if (options.cache === true) {
     var xjstCached = BEMHTMLLogLocal.match(xjstPre, 'topLevel');
     vars = xjstCached[0];
@@ -26,8 +28,6 @@ api.translate = function translate(source, options) {
   }
 
   var xjstTree = xjst.translate(xjstPre);
-
-  options || (options = {});
 
   try {
     var xjstJS = options.devMode ?
