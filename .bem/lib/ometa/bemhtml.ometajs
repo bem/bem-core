@@ -9,7 +9,7 @@ ometa BEMHTMLParser <: XJSTParser {
 
   bemMatch = bemBlock | bemElem | bemMod,
 
-  bemVal = letter:x (letter | digit | '-')*:xs -> [#string, x + xs.join('')],
+  bemVal = (letter | digit | '-')+:xs -> [#string, xs.join('')],
   bemVal = asgnExpr:e -> e,
 
   bemPredic :n = spaces seq(n):nn space+ -> nn,
@@ -244,7 +244,9 @@ ometa BEMHTMLLogLocal <: XJSTIdentity {
     ]
   },
 
-  transChange = [#set [(#get :v | #getp :p :v)] :v]:e -> e,
+  transChange = [#parens transChange:r] -> r
+              | [#set [#parens :o]:g :v]:e transChange([#set, o, v]):r -> r
+              | [#set [(#get :v | #getp :p :v)] :v]:e -> e,
 
   transJsonChange = [#binding :k :v] transChange([
                       #set,
@@ -256,6 +258,7 @@ ometa BEMHTMLLogLocal <: XJSTIdentity {
                | [#binop ',' transChanges:left transChange:right] -> {
                    left.concat([ right ]);
                  }
+               | [#parens transChanges:r] -> r
                | transChange:r -> [ r ],
 
   // Translate simple changes into one `push` call
