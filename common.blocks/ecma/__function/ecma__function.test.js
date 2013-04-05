@@ -1,4 +1,4 @@
-BEM.TEST.decl({ block : 'i-ecma', elem : 'function' }, function() {
+BEM.TEST.decl({ block : 'ecma', elem : 'function' }, function() {
 
     describe('bind specs', function() {
         it('should be called with bound context', function() {

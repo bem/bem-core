@@ -1,5 +1,3 @@
-(function() {
-
 /**
  * Возвращает массив свойств объекта
  * @param {Object} obj объект
@@ -13,5 +11,3 @@ Object.keys || (Object.keys = function(obj) {
 
     return res;
 });
-
-})();

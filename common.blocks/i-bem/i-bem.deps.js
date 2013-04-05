@@ -6,8 +6,8 @@
         'events'
     ],
     shouldDeps: [
-        { block: 'i-ecma', elem: 'object' },
-        { block: 'i-ecma', elem: 'array' },
-        { block: 'i-ecma', elem: 'function' }
+        { block: 'ecma', elem: 'object' },
+        { block: 'ecma', elem: 'array' },
+        { block: 'ecma', elem: 'function' }
     ]
 })

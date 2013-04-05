@@ -1,4 +1,4 @@
-BEM.TEST.decl({ block : 'i-ecma', elem : 'json' }, function() {
+BEM.TEST.decl({ block : 'ecma', elem : 'json' }, function() {
 
     describe('stringify specs', function() {
         it('undefined should be stringified to undefined', function() {

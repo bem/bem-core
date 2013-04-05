@@ -1,4 +1,4 @@
-BEM.TEST.decl({ block : 'i-ecma', elem : 'object' }, function(undefined) {
+BEM.TEST.decl({ block : 'ecma', elem : 'object' }, function(undefined) {
 
     describe('keys specs', function() {
         [

@@ -1,4 +1,4 @@
-BEM.TEST.decl({ block : 'i-ecma', elem : 'string' }, function() {
+BEM.TEST.decl({ block : 'ecma', elem : 'string' }, function() {
 
     describe('trim specs', function() {
         [
