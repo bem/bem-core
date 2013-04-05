@@ -1,0 +1,58 @@
+var xjst = require('xjst'),
+    XJSTIdentity = xjst.XJSTIdentity;
+
+ometa Jail <: XJSTIdentity {
+  // Function expression
+  func %( this._ctx = this._wrap() ) anything:name multi:args trans:body -> {
+    [#func, name, args, body]
+  },
+
+  // Function declaration
+  stmt = [#func anything:name anything:args anything:body]:fn
+         trans([#var, [name]]):v
+         trans(fn):tfn -> [#stmt, [#func, v[1][0], tfn[2], tfn[3]]]
+       | ^stmt,
+
+  set trans:lhs trans:rhs -> [#set, lhs, rhs],
+  get :name -> [#get, this._get(name)],
+  varItem = [single:n trans:v] -> [n, v]
+          | [single:n] -> [n],
+
+  single :arg -> this._set(arg),
+
+  multi :args -> args.map(function(arg) {
+    return this._set(arg);
+  }, this),
+
+  topLevel :id = {
+    this._prefix = id;
+    this._ctx = this._global = this._wrap();
+  } trans:r -> r
+}
+
+Jail.prototype._wrap = function wrap() {
+  return {
+    hash: {},
+    parent: this._ctx
+  };
+};
+
+Jail.prototype._get = function get(name) {
+  var ctx = this._ctx;
+
+  do {
+    if (ctx.hash.hasOwnProperty(name)) return ctx.hash[name];
+    ctx = ctx.parent;
+  } while (ctx !== undefined);
+
+  return name;
+};
+
+Jail.prototype._set = function set(name) {
+  if (this._ctx === this._global) {
+    return this._global.hash[name] = this._prefix + name;
+  }
+
+  this._ctx.hash[name] = name;
+  return name;
+};

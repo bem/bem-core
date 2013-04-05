@@ -1,0 +1,25 @@
+{
+  "name": "bem-core",
+  "version": "0.0.0",
+  "private": true,
+  "description": "BEM Core Library",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bem/bem-core.git"
+  },
+  "keywords": [
+    "bem",
+    "core"
+  ],
+  "author": "Sergey Belov <peimei@ya.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "bem": "~0.5.24",
+    "xjst": "~0.4.2",
+    "ometajs": "~3.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
