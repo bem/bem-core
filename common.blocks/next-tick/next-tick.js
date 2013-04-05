@@ -31,7 +31,7 @@ if(global.postMessage) { // modern browsers
     }
 
     if(isPostMessageAsync) {
-        var msg = '__promise' + +new Date,
+        var msg = '__nextTick' + +new Date,
             onMessage = function(e) {
                 if(e.data === msg) {
                     e.stopPropagation && e.stopPropagation();
