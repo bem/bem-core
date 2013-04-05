@@ -1,8 +1,8 @@
-modules.define('tick', ['utils', 'events'], function(provide, utils, events) {
+modules.define('tick', ['inherit', 'events'], function(provide, inherit, events) {
 
 var TICK_INTERVAL = 50;
 
-provide(new (utils.inherit(events.Emitter, {
+provide(new (inherit(events.Emitter, {
     __constructor : function() {
         this._timer = null;
         this._isStarted = false;

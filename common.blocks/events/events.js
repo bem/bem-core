@@ -17,7 +17,7 @@ var undef,
         return identify(fn) + (ctx? identify(ctx) : '');
     },
 
-    Event = /** @lends Event.prototype */ inherit.inherit({
+    Event = /** @lends Event.prototype */ inherit({
         __constructor : function(type, target) {
             this.type = type;
             this.target = target;
@@ -214,7 +214,7 @@ Emitter.trigger = Emitter.emit;
 Emitter.onFirst = Emitter.once;
 
 provide({
-    Emitter : inherit.inherit(Emitter, Emitter),
+    Emitter : inherit(Emitter, Emitter),
     Event   : Event
 });
 

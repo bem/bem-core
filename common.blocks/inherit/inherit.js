@@ -79,46 +79,46 @@ function override(base, res, add) {
     }
 }
 
-provide({
-    inherit : function() {
-        var args = arguments,
-            hasBase = isFunction(args[0]),
-            base = hasBase? args[0] : emptyBase,
-            props = args[hasBase? 1 : 0] || {},
-            staticProps = args[hasBase? 2 : 1],
-            res = props.__constructor || (hasBase && base.prototype.__constructor)?
-                function() {
-                    return this.__constructor.apply(this, arguments);
-                } :
-                noOp;
+var inherit = function() {
+    var args = arguments,
+        hasBase = isFunction(args[0]),
+        base = hasBase? args[0] : emptyBase,
+        props = args[hasBase? 1 : 0] || {},
+        staticProps = args[hasBase? 2 : 1],
+        res = props.__constructor || (hasBase && base.prototype.__constructor)?
+            function() {
+                return this.__constructor.apply(this, arguments);
+            } :
+            noOp;
 
-        if(!hasBase) {
-            res.prototype = props;
-            res.prototype.__self = res.prototype.constructor = res;
-            return extend(res, staticProps);
-        }
-
-        extend(res, base);
-
-        var basePtp = base.prototype,
-            resultPtp = res.prototype = objCreate(basePtp);
-
-        resultPtp.__self = resultPtp.constructor = res;
-
-        override(basePtp, resultPtp, props);
-        staticProps && override(base, res, staticProps);
-
-        return res;
-    },
-
-    inheritSelf : function(base, props, staticProps) {
-        var basePtp = base.prototype;
-
-        override(basePtp, basePtp, props);
-        staticProps && override(base, base, staticProps);
-
-        return base;
+    if(!hasBase) {
+        res.prototype = props;
+        res.prototype.__self = res.prototype.constructor = res;
+        return extend(res, staticProps);
     }
-});
+
+    extend(res, base);
+
+    var basePtp = base.prototype,
+        resultPtp = res.prototype = objCreate(basePtp);
+
+    resultPtp.__self = resultPtp.constructor = res;
+
+    override(basePtp, resultPtp, props);
+    staticProps && override(base, res, staticProps);
+
+    return res;
+};
+
+inherit.self = function(base, props, staticProps) {
+    var basePtp = base.prototype;
+
+    override(basePtp, basePtp, props);
+    staticProps && override(base, base, staticProps);
+
+    return base;
+};
+
+provide(inherit);
 
 });

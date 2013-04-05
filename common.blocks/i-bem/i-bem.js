@@ -1,7 +1,7 @@
 modules.define(
     'i-bem',
-    ['utils', 'objects', 'functions', 'events'],
-    function(provide, utils, objects, functions, events) {
+    ['inherit', 'identify', 'nextTick', 'objects', 'functions', 'events'],
+    function(provide, inherit, identify, nextTick, objects, functions, events) {
 
 var undefined,
 /**
@@ -85,7 +85,7 @@ function buildCheckMod(modName, modVal) {
 }
 
 /** @namespace */
-this.BEM = utils.inherit(events.Emitter, /** @lends BEM.prototype */ {
+this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     /**
      * @class Base block for creating BEM blocks
      * @constructs
@@ -299,7 +299,7 @@ this.BEM = utils.inherit(events.Emitter, /** @lends BEM.prototype */ {
 
         if(!elem || elem[0]) {
 
-            var modId = (elem && elem[0]? utils.identify(elem[0]) : '') + '_' + modName;
+            var modId = (elem && elem[0]? identify(elem[0]) : '') + '_' + modName;
 
             if(this._processingMods[modId]) return _this;
 
@@ -542,8 +542,8 @@ this.BEM = utils.inherit(events.Emitter, /** @lends BEM.prototype */ {
         var block;
         decl.block == baseBlock._name?
             // makes a new "live" if the old one was already executed
-            (block = utils.inheritSelf(baseBlock, props, staticProps))._processLive(true) :
-            (block = blocks[decl.block] = utils.inherit(baseBlock, props, staticProps))._name = decl.block;
+            (block = inherit.self(baseBlock, props, staticProps))._processLive(true) :
+            (block = blocks[decl.block] = inherit(baseBlock, props, staticProps))._name = decl.block;
 
         return block;
     },
@@ -599,7 +599,7 @@ this.BEM = utils.inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     afterCurrentEvent : function(fn, ctx) {
         afterCurrentEventFns.push({ fn : fn, ctx : ctx }) === 1 &&
-            utils.nextTick(this._runAfterCurrentEventFns);
+            nextTick(this._runAfterCurrentEventFns);
     },
 
     /**

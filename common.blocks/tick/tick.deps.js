@@ -1,3 +1,3 @@
 ({
-    shouldDeps : ['events', 'utils']
+    shouldDeps : ['events', 'inherit']
 })

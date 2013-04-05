@@ -1,9 +1,9 @@
-modules.define('idle', ['utils', 'events', 'jQuery'], function(provide, utils, events, $) {
+modules.define('idle', ['inherit', 'events', 'jQuery'], function(provide, inherit, events, $) {
 
 var IDLE_TIMEOUT = 3000,
     USER_EVENTS = 'mousemove keydown click';
 
-provide(new (utils.inherit(events.Emitter, {
+provide(new (inherit(events.Emitter, {
     __constructor : function() {
         this._timer = null;
         this._isStarted = false;
