@@ -1,6 +1,6 @@
 ({
     mustDeps: [
-        'i-jquery',
+        'jquery',
         'objects',
         'functions',
         { block: 'i-bem', elems: ['internal', 'html'] }

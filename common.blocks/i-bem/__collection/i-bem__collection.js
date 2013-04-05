@@ -5,7 +5,7 @@
  * @inherit Array
  */
 
-modules.require(['i-bem'], function(BEM) {
+modules.require(['i-bem', 'inherit'], function(BEM, inherit) {
 
 BEM.decl('i-bem__collection', null, {
 
@@ -75,7 +75,7 @@ BEM.decl('i-bem__collection', null, {
                     };
                 }
             });
-        Collection = jQuery.inherit(Array, decl);
+        Collection = inherit(Array, decl);
         this.create = function(a) {
             return new Collection(a);
         };
