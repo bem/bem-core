@@ -184,7 +184,7 @@ var buildEscape = (function() {
 })();
 
 function BEMContext(context, apply_) {
-  this.ctx = context;
+  this.ctx = typeof context === null ? '' : context;
   this.apply = apply_;
   this._buf = [];
   this._ = this;
@@ -301,8 +301,10 @@ this._mode === '' {
 
         this._notNewList = true;
 
-        while(i < l)
-            apply(this.ctx = v[i++]);
+        while(i < l) {
+            var newCtx = v[i++];
+            apply(this.ctx = newCtx === null ? '' : newCtx);
+        }
 
         prevNotNewList || (this.position = prevPos);
     }
