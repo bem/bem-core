@@ -2,7 +2,7 @@ var BEM = require('bem'),
     FS = require('fs'),
     PATH = require('path'),
     Template = BEM.require('./template'),
-    Q = BEM.require('Q');
+    Q = BEM.require('q');
 
 exports.baseTechPath = BEM.require.resolve('./techs/js.js');
 
