@@ -184,7 +184,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     },
 
     buildEvent : function(e) {
-        typeof e == 'string' && (e = new events.Event(e));
+        typeof e === 'string' && (e = new events.Event(e));
         e.block = this;
 
         return e;
@@ -202,14 +202,14 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         var len = arguments.length,
             invert = false;
 
-        if(len == 1) {
+        if(len === 1) {
             modVal = '';
             modName = elem;
             elem = undefined;
             invert = true;
         }
-        else if(len == 2) {
-            if(typeof elem == 'string') {
+        else if(len === 2) {
+            if(typeof elem === 'string') {
                 modVal = modName;
                 modName = elem;
                 elem = undefined;
@@ -289,7 +289,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @returns {BEM}
      */
     setMod : function(elem, modName, modVal) {
-        if(typeof modVal == 'undefined') {
+        if(typeof modVal === 'undefined') {
             modVal = modName;
             modName = elem;
             elem = undefined;
@@ -355,22 +355,22 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @returns {BEM}
      */
     toggleMod : function(elem, modName, modVal1, modVal2, condition) {
-        if(typeof elem == 'string') { // if this is a block
+        if(typeof elem === 'string') { // if this is a block
             condition = modVal2;
             modVal2 = modVal1;
             modVal1 = modName;
             modName = elem;
             elem = undefined;
         }
-        if(typeof modVal2 == 'undefined') {
+        if(typeof modVal2 === 'undefined') {
             modVal2 = '';
-        } else if(typeof modVal2 == 'boolean') {
+        } else if(typeof modVal2 === 'boolean') {
             condition = modVal2;
             modVal2 = '';
         }
 
         var modVal = this.getMod(elem, modName);
-        (modVal == modVal1 || modVal == modVal2) &&
+        (modVal === modVal1 || modVal === modVal2) &&
             this.setMod(
                 elem,
                 modName,
@@ -448,7 +448,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     del : function(obj) {
         var args = [].slice.call(arguments);
-        typeof obj == 'string' && args.unshift(this);
+        typeof obj === 'string' && args.unshift(this);
         this.__self.del.apply(this.__self, args);
         return this;
 	},
@@ -483,7 +483,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [staticProps] Static methods
      */
     decl : function(decl, props, staticProps) {
-        if(typeof decl == 'string')
+        if(typeof decl === 'string')
             decl = { block : decl };
         else if(decl.name)
             decl.block = decl.name;
@@ -514,7 +514,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             for(var name in props) {
                 if(props.hasOwnProperty(name)) {
                     var prop = props[name];
-                    functions.isFunction() &&
+                    functions.isFunction(prop) &&
                         (props[name] = function() {
                             var method;
                             if(checkMod(this)) {
@@ -540,7 +540,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         }
 
         var block;
-        decl.block == baseBlock._name?
+        decl.block === baseBlock._name?
             // makes a new "live" if the old one was already executed
             (block = inherit.self(baseBlock, props, staticProps))._processLive(true) :
             (block = blocks[decl.block] = inherit(baseBlock, props, staticProps))._name = decl.block;
@@ -566,7 +566,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @returns {BEM}
      */
     create : function(block, params) {
-        typeof block == 'string' && (block = { block : block });
+        typeof block === 'string' && (block = { block : block });
 
         return new blocks[block.block](block.mods, params);
     },
@@ -632,7 +632,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [obj=this]
      */
     del : function(obj) {
-        var delInThis = typeof obj == 'string',
+        var delInThis = typeof obj === 'string',
             i = delInThis? 0 : 1,
             len = arguments.length;
         delInThis && (obj = this);
