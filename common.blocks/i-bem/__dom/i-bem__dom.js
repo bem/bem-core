@@ -529,7 +529,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      */
     trigger : function(e, data) {
         this
-            .__base(e = this.buildEvent(e), data)
+            .__base(e = this._buildEvent(e), data)
             .domElem && this._ctxTrigger(e, data);
 
         return this;

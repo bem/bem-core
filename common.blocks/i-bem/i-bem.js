@@ -177,17 +177,14 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     trigger : function(e, data) {
         this
-            .__base(e = this.buildEvent(e), data)
+            .__base(e = this._buildEvent(e), data)
             .__self.trigger(e, data);
 
         return this;
     },
 
-    buildEvent : function(e) {
-        typeof e === 'string' && (e = new events.Event(e));
-        e.block = this;
-
-        return e;
+    _buildEvent : function(e) {
+        return typeof e === 'string'? new events.Event(e) : e;
     },
 
     /**

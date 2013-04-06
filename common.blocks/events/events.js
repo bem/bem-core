@@ -45,16 +45,6 @@ var undef,
 
     Emitter = /** @lends Emitter.prototype */{
         /**
-         * Builds full event name
-         * @protected
-         * @param {String} e Event type
-         * @returns {String}
-         */
-        buildEventName : function(e) {
-            return e;
-        },
-
-        /**
          * Adding event handler
          * @param {String} e Event type
          * @param {Object} [data] Additional data that the handler gets as e.data
@@ -63,7 +53,7 @@ var undef,
          * @returns {this}
          */
         on : function(e, data, fn, ctx, _special) {
-            if(typeof e == 'string') {
+            if(typeof e === 'string') {
                 if(typeof data === 'function') {
                     ctx = fn;
                     fn = data;
@@ -77,8 +67,7 @@ var undef,
                     eStorage;
 
                 while(e = eList[i++]) {
-                    e = this.buildEventName(e);
-                    eStorage = storage[e] || (storage[e] = { ids : {}, list : {} });
+                    eStorage = storage[e] || (storage[e] = { ids : {}, list : {}});
 
                     if(!(id in eStorage.ids)) {
                         list = eStorage.list;
@@ -94,10 +83,9 @@ var undef,
                     }
                 }
             } else {
-                var _this = this;
-                Object.keys(e).forEach(function(key) {
-                    _this.on(key, e[key], data, _special);
-                });
+                for(var key in e) {
+                    e.hasOwnProperty(key) && this.on(key, e[key], data, _special);
+                }
             }
 
             return this;
@@ -115,7 +103,7 @@ var undef,
          * @returns {this}
          */
         un : function(e, fn, ctx) {
-            if(typeof e == 'string' || typeof e == 'undefined') {
+            if(typeof e === 'string' || typeof e === 'undefined') {
                 var storage = this[storageExpando];
                 if(storage) {
                     if(e) { // if event type was passed
@@ -123,7 +111,6 @@ var undef,
                             i = 0,
                             eStorage;
                         while(e = eList[i++]) {
-                            e = this.buildEventName(e);
                             if(eStorage = storage[e]) {
                                 if(fn) {  // if specific handler was passed
                                     var id = getFnId(fn, ctx),
@@ -160,10 +147,9 @@ var undef,
                     }
                 }
             } else {
-                var _this = this;
-                Object.keys(e).forEach(function(key) {
-                    _this.un(e, e[key], ctx);
-                });
+                for(var key in e) {
+                    e.hasOwnProperty(key) && this.un(key, e[key], fn);
+                }
             }
 
             return this;
@@ -177,12 +163,9 @@ var undef,
          */
         emit : function(e, data) {
             var _this = this,
-                storage = _this[storageExpando],
-                rawType;
+                storage = _this[storageExpando];
 
-            typeof e === 'string'?
-                e = new Event(_this.buildEventName(rawType = e)) :
-                e.type = _this.buildEventName(rawType = e.type);
+            typeof e === 'string' && (e = new Event(e));
 
             e.target || (e.target = _this);
 
@@ -201,7 +184,7 @@ var undef,
                     }
 
                     item.special && item.special.once &&
-                        _this.un(rawType, item.fn, item.ctx);
+                        _this.un(e.type, item.fn, item.ctx);
                     item = item.next;
                 }
             }
