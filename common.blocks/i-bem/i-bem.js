@@ -261,7 +261,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @returns {Object} Hash of modifier values
      */
     getMods : function(elem) {
-        var hasElem = elem && typeof elem != 'string',
+        var hasElem = elem && typeof elem !== 'string',
             _this = this,
             modNames = [].slice.call(arguments, hasElem? 1 : 0),
             res = _this._extractMods(modNames, hasElem? elem : undefined);
@@ -480,10 +480,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [staticProps] Static methods
      */
     decl : function(decl, props, staticProps) {
-        if(typeof decl === 'string')
-            decl = { block : decl };
-        else if(decl.name)
-            decl.block = decl.name;
+        typeof decl === 'string' && (decl = { block : decl });
 
         if(decl.baseBlock && !blocks[decl.baseBlock])
             throw('baseBlock "' + decl.baseBlock + '" for "' + decl.block + '" is undefined');

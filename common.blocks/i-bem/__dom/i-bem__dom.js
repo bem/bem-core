@@ -573,7 +573,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @returns {BEM}
      */
     setMod : function(elem, modName, modVal) {
-        if(elem && typeof modVal != 'undefined' && elem.length > 1) {
+        if(elem && typeof modVal !== 'undefined' && elem.length > 1) {
             var _this = this;
             elem.each(function() {
                 var item = $(this);
@@ -720,7 +720,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @returns {jQuery} DOM elements
      */
     elem : function(names, modName, modVal) {
-        if(modName && typeof modName != 'string') {
+        if(modName && typeof modName !== 'string') {
             modName.__bemElemName = names;
             return modName;
         }
@@ -768,7 +768,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      */
     elemParams : function(elem) {
         var elemName;
-        if(typeof elem ===  'string') {
+        if(typeof elem === 'string') {
             elemName = elem;
             elem = this.elem(elem);
         } else {
@@ -920,7 +920,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @param {Boolean} [excludeSelf=false] Exclude the context
      */
     destruct : function(keepDOM, ctx, excludeSelf) {
-        if(typeof keepDOM != 'boolean') {
+        if(typeof keepDOM !== 'boolean') {
             excludeSelf = ctx;
             ctx = keepDOM;
             keepDOM = undefined;

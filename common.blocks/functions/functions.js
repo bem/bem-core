@@ -11,7 +11,7 @@ provide({
     },
 
     debounce : function(fn, timeout, invokeAsap, ctx) {
-        if(arguments.length == 3 && typeof invokeAsap != 'boolean') {
+        if(arguments.length === 3 && typeof invokeAsap !== 'boolean') {
             ctx = invokeAsap;
             invokeAsap = false;
         }
@@ -19,7 +19,7 @@ provide({
         var timer;
         return function() {
             var args = arguments;
-            ctx = ctx || this;
+            ctx || (ctx = this);
 
             invokeAsap && !timer && fn.apply(ctx, args);
 
@@ -37,7 +37,7 @@ provide({
         return function() {
             args = arguments;
             needInvoke = true;
-            ctx = ctx || this;
+            ctx || (ctx = this);
 
             timer || (function() {
                 if(needInvoke) {
