@@ -894,22 +894,13 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @param {jQuery} [ctx=document] Root DOM node
      * @returns {jQuery} ctx Initialization context
      */
-    init : function(ctx, callback, callbackCtx) {
-        if(!ctx || functions.isFunction(ctx)) {
-            callbackCtx = callback;
-            callback = ctx;
-            ctx = doc;
-        }
+    init : function(ctx) {
+        ctx || (ctx = doc);
 
         var uniqInitId = identify();
         findDomElem(ctx, '.i-bem').each(function() {
             init($(this), uniqInitId);
         });
-
-        callback && this.afterCurrentEvent(
-            function() {
-                callback.call(callbackCtx || this, ctx);
-            });
 
         // makes initialization completely synchronous
         this._runAfterCurrentEventFns();
