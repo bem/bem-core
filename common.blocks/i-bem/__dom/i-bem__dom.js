@@ -63,19 +63,25 @@ var undefined,
  * @param {String} uniqInitId ID of the "initialization wave"
  */
 function init(domElem, uniqInitId) {
-    var domNode = domElem[0];
-    $.each(getParams(domNode), function(blockName, params) {
-        processParams(params, domNode, blockName, uniqInitId);
-        var block = uniqIdToBlock[params.uniqId];
-        if(block) {
-            if(block.domElem.index(domNode) < 0) {
-                block.domElem = block.domElem.add(domElem);
-                objects.extend(block._params, params);
+    var domNode = domElem[0],
+        params = getParams(domNode),
+        blockName, blockParams;
+
+    for(blockName in params) {
+        if(params.hasOwnProperty(blockName)) {
+            blockParams = params[blockName];
+            processParams(blockParams, domNode, blockName, uniqInitId);
+            var block = uniqIdToBlock[blockParams.uniqId];
+            if(block) {
+                if(block.domElem.index(domNode) < 0) {
+                    block.domElem = block.domElem.add(domElem);
+                    objects.extend(block._params, blockParams);
+                }
+            } else {
+                initBlock(blockName, domElem, blockParams);
             }
-        } else {
-            initBlock(blockName, domElem, params);
         }
-    });
+    }
 }
 
 /**
