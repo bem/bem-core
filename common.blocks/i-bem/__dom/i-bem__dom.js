@@ -357,7 +357,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
         var res = [],
             uniqIds = {};
 
-        $.each(domElems, function(i, domElem) {
+        domElems.each(function(i, domElem) {
             var block = initBlock(blockName, $(domElem), true);
             if(!uniqIds[block._uniqId]) {
                 uniqIds[block._uniqId] = true;
@@ -387,7 +387,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
                     return fn.apply(_this, arguments);
                 }
             ) :
-            $.each(event, function(event, fn) {
+            objects.each(event, function(fn, event) {
                 _this.bindToDomElem(domElem, event, fn);
             });
 
@@ -555,7 +555,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
                     if(ctxIds[ctxId]) break;
                     var storageCtx = storage.ctxs[ctxId];
                     if(storageCtx) {
-                        $.each(storageCtx, function(uniqId, handler) {
+                        objects.each(storageCtx, function(handler) {
                             handler.fn.call(
                                 handler.ctx || _this,
                                 e,
@@ -825,7 +825,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 
         _this.dropElemCache().domElem.each(function(i, domNode) {
             var params = getParams(domNode);
-            $.each(params, function(blockName, blockParams) {
+            objects.each(params, function(blockParams, blockName) {
                 var block = uniqIdToBlock[blockParams.uniqId];
                 if(block) {
                     if(!block._isDestructing) {
@@ -925,7 +925,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 
         findDomElem(ctx, '.i-bem', excludeSelf).each(function(i, domNode) {
             var params = getParams(this);
-            $.each(params, function(blockName, blockParams) {
+            objects.each(function(blockParams, blockName) {
                 if(blockParams.uniqId) {
                     var block = uniqIdToBlock[blockParams.uniqId];
                     if(block) {
@@ -1302,7 +1302,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
                 });
             }
         } else {
-            $.each(e, function(e, fn) {
+            objects.each(e, function(fn, e) {
                 _this._liveCtxBind(ctx, e, fn, data);
             });
         }

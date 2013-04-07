@@ -440,17 +440,6 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     },
 
     /**
-     * Helper for cleaning up block properties
-     * @param {Object} [obj=this]
-     */
-    del : function(obj) {
-        var args = [].slice.call(arguments);
-        typeof obj === 'string' && args.unshift(this);
-        this.__self.del.apply(this.__self, args);
-        return this;
-	},
-
-    /**
      * Deletes a block
      */
     destruct : function() {}
@@ -505,25 +494,22 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
         if(decl.modName) {
             var checkMod = buildCheckMod(decl.modName, decl.modVal);
-            for(var name in props) {
-                if(props.hasOwnProperty(name)) {
-                    var prop = props[name];
-                    functions.isFunction(prop) &&
-                        (props[name] = function() {
-                            var method;
-                            if(checkMod(this)) {
-                                method = prop;
-                            } else {
-                                var baseMethod = baseBlock.prototype[name];
-                                baseMethod && baseMethod !== props[name] &&
-                                    (method = this.__base);
-                            }
-                            return method?
-                                method.apply(this, arguments) :
-                                undefined;
-                        });
-                }
-            }
+            objects.each(props, function(prop, name) {
+                functions.isFunction(prop) &&
+                    (props[name] = function() {
+                        var method;
+                        if(checkMod(this)) {
+                            method = prop;
+                        } else {
+                            var baseMethod = baseBlock.prototype[name];
+                            baseMethod && baseMethod !== prop &&
+                                (method = this.__base);
+                        }
+                        return method?
+                            method.apply(this, arguments) :
+                            undefined;
+                    });
+            });
         }
 
         if(staticProps && typeof staticProps.live === 'boolean') {
@@ -619,22 +605,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     changeThis : function(fn, ctx) {
         return fn.bind(ctx || this);
-    },
-
-    /**
-     * Helper for cleaning out properties
-     * @param {Object} [obj=this]
-     */
-    del : function(obj) {
-        var delInThis = typeof obj === 'string',
-            i = delInThis? 0 : 1,
-            len = arguments.length;
-        delInThis && (obj = this);
-
-        while(i < len) delete obj[arguments[i++]];
-
-        return this;
-	}
+    }
 });
 
 provide(this.BEM);
