@@ -121,9 +121,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
         initImmediately !== false?
             _this._init() :
-            _this.afterCurrentEvent(function() {
-                _this._init();
-            });
+            _this.afterCurrentEvent( _this._init);
     },
 
     /**
