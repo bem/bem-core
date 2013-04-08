@@ -902,8 +902,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
             init($(this), uniqInitId);
         });
 
-        // makes initialization completely synchronous
-        this._runAfterCurrentEventFns();
+        this._runInitFns();
 
         return ctx;
     },
@@ -1026,7 +1025,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 
             if(!storage) {
                 storage = liveClassEventStorage[e] = {};
-                doc.bind(e, _this.changeThis(_this._liveClassTrigger, _this));
+                doc.bind(e, _this._liveClassTrigger.bind(_this));
             }
 
             storage = storage[className] || (storage[className] = { uniqIds : {}, fns : [] });

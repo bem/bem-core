@@ -5,11 +5,11 @@ modules.define(
 
 var undefined,
 /**
- * Storage for deferred functions
+ * Storage for block init functions
  * @private
  * @type Array
  */
-    afterCurrentEventFns = [],
+    initFns = [],
 
 /**
  * Storage for block declarations (hash by block name)
@@ -121,7 +121,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
         initImmediately !== false?
             _this._init() :
-            _this.afterCurrentEvent( _this._init);
+            initFns.push(_this._init.bind(_this));
     },
 
     /**
@@ -143,27 +143,6 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         }
 
         return this;
-    },
-
-    /**
-     * Changes the context of the function being passed
-     * @protected
-     * @param {Function} fn
-     * @param {Object} [ctx=this] Context
-     * @returns {Function} Function with a modified context
-     */
-    changeThis : function(fn, ctx) {
-        return fn.bind(ctx || this);
-    },
-
-    /**
-     * Executes the function in the context of the block, after the "current event"
-     * @protected
-     * @param {Function} fn
-     * @param {Object} [ctx] Context
-     */
-    afterCurrentEvent : function(fn, ctx) {
-        this.__self.afterCurrentEvent(this.changeThis(fn, ctx));
     },
 
     /**
@@ -569,40 +548,20 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     _extractElemNameFrom : function(elem) {},
 
     /**
-     * Adds a function to the queue for executing after the "current event"
-     * @static
-     * @protected
-     * @param {Function} fn
-     * @param {Object} ctx
-     */
-    afterCurrentEvent : function(fn, ctx) {
-        afterCurrentEventFns.push({ fn : fn, ctx : ctx }) === 1 &&
-            nextTick(this._runAfterCurrentEventFns);
-    },
-
-    /**
-     * Executes the queue
+     * Executes the block init functions
      * @private
      */
-    _runAfterCurrentEventFns : function() {
-        var fnsLen = afterCurrentEventFns.length;
+    _runInitFns : function() {
+        var fnsLen = initFns.length;
         if(fnsLen) {
-            var fnObj,
-                fnsCopy = afterCurrentEventFns.splice(0, fnsLen);
+            var fnsCopy = initFns.slice(),
+                fn, i = 0;
 
-            while(fnObj = fnsCopy.shift()) fnObj.fn.call(fnObj.ctx || this);
+            initFns = [];
+            while(fn = fnsCopy[i++]) {
+                fn();
+            }
         }
-    },
-
-    /**
-     * Changes the context of the function being passed
-     * @protected
-     * @param {Function} fn
-     * @param {Object} ctx Context
-     * @returns {Function} Function with a modified context
-     */
-    changeThis : function(fn, ctx) {
-        return fn.bind(ctx || this);
     }
 });
 
