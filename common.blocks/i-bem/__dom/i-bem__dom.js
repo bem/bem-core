@@ -383,7 +383,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
             domElem.bind(
                 _this._buildEventName(event),
                 function(e) {
-                    (e.data || (e.data = {})).domElem = $(this);
+                    e.domElem = $(this);
                     return fn.apply(_this, arguments);
                 }
             ) :
@@ -1091,7 +1091,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
         return function(e) {
             var args = [
                     _this._name,
-                    ((e.data || (e.data = {})).domElem = $(this)).closest(_this.buildSelector()),
+                    (e.domElem = $(this)).closest(_this.buildSelector()),
                     true ],
                 block = initBlock.apply(null, invokeOnInit? args.concat([callback, e]) : args);
 
