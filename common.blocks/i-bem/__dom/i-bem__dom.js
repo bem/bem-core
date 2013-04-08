@@ -206,7 +206,7 @@ function cleanupDomNode(domNode) {
  */
 function removeDomNodeFromBlock(block, domNode) {
     block.domElem.length === 1?
-        block.destruct(true) :
+        block._destruct(true) :
         block.domElem = block.domElem.not(domNode);
 }
 
@@ -651,6 +651,10 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @param {String} [elemName] Element name
      */
     _afterSetMod : function(modName, modVal, oldModVal, elem, elemName) {
+        if(!elem && modName === 'js' && modVal === '') {
+            return;
+        }
+
         var _self = this.__self,
             classPrefix = _self._buildModClassPrefix(modName, elemName),
             classRE = _self._buildModValRE(modName, elemName),
@@ -812,15 +816,14 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
     },
 
     /**
-     * Deletes a block
-     * @param {Boolean} [keepDOM=false] Whether to keep the block's DOM nodes in the document
+     * Destructs a block
+     * @private
      */
-    destruct : function(keepDOM) {
+    _destruct : function() {
         var _this = this,
             _self = _this.__self;
 
         _this._isDestructing = true;
-
         _this._needSpecialUnbind && _self.doc.add(_self.win).unbind('.' + _this._uniqId);
 
         _this.dropElemCache().domElem.each(function(i, domNode) {
@@ -840,13 +843,13 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
             objects.isEmpty(params) && cleanupDomNode(domNode);
         });
 
-        keepDOM || _this.domElem.remove();
+        _this.domElem.remove();
+
+        _this.__base();
 
         delete uniqIdToBlock[_this.un()._uniqId];
         delete _this.domElem;
         delete _this._elemCache;
-
-        _this.__base();
     }
 
 }, /** @lends BEM.DOM */{
@@ -911,20 +914,13 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * Destroys blocks on a fragment of the DOM tree
      * @static
      * @protected
-     * @param {Boolean} [keepDOM=false] Whether to keep DOM nodes in the document
      * @param {jQuery} ctx Root DOM node
-     * @param {Boolean} [excludeSelf=false] Exclude the context
+     * @param {Boolean} [excludeSelf=false] Exclude the main domElem
      */
-    destruct : function(keepDOM, ctx, excludeSelf) {
-        if(typeof keepDOM !== 'boolean') {
-            excludeSelf = ctx;
-            ctx = keepDOM;
-            keepDOM = undefined;
-        }
-
+    destruct : function(ctx, excludeSelf) {
         findDomElem(ctx, '.i-bem', excludeSelf).each(function(i, domNode) {
             var params = getParams(this);
-            objects.each(function(blockParams, blockName) {
+            objects.each(params, function(blockParams, blockName) {
                 if(blockParams.uniqId) {
                     var block = uniqIdToBlock[blockParams.uniqId];
                     if(block) {
@@ -938,7 +934,8 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
             });
             objects.isEmpty(params) && cleanupDomNode(this);
         });
-        keepDOM || (excludeSelf? ctx.empty() : ctx.remove());
+
+        excludeSelf? ctx.empty() : ctx.remove();
     },
 
     /**

@@ -418,8 +418,11 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Deletes a block
+     * @private
      */
-    destruct : function() {}
+    _destruct : function() {
+        this.delMod('js');
+    }
 
 }, /** @lends BEM */{
 
