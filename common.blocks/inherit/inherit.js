@@ -1,12 +1,12 @@
 /**
  * Inheritance module
  *
- * Copyright (c) 2010 Filatov Dmitry (dfilatov@yandex-team.ru)
+ * Copyright (c) 2010-2013 Filatov Dmitry (dfilatov@yandex-team.ru)
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 1.3.5
+ * @version 2.0.0
  */
 
 modules.define('inherit', function(provide) {
@@ -33,6 +33,9 @@ var hasIntrospection = (function(){_}).toString().indexOf('_') > -1,
         return o1;
     },
     toStr = Object.prototype.toString,
+    isArray = Array.isArray || function(obj) {
+        return toStr.call(obj) === '[object Array]';
+    },
     isFunction = function(obj) {
         return toStr.call(obj) === '[object Function]';
     },
@@ -81,15 +84,16 @@ function override(base, res, add) {
 
 var inherit = function() {
     var args = arguments,
-        hasBase = isFunction(args[0]),
-        base = hasBase? args[0] : emptyBase,
+        withMixins = isArray(args[0]),
+        hasBase = withMixins || isFunction(args[0]),
+        base = hasBase? withMixins? args[0][0] : args[0] : emptyBase,
         props = args[hasBase? 1 : 0] || {},
         staticProps = args[hasBase? 2 : 1],
         res = props.__constructor || (hasBase && base.prototype.__constructor)?
             function() {
                 return this.__constructor.apply(this, arguments);
             } :
-            noOp;
+            function() {};
 
     if(!hasBase) {
         res.prototype = props;
@@ -106,6 +110,34 @@ var inherit = function() {
 
     override(basePtp, resultPtp, props);
     staticProps && override(base, res, staticProps);
+
+    if(withMixins) {
+        var i = 1, mixins = args[0], mixin, __constructors = [];
+        while(mixin = mixins[i++]) {
+            if(isFunction(mixin)) {
+                mixin.prototype.__constructor && __constructors.push(mixin.prototype.__constructor);
+                mixin = mixin.prototype;
+            }
+            for(var propName in mixin) {
+                if(mixin.hasOwnProperty(propName) && propName !== '__self' && propName !== '__constructor') {
+                    resultPtp[propName] = mixin[propName];
+                }
+            }
+        }
+
+        if(__constructors.length) {
+            resultPtp.__constructor && __constructors.unshift(resultPtp.__constructor);
+            resultPtp.__constructor = function() {
+                var i = 0, __constructor, res;
+                while(__constructor = __constructors[i]) {
+                    i++?
+                        __constructor.apply(this, arguments) :
+                        res = __constructor.apply(this, arguments);
+                }
+                return res;
+            };
+        }
+    }
 
     return res;
 };
