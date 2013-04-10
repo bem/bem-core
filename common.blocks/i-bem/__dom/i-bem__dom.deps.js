@@ -3,7 +3,7 @@
         'jquery',
         'objects',
         'functions',
-        { block: 'i-bem', elems: ['internal', 'html'] }
+        { block: 'i-bem', elems: ['internal'] }
     ],
     shouldDeps: { block: 'ecma', elem: 'string' }
 })
