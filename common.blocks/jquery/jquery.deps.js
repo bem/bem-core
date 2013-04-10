@@ -1,6 +1,6 @@
 ({
     shouldDeps: [
         'loader',
-        { block: 'jquery', elem: 'config'}
+        { elem: 'config'}
     ]
 })
