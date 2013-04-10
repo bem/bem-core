@@ -1804,7 +1804,7 @@ block b1, content, !this._myGuard: [
 
 В результате применения шаблонов к блоку `b1` будет получен HTML:
 
-```js
+```xml
 <div class="b1">text1text2</div>
 ```
 
