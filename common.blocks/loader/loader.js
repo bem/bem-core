@@ -1,3 +1,14 @@
+/**
+ * Loader module
+ *
+ * Copyright (c) 2013 Filatov Dmitry (dfilatov@yandex-team.ru)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * @version 1.0.0
+ */
+
 modules.define('loader', function(provide) {
 
 var loading = {},
@@ -32,7 +43,7 @@ provide(function(path, cb) {
     script.onreadystatechange === null?
         script.onreadystatechange = function() {
             var readyState = this.readyState;
-            if (readyState === 'loaded' || readyState === 'complete') {
+            if(readyState === 'loaded' || readyState === 'complete') {
                 script.onreadystatechange = null;
                 onLoad(path);
             }

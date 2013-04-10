@@ -1,3 +1,14 @@
+/**
+ * Identify module
+ *
+ * Copyright (c) 2010-2013 Filatov Dmitry (dfilatov@yandex-team.ru)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * @version 1.0.0
+ */
+
 modules.define('identify', function(provide) {
 
 var counter = 0,

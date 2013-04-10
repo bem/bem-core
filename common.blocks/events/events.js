@@ -1,7 +1,7 @@
 /**
- * Observable module
+ * Events module
  *
- * Copyright (c) 2010 Filatov Dmitry (alpha@zforms.ru)
+ * Copyright (c) 2010-2013 Filatov Dmitry (alpha@zforms.ru)
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
