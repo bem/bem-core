@@ -1,7 +1,7 @@
 /** @fileOverview Module for internal BEM helpers */
 /** @requires BEM */
 
-modules.define('i-bem__internal', function(provide) {
+modules.define('i-bem.internal', function(provide) {
 
 /**
  * Separator for modifiers and their values

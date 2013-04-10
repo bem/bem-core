@@ -2,8 +2,8 @@
 /** @requires BEM.INTERNAL */
 
 modules.define(
-    'i-bem__dom',
-    ['i-bem', 'i-bem__internal', 'identify', 'objects', 'functions', 'jQuery'],
+    'i-bem.dom',
+    ['i-bem', 'i-bem.internal', 'identify', 'objects', 'functions', 'jQuery'],
     function(provide, BEM, INTERNAL, identify, objects, functions, $) {
 
 var undefined,
@@ -1420,6 +1420,6 @@ $.fn.bem = function(blockName, params) {
     return initBlock(blockName, this, params, true);
 };
 
-provide(DOM);
+provide(blocks['i-bem__dom']);
 
 });

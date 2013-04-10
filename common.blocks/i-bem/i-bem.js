@@ -505,7 +505,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             (block = inherit.self(baseBlock, props, staticProps))._processLive(true) :
             (block = blocks[decl.block] = inherit(baseBlock, props, staticProps))._name = decl.block;
 
-        return block;
+        return this;
     },
 
     /**

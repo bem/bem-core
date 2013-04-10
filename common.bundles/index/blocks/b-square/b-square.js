@@ -6,9 +6,9 @@
  * You can find various declarations on the i-bem block's wiki page, blocks/i-bem/i-bem.wiki
  */
 
-modules.require(['i-bem__dom'], function(DOM) {
+modules.define('i-bem.dom', function(provide, DOM) {
 
-DOM.decl('b-square', {
+provide(DOM.decl('b-square', {
 
     onSetMod : {
         'js' : {
@@ -31,7 +31,6 @@ DOM.decl('b-square', {
          */
 
         this.toggleMod('color', 'green', '');
-        DOM.destruct(this.domElem);
 
     }
 
@@ -58,41 +57,7 @@ DOM.decl('b-square', {
 
     }
 
-});
+}));
 
 });
 
-modules.require(['inherit'], function(inherit) {
-    var A = inherit({
-            method : function() {
-                return 'A';
-            }
-        });
-
-    var M1 = inherit({
-            __constructor : function() {
-                console.log('!')
-            },
-            methodM : function() {
-                return 'M1';
-            }
-        });
-
-    var M2 = inherit(M1, {
-            methodM : function() {
-                return this.__base() +  'M2';
-            }
-        });
-
-    var B = inherit([A, M2], {
-            __constructor : function() {
-                return new A();
-            },
-
-            method : function() {
-                return this.__base() + 'B' + this.methodM();
-            }
-        });
-
-    console.log((new B()).method());
-});

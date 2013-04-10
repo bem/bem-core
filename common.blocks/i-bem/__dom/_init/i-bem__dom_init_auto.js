@@ -1,12 +1,8 @@
 /* дефолтная инициализация */
-modules.require(
-    ['i-bem__dom', 'jQuery', 'nextTick'],
-    function(DOM, $, nextTick) {
+modules.require(['i-bem.dom', 'jQuery'], function(DOM, $) {
 
-nextTick(function() {
-    $(function() {
-        DOM.init();
-    });
+$(function() {
+    DOM.init();
 });
 
 });
