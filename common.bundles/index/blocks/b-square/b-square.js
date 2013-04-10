@@ -10,6 +10,18 @@ modules.require(['i-bem__dom'], function(DOM) {
 
 DOM.decl('b-square', {
 
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                console.log('inited');
+            },
+
+            '' : function() {
+                console.log('destructed');
+            }
+        }
+    },
+
     onSquareClick : function(e) {
 
         /*
@@ -19,6 +31,7 @@ DOM.decl('b-square', {
          */
 
         this.toggleMod('color', 'green', '');
+        DOM.destruct(this.domElem);
 
     }
 
@@ -47,4 +60,39 @@ DOM.decl('b-square', {
 
 });
 
+});
+
+modules.require(['inherit'], function(inherit) {
+    var A = inherit({
+            method : function() {
+                return 'A';
+            }
+        });
+
+    var M1 = inherit({
+            __constructor : function() {
+                console.log('!')
+            },
+            methodM : function() {
+                return 'M1';
+            }
+        });
+
+    var M2 = inherit(M1, {
+            methodM : function() {
+                return this.__base() +  'M2';
+            }
+        });
+
+    var B = inherit([A, M2], {
+            __constructor : function() {
+                return new A();
+            },
+
+            method : function() {
+                return this.__base() + 'B' + this.methodM();
+            }
+        });
+
+    console.log((new B()).method());
 });
