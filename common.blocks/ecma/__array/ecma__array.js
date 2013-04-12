@@ -3,7 +3,6 @@
 var ptp = Array.prototype,
     toStr = Object.prototype.toString,
     methods = {
-
         /**
          * Finds the index of an element in an array
          * @param {Object} item
@@ -11,7 +10,6 @@ var ptp = Array.prototype,
          * @returns {Number} Element index or -1, if not found
          */
         indexOf : function(item, fromIdx) {
-
             fromIdx = +(fromIdx || 0);
 
             var t = this, len = t.length;
@@ -29,7 +27,6 @@ var ptp = Array.prototype,
             }
 
             return -1;
-
         },
 
         /**
@@ -38,11 +35,9 @@ var ptp = Array.prototype,
          * @param {Object} [ctx=null] Callback context
          */
         forEach : function(callback, ctx) {
-
             var i = -1, t = this, len = t.length;
             while(++i < len) i in t &&
                 (ctx? callback.call(ctx, t[i], i, t) : callback(t[i], i, t));
-
         },
 
         /**
@@ -52,7 +47,6 @@ var ptp = Array.prototype,
          * @returns {Array}
          */
         map : function(callback, ctx) {
-
             var i = -1, t = this, len = t.length,
                 res = new Array(len);
 
@@ -60,7 +54,6 @@ var ptp = Array.prototype,
                 (res[i] = ctx? callback.call(ctx, t[i], i, t) : callback(t[i], i, t));
 
             return res;
-
         },
 
         /**
@@ -70,7 +63,6 @@ var ptp = Array.prototype,
          * @returns {Array}
          */
         filter : function(callback, ctx) {
-
             var i = -1, t = this, len = t.length,
                 res = [];
 
@@ -78,7 +70,6 @@ var ptp = Array.prototype,
                 (ctx? callback.call(ctx, t[i], i, t) : callback(t[i], i, t)) && res.push(t[i]);
 
             return res;
-
         },
 
         /**
@@ -88,7 +79,6 @@ var ptp = Array.prototype,
          * @returns {Object} Accumulator
          */
         reduce : function(callback, initialVal) {
-
             var i = -1, t = this, len = t.length,
                 res;
 
@@ -108,7 +98,6 @@ var ptp = Array.prototype,
                 (res = callback(res, t[i], i, t));
 
             return res;
-
         },
 
         /**
@@ -118,7 +107,6 @@ var ptp = Array.prototype,
          * @returns {Boolean}
          */
         some : function(callback, ctx) {
-
             var i = -1, t = this, len = t.length;
 
             while(++i < len)
@@ -126,7 +114,6 @@ var ptp = Array.prototype,
                     return true;
 
             return false;
-
         },
 
         /**
@@ -136,7 +123,6 @@ var ptp = Array.prototype,
          * @returns {Boolean}
          */
         every : function(callback, ctx) {
-
             var i = -1, t = this, len = t.length;
 
             while(++i < len)
@@ -144,9 +130,7 @@ var ptp = Array.prototype,
                     return false;
 
             return true;
-
         }
-
     };
 
 for(var name in methods)
