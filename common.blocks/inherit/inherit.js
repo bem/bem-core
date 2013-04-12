@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 2.0.0
+ * @version 2.0.1
  */
 
 modules.define('inherit', function(provide) {
@@ -119,7 +119,7 @@ var inherit = function() {
                 mixin = mixin.prototype;
             }
             for(var propName in mixin) {
-                if(mixin.hasOwnProperty(propName) && propName !== '__self' && propName !== '__constructor') {
+                if(propName !== '__self' && propName !== '__constructor') {
                     resultPtp[propName] = mixin[propName];
                 }
             }
