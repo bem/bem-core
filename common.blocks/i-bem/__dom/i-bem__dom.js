@@ -3,7 +3,7 @@
 
 modules.define(
     'i-bem__dom',
-    ['i-bem', 'i-bem__internal', 'identify', 'objects', 'functions', 'jQuery'],
+    ['i-bem', 'i-bem__internal', 'identify', 'objects', 'functions', 'jquery'],
     function(provide, BEM, INTERNAL, identify, objects, functions, $) {
 
 var undefined,

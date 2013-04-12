@@ -1,6 +1,6 @@
 modules.define(
-    'jQuery',
-    ['loader', 'jQuery.config'],
+    'jquery',
+    ['loader', 'jquery__config'],
     function(provide, loader, cfg) {
 
 typeof jQuery !== 'undefined'?
