@@ -6,6 +6,10 @@ exports.techMixin = {
         return ['vanilla.js', 'node.js'];
     },
 
+    getCreateSuffixes : function() {
+        return ['node.js'];
+    },
+
     getBuildSuffixes : function() {
         return ['node.js'];
     },

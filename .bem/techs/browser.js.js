@@ -11,6 +11,10 @@ exports.techMixin = {
         return ['vanilla.js', 'browser.js', 'js'];
     },
 
+    getCreateSuffixes : function() {
+        return ['browser.js'];
+    },
+
     getBuildSuffixes : function() {
         return ['js'];
     },
