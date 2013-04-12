@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 2.0.1
+ * @version 2.0.2
  */
 
 modules.define('inherit', function(provide) {
@@ -49,16 +49,20 @@ for(var i in testPropObj) { // fucking ie hasn't toString, valueOf in for
 
 var specProps = needCheckProps? ['toString', 'valueOf'] : null;
 
-function override(base, res, add) {
-    var addList = objKeys(add);
+function getPropList(obj) {
+    var res = objKeys(obj);
     if(needCheckProps) {
         var specProp, i = 0;
         while(specProp = specProps[i++]) {
-            add.hasOwnProperty(specProp) && addList.push(specProp);
+            obj.hasOwnProperty(specProp) && res.push(specProp);
         }
     }
+    return res;
+}
 
-    var j = 0, len = addList.length,
+function override(base, res, add) {
+    var addList = getPropList(add),
+        j = 0, len = addList.length,
         name, prop;
     while(j < len) {
         name = addList[j++];
@@ -108,34 +112,26 @@ var inherit = function() {
 
     resultPtp.__self = resultPtp.constructor = res;
 
-    override(basePtp, resultPtp, props);
+    props && override(basePtp, resultPtp, props);
     staticProps && override(base, res, staticProps);
 
     if(withMixins) {
-        var i = 1, mixins = args[0], mixin, __constructors = [];
+        var i = 1, mixins = args[0], mixin,
+            propList, propName, j, len;
         while(mixin = mixins[i++]) {
             if(isFunction(mixin)) {
-                mixin.prototype.__constructor && __constructors.push(mixin.prototype.__constructor);
+                extend(res, mixin);
                 mixin = mixin.prototype;
             }
-            for(var propName in mixin) {
-                if(propName !== '__self' && propName !== '__constructor') {
+
+            propList = getPropList(mixin);
+            j = 0; len = propList.length;
+            while(j < len) {
+                propName = propList[j++];
+                if(propName !== '__self' && propName !== '__constructor' && propName !== 'constructor') {
                     resultPtp[propName] = mixin[propName];
                 }
             }
-        }
-
-        if(__constructors.length) {
-            resultPtp.__constructor && __constructors.unshift(resultPtp.__constructor);
-            resultPtp.__constructor = function() {
-                var i = 0, __constructor, res;
-                while(__constructor = __constructors[i]) {
-                    i++?
-                        __constructor.apply(this, arguments) :
-                        res = __constructor.apply(this, arguments);
-                }
-                return res;
-            };
         }
     }
 
@@ -145,7 +141,7 @@ var inherit = function() {
 inherit.self = function(base, props, staticProps) {
     var basePtp = base.prototype;
 
-    override(basePtp, basePtp, props);
+    props && override(basePtp, basePtp, props);
     staticProps && override(base, base, staticProps);
 
     return base;
