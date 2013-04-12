@@ -6,17 +6,25 @@ var PATH = require('path'),
     join = PATH.join;
 
 exports.getTechs = function() {
-    return {
+    var techs = {
         'bemjson.js' : '',
         'bemdecl.js' : 'bemdecl.js',
         'deps.js'    : 'deps.js',
         'css'        : 'css',
         'ie.css'     : 'ie.css',
-
-        'bemhtml'    : join(PRJ_TECHS, 'bemhtml.js'),
-        'html'       : join(PRJ_TECHS, 'html.js'),
-        'js'         : join(PRJ_TECHS, 'js.js'),
-
-        'examples'   : ''
+        'js'         : 'js-i'
     };
+
+    [
+        'bemhtml',
+        'html',
+        'examples',
+        'vanilla.js',
+        'browser.js',
+        'node.js'
+    ].forEach(function(name) {
+        techs[name] = join(PRJ_TECHS, name + '.js');
+    });
+
+    return techs;
 };
