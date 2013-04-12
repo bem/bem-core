@@ -1,4 +1,4 @@
-modules.define('functions.debounce', function(provide) {
+modules.define('functions__debounce', function(provide) {
 
 provide(function(fn, timeout, invokeAsap, ctx) {
     if(arguments.length === 3 && typeof invokeAsap !== 'boolean') {

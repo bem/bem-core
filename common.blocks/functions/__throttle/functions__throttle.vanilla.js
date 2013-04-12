@@ -1,4 +1,4 @@
-modules.define('functions.throttle', function(provide) {
+modules.define('functions__throttle', function(provide) {
 
 provide(function(fn, timeout, ctx) {
     var timer, args, needInvoke;
