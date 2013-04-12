@@ -9,32 +9,26 @@
  * @version 1.0.0
  */
 
-(function($) {
+modules.define(['jquery'], function(provide, $) {
 
 var leftClick = $.event.special.leftclick = {
-
     setup : function() {
-
-        $(this).bind('click', leftClick.handler);
-
+        $(this).on('click', leftClick.handler);
     },
 
     teardown : function() {
-
-        $(this).unbind('click', leftClick.handler);
-
+        $(this).off('click', leftClick.handler);
     },
 
     handler : function(e) {
-
         if(!e.button) {
             e.type = 'leftclick';
-            $.event.handle.apply(this, arguments);
+            $.event.dispatch.apply(this, arguments);
             e.type = 'click';
         }
-
     }
-
 };
 
-})(jQuery);
+provide($);
+
+});
