@@ -2,8 +2,8 @@
 /** @requires BEM.INTERNAL */
 
 modules.define(
-    'i-bem.dom',
-    ['i-bem', 'i-bem.internal', 'identify', 'objects', 'functions', 'jQuery'],
+    'i-bem__dom',
+    ['i-bem', 'i-bem__internal', 'identify', 'objects', 'functions', 'jQuery'],
     function(provide, BEM, INTERNAL, identify, objects, functions, $) {
 
 var undefined,
@@ -867,6 +867,15 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @type jQuery
      */
     win : win,
+
+    /**
+     * @protected
+     */
+    decl : function(decl, props, staticProps) {
+        typeof decl === 'string' && (decl = { block : decl });
+        decl.baseBlock || (decl.baseBlock = 'i-bem__dom');
+        return BEM.decl(decl, props, staticProps);
+    },
 
     /**
      * Processes a block's live properties

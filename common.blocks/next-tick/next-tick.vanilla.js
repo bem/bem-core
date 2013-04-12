@@ -9,7 +9,7 @@
  * @version 1.0.0
  */
 
-modules.define('nextTick', function(provide) {
+modules.define('next-tick', function(provide) {
 
 var global = this;
 

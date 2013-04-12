@@ -6,7 +6,7 @@
 
 modules.require(['i-bem'], function(BEM) {
 
-BEM.decl({ name : 'i-bem__collection_type_dom', baseBlock : 'i-bem__collection' }, null, {
+BEM.decl({ block : 'i-bem__collection_type_dom', baseBlock : 'i-bem__collection' }, null, {
 
     /**
      * Get methods that will be implemented in bem__collection_type_dom

@@ -12,7 +12,7 @@
 modules.define('events', ['identify', 'inherit'], function(provide, identify, inherit) {
 
 var undef,
-    storageExpando = '__' + +new Date + 'storage',
+    storageExpando = '__' + (+new Date) + 'storage',
     getFnId = function(fn, ctx) {
         return identify(fn) + (ctx? identify(ctx) : '');
     },

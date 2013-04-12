@@ -6,7 +6,7 @@
  * You can find various declarations on the i-bem block's wiki page, blocks/i-bem/i-bem.wiki
  */
 
-modules.define('i-bem.dom', function(provide, DOM) {
+modules.define('i-bem__dom', function(provide, DOM) {
 
 provide(DOM.decl('b-square', {
 
@@ -60,4 +60,3 @@ provide(DOM.decl('b-square', {
 }));
 
 });
-

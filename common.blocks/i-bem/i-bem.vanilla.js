@@ -1,6 +1,6 @@
 modules.define(
     'i-bem',
-    ['inherit', 'identify', 'nextTick', 'objects', 'functions', 'events'],
+    ['inherit', 'identify', 'next-tick', 'objects', 'functions', 'events'],
     function(provide, inherit, identify, nextTick, objects, functions, events) {
 
 var undefined,
@@ -85,7 +85,7 @@ function buildCheckMod(modName, modVal) {
 }
 
 /** @namespace */
-this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
+var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     /**
      * @class Base block for creating BEM blocks
      * @constructs
@@ -470,7 +470,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             delete props.onElemSetMod;
         }
 
-        var baseBlock = blocks[decl.baseBlock || decl.block] || this;
+        var baseBlock = blocks[decl.baseBlock || decl.block] || BEM;
 
         if(decl.modName) {
             var checkMod = buildCheckMod(decl.modName, decl.modVal);
@@ -505,7 +505,7 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             (block = inherit.self(baseBlock, props, staticProps))._processLive(true) :
             (block = blocks[decl.block] = inherit(baseBlock, props, staticProps))._name = decl.block;
 
-        return this;
+        return block;
     },
 
     /**
@@ -568,6 +568,6 @@ this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     }
 });
 
-provide(this.BEM);
+provide(BEM);
 
 });

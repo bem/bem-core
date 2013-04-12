@@ -14,7 +14,7 @@ modules.define('identify', function(provide) {
 var counter = 0,
     expando = '__' + (+new Date),
     get = function() {
-        return 'uniq' + ++counter;
+        return 'uniq' + (++counter);
     };
 
 /**
