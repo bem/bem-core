@@ -9,7 +9,7 @@
  * @version 1.0.0
  */
 
-modules.define(['jquery'], function(provide, $) {
+modules.define('jquery', function(provide, $) {
 
 var leftClick = $.event.special.leftclick = {
     setup : function() {
