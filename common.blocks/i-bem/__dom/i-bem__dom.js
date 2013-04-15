@@ -873,7 +873,9 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      */
     decl : function(decl, props, staticProps) {
         typeof decl === 'string' && (decl = { block : decl });
-        decl.baseBlock || (decl.baseBlock = 'i-bem__dom');
+        if(!decl.baseBlock && !blocks[decl.block]) {
+            decl.baseBlock = 'i-bem__dom';
+        }
         return BEM.decl(decl, props, staticProps);
     },
 
