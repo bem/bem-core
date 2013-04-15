@@ -7,16 +7,19 @@ provide(function(fn, timeout, ctx) {
         needInvoke = true;
         ctx || (ctx = this);
 
-        timer || (function() {
-            if(needInvoke) {
-                fn.apply(ctx, args);
-                needInvoke = false;
-                timer = setTimeout(arguments.callee, timeout);
-            }
-            else {
-                timer = null;
-            }
-        })();
+        if(!timer) {
+            var wrapperFn = function() {
+                    if(needInvoke) {
+                        fn.apply(ctx, args);
+                        needInvoke = false;
+                        timer = setTimeout(wrapperFn, timeout);
+                    }
+                    else {
+                        timer = null;
+                    }
+                };
+            wrapperFn();
+        }
     };
 });
 
