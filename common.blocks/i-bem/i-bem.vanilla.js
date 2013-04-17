@@ -429,6 +429,11 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         this.delMod('js');
     },
 
+    /** @deprecated use module "next-tick" instead */
+    afterCurrentEvent : function(fn, ctx) {
+        this.__self.afterCurrentEvent(this.changeThis(fn, ctx));
+    },
+
     /** @deprecated use module "events__channels" instead */
     channel : function() {
         return this.__self.channel.apply(null, arguments);
@@ -589,6 +594,11 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     /** @deprecated use module "events__channels" instead */
     channel : function() {
         return channels.apply(null, arguments);
+    },
+
+    /** @deprecated use module "next-tick" instead */
+    afterCurrentEvent : function(fn, ctx) {
+        nextTick(ctx? fn.bind(ctx) : fn);
     }
 });
 
