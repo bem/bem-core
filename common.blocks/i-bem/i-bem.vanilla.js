@@ -145,6 +145,11 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         return this;
     },
 
+    /** @deprecated use native bind */
+    changeThis : function(fn, ctx) {
+        return fn.bind(ctx || this);
+    },
+
     /**
      * Executes the block's event handlers and live event handlers
      * @protected
@@ -409,13 +414,6 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     },
 
     /**
-     * @deprecated use module "events__channels" instead
-     */
-    channel : function() {
-        return this.__self.channel.apply(null, arguments);
-    },
-
-    /**
      * Returns a block's default parameters
      * @returns {Object}
      */
@@ -429,8 +427,17 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     _destruct : function() {
         this.delMod('js');
-    }
+    },
 
+    /** @deprecated use module "events__channels" instead */
+    channel : function() {
+        return this.__self.channel.apply(null, arguments);
+    },
+
+    /** @deprecated use native bind */
+    changeThis : function(fn, ctx) {
+        return fn.bind(ctx || this);
+    }
 }, /** @lends BEM */{
 
     _name : 'i-bem',
@@ -572,6 +579,11 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
                 fn();
             }
         }
+    },
+
+    /** @deprecated use native bind */
+    changeThis : function(fn, ctx) {
+        return fn.bind(ctx || this);
     },
 
     /** @deprecated use module "events__channels" instead */
