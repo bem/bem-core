@@ -52,7 +52,13 @@ function modFnsToProps(modFns, props, elemName) {
             if(modFns.hasOwnProperty(modName)) {
                 modFn = modFns[modName];
                 if(functions.isFunction(modFn)) {
-                    props[buildModFnName(elemName, modName, '*')] = modFn;
+                    props[buildModFnName(elemName, modName, modName === 'js'? 'inited' : '*')] = modFn;
+                    /** @deprecated: above code has fallback, replace
+                     *  modName === 'js'? 'inited' : '*'
+                     *  with
+                     *  '*'
+                     *  in next version
+                     */
                 }
                 else {
                     for(modVal in modFn) {
@@ -143,11 +149,6 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         }
 
         return this;
-    },
-
-    /** @deprecated use native bind */
-    changeThis : function(fn, ctx) {
-        return fn.bind(ctx || this);
     },
 
     /**
@@ -428,6 +429,9 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     _destruct : function() {
         this.delMod('js');
     },
+
+    /** @deprecated use onSetMod js '' */
+    destruct : function() {},
 
     /** @deprecated use module "next-tick" instead */
     afterCurrentEvent : function(fn, ctx) {

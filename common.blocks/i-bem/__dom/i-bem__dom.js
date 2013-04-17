@@ -820,6 +820,8 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @private
      */
     _destruct : function() {
+        this.destruct();
+        /** @deprecated: above code has fallback, remove it in next version */
         var _this = this,
             _self = _this.__self;
 
