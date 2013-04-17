@@ -1,7 +1,7 @@
 modules.define(
     'i-bem',
-    ['inherit', 'identify', 'next-tick', 'objects', 'functions', 'events'],
-    function(provide, inherit, identify, nextTick, objects, functions, events) {
+    ['inherit', 'identify', 'next-tick', 'objects', 'functions', 'events', 'events__channels'],
+    function(provide, inherit, identify, nextTick, objects, functions, events, channels) {
 
 var undefined,
 /**
@@ -409,6 +409,13 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     },
 
     /**
+     * @deprecated use module "events__channels" instead
+     */
+    channel : function() {
+        return this.__self.channel.apply(null, arguments);
+    },
+
+    /**
      * Returns a block's default parameters
      * @returns {Object}
      */
@@ -565,6 +572,11 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
                 fn();
             }
         }
+    },
+
+    /** @deprecated use module "events__channels" instead */
+    channel : function() {
+        return channels.apply(null, arguments);
     }
 });
 
