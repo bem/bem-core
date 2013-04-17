@@ -1,4 +1,4 @@
-modules.define('channels', ['events'], function(provide, events) {
+modules.define('events__channels', ['events'], function(provide, events) {
 
 var undef,
 
