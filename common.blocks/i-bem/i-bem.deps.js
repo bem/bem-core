@@ -5,7 +5,7 @@
         'next-tick',
         'objects',
         'functions',
-        'events'
+        { block: 'events', elems: ['channels'] }
     ],
     shouldDeps: [
         { block: 'ecma', elem: 'object' },
