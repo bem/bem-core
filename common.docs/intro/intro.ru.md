@@ -195,7 +195,7 @@ HTML-результат:
 сгенерировать элемент `item`, вложенный в `b-hello`. Файл `b-hello.bemhtml`:
 
     block b-hello {
-        content: this.ctx.names.map(function(user) { return { elem: 'item', content: name } })
+        content: this.ctx.names.map(function(user) { return { elem: 'item', content: user } })
 
         elem item, content: ['Hello, ', applyNext(), '!']
     }
@@ -233,7 +233,7 @@ HTML-результат:
 
         tag: 'ul'
 
-        content: this.ctx.names.map(function(user) { return { elem: 'item', content: name } })
+        content: this.ctx.names.map(function(user) { return { elem: 'item', content: user } })
 
         elem item {
 
