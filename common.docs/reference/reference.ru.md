@@ -62,7 +62,8 @@
     { text: '1' },
     { text: '2' }
   ]
-}        </code></pre>
+}
+        </code></pre>
     </td>
 
     <td>
@@ -345,7 +346,7 @@ HTML-дерева не потребуется изменений в наборе
   elem: 'item',
   elemMods: { selected: 'yes' }
 }
-        </pre></code>
+        </code></pre>
     </td>
 </tr>
 
@@ -1088,12 +1089,16 @@ JavaScript.
 <tr>
     <td><pre><code>{block: 'b1'}</code></pre></td>
     <td><pre><code>block b1, js: true</code></pre></td>
-    <td><pre><code>&lt;div class="b1 i-bem" onclick="return { 'b1': {} }"&gt;&lt;/div&gt;</code></pre></td>
+    <td><pre><code>&lt;div class="b1 i-bem"
+    onclick="return { 'b1': {} }"&gt;
+&lt;/div&gt;</code></pre></td>
 </tr>
 <tr>
     <td><pre><code>{block: 'b1'}</code></pre></td>
     <td><pre><code>block b1, js: {param: 'value'}</code></pre></td>
-    <td><pre><code>&lt;div class="b1 i-bem" onclick="return { 'b1': { 'param': 'value' } }"&gt;&lt;/div&gt;</code></pre></td>
+    <td><pre><code>&lt;div class="b1 i-bem"
+    onclick="return { 'b1': { 'param': 'value' } }"&gt;
+&lt;/div&gt;</code></pre></td>
 </tr>
 </table>
 
@@ -1230,7 +1235,12 @@ JavaScript.
   js: { p: 2 }
 })</code></pre>
     </td>
-    <td><pre><code>&lt;div class="b1 b2 i-bem" onclick="return { 'b1': { 'p': 1 }, 'b2': { 'p': 2 } }"&gt;&lt;/div&gt;</code></pre></td>
+    <td><pre><code>&lt;div class="b1 b2 i-bem"
+    onclick="return {
+        'b1': { 'p': 1},
+        'b2': { 'p': 2}
+    }"&gt;
+&lt;/div&gt;</code></pre></td>
 </tr>
 <tr>
     <td>
@@ -1278,7 +1288,9 @@ block b4, mix: [ { block: 'b1' } ]</code></pre>
 }</code></pre>
     </td>
     <td><pre><code>block b1, jsAttr: 'ondblclick'</code></pre></td>
-    <td><pre><code>&lt;div class="b1 i-bem" ondblclick="return {'b1': {} }"&gt;&lt;/div&gt;</code></pre></td>
+    <td><pre><code>&lt;div class="b1 i-bem"
+    ondblclick="return {'b1': {} }"&gt;
+&lt;/div&gt;</code></pre></td>
 </tr>
 </table>
 
@@ -1325,7 +1337,8 @@ block b4, mix: [ { block: 'b1' } ]</code></pre>
   attrs: ({ alt: 'logo', href: 'http://...' })
 }</code></pre>
     </td>
-    <td><pre><code>&lt;img alt="logo" href="http://..." /&gt;</code></pre></td>
+    <td><pre><code>&lt;img alt="logo"
+    href="http://..." /&gt;</code></pre></td>
 </tr>
 
 <tr>
@@ -1338,10 +1351,13 @@ block b4, mix: [ { block: 'b1' } ]</code></pre>
     <td>
         <pre><code>block input {
   tag: 'input'
-  attrs: ({ disabled: this.ctx.disabled ? 'disabled' : undefined })
+  attrs: ({
+    disabled: this.ctx.disabled ? 'disabled' : undefined
+  })
 }</code></pre>
     </td>
-    <td><pre><code>&lt;input class="input" disabled="disabled" /&gt;</code></pre></td>
+    <td><pre><code>&lt;input class="input"
+    disabled="disabled"/&gt;</code></pre></td>
 </tr>
 
 <tr>
