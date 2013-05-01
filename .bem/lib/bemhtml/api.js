@@ -19,15 +19,16 @@ api.translate = function translate(source, options) {
       xjstPre = BEMHTMLToXJST.match(tree, 'topLevel'),
       vars = [];
 
+  options || (options = {});
+
   if (options.cache === true) {
     var xjstCached = BEMHTMLLogLocal.match(xjstPre, 'topLevel');
     vars = xjstCached[0];
     xjstPre = xjstCached[1];
   }
 
-  var xjstTree = xjst.translate(xjstPre);
-
-  options || (options = {});
+  var xjstTree = xjst.translate(xjstPre),
+      exportName = options.exportName || 'BEMHTML';
 
   try {
     var xjstJS = options.devMode ?
@@ -38,19 +39,25 @@ api.translate = function translate(source, options) {
     throw new Error("xjst to js compilation failed:\n" + e.stack);
   }
 
-  return 'var BEMHTML = function() {\n' +
-         '  var cache,\n' +
-         '      xjst = '  + xjstJS + ';\n' +
-         '  return function(options) {\n' +
-         '    if (!options) options = {};\n' +
-         '    cache = options.cache;\n' +
-         (vars.length > 0 ? '    var ' + vars.join(', ') + ';\n' : '') +
-         '    return xjst.apply.call(\n' +
-         (options.raw ? 'this' : '[this]') + '\n' +
-         '    );\n' +
-         '  };\n' +
-         '}();\n' +
-         'typeof exports === "undefined" || (exports.BEMHTML = BEMHTML);';
+  return [
+         '(function(g) {',
+         'var cache,',
+         '  xjst = function(options) {',
+         '    if (!options) options = {};',
+         '    cache = options.cache;',
+         (vars.length > 0 ? '    var ' + vars.join(', ') + ';\n' : ''),
+         '    return __xjst.apply.call(',
+         (options.raw ? 'this' : '[this]'),
+         '    );',
+         '  },',
+         '  __xjst = '  + xjstJS + ';',
+         'if(typeof exports === "object") {',
+         'exports["' + exportName + '"] = xjst;',
+         '} else {',
+         'g["' + exportName + '"] = xjst;',
+         '}',
+         '})(this);'
+         ].join('\n');
 };
 
 //
