@@ -1,23 +1,19 @@
 С помощью этого расширения можно работать с элементами почти так же, как и с обычными блоками, т.е. любой (но необязательно каждый) элемент может иметь свой инстанс.
 
-Совместимо с Лего 2.9 и 2.10. На более ранних версиях не тестировалось.
+## Декларация элемента
 
-----
-
-===ДЕКЛАРАЦИЯ ЭЛЕМЕНТА
-
-%%(js)
+```javascript
 BEM.DOM.decl({
 
     block: 'menu',
     elem: 'item'
 
 }, {}, {});
-%%
+```
 
 Декларация модификатора элемента:
 
-%%(js)
+```javascript
 BEM.DOM.decl({
 
     block: 'menu',
@@ -26,38 +22,38 @@ BEM.DOM.decl({
     modVal: 'current'
 
 }, {}, {});
-%%
+```
 
 Для модификаторов элементов действуют все те же правила, что и для модификаторов блоков.
 
 ----
 
-===РАСШИРЕННОЕ АПИ БЛОКА
+## Расширенное апи блока
 
 Найти все инстансы указанного элемента:
 
-%%(js)
+```javascript
 this.elemInstances('item'); // эквивалентно this.findBlocksInside('menu__item');
 this.elemInstances(items); // items - jQuery-коллекция
-%%
+```
 
 Найти все инстансы указанного модификатора элемента:
 
-%%(js)
+```javascript
 this.elemInstances('item', 'state', 'current');
-%%
+```
 
 Для поиска одного (первого) инстанса есть хелпер с аналогичным апи:
 
-%%(js)
+```javascript
 this.elemInstance('item');
-%%
+```
 
 ----
 
 Найти элемент снаружи контекста:
 
-%%(js)
+```javascript
 {
     block: 'menu',
     content: {
@@ -67,19 +63,19 @@ this.elemInstance('item');
         }
     }
 }
-%%
+```
 
-%%(js)
+```javascript
 this.closestElem(this.elem('link'), 'item'); // this => menu
-%%
+```
 
--возвращает jQuery-коллекцию!
+- возвращает jQuery-коллекцию!
 
 ----
 
 Обработчики onElemSetMod блока сработают, если инстанс элемента сам установит себе соответствующие модификаторы:
 
-%%(js)
+```javascript
 onElemSetMod: { // this => menu
     'item': {
         'state': {
@@ -89,15 +85,15 @@ onElemSetMod: { // this => menu
         }
     }
 }
-%%
+```
 
-%%(js)
+```javascript
 this.setMod('state', 'current'); // this => menu__item
-%%
+```
 
 ----
 
-===АПИ ЭЛЕМЕНТА
+## Апи элемента
 
 Элемент имеет все те же самые хелперы, что и обычный блок, но некоторые из них работают немного иначе. Кроме того, у элементов есть ряд дополнительных хелперов.
 
@@ -105,27 +101,27 @@ this.setMod('state', 'current'); // this => menu__item
 
 Вернуть родительский блок:
 
-%%(js)
+```javascript
 this.getParent() // эквивалентно this.findBlockOutside('menu') + инстанс блока кэшируется
-%%
+```
 
 ----
 
 Отложенная инициализация по событию родительского блока:
 
-%%(js)
+```javascript
 this.liveInitOnParentEvent('switch', function() {});
-%%
+```
 
 Отложенная инициализация по событию блока снаружи текущего элемента (или блока):
 
-%%(js)
+```javascript
 this.liveInitOnBlockOutsideEvent('switch', 'menu', function() {});
-%%
+```
 
 Отличие заключается в следующем:
 
-%%(js)
+```javascript
 {
     block: 'menu', // (1)
     content: {
@@ -138,7 +134,7 @@ this.liveInitOnBlockOutsideEvent('switch', 'menu', function() {});
         }
     }
 }
-%%
+```
 
 При использовании liveInitOnBlockOutsideEvent элемент (b) будет проинициализирован по собитию на блоке (1) или (2).
 При использовании liveInitOnParentEvent элемент (b) будет проинициализирован только по собитию на блоке (2).
@@ -147,7 +143,7 @@ this.liveInitOnBlockOutsideEvent('switch', 'menu', function() {});
 
 Поиск элемента снаружи текущего:
 
-%%(js)
+```javascript
 {
     block: 'menu',
     content: {
@@ -157,17 +153,17 @@ this.liveInitOnBlockOutsideEvent('switch', 'menu', function() {});
         }
     }
 }
-%%
+```
 
-%%(js)
+```javascript
 this.closestElem('item'); // this => menu__link
-%%
+```
 
 При использовании этого хелпера, также как и для обычного блока, можно указать контекст первым параметром:
 
-%%(js)
+```javascript
 this.closestElem(ctx, 'item'); // ctx - jQuery-коллекция
-%%
+```
 
 ----
 
@@ -175,7 +171,7 @@ this.closestElem(ctx, 'item'); // ctx - jQuery-коллекция
 
 Элемент ищет только вложенные в него элементы:
 
-%%(js)
+```javascript
 {
     block: 'menu',
     content: [
@@ -190,19 +186,19 @@ this.closestElem(ctx, 'item'); // ctx - jQuery-коллекция
         }
     ]
 }
-%%
+```
 
-%%(js)
+```javascript
 this.findElem('link'); // this => menu__item
-%%
+```
 
 - будет найден только элемент (1).
 
 Если нужно найти все элементы link, поиск нужно производить от имени блока-родителя:
 
-%%(js)
+```javascript
 this.getParent().findElem('link'); // this => menu__item
-%%
+```
 
 - будут найдены элементы (1) и (2).
 
@@ -212,7 +208,7 @@ this.getParent().findElem('link'); // this => menu__item
 
 Обработчики onSetMod элемента сработают, если родительский блок установит этому элементу соответствующие модификаторы:
 
-%%(js)
+```javascript
 onSetMod: { // this => menu__item
     'state': {
         'current': function() {
@@ -220,10 +216,10 @@ onSetMod: { // this => menu__item
         }
     }
 }
-%%
+```
 
-%%(js)
+```javascript
 this.setMod(this.elem('item'), 'state', 'current'); // this => menu
-%%
+```
 
 Обработчики onElemSetMod в контексте инстанса элемента не используются.
