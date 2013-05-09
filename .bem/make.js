@@ -51,6 +51,16 @@ MAKE.decl('SetsNode', {
 MAKE.decl('BundleNode', {
 
     getTechs : function() {
+        if(~this.getPath().indexOf('test-bemtree')) {
+            return [
+                'bemdecl.js',
+                'deps.js',
+                'bemtree.xjst',
+                'bemhtml',
+                'html'
+            ];
+        }
+
         return [
             'bemjson.js',
             'bemdecl.js',
@@ -60,6 +70,15 @@ MAKE.decl('BundleNode', {
             'bemhtml',
             'html'
         ];
+    },
+
+    'create-html-node': function(tech, _) {
+        var args = [].slice.call(arguments, 1);
+
+        ~this.getPath().indexOf('test-bemtree') &&
+            (tech = 'bemtree-html');
+
+        return this.__base.apply(this, [tech].concat(args));
     }
 
 });

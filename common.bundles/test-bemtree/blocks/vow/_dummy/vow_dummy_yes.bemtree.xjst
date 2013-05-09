@@ -1,0 +1,26 @@
+typeof Vow === 'undefined' &&
+    (Vow = {
+        _res : {},
+
+        then : function(fn) {
+            this._res = fn();
+            return this;
+        },
+
+        fail : function(fn) {
+            this._res = fn();
+            return this;
+        },
+
+        always : function(fn) {
+            return fn();
+        },
+
+        allResolved : function() {
+            return this;
+        },
+
+        invoke : function() {
+            return this;
+        }
+    });
