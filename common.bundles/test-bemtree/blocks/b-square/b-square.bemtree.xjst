@@ -1,0 +1,12 @@
+block b-square {
+
+    default: {
+        this.ctx.mods = { color : 'green' };
+        return applyCtx(this.ctx);
+    }
+
+    mod color green, default: {
+        return applyNext();
+    }
+
+}

@@ -1,0 +1,7 @@
+function isVowPromise(obj) {
+    return obj && obj._res != null;
+}
+
+this._mode === '', isVowPromise(this.ctx): {
+    apply(this.ctx = this.ctx._res);
+}
