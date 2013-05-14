@@ -677,28 +677,41 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
     /**
      * Finds elements nested in a block
      * @protected
-     * @param {String|jQuery} [ctx=this.domElem] Element where search is being performed
+     * @param {jQuery} [ctx=this.domElem] Element where search is being performed
      * @param {String} names Nested element name (or names separated by spaces)
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
+     * @param {Boolean} [strictMode=false]
      * @returns {jQuery} DOM elements
      */
-    findElem : function(ctx, names, modName, modVal) {
-        if(arguments.length % 2) { // if the number of arguments is one or three
+    findElem : function(ctx, names, modName, modVal, strictMode) {
+        if(typeof ctx === 'string') {
+            strictMode = modVal;
             modVal = modName;
             modName = names;
             names = ctx;
             ctx = this.domElem;
-        } else if(typeof ctx === 'string') {
-            ctx = this.findElem(ctx);
+        }
+
+        if(typeof modName === 'boolean') {
+            strictMode = modName;
+            modName = undefined;
         }
 
         var _self = this.__self,
             selector = '.' +
                 names.split(' ').map(function(name) {
                     return buildClass(_self._name, name, modName, modVal);
-                }).join(',.');
-        return findDomElem(ctx, selector);
+                }).join(',.'),
+            res = findDomElem(ctx, selector);
+
+        if(!strictMode) return res;
+
+        var blockSelector = this.buildSelector(),
+            domElem = this.domElem;
+        return res.filter(function() {
+            return domElem.index($(this).closest(blockSelector)) > -1;
+        });
     },
 
     /**
