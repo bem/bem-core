@@ -6,12 +6,12 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 2.0.2
+ * @version 2.0.3
  */
 
 modules.define('inherit', function(provide) {
 
-var hasIntrospection = (function(_){_;}).toString().indexOf('_') > -1,
+var hasIntrospection = (function(){'_';}).toString().indexOf('_') > -1,
     emptyBase = function() {},
     objCreate = Object.create || function(ptp) {
         var inheritance = function() {};
