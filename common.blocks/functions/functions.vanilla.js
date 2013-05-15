@@ -8,7 +8,9 @@ var bindCall = function(fn) {
 provide({
     isFunction : function(obj) {
         return toStr(obj) === '[object Function]';
-    }
+    },
+    
+    noop : function() {}
 });
 
 });
