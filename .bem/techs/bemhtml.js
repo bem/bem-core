@@ -6,7 +6,7 @@ var BEM = require('bem'),
 exports.techMixin = {
 
     getSuffixes : function() {
-        return ['bemhtml'];
+        return ['bemhtml', 'bemhtml.xjst'];
     },
 
     getBuildSuffixes : function() {
@@ -14,7 +14,8 @@ exports.techMixin = {
     },
 
     getBuildResultChunk : function(relPath, path, suffix) {
-        return compat.transpile(this.readContent(path, suffix));
+        var content = this.readContent(path, suffix);
+        return suffix !== 'bemhtml.xjst' ? compat.transpile(content) : content;
     },
 
     getBuildResult : function(prefixes, suffix, outputDir, outputName) {
