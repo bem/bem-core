@@ -1,0 +1,12 @@
+{
+  "block": "blah",
+  "content": [
+    "",
+    0,
+    true,
+    false,
+    null,
+    "Abstract",
+    { "elem": "lem", "content": "text" }
+  ]
+}

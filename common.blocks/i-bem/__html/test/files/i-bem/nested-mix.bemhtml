@@ -1,0 +1,12 @@
+block('b1')(
+  tag()('a'),
+  mix()([{ block: 'b2' }, { block: 'b3', elem: 'e3' }])
+);
+block('b2')(
+  tag()('b'),
+  mix()([{ mods: { modname: 'modval' } }])
+);
+block('b3')(
+  tag()('b'),
+  elem('e3').mix()([{ mods: { modname: 1 } }])
+);

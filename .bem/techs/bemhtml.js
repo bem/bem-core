@@ -1,6 +1,7 @@
 var BEM = require('bem'),
     Q = BEM.require('q'),
-    PATH = require('path');
+    PATH = require('path'),
+    compat = require('bemhtml-compat');
 
 exports.techMixin = {
 
@@ -13,7 +14,7 @@ exports.techMixin = {
     },
 
     getBuildResultChunk : function(relPath, path, suffix) {
-        return this.readContent(path, suffix);
+        return compat.transpile(this.readContent(path, suffix));
     },
 
     getBuildResult : function(prefixes, suffix, outputDir, outputName) {

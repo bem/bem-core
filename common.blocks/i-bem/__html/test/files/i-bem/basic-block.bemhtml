@@ -1,0 +1,25 @@
+block('b-bla')(
+  tag()('span'),
+  mod('0-mode', 'v2').tag()('yay'),
+  mix()([{ mods: { m2: 'v2' } }]),
+  js()(true)
+);
+
+block('b-alb')(
+  attrs()({ bbb: 1, title: 2 }),
+  js()({ bbb: 1, title: 2 })
+);
+
+block('b-nojs')(
+  tag().match(!this.elem)('table'),
+  def().match(!this.elem, function() { return !this.ctx._wrap })(function() {
+    return apply('', {
+      'ctx._wrap': true,
+      ctx: { elem: 'run', content: this.ctx }
+    });
+  })
+);
+
+elem('elem1').def()(function() {
+  return apply('', { ctx: this.ctx.content });
+});
