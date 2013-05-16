@@ -1,3 +1,5 @@
+oninit(function() {
+
 // XXX: Support tanker-like syntax of keys in `i-bem__i18n`
 // i18n['prj']['keyset']['key'](params);
 // FIXME: Should not work, because of vars hoisting
@@ -235,3 +237,5 @@ bem_.I18N = (function(base) {
 BEM = this.BEM = bem_;
 
 })(typeof BEM === 'undefined' ? {} : BEM);
+
+}); // oninit
