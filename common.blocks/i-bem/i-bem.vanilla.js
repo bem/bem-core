@@ -466,6 +466,7 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {String|Object} decl Block name (simple syntax) or description
      * @param {String} decl.block|decl.name Block name
      * @param {String} [decl.baseBlock] Name of the parent block
+     * @param {Array} [decl.baseMix] Mixed block names
      * @param {String} [decl.modName] Modifier name
      * @param {String} [decl.modVal] Modifier value
      * @param {Object} [props] Methods
@@ -522,11 +523,22 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             };
         }
 
-        var block;
+        var block, baseBlocks = baseBlock;
+        if(decl.baseMix) {
+            baseBlocks = [baseBlocks];
+            decl.baseMix.forEach(function(mixedBlock) {
+                if(!blocks[mixedBlock]) {
+                    throw('mix block "' + mixedBlock + '" for "' + decl.block + '" is undefined');
+                }
+                baseBlocks.push(blocks[mixedBlock]);
+            });
+            console.log(baseBlocks, props, staticProps);
+        }
+
         decl.block === baseBlock._name?
             // makes a new "live" if the old one was already executed
-            (block = inherit.self(baseBlock, props, staticProps))._processLive(true) :
-            (block = blocks[decl.block] = inherit(baseBlock, props, staticProps))._name = decl.block;
+            (block = inherit.self(baseBlocks, props, staticProps))._processLive(true) :
+            (block = blocks[decl.block] = inherit(baseBlocks, props, staticProps))._name = decl.block;
 
         return block;
     },
