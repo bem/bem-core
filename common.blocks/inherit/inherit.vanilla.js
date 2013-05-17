@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 2.0.3
+ * @version 2.0.4
  */
 
 modules.define('inherit', function(provide) {
@@ -57,6 +57,7 @@ function getPropList(obj) {
             obj.hasOwnProperty(specProp) && res.push(specProp);
         }
     }
+
     return res;
 }
 
@@ -65,7 +66,9 @@ function override(base, res, add) {
         j = 0, len = addList.length,
         name, prop;
     while(j < len) {
-        name = addList[j++];
+        if((name = addList[j++]) === '__self') {
+            continue;
+        }
         prop = add[name];
         if(isFunction(prop) &&
                 (!hasIntrospection || prop.toString().indexOf('.__base') > -1)) {
@@ -108,30 +111,21 @@ var inherit = function() {
     extend(res, base);
 
     var basePtp = base.prototype,
-        resultPtp = res.prototype = objCreate(basePtp);
+        resPtp = res.prototype = objCreate(basePtp);
 
-    resultPtp.__self = resultPtp.constructor = res;
+    resPtp.__self = resPtp.constructor = res;
 
-    props && override(basePtp, resultPtp, props);
+    props && override(basePtp, resPtp, props);
     staticProps && override(base, res, staticProps);
 
     if(withMixins) {
-        var i = 1, mixins = args[0], mixin,
-            propList, propName, j, len;
+        var i = 1, mixins = args[0], mixin;
         while(mixin = mixins[i++]) {
             if(isFunction(mixin)) {
-                extend(res, mixin);
+                override(res, res, mixin);
                 mixin = mixin.prototype;
             }
-
-            propList = getPropList(mixin);
-            j = 0; len = propList.length;
-            while(j < len) {
-                propName = propList[j++];
-                if(propName !== '__self' && propName !== '__constructor' && propName !== 'constructor') {
-                    resultPtp[propName] = mixin[propName];
-                }
-            }
+            override(resPtp, resPtp, mixin);
         }
     }
 
