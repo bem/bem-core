@@ -542,6 +542,26 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         return block;
     },
 
+    declMix : function(block, props, staticProps) {
+        props || (props = {});
+
+        if(props.onSetMod) {
+            modFnsToProps(props.onSetMod, props);
+            delete props.onSetMod;
+        }
+
+        if(props.onElemSetMod) {
+            for(var elemName in props.onElemSetMod) {
+                if(props.onElemSetMod.hasOwnProperty(elemName)) {
+                    modFnsToProps(props.onElemSetMod[elemName], props, elemName);
+                }
+            }
+            delete props.onElemSetMod;
+        }
+
+        return blocks[block] = inherit(props, staticProps);
+    },
+
     /**
      * Processes a block's live properties
      * @private

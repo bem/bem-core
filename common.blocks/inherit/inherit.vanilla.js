@@ -89,19 +89,16 @@ function override(base, res, add) {
     }
 }
 
-function applyMixins(mixins) {
-    var i = 1, mixin, res;
-    while(mixin = mixins[i]) {
-        if(i++ === 1) {
+function applyMixins(mixins, res) {
+    var i = 1, mixin;
+    while(mixin = mixins[i++]) {
+        res?
+            isFunction(mixin)?
+                inherit.self(res, mixin.prototype, mixin) :
+                inherit.self(res, mixin) :
             res = isFunction(mixin)?
                 inherit(mixins[0], mixin.prototype, mixin) :
                 inherit(mixins[0], mixin);
-        }
-        else {
-            isFunction(mixin)?
-                inherit.self(res, mixin.prototype, mixin) :
-                inherit.self(res, mixin);
-        }
     }
     return res || mixins[0];
 }
@@ -141,14 +138,14 @@ var inherit = function() {
 inherit.self = function() {
     var args = arguments,
         withMixins = isArray(args[0]),
-        base = withMixins? applyMixins(args[0]) : args[0],
+        base = withMixins? applyMixins(args[0], args[0][0]) : args[0],
         props = args[1],
         staticProps = args[2];
 
     var basePtp = base.prototype;
     props && override(basePtp, basePtp, props);
     staticProps && override(base, base, staticProps);
-
+    
     return base;
 };
 
