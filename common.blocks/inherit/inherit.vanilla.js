@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 2.0.5
+ * @version 2.1.0
  */
 
 modules.define('inherit', function(provide) {
@@ -89,23 +89,28 @@ function override(base, res, add) {
     }
 }
 
-function applyMixins(res, mixins) {
-    var resPtp = res.prototype,
-        i = 1, mixin;
-    while(mixin = mixins[i++]) {
-        if(isFunction(mixin)) {
-            override(res, res, mixin);
-            mixin = mixin.prototype;
+function applyMixins(mixins) {
+    var i = 1, mixin, res;
+    while(mixin = mixins[i]) {
+        if(i++ === 1) {
+            res = isFunction(mixin)?
+                inherit(mixins[0], mixin.prototype, mixin) :
+                inherit(mixins[0], mixin);
         }
-        override(resPtp, resPtp, mixin);
+        else {
+            isFunction(mixin)?
+                inherit.self(res, mixin.prototype, mixin) :
+                inherit.self(res, mixin);
+        }
     }
+    return res || mixins[0];
 }
 
 var inherit = function() {
     var args = arguments,
         withMixins = isArray(args[0]),
         hasBase = withMixins || isFunction(args[0]),
-        base = hasBase? withMixins? args[0][0] : args[0] : emptyBase,
+        base = hasBase? withMixins? applyMixins(args[0]) : args[0] : emptyBase,
         props = args[hasBase? 1 : 0] || {},
         staticProps = args[hasBase? 2 : 1],
         res = props.__constructor || (hasBase && base.prototype.__constructor)?
@@ -129,7 +134,6 @@ var inherit = function() {
 
     props && override(basePtp, resPtp, props);
     staticProps && override(base, res, staticProps);
-    withMixins && applyMixins(res, args[0]);
 
     return res;
 };
@@ -137,14 +141,13 @@ var inherit = function() {
 inherit.self = function() {
     var args = arguments,
         withMixins = isArray(args[0]),
-        base = withMixins? args[0][0] : args[0],
-        basePtp = base.prototype,
+        base = withMixins? applyMixins(args[0]) : args[0],
         props = args[1],
         staticProps = args[2];
 
+    var basePtp = base.prototype;
     props && override(basePtp, basePtp, props);
     staticProps && override(base, base, staticProps);
-    withMixins && applyMixins(base, args[0]);
 
     return base;
 };
