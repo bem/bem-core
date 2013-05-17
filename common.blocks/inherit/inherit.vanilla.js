@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 2.0.4
+ * @version 2.0.5
  */
 
 modules.define('inherit', function(provide) {
@@ -89,6 +89,18 @@ function override(base, res, add) {
     }
 }
 
+function applyMixins(res, mixins) {
+    var resPtp = res.prototype,
+        i = 1, mixin;
+    while(mixin = mixins[i++]) {
+        if(isFunction(mixin)) {
+            override(res, res, mixin);
+            mixin = mixin.prototype;
+        }
+        override(resPtp, resPtp, mixin);
+    }
+}
+
 var inherit = function() {
     var args = arguments,
         withMixins = isArray(args[0]),
@@ -117,26 +129,22 @@ var inherit = function() {
 
     props && override(basePtp, resPtp, props);
     staticProps && override(base, res, staticProps);
-
-    if(withMixins) {
-        var i = 1, mixins = args[0], mixin;
-        while(mixin = mixins[i++]) {
-            if(isFunction(mixin)) {
-                override(res, res, mixin);
-                mixin = mixin.prototype;
-            }
-            override(resPtp, resPtp, mixin);
-        }
-    }
+    withMixins && applyMixins(res, args[0]);
 
     return res;
 };
 
-inherit.self = function(base, props, staticProps) {
-    var basePtp = base.prototype;
+inherit.self = function() {
+    var args = arguments,
+        withMixins = isArray(args[0]),
+        base = withMixins? args[0][0] : args[0],
+        basePtp = base.prototype,
+        props = args[1],
+        staticProps = args[2];
 
     props && override(basePtp, basePtp, props);
     staticProps && override(base, base, staticProps);
+    withMixins && applyMixins(base, args[0]);
 
     return base;
 };
