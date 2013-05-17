@@ -532,7 +532,6 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
                 }
                 baseBlocks.push(blocks[mixedBlock]);
             });
-            console.log(baseBlocks, props, staticProps);
         }
 
         decl.block === baseBlock._name?
