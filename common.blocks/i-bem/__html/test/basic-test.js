@@ -1,9 +1,9 @@
 var assert = require('assert'),
     bemhtml = require('../../../../.bem/lib/bemhtml');
 
-describe('BEMHTML Compiler', function() {
+suite('BEMHTML Compiler', function() {
   function unit(name, src, data, dst) {
-    it(name, function() {
+    test(name, function() {
       assert.equal(bemhtml.compile(src, { raw: true }).apply.call(data), dst);
     });
   }

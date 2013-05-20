@@ -7,13 +7,13 @@ var assert = require('assert'),
       '../i-bem__html.bemhtml'
     )).toString();
 
-describe('i-bem block and others', function() {
+suite('i-bem block and others', function() {
   function readFile(file) {
     return fs.readFileSync(path.resolve(__dirname, 'files', file)).toString();
   }
 
   function unit(name, file, raw) {
-    it(name, function() {
+    test(name, function() {
       var contents = {
         src: readFile('i-bem/' + file + '.bemhtml'),
         data: JSON.parse(readFile('i-bem/' + file + '.json')),
