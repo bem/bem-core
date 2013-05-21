@@ -254,8 +254,8 @@ BEMContext.prototype.generateId = function generateId() {
 
 // Wrap xjst's apply and export our own
 var oldApply = exports.apply;
-exports.apply = BEMContext.apply = function _apply() {
-    var ctx = new BEMContext(this, oldApply);
+exports.apply = BEMContext.apply = function _apply(context) {
+    var ctx = new BEMContext(context || this, oldApply);
     ctx.apply();
     return ctx._buf.join('');
 };
