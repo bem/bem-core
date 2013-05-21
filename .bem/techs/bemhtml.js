@@ -13,6 +13,10 @@ exports.techMixin = {
         return ['bemhtml.js'];
     },
 
+    getCreateSuffixes : function() {
+        return ['bemhtml'];
+    },
+
     getBuildResultChunk : function(relPath, path, suffix) {
         var content = this.readContent(path, suffix);
         return suffix !== 'bemhtml.xjst' ? content.then(function(source) {
