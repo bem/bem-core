@@ -15,7 +15,9 @@ exports.techMixin = {
 
     getBuildResultChunk : function(relPath, path, suffix) {
         var content = this.readContent(path, suffix);
-        return suffix !== 'bemhtml.xjst' ? compat.transpile(content) : content;
+        return suffix !== 'bemhtml.xjst' ? content.then(function(source) {
+          return compat.transpile(source);
+        }) : content;
     },
 
     getBuildResult : function(prefixes, suffix, outputDir, outputName) {
