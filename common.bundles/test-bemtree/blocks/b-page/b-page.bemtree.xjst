@@ -5,6 +5,7 @@ block b-page {
         return applyCtx({
                 block : this.block,
                 title : this.data.pageTitle,
+                mods  : this.ctx.mods,
                 head  : head,
                 content : this.ctx.content
             });
@@ -29,6 +30,8 @@ block b-page {
         { block : 'some-block' },
         { block : 'b-square', js : { id : 1 } }
     ]
+    
+    mod error not-found, content: 'Nothing found'
 
     elem css {
 
