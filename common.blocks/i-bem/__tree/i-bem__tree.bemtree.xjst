@@ -95,15 +95,14 @@ BEMContext.prototype.doAsync = function(fn) {
 
 // Wrap xjst's apply and export our own
 exports.apply = BEMContext.applyAsync = function() {
-    var ctx = new BEMContext(this, apply),
-        result;
+    var ctx = new BEMContext(this, apply);
 
     ctx.__queue = [];
-    result = ctx.apply();
+    ctx._buf = ctx.apply();
 
     return Vow.allResolved(ctx.__queue)
         .always(function() {
-            return result;
+            return ctx._buf;
         });
 };
 

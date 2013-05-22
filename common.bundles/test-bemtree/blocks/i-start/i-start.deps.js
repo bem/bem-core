@@ -1,6 +1,6 @@
 ({
     mustDeps : [
-        { block : 'vow', mods : { 'dummy' : 'yes' } },
+        { block : 'vow', mods : { dummy : 'yes' } },
         { block : 'i-bem', elems : ['tree'] }
     ],
     shouldDeps : [
