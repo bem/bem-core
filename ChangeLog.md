@@ -3,6 +3,7 @@ bem-core changelog
 1.0.0
 -----
 - переход на модульную систему https://github.com/ymaps/modules
+- все блоки-модули, кроме i-bem, избавились от префиксов
 - из i-bem, i-bem__dom убраны все deprecated-методы
 - i-bem больше не зависит от jQuery
 - блок i-bem__dom становится модулем i-bem__dom. Все BEM.DOM-блоки должны теперь доопределять этот модуль. Пример: https://github.com/bem/bem-core/blob/feature/modules/common.bundles/index/blocks/b-square/b-square.js
