@@ -5,20 +5,17 @@
  * @inherit Array
  */
 
-modules.require(['i-bem', 'inherit'], function(BEM, inherit) {
+modules.define('i-bem__collection', ['inherit'], function(provide, inherit) {
 
-BEM.decl('i-bem__collection', null, {
-
+provide(inherit(null, {
     /**
      * Get method names that will be implemented in collection
      * @return {Array}
      */
     getMethods : function() {
-
         return ['on', 'onFirst', 'un', 'trigger',
             'setMod', 'toggleMod', 'delMod',
             'afterCurrentEvent', 'destruct'];
-
     },
 
     /**
@@ -26,35 +23,23 @@ BEM.decl('i-bem__collection', null, {
      * @return {Object}
      */
     getBase : function() {
-
         return {
-
             __constructor : function(a) {
-
                 a && this.push.apply(this, a);
-
             },
 
             applyMethod : function(method, args) {
-
                 this.forEach(function(context) {
                     context[method] && context[method].apply(context, args);
                 });
-
                 return this;
-
             },
 
             callMethod : function() {
-
                 var args = this.slice.call(arguments);
-
                 return this.applyMethod(args.shift(), args);
-
             }
-
         };
-
     },
 
     /**
@@ -63,7 +48,6 @@ BEM.decl('i-bem__collection', null, {
      * @return {Object}
      */
     create : function(a) {
-
         var decl = this.getBase(),
             Collection;
 
@@ -81,9 +65,7 @@ BEM.decl('i-bem__collection', null, {
         };
 
         return this.create(a);
-
     }
-
-});
+}));
 
 });
