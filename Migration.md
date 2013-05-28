@@ -3,7 +3,7 @@
 ## BEM.DOM-блоки
 
 ### Было
-````(javascript)
+````javascript
 BEM.DOM.decl('b-spin', {
 
     onSetMod : {
@@ -64,7 +64,7 @@ BEM.DOM.decl('b-spin', {
 ````
 
 ### Стало
-````(javascript)
+````javascript
 modules.define(
     'i-bem__dom',
     ['tick'],
