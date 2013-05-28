@@ -70,10 +70,6 @@ modules.define(
     ['tick'],
     function(provide, tick, DOM) {
 
-/**
- * Количество фреймов в анимации
- * @type {Number}
- */
 var FRAME_COUNT = 36;
 
 DOM.decl('b-spin', {
