@@ -416,16 +416,14 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
     bindToWin : function(event, fn) {
         var _fn = fn,
             currentHeight,
-            currentWidth,
-            win;
+            currentWidth;
 
-        if (event === 'resize') {
-            win = this.__self.win;
+        if(event === 'resize') {
             fn = function() {
                 var height = win.height(),
                     width = win.width();
 
-                if (currentHeight !== height || currentWidth !== width) {
+                if(currentHeight !== height || currentWidth !== width) {
                     currentHeight = height;
                     currentWidth = width;
                     _fn.apply(this, arguments);
