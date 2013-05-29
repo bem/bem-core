@@ -55,6 +55,21 @@ onSetMod : {
             // код деструктора
 ````
 
+### Доступ до DOM-элемента в обработчике события
+DOM-элемент, к которому был подвешен обработчик события теперь доступен как `e.domElem` вместо `e.data.domElem`.
+
+Было:
+````javascript
+onClick : function(e) {
+    e.data.domElem.attr(...
+````
+
+Стало:
+````javascript
+onClick : function(e) {
+    e.domElem.attr(...
+````
+
 ### Каналы (channels)
 Каналы больше не являются встроенными в BEM, теперь они являются самостоятельным модулем `events__channels`.
 
@@ -69,10 +84,46 @@ BEM.DOM.decl('block', {
 ````javascript
 modules.define('i-bem__dom', ['events__channels'], function(provide, channels, DOM) {    
 
-DOM.decl('blocks', {
+DOM.decl('block', {
     method : function() {
         channels('channel-name').on(....    
 ````
+
+### Блок `i-system` и канал `sys` событий tick, idle, wakeup.
+Этот блок и канал перестали существовать, вместо них появились отдельные модули: `tick` с событием tick  и `idle` с событиями idle и wakeup.
+
+Было:
+````javascript
+BEM.DOM.decl('block', {
+    method : function() {
+        BEM.channel('sys').on('tick', ...
+````
+
+Стало:
+````javascript
+modules.define('i-bem__dom', ['tick'], function(provide, tick, DOM) {    
+
+DOM.decl('block', {
+    method : function() {
+        tick.on('tick', ...
+````
+
+Было:
+````javascript
+BEM.DOM.decl('block', {
+    method : function() {
+        BEM.channel('sys').on('wakeup', ...
+````
+
+Стало:
+````javascript
+modules.define('i-bem__dom', ['idle'], function(provide, idle, DOM) {    
+
+DOM.decl('block', {
+    method : function() {
+        idle.on('wakeup', ...
+````
+
 
 ### На примере блока `b-spin`
 Было:
