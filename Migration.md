@@ -1,5 +1,25 @@
 # Миграция
 
+## Модули
+
+## jQuery и jQuery-плагины
+Все jQuery-плагины, не связанные непосредственно с jQuery (`$.observable`, `$.inherit`, `$.identify`, `$.throttle`) стали модулями (`events`, `inherit`, `identify`, `functions__throttle`, `functions__debounce`).
+
+Было:
+````javascript
+// код блока
+$.throttle(...
+// код блока
+````
+
+Стало:
+````javascript
+module.define('my-module', ['functions__throttle'], function(provide, throttle) {
+// код модуля
+throttle(...
+// код модуля
+````
+
 ## BEM-блоки
 
 ## BEM.DOM-блоки
