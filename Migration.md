@@ -1,8 +1,59 @@
 # Миграция
 
+## BEM-блоки
+
 ## BEM.DOM-блоки
 
-### Было
+### Декларация
+Вместо декларации через BEM.DOM.decl необходимо доопределять модуль `i-bem__dom`.
+
+Было:
+````javascript
+BEM.DOM.decl('block', ...);
+````
+Стало:
+````javascript
+modules.define('i-bem__dom', function(provide, DOM) {
+
+DOM.decl('block', ...);
+
+provide(DOM);
+
+});
+````
+### Конструктор
+Необходимо использовать полную нотацию для обработчика установки модификатора `js` в значение `inited`.
+
+Было:
+````javascript
+onSetMod : {
+    js : function() {
+        // код деструктора
+````
+Стало:
+````javascript
+onSetMod : {
+    js : {
+        inited : function() { 
+            // код конструктора
+````
+### Деструктор
+Вместо метода `destruct` необходимо использовать обработчик установки модификатора `js` в пустое значение (удаление модификатора).
+
+Было:
+````javascript
+destruct : function() {
+    // код деструктора
+````
+Стало:
+````javascript
+onSetMod : {
+    js : {
+        '' : function() {
+            // код деструктора
+````
+### На примере блока `b-spin`
+Было:
 ````javascript
 BEM.DOM.decl('b-spin', {
 
@@ -62,8 +113,7 @@ BEM.DOM.decl('b-spin', {
 
 });
 ````
-
-### Стало
+Стало:
 ````javascript
 modules.define(
     'i-bem__dom',
