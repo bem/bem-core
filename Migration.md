@@ -54,6 +54,26 @@ onSetMod : {
         '' : function() {
             // код деструктора
 ````
+
+### Каналы (channels)
+Каналы больше не являются встроенными в BEM, теперь они являются самостоятельным модулем `events__channels`.
+
+Было:
+````javascript
+BEM.DOM.decl('block', {
+    method : function() {
+        BEM.channel('channel-name').on(....
+````
+
+Стало:
+````javascript
+modules.define('i-bem__dom', ['events__channels'], function(provide, channels, DOM) {    
+
+DOM.decl('blocks', {
+    method : function() {
+        channels('channel-name').on(....    
+````
+
 ### На примере блока `b-spin`
 Было:
 ````javascript
