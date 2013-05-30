@@ -1,9 +1,20 @@
 # Миграция
 
 ## Модули
+Весь код теперь пишется в терминах модульной системы https://github.com/ymaps/modules.
 
 ## jQuery и jQuery-плагины
-Все jQuery-плагины, не связанные непосредственно с jQuery (`$.observable`, `$.inherit`, `$.identify`, `$.throttle`) стали модулями (`events`, `inherit`, `identify`, `functions__throttle`, `functions__debounce`).
+jQuery теперь используется только для операций, связанных непосредственно с DOM (поиск элементов, подписка на события, установка/получение атрибутов элементов, и т.д.).
+Для всех остальных операций написаны соответствующие модули, предоставляющие аналогичный функционал, но, при этом, не зависящие от jQuery:
+ * модуль `objects` для работы с объектами (с методами `extend`, `isEmpty`, `each`)
+ * модуль `functions` для работы с функциями (с методами `isFunction` и `noop`)
+
+Также, все jQuery-плагины, не связанные непосредственно с jQuery (`$.observable`, `$.inherit`, `$.cookie`, `$.identify`, `$.throttle`) стали модулями:
+ * модуль `events` вместо `$.observable` для работы с событиями, предоставляющий "классы" `EventsEmitter` и `Event`)
+ * модуль `inherit` вместо `$.inherit` для работы с "классами" и наследованием
+ * модуль `cookie` вместо `$.cookie`
+ * модуль `identify` вместо `$.identify`
+ * модули `functions__throttle`, `functions__debounce` вместо $.throttle и $.debounce, соответственно
 
 Было:
 ````javascript
