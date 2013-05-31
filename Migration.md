@@ -32,6 +32,27 @@ throttle(...
 ````
 
 ## BEM-блоки
+Те BEM-блоки, которые использовались как хранилище для каких-то методов, при этом никак не использующие BEM-методологию, теперь 
+могут быть написаны как модули.
+
+Было:
+````javascript
+BEM.decl('i-router', {
+    route : function() { ... }
+});
+````
+
+Стало:
+````javascript
+modules.define('router', function(provide) {
+
+provide({
+    route : function() { ... }
+});
+
+});
+
+````
 
 ## BEM.DOM-блоки
 
