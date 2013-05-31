@@ -23,6 +23,7 @@
 - Вместо `BEM.afterCurrentEvent` появился модуль `next-tick`. `BEM.afterCurrentEvent` теперь **deprecated**.
 - Вместо `BEM.channel` появился отдельный модуль `channels`. `BEM.channel` теперь **deprecated**.
 - Метод `changeThis` помечен как **deprecated**. Используйте нативный `bind`.
+- Метод `del` удален из блока `i-bem`.
 - Добавлен модуль-обертка `jquery`, предоставляющий jQuery
 - `$.observable` становится модулем `events` и больше не зависит от jQuery.
 - `$.inherit` становится модулем `inherit` и больше не зависит от jQuery.
