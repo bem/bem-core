@@ -54,6 +54,24 @@ provide({
 
 ````
 
+Если же, по каким-то причинам, нужны именно BEM-блоки (не BEM.DOM-блоки), то их можно объявлять, доопределяя модуль `i-bem`.
+
+Было:
+````javascript
+BEM.decl('my-block', { ... });
+````
+
+Стало:
+````javascript
+modules.define('i-bem', function(provide, BEM) {
+
+BEM.decl('my-block', { ... });
+
+provide(BEM);
+
+});
+````
+
 ## BEM.DOM-блоки
 
 ### Декларация
