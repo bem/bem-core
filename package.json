@@ -16,7 +16,7 @@
   "dependencies": {
     "xjst": "~0.4.2",
     "ometajs": "~3.2.2",
-    "ym": "~0.0.1"
+    "ym": "0.0.5"
   },
   "devDependencies": {
     "bem": "~0.5.29"
