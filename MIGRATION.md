@@ -49,47 +49,6 @@ throttle(...
 // код модуля
 ````
 
-## BEM-блоки
-Те BEM-блоки, которые использовались как хранилище для каких-то методов, при этом никак не использующие BEM-методологию, теперь 
-могут быть написаны как модули.
-
-Было:
-````javascript
-BEM.decl('i-router', {
-    route : function() { ... }
-});
-````
-
-Стало:
-````javascript
-modules.define('router', function(provide) {
-
-provide({
-    route : function() { ... }
-});
-
-});
-
-````
-
-Если же, по каким-то причинам, нужны именно BEM-блоки (не BEM.DOM-блоки), то их можно объявлять, доопределяя модуль `i-bem`.
-
-Было:
-````javascript
-BEM.decl('my-block', { ... });
-````
-
-Стало:
-````javascript
-modules.define('i-bem', function(provide, BEM) {
-
-BEM.decl('my-block', { ... });
-
-provide(BEM);
-
-});
-````
-
 ## BEM.DOM-блоки
 
 ### Декларация
@@ -141,6 +100,21 @@ onSetMod : {
     js : {
         '' : function() {
             // код деструктора
+````
+
+### Метод changeThis ###
+Вместо метода `changeThis` необходимо использовать нативный метод `bind`.
+
+Было:
+````javascript
+// код блока
+obj.on('event', this.changeThis(this._method);
+// код блока
+````
+
+Стало:
+````javascript
+obj.on('event', this._method.bind(this));
 ````
 
 ### Доступ до DOM-элемента в обработчике события
@@ -212,6 +186,46 @@ DOM.decl('block', {
         idle.on('wakeup', ...
 ````
 
+## BEM-блоки
+Те BEM-блоки, которые использовались как хранилище для каких-то методов, при этом никак не использующие BEM-методологию, теперь 
+могут быть написаны как модули.
+
+Было:
+````javascript
+BEM.decl('i-router', {
+    route : function() { ... }
+});
+````
+
+Стало:
+````javascript
+modules.define('router', function(provide) {
+
+provide({
+    route : function() { ... }
+});
+
+});
+
+````
+
+Если же, по каким-то причинам, нужны именно BEM-блоки (не BEM.DOM-блоки), то их можно объявлять, доопределяя модуль `i-bem`.
+
+Было:
+````javascript
+BEM.decl('my-block', { ... });
+````
+
+Стало:
+````javascript
+modules.define('i-bem', function(provide, BEM) {
+
+BEM.decl('my-block', { ... });
+
+provide(BEM);
+
+});
+````
 
 ### Рефакторинг на примере блока `b-spin`
 Было:
