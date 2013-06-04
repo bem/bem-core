@@ -936,7 +936,6 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
     /**
      * Initializes blocks on a fragment of the DOM tree
      * @static
-     * @protected
      * @param {jQuery} [ctx=document] Root DOM node
      * @returns {jQuery} ctx Initialization context
      */
@@ -956,7 +955,6 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
     /**
      * Destroys blocks on a fragment of the DOM tree
      * @static
-     * @protected
      * @param {jQuery} ctx Root DOM node
      * @param {Boolean} [excludeSelf=false] Exclude the main domElem
      */
@@ -984,7 +982,6 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
     /**
      * Replaces a fragment of the DOM tree inside the context, destroying old blocks and intializing new ones
      * @static
-     * @protected
      * @param {jQuery} ctx Root DOM node
      * @param {jQuery|String} content New content
      * @param {Function} [callback] Handler to be called after initialization
@@ -997,6 +994,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 
     /**
      * Changes a fragment of the DOM tree including the context and initializes blocks.
+     * @static
      * @param {jQuery} ctx Root DOM node
      * @param {jQuery|String} content Content to be added
      */
@@ -1007,6 +1005,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 
     /**
      * Adds a fragment of the DOM tree at the end of the context and initializes blocks
+     * @static
      * @param {jQuery} ctx Root DOM node
      * @param {jQuery|String} content Content to be added
      */
@@ -1016,6 +1015,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 
     /**
      * Adds a fragment of the DOM tree at the beginning of the context and initializes blocks
+     * @static
      * @param {jQuery} ctx Root DOM node
      * @param {jQuery|String} content Content to be added
      */
@@ -1025,6 +1025,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 
     /**
      * Adds a fragment of the DOM tree before the context and initializes blocks
+     * @static
      * @param {jQuery} ctx Contextual DOM node
      * @param {jQuery|String} content Content to be added
      */
@@ -1034,6 +1035,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 
     /**
      * Adds a fragment of the DOM tree after the context and initializes blocks
+     * @static
      * @param {jQuery} ctx Contextual DOM node
      * @param {jQuery|String} content Content to be added
      */
