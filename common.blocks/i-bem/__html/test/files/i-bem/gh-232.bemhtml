@@ -1,0 +1,12 @@
+block('para')(
+  def().match(!this.ctx._wrap, !this.elem)(function() {
+    return apply('', {
+      'ctx._wrap': true,
+      ctx: {
+        elem: 'inner',
+        mix: [{ block: this.block }],
+        content: this.ctx
+      }
+    });
+  })
+);

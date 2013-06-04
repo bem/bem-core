@@ -1,0 +1,20 @@
+block('b1')(
+  function() {
+    var x;
+    if (x !== undefined) throw new Error('x should not change');
+    x = true;
+    applyNext();
+  },
+  tag()('div')
+);
+
+block('b2')(
+  function() {
+    var x;
+
+    if (x !== undefined) throw new Error('x should not change');
+    x = true;
+    applyNext();
+  },
+  tag()('div')
+);

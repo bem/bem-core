@@ -1,0 +1,11 @@
+block('b1')(
+    attrs()(function() {
+        return {
+          'data-key': BEM.I18N.key('key1')
+        };
+    }),
+    content()(function() {
+        BEM.I18N.keyset('ktest');
+        return BEM.I18N.key('key2');
+    })
+);

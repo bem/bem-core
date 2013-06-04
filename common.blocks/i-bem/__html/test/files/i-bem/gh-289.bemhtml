@@ -1,0 +1,3 @@
+block('b1')(
+   content()(function() { return applyNext({ _someFlag: 'blah' }) })
+);

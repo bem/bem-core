@@ -1,0 +1,8 @@
+block('b1')(
+  tag()('a'),
+  mix()([{ block: 'b2' }])
+);
+block('b2')(
+  tag()('b'),
+  mix()([{ mods: { modname: 'modval' } }, { block: 'b1' }])
+);

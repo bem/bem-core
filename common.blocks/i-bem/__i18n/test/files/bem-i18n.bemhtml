@@ -1,0 +1,9 @@
+block('b1').content()(function() {
+    return BEM.I18N('ktest', 'key')
+});
+
+block('b2').elem('e2').attrs()(function() {
+    return {
+        'data-key': BEM.I18N('ktest', 'key')
+    };
+});

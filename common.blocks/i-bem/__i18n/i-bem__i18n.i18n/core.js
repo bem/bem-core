@@ -1,5 +1,7 @@
 /* jshint browser:true, node:true */
 /* global BEM:true */
+if (typeof oninit === 'undefined') oninit = function(cb) { return cb() };
+oninit(function() {
 
 // XXX: Support tanker-like syntax of keys in `i-bem__i18n`
 // i18n['prj']['keyset']['key'](params);
@@ -249,3 +251,5 @@ bem_.I18N = (function(base) {
 BEM = bem_;
 
 })(this, typeof BEM === 'undefined' ? {} : BEM);
+
+}); // oninit

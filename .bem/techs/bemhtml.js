@@ -1,19 +1,27 @@
 var BEM = require('bem'),
     Q = BEM.require('q'),
-    PATH = require('path');
+    PATH = require('path'),
+    compat = require('bemhtml-compat');
 
 exports.techMixin = {
 
     getSuffixes : function() {
-        return ['bemhtml'];
+        return ['bemhtml', 'bemhtml.xjst'];
     },
 
     getBuildSuffixes : function() {
         return ['bemhtml.js'];
     },
 
+    getCreateSuffixes : function() {
+        return ['bemhtml'];
+    },
+
     getBuildResultChunk : function(relPath, path, suffix) {
-        return this.readContent(path, suffix);
+        var content = this.readContent(path, suffix);
+        return suffix !== 'bemhtml.xjst' ? content.then(function(source) {
+          return compat.transpile(source);
+        }) : content;
     },
 
     getBuildResult : function(prefixes, suffix, outputDir, outputName) {
