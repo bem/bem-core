@@ -101,33 +101,31 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Boolean} [initImmediately=true]
      */
     __constructor : function(mods, params, initImmediately) {
-        var _this = this;
-
         /**
          * Cache of block modifiers
          * @private
          * @type Object
          */
-        _this._modCache = mods || {};
+        this._modCache = mods || {};
 
         /**
          * Current modifiers in the stack
          * @private
          * @type Object
          */
-        _this._processingMods = {};
+        this._processingMods = {};
 
         /**
          * The block's parameters, taking into account the defaults
          * @protected
          * @type Object
          */
-        _this._params = params; // это нужно для правильной сборки параметров у блока из нескольких нод
-        _this.params = null;
+        this._params = params; // это нужно для правильной сборки параметров у блока из нескольких нод
+        this.params = null;
 
         initImmediately !== false?
-            _this._init() :
-            initFns.push(_this._init.bind(_this));
+            this._init() :
+            initFns.push(this._init.bind(this));
     },
 
     /**
@@ -245,16 +243,15 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     getMods : function(elem) {
         var hasElem = elem && typeof elem !== 'string',
-            _this = this,
             modNames = [].slice.call(arguments, hasElem? 1 : 0),
-            res = _this._extractMods(modNames, hasElem? elem : undefined);
+            res = this._extractMods(modNames, hasElem? elem : undefined);
 
         if(!hasElem) { // caching
             modNames.length?
                 modNames.forEach(function(name) {
-                    _this._modCache[name] = res[name];
-                }):
-                _this._modCache = res;
+                    this._modCache[name] = res[name];
+                }, this):
+                this._modCache = res;
         }
 
         return res;
@@ -275,20 +272,19 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             elem = undefined;
         }
 
-        var _this = this;
-
         if(!elem || elem[0]) {
-
             var modId = (elem && elem[0]? identify(elem[0]) : '') + '_' + modName;
 
-            if(this._processingMods[modId]) return _this;
+            if(this._processingMods[modId])
+                return this;
 
             var elemName,
                 curModVal = elem?
-                    _this._getElemMod(modName, elem, elemName = _this.__self._extractElemNameFrom(elem)) :
-                    _this.getMod(modName);
+                    this._getElemMod(modName, elem, elemName = this.__self._extractElemNameFrom(elem)) :
+                    this.getMod(modName);
 
-            if(curModVal === modVal) return _this;
+            if(curModVal === modVal)
+                return this;
 
             this._processingMods[modId] = true;
 
@@ -298,17 +294,17 @@ var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             elem && modFnParams.unshift(elem);
 
             [['*', '*'], [modName, '*'], [modName, modVal]].forEach(function(mod) {
-                needSetMod = _this._callModFn(elemName, mod[0], mod[1], modFnParams) !== false && needSetMod;
-            });
+                needSetMod = this._callModFn(elemName, mod[0], mod[1], modFnParams) !== false && needSetMod;
+            }, this);
 
-            !elem && needSetMod && (_this._modCache[modName] = modVal);
+            !elem && needSetMod && (this._modCache[modName] = modVal);
 
-            needSetMod && _this._afterSetMod(modName, modVal, curModVal, elem, elemName);
+            needSetMod && this._afterSetMod(modName, modVal, curModVal, elem, elemName);
 
             delete this._processingMods[modId];
         }
 
-        return _this;
+        return this;
     },
 
     /**
