@@ -14,14 +14,15 @@
   "author": "Sergey Belov <peimei@ya.ru>",
   "license": "MIT",
   "dependencies": {
-    "xjst": "~0.4.2",
-    "ometajs": "~3.2.2",
     "ym": "0.0.5"
+    "bem-xjst": "~0.1.0",
+    "bemhtml-compat": "~0.0.4",
   },
   "devDependencies": {
-    "bem": "~0.5.29"
+    "bem": "~0.5.29",
+    "mocha": "~1.9.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --ui tdd --reporter spec common.blocks/i-bem/__html/test/*-test.js common.blocks/i-bem/__i18n/test/test-*.js"
   }
 }

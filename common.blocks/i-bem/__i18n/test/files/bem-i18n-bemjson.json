@@ -1,0 +1,9 @@
+{
+    "block": "b1",
+    "content": {
+        "block": "i-bem",
+        "elem": "i18n",
+        "keyset": "kset",
+        "key": "test"
+    }
+}
