@@ -32,6 +32,7 @@
 - `$.decodeURI`, `$.decodeURIComponent` переезжают в модуль `uri` и больше не зависят от jQuery.
 - `$.cookie` становится модулем `cookie` и больше не зависит от jQuery.
 - Блок `i-system` разбит на 2 модуля: `idle` и `tick`.
+- Использовать конструкцию `{ onSetMod : { js : function() { ... } } }` в качестве конструктора теперь **deprecated**, необходимо использовать `onSetMod: { js : { inited : ... } } }`. 
 - Вместо метода `destruct` в `i-bem` появился зеркальный метод
   для `onSetMod: { js : { inited : ... } } }` — `{ onSetMod : { js : { '' : ... } } }`.
   Метод `destruct` теперь **deprecated**.
