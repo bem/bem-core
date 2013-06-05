@@ -1,7 +1,10 @@
-!function() {
+oninit(function(exports) {
 
 var BEM_ = {},
     toString = Object.prototype.toString,
+    isArray = Array.isArray || function(obj) {
+        return toString.call(obj) === "[object Array]";
+    },
     SHORT_TAGS = { // хэш для быстрого определения, является ли тэг коротким
         area : 1, base : 1, br : 1, col : 1, command : 1, embed : 1, hr : 1, img : 1,
         input : 1, keygen : 1, link : 1, meta : 1, param : 1, source : 1, wbr : 1 };
@@ -201,9 +204,7 @@ function BEMContext(context, apply_) {
   this.elemMods = undefined;
 };
 
-BEMContext.prototype.isArray = function isArray(obj) {
-    return toString.call(obj) === "[object Array]";
-};
+BEMContext.prototype.isArray = isArray;
 
 BEMContext.prototype.isSimple = function isSimple(obj) {
     var t = typeof obj;
@@ -224,7 +225,7 @@ BEMContext.prototype.extend = function extend(o1, o2) {
 
 BEMContext.prototype.identify = (function() {
     var cnt = 0,
-        id = BEM_.__id = (+new Date()),
+        id = (+new Date()),
         expando = '__' + id,
         get = function() { return 'uniq' + id + ++cnt; };
     return function(obj, onlyGet) {
@@ -252,40 +253,38 @@ BEMContext.prototype.generateId = function generateId() {
 };
 
 // Wrap xjst's apply and export our own
-exports.apply = BEMContext.apply = function _apply() {
-    var ctx = new BEMContext(this, apply);
+var oldApply = exports.apply;
+exports.apply = BEMContext.apply = function _apply(context) {
+    var ctx = new BEMContext(context || this, oldApply);
     ctx.apply();
     return ctx._buf.join('');
 };
-}();
-return exports;
+}); // oninit
 
-this._mode === '' {
+match(this._mode === '')(
 
-    true: {
+    match()(function() {
         var vBlock = this.ctx.block,
             vElem = this.ctx.elem,
             block = this._currBlock || this.block;
 
         this.ctx || (this.ctx = {});
 
-        local(
-            this._mode = 'default',
-            this._links = this.ctx.links || this._links,
-            this.block = vBlock || (vElem ? block : undefined),
-            this._currBlock = vBlock || vElem ? undefined : block,
-            this.elem = this.ctx.elem,
-            this.mods = (vBlock ? this.ctx.mods : this.mods) || {},
-            this.elemMods = this.ctx.elemMods || {}
-        ) {
+        local('default', {
+            block: vBlock || (vElem ? block : undefined),
+            _currBlock: vBlock || vElem ? undefined : block,
+            elem: this.ctx.elem,
+            mods: (vBlock ? this.ctx.mods : this.mods) || {},
+            elemMods: this.ctx.elemMods || {}
+        })(function() {
             (this.block || this.elem) ?
                 (this.position = (this.position || 0) + 1) :
                 this._listLength--;
             apply();
-        }
-    }
+        });
+    }),
 
-    this._.isArray(this.ctx): {
+    match(function() { return this._.isArray(this.ctx) })(function() {
         var v = this.ctx,
             l = v.length,
             i = 0,
@@ -301,52 +300,50 @@ this._mode === '' {
 
         this._notNewList = true;
 
-        while(i < l) {
-            var newCtx = v[i++];
-            apply(this.ctx = newCtx === null ? '' : newCtx);
-        }
+        while(i < l)
+            apply({ ctx: v[i++] });
 
         prevNotNewList || (this.position = prevPos);
-    }
+    }),
 
-    !this.ctx: {
+    match(!this.ctx)(function() {
         this._listLength--;
-    }
+    }),
 
-    this._.isSimple(this.ctx): {
+    match(function() { return this._.isSimple(this.ctx) })(function() {
         this._listLength--;
 
         var ctx = this.ctx;
         (ctx && ctx !== true || ctx === 0) && this._buf.push(ctx);
-    }
+    })
 
-}
+);
 
-default: {
+def()(function() {
     var _this = this,
         BEM_ = _this.BEM,
         v = this.ctx,
         buf = this._buf,
         tag;
 
-    tag = apply(this._mode = 'tag');
+    tag = apply('tag');
     typeof tag != 'undefined' || (tag = v.tag);
     typeof tag != 'undefined' || (tag = 'div');
 
     if(tag) {
         var jsParams, js;
         if(this.block && v.js !== false) {
-            js = apply(this._mode = 'js');
+            js = apply('js');
             js = js? this._.extend(v.js, js === true? {} : js) : v.js === true? {} : v.js;
             js && ((jsParams = {})[BEM_.INTERNAL.buildClass(this.block, v.elem)] = js);
         }
 
         buf.push('<', tag);
 
-        var isBEM = apply(this._mode = 'bem');
+        var isBEM = apply('bem');
         typeof isBEM != 'undefined' || (isBEM = typeof v.bem != 'undefined' ? v.bem : v.block || v.elem);
 
-        var cls = apply(this._mode = 'cls');
+        var cls = apply('cls');
         cls || (cls = v.cls);
 
         var addJSInitClass = v.block && jsParams;
@@ -356,7 +353,7 @@ default: {
 
                 BEM_.INTERNAL.buildClasses(this.block, v.elem, v.elemMods || v.mods, buf);
 
-                var mix = apply(this._mode = 'mix');
+                var mix = apply('mix');
                 v.mix && (mix = mix? mix.concat(v.mix) : v.mix);
 
                 if(mix) {
@@ -392,11 +389,10 @@ default: {
                         // Process nested mixes
                         if (hasItem && !visited[visitedKey(block, elem)]) {
                             visited[visitedKey(block, elem)] = true;
-                            var nestedMix = apply(
-                              this.block = block,
-                              this.elem = elem,
-                              'mix'
-                            );
+                            var nestedMix = apply('mix', {
+                                block: block,
+                                elem: elem
+                            });
 
                             if (nestedMix) {
                                 for (var j = 0; j < nestedMix.length; j++) {
@@ -425,20 +421,20 @@ default: {
         }
 
         if(jsParams) {
-            var jsAttr = apply(this._mode = 'jsAttr');
+            var jsAttr = apply('jsAttr');
             buf.push(
                 ' ', jsAttr || 'onclick', '="return ',
                 this._.attrEscape(JSON.stringify(jsParams)),
                 '"');
         }
 
-        var attrs = apply(this._mode = 'attrs');
+        var attrs = apply('attrs');
         attrs = this._.extend(attrs, v.attrs); // NOTE: возможно стоит делать массив, чтобы потом быстрее сериализовывать
         if(attrs) {
             var name; // TODO: разобраться с OmetaJS и YUI Compressor
             for(name in attrs) {
-              if (attrs[name] === undefined) continue;
-              buf.push(' ', name, '="', this._.attrEscape(attrs[name]), '"');
+                if (attrs[name] === undefined) continue;
+                buf.push(' ', name, '="', this._.attrEscape(attrs[name]), '"');
             }
         }
     }
@@ -448,151 +444,26 @@ default: {
     } else {
         tag && buf.push('>');
 
-        var content = apply(this._mode = 'content');
+        var content = apply('content');
         if(content || content === 0) {
             var isBEM = this.block || this.elem;
-            apply(
-                this._notNewList = false,
-                this.position = isBEM ? 1 : this.position,
-                this._listLength = isBEM ? 1 : this._listLength,
-                this.ctx = content,
-                this._mode = '');
+            apply('', {
+                _notNewList: false,
+                position: isBEM ? 1 : this.position,
+                _listLength: isBEM ? 1 : this._listLength,
+                ctx: content
+            });
         }
 
         tag && buf.push('</', tag, '>');
     }
-}
+});
 
-// Cache start
-cache && this.ctx && this.ctx.cache: {
-    var cached;
-
-    // setProperty(obj, ['nested', 'key'], 'value')
-    function setProperty(obj, key, value) {
-        if (key.length === 0) return;
-
-        if (Array.isArray(value)) {
-            var target = obj;
-            for (var i = 0; i < value.length - 1; i++) {
-                target = target[value[i]];
-            }
-            value = target[value[i]];
-        }
-
-        var host = obj,
-            previous;
-
-        for (var i = 0; i < key.length - 1; i++) {
-            host = host[key[i]];
-        }
-
-        previous = host[key[i]];
-        host[key[i]] = value;
-
-        return previous;
-    }
-
-    if (cached = cache.get(this.ctx.cache)) {
-        // get new links from context
-        var oldLinks = this._links;
-        if (this.ctx.links) this._links = this.ctx.links;
-
-        // Cache hit
-        for (var i = 0; i < cached.log.length; i++) {
-            if (typeof cached.log[i] === 'string') {
-                this._buf.push(cached.log[i]);
-                continue;
-            }
-
-            // Apply log and create reverse movement
-            var log = cached.log[i],
-                reverseLog;
-
-            reverseLog = log.log.map(function(entry) {
-                return {
-                    key: entry[0],
-                    value: setProperty(this, entry[0], entry[1])
-                };
-            }, this).reverse();
-
-            // Generate content
-            apply(this.ctx.cache = null,
-                  this._cacheLog = null,
-                  this.ctx.link = log.link);
-
-            // Revert changes
-            reverseLog.forEach(function(entry) {
-                setProperty(this, entry.key, entry.value)
-            }, this);
-        }
-
-        // restore links
-        this._links = oldLinks;
-
-        return cached.res;
-    }
-
-    // Record log
-    var cacheLog = [],
-        res;
-
-    local(this.ctx.cache = null,
-          this._cachePos = this._buf.length,
-          this._cacheLog = cacheLog,
-          this._localLog = []) {
-        res = apply();
-
-        var tail = this._buf.slice(this._cachePos).join('');
-        if (tail) cacheLog.push(tail);
-    }
-
-    // And set cache
-    cache.set(this.ctx.cache, { log: cacheLog, res: res });
-
-    return res;
-}
-
-// Data redirection
-this.ctx && !this._.isSimple(this.ctx) && this.ctx.link: {
-    function follow() {
-        if (this.ctx.link === 'no-follow') return;
-
-        var data = this._links[this.ctx.link];
-        return apply(this.ctx = data);
-    }
-
-    if (!cache || !this._cacheLog) return follow.call(this);
-
-    // Get contents that should be cached
-    var contents = this._buf.slice(this._cachePos).join('');
-
-    // Move buffer position forward
-    this._cachePos = this._buf.length;
-
-    this._cacheLog.push(
-        // static cache entry
-        contents,
-
-        // dynamic entry
-        {
-            log: this._localLog.slice(),
-            link: this.ctx.link
-        }
-    );
-
-    var res = follow.call(this);
-
-    // Skip non-cacheable contents
-    this._cachePos = this._buf.length;
-
-    return res;
-}
-
-tag: undefined
-attrs: undefined
-cls: undefined
-js: undefined
-jsAttr: undefined
-bem: undefined
-mix: undefined
-content: this.ctx.content
+tag()(undefined);
+attrs()(undefined);
+cls()(undefined);
+js()(undefined);
+jsAttr()(undefined);
+bem()(undefined);
+mix()(undefined);
+content()(function() { return this.ctx.content });

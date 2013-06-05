@@ -4,18 +4,18 @@
  * @abstract
  * @inherit Array
  */
-BEM.decl('i-bem__collection', null, {
 
+modules.define('i-bem__collection', ['inherit'], function(provide, inherit) {
+
+provide(inherit(null, {
     /**
      * Get method names that will be implemented in collection
      * @return {Array}
      */
     getMethods : function() {
-
         return ['on', 'onFirst', 'un', 'trigger',
             'setMod', 'toggleMod', 'delMod',
             'afterCurrentEvent', 'destruct'];
-
     },
 
     /**
@@ -23,35 +23,19 @@ BEM.decl('i-bem__collection', null, {
      * @return {Object}
      */
     getBase : function() {
-
         return {
-
-            __constructor : function(a) {
-
-                a && this.push.apply(this, a);
-
-            },
-
             applyMethod : function(method, args) {
-
                 this.forEach(function(context) {
                     context[method] && context[method].apply(context, args);
                 });
-
                 return this;
-
             },
 
             callMethod : function() {
-
                 var args = this.slice.call(arguments);
-
                 return this.applyMethod(args.shift(), args);
-
             }
-
         };
-
     },
 
     /**
@@ -60,9 +44,7 @@ BEM.decl('i-bem__collection', null, {
      * @return {Object}
      */
     create : function(a) {
-
-        var decl = this.getBase(),
-            Collection;
+        var decl = this.getBase();
 
         this.getMethods()
             .forEach(function(method) {
@@ -72,13 +54,19 @@ BEM.decl('i-bem__collection', null, {
                     };
                 }
             });
-        Collection = jQuery.inherit(Array, decl);
-        this.create = function(a) {
-            return new Collection(a);
+
+        /**
+         * "Inherit" Array using direct extend
+         * @see http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/
+         */
+        this.create = function(arr) {
+            arr || (arr = []);
+            arr.__self = this;
+            return jQuery.extend(arr, decl);
         };
 
         return this.create(a);
-
     }
+}));
 
 });

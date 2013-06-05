@@ -1,0 +1,13 @@
+this._mode === '' && !this.data: {
+    return apply(
+        this._mode = '',
+        this.data = {
+            bundleName : 'test-bemtree',
+            pageTitle  : 'Обработчик события click'
+        },
+        this.ctx = {
+            block : 'b-page',
+            mods  : this.ctx.err? { error : 'not-found' } : {}
+        }
+    );
+}

@@ -1,0 +1,6 @@
+({
+    shouldDeps: [
+        'loader',
+        { elem: 'config'}
+    ]
+})

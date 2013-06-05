@@ -1,1 +1,15 @@
-node_modules/
+.project
+.settings
+
+.bem/cache
+.bem/snapshots
+
+vendor
+node_modules
+
+*.bundles/*/*
+!*.bundles/.bem/*
+!*.bundles/*/blocks
+!*.bundles/*/*.bemjson.js
+
+*.sets/*.examples

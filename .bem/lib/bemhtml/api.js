@@ -1,10 +1,5 @@
-var ometajs = require('ometajs'),
-    xjst = require('xjst'),
-    vm = require('vm'),
-    bemhtml = require('../ometa/bemhtml'),
-    BEMHTMLParser = bemhtml.BEMHTMLParser,
-    BEMHTMLToXJST = bemhtml.BEMHTMLToXJST,
-    BEMHTMLLogLocal = bemhtml.BEMHTMLLogLocal;
+var bem_xjst = require('bem-xjst'),
+    vm = require('vm');
 
 var api = exports;
 
@@ -15,42 +10,26 @@ var api = exports;
 // Returns source translated to javascript
 //
 api.translate = function translate(source, options) {
-  var tree = BEMHTMLParser.matchAll(source, 'topLevel'),
-      xjstPre = BEMHTMLToXJST.match(tree, 'topLevel'),
-      vars = [];
-
   options || (options = {});
 
-  if (options.cache === true) {
-    var xjstCached = BEMHTMLLogLocal.match(xjstPre, 'topLevel');
-    vars = xjstCached[0];
-    xjstPre = xjstCached[1];
-  }
+  var xjstJS = bem_xjst.generate(source, {
+        optimize: !options.devMode
+      }),
+      exportName = options.exportName || 'BEMHTML';
 
-  var xjstTree = xjst.translate(xjstPre);
-
-  try {
-    var xjstJS = options.devMode ?
-                   xjst.compile(xjstTree, '', { 'no-opt': true })
-                   :
-                   xjst.compile(xjstTree, { engine: 'sort-group' });
-  } catch (e) {
-    throw new Error("xjst to js compilation failed:\n" + e.stack);
-  }
-
-  return 'var BEMHTML = function() {\n' +
-         '  var cache,\n' +
-         '      xjst = '  + xjstJS + ';\n' +
-         '  return function(options) {\n' +
-         '    if (!options) options = {};\n' +
-         '    cache = options.cache;\n' +
-         (vars.length > 0 ? '    var ' + vars.join(', ') + ';\n' : '') +
-         '    return xjst.apply.call(\n' +
-         (options.raw ? 'this' : '[this]') + '\n' +
-         '    );\n' +
-         '  };\n' +
-         '}();\n' +
-         'typeof exports === "undefined" || (exports.BEMHTML = BEMHTML);';
+  return [
+         '(function(g) {\n',
+         '  var __xjst = (function(exports) {\n',
+         '     ' + xjstJS + ';',
+         '     return exports;',
+         '  })({});',
+         '  if(typeof exports === "object") {',
+         '    exports["' + exportName + '"] = __xjst;',
+         '  } else {',
+         '    g["' + exportName + '"] = __xjst;',
+         '  }',
+         '})(this);'
+         ].join('\n');
 };
 
 //
@@ -66,5 +45,5 @@ api.compile = function compile(source, options) {
   if (options && options.devMode) context.console = console;
   vm.runInNewContext(body, context);
 
-  return context.BEMHTML;
+  return context.exports.BEMHTML;
 };

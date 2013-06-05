@@ -1,6 +1,8 @@
 /* дефолтная инициализация */
+modules.require(['i-bem__dom', 'jquery'], function(DOM, $) {
+
 $(function() {
-    BEM.afterCurrentEvent(function() {
-        BEM.DOM.init();
-    });
+    DOM.init();
+});
+
 });
