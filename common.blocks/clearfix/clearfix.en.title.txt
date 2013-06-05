@@ -1,0 +1,1 @@
+Block with floats inside
