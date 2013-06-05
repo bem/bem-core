@@ -90,8 +90,7 @@ function buildCheckMod(modName, modVal) {
         };
 }
 
-/** @namespace */
-var BEM = this.BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
+var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     /**
      * @class Base block for creating BEM blocks
      * @constructs
