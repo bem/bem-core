@@ -117,6 +117,25 @@ obj.on('event', this.changeThis(this._method);
 obj.on('event', this._method.bind(this));
 ````
 
+### Метод afterCurrentEvent ###
+Вместо метода `afterCurrentEvent` необходимо использовать модуль `next-tick`.
+
+Было:
+````javascript
+BEM.DOM.decl('block', {
+    method : function() {
+        this.afterCurrentEvent(function() { ...
+````
+
+Стало:
+````javascript
+modules.define('i-bem__dom', ['next-tick'], function(provide, nextTick, DOM) {    
+
+DOM.decl('block', {
+    method : function() {
+        nextTick(function() { ...
+````
+
 ### Доступ до DOM-элемента в обработчике события
 DOM-элемент, к которому был подвешен обработчик события теперь доступен как `e.domElem` вместо `e.data.domElem`.
 
