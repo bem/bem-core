@@ -1,6 +1,6 @@
 block('i-ua')(
-    .tag()('script')
-    .bem()(false)
+    .tag()('script'),
+    .bem()(false),
     .content()([
         ';(function(d,e,c,r){',
             'e=d.documentElement;',
