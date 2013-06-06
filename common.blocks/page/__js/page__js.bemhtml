@@ -1,0 +1,5 @@
+block('page').elem('js')(
+    bem()(false),
+    tag()('script'),
+    attrs().match(this.ctx.url)({ src: this.ctx.url })
+)
