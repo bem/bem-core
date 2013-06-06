@@ -28,7 +28,7 @@
 - `$.observable` становится модулем `events` и больше не зависит от jQuery.
 - `$.inherit` становится модулем `inherit` и больше не зависит от jQuery.
 - `$.identify` становится модулем `identify` и больше не зависит от jQuery.
-- `$.throttle` разбивается на два модуля: `functions__throttle` и `functions__debounce`, и больше не зависят от jQuery.
+- `$.throttle` разбивается на два модуля: `functions__throttle` и `functions__debounce`, которые больше не зависят от jQuery.
 - `$.decodeURI`, `$.decodeURIComponent` переезжают в модуль `uri` и больше не зависят от jQuery.
 - `$.cookie` становится модулем `cookie` и больше не зависит от jQuery.
 - Блок `i-system` разбит на 2 модуля: `idle` и `tick`.
