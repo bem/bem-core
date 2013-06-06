@@ -1,0 +1,41 @@
+block('page').elem('css')(
+
+    bem()(false),
+
+    tag()('style'),
+
+    def()
+        .match(this.ctx.hasOwnProperty('ie'))
+        .match(!this.ctx._ieCommented)(function() {
+            var ie = this.ctx.ie;
+            if (ie === true) {
+                var url = this.ctx.url;
+                applyCtx([6, 7, 8, 9].map(function(v) {
+                    return { elem: 'css', url: url + '.ie' + v + '.css', ie: 'IE ' + v }
+                }));
+            } else {
+                var hideRule = !ie ?
+                        ['gt IE 9', '<!-->', '<!--'] :
+                        ie === '!IE' ?
+                            [ie, '<!-->', '<!--'] :
+                            [ie, '', ''];
+                apply(
+                    '',
+                    { 'ctx._ieCommented': true },
+                    {
+                        ctx: [
+                            '<!--[if ' + hideRule[0] + ']>' + hideRule[1],
+                            this.ctx,
+                            hideRule[2] + '<![endif]-->'
+                        ]
+                    }
+                );
+            }
+        }),
+
+    match(this.ctx.url)(
+        tag()('link'),
+        attrs()({ rel: 'stylesheet', href: this.ctx.url })
+    )
+
+)
