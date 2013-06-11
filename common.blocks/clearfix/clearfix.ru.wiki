@@ -4,7 +4,7 @@
         top
     </div>
 
-    <div class="i-clearfix" style="background: #eda;">
+    <div class="clearfix" style="background: #eda;">
         <div style="float: left; height: 100px;">item1</div>
         <div style="float: left; height: 100px;">item2</div>
         <div style="float: left; height: 100px;">item3</div>
