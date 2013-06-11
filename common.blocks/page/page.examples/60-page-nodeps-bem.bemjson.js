@@ -3,7 +3,6 @@
     title: 'noDeps',
     head: [
         { elem: 'css', url: '_60page-nodeps_bem.css' },
-        { block: 'i-jquery', elem: 'core' },
         { elem: 'js', url: '_60page-nodeps_bem.js' }
     ],
     content: [

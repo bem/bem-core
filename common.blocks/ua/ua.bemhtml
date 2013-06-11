@@ -1,7 +1,7 @@
-block('i-ua')(
-    tag()('script'),
-    bem()(false),
-    content()([
+block('ua')(
+    .tag()('script')
+    .bem()(false)
+    .content()([
         ';(function(d,e,c,r){',
             'e=d.documentElement;',
             'c="className";',

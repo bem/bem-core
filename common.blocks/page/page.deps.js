@@ -7,7 +7,7 @@
                 { elem: 'dom', mods: { init: 'auto' } },
             ]
         },
-        { block: 'i-ua' }
+        { block: 'ua' }
     ],
     shouldDeps: { elems: ['css', 'js'] }
 })
