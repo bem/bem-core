@@ -44,7 +44,7 @@ block('page')(
     elem('root')(
         bem()(false),
         tag()('html'),
-        cls()('i-ua_js_no i-ua_css_standard')
+        cls()('ua_js_no ua_css_standard')
     ),
 
     elem('head')(
