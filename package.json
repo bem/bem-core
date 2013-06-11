@@ -23,6 +23,6 @@
     "mocha": "~1.9.0"
   },
   "scripts": {
-    "test": "mocha --ui tdd --reporter spec common.blocks/i-bem/__html/test/*-test.js common.blocks/i-bem/__i18n/test/test-*.js"
+    "test": "mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/test-*.js"
   }
 }

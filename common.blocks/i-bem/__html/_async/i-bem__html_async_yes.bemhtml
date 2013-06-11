@@ -1,7 +1,0 @@
-function isVowPromise(obj) {
-    return obj && obj.hasOwnProperty('_res');
-}
-
-this._mode === '', isVowPromise(this.ctx): {
-    apply(this.ctx = this.ctx._res);
-}
