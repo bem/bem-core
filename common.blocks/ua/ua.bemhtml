@@ -1,4 +1,4 @@
-block('i-ua')(
+block('ua')(
     tag()('script'),
     bem()(false),
     content()([
