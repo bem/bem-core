@@ -1,5 +1,5 @@
 ({
-    block: 'b-page',
+    block: 'page',
     title: 'Обработчик события click',
     head: [
         { elem: 'css', url: '_index.css', ie: false },

@@ -1,41 +1,44 @@
 block('page')(
 
-    mode('doctype')(this.ctx.doctype || '<!DOCTYPE html>'),
+    mode('doctype')(function() { return this.ctx.doctype || '<!DOCTYPE html>'}),
 
-    mode('xUACompatible')(
+    mode('xUACompatible')(function() {
         this.ctx['x-ua-compatible'] === false
             ? false
             : {
                 tag: 'meta',
                 attrs: { 'http-equiv': 'X-UA-Compatible', content: this.ctx['x-ua-compatible'] || 'IE=edge' }
             }
-    ),
-
-    mode('head')([{ block: 'ua' }, this.ctx.head]),
-
-    def()(function() {
-        var ctx = this.ctx;
-        applyCtx([
-            apply('doctype'),
-            {
-                elem: 'root',
-                content: [
-                    {
-                        elem: 'head',
-                        content: [
-                            { tag: 'meta', attrs: { charset: 'utf-8' } },
-                            apply('xUACompatible'),
-                            { tag: 'title', content: ctx.title },
-                            ctx.favicon ? { elem: 'favicon', url: ctx.favicon } : '',
-                            ctx.meta,
-                            apply('head')
-                        ]
-                    },
-                    ctx
-                ]
-            }
-        ]);
     }),
+
+    mode('head')(function() { return [{ block: 'ua' }, this.ctx.head] }),
+
+    def()
+        .match(!this.elem) // TODO: remove after https://github.com/bem/bem-xjst/issues/1
+        .match(function() { return !this.ctx._wrapped })(function() {
+            var ctx = this.ctx;
+            ctx._wrapped = true;
+            applyCtx([
+                apply('doctype'),
+                {
+                    elem: 'root',
+                    content: [
+                        {
+                            elem: 'head',
+                            content: [
+                                { tag: 'meta', attrs: { charset: 'utf-8' } },
+                                apply('xUACompatible'),
+                                { tag: 'title', content: ctx.title },
+                                ctx.favicon ? { elem: 'favicon', url: ctx.favicon } : '',
+                                ctx.meta,
+                                apply('head')
+                            ]
+                        },
+                        ctx
+                    ]
+                }
+            ]);
+        }),
 
     tag()('body'),
 
@@ -60,7 +63,7 @@ block('page')(
     elem('favicon')(
         bem()(false),
         tag()('link'),
-        attrs()({ rel: 'shortcut icon', href: this.ctx.url })
+        attrs()(function() { return { rel: 'shortcut icon', href: this.ctx.url } })
     )
 
 )

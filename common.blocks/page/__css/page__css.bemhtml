@@ -5,7 +5,7 @@ block('page').elem('css')(
     tag()('style'),
 
     def()
-        .match(this.ctx.hasOwnProperty('ie'))
+        .match(function() { this.ctx.hasOwnProperty('ie') })
         .match(!this.ctx._ieCommented)(function() {
             var ie = this.ctx.ie;
             if (ie === true) {
@@ -33,9 +33,9 @@ block('page').elem('css')(
             }
         }),
 
-    match(this.ctx.url)(
+    match(function() { return this.ctx.url })(
         tag()('link'),
-        attrs()({ rel: 'stylesheet', href: this.ctx.url })
+        attrs()(function() { return { rel: 'stylesheet', href: this.ctx.url } })
     )
 
 )
