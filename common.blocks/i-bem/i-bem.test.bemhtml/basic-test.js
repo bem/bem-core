@@ -1,5 +1,5 @@
 var assert = require('assert'),
-    bemhtml = require('../../../../.bem/lib/bemhtml');
+    bemhtml = require('../../../.bem/lib/bemhtml');
 
 suite('BEMHTML Compiler', function() {
   function unit(name, src, data, dst) {
