@@ -25,6 +25,8 @@ api.translate = function translate(source, options) {
          '  })({});',
          '  if(typeof exports === "object") {',
          '    exports["' + exportName + '"] = __xjst;',
+         '  } else if(typeof modules === "object") {',
+         '    modules.define("' + exportName + '", function(provide) { provide(__xjst) });',
          '  } else {',
          '    g["' + exportName + '"] = __xjst;',
          '  }',
