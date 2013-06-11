@@ -1,4 +1,4 @@
-.i-clearfix:after
+.clearfix:after
 {
     display: block;
     clear: both;
