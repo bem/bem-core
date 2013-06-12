@@ -1,25 +1,30 @@
-BEM.TEST.decl({ block : 'ecma', elem : 'function' }, function() {
+modules.define('test', function(provide) {
 
-    describe('bind specs', function() {
-        it('should be called with bound context', function() {
-            var ctx = {},
-                expectedCtx,
-                fn = (function() { expectedCtx = this; }).bind(ctx);
+    describe('ecma__function', function() {
 
-            fn();
+        describe('bind specs', function() {
 
-            expect(expectedCtx).toBe(ctx);
+            it('should be called with bound context', function() {
+                var ctx = {},
+                    expectedCtx,
+                    fn = (function() { expectedCtx = this; }).bind(ctx);
+
+                fn();
+
+                expectedCtx.should.to.equal(ctx);
+            });
+
+            it('should be called with original and bound params', function() {
+               var ctx = {},
+                   spy = sinon.spy(),
+                   fn = spy.bind(ctx, 1, 2);
+
+               fn(3, 4);
+
+               spy.lastCall.calledWith(1, 2, 3, 4).should.to.be.true;
+           });
         });
-
-        it('should be called with original and bound params', function() {
-           var ctx = {},
-               spy = jasmine.createSpy(),
-               fn = spy.bind(ctx, 1, 2);
-
-           fn(3, 4);
-
-           expect(spy.mostRecentCall.args).toEqual([1, 2, 3, 4]);
-       });
     });
 
+    provide();
 });

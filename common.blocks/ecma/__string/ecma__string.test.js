@@ -1,15 +1,18 @@
-BEM.TEST.decl({ block : 'ecma', elem : 'string' }, function() {
+modules.define('test', function(provide) {
 
-    describe('trim specs', function() {
-        [
-            { data : ' trim ', res : 'trim' },
-            { data : ' trim', res : 'trim' },
-            { data : 'trim ', res : 'trim' }
-        ].forEach(function(test) {
-            it('should be correct result', function() {
-                expect(test.data.trim()).toEqual(test.res);
+    describe('ecma__string', function() {
+        describe('trim specs', function() {
+            [
+                { data : ' trim ', res : 'trim' },
+                { data : ' trim', res : 'trim' },
+                { data : 'trim ', res : 'trim' }
+            ].forEach(function(test) {
+                it('should be correct result', function() {
+                    test.data.trim().should.to.equal(test.res);
+                });
             });
         });
     });
 
+    provide();
 });
