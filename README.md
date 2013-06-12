@@ -71,19 +71,12 @@ $ bem server
 
 ### Модульное тестирование
 
-Перед тем как запускать тесты, должны быть установлены npm-пакеты и загружены библиотеки:
+Перед тем как запускать тесты, должна быть получена полноценная рабочая копия -- см. раздел [#--2](Разработка / Рабочая копия).
 
-    $ npm install
-    $ ./node_modules/.bin/bem make vendor
-
-Сборка дефолтного тестового бандла для `ecma__array`:
-
-    $ ./node_modules/.bin/bem make common.sets/ecma__array.tests/default
-
+Сборка дефолтного тестового бандла для `ecma__array`: `bem make common.sets/ecma__array.tests/default`
 После сборки тестового бандла вы увидите результаты выполнения тестов в консоли.
 Их также можно посмотреть в браузере, открыв `common.sets/ecma__array.tests/default.html`.
 
 По аналогии можно запустить тесты для других бем-сущностей, имеющих реализацию в технологии `test.js`.
 
-Для сборки и запуска тестов используется библиотека [bem-pr](https://github.com/narqo/bem-pr).
-Подробная информация про инфраструктуру тестирования bem-pr: https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md
+Для сборки и запуска тестов используется библиотека [bem-pr](https://github.com/narqo/bem-pr). См. [https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md](подробную информацию) про инфраструктуру тестирования [bem-pr](https://github.com/narqo/bem-pr).
