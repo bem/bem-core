@@ -1,4 +1,4 @@
-({
+[{
     mustDeps : [
         {
             block : 'i-bem',
@@ -11,4 +11,9 @@
             mods : { color : 'green' }
         }
     ]
-})
+},
+{
+    tech: 'js',
+    mustDeps: { tech: 'bemhtml', block: 'i-bem', elems: 'html' }
+}
+]

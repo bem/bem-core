@@ -14,6 +14,7 @@
   "author": "Sergey Belov <peimei@ya.ru>",
   "license": "MIT",
   "dependencies": {
+    "dom-js": "*",
     "ym": "0.0.5",
     "bem-xjst": "~0.1.0",
     "bemhtml-compat": "~0.0.4"
