@@ -23,10 +23,10 @@ exports.techMixin = {
         var ctx = {};
         return Q.when(bemjson)
             .then(function(bemjson) {
-                return [bemhtml, bemjson.call(ctx)];
+                return [bemhtml, bemjson.apply(ctx)];
             })
             .spread(function(bemhtml, bemjson) {
-                return bemhtml.call(bemjson);
+                return bemhtml.apply(bemjson);
             });
     },
 
