@@ -23,13 +23,16 @@ api.translate = function translate(source, options) {
          '     ' + xjstJS + ';',
          '     return exports;',
          '  })({});',
+         '  var defineAsGlobal = true;',
          '  if(typeof exports === "object") {',
          '    exports["' + exportName + '"] = __xjst;',
-         '  } else if(typeof modules === "object") {',
-         '    modules.define("' + exportName + '", function(provide) { provide(__xjst) });',
-         '  } else {',
-         '    g["' + exportName + '"] = __xjst;',
+         '    defineAsGlobal = false;',
          '  }',
+         '  if(typeof modules === "object") {',
+         '    modules.define("' + exportName + '", function(provide) { provide(__xjst) });',
+         '    defineAsGlobal = false;',
+         '  }',
+         '  defineAsGlobal && (g["' + exportName + '"] = __xjst);',
          '})(this);'
          ].join('\n');
 };
