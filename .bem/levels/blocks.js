@@ -12,7 +12,8 @@ exports.getTechs = function() {
         'deps.js'    : 'deps.js',
         'css'        : 'css',
         'ie.css'     : 'ie.css',
-        'js'         : 'js-i'
+        'js'         : 'js-i',
+        'test.js'    : environ.getLibPath('bem-pr', 'bem/techs/test.js.js')
     };
 
     [
@@ -20,6 +21,7 @@ exports.getTechs = function() {
         'bemtree.xjst',
         'html',
         'examples',
+        'tests',
         'vanilla.js',
         'browser.js',
         'node.js'

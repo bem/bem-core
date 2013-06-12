@@ -82,6 +82,10 @@ MAKE.decl('BundleNode', {
             (tech = 'bemtree-html');
 
         return this.__base.apply(this, [tech].concat(args));
+    },
+
+    'create-test.js-optimizer-node': function(tech, sourceNode, bundleNode) {
+        return this.createBorschikOptimizerNode('js', sourceNode, bundleNode);
     }
 
 });
@@ -127,4 +131,21 @@ MAKE.decl('ExampleNode', {
         return levels.map(function(path) { return PATH.resolve(this.root, path); }, this);
     }
 
+});
+
+
+MAKE.decl('TestNode', {
+
+    getLevels : function() {
+        return this.__base().concat([
+            environ.getLibPath('bem-pr', 'test.blocks')
+        ]);
+    },
+
+    getTechs : function() {
+        return this.__base().concat([
+            'test.js',
+            'phantomjs'
+        ]);
+    }
 });
