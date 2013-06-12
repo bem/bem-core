@@ -1,5 +1,0 @@
-({
-    mustDeps: [
-        {elem: 'collection'}
-    ]
-})
