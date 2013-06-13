@@ -1,10 +1,10 @@
 var assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
-    bemhtml = require('../../../../.bem/lib/bemhtml'),
+    bemhtml = require('../../../.bem/lib/bemhtml'),
     iBem = fs.readFileSync(path.resolve(
       __dirname,
-      '../i-bem__html.bemhtml'
+      '../i-bem.bemhtml'
     )).toString();
 
 suite('i-bem block and others', function() {

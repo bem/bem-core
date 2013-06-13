@@ -36,9 +36,9 @@
 
 ### Рабочая копия
 
-1. Получаем исходники:
+1. Получаем исходники нужной версии (например, `v1`):
 ```
-$ git clone git@github.com:bem/bem-core.git
+$ git clone -b v1 git@github.com:bem/bem-core.git
 $ cd bem-core
 ```
 

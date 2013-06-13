@@ -7,7 +7,7 @@ var ASSERT = require('assert'),
 
     icores = [
             '../_dummy/i-bem__i18n_dummy_yes.bemhtml',
-            '../../__html/i-bem__html.bemhtml',
+            '../../i-bem.bemhtml',
             '../i-bem__i18n.bemhtml'
         ].map(function(path) {
             return FS.readFileSync(resolve(path)).toString();
