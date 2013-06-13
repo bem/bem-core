@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "ym": "0.0.5",
-    "bem-xjst": "~0.1.0",
+    "bem-xjst": "~0.2.3",
     "bemhtml-compat": "~0.0.4"
   },
   "devDependencies": {
