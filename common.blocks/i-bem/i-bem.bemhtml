@@ -315,6 +315,11 @@ match(this._mode === '')(
 
         var ctx = this.ctx;
         (ctx && ctx !== true || ctx === 0) && this._buf.push(ctx);
+    }),
+
+    // hack-check for Vow-promise
+    match(this.ctx && this.ctx.hasOwnProperty('_res'))(function() {
+        applyCtx(this.ctx._res)
     })
 
 );
