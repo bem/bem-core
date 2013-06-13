@@ -5,8 +5,8 @@ block('page').elem('css')(
     tag()('style'),
 
     def()
-        .match(function() { this.ctx.hasOwnProperty('ie') })
-        .match(!this.ctx._ieCommented)(function() {
+        .match(function() { return this.ctx.hasOwnProperty('ie') })
+        .match(function() { return !this.ctx._ieCommented })(function() {
             var ie = this.ctx.ie;
             if (ie === true) {
                 var url = this.ctx.url;
