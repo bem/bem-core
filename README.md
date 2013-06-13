@@ -78,7 +78,7 @@ $ bem server
 
 Сборка дефолтного тестового бандла для `ecma__array`: `bem make common.sets/ecma__array.tests/default`
 После сборки тестового бандла вы увидите результаты выполнения тестов в консоли.
-Их также можно посмотреть в браузере, открыв `common.sets/ecma__array.tests/default.html`.
+Их также можно посмотреть в браузере, открыв `common.sets/ecma__array.tests/default/default.html`.
 
 По аналогии можно запустить тесты для других БЭМ-сущностей, имеющих реализацию в технологии `test.js`.
 
