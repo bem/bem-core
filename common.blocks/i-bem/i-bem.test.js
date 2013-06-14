@@ -111,6 +111,44 @@ describe('i-bem', function() {
                         .should.be.true;
             });
         });
+
+        describe('nextTick', function() {
+            var block;
+            beforeEach(function() {
+                BEM.decl('block', {});
+                block = BEM.create({ block : 'block', mods : { mod1 : 'val1' }});
+            });
+            afterEach(function() {
+                delete BEM.blocks['block'];
+            });
+
+            it('should call callback asynchronously', function(done) {
+                var spy = sinon.spy();
+                block.nextTick(spy);
+                spy.called.should.be.false;
+                setTimeout(function() {
+                    spy.called.should.be.true;
+                    done();
+                }, 0);
+            });
+
+            it('should call callback with block\'s context', function(done) {
+                block.nextTick(function() {
+                    this.should.be.equal(block);
+                    done();
+                });
+            });
+
+            it('should not call callback if block destructed', function(done) {
+                var spy = sinon.spy();
+                block.nextTick(spy);
+                block._destruct();
+                setTimeout(function() {
+                    spy.called.should.be.false;
+                    done();
+                }, 0);
+            });
+        });
     });
 });
 
