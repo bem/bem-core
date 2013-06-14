@@ -20,7 +20,7 @@
 - Все блоки-модули, кроме `i-bem`, избавились от префиксов.
 - Блок `i-bem__dom` становится модулем `i-bem__dom`. Все BEM.DOM-блоки должны теперь доопределять
   этот модуль ([пример](common.bundles/index/blocks/b-square/b-square.js)).
-- Вместо `BEM.afterCurrentEvent` появился модуль `next-tick`. `BEM.afterCurrentEvent` теперь **deprecated**.
+- Вместо метода `afterCurrentEvent` у блоков появился метод `nextTick`, который проверят существование блока в момент исполнения колбэка. `BEM.afterCurrentEvent` теперь **deprecated**.
 - Вместо `BEM.channel` появился отдельный модуль `channels`. `BEM.channel` теперь **deprecated**.
 - Метод `changeThis` помечен как **deprecated**. Используйте нативный `bind`.
 - Метод `del` удален из блока `i-bem`.
@@ -42,5 +42,6 @@
 - Добавлен модуль `functions` для работы с функциями (содержит методы `isFunction`, `noop`).
 - Добавлен модуль `loader` для загрузки js.
 - Добавлен модуль `vow` для работы с промисами.
+- Добавлен модуль `next-tick`.
 - Модуль `inherit` теперь поддерживает миксины.
 - В модуле `functions__throttle` добавлен параметр invokeAsap, позволяющий отложить первое исполнение.
