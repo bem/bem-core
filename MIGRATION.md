@@ -118,7 +118,7 @@ obj.on('event', this._method.bind(this));
 ````
 
 ### Метод afterCurrentEvent ###
-Вместо метода `afterCurrentEvent` необходимо использовать модуль `next-tick`.
+Вместо метода `afterCurrentEvent` необходимо использовать метод `nextTick`, который гарантирует, что блок еще существует в момент исполнения колбэка (если блок уже уничтожен к этому моменту, то колбэк не исполняется).
 
 Было:
 ````javascript
@@ -129,11 +129,11 @@ BEM.DOM.decl('block', {
 
 Стало:
 ````javascript
-modules.define('i-bem__dom', ['next-tick'], function(provide, nextTick, DOM) {    
+modules.define('i-bem__dom', function(provide, DOM) {    
 
 DOM.decl('block', {
     method : function() {
-        nextTick(function() { ...
+        this.nextTick(function() { ...
 ````
 
 ### Доступ до DOM-элемента в обработчике события
