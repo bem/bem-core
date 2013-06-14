@@ -881,6 +881,13 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 }, /** @lends BEM.DOM */{
 
     /**
+     * Scope
+     * @protected
+     * @type jQuery
+     */
+    scope : doc,
+
+    /**
      * Document shortcut
      * @protected
      * @type jQuery
@@ -929,11 +936,11 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
     /**
      * Initializes blocks on a fragment of the DOM tree
      * @static
-     * @param {jQuery} [ctx=document] Root DOM node
+     * @param {jQuery} [ctx=scope] Root DOM node
      * @returns {jQuery} ctx Initialization context
      */
     init : function(ctx) {
-        ctx || (ctx = this.doc);
+        ctx || (ctx = this.scope);
 
         var uniqInitId = identify();
         findDomElem(ctx, '.i-bem').each(function() {
@@ -1059,7 +1066,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 
             if(!storage) {
                 storage = liveClassEventStorage[e] = {};
-                this.doc.bind(e, this._liveClassTrigger.bind(this));
+                this.scope.bind(e, this._liveClassTrigger.bind(this));
             }
 
             storage = storage[className] || (storage[className] = { uniqIds : {}, fns : [] });
