@@ -425,6 +425,18 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         this.delMod('js');
     },
 
+    /**
+     * Executes given callback on next turn evenloop in block's context
+     * @param {Function} fn callback
+     * @returns {this}
+     */
+    nextTick : function(fn) {
+        nextTick(function() {
+            this.hasMod('js', 'inited') && fn.call(this);
+        }.bind(this));
+        return this;
+    },
+
     /** @deprecated use onSetMod js '' */
     destruct : function() {},
 
