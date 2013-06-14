@@ -31,6 +31,7 @@
 - `$.throttle` разбивается на два модуля: `functions__throttle` и `functions__debounce`, которые больше не зависят от jQuery.
 - `$.decodeURI`, `$.decodeURIComponent` переезжают в модуль `uri` и больше не зависят от jQuery.
 - `$.cookie` становится модулем `cookie` и больше не зависит от jQuery.
+- Вместо `$.browser` появился модуль `ua` с аналогичным интерфейсом.
 - Блок `i-system` разбит на 2 модуля: `idle` и `tick`.
 - Использовать конструкцию `{ onSetMod : { js : function() { ... } } }` в качестве конструктора теперь **deprecated**, необходимо использовать `onSetMod: { js : { inited : ... } } }`. 
 - Вместо метода `destruct` в `i-bem` появился зеркальный метод
