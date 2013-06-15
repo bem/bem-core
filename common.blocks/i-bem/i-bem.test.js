@@ -7,6 +7,31 @@ describe('i-bem', function() {
             block.should.be.equal(BEM.blocks['block']);
             delete BEM.blocks['block'];
         });
+
+        it('with mod should apply method only if block has mod', function() {
+            var baseMethodSpy = sinon.spy(),
+                modsMethodSpy = sinon.spy();
+
+            BEM.decl('block', {
+                method : baseMethodSpy
+            });
+            BEM.decl({ block : 'block', modName : 'mod1', modVal : 'val1' }, {
+                method : modsMethodSpy
+            });
+
+            var instance = BEM.create({ block : 'block', mods : { 'mod1' : 'val1' }});
+
+            instance.method();
+            baseMethodSpy.called.should.be.false;
+            modsMethodSpy.called.should.be.true;
+
+            instance.setMod('mod1', 'val2');
+            instance.method();
+            baseMethodSpy.called.should.be.true;
+            modsMethodSpy.callCount.should.be.equal(1);
+
+            delete BEM.blocks['block'];
+        });
     });
 
     describe('create', function() {
@@ -99,6 +124,18 @@ describe('i-bem', function() {
                         .should.be.true;
             });
 
+            it('should switch mod\'s value if "modVal2" param omited', function() {
+                block
+                    .toggleMod('mod1', 'val1')
+                    .hasMod('mod1')
+                        .should.be.false;
+
+                block
+                    .toggleMod('mod1', 'val1')
+                    .hasMod('mod1', 'val1')
+                        .should.be.true;
+            });
+
             it('should switch mod\'s values according to "condition" param', function() {
                 block
                     .toggleMod('mod1', 'val1', 'val2', true)
@@ -109,6 +146,18 @@ describe('i-bem', function() {
                     .toggleMod('mod1', 'val1', 'val2', false)
                     .hasMod('mod1', 'val2')
                         .should.be.true;
+            });
+
+            it('should switch mod\'s value according to "condition" param if "modVal2" param omited', function() {
+                block
+                    .toggleMod('mod1', 'val1', true)
+                    .hasMod('mod1', 'val1')
+                        .should.be.true;
+
+                block
+                    .toggleMod('mod1', 'val1', false)
+                    .hasMod('mod1')
+                        .should.be.false;
             });
         });
 
