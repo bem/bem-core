@@ -8,6 +8,7 @@ describe('i-bem__dom', function() {
         it('should return properly extracted mod from html', function() {
             DOM.decl('block', {});
 
+            var rootNode;
             [
                 {
                     cls : '',
@@ -26,8 +27,9 @@ describe('i-bem__dom', function() {
                     val : 'v1'
                 }
             ].forEach(function(data) {
-                $('<div class="' + data.cls + '"/>').bem('block').getMod('m1')
+                (rootNode = $('<div class="' + data.cls + '"/>')).bem('block').getMod('m1')
                     .should.be.equal(data.val);
+                DOM.destruct(rootNode);
             });
 
             delete DOM.blocks['block'];
@@ -38,6 +40,7 @@ describe('i-bem__dom', function() {
         it('should return properly extracted mods from html', function() {
             DOM.decl('block', {});
 
+            var rootNode;
             [
                 {
                     cls  : '',
@@ -56,11 +59,40 @@ describe('i-bem__dom', function() {
                     mods : { js : 'inited', m2 : 'v2', m3 : 'v3' }
                 }
             ].forEach(function(data) {
-                $('<div class="' + data.cls + '"/>').bem('block').getMods()
+                (rootNode = $('<div class="' + data.cls + '"/>')).bem('block').getMods()
                     .should.be.eql(data.mods);
+                DOM.destruct(rootNode);
             });
 
             delete DOM.blocks['block'];
+        });
+    });
+
+    describe('elemify', function() {
+        var rootNode, instance;
+        beforeEach(function() {
+            DOM.decl('block', {});
+            rootNode = DOM.init($(
+                '<div class="block i-bem" onclick="return {\'block\':{}}">' +
+                    '<div class="block_e1 block_e2"/>' +
+                '</div>'
+                ));
+            instance = rootNode.bem('block');
+        });
+        afterEach(function() {
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+        });
+
+        it('shouldn\'t change given elem', function() {
+            var elem1 = instance.elem('e1');
+            instance.elemify(elem1, 'e2');
+            instance.__self._extractElemNameFrom(elem1).should.be.equal('e1');
+        });
+
+        it('should return', function() {
+            var elem = instance.elemify(instance.elem('e1'), 'e2');
+            instance.__self._extractElemNameFrom(elem).should.be.equal('e2');
         });
     });
 
@@ -82,7 +114,7 @@ describe('i-bem__dom', function() {
 
             spy.called.should.be.true;
 
-            rootNode.remove();
+            DOM.destruct(rootNode);
             delete DOM.blocks['block'];
         });
 
@@ -106,7 +138,7 @@ describe('i-bem__dom', function() {
             DOM.init(rootNode);
             spy.called.should.be.false;
 
-            rootNode.remove();
+            DOM.destruct(rootNode);
             delete DOM.blocks['block'];
         });
     });
@@ -134,7 +166,7 @@ describe('i-bem__dom', function() {
             DOM.destruct(rootNode.find('.block'));
             spy.called.should.be.true;
 
-            rootNode.remove();
+            DOM.destruct(rootNode);
             delete DOM.blocks['block'];
         });
     });
@@ -169,7 +201,7 @@ describe('i-bem__dom', function() {
             spyBlock1Destructed.called.should.be.true;
             spyBlock2Inited.called.should.be.true;
 
-            rootNode.remove();
+            DOM.destruct(rootNode);
             delete DOM.blocks['block1'];
             delete DOM.blocks['block2'];
         });
