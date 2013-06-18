@@ -1,5 +1,7 @@
 modules.define('objects', function(provide) {
 
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
 provide({
     extend : function(target) {
         typeof target !== 'object' && (target = {});
@@ -8,7 +10,7 @@ provide({
             var obj = arguments[i];
             if(obj) {
                 for(var key in obj) {
-                    obj.hasOwnProperty(key) && (target[key] = obj[key]);
+                    hasOwnProperty.call(obj, key) && (target[key] = obj[key]);
                 }
             }
         }
@@ -18,7 +20,7 @@ provide({
 
     isEmpty : function(obj) {
         for(var key in obj) {
-            if(obj.hasOwnProperty(key)) {
+            if(hasOwnProperty.call(obj, key)) {
                 return false;
             }
         }
@@ -28,7 +30,7 @@ provide({
 
     each : function(obj, fn, ctx) {
         for(var key in obj) {
-            if(obj.hasOwnProperty(key)) {
+            if(hasOwnProperty.call(obj, key)) {
                 ctx? fn.call(ctx, obj[key], key) : fn(obj[key], key);
             }
         }
