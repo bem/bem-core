@@ -1,7 +1,7 @@
-modules.define('i-bem__dom', function(provide, DOM) {
+modules.define('ua', ['jquery'], function(provide, $) {
 
-var win = DOM.win,
-    doc = document, // NOTE: не DOM.doc т.к. в DOM.doc в случае _conflicts_no может быть не document, а нода скоупа
+var win = window,
+    doc = document,
     ua = navigator.userAgent,
     platform = {},
     device = {},
@@ -54,7 +54,7 @@ var plugins = navigator.plugins,
 if (plugins && i) {
     var plugin;
     while(plugin = plugins[--i])
-        if (plugin.name == 'Shockwave Flash' && match = plugin.description.match(/Flash ([\d.]+)/)) {
+        if (plugin.name == 'Shockwave Flash' && (match = plugin.description.match(/Flash ([\d.]+)/))) {
             support.flash = match[1];
             break;
         }
@@ -82,38 +82,7 @@ var lastOrient = win.innerWidth > win.innerHeight,
         }
     });
 
-DOM.decl('ua', {
-    onSetMod: {
-        js: function() {
-            var self = this.__self;
-            this
-                .setMod('platform',
-                    self.ios ? 'ios' :
-                    self.android ? 'android' :
-                    self.bada ? 'bada' :
-                    self.wp ? 'wp' :
-                    self.opera ? 'opera' :
-                    'other')
-                .setMod('browser',
-                    self.opera ? 'opera' :
-                    self.chrome ? 'chrome' :
-                    '')
-                .setMod('ios', self.ios ? self.ios.charAt(0) : '')
-                .setMod('ios-subversion', self.ios ? self.ios.match(/(\d\.\d)/)[1].replace('.', '') : '')
-                .setMod('screen-size', self.screenSize)
-                .setMod('svg', self.svg ? 'yes' : 'no')
-                .setMod('orient', self.landscape ? 'landscape' : 'portrait')
-                .bindToWin(
-                    'orientchange',
-                    function(e, data) {
-                        self.width = data.width;
-                        self.height = data.height;
-                        self.landscape = data.landscape;
-                        this.setMod('orient', data.landscape ? 'landscape' : 'portrait');
-                    });
-        }
-    }
-}, {
+var api = {
     ua: ua,
     ios: platform.ios,
     iphone: device.iphone,
@@ -133,8 +102,8 @@ DOM.decl('ua', {
     width: win.innerWidth,
     height: win.innerHeight,
     landscape: lastOrient
-});
+};
 
-provide(DOM);
+provide(api);
 
 });
