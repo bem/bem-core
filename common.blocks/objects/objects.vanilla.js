@@ -1,6 +1,9 @@
 modules.define('objects', function(provide) {
 
-var hasOwnProperty = Object.prototype.hasOwnProperty;
+var bindCall = function(fn) {
+        return fn.call.bind(fn);
+    },
+    hasOwnProp = bindCall(Object.prototype.hasOwnProperty);
 
 provide({
     extend : function(target) {
@@ -10,7 +13,7 @@ provide({
             var obj = arguments[i];
             if(obj) {
                 for(var key in obj) {
-                    hasOwnProperty.call(obj, key) && (target[key] = obj[key]);
+                    hasOwnProp(obj, key) && (target[key] = obj[key]);
                 }
             }
         }
@@ -20,7 +23,7 @@ provide({
 
     isEmpty : function(obj) {
         for(var key in obj) {
-            if(hasOwnProperty.call(obj, key)) {
+            if(hasOwnProp(obj, key)) {
                 return false;
             }
         }
@@ -30,7 +33,7 @@ provide({
 
     each : function(obj, fn, ctx) {
         for(var key in obj) {
-            if(hasOwnProperty.call(obj, key)) {
+            if(hasOwnProp(obj, key)) {
                 ctx? fn.call(ctx, obj[key], key) : fn(obj[key], key);
             }
         }
