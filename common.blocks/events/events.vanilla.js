@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 1.0.0
+ * @version 1.0.1
  */
 
 modules.define('events', ['identify', 'inherit'], function(provide, identify, inherit) {
@@ -21,6 +21,8 @@ var undef,
         __constructor : function(type, target) {
             this.type = type;
             this.target = target;
+            this.result = undef;
+            this.data = undef;
 
             this._isDefaultPrevented = false;
             this._isPropagationStopped = false;
