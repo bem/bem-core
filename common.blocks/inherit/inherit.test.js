@@ -174,6 +174,106 @@ describe('inherit', function() {
             ClsC.method2().should.be.equal('A2C2');
         });
     });
+
+    describe('mixin', function() {
+        it('properties should be assigned', function() {
+            var ClsA = inherit({
+                    method : function() {
+                        return 'method';
+                    }
+                }),
+                Mix1 = inherit({
+                    method1 : function() {
+                        return 'mix1method';
+                    }
+                }),
+                Mix2 = inherit({
+                    method2 : function() {
+                        return 'mix2method';
+                    }
+                }),
+                ClsB = inherit([ClsA, Mix1, Mix2]),
+                instance = new ClsB();
+
+            instance.method().should.be.equal('method');
+            instance.method1().should.be.equal('mix1method');
+            instance.method2().should.be.equal('mix2method');
+        });
+
+        it('static properties should be assigned', function() {
+            var ClsA = inherit({}, {
+                    method : function() {
+                        return 'method';
+                    }
+                }),
+                Mix1 = inherit({}, {
+                    method1 : function() {
+                        return 'mix1method';
+                    }
+                }),
+                Mix2 = inherit({}, {
+                    method2 : function() {
+                        return 'mix2method';
+                    }
+                }),
+                ClsB = inherit([ClsA, Mix1, Mix2]);
+
+            ClsB.method().should.be.equal('method');
+            ClsB.method1().should.be.equal('mix1method');
+            ClsB.method2().should.be.equal('mix2method');
+        });
+
+        it('__base should call methods of previous object', function() {
+            var ClsA = inherit({
+                    method : function() {
+                        return 'methodA';
+                    }
+                }),
+                Mix1 = inherit({
+                    method : function() {
+                        return this.__base() + '_mix1method';
+                    }
+                }),
+                Mix2 = inherit({
+                    method : function() {
+                        return this.__base() + '_mix2method';
+                    }
+                }),
+                ClsB = inherit([ClsA, Mix1, Mix2], {
+                    method : function() {
+                        return this.__base() + '_methodB';
+                    }
+                }),
+                instance = new ClsB();
+
+            instance.method().should.be.equal('methodA_mix1method_mix2method_methodB');
+        });
+
+        it('__base in static methods should call methods of previous object', function() {
+            var ClsA = inherit(null, {
+                    method : function() {
+                        return 'methodA';
+                    }
+                }),
+                Mix1 = inherit(null, {
+                    method : function() {
+                        return this.__base() + '_mix1method';
+                    }
+                }),
+                Mix2 = inherit(null, {
+                    method : function() {
+                        return this.__base() + '_mix2method';
+                    }
+                }),
+                ClsB = inherit([ClsA, Mix1, Mix2], null, {
+                    method : function() {
+                        return this.__base() + '_methodB';
+                    }
+                });
+
+            ClsB.method().should.be.equal('methodA_mix1method_mix2method_methodB');
+        });
+    });
 });
 
 provide();
