@@ -43,7 +43,6 @@ MAKE.decl('SetsNode', {
      */
     getSets : function() {
         return {
-            'common' : [ 'common.blocks' ],
             'desktop' : [ 'common.blocks', 'desktop.blocks' ],
             'touch' : [ 'common.blocks', 'touch.blocks' ]
         };
