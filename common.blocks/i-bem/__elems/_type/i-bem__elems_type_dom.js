@@ -105,7 +105,7 @@ BEM.decl('i-bem__dom', {
                 names.split(' ').map(function(name) {
                     return _self.buildClass(name, modName, modVal);
                 }).join(',.'),
-            res = findDomElem(ctx, selector);
+            res = ctx.find(selector).add(ctx.filter(selector)); // findDomElem
 
         if(!strictMode) return res;
 
