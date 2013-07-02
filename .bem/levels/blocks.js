@@ -18,7 +18,7 @@ exports.getTechs = function() {
 
     [
         'bemhtml',
-        'bemtree.xjst',
+        'bemtree',
         'html',
         'examples',
         'tests',
