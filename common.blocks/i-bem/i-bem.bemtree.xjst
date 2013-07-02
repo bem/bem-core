@@ -1,4 +1,4 @@
-!function() {
+oninit(function(exports) {
 
 var BEM_ = {},
     toString = Object.prototype.toString,
@@ -94,8 +94,9 @@ BEMContext.prototype.doAsync = function(fn) {
 };
 
 // Wrap xjst's apply and export our own
-exports.apply = BEMContext.applyAsync = function() {
-    var ctx = new BEMContext(this, apply);
+var oldApply = exports.apply;
+exports.apply = BEMContext.applyAsync = function _applyAsync(context) {
+    var ctx = new BEMContext(context || this, oldApply);
 
     ctx.__queue = [];
     ctx._buf = ctx.apply();
@@ -106,8 +107,7 @@ exports.apply = BEMContext.applyAsync = function() {
         });
 };
 
-}();
-return exports;
+});
 
 
 this._mode === '' {
