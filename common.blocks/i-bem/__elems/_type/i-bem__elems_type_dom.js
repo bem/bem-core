@@ -60,6 +60,46 @@ BEM.decl('i-bem__dom', {
                 this);
         }
         return result;
+    },
+
+    /**
+     * Finds elements of the parent block nested in the current element
+     * @protected
+     * @param {jQuery} [ctx=this.domElem] Element where search is being performed
+     * @param {String} names Nested element name (or names separated by spaces)
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @param {Boolean} [strictMode=false]
+     * @returns {jQuery} DOM elements
+     */
+    findElem : function(ctx, names, modName, modVal, strictMode) {
+        if(typeof ctx === 'string') {
+            strictMode = modVal;
+            modVal = modName;
+            modName = names;
+            names = ctx;
+            ctx = this.domElem;
+        }
+
+        if(typeof modName === 'boolean') {
+            strictMode = modName;
+            modName = undefined;
+        }
+
+        var _self = this.__self,
+            selector = '.' +
+                names.split(' ').map(function(name) {
+                    return _self.buildClass(name, modName, modVal);
+                }).join(',.'),
+            res = findDomElem(ctx, selector);
+
+        if(!strictMode) return res;
+
+        var blockSelector = this.buildSelector(''),
+            domElem = _self._elemName? this.domElem.closest(blockSelector) : this.domElem;
+        return res.filter(function() {
+            return domElem.index($(this).closest(blockSelector)) > -1;
+        });
     }
 
 }, {
