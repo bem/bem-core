@@ -172,13 +172,12 @@ describe('i-bem', function() {
             });
 
             it('should call callback asynchronously', function(done) {
-                var spy = sinon.spy();
-                block.nextTick(spy);
-                spy.called.should.be.false;
-                setTimeout(function() {
-                    spy.called.should.be.true;
+                var isAsync = false;
+                block.nextTick(function() {
+                    isAsync.should.be.true;
                     done();
-                }, 0);
+                });
+                isAsync = true;
             });
 
             it('should call callback with block\'s context', function(done) {
