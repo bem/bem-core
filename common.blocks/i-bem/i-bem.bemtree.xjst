@@ -63,25 +63,23 @@ BEMContext.prototype.generateId = function generateId() {
 };
 
 BEMContext.prototype.doAsync = function(fn) {
-    var ctx = {
-            _mode : this._mode,
-            ctx   : this.ctx,
-            block : this.block,
-            elem  : this.elem,
-            mods  : this.mods,
-            elemMods : this.elemMods
-        },
+    var mode  = this._mode,
+        ctx   = this.ctx,
+        block = this.block,
+        elem  = this.elem,
+        mods  = this.mods,
+        elemMods = this.elemMods,
         promise = Vow.invoke(fn);
 
     (this.__queue || (this.__queue = [])).push(promise);
 
     promise.always(function() {
-        this._mode = ctx._mode;
-        this.ctx   = ctx.ctx;
-        this.block = ctx.block;
-        this.elem  = ctx.elem;
-        this.mods  = ctx.mods;
-        this.elemMods = ctx.elemMods;
+        this._mode = mode;
+        this.ctx   = ctx;
+        this.block = block;
+        this.elem  = elem;
+        this.mods  = mods;
+        this.elemMods = elemMods;
     }.bind(this));
 
     return promise;
