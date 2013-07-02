@@ -39,7 +39,7 @@ provide(function(path, cb) {
     var script = document.createElement('script');
     script.type = 'text/javascript';
     script.charset = 'utf-8';
-    script.src = path;
+    script.src = (location.protocol === 'file:' && !path.indexOf('//')? 'http:' : '') + path;
     script.onreadystatechange === null?
         script.onreadystatechange = function() {
             var readyState = this.readyState;
