@@ -11,7 +11,7 @@ var BEM_ = {},
         return function(r) {
             r = new RegExp(r, 'g');
             return function(s) { return ('' + s).replace(r, f) }
-        }
+        };
     })();
 
 function BEMContext(context, apply_) {
@@ -33,10 +33,6 @@ BEMContext.prototype.isArray = isArray;
 BEMContext.prototype.isSimple = function isSimple(obj) {
     var t = typeof obj;
     return t === 'string' || t === 'number' || t === 'boolean';
-};
-
-BEMContext.prototype.isShortTag = function isShortTag(t) {
-    return SHORT_TAGS.hasOwnProperty(t);
 };
 
 BEMContext.prototype.extend = function extend(o1, o2) {
@@ -61,8 +57,6 @@ BEMContext.prototype.identify = (function() {
 
 BEMContext.prototype.xmlEscape = buildEscape('[&<>]');
 BEMContext.prototype.attrEscape = buildEscape('["&<>]');
-
-BEMContext.prototype.BEM = BEM_;
 
 BEMContext.prototype.generateId = function generateId() {
     return this.identify(this.ctx);
