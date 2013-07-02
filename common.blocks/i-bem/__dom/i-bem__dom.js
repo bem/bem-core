@@ -770,6 +770,20 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
     },
 
     /**
+     * Finds elements outside the context
+     * @param {jQuery} [ctx=this.domElem] context (current element by default)
+     * @param {String} elemName Element name
+     * @returns {jQuery} DOM elements
+     */
+    closestElem : function(ctx, elemName) {
+        if(!elemName) {
+            elemName = ctx;
+            ctx = this.domElem;
+        }
+        return ctx.closest(this.buildSelector(elemName));
+    },
+
+    /**
      * Clearing the cache for elements
      * @protected
      * @param {String} names Nested element name (or names separated by spaces)
