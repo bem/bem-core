@@ -12,7 +12,20 @@ var buildClass = INTERNAL.buildClass,
     ELEM_DELIM = INTERNAL.ELEM_DELIM,
     slice = Array.prototype.slice;
 
+/**
+ * Clears the element's modifiers cache
+ */
+function clearElemModCache() {
+    var result = this.__base.apply(this, arguments);
+    this.__self._elemName && (this._modCache = {});
+    return result;
+}
+
 BEM.decl('i-bem__dom', {
+
+    getMod : clearElemModCache,
+    getMods : clearElemModCache,
+    setMod : clearElemModCache,
 
     /**
      * Returns and initializes (if necessary) the parent block of current element
