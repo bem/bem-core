@@ -13,6 +13,14 @@ var buildClass = INTERNAL.buildClass,
 
 BEM.decl('i-bem__dom', {
 
+    /**
+     * Returns and initializes (if necessary) the parent block of current element
+     * @returns {BEM}
+     */
+    getParent : function() {
+        return this._parent || (this._parent = this.findBlockOutside(this.__self._blockName));
+    }
+
 }, {
 
     /**
@@ -42,5 +50,7 @@ BEM.decl('i-bem__dom', {
     }
 
 });
+
+provide(BEM);
 
 });

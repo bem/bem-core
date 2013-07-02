@@ -8,7 +8,7 @@ modules.define(
 
 var buildClass = INTERNAL.buildClass;
 
-BEM.decl('i-bem__dom', {}, {
+BEM.decl('i-bem', {}, {
 
     /**
      * Declares elements and creates an elements class
@@ -80,5 +80,7 @@ BEM.decl('i-bem__dom', {}, {
     }
 
 });
+
+provide(BEM);
 
 });
