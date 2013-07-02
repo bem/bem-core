@@ -858,7 +858,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @returns {String}
      */
     buildSelector : function(elem, modName, modVal) {
-        return this.__self.buildSelector(elem, modName, modVal);
+        return this.__self.buildSelector.apply(this.__self, arguments);
     },
 
     /**
