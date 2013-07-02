@@ -15,7 +15,7 @@ exports.techMixin = {
     },
 
     getBemjson : function(prefix) {
-        var path = this.getPath(prefix, 'bemtree.xjst.js');
+        var path = this.getPath(prefix, 'bemtree.js');
         return require(path).BEMTREE;
     },
 
@@ -31,7 +31,7 @@ exports.techMixin = {
     },
 
     getDependencies : function() {
-        return ['bemtree.xjst', 'bemhtml'];
+        return ['bemtree', 'bemhtml'];
     }
 
 };
