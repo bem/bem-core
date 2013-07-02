@@ -141,7 +141,7 @@ BEM.decl('i-bem__dom', {
 
         if (typeof elem == 'string') {
             elemClass = buildClass(blockName, elem = elem.replace(/^.+__/, ''));
-            elem = this.findElem.apply(this, [elem].concat(slice.call(arguments, 1)));
+            elem = this.findElem.apply(this, [elem].concat(slice.call(arguments, 1), [true]));
         } else {
             elemClass = buildClass(blockName, _self._extractElemNameFrom(elem));
         }
