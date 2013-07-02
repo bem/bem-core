@@ -102,59 +102,55 @@ exports.apply = BEMContext.applyAsync = function _applyAsync(context) {
 });
 
 
-this._mode === '' {
+match(this._mode === '')(
 
-    true: {
+    match()(function() {
         this.ctx || (this.ctx = {});
 
         var vBlock = this.ctx.block,
             vElem = this.ctx.elem,
             block = this._currBlock || this.block;
 
-        return apply(
-            this._mode = 'default',
-            this.block = vBlock || (vElem ? block : undefined),
-            this._currBlock = (vBlock || vElem) ? undefined : block,
-            this.elem = this.ctx.elem,
-            this.mods = (vBlock ? this.ctx.mods : this.mods) || {},
-            this.elemMods = this.ctx.elemMods || {}
-        );
-    }
+        return apply('default', {
+            block : vBlock || (vElem ? block : undefined),
+            _currBlock : (vBlock || vElem) ? undefined : block,
+            elem  : this.ctx.elem,
+            mods  : (vBlock ? this.ctx.mods : this.mods) || {},
+            elemMods : this.ctx.elemMods || {}
+        });
+    }),
 
-    this._.isArray(this.ctx): {
+    match(function() { return this._.isArray(this.ctx) })(function() {
         var v = this.ctx,
             l = v.length,
             i = 0,
             buf = [];
 
-        while(i < l) {
-            buf.push(apply(this.ctx = v[i++]));
-        }
+        while(i < l)
+            buf.push(apply({ ctx: v[i++] }));
 
         return buf;
-    }
+    }),
 
-    !this.ctx: {
-        return;
-    }
+    match(function() { return !this.ctx })(),
 
-    this._.isSimple(this.ctx): {
+    match(function() { return this._.isSimple(this.ctx) })(function() {
         var ctx = this.ctx;
         if(ctx && ctx !== true || ctx === 0) {
             return ctx;
         }
-    }
+    })
 
-}
+);
 
-default: {
+def()(function() {
     var content = apply('content');
     if(content || content === 0) {
-        this.ctx.content = apply(this._mode = '', this.ctx = content);
+        this.ctx.content = apply('', { ctx : content });
     }
     return this.ctx;
-}
+});
 
-content: {
+content()(function() {
     return this.ctx.content
-}
+});
