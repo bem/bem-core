@@ -44,6 +44,41 @@ BEM.decl('i-bem__dom', {
             block._blockName = block._name;
         }
         return block;
+    },
+
+    /**
+     * Builds a CSS class corresponding to the block/element and modifier
+     * @param {String} [elem] Element name
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {String}
+     */
+    buildClass : function(elem, modName, modVal) {
+        return this._elemName && (arguments.length % 2)?
+            buildClass(this._blockName, elem, modName, modVal) :
+            buildClass(this._name, elem, modName, modVal);
+    },
+
+    /**
+     * Builds a CSS selector corresponding to the block/element and modifier
+     * @param {String} [elem] Element name
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {String}
+     */
+    buildSelector : function() {
+        return '.' + this.buildClass.apply(this, arguments);
+    },
+
+    /**
+     * Returns the name of the current instance
+     * @static
+     * @protected
+     * @param {Boolean} [shortName] return the short name for current instance
+     * @returns {String}
+     */
+    getName : function(shortName) {
+        return shortName? (this._elemName || this._blockName) : this._name;
     }
 
 });
