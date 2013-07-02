@@ -11,7 +11,7 @@
 
 modules.define('next-tick', function(provide) {
 
-var global = this,
+var global = this.global,
     fns = [],
     enqueueFn = function(fn) {
         return fns.push(fn) === 1;
