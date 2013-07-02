@@ -155,12 +155,17 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [data] Additional information
      * @returns {BEM}
      */
-    trigger : function(e, data) {
+    emit : function(e, data) {
         this
             .__base(e = this._buildEvent(e), data)
             .__self.trigger(e, data);
 
         return this;
+    },
+
+    /** @deprecated use emit */
+    trigger : function() {
+        this.emit.apply(this, arguments);
     },
 
     _buildEvent : function(e) {

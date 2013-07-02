@@ -546,15 +546,15 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @param {Object} [data] Additional information
      * @returns {BEM}
      */
-    trigger : function(e, data) {
+    emit : function(e, data) {
         this
             .__base(e = this._buildEvent(e), data)
-            .domElem && this._ctxTrigger(e, data);
+            .domElem && this._ctxEmit(e, data);
 
         return this;
     },
 
-    _ctxTrigger : function(e, data) {
+    _ctxEmit : function(e, data) {
         var _this = this,
             storage = liveEventCtxStorage[_this.__self._buildCtxEventName(e.type)],
             ctxIds = {};
