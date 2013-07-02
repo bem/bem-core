@@ -3,13 +3,14 @@
 
 modules.define(
     'i-bem__elems',
-    ['i-bem', 'i-bem__internal'],
-    function(provide, BEM, INTERNAL) {
+    ['i-bem', 'i-bem__internal', 'jquery'],
+    function(provide, BEM, INTERNAL, $) {
 
 var buildClass = INTERNAL.buildClass,
     NAME_PATTERN = INTERNAL.NAME_PATTERN,
     MOD_DELIM = INTERNAL.MOD_DELIM,
-    ELEM_DELIM = INTERNAL.ELEM_DELIM;
+    ELEM_DELIM = INTERNAL.ELEM_DELIM,
+    slice = Array.prototype.slice;
 
 BEM.decl('i-bem__dom', {
 
@@ -100,6 +101,38 @@ BEM.decl('i-bem__dom', {
         return res.filter(function() {
             return domElem.index($(this).closest(blockSelector)) > -1;
         });
+    },
+
+    /**
+     * Finds the first instance of defined elements of the current (or parent) block
+     * @param {String|jQuery} elem Element
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {BEM}
+     */
+    elemInstance : function() {
+        return this.elemInstances.apply(this, arguments)[0] || null;
+    },
+
+    /**
+     * Finds instances of defined elements of the current (or parent) block
+     * @param {String|jQuery} elem Element
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {BEM[]}
+     */
+    elemInstances : function(elem) {
+        var _self = this.__self,
+            blockName = _self._blockName,
+            elemClass;
+
+        if (typeof elem == 'string') {
+            elemClass = buildClass(blockName, elem = elem.replace(/^.+__/, ''));
+            elem = this.findElem.apply(this, [elem].concat(slice.call(arguments, 1)));
+        } else {
+            elemClass = buildClass(blockName, _self._extractElemNameFrom(elem));
+        }
+        return this.findBlocksOn(elem, elemClass);
     }
 
 }, {
