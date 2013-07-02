@@ -19,6 +19,47 @@ BEM.decl('i-bem__dom', {
      */
     getParent : function() {
         return this._parent || (this._parent = this.findBlockOutside(this.__self._blockName));
+    },
+
+    /**
+     * Executes handlers for setting modifiers
+     * If block sets modifier to its elements, it executes their onSetMod handlers too (if these elements have their own instances)
+     * If element sets modifier to itself, it executes onElemSetMod handlers of parent block
+     * @private
+     * @param {String} elemName Element name
+     * @param {String} modName Modifier name
+     * @param {String} modVal Modifier value
+     * @param {Array} modFnParams Handler parameters
+     */
+    _callModFn : function(elemName, modName, modVal, modFnParams) {
+        var result = this.__base.apply(this, arguments),
+            elemClass;
+        if (this.__self._elemName) {
+
+            this.__base.call(
+                this.getParent(),
+                this.__self._elemName,
+                modName,
+                modVal,
+                [ this.domElem ].concat(modFnParams)
+            )
+                === false && (result = false);
+
+        } else if (elemName && BEM.blocks[elemClass = this.__self.buildClass(elemName)]) {
+
+            this.findBlocksOn(modFnParams[0], elemClass).forEach(
+                function(elemInstance) {
+                    this.__base.call(
+                        elemInstance,
+                        undefined,
+                        modName,
+                        modVal,
+                        modFnParams.slice(1)
+                    )
+                        === false && (result = false) },
+                this);
+        }
+        return result;
     }
 
 }, {
