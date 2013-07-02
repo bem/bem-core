@@ -1,16 +1,14 @@
+/** @requires BEM */
+/** @requires BEM.INTERNAL */
+
 modules.define(
     'i-bem__elems',
     ['i-bem', 'i-bem__internal'],
     function(provide, BEM, INTERNAL) {
 
-var buildClass = INTERNAL.buildClass,
-    NAME_PATTERN = INTERNAL.NAME_PATTERN,
-    MOD_DELIM = INTERNAL.MOD_DELIM,
-    ELEM_DELIM = INTERNAL.ELEM_DELIM;
+var buildClass = INTERNAL.buildClass;
 
-BEM.decl('i-bem__dom', {
-
-}, {
+BEM.decl('i-bem__dom', {}, {
 
     /**
      * Declares elements and creates an elements class
