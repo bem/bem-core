@@ -10,6 +10,10 @@ exports.techMixin = {
         return ['bemtree.xjst.js'];
     },
 
+    getCreateSuffixes : function() {
+        return ['bemtree.xjst'];
+    },
+
     getCompiledResult : function(sources) {
         sources = sources.join('\n');
 
