@@ -1,4 +1,4 @@
-modules.define('test', ['events'], function(provide, events) {
+modules.define('test', ['events', 'sinon'], function(provide, events, sinon) {
 
 describe('events', function() {
     describe('Emitter', function() {

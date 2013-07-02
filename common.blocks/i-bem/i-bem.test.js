@@ -1,4 +1,4 @@
-modules.define('test', ['i-bem'], function(provide, BEM) {
+modules.define('test', ['i-bem', 'sinon'], function(provide, BEM, sinon) {
 
 describe('i-bem', function() {
     describe('decl', function() {
