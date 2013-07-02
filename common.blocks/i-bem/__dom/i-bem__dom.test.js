@@ -1,7 +1,7 @@
 modules.define(
     'test',
-    ['i-bem__dom', 'jquery'],
-    function(provide, DOM, $) {
+    ['i-bem__dom', 'jquery', 'sinon'],
+    function(provide, DOM, $, sinon) {
 
 describe('i-bem__dom', function() {
     describe('getMod', function() {

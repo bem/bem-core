@@ -1,4 +1,4 @@
-modules.define('test', function(provide) {
+modules.define('test', ['sinon'], function(provide, sinon) {
 
     describe('ecma__array', function() {
 
