@@ -3,8 +3,8 @@
 
 modules.define(
     'i-bem__elems',
-    ['i-bem', 'i-bem__internal', 'jquery'],
-    function(provide, BEM, INTERNAL, $) {
+    ['i-bem', 'i-bem__internal'],
+    function(provide, BEM, INTERNAL) {
 
 var buildClass = INTERNAL.buildClass,
     NAME_PATTERN = INTERNAL.NAME_PATTERN,
@@ -136,6 +136,17 @@ BEM.decl('i-bem__dom', {
     }
 
 }, {
+
+    /**
+     * Helper for live initialization for a parent block's event
+     * @static
+     * @protected
+     * @param {String} event Event name
+     * @param {Function} [callback] Handler to be called after successful initialization in the new element's context
+     */
+    liveInitOnParentEvent : function(event, callback) {
+        return this._liveInitOnBlockEvent(event, this._blockName, callback, 'elemInstances');
+    },
 
     /**
      * Builds a prefix for the CSS class of a DOM element or nested element of the block, based on modifier name
