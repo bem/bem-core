@@ -15,6 +15,7 @@
 
 ### Уровни
   - common.blocks
+  - desktop.blocks
   - touch.blocks
 
 ### Блоки
