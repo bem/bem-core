@@ -508,7 +508,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
         convertModHandlersToMethods(props || (props = {}));
 
-        var baseBlock = blocks[decl.baseBlock || decl.block] || BEM;
+        var baseBlock = blocks[decl.baseBlock || decl.block] || this;
 
         if(decl.modName) {
             var checkMod = buildCheckMod(decl.modName, decl.modVal);

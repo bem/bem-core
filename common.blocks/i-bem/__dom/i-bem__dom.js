@@ -913,17 +913,6 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
     win : win,
 
     /**
-     * @protected
-     */
-    decl : function(decl, props, staticProps) {
-        typeof decl === 'string' && (decl = { block : decl });
-        if(!decl.baseBlock && !blocks[decl.block]) {
-            decl.baseBlock = 'i-bem__dom';
-        }
-        return BEM.decl(decl, props, staticProps);
-    },
-
-    /**
      * Processes a block's live properties
      * @private
      * @param {Boolean} [heedLive=false] Whether to take into account that the block already processed its live properties
