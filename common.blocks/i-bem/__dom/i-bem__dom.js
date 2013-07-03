@@ -1389,10 +1389,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
     },
 
     /**
-     * Retrieves block parameters from a DOM element
-     * @static
-     * @param {HTMLElement} domNode DOM node
-     * @returns {Object}
+     * @deprecated use elemParams
      */
     extractParams : extractParams,
 
