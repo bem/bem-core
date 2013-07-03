@@ -2,9 +2,9 @@
 /** @requires BEM.INTERNAL */
 
 modules.define(
-    'i-bem__elems',
+    'i-bem__dom',
     ['i-bem', 'i-bem__internal'],
-    function(provide, BEM, INTERNAL) {
+    function(provide, BEM, INTERNAL, DOM) {
 
 var buildClass = INTERNAL.buildClass,
     NAME_PATTERN = INTERNAL.NAME_PATTERN,
@@ -159,6 +159,30 @@ BEM.decl('i-bem__dom', {
      */
     liveInitOnParentEvent : function(event, callback) {
         return this._liveInitOnBlockEvent(event, this._blockName, callback, 'elemInstances');
+    },
+
+    /**
+     * Builds a CSS class corresponding to the block/element and modifier
+     * @param {String} [elem] Element name
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {String}
+     */
+    buildClass : function(elem, modName, modVal) {
+        return this._elemName && (arguments.length % 2)?
+            buildClass(this._blockName, elem, modName, modVal) :
+            buildClass(this._name, elem, modName, modVal);
+    },
+
+    /**
+     * Builds a CSS selector corresponding to the block/element and modifier
+     * @param {String} [elem] Element name
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {String}
+     */
+    buildSelector : function() {
+        return '.' + this.buildClass.apply(this, arguments);
     },
 
     /**
