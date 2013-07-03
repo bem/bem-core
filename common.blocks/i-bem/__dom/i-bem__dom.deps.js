@@ -1,9 +1,9 @@
 ({
-    mustDeps: [
+    shouldDeps: [
         'jquery',
         'objects',
         'functions',
-        { block: 'i-bem', elems: ['internal'] }
-    ],
-    shouldDeps: { block: 'ecma', elem: 'string' }
+        { block: 'i-bem', elems: ['internal'] },
+        { block: 'ecma', elem: 'string' }
+    ]
 })
