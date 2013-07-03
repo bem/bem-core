@@ -90,6 +90,22 @@ function buildCheckMod(modName, modVal) {
         };
 }
 
+function convertModHandlersToMethods(props) {
+    if(props.onSetMod) {
+        modFnsToProps(props.onSetMod, props);
+        delete props.onSetMod;
+    }
+
+    if(props.onElemSetMod) {
+        for(var elemName in props.onElemSetMod) {
+            if(props.onElemSetMod.hasOwnProperty(elemName)) {
+                modFnsToProps(props.onElemSetMod[elemName], props, elemName);
+            }
+        }
+        delete props.onElemSetMod;
+    }
+}
+
 var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     /**
      * @class Base block for creating BEM blocks
@@ -490,21 +506,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         if(decl.baseBlock && !blocks[decl.baseBlock])
             throw('baseBlock "' + decl.baseBlock + '" for "' + decl.block + '" is undefined');
 
-        props || (props = {});
-
-        if(props.onSetMod) {
-            modFnsToProps(props.onSetMod, props);
-            delete props.onSetMod;
-        }
-
-        if(props.onElemSetMod) {
-            for(var elemName in props.onElemSetMod) {
-                if(props.onElemSetMod.hasOwnProperty(elemName)) {
-                    modFnsToProps(props.onElemSetMod[elemName], props, elemName);
-                }
-            }
-            delete props.onElemSetMod;
-        }
+        convertModHandlersToMethods(props || (props = {}));
 
         var baseBlock = blocks[decl.baseBlock || decl.block] || BEM;
 
@@ -555,22 +557,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     },
 
     declMix : function(block, props, staticProps) {
-        props || (props = {});
-
-        if(props.onSetMod) {
-            modFnsToProps(props.onSetMod, props);
-            delete props.onSetMod;
-        }
-
-        if(props.onElemSetMod) {
-            for(var elemName in props.onElemSetMod) {
-                if(props.onElemSetMod.hasOwnProperty(elemName)) {
-                    modFnsToProps(props.onElemSetMod[elemName], props, elemName);
-                }
-            }
-            delete props.onElemSetMod;
-        }
-
+        convertModHandlersToMethods(props || (props = {}));
         return blocks[block] = inherit(props, staticProps);
     },
 
