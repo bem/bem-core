@@ -1,13 +1,8 @@
 ({
-    mustDeps: [
-        {
-            block: 'i-bem',
-            elems: [
-                'html',
-                { elem: 'dom', mods: { init: 'auto' } },
-            ]
-        },
-        { block: 'ua' }
-    ],
-    shouldDeps: { elems: ['css', 'js'] }
+    mustDeps: 'i-bem',
+    shouldDeps: [
+        { block: 'i-bem', elem: 'dom', mods: { init: 'auto' }},
+        { block: 'ua' },
+        { elems: ['css', 'js'] }
+    ]
 })
