@@ -480,7 +480,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {String} [decl.baseBlock] Name of the parent block
      * @param {Array} [decl.baseMix] Mixed block names
      * @param {String} [decl.modName] Modifier name
-     * @param {String} [decl.modVal] Modifier value
+     * @param {String|Array} [decl.modVal] Modifier value
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      */
