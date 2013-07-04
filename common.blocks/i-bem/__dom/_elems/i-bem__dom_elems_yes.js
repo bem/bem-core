@@ -23,6 +23,7 @@ function clearElemModCache() {
 
 BEM.decl('i-bem__dom', {
 
+    // TODO идея: делегировать эти методы инстансу элемента
     getMod : clearElemModCache,
     getMods : clearElemModCache,
     setMod : clearElemModCache,
