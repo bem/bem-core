@@ -124,7 +124,7 @@ BEM.decl('i-bem__dom', {
      * @returns {BEM}
      */
     elemInstance : function() {
-        return this.elemInstances.apply(this, arguments)[0] || null;
+        return this._elemInstances(arguments, 'elem', 'findBlockOn') || null;
     },
 
     /**
@@ -134,18 +134,32 @@ BEM.decl('i-bem__dom', {
      * @param {String} [modVal] Modifier value
      * @returns {BEM[]}
      */
-    elemInstances : function(elem) {
-        var _self = this.__self,
+    elemInstances : function() {
+        return this._elemInstances(arguments, 'elem', 'findBlocksOn') || [];
+    },
+
+    findElemInstance : function() {
+        return this._elemInstances(arguments, 'findElem', 'findBlockOn') || null;
+    },
+
+    findElemInstances : function() {
+        return this._elemInstances(arguments, 'findElem', 'findBlocksOn') || [];
+    },
+
+    _elemInstances : function(args, findElemMethod, findBlockMethod) {
+        var elem = args[0],
+            _self = this.__self,
             blockName = _self._blockName,
             elemClass;
 
-        if (typeof elem == 'string') {
-            elemClass = buildClass(blockName, elem = elem.replace(/^.+__/, ''));
-            elem = this.findElem.apply(this, [elem].concat(slice.call(arguments, 1), [true]));
-        } else {
+        if (args.length == 1 && typeof elem !== 'string') {
             elemClass = buildClass(blockName, _self._extractElemNameFrom(elem));
+        } else {
+            if (typeof elem !== 'string') elem = args[1];
+            elemClass = buildClass(blockName, elem = elem.replace(/^.+__/, ''));
+            elem = this[findElemMethod].apply(this, [elem].concat(slice.call(args, 1), [true]));
         }
-        return this.findBlocksOn(elem, elemClass);
+        return this[findBlockMethod](elem, elemClass);
     }
 
 }, {

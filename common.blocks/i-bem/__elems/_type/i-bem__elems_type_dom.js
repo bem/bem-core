@@ -213,6 +213,6 @@ BEM.decl('i-bem__dom', {
 
 });
 
-provide(BEM.blocks['i-bem__dom']);
+provide(DOM);
 
 });

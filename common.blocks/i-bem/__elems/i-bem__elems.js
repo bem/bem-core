@@ -3,12 +3,12 @@
 
 modules.define(
     'i-bem',
-    ['i-bem__internal'],
-    function(provide, INTERNAL, BEM) {
+    ['i-bem__internal', 'inherit'],
+    function(provide, INTERNAL, inherit, BEM) {
 
 var buildClass = INTERNAL.buildClass;
 
-BEM.decl('i-bem', {}, {
+provide(inherit.self(BEM, {}, {
 
     /**
      * Declares elements and creates an elements class
@@ -55,8 +55,6 @@ BEM.decl('i-bem', {}, {
         return shortName? (this._elemName || this._blockName) : this._name;
     }
 
-});
-
-provide(BEM);
+}));
 
 });
