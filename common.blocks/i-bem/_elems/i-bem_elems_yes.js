@@ -30,6 +30,7 @@ provide(inherit.self(BEM, {}, {
                 {
                     block: buildClass(decl.block, decl.elem),
                     baseBlock: decl.baseBlock,
+                    baseMix: decl.baseMix,
                     modName: decl.modName,
                     modVal: decl.modVal
                 },
