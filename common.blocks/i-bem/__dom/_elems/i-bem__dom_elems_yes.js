@@ -192,7 +192,7 @@ BEM.decl('i-bem__dom', {
         var name = this._elemName;
         BEM.blocks[this._blockName].on(event, function(e) {
             var args = arguments,
-                elems = e.block.findElemInstances(name, true);
+                elems = e.target.findElemInstances(name, true);
 
             callback && elems.forEach(function(elem) {
                 callback.apply(elem, args);
