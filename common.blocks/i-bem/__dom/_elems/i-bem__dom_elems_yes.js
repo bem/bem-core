@@ -39,7 +39,7 @@ BEM.decl('i-bem__dom', {
     /**
      * Executes handlers for setting modifiers
      * If block sets modifier to its elements, it executes their onSetMod handlers too (if these elements have their own instances)
-     * If element sets modifier to itself, it executes onElemSetMod handlers of parent block
+     * If element sets modifier to itself, it executes onElemSetMod handlers of the parent block
      * @private
      * @param {String} elemName Element name
      * @param {String} modName Modifier name
@@ -118,47 +118,64 @@ BEM.decl('i-bem__dom', {
     },
 
     /**
-     * Finds the first instance of defined elements of the current (or parent) block
+     * Lazy search (caches results) for the first instance of defined element and intializes it (if necessary)
      * @param {String|jQuery} elem Element
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
      * @returns {BEM}
      */
     elemInstance : function() {
-        return this._elemInstances(arguments, 'elem', 'findBlockOn') || null;
+        return this._elemInstances(arguments, 'elem', 'findBlockOn');
     },
 
     /**
-     * Finds instances of defined elements of the current (or parent) block
+     * Lazy search (caches results) for instances of defined elements and intializes it (if necessary)
      * @param {String|jQuery} elem Element
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
      * @returns {BEM[]}
      */
     elemInstances : function() {
-        return this._elemInstances(arguments, 'elem', 'findBlocksOn') || [];
+        return this._elemInstances(arguments, 'elem', 'findBlocksOn');
     },
 
+    /**
+     * Finds the first instance of defined element and intializes it (if necessary)
+     * @param {jQuery} [ctx=this.domElem] Element where search is being performed
+     * @param {String|jQuery} elem Element
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @param {Boolean} [strictMode=false]
+     * @returns {BEM}
+     */
     findElemInstance : function() {
-        return this._elemInstances(arguments, 'findElem', 'findBlockOn') || null;
+        return this._elemInstances(arguments, 'findElem', 'findBlockOn');
     },
 
+    /**
+     * Finds instances of defined elements and intializes it (if necessary)
+     * @param {jQuery} [ctx=this.domElem] Element where search is being performed
+     * @param {String|jQuery} elem Element
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @param {Boolean} [strictMode=false]
+     * @returns {BEM[]}
+     */
     findElemInstances : function() {
-        return this._elemInstances(arguments, 'findElem', 'findBlocksOn') || [];
+        return this._elemInstances(arguments, 'findElem', 'findBlocksOn');
     },
 
     _elemInstances : function(args, findElemMethod, findBlockMethod) {
         var elem = args[0],
+            isString = typeof elem === 'string',
             _self = this.__self,
-            blockName = _self._blockName,
             elemClass;
 
-        if (args.length == 1 && typeof elem !== 'string') {
-            elemClass = buildClass(blockName, _self._extractElemNameFrom(elem));
+        if (args.length === 1 && !isString) {
+            elemClass = buildClass(_self._blockName, _self._extractElemNameFrom(elem));
         } else {
-            if (typeof elem !== 'string') elem = args[1];
-            elemClass = buildClass(blockName, elem);
-            elem = this[findElemMethod].apply(this, [elem].concat(slice.call(args, 1)));
+            elemClass = buildClass(_self._blockName, args[isString? 0 : 1]);
+            elem = this[findElemMethod].apply(this, args);
         }
         return this[findBlockMethod](elem, elemClass);
     }
@@ -176,7 +193,7 @@ BEM.decl('i-bem__dom', {
         var name = this._elemName;
         BEM.blocks[this._blockName].on(event, function(e) {
             var args = arguments,
-                elems = e.block.findElemInstances(name);
+                elems = e.block.findElemInstances(name, true);
 
             callback && elems.forEach(function(elem) {
                 callback.apply(elem, args);
