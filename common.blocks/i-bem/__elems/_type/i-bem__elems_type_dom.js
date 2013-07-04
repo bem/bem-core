@@ -14,6 +14,7 @@ var buildClass = INTERNAL.buildClass,
 
 /**
  * Clears the element's modifiers cache
+ * TODO костыль, сделать с использованием кэша
  */
 function clearElemModCache() {
     var result = this.__base.apply(this, arguments);
