@@ -3,8 +3,8 @@
 
 modules.define(
     'i-bem__dom',
-    ['i-bem', 'i-bem__internal'],
-    function(provide, BEM, INTERNAL, DOM) {
+    ['i-bem', 'i-bem__internal', 'jquery'],
+    function(provide, BEM, INTERNAL, $, DOM) {
 
 var buildClass = INTERNAL.buildClass,
     NAME_PATTERN = INTERNAL.NAME_PATTERN,
@@ -157,8 +157,8 @@ BEM.decl('i-bem__dom', {
             elemClass = buildClass(blockName, _self._extractElemNameFrom(elem));
         } else {
             if (typeof elem !== 'string') elem = args[1];
-            elemClass = buildClass(blockName, elem = elem.replace(/^.+__/, ''));
-            elem = this[findElemMethod].apply(this, [elem].concat(slice.call(args, 1), [true]));
+            elemClass = buildClass(blockName, elem);
+            elem = this[findElemMethod].apply(this, [elem].concat(slice.call(args, 1)));
         }
         return this[findBlockMethod](elem, elemClass);
     }
@@ -173,7 +173,16 @@ BEM.decl('i-bem__dom', {
      * @param {Function} [callback] Handler to be called after successful initialization in the new element's context
      */
     liveInitOnParentEvent : function(event, callback) {
-        return this._liveInitOnBlockEvent(event, this._blockName, callback, 'elemInstances');
+        var name = this._elemName;
+        BEM.blocks[this._blockName].on(event, function(e) {
+            var args = arguments,
+                elems = e.block.findElemInstances(name);
+
+            callback && elems.forEach(function(elem) {
+                callback.apply(elem, args);
+            });
+        });
+        return this;
     },
 
     /**
