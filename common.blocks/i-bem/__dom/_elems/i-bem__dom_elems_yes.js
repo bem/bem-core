@@ -9,8 +9,7 @@ modules.define(
 var buildClass = INTERNAL.buildClass,
     NAME_PATTERN = INTERNAL.NAME_PATTERN,
     MOD_DELIM = INTERNAL.MOD_DELIM,
-    ELEM_DELIM = INTERNAL.ELEM_DELIM,
-    slice = Array.prototype.slice;
+    ELEM_DELIM = INTERNAL.ELEM_DELIM;
 
 /**
  * Clears the element's modifiers cache

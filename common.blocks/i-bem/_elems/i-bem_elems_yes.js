@@ -50,7 +50,7 @@ provide(inherit.self(BEM, {}, {
      * Returns the name of the current instance
      * @static
      * @protected
-     * @param {Boolean} [shortName] return the short name for current instance
+     * @param {Boolean} [shortName] return the short name of the current instance
      * @returns {String}
      */
     getName : function(shortName) {
