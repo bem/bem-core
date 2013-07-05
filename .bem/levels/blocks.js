@@ -7,13 +7,14 @@ var PATH = require('path'),
 
 exports.getTechs = function() {
     var techs = {
-        'bemjson.js' : '',
-        'bemdecl.js' : 'bemdecl.js',
-        'deps.js'    : 'deps.js',
-        'css'        : 'css',
-        'ie.css'     : 'ie.css',
-        'js'         : 'js-i',
-        'test.js'    : environ.getLibPath('bem-pr', 'bem/techs/test.js.js')
+        'bemjson.js'                 : '',
+        'bemdecl.js'                 : 'bemdecl.js',
+        'deps.js'                    : 'deps.js',
+        'css'                        : 'css',
+        'ie.css'                     : 'ie.css',
+        'js'                         : 'js-i',
+        'test.js'                    : environ.getLibPath('bem-pr', 'bem/techs/test.js.js'),
+        'test.js+browser.js+bemhtml' : environ.getLibPath('bem-pr', 'bem/techs/test.js+browser.js+bemhtml.js')
     };
 
     [

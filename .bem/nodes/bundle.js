@@ -35,6 +35,10 @@ require('bem/lib/nodesregistry').decl('BundleNode', {
         return this.createBorschikOptimizerNode('js', sourceNode, bundleNode);
     },
 
+    'create-test.js+browser.js+bemhtml-optimizer-node': function(tech, sourceNode, bundleNode) {
+        return this.createBorschikOptimizerNode('js', sourceNode, bundleNode);
+    },
+
     'create-browser.js+bemhtml-optimizer-node' : function() {
         return this['create-js-optimizer-node'].apply(this, arguments);
     },

@@ -123,7 +123,7 @@ MAKE.decl('TestNode', {
 
     getTechs : function() {
         return this.__base().concat([
-            'test.js',
+            'test.js+browser.js+bemhtml',
             'phantomjs'
         ]);
     }
