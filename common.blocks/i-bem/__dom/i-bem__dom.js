@@ -711,12 +711,19 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         var _self = this.__self,
             selector = '.' +
                 names.split(' ').map(function(name) {
-                    return buildClass(_self._name, name, modName, modVal);
+                    return _self.buildClass(name, modName, modVal);
                 }).join(',.'),
             res = findDomElem(ctx, selector);
 
-        if(!strictMode) return res;
+        return strictMode? this._filterFindElemResults(res) : res;
+    },
 
+    /**
+     * Filters results of findElem helper execution in strict mode
+     * @param {jQuery} res DOM elements
+     * @returns {jQuery} DOM elements
+     */
+    _filterFindElemResults : function(res) {
         var blockSelector = this.buildSelector(),
             domElem = this.domElem;
         return res.filter(function() {
