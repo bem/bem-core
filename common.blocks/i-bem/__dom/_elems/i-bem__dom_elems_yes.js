@@ -268,20 +268,9 @@ BEM.decl('i-bem__dom', {
      * @returns {String}
      */
     buildClass : function(elem, modName, modVal) {
-        return this._elemName && (arguments.length % 2)?
+        return this._elemName && elem && (modVal || !modName)?
             buildClass(this._blockName, elem, modName, modVal) :
             buildClass(this._name, elem, modName, modVal);
-    },
-
-    /**
-     * Builds a CSS selector corresponding to the block/element and modifier
-     * @param {String} [elem] Element name
-     * @param {String} [modName] Modifier name
-     * @param {String} [modVal] Modifier value
-     * @returns {String}
-     */
-    buildSelector : function() {
-        return '.' + this.buildClass.apply(this, arguments);
     },
 
     /**

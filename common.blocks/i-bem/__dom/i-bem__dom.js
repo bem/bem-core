@@ -1186,7 +1186,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         if(to.elem && to.elem.indexOf(' ') > 0) {
             to.elem.split(' ').forEach(function(elem) {
                 this._liveClassBind(
-                    buildClass(this._name, elem, to.modName, to.modVal),
+                    this.buildClass(elem, to.modName, to.modVal),
                     event,
                     callback,
                     invokeOnInit);
@@ -1195,7 +1195,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         }
 
         return this._liveClassBind(
-            buildClass(this._name, to.elem, to.modName, to.modVal),
+            this.buildClass(to.elem, to.modName, to.modVal),
             event,
             callback,
             invokeOnInit);
@@ -1213,7 +1213,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         if(elem.indexOf(' ') > 1) {
             elem.split(' ').forEach(function(elem) {
                 this._liveClassUnbind(
-                    buildClass(this._name, elem),
+                    this.buildClass(elem),
                     event,
                     callback);
             }, this);
@@ -1221,7 +1221,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         }
 
         return this._liveClassUnbind(
-            buildClass(this._name, elem),
+            this.buildClass(elem),
             event,
             callback);
     },
@@ -1446,6 +1446,17 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
     },
 
     /**
+     * Builds a CSS class corresponding to the block/element and modifier
+     * @param {String} [elem] Element name
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {String}
+     */
+    buildClass : function(elem, modName, modVal) {
+        return buildClass(this._name, elem, modName, modVal);
+    },
+
+    /**
      * Builds a CSS selector corresponding to the block/element and modifier
      * @param {String} [elem] Element name
      * @param {String} [modName] Modifier name
@@ -1453,7 +1464,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @returns {String}
      */
     buildSelector : function(elem, modName, modVal) {
-        return '.' + buildClass(this._name, elem, modName, modVal);
+        return '.' + this.buildClass(elem, modName, modVal);
     }
 });
 
