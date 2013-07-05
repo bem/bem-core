@@ -23,10 +23,53 @@ function clearElemModCache() {
 
 BEM.decl('i-bem__dom', {
 
-    // TODO идея: делегировать эти методы инстансу элемента
+    /*// TODO идея: делегировать эти методы инстансу элемента
     getMod : clearElemModCache,
     getMods : clearElemModCache,
-    setMod : clearElemModCache,
+    setMod : clearElemModCache,*/
+
+    getMod : function(elem, modName) {
+        if (elem && modName) {
+            var _self = this.__self,
+                elemClass = _self.buildClass(_self._extractElemNameFrom(elem));
+
+            if (BEM.blocks[elemClass]) {
+                return this.findBlockOn(elem, elemClass).getMod(modName);
+            }
+        }
+        return this.__base(elem, modName);
+    },
+
+    getMods : function(elem) {
+        if (elem && typeof elem !== 'string') {
+            var _self = this.__self,
+                elemClass = _self.buildClass(_self._extractElemNameFrom(elem)),
+                elemInstance;
+
+            if (BEM.blocks[elemClass]) {
+                elemInstance = this.findBlockOn(elem, elemClass);
+                return elemInstance.getMods.apply(elemInstance, [].slice.call(arguments, 1));
+            }
+        }
+        return this.__base.apply(this, arguments);
+    },
+
+    setMod : function(elem, modName, modVal) {
+        if (elem && typeof modVal !== 'undefined') {
+            var _self = this.__self,
+                elemClass = _self.buildClass(_self._extractElemNameFrom(elem));
+
+            if (BEM.blocks[elemClass]) {
+                this
+                    .findBlocksOn(elem, elemClass)
+                    .forEach(function(instance) {
+                        instance.setMod(modName, modVal);
+                    });
+                return this;
+            }
+        }
+        return this.__base(elem, modName, modVal);
+    },
 
     /**
      * Returns and initializes (if necessary) the parent block of current element
@@ -38,7 +81,6 @@ BEM.decl('i-bem__dom', {
 
     /**
      * Executes handlers for setting modifiers
-     * If block sets modifier to its elements, it executes their onSetMod handlers too (if these elements have their own instances)
      * If element sets modifier to itself, it executes onElemSetMod handlers of the parent block
      * @private
      * @param {String} elemName Element name
@@ -49,8 +91,8 @@ BEM.decl('i-bem__dom', {
     _callModFn : function(elemName, modName, modVal, modFnParams) {
         var result = this.__base.apply(this, arguments),
             elemClass;
-        if (this.__self._elemName) {
 
+        if (this.__self._elemName) {
             this.__base.call(
                 this.getParent(),
                 this.__self._elemName,
@@ -59,20 +101,6 @@ BEM.decl('i-bem__dom', {
                 [ this.domElem ].concat(modFnParams)
             )
                 === false && (result = false);
-
-        } else if (elemName && BEM.blocks[elemClass = this.__self.buildClass(elemName)]) {
-
-            this.findBlocksOn(modFnParams[0], elemClass).forEach(
-                function(elemInstance) {
-                    this.__base.call(
-                        elemInstance,
-                        undefined,
-                        modName,
-                        modVal,
-                        modFnParams.slice(1)
-                    )
-                        === false && (result = false) },
-                this);
         }
         return result;
     },
