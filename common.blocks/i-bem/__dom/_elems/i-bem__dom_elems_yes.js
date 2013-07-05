@@ -9,64 +9,40 @@ modules.define(
 var buildClass = INTERNAL.buildClass,
     NAME_PATTERN = INTERNAL.NAME_PATTERN,
     MOD_DELIM = INTERNAL.MOD_DELIM,
-    ELEM_DELIM = INTERNAL.ELEM_DELIM;
-
-/**
- * Clears the element's modifiers cache
- * TODO костыль, сделать с использованием кэша
- */
-function clearElemModCache() {
-    var result = this.__base.apply(this, arguments);
-    this.__self._elemName && (this._modCache = {});
-    return result;
-}
+    ELEM_DELIM = INTERNAL.ELEM_DELIM,
+    blocks = BEM.blocks,
+    slice = Array.prototype.slice;
 
 BEM.decl('i-bem__dom', {
 
-    /*// TODO идея: делегировать эти методы инстансу элемента
-    getMod : clearElemModCache,
-    getMods : clearElemModCache,
-    setMod : clearElemModCache,*/
-
     getMod : function(elem, modName) {
-        if (elem && modName) {
-            var _self = this.__self,
-                elemClass = _self.buildClass(_self._extractElemNameFrom(elem));
+        var elemClass;
 
-            if (BEM.blocks[elemClass]) {
-                return this.findBlockOn(elem, elemClass).getMod(modName);
-            }
+        if (elem && modName && blocks[elemClass = this.__self._buildElemClass(elem)]) {
+            return this.__base.call(this.findBlockOn(elem, elemClass), modName);
         }
         return this.__base(elem, modName);
     },
 
     getMods : function(elem) {
-        if (elem && typeof elem !== 'string') {
-            var _self = this.__self,
-                elemClass = _self.buildClass(_self._extractElemNameFrom(elem)),
-                elemInstance;
+        var elemClass;
 
-            if (BEM.blocks[elemClass]) {
-                elemInstance = this.findBlockOn(elem, elemClass);
-                return elemInstance.getMods.apply(elemInstance, [].slice.call(arguments, 1));
-            }
+        if (elem && typeof elem !== 'string' && blocks[elemClass = this.__self._buildElemClass(elem)]) {
+            return this.__base.apply(this.findBlockOn(elem, elemClass), slice.call(arguments, 1));
         }
         return this.__base.apply(this, arguments);
     },
 
     setMod : function(elem, modName, modVal) {
-        if (elem && typeof modVal !== 'undefined') {
-            var _self = this.__self,
-                elemClass = _self.buildClass(_self._extractElemNameFrom(elem));
+        var elemClass;
 
-            if (BEM.blocks[elemClass]) {
-                this
-                    .findBlocksOn(elem, elemClass)
-                    .forEach(function(instance) {
-                        instance.setMod(modName, modVal);
-                    });
-                return this;
-            }
+        if (elem && typeof modVal !== 'undefined' && blocks[elemClass = this.__self._buildElemClass(elem)]) {
+            this
+                .findBlocksOn(elem, elemClass)
+                .forEach(function(instance) {
+                    this.__base.call(instance, modName, modVal);
+                }, this);
+            return this;
         }
         return this.__base(elem, modName, modVal);
     },
@@ -196,13 +172,12 @@ BEM.decl('i-bem__dom', {
     _elemInstances : function(args, findElemMethod, findBlockMethod) {
         var elem = args[0],
             isString = typeof elem === 'string',
-            _self = this.__self,
             elemClass;
 
         if (args.length === 1 && !isString) {
-            elemClass = buildClass(_self._blockName, _self._extractElemNameFrom(elem));
+            elemClass = this.__self._buildElemClass(elem);
         } else {
-            elemClass = buildClass(_self._blockName, args[isString? 0 : 1]);
+            elemClass = buildClass(this.__self._blockName, args[isString? 0 : 1]);
             elem = this[findElemMethod].apply(this, args);
         }
         return this[findBlockMethod](elem, elemClass);
@@ -219,7 +194,7 @@ BEM.decl('i-bem__dom', {
      */
     liveInitOnParentEvent : function(event, callback) {
         var name = this._elemName;
-        BEM.blocks[this._blockName].on(event, function(e) {
+        blocks[this._blockName].on(event, function(e) {
             var args = arguments,
                 elems = e.target.findElemInstances(name, true);
 
@@ -228,6 +203,10 @@ BEM.decl('i-bem__dom', {
             });
         });
         return this;
+    },
+
+    _buildElemClass : function(elem) {
+        return buildClass(this._blockName, this._extractElemNameFrom(elem));
     },
 
     /**
