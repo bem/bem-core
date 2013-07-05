@@ -227,6 +227,8 @@ BEM.decl('i-bem__dom', {
 
     /**
      * Builds a CSS class corresponding to the element's instance with extraction it's name form the specified DOM element
+     * @static
+     * @private
      * @param {jQuery} elem Element
      * @returns {String}
      */
