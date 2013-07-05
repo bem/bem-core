@@ -203,6 +203,30 @@ BEM.decl('i-bem__dom', {
             elem = this[findElemMethod].apply(this, args);
         }
         return this[findBlockMethod](elem, elemClass);
+    },
+
+    /**
+     * Finds elements outside the context or current element
+     * @param {jQuery} [ctx=this.domElem] context (current element by default)
+     * @param {String} elemName Element name
+     * @returns {jQuery} DOM elements
+     */
+    closestElem : function(ctx, elemName) {
+        return ctx && elemName?
+            this.__base(ctx, elemName) :
+            this.__base(this.domElem, elemName || ctx);
+    },
+
+    /**
+     * Finds instance of defined element outside the context or current element
+     * @param {jQuery} [ctx=this.domElem] context (current element by default)
+     * @param {String} elemName Element name
+     * @returns {BEM}
+     */
+    closestElemInstance : function(ctx, elemName) {
+        return this.findBlockOn(
+            this.closestElem.apply(this, arguments),
+            buildClass(this.__self._blockName, elemName || ctx));
     }
 
 }, {
@@ -227,6 +251,11 @@ BEM.decl('i-bem__dom', {
         return this;
     },
 
+    /**
+     * Builds a CSS class corresponding to the element's instance with extraction it's name form the specified DOM element
+     * @param {jQuery} elem Element
+     * @returns {String}
+     */
     _buildElemClass : function(elem) {
         return buildClass(this._blockName, this._extractElemNameFrom(elem));
     },
