@@ -282,7 +282,7 @@ BEM.decl('i-bem__dom', {
      * @returns {String}
      */
     _buildModClassPrefix : function(modName, elem) {
-        return buildClass(elem? this._blockName : this._name) +
+        return (elem? this._blockName : this._name) +
                (elem?
                    ELEM_DELIM + (typeof elem === 'string'? elem : this._extractElemNameFrom(elem)) :
                    '') +

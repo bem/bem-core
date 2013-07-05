@@ -854,7 +854,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @returns {String}
      */
     buildSelector : function(elem, modName, modVal) {
-        return this.__self.buildSelector.apply(this.__self, arguments);
+        return this.__self.buildSelector(elem, modName, modVal);
     },
 
     /**
@@ -1411,7 +1411,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @returns {String}
      */
     _buildModClassPrefix : function(modName, elem) {
-        return buildClass(this._name) +
+        return this._name +
                (elem?
                    ELEM_DELIM + (typeof elem === 'string'? elem : this._extractElemNameFrom(elem)) :
                    '') +
