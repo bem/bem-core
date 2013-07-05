@@ -15,6 +15,13 @@ var buildClass = INTERNAL.buildClass,
 
 BEM.decl('i-bem__dom', {
 
+    /**
+     * Delegates native getMod helper to element's instance
+     * @protected
+     * @param {jQuery} [elem] Nested element
+     * @param {String} modName Modifier name
+     * @returns {String} Modifier value
+     */
     getMod : function(elem, modName) {
         var elemClass;
 
@@ -24,6 +31,13 @@ BEM.decl('i-bem__dom', {
         return this.__base(elem, modName);
     },
 
+    /**
+     * Delegates native getMods helper to element's instance
+     * @protected
+     * @param {jQuery} [elem] Nested element
+     * @param {String} [modName1, ..., modNameN] Modifier names
+     * @returns {Object} Hash of modifier values
+     */
     getMods : function(elem) {
         var elemClass;
 
@@ -33,6 +47,14 @@ BEM.decl('i-bem__dom', {
         return this.__base.apply(this, arguments);
     },
 
+    /**
+     * Delegates native setMod helper to element's instances
+     * @protected
+     * @param {jQuery} [elem] Nested element
+     * @param {String} modName Modifier name
+     * @param {String} modVal Modifier value
+     * @returns {BEM}
+     */
     setMod : function(elem, modName, modVal) {
         var elemClass;
 
