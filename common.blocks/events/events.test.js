@@ -43,6 +43,21 @@ describe('events', function() {
                 spy.should.have.been.calledTwice;
             });
 
+            it('should call callbacks for all types of event', function() {
+                var spy = sinon.spy();
+
+                emitter
+                    .on('*', spy)
+                    .trigger('event1');
+                spy.should.have.been.calledOnce;
+
+                emitter.trigger('event2');
+                spy.should.have.been.calledTwice;
+
+                emitter.trigger('event3');
+                spy.should.have.been.calledThrice;
+            });
+
             it('should call callback with given context', function() {
                 var spy = sinon.spy(),
                     ctx = {};
