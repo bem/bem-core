@@ -87,8 +87,7 @@ BEM.decl('i-bem__dom', {
      * @param {Array} modFnParams Handler parameters
      */
     _callModFn : function(elemName, modName, modVal, modFnParams) {
-        var result = this.__base.apply(this, arguments),
-            elemClass;
+        var result = this.__base.apply(this, arguments);
 
         if (this.__self._elemName) {
             this.__base.call(
@@ -226,7 +225,7 @@ BEM.decl('i-bem__dom', {
     },
 
     /**
-     * Builds a CSS class corresponding to the element's instance with extraction it's name form the specified DOM element
+     * Builds a CSS class corresponding to the element's instance with extraction it's name from the specified DOM element
      * @static
      * @private
      * @param {jQuery} elem Element
