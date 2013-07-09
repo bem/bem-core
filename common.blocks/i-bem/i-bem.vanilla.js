@@ -181,7 +181,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /** @deprecated use emit */
     trigger : function() {
-        this.emit.apply(this, arguments);
+        return this.emit.apply(this, arguments);
     },
 
     _buildEvent : function(e) {
