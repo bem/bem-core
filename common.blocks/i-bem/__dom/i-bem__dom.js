@@ -1,6 +1,3 @@
-/** @requires BEM */
-/** @requires BEM.INTERNAL */
-
 modules.define(
     'i-bem__dom',
     ['i-bem', 'i-bem__internal', 'identify', 'objects', 'functions', 'jquery'],
