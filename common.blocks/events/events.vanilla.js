@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 1.0.2
+ * @version 1.0.3
  */
 
 modules.define('events', ['identify', 'inherit'], function(provide, identify, inherit) {
@@ -161,23 +161,23 @@ var undef,
          * @returns {this}
          */
         emit : function(e, data) {
-            var _this = this,
-                storage = _this[storageExpando];
+            var storage = this[storageExpando];
 
             if(storage) {
                 typeof e === 'string' && (e = new Event(e));
 
-                e.target || (e.target = _this);
+                e.target || (e.target = this);
 
                 var eventTypes = [e.type, '*'],
                     i = 0, eventType, eventStorage;
                 while(eventType = eventTypes[i++]) {
                     if(eventStorage = storage[eventType]) {
                         var item = eventStorage.list.first,
+                            lastItem = eventStorage.list.last,
                             res;
                         while(item) {
                             e.data = item.data;
-                            res = item.fn.apply(item.ctx || _this, arguments);
+                            res = item.fn.apply(item.ctx || this, arguments);
                             if(typeof res !== 'undefined') {
                                 e.result = res;
                                 if(res === false) {
@@ -187,14 +187,19 @@ var undef,
                             }
 
                             item.special && item.special.once &&
-                                _this.un(e.type, item.fn, item.ctx);
+                                this.un(e.type, item.fn, item.ctx);
+
+                            if(item === lastItem) {
+                                break;
+                            }
+
                             item = item.next;
                         }
                     }
                 }
             }
 
-            return _this;
+            return this;
         }
     };
 
