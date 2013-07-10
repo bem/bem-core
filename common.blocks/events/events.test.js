@@ -136,7 +136,22 @@ describe('events', function() {
 
                 e.isPropagationStopped().should.be.true;
                 e.isDefaultPrevented().should.be.true;
-            })
+            });
+
+            it('should not immediately call callback that was binded in callback', function() {
+                var spy = sinon.spy();
+
+                emitter
+                    .on('event', function() {
+                        emitter.on('event', spy);
+                    })
+                    .trigger('event');
+
+                spy.should.not.have.been.called;
+
+                emitter.trigger('event');
+                spy.should.have.been.called;
+            });
         });
 
         describe('once/emit', function() {
