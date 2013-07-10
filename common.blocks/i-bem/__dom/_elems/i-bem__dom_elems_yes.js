@@ -1,3 +1,13 @@
+/** TODO
+ * Апдейт документации
+ * Тесты
+ *
+ *
+ * git push origin +feature/elem-js
+ */
+
+
+
 /** @requires BEM */
 /** @requires BEM.INTERNAL */
 
@@ -71,9 +81,9 @@ BEM.decl('i-bem__dom', {
 
     /**
      * Returns and initializes (if necessary) the parent block of current element
-     * @returns {BEM}
+     * @returns {BEM}  // TODO OwnBlock
      */
-    getParent : function() {
+    getOwnBlock : function() {
         return this._parent || (this._parent = this.findBlockOutside(this.__self._blockName));
     },
 
@@ -91,7 +101,7 @@ BEM.decl('i-bem__dom', {
 
         if (this.__self._elemName) {
             this.__base.call(
-                this.getParent(),
+                this.getOwnBlock(),
                 this.__self._elemName,
                 modName,
                 modVal,
@@ -185,7 +195,7 @@ BEM.decl('i-bem__dom', {
      * @returns {jQuery} DOM elements
      */
     closestElem : function(ctx, elemName) {
-        return ctx && elemName?
+        return arguments.length == 2 ?
             this.__base(ctx, elemName) :
             this.__base(this.domElem, elemName || ctx);
     },

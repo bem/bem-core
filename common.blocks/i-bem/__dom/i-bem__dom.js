@@ -125,7 +125,7 @@ function initBlock(blockName, domElem, params, forceLive, callback) {
     if(!parentDomNode || parentDomNode.nodeType === 11) { // jquery doesn't unique disconnected node
         $.unique(uniqIdToDomElems[uniqId]);
     }
-
+    // TODO добавить параметр в decl про autoDecl
     var blockClass = blocks[blockName] || DOM.decl(blockName, {}, { live : true });
     if(!(blockClass._liveInitable = !!blockClass._processLive()) || forceLive || params.live === false) {
         forceLive && domElem.addClass(BEM_CLASS); // add css class for preventing memory leaks in further destructing
