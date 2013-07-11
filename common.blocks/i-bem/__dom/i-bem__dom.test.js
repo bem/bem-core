@@ -167,6 +167,24 @@ describe('i-bem__dom', function() {
             DOM.destruct(rootNode);
             delete DOM.blocks['block'];
         });
+
+        it('should destruct implicitly inited block', function() {
+            var spy = sinon.spy();
+            DOM.decl('imp-block', {
+                onSetMod : {
+                    js : {
+                        '' : spy
+                    }
+                }
+            });
+
+            var blockNode = DOM.init($(BEMHTML.apply({ block : 'imp-block' })));
+            blockNode.bem('imp-block');
+            DOM.destruct(blockNode);
+            spy.should.have.been.calledOnce;
+
+            delete DOM.blocks['imp-block'];
+        });
     });
 
     describe('DOM.update', function() {
