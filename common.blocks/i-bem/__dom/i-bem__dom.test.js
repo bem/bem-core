@@ -1,7 +1,7 @@
 modules.define(
     'test',
-    ['i-bem__dom', 'jquery', 'sinon'],
-    function(provide, DOM, $, sinon) {
+    ['i-bem__dom', 'jquery', 'sinon', 'BEMHTML'],
+    function(provide, DOM, $, sinon, BEMHTML) {
 
 describe('i-bem__dom', function() {
     describe('getMod', function() {
@@ -72,11 +72,10 @@ describe('i-bem__dom', function() {
         var rootNode, instance;
         beforeEach(function() {
             DOM.decl('block', {});
-            rootNode = DOM.init($(
-                '<div class="block i-bem" onclick="return {\'block\':{}}">' +
-                    '<div class="block_e1 block_e2"/>' +
-                '</div>'
-                ));
+            rootNode = DOM.init($(BEMHTML.apply({
+                block : 'block',
+                js : true,
+                content : { elem : 'e1', mix : { elem : 'e2' }}})));
             instance = rootNode.bem('block');
         });
         afterEach(function() {
@@ -107,10 +106,9 @@ describe('i-bem__dom', function() {
                 }
             });
 
-            var rootNode = DOM.init($(
-                '<div>' +
-                    '<div class="block i-bem" onclick="return {\'block\':{}}"/>' +
-                '</div>'));
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    tag : 'div',
+                    content : { block : 'block', js : true }})));
 
             spy.called.should.be.true;
 
@@ -130,10 +128,9 @@ describe('i-bem__dom', function() {
                 live : true
             });
 
-            var rootNode = DOM.init($(
-                '<div>' +
-                    '<div class="block i-bem" onclick="return {\'block\':{}}"/>' +
-                '</div>'));
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    tag : 'div',
+                    content : { block : 'block', js : true }})));
 
             DOM.init(rootNode);
             spy.called.should.be.false;
@@ -154,11 +151,12 @@ describe('i-bem__dom', function() {
                 }
             });
 
-            var rootNode = DOM.init($(
-                '<div>' +
-                    '<div class="block i-bem" onclick="return {\'block\':{id:\'block\'}}"/>' +
-                    '<div class="block i-bem" onclick="return {\'block\':{id:\'block\'}}"/>' +
-                '</div>'));
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    tag : 'div',
+                    content : [
+                        { block : 'block', js : { id : 'block' }},
+                        { block : 'block', js : { id : 'block' }}
+                    ]})));
 
             DOM.destruct(rootNode.find('.block:eq(0)'));
             spy.called.should.be.false;
@@ -191,12 +189,11 @@ describe('i-bem__dom', function() {
                 }
             });
 
-            var rootNode = DOM.init($(
-                '<div>' +
-                    '<div class="block1 i-bem" onclick="return {\'block1\':{}}"/>' +
-                '</div>'));
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    tag : 'div',
+                    content : { block : 'block1', js : true }})));
 
-            DOM.update(rootNode, '<div class="block2 i-bem" onclick="return {\'block2\':{}}"/>');
+            DOM.update(rootNode, BEMHTML.apply({ block : 'block2', js : true }));
 
             spyBlock1Destructed.called.should.be.true;
             spyBlock2Inited.called.should.be.true;
