@@ -46,6 +46,9 @@ var undefined,
 
     blocks = BEM.blocks,
 
+    BEM_CLASS = 'i-bem',
+    BEM_SELECTOR = '.' + BEM_CLASS,
+
     NAME_PATTERN = INTERNAL.NAME_PATTERN,
 
     MOD_DELIM = INTERNAL.MOD_DELIM,
@@ -117,6 +120,8 @@ function initBlock(blockName, domElem, params, forceLive, callback) {
 
     var blockClass = blocks[blockName] || DOM.decl(blockName, {}, { live : true });
     if(!(blockClass._liveInitable = !!blockClass._processLive()) || forceLive || params.live === false) {
+        forceLive && domElem.addClass(BEM_CLASS); // add css class for preventing memory leaks in further destructing
+
         var block = new blockClass(uniqIdToDomElems[uniqId], params, !!forceLive);
         delete uniqIdToDomElems[uniqId];
         callback && callback.apply(block, Array.prototype.slice.call(arguments, 4));
@@ -941,7 +946,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
         ctx || (ctx = this.scope);
 
         var uniqInitId = identify();
-        findDomElem(ctx, '.i-bem').each(function() {
+        findDomElem(ctx, BEM_SELECTOR).each(function() {
             init($(this), uniqInitId);
         });
 
@@ -957,7 +962,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @param {Boolean} [excludeSelf=false] Exclude the main domElem
      */
     destruct : function(ctx, excludeSelf) {
-        findDomElem(ctx, '.i-bem', excludeSelf).each(function(i, domNode) {
+        findDomElem(ctx, BEM_SELECTOR, excludeSelf).each(function(i, domNode) {
             var params = getParams(this);
             objects.each(params, function(blockParams, blockName) {
                 if(blockParams.uniqId) {
