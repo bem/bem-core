@@ -4,6 +4,7 @@ block('page')(
 
     mode('head')(function() {
         return [
+            { block: 'ua' },
             {
                 elem: 'meta',
                 attrs: {
