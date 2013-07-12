@@ -21,6 +21,8 @@
 - Все блоки-модули, кроме `i-bem`, избавились от префиксов.
 - Блок `i-bem__dom` становится модулем `i-bem__dom`. Все BEM.DOM-блоки должны теперь доопределять
   этот модуль ([пример](common.bundles/index/blocks/b-square/b-square.js)).
+- Метод для декларации блоков (`.decl()`) больше не принимает первым параметром объект с полем `name`,
+  теперь обязательная форма записи с полем `block`: `BEM.decl({ block: 'b1', modName: 'm', modVal: 'v' }, ...)`.
 - Вместо метода `afterCurrentEvent` у блоков появился метод `nextTick`, который проверят существование блока в момент исполнения колбэка. `BEM.afterCurrentEvent` теперь **deprecated**.
 - Вместо `BEM.channel` появился отдельный модуль `channels`. `BEM.channel` теперь **deprecated**.
 - Метод `changeThis` помечен как **deprecated**. Используйте нативный `bind`.
