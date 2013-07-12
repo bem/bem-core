@@ -3,10 +3,12 @@ modules.define(
     ['loader', 'jquery__config'],
     function(provide, loader, cfg) {
 
+function doProvide() {
+    provide(jQuery.noConflict(true));
+}
+
 typeof jQuery !== 'undefined'?
-    provide(jQuery) :
-    loader(cfg.url, function() {
-        provide(jQuery);
-    });
+    doProvide() :
+    loader(cfg.url, doProvide);
 
 });
