@@ -20,10 +20,6 @@ exports.getConfig = function() {
                 'common.blocks'
             ]
             .map(function(path) { return PATH.resolve(environ.PRJ_ROOT, path); })
-            .concat([
-                    'bem-bl/blocks-desktop'
-                ].map(function(path) { return PATH.resolve(environ.LIB_ROOT, path); }))
-
     });
 
 };
