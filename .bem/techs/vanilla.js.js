@@ -41,18 +41,6 @@ exports.techMixin = {
             "});",
             ""
         ], vars);
-    },
-
-    getBuildResult : function(prefixes, suffix, outputDir, outputName) {
-        var _t = this;
-        return Q.when(
-                this.filterPrefixes(prefixes, this.getBuildSuffixesMap()[suffix] || [suffix]),
-                function(paths) {
-                    return Q.all(paths.map(function(path) {
-                        return _t.getBuildResultChunk(
-                            PATH.relative(outputDir, path), path, suffix);
-                    }));
-                });
     }
 
 };

@@ -19,7 +19,7 @@
     "bemhtml-compat": "~0.0.4"
   },
   "devDependencies": {
-    "bem": "~0.5.29",
+    "bem": "0.6.x",
     "mocha": "~1.9.0"
   },
   "scripts": {
