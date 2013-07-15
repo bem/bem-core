@@ -80,16 +80,16 @@ BEM.decl('i-bem__dom', {
     },
 
     /**
-     * Returns and initializes (if necessary) the parent block of current element
+     * Returns and initializes (if necessary) the own block block of current element
      * @returns {BEM}  // TODO OwnBlock
      */
     getOwnBlock : function() {
-        return this._parent || (this._parent = this.findBlockOutside(this.__self._blockName));
+        return this._ownBlock || (this._ownBlock = this.findBlockOutside(this.__self._blockName));
     },
 
     /**
      * Executes handlers for setting modifiers
-     * If element sets modifier to itself, it executes onElemSetMod handlers of the parent block
+     * If element sets modifier to itself, it executes onElemSetMod handlers of the own block
      * @private
      * @param {String} elemName Element name
      * @param {String} modName Modifier name
@@ -97,12 +97,13 @@ BEM.decl('i-bem__dom', {
      * @param {Array} modFnParams Handler parameters
      */
     _callModFn : function(elemName, modName, modVal, modFnParams) {
-        var result = this.__base.apply(this, arguments);
+        var result = this.__base.apply(this, arguments),
+            elemName = this.__self._elemName;
 
-        if (this.__self._elemName) {
+        if (elemName) {
             this.__base.call(
                 this.getOwnBlock(),
-                this.__self._elemName,
+                elemName,
                 modName,
                 modVal,
                 [ this.domElem ].concat(modFnParams)
@@ -215,13 +216,13 @@ BEM.decl('i-bem__dom', {
 }, {
 
     /**
-     * Helper for live initialization for a parent block's event
+     * Helper for live initialization for a own block block's event
      * @static
      * @protected
      * @param {String} event Event name
      * @param {Function} [callback] Handler to be called after successful initialization in the new element's context
      */
-    liveInitOnParentEvent : function(event, callback) {
+    liveInitOnOwnBlockEvent : function(event, callback) {
         var name = this._elemName;
         blocks[this._blockName].on(event, function(e) {
             var args = arguments,
