@@ -2,6 +2,7 @@
  * Апдейт документации
  * Тесты
  *
+ * onElemSetMod -> elem -> js -> inited   инициализация родительского блока
  *
  * git push origin +feature/elem-js
  */
@@ -81,7 +82,7 @@ BEM.decl('i-bem__dom', {
 
     /**
      * Returns and initializes (if necessary) the own block block of current element
-     * @returns {BEM}  // TODO OwnBlock
+     * @returns {BEM}
      */
     getOwnBlock : function() {
         return this._ownBlock || (this._ownBlock = this.findBlockOutside(this.__self._blockName));
@@ -214,6 +215,24 @@ BEM.decl('i-bem__dom', {
     }
 
 }, {
+
+    /**
+     * Auto-declarator for elements
+     * @static
+     * @protected
+     * @param {Object} name Instance name
+     * @param {Object} [props] Methods
+     * @param {Object} [staticProps] Static methods
+     * @param {Object} [_autoDecl] Auto-declaration flag
+     */
+    decl : function(name, props, staticProps, _autoDecl) {
+        if (_autoDecl) {
+            var names = name.split(ELEM_DELIM);
+            return this.__base({ block: names[0], elem: names[1] }, props, staticProps);
+        } else {
+            return this.__base(name, props, staticProps);
+        }
+    },
 
     /**
      * Helper for live initialization for a own block block's event
