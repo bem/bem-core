@@ -60,6 +60,11 @@ block('page')(
         tag()('meta')
     ),
 
+    elem('link')(
+        bem()(false),
+        tag()('link')
+    ),
+
     elem('favicon')(
         bem()(false),
         tag()('link'),
