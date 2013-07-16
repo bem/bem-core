@@ -6,7 +6,7 @@ this._mode === '' && !this.data: {
             pageTitle  : 'Обработчик события click'
         },
         this.ctx = {
-            block : 'b-page',
+            block : 'page',
             mods  : this.ctx.err? { error : 'not-found' } : {}
         }
     );

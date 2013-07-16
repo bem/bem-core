@@ -5,8 +5,10 @@ require('bem/lib/nodesregistry').decl('BundleNode', {
             return [
                 'bemdecl.js',
                 'deps.js',
+                'css',
                 'bemtree',
                 'bemhtml',
+                'browser.js+bemhtml',
                 'html'
             ];
         }

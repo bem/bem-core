@@ -1,4 +1,4 @@
-block b-page {
+block page {
 
     default: {
         var head = apply('head');
@@ -30,7 +30,7 @@ block b-page {
         { block : 'some-block' },
         { block : 'b-square', js : { id : 1 } }
     ]
-    
+
     mod error not-found, content: 'Nothing found'
 
     elem css {
@@ -47,7 +47,7 @@ block b-page {
                 {
                     elem : elem,
                     url  : url.prefix + '.ie.' + url.suffix,
-                    ie : 'lt IE 8'
+                    ie : 'lte IE 9'
                 }
             ]);
         }
