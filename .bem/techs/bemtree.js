@@ -2,16 +2,14 @@ exports.baseTechPath = require.resolve('./bemhtml.js');
 
 exports.techMixin = {
 
-    getSuffixes : function() {
-        return ['bemtree'];
+    getBuildSuffixesMap: function() {
+        return {
+            'bemtree.js': ['bemtree']
+        };
     },
 
     getCreateSuffixes : function() {
         return ['bemtree'];
-    },
-
-    getBuildSuffixes : function() {
-        return ['bemtree.js'];
     },
 
     getCompiledResult : function(sources) {
