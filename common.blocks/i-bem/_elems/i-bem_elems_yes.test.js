@@ -45,7 +45,7 @@ describe('i-bem_elems_yes', function() {
     });
 
     describe('getName', function() {
-        it('should return correct full and short name of element', function() {
+        it('should return correct full and short names of element', function() {
             var elem = BEM.decl({ block: 'block', elem: 'elem' }, {});
 
             elem.getName().should.be.equal('block__elem');

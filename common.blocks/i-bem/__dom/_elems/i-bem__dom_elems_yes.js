@@ -1,13 +1,6 @@
 /** TODO
- * Апдейт документации
- * Тесты
- *
  * onElemSetMod -> elem -> js -> inited   инициализация родительского блока
- *
- * git push origin +feature/elem-js
  */
-
-
 
 /** @requires BEM */
 /** @requires BEM.INTERNAL */
