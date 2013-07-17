@@ -33,6 +33,27 @@ describe('i-bem_elems_yes', function() {
             delete BEM.blocks['block__elem'];
         });
     });
+
+    describe('create', function() {
+        it('should return instance of element', function() {
+            var elem = BEM.decl({ block: 'block', elem: 'elem' }, {}),
+                instance = BEM.create({ block: 'block', elem: 'elem' });
+
+            instance.should.be.instanceOf(elem);
+            delete BEM.blocks['block__elem'];
+        });
+    });
+
+    describe('getName', function() {
+        it('should return correct full and short name of element', function() {
+            var elem = BEM.decl({ block: 'block', elem: 'elem' }, {});
+
+            elem.getName().should.be.equal('block__elem');
+            elem.getName(true).should.be.equal('elem');
+
+            delete BEM.blocks['block__elem'];
+        });
+    });
 });
 
 provide();
