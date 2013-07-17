@@ -47,6 +47,19 @@ provide(inherit.self(BEM, {}, {
     },
 
     /**
+     * Factory method for creating an instance of the element named
+     * @static
+     * @param {Object} desc Description
+     * @param {Object} [params] Instance parameters
+     * @returns {BEM}
+     */
+    create : function(desc, params) {
+        return desc.elem?
+            new BEM.blocks[buildClass(desc.block, desc.elem)](desc.mods, params) :
+            this.__base(desc, params);
+    },
+
+    /**
      * Returns the name of the current instance
      * @static
      * @protected
