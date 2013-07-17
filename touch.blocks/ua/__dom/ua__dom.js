@@ -17,6 +17,7 @@ DOM.decl('ua', {
                             ua.chrome ? 'chrome' :
                                 '')
                     .setMod('ios', ua.ios ? ua.ios.charAt(0) : '')
+                    .setMod('android', self.android ? self.android.charAt(0) : '')
                     .setMod('ios-subversion', ua.ios ? ua.ios.match(/(\d\.\d)/)[1].replace('.', '') : '')
                     .setMod('screen-size', ua.screenSize)
                     .setMod('svg', ua.svg ? 'yes' : 'no')
