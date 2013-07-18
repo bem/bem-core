@@ -2,13 +2,13 @@ modules.define('test', ['i-bem', 'sinon'], function(provide, BEM, sinon) {
 
 describe('i-bem_elems_yes', function() {
     describe('decl', function() {
-        it('should return element\'s instance', function() {
+        it('should return element', function() {
             var block = BEM.decl({ block: 'block', elem: 'elem' }, {});
             block.should.be.equal(BEM.blocks['block__elem']);
             delete BEM.blocks['block__elem'];
         });
 
-        it('with mod should apply method only if element\'s instance has mod', function() {
+        it('with mod should apply method only if element has mod', function() {
             var baseMethodSpy = sinon.spy(),
                 modsMethodSpy = sinon.spy();
 
