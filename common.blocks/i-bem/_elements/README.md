@@ -139,7 +139,7 @@ this.closestElemInstance('item');
 
 ```javascript
 // this => elem 'menu__item'
-this.getOwnBlock() // эквивалентно this.findBlockOutside('menu') с кэшированием результата поиска
+this.getBlock() // эквивалентно this.findBlockOutside('menu') с кэшированием результата поиска
 ```
 
 ### Поиск элементов и блоков
@@ -173,7 +173,7 @@ this.findElem('link');  // будет найден только элемент (
 
 ```javascript
 // this => elem 'menu__item'
-this.getOwnBlock().findElem('link');    // будут найдены элементы (1) и (2).
+this.getBlock().findElem('link');    // будут найдены элементы (1) и (2).
 ```
 
 Все это справедливо также для хелпера ```elem```, хелперов поиска блоков (```findBlockInside``` и др.) и описанных выше хелперов для поиска BEM-инстансов элементов.

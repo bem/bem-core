@@ -74,11 +74,11 @@ BEM.decl('i-bem__dom', {
     },
 
     /**
-     * Returns and initializes (if necessary) the own block block of current element
+     * Returns and initializes (if necessary) the own block of current element
      * @returns {BEM}
      */
-    getOwnBlock : function() {
-        return this._ownBlock || (this._ownBlock = this.findBlockOutside(this.__self._blockName));
+    getBlock : function() {
+        return this._block || (this._block = this.findBlockOutside(this.__self._blockName));
     },
 
     /**
@@ -96,7 +96,7 @@ BEM.decl('i-bem__dom', {
 
         if (elemName) {
             this.__base.call(
-                this.getOwnBlock(),
+                this.getBlock(),
                 elemName,
                 modName,
                 modVal,
