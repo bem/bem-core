@@ -222,7 +222,7 @@ describe('i-bem__dom_elems_yes', function() {
         });
     });
 
-    /*describe('liveInitOnOwnBlockEvent', function() {
+    describe('liveInitOnOwnBlockEvent', function() {
         it('should init and call handler on live initialization', function() {
             var spyInit = sinon.spy(),
                 spyHandler = sinon.spy();
@@ -263,7 +263,7 @@ describe('i-bem__dom_elems_yes', function() {
             delete DOM.blocks['block'];
             delete DOM.blocks['block__elem'];
         });
-    });*/
+    });
 });
 
 provide();
