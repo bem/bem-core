@@ -200,7 +200,7 @@ describe('i-bem__dom_elements', function() {
         });
     });
 
-    describe('liveInitOnOwnBlockEvent', function() {
+    describe('liveInitOnBlockEvent', function() {
         it('should init and call handler on live initialization', function() {
             var spyInit = sinon.spy(),
                 spyHandler = sinon.spy();
@@ -214,7 +214,7 @@ describe('i-bem__dom_elements', function() {
                 }
             }, {
                 live: function() {
-                    this.liveInitOnOwnBlockEvent('event', spyHandler);
+                    this.liveInitOnBlockEvent('event', spyHandler);
                 }
             });
 

@@ -228,13 +228,19 @@ BEM.decl('i-bem__dom', {
     },
 
     /**
-     * Helper for live initialization for a own block block's event
+     * Helper for live initialization for an own block's event
      * @static
      * @protected
      * @param {String} event Event name
      * @param {Function} [callback] Handler to be called after successful initialization in the new element's context
      */
-    liveInitOnOwnBlockEvent : function(event, callback) {
+    liveInitOnBlockEvent : function(event, callback) {
+        return (typeof callback === 'string')?
+            this.__base.apply(this, arguments) :
+            this._liveInitOnOwnBlockEvent(event, callback);
+    },
+
+    _liveInitOnOwnBlockEvent : function(event, callback) {
         var name = this._elemName;
         blocks[this._blockName].on(event, function(e) {
             var args = arguments,
