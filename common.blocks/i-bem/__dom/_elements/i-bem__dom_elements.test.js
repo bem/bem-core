@@ -4,7 +4,7 @@ modules.define(
     function(provide, DOM, $, sinon, BEMHTML) {
 
 describe('i-bem__dom_elements', function() {
-    describe('elemInstance', function() {
+    describe('element', function() {
         it('should return the instance of element', function() {
             DOM.decl('block', {}, {});
             DOM.decl({ block: 'block', elem: 'elem' }, {}, {});
@@ -18,7 +18,7 @@ describe('i-bem__dom_elements', function() {
                     }
                 })),
                 block = rootNode.bem('block'),
-                elem = block.elemInstance('elem');
+                elem = block.element('elem');
 
             elem.should.be.instanceOf(DOM.blocks['block__elem']);
             elem.__self.getName(true).should.be.equal('elem');
@@ -43,7 +43,7 @@ describe('i-bem__dom_elements', function() {
                     }
                 })),
                 block = rootNode.bem('block'),
-                elem = block.elemInstance('elem');
+                elem = block.element('elem');
 
             elem.getBlock().should.be.equal(block);
 
@@ -70,7 +70,7 @@ describe('i-bem__dom_elements', function() {
                     }
                 })),
                 block = rootNode.bem('block'),
-                elem2 = block.elemInstance('elem2'),
+                elem2 = block.element('elem2'),
                 closest = elem2.closestElem('elem1');
 
             closest[0].should.be.equal(block.elem('elem1')[0]);
@@ -97,7 +97,7 @@ describe('i-bem__dom_elements', function() {
                     }
                 })),
                 block = rootNode.bem('block'),
-                elem = block.elemInstance('elem');
+                elem = block.element('elem');
 
             elem.hasMod('mod', 'val1').should.be.true;
 
@@ -132,7 +132,7 @@ describe('i-bem__dom_elements', function() {
                     }
                 })),
                 block = rootNode.bem('block'),
-                elem = block.elemInstance('elem');
+                elem = block.element('elem');
 
             elem.setMod('mod', 'val');
             spy.called.should.be.true;
@@ -165,7 +165,7 @@ describe('i-bem__dom_elements', function() {
                     }
                 })),
                 block = rootNode.bem('block'),
-                elem = block.elemInstance('elem'),
+                elem = block.element('elem'),
                 nested = elem.findElem('nested', true);
 
             nested.length.should.be.equal(1);
@@ -189,7 +189,7 @@ describe('i-bem__dom_elements', function() {
                     }
                 })),
                 block = rootNode.bem('block'),
-                elem = block.elemInstance('elem');
+                elem = block.element('elem');
 
             elem.__self.should.be.equal(DOM.blocks['block__elem']);
             elem.__self.getName(true).should.be.equal('elem');

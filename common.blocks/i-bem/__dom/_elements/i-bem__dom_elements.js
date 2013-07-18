@@ -128,8 +128,8 @@ BEM.decl('i-bem__dom', {
      * @param {String} [modVal] Modifier value
      * @returns {BEM}
      */
-    elemInstance : function() {
-        return this._elemInstances(arguments, 'elem', 'findBlockOn');
+    element : function() {
+        return this._elements(arguments, 'elem', 'findBlockOn');
     },
 
     /**
@@ -139,8 +139,8 @@ BEM.decl('i-bem__dom', {
      * @param {String} [modVal] Modifier value
      * @returns {BEM[]}
      */
-    elemInstances : function() {
-        return this._elemInstances(arguments, 'elem', 'findBlocksOn');
+    elements : function() {
+        return this._elements(arguments, 'elem', 'findBlocksOn');
     },
 
     /**
@@ -152,8 +152,8 @@ BEM.decl('i-bem__dom', {
      * @param {Boolean} [strictMode=false]
      * @returns {BEM}
      */
-    findElemInstance : function() {
-        return this._elemInstances(arguments, 'findElem', 'findBlockOn');
+    findElement : function() {
+        return this._elements(arguments, 'findElem', 'findBlockOn');
     },
 
     /**
@@ -165,11 +165,11 @@ BEM.decl('i-bem__dom', {
      * @param {Boolean} [strictMode=false]
      * @returns {BEM[]}
      */
-    findElemInstances : function() {
-        return this._elemInstances(arguments, 'findElem', 'findBlocksOn');
+    findElements : function() {
+        return this._elements(arguments, 'findElem', 'findBlocksOn');
     },
 
-    _elemInstances : function(args, findElemMethod, findBlockMethod) {
+    _elements : function(args, findElemMethod, findBlockMethod) {
         var elem = args[0],
             isString = typeof elem === 'string',
             elemClass;
@@ -201,7 +201,7 @@ BEM.decl('i-bem__dom', {
      * @param {String} elemName Element name
      * @returns {BEM}
      */
-    closestElemInstance : function(ctx, elemName) {
+    closestElement : function(ctx, elemName) {
         return this.findBlockOn(
             this.closestElem.apply(this, arguments),
             buildClass(this.__self._blockName, elemName || ctx));
@@ -238,7 +238,7 @@ BEM.decl('i-bem__dom', {
         var name = this._elemName;
         blocks[this._blockName].on(event, function(e) {
             var args = arguments,
-                elems = e.target.findElemInstances(name, true);
+                elems = e.target.findElements(name, true);
 
             callback && elems.forEach(function(elem) {
                 callback.apply(elem, args);
