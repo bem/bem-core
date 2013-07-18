@@ -190,9 +190,11 @@ BEM.decl('i-bem__dom', {
      * @returns {jQuery} DOM elements
      */
     closestElem : function(ctx, elemName) {
-        return arguments.length == 2 ?
-            this.__base(ctx, elemName) :
-            this.__base(this.domElem, elemName || ctx);
+        if (!elemName) {
+            elemName = ctx;
+            ctx = this.domElem;
+        }
+        return this.__base(ctx, elemName);
     },
 
     /**
@@ -203,6 +205,18 @@ BEM.decl('i-bem__dom', {
      */
     closestElement : function(ctx, elemName) {
         return this.findBlockOn(
+            this.closestElem.apply(this, arguments),
+            buildClass(this.__self._blockName, elemName || ctx));
+    },
+
+    /**
+     * Finds instances of defined elements outside the context or current element
+     * @param {jQuery} [ctx=this.domElem] context (current element by default)
+     * @param {String} elemName Element name
+     * @returns {BEM}
+     */
+    closestElements : function(ctx, elemName) {
+        return this.findBlocksOn(
             this.closestElem.apply(this, arguments),
             buildClass(this.__self._blockName, elemName || ctx));
     }
