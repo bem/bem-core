@@ -682,6 +682,30 @@ describe('i-bem__dom', function() {
         });
     });
 
+    describe('closestElem', function() {
+        it('should return the closest element', function() {
+            DOM.decl('block', {}, {});
+
+            var rootNode = $(BEMHTML.apply({
+                    block: 'block',
+                    js: true,
+                    content: {
+                        elem: 'elem1',
+                        content: {
+                            elem: 'elem2'
+                        }
+                    }
+                })),
+                block = rootNode.bem('block'),
+                closest = block.closestElem(block.elem('elem2'), 'elem1');
+
+            closest[0].should.be.equal(block.elem('elem1')[0]);
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+        });
+    });
+
     describe('liveInitOnBlockInsideEvent', function() {
         it('should init and call handler on live initialization', function() {
             var spyInit = sinon.spy(),

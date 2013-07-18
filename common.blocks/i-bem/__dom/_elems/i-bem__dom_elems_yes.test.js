@@ -54,29 +54,7 @@ describe('i-bem__dom_elems_yes', function() {
     });
 
     describe('closestElem', function() {
-        it('should return the closest element regarding to block', function() {
-            DOM.decl('block', {}, {});
-
-            var rootNode = $(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem1',
-                        content: {
-                            elem: 'elem2'
-                        }
-                    }
-                })),
-                block = rootNode.bem('block'),
-                closest = block.closestElem(block.elem('elem2'), 'elem1')[0];
-
-            closest.should.be.equal(block.elem('elem1')[0]);
-
-            DOM.destruct(rootNode);
-            delete DOM.blocks['block'];
-        });
-
-        it('should return the closest element regarding to another element', function() {
+        it('should return the closest element', function() {
             DOM.decl('block', {}, {});
             DOM.decl({ block: 'block', elem: 'elem2' }, {}, {});
 
@@ -93,9 +71,9 @@ describe('i-bem__dom_elems_yes', function() {
                 })),
                 block = rootNode.bem('block'),
                 elem2 = block.elemInstance('elem2'),
-                closest = elem2.closestElem('elem1')[0];
+                closest = elem2.closestElem('elem1');
 
-            closest.should.be.equal(block.elem('elem1')[0]);
+            closest[0].should.be.equal(block.elem('elem1')[0]);
 
             DOM.destruct(rootNode);
             delete DOM.blocks['block'];
