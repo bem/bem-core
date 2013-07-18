@@ -122,11 +122,12 @@ this.closestElem(this.elem('link'), 'item');
 this.closestElem('item');
 ```
 
-По аналогии с хелперами ```elem``` и ```findElem```, хелпер ```closestElem``` возвращает jQuery-коллекцию. Для доступа к BEM-инстансу элемента снаружи контекста используется хелпер ```closestElement```:
+По аналогии с хелперами ```elem``` и ```findElem```, хелпер ```closestElem``` возвращает jQuery-коллекцию. Для доступа к BEM-инстансам элементов снаружи контекста используются хелперы ```closestElement``` и ```closestElements```:
 
 ```javascript
 // this => block 'menu'
 this.closestElement(this.elem('link'), 'item');
+this.closestElements(this.elem('link'), 'item');
 ```
 ```javascript
 // this => element 'menu__link'
