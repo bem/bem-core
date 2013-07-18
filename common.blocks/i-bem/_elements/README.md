@@ -118,7 +118,7 @@ this.closestElem(this.elem('link'), 'item');
 При поиске от имени BEM-инстанса элемента можно не указывать контекст поиска, тогда поиск будет производиться относительно DOM-ноды этого элемента:
 
 ```javascript
-// this => elem 'menu__link'
+// this => element 'menu__link'
 this.closestElem('item');
 ```
 
@@ -129,7 +129,7 @@ this.closestElem('item');
 this.closestElement(this.elem('link'), 'item');
 ```
 ```javascript
-// this => elem 'menu__link'
+// this => element 'menu__link'
 this.closestElement('item');
 ```
 
@@ -138,7 +138,7 @@ this.closestElement('item');
 Для доступа к блоку, элементом которого является текущий BEM-инстанс, используется кэширующий хелпер:
 
 ```javascript
-// this => elem 'menu__item'
+// this => element 'menu__item'
 this.getBlock() // эквивалентно this.findBlockOutside('menu') с кэшированием результата поиска
 ```
 
@@ -165,14 +165,14 @@ this.getBlock() // эквивалентно this.findBlockOutside('menu') с к�
 ```
 
 ```javascript
-// this => elem 'menu__item'
+// this => element 'menu__item'
 this.findElem('link');  // будет найден только элемент (1).
 ```
 
 Если нужно найти все элементы ```'link'```, поиск нужно производить от имени блока-родителя:
 
 ```javascript
-// this => elem 'menu__item'
+// this => element 'menu__item'
 this.getBlock().findElem('link');    // будут найдены элементы (1) и (2).
 ```
 
@@ -184,7 +184,7 @@ this.getBlock().findElem('link');    // будут найдены элемент
 Поэму обработчики ```onSetMod``` элемента выполнятся, если родительский блок установит этому элементу соответствующие модификаторы:
 
 ```javascript
-// this => elem 'menu__item'
+// this => element 'menu__item'
 onSetMod: {
     'state': {
         'current': function() {
@@ -213,7 +213,7 @@ onElemSetMod: {
 }
 ```
 ```javascript
-// this => elem 'menu__item'
+// this => element 'menu__item'
 this.setMod('state', 'current'); // выполнится задекларированный выше обработчик
 ```
 
