@@ -20,7 +20,7 @@ exports.techMixin = {
         };
     },
 
-    getYmChunk : function() {
+    getYmChunk : function(outputDir, outputName, suffix) {
         return [
             "if(typeof module !== 'undefined') {",
             "modules = require('ym');",
@@ -28,7 +28,7 @@ exports.techMixin = {
         ].join('');
     },
 
-    getBuildResult : function(files, suffix, output, opts) {
+    getBuildResult : function(prefixes, suffix, outputDir, outputName) {
         var ymChunk = this.getYmChunk();
         return this.__base.apply(this, arguments)
             .then(function(res) {

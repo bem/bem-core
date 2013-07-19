@@ -1,18 +1,16 @@
 var BEM = require('bem'),
     Q = BEM.require('q'),
     PATH = require('path'),
-    compat = require('bemhtml-compat'),
-
-    Tech = require('bem/lib/tech').TechV2;
-
-exports.baseTech = Tech;
+    compat = require('bemhtml-compat');
 
 exports.techMixin = {
 
-    getBuildSuffixesMap: function() {
-        return {
-            'bemhtml.js': ['bemhtml', 'bemhtml.xjst']
-        };
+    getSuffixes : function() {
+        return ['bemhtml', 'bemhtml.xjst'];
+    },
+
+    getBuildSuffixes : function() {
+        return ['bemhtml.js'];
     },
 
     getCreateSuffixes : function() {
@@ -22,18 +20,24 @@ exports.techMixin = {
     getBuildResultChunk : function(relPath, path, suffix) {
         var content = this.readContent(path, suffix);
         return (suffix !== 'bemhtml.xjst' ?
-            content.then(function(source) { return compat.transpile(source); }) :
+            content.then(function(source) { return compat.transpile(source) }) :
             content)
                 .then(function(source) {
                     return '\n/* begin: ' + relPath + ' */\n' +
                         source +
                         '\n/* end: ' + relPath + ' */\n';
-                });
+                })
     },
 
-    getBuildResult : function(files, suffix, output, opts) {
+    getBuildResult : function(prefixes, suffix, outputDir, outputName) {
         var _t = this;
-        return this.__base(files, suffix, output, opts)
+        return this.filterPrefixes(prefixes, this.getCreateSuffixes())
+            .then(function(paths) {
+                return Q.all(paths.map(function(path) {
+                    return _t.getBuildResultChunk(
+                            PATH.relative(outputDir, path), path, suffix);
+                }));
+            })
             .then(_t.getCompiledResult.bind(_t));
     },
 
