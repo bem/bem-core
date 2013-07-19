@@ -8,7 +8,6 @@ var PATH = require('path'),
 try {
     var setsNodes = require(environ.getLibPath('bem-pr', 'bem/nodes/sets'));
 } catch(e) {
-    console.log('MODULE_NOT_FOUND', e.code);
     if(e.code !== 'MODULE_NOT_FOUND')
         throw e;
 
