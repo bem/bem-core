@@ -185,7 +185,11 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     },
 
     _buildEvent : function(e) {
-        return typeof e === 'string'? new events.Event(e) : e;
+        typeof e === 'string'?
+            e = new events.Event(e, this) :
+            e.target || (e.target = this);
+
+        return e;
     },
 
     /**

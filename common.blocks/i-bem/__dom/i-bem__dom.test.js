@@ -221,6 +221,33 @@ describe('i-bem__dom', function() {
             delete DOM.blocks['block2'];
         });
     });
+
+    describe('emit', function() {
+        it('should emit context event with target', function() {
+            DOM.decl('block', {
+                onSetMod : {
+                    'js' : {
+                        'inited' : function() {
+                            this.emit('event');
+                        }
+                    }
+                }
+            });
+
+            var rootNode = $('<div/>'),
+                spy = sinon.spy();
+
+            DOM.blocks['block'].on(rootNode, 'event', spy);
+            DOM.update(rootNode, BEMHTML.apply({ block : 'block', js : true }));
+
+            var block = rootNode.find('.block').bem('block');
+
+            spy.should.have.been.calledOnce;
+            spy.args[0][0].target.should.be.equal(block);
+
+            delete DOM.blocks['block'];
+        });
+    });
 });
 
 provide();
