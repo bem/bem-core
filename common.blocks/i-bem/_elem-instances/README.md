@@ -23,21 +23,36 @@ BEM.DOM.decl({
 });
 ```
 
-Модификаторы элементов работают также, как модификаторы блоков.
+Модификаторы элементов работают так же, как модификаторы блоков.
 
 ### BEM-инстансы элементов
 
-Для доступа к BEM-инстансам элементов используется хелпер ```findElemInstances```, API которого аналогично нативному методу ```findElem```:
+Для доступа к BEM-инстансам элементов используется хелпер ```findElemInstances```, API которого аналогично хелперу ```findElem```:
 
 ```javascript
-this.findElemInstances('item');                                  // поиск всех вложенных элементов 'item'
-this.findElemInstances('item', true);                            // строгий поиск всех вложенных элементов 'item'
-this.findElemInstances('item', 'state', 'current');              // поиск всех вложенных модификаторов элементов 'item'
-this.findElemInstances('item', 'state', 'current', true);        // строгий поиск всех вложенных модификаторов элементов 'item'
-this.findElemInstances(ctx, 'item');                             // поиск всех элементов 'item' внутри указанного контекста
-this.findElemInstances(ctx, 'item', true);                       // строгий поиск всех элементов 'item' внутри указанного контекста
-this.findElemInstances(ctx, 'item', 'state', 'current');         // поиск всех модификаторов элементов 'item' внутри указанного контекста
-this.findElemInstances(ctx, 'item', 'state', 'current', true);   // строгий поиск всех модификаторов элементов 'item' внутри указанного контекста
+// поиск всех вложенных элементов 'item'
+this.findElemInstances('item');
+
+// строгий поиск всех вложенных элементов 'item'
+this.findElemInstances('item', true);
+
+// поиск всех вложенных модификаторов элементов 'item'
+this.findElemInstances('item', 'state', 'current');
+
+// строгий поиск всех вложенных модификаторов элементов 'item'
+this.findElemInstances('item', 'state', 'current', true);
+
+// поиск всех элементов 'item' внутри указанного контекста
+this.findElemInstances(ctx, 'item');
+
+// строгий поиск всех элементов 'item' внутри указанного контекста
+this.findElemInstances(ctx, 'item', true);
+
+// поиск всех модификаторов элементов 'item' внутри указанного контекста
+this.findElemInstances(ctx, 'item', 'state', 'current');
+
+// строгий поиск всех модификаторов элементов 'item' внутри указанного контекста
+this.findElemInstances(ctx, 'item', 'state', 'current', true);
 ```
 
 При необходимости, инстансы найденных элементов инициализируются.
@@ -45,7 +60,6 @@ this.findElemInstances(ctx, 'item', 'state', 'current', true);   // строги
 Строгий поиск подразумевает фильтрацию элементов вложенных блоков с таким же именем, как у текущего блока:
 
 ```javascript
-// BEMJSON:
 {
     block: 'menu',
     content: [
@@ -63,29 +77,37 @@ this.findElemInstances(ctx, 'item', 'state', 'current', true);   // строги
 ```
 ```javascript
 // this => block 'menu'
-this.findElemInstances('item'); // найдет инстансы (1) и (2)
-this.findElemInstances('item', true); // найдет только инстанс (1)
+this.findElemInstances('item');         // найдет инстансы (1) и (2)
+this.findElemInstances('item', true);   // найдет только инстанс (1)
 ```
 
 По аналогии с хелпером ```elem```, кэширующим результаты своей работы, для минимизации количества операций с DOM рекомендуется использовать кэширующий поиск BEM-инстансов элементов:
 
 ```javascript
-this.elemInstances('item');                      // кэширующий поиск всех вложенных элементов 'item'
-this.elemInstances('item', 'state', 'current');  // кэширующий поиск всех вложенных модификаторов элемента 'item'
+// кэширующий поиск всех вложенных элементов 'item'
+this.elemInstances('item');
+
+// кэширующий поиск всех вложенных модификаторов элемента 'item'
+this.elemInstances('item', 'state', 'current');
 ```
 
-Также с помощью этого хелпера можно:
+Также с помощью этого хелпера можно вернуть инстансы элементов, расположенных на DOM-нодах указанной jQuery-коллекции:
 
 ```javascript
-this.elemInstances(domElem);     // вернуть инстансы элементов, расположенных на DOM-нодах указанной jQuery-коллекции
+this.elemInstances(domElem);
 ```
 
 Для поиска одного (первого) BEM-инстанса элемента есть дополнительные формы этих хелперов с аналогичным API:
 
 ```javascript
-this.findElemInstance('item');   // поиск одного вложенного элемента 'item'
-this.elemInstance('item');       // кэширующий поиск одного вложенного элемента 'item'
-this.elemInstance(domElem);      // вернуть инстанс элемента, расположенного на первой DOM-ноде указанной jQuery-коллекции
+// поиск одного вложенного элемента 'item'
+this.findElemInstance('item');
+
+// кэширующий поиск одного вложенного элемента 'item'
+this.elemInstance('item');
+
+// вернуть инстанс элемента, расположенного на первой DOM-ноде указанной jQuery-коллекции
+this.elemInstance(domElem);
 ```
 
 Если необходимо вернуть BEM-инстанс элемента, на DOM-ноде которого подмешаны другие элементы того же блока:
@@ -99,7 +121,6 @@ this.elemInstance(this.elemify(domElem, 'item'));
 Существует хелпер для поиска элемента снаружи указанного контекста:
 
 ```javascript
-// BEMJSON:
 {
     block: 'menu',
     content: {
@@ -148,7 +169,6 @@ this.block() // эквивалентно this.findBlockOutside('menu') с кэш
 Элемент ищет только вложенные в него элементы:
 
 ```javascript
-// BEMJSON:
 {
     block: 'menu',
     content: [
