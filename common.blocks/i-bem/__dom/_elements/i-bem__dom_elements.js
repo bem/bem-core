@@ -1,5 +1,13 @@
 /** TODO
- * onElemSetMod -> elem -> js -> inited   инициализация родительского блока
+ *
+ *
+ * element -> elemInstance
+ * getBlock -> block
+ * _elements -> _elements_yes -> _elem-instances_yes
+ *
+ *
+ * docs: отдельный блок кода под каждый кейс findElements
+ * README.md -> i-bem__dom_elem-instances_yes.ru.desc.wiki
  */
 
 /** @requires BEM */
@@ -29,7 +37,7 @@ BEM.decl('i-bem__dom', {
     getMod : function(elem, modName) {
         var elemClass;
 
-        if (elem && modName && blocks[elemClass = this.__self._buildElemClass(elem)]) {
+        if(elem && modName && blocks[elemClass = this.__self._buildElemClass(elem)]) {
             return this.__base.call(this.findBlockOn(elem, elemClass), modName);
         }
         return this.__base(elem, modName);
@@ -45,7 +53,7 @@ BEM.decl('i-bem__dom', {
     getMods : function(elem) {
         var elemClass;
 
-        if (elem && typeof elem !== 'string' && blocks[elemClass = this.__self._buildElemClass(elem)]) {
+        if(elem && typeof elem !== 'string' && blocks[elemClass = this.__self._buildElemClass(elem)]) {
             return this.__base.apply(this.findBlockOn(elem, elemClass), slice.call(arguments, 1));
         }
         return this.__base.apply(this, arguments);
@@ -62,7 +70,7 @@ BEM.decl('i-bem__dom', {
     setMod : function(elem, modName, modVal) {
         var elemClass;
 
-        if (elem && typeof modVal !== 'undefined' && blocks[elemClass = this.__self._buildElemClass(elem)]) {
+        if(elem && typeof modVal !== 'undefined' && blocks[elemClass = this.__self._buildElemClass(elem)]) {
             this
                 .findBlocksOn(elem, elemClass)
                 .forEach(function(instance) {
@@ -94,7 +102,7 @@ BEM.decl('i-bem__dom', {
         var result = this.__base.apply(this, arguments),
             elemName = this.__self._elemName;
 
-        if (elemName) {
+        if(elemName) {
             this.__base.call(
                 this.getBlock(),
                 elemName,
@@ -174,7 +182,7 @@ BEM.decl('i-bem__dom', {
             isString = typeof elem === 'string',
             elemClass;
 
-        if (args.length === 1 && !isString) {
+        if(args.length === 1 && !isString) {
             elemClass = this.__self._buildElemClass(elem);
         } else {
             elemClass = buildClass(this.__self._blockName, args[isString? 0 : 1]);
@@ -190,7 +198,7 @@ BEM.decl('i-bem__dom', {
      * @returns {jQuery} DOM elements
      */
     closestElem : function(ctx, elemName) {
-        if (!elemName) {
+        if(!elemName) {
             elemName = ctx;
             ctx = this.domElem;
         }
@@ -233,7 +241,7 @@ BEM.decl('i-bem__dom', {
      * @param {Object} [_autoDecl] Auto-declaration flag
      */
     decl : function(name, props, staticProps, _autoDecl) {
-        if (_autoDecl) {
+        if(_autoDecl) {
             var names = name.split(ELEM_DELIM);
             return this.__base({ block: names[0], elem: names[1] }, props, staticProps);
         } else {

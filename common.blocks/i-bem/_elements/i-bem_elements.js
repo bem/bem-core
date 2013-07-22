@@ -26,7 +26,7 @@ provide(inherit.self(BEM, {}, {
      */
     decl : function(decl, props, staticProps) {
         var block;
-        if (decl.elem) {
+        if(decl.elem) {
             block = this.__base(
                 {
                     block: buildClass(decl.block, decl.elem),

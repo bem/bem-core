@@ -1,3 +1,4 @@
+// todo test destruct case
 modules.define(
     'test',
     ['i-bem__dom', 'jquery', 'sinon', 'BEMHTML'],
