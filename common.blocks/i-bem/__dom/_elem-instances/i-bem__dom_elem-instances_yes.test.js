@@ -1,4 +1,3 @@
-// todo test destruct case
 modules.define(
     'test',
     ['i-bem__dom', 'jquery', 'sinon', 'BEMHTML'],
@@ -239,6 +238,40 @@ describe('i-bem__dom_elem-instances_yes', function() {
             spyHandler.called.should.be.true;
 
             DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block__elem'];
+        });
+    });
+
+    describe('destruct', function() {
+        it('should destruct element\'s instance properly', function() {
+            var spy = sinon.spy();
+
+            DOM.decl('block', {}, {});
+            DOM.decl({ block: 'block', elem: 'elem' }, {
+                onSetMod: {
+                    js: {
+                        '': spy
+                    }
+                }
+            });
+
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    block: 'block',
+                    js: true,
+                    content: {
+                        elem: 'elem',
+                        js: true,
+                        mix: { block: 'i-bem' }
+                    }
+                })));
+
+            spy.called.should.be.false;
+
+            DOM.destruct(rootNode);
+
+            spy.called.should.be.true;
+
             delete DOM.blocks['block'];
             delete DOM.blocks['block__elem'];
         });
