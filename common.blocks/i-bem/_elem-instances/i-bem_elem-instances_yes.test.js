@@ -1,6 +1,6 @@
 modules.define('test', ['i-bem', 'sinon'], function(provide, BEM, sinon) {
 
-describe('i-bem_elements', function() {
+describe('i-bem_elem-instances_yes', function() {
     describe('decl', function() {
         it('should return element', function() {
             var block = BEM.decl({ block: 'block', elem: 'elem' }, {});

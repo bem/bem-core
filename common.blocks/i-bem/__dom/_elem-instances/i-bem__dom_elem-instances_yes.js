@@ -1,6 +1,4 @@
 /** TODO
- * _elements -> _elements_yes -> _elem-instances_yes
- *
  * docs: отдельный блок кода под каждый кейс findElements
  * README.md -> i-bem__dom_elem-instances_yes.ru.desc.wiki
  */

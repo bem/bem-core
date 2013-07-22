@@ -2,9 +2,7 @@
     mustDeps: [
         {
             block: 'i-bem',
-            mods: [
-                { name: 'elements' }
-            ]
+            mods: { 'elem-instances': 'yes' }
         }
     ]
 })
