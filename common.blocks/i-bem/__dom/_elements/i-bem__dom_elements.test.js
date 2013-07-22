@@ -30,7 +30,7 @@ describe('i-bem__dom_elements', function() {
         });
     });
 
-    describe('getBlock', function() {
+    describe('block', function() {
         it('should return instance of the own block', function() {
             DOM.decl('block', {}, {});
             DOM.decl({ block: 'block', elem: 'elem' }, {}, {});
@@ -46,7 +46,7 @@ describe('i-bem__dom_elements', function() {
                 block = rootNode.bem('block'),
                 elem = block.element('elem');
 
-            elem.getBlock().should.be.equal(block);
+            elem.block().should.be.equal(block);
 
             DOM.destruct(rootNode);
             delete DOM.blocks['block'];

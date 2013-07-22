@@ -2,7 +2,6 @@
  *
  *
  * element -> elemInstance
- * getBlock -> block
  * _elements -> _elements_yes -> _elem-instances_yes
  *
  *
@@ -85,7 +84,7 @@ BEM.decl('i-bem__dom', {
      * Returns and initializes (if necessary) the own block of current element
      * @returns {BEM}
      */
-    getBlock : function() {
+    block : function() {
         return this._block || (this._block = this.findBlockOutside(this.__self._blockName));
     },
 
@@ -104,7 +103,7 @@ BEM.decl('i-bem__dom', {
 
         if(elemName) {
             this.__base.call(
-                this.getBlock(),
+                this.block(),
                 elemName,
                 modName,
                 modVal,
