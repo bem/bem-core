@@ -1,9 +1,5 @@
 /** TODO
- *
- *
- * element -> elemInstance
  * _elements -> _elements_yes -> _elem-instances_yes
- *
  *
  * docs: отдельный блок кода под каждый кейс findElements
  * README.md -> i-bem__dom_elem-instances_yes.ru.desc.wiki
@@ -135,8 +131,8 @@ BEM.decl('i-bem__dom', {
      * @param {String} [modVal] Modifier value
      * @returns {BEM}
      */
-    element : function() {
-        return this._elements(arguments, 'elem', 'findBlockOn');
+    elemInstance : function() {
+        return this._elemInstances(arguments, 'elem', 'findBlockOn');
     },
 
     /**
@@ -146,8 +142,8 @@ BEM.decl('i-bem__dom', {
      * @param {String} [modVal] Modifier value
      * @returns {BEM[]}
      */
-    elements : function() {
-        return this._elements(arguments, 'elem', 'findBlocksOn');
+    elemInstances : function() {
+        return this._elemInstances(arguments, 'elem', 'findBlocksOn');
     },
 
     /**
@@ -159,8 +155,8 @@ BEM.decl('i-bem__dom', {
      * @param {Boolean} [strictMode=false]
      * @returns {BEM}
      */
-    findElement : function() {
-        return this._elements(arguments, 'findElem', 'findBlockOn');
+    findElemInstance : function() {
+        return this._elemInstances(arguments, 'findElem', 'findBlockOn');
     },
 
     /**
@@ -172,11 +168,11 @@ BEM.decl('i-bem__dom', {
      * @param {Boolean} [strictMode=false]
      * @returns {BEM[]}
      */
-    findElements : function() {
-        return this._elements(arguments, 'findElem', 'findBlocksOn');
+    findElemInstances : function() {
+        return this._elemInstances(arguments, 'findElem', 'findBlocksOn');
     },
 
-    _elements : function(args, findElemMethod, findBlockMethod) {
+    _elemInstances : function(args, findElemMethod, findBlockMethod) {
         var elem = args[0],
             isString = typeof elem === 'string',
             elemClass;
@@ -210,7 +206,7 @@ BEM.decl('i-bem__dom', {
      * @param {String} elemName Element name
      * @returns {BEM}
      */
-    closestElement : function(ctx, elemName) {
+    closestElemInstance : function(ctx, elemName) {
         return this.findBlockOn(
             this.closestElem.apply(this, arguments),
             buildClass(this.__self._blockName, elemName || ctx));
@@ -222,7 +218,7 @@ BEM.decl('i-bem__dom', {
      * @param {String} elemName Element name
      * @returns {BEM}
      */
-    closestElements : function(ctx, elemName) {
+    closestElemInstances : function(ctx, elemName) {
         return this.findBlocksOn(
             this.closestElem.apply(this, arguments),
             buildClass(this.__self._blockName, elemName || ctx));
@@ -265,7 +261,7 @@ BEM.decl('i-bem__dom', {
         var name = this._elemName;
         blocks[this._blockName].on(event, function(e) {
             var args = arguments,
-                elems = e.target.findElements(name, true);
+                elems = e.target.findElemInstances(name, true);
 
             callback && elems.forEach(function(elem) {
                 callback.apply(elem, args);
