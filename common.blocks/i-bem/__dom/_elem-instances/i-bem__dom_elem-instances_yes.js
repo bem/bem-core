@@ -1,8 +1,3 @@
-/** TODO
- * docs: отдельный блок кода под каждый кейс findElements
- * README.md -> i-bem__dom_elem-instances_yes.ru.desc.wiki
- */
-
 /** @requires BEM */
 /** @requires BEM.INTERNAL */
 
