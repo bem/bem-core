@@ -1,4 +1,5 @@
-# BEM Core Library
+# BEM Core Library [![Build Status](https://travis-ci.org/bem/bem-core.png)](https://travis-ci.org/bem/bem-core)
+
 
 ## Что это?
 
