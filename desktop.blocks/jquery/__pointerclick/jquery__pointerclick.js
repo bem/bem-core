@@ -1,5 +1,5 @@
 /**
- * leftClick event plugin
+ * pointerclick event plugin
  *
  * Copyright (c) 2010 Filatov Dmitry (alpha@zforms.ru)
  * Dual licensed under the MIT and GPL licenses:
@@ -11,7 +11,7 @@
 
 modules.define('jquery', function(provide, $) {
 
-var leftClick = $.event.special.leftclick = {
+var leftClick = $.event.special.pointerclick = {
     setup : function() {
         $(this).on('click', leftClick.handler);
     },
@@ -22,7 +22,7 @@ var leftClick = $.event.special.leftclick = {
 
     handler : function(e) {
         if(!e.button) {
-            e.type = 'leftclick';
+            e.type = 'pointerclick';
             $.event.dispatch.apply(this, arguments);
             e.type = 'click';
         }
