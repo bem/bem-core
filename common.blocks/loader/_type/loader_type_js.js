@@ -9,7 +9,7 @@
  * @version 1.0.0
  */
 
-modules.define('loader', function(provide) {
+modules.define('loader_type_js', function(provide) {
 
 var loading = {},
     loaded = {},
