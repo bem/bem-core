@@ -160,42 +160,264 @@ describe('i-bem', function() {
                         .should.be.false;
             });
         });
+    });
 
-        describe('nextTick', function() {
-            var block;
-            beforeEach(function() {
-                BEM.decl('block', {});
-                block = BEM.create({ block : 'block', mods : { mod1 : 'val1' }});
-            });
-            afterEach(function() {
-                delete BEM.blocks['block'];
-            });
+    describe('onBeforeSetMod', function() {
+        afterEach(function() {
+            delete BEM.blocks['block'];
+        });
 
-            it('should call callback asynchronously', function(done) {
-                var isAsync = false;
-                block.nextTick(function() {
-                    isAsync.should.be.true;
-                    done();
-                });
-                isAsync = true;
-            });
+        it('should call properly matched callbacks by order', function() {
+            var order = [],
+                spyMod1Val2 = sinon.spy(),
+                spyMod2Val1 = sinon.spy(),
+                spyMod2Val2 = sinon.spy();
 
-            it('should call callback with block\'s context', function(done) {
-                block.nextTick(function() {
-                    this.should.be.equal(block);
-                    done();
-                });
+            BEM.decl('block', {
+                onBeforeSetMod : {
+                    'mod1' : {
+                        'val1' : function() {
+                            order.push(5);
+                        }
+                    }
+                }
             });
 
-            it('should not call callback if block destructed', function(done) {
-                var spy = sinon.spy();
-                block.nextTick(spy);
-                block._destruct();
-                setTimeout(function() {
-                    spy.called.should.be.false;
-                    done();
-                }, 0);
+            BEM.decl('block', {
+                onBeforeSetMod : {
+                    'mod1' : function() {
+                        order.push(3);
+                    },
+
+                    '*' : function(modName) {
+                        modName === 'mod1' && order.push(1);
+                    }
+                }
             });
+
+
+            BEM.decl('block', {
+                onBeforeSetMod : function(modName) {
+                    this.__base.apply(this, arguments);
+                    modName === 'mod1' && order.push(2);
+                }
+            });
+
+            BEM.decl('block', {
+                onBeforeSetMod : {
+                   'mod1' : {
+                       '*'    : function() {
+                           this.__base.apply(this, arguments);
+                           order.push(4);
+                       },
+                       'val1' : function() {
+                            this.__base.apply(this, arguments);
+                           order.push(6);
+                       },
+                       'val2' : spyMod1Val2
+                   },
+                   'mod2' : {
+                       'val1' : spyMod2Val1,
+                       'val2' : spyMod2Val2
+                   }
+                }
+            });
+
+            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0', mod2 : 'val0' }});
+            block.setMod('mod1', 'val1');
+
+            order.should.be.eql([1, 2, 3, 4, 5, 6]);
+            spyMod1Val2.should.not.have.been.called;
+            spyMod2Val1.should.not.have.been.called;
+            spyMod2Val2.should.not.have.been.called;
+        });
+
+        it('should call callbacks before set mod', function(done) {
+            BEM.decl('block', {
+                onBeforeSetMod : {
+                   'mod1' : {
+                       'val1' : function() {
+                           this.hasMod('mod1', 'val1').should.be.false;
+                           done();
+                       }
+                   }
+                }
+            });
+            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0' }});
+            block.setMod('mod1', 'val1');
+        });
+
+        it('should set mod after callbacks', function() {
+             BEM.decl('block', {
+                onBeforeSetMod : {
+                   'mod1' : {
+                       'val1' : function() {}
+                   }
+                }
+            });
+            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0' }});
+            block.setMod('mod1', 'val1');
+            block.hasMod('mod1', 'val1').should.be.true;
+        });
+
+        it('shouldn\'t set mod when callback returns false', function() {
+            BEM.decl('block', {
+                onBeforeSetMod : {
+                   'mod1' : {
+                       'val1' : function() {
+                           return false;
+                       }
+                   }
+                }
+            });
+            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0' }});
+            block.setMod('mod1', 'val1');
+            block.hasMod('mod1', 'val1').should.be.false;
+        });
+    });
+
+    describe('onSetMod', function() {
+        afterEach(function() {
+            delete BEM.blocks['block'];
+        });
+
+        it('should call properly matched callbacks by order', function() {
+            var order = [],
+                spyMod1Val2 = sinon.spy(),
+                spyMod2Val1 = sinon.spy(),
+                spyMod2Val2 = sinon.spy();
+
+            BEM.decl('block', {
+                onSetMod : {
+                    'mod1' : {
+                        'val1' : function() {
+                            order.push(5);
+                        }
+                    }
+                }
+            });
+
+            BEM.decl('block', {
+                onSetMod : {
+                    'mod1' : function() {
+                        order.push(3);
+                    },
+
+                    '*' : function(modName) {
+                        modName === 'mod1' && order.push(1);
+                    }
+                }
+            });
+
+
+            BEM.decl('block', {
+                onSetMod : function(modName) {
+                    this.__base.apply(this, arguments);
+                    modName === 'mod1' && order.push(2);
+                }
+            });
+
+            BEM.decl('block', {
+                onSetMod : {
+                   'mod1' : {
+                       '*'    : function() {
+                           this.__base.apply(this, arguments);
+                           order.push(4);
+                       },
+                       'val1' : function() {
+                            this.__base.apply(this, arguments);
+                           order.push(6);
+                       },
+                       'val2' : spyMod1Val2
+                   },
+                   'mod2' : {
+                       'val1' : spyMod2Val1,
+                       'val2' : spyMod2Val2
+                   }
+                }
+            });
+
+            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0', mod2 : 'val0' }});
+            block.setMod('mod1', 'val1');
+
+            order.should.be.eql([1, 2, 3, 4, 5, 6]);
+            spyMod1Val2.should.not.have.been.called;
+            spyMod2Val1.should.not.have.been.called;
+            spyMod2Val2.should.not.have.been.called;
+        });
+
+        it('should call callbacks after set mod', function(done) {
+            BEM.decl('block', {
+                onSetMod : {
+                   'mod1' : {
+                       'val1' : function() {
+                           this.hasMod('mod1', 'val1').should.be.true;
+                           done();
+                       }
+                   }
+                }
+            });
+            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0' }});
+            block.setMod('mod1', 'val1');
+        });
+
+        it('shouldn\'t call callbacks if beforeSetMod cancel set mod', function() {
+            var spy = sinon.spy();
+            BEM.decl('block', {
+                onBeforeSetMod : {
+                   'mod1' : {
+                       'val1' : function() {
+                           return false;
+                       }
+                   }
+                },
+
+                onSetMod : {
+                   'mod1' : {
+                       'val1' : spy
+                   }
+                }
+            });
+            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0' }});
+            block.setMod('mod1', 'val1');
+            spy.should.not.have.been.called;
+        });
+    });
+
+    describe('nextTick', function() {
+        var block;
+        beforeEach(function() {
+            BEM.decl('block', {});
+            block = BEM.create({ block : 'block', mods : { mod1 : 'val1' }});
+        });
+        afterEach(function() {
+            delete BEM.blocks['block'];
+        });
+
+        it('should call callback asynchronously', function(done) {
+            var isAsync = false;
+            block.nextTick(function() {
+                isAsync.should.be.true;
+                done();
+            });
+            isAsync = true;
+        });
+
+        it('should call callback with block\'s context', function(done) {
+            block.nextTick(function() {
+                this.should.be.equal(block);
+                done();
+            });
+        });
+
+        it('should not call callback if block destructed', function(done) {
+            var spy = sinon.spy();
+            block.nextTick(spy);
+            block._destruct();
+            setTimeout(function() {
+                spy.called.should.be.false;
+                done();
+            }, 0);
         });
     });
 });
