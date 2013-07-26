@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 1.0.3
+ * @version 1.0.4
  */
 
 modules.define('events', ['identify', 'inherit'], function(provide, identify, inherit) {
@@ -161,14 +161,11 @@ var undef,
          * @returns {this}
          */
         emit : function(e, data) {
-            var storage = this[storageExpando];
+            var storage = this[storageExpando],
+                eventInstantiated = false;
 
             if(storage) {
-                typeof e === 'string' && (e = new Event(e));
-
-                e.target || (e.target = this);
-
-                var eventTypes = [e.type, '*'],
+                var eventTypes = [typeof e === 'string'? e : e.type, '*'],
                     i = 0, eventType, eventStorage;
                 while(eventType = eventTypes[i++]) {
                     if(eventStorage = storage[eventType]) {
@@ -176,6 +173,11 @@ var undef,
                             lastItem = eventStorage.list.last,
                             res;
                         while(item) {
+                            if(!eventInstantiated) { // instantiate Event only on demand
+                                typeof e === 'string' && (e = new Event(e));
+                                e.target || (e.target = this);
+                            }
+
                             e.data = item.data;
                             res = item.fn.apply(item.ctx || this, arguments);
                             if(typeof res !== 'undefined') {
