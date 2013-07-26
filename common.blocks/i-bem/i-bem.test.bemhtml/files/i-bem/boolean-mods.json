@@ -1,0 +1,4 @@
+{
+  "block": "b1",
+  "mods": { "mod1": true, "mod2": false }
+}
