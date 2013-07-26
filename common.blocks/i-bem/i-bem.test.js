@@ -2,13 +2,16 @@ modules.define('test', ['i-bem', 'sinon'], function(provide, BEM, sinon) {
 
 describe('i-bem', function() {
     describe('decl', function() {
-        it('should return block', function() {
-            var block = BEM.decl('block', {});
-            block.should.be.equal(BEM.blocks['block']);
+        afterEach(function() {
             delete BEM.blocks['block'];
         });
 
-        it('with mod should apply method only if block has mod', function() {
+        it('should return block', function() {
+            var block = BEM.decl('block', {});
+            block.should.be.equal(BEM.blocks['block']);
+        });
+
+        it('should apply method only if block has mod', function() {
             var baseMethodSpy = sinon.spy(),
                 modsMethodSpy = sinon.spy();
 
@@ -29,8 +32,30 @@ describe('i-bem', function() {
             instance.method();
             baseMethodSpy.called.should.be.true;
             modsMethodSpy.callCount.should.be.equal(1);
+        });
 
-            delete BEM.blocks['block'];
+        it('should apply method only if block has boolean mod', function() {
+            var baseMethodSpy = sinon.spy(),
+                modsMethodSpy = sinon.spy();
+
+            BEM.decl('block', {
+                method : baseMethodSpy
+            });
+
+            BEM.decl({ block : 'block', modName : 'mod1', modVal : true }, {
+                method : modsMethodSpy
+            });
+
+            var instance = BEM.create({ block : 'block', mods : { 'mod1' : true }});
+
+            instance.method();
+            baseMethodSpy.should.not.have.been.called;
+            modsMethodSpy.should.have.been.calledOnce;
+
+            instance.delMod('mod1');
+            instance.method();
+            baseMethodSpy.should.have.been.calledOnce;
+            modsMethodSpy.should.have.been.calledOnce;
         });
     });
 
@@ -71,6 +96,16 @@ describe('i-bem', function() {
                     .getMod('mod1')
                         .should.be.equal('val2');
             });
+
+            it('should update boolean mod value', function() {
+                block
+                    .setMod('mod1', true)
+                    .getMod('mod1').should.be.true;
+
+                block
+                    .setMod('mod1', false)
+                    .getMod('mod1').should.be.equal('');
+            });
         });
 
         describe('delMod', function() {
@@ -108,6 +143,14 @@ describe('i-bem', function() {
 
             it('in short form should return true for undefined mod', function() {
                 block.hasMod('mod2').should.be.false;
+            });
+
+            it('should return true for matching boolean mod\'s value', function() {
+                block
+                    .setMod('mod1', true)
+                    .hasMod('mod1').should.be.true;
+
+                block.hasMod('mod1', true).should.be.true;
             });
         });
 
@@ -381,6 +424,134 @@ describe('i-bem', function() {
             var block = BEM.create({ block : 'block', mods : { mod1 : 'val0' }});
             block.setMod('mod1', 'val1');
             spy.should.not.have.been.called;
+        });
+    });
+
+    describe('beforeSetMod/onSetMod for boolean mods', function() {
+        it('should call properly matched callbacks for boolean mods by order', function() {
+            var order = [],
+                spyMod1Val2 = sinon.spy(),
+                spyMod2ValFalse = sinon.spy(),
+                spyMod2Val2 = sinon.spy();
+
+            BEM.decl('block', {
+                beforeSetMod : {
+                    'mod1' : {
+                        'true' : function(modName, modVal, oldModVal) {
+                            modVal.should.be.true;
+                            oldModVal.should.be.equal('');
+                            order.push(5);
+                        }
+                    }
+                },
+
+                onSetMod : {
+                    'mod1' : {
+                        'true' : function() {
+                            order.push(11);
+                        }
+                    }
+                }
+            });
+
+            BEM.decl('block', {
+                beforeSetMod : {
+                    'mod1' : function() {
+                        order.push(3);
+                    },
+
+                    '*' : function(modName) {
+                        modName === 'mod1' && order.push(1);
+                    }
+                },
+
+                onSetMod : {
+                    'mod1' : function() {
+                        order.push(9);
+                    },
+
+                    '*' : function(modName) {
+                        modName === 'mod1' && order.push(7);
+                    }
+                }
+            });
+
+            BEM.decl('block', {
+                beforeSetMod : function(modName) {
+                    this.__base.apply(this, arguments);
+                    modName === 'mod1' && order.push(2);
+                },
+
+                onSetMod : function(modName) {
+                    this.__base.apply(this, arguments);
+                    modName === 'mod1' && order.push(8);
+                }
+            });
+
+            BEM.decl('block', {
+                beforeSetMod : {
+                    'mod1' : {
+                        '*'    : function(modName, modVal, oldModVal) {
+                           this.__base.apply(this, arguments);
+                           order.push(4);
+                        },
+
+                        'true' : function() {
+                            this.__base.apply(this, arguments);
+                           order.push(6);
+
+                        },
+                        'val2' : function() {
+                           spyMod1Val2();
+                        }
+                    },
+
+                    'mod2' : {
+                        '' : function(modName, modVal, oldModVal) {
+                            modVal.should.be.equal('');
+                            oldModVal.should.be.true;
+                            spyMod2ValFalse();
+                        },
+
+                       'val2' : function() {
+                            spyMod2Val2();
+                       }
+                   }
+                },
+
+                onSetMod : {
+                    'mod1' : {
+                       '*'    : function() {
+                           this.__base.apply(this, arguments);
+                           order.push(10);
+                       },
+
+                       'true' : function() {
+                            this.__base.apply(this, arguments);
+                           order.push(12);
+                       },
+
+                       'val2' : spyMod1Val2
+                    },
+
+                    'mod2' : {
+                        '' : spyMod2ValFalse,
+                        'val2' : spyMod2Val2
+                    }
+                }
+            });
+
+            var block = BEM.create({ block : 'block', mods : { mod1 : false, mod2 : true }});
+            block.setMod('mod1', true);
+
+            spyMod1Val2.should.not.have.been.called;
+            spyMod2ValFalse.should.not.have.been.called;
+            spyMod2Val2.should.not.have.been.called;
+
+            order.should.be.eql([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+
+            block.setMod('mod2', false);
+            spyMod2ValFalse.should.have.been.calledTwice;
         });
     });
 

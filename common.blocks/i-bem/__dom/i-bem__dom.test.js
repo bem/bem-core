@@ -1,7 +1,7 @@
 modules.define(
     'test',
-    ['i-bem__dom', 'jquery', 'sinon', 'BEMHTML'],
-    function(provide, DOM, $, sinon, BEMHTML) {
+    ['i-bem__dom', 'objects', 'jquery', 'sinon', 'BEMHTML'],
+    function(provide, DOM, objects, $, sinon, BEMHTML) {
 
 describe('i-bem__dom', function() {
     describe('getMod', function() {
@@ -25,10 +25,14 @@ describe('i-bem__dom', function() {
                 {
                     cls : 'bla-block_m1_v2 block_m1_v1',
                     val : 'v1'
+                },
+                {
+                    cls : 'block_m1',
+                    val : true
                 }
             ].forEach(function(data) {
                 (rootNode = $('<div class="' + data.cls + '"/>')).bem('block').getMod('m1')
-                    .should.be.equal(data.val);
+                    .should.be.eql(data.val);
                 DOM.destruct(rootNode);
             });
 
@@ -37,7 +41,7 @@ describe('i-bem__dom', function() {
     });
 
     describe('getMods', function() {
-        it('should return properly extracted mods from html', function() {
+        it('should return properly extracted block mods from html', function() {
             DOM.decl('block', {});
 
             var rootNode;
@@ -55,12 +59,70 @@ describe('i-bem__dom', function() {
                     mods : { js : 'inited', m1 : 'v1', m2 : 'v2', m4 : 'v4' }
                 },
                 {
-                    cls  : 'bla-block_m1_v1 block_m2_v2 block_m3_v3 bla-block_m3_v4',
-                    mods : { js : 'inited', m2 : 'v2', m3 : 'v3' }
+                    cls  : 'bla-block_m1_v1 block_m2_v2 block_m3_v3 bla-block_m3_v4 block_m4',
+                    mods : { js : 'inited', m2 : 'v2', m3 : 'v3', m4 : true }
                 }
             ].forEach(function(data) {
                 (rootNode = $('<div class="' + data.cls + '"/>')).bem('block').getMods()
                     .should.be.eql(data.mods);
+                DOM.destruct(rootNode);
+            });
+
+            delete DOM.blocks['block'];
+        });
+
+        it('should return properly extracted elem mods from html', function() {
+            DOM.decl('block', {});
+
+            var rootNode;
+            [
+                {
+                    cls  : 'block__e1_m1_v1',
+                    mods : { m1 : 'v1' }
+                },
+                {
+                    cls  : 'block__e1_m1_v1 block__e1_m2_v2 bla-block__e1_m4_v3 block__e1_m4_v4',
+                    mods : { m1 : 'v1', m2 : 'v2', m4 : 'v4' }
+                },
+                {
+                    cls  : 'bla-block__e1_m1_v1 block__e1_m2_v2 block__e1_m3_v3 bla-block__e1_m3_v4 block__e1_m4',
+                    mods : { m2 : 'v2', m3 : 'v3', m4 : true }
+                }
+            ].forEach(function(data) {
+                var block = (rootNode = $('<div class="block block__e1 ' + data.cls + '"/>')).bem('block');
+                block.getMods(block.elem('e1')).should.be.eql(data.mods);
+                DOM.destruct(rootNode);
+            });
+
+            delete DOM.blocks['block'];
+        });
+    });
+
+    describe('setMod', function() {
+        it('should properly set CSS classes', function() {
+            DOM.decl('block', {});
+
+            var rootNode;
+            [
+                {
+                    cls  : ['block_m1_v1'],
+                    mods : { m1 : 'v1' }
+                },
+                {
+                    cls  : ['block_m1_v1', 'block_m2_v2', 'block_m3', 'block_m4_v4', 'block_m5'],
+                    mods : { m1 : 'v1', m2 : 'v2', m3 : true, m4 : 'v4', m5 : true  }
+                }
+            ].forEach(function(data) {
+                var block = (rootNode = $('<div class="bla-block"/>')).bem('block');
+
+                objects.each(data.mods, function(modVal, modName) {
+                    block.setMod(modName, modVal);
+                });
+
+                data.cls.forEach(function(cls) {
+                    block.domElem.hasClass(cls);
+                });
+
                 DOM.destruct(rootNode);
             });
 

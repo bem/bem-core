@@ -255,7 +255,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             modName = elem || modName;
             var modCache = this._modCache;
             return modName in modCache?
-                modCache[modName] :
+                modCache[modName] || '' :
                 modCache[modName] = this._extractModVal(modName);
         }
 
@@ -313,6 +313,8 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         }
 
         if(!elem || elem[0]) {
+            modVal === false && (modVal = '');
+
             var modId = (elem && elem[0]? identify(elem[0]) : '') + '_' + modName;
 
             if(this._processingMods[modId])
