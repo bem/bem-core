@@ -104,7 +104,7 @@ describe('i-bem', function() {
 
                 block
                     .setMod('mod1', false)
-                    .getMod('mod1').should.be.false;
+                    .getMod('mod1').should.be.equal('');
             });
         });
 
@@ -428,7 +428,6 @@ describe('i-bem', function() {
     });
 
     describe('beforeSetMod/onSetMod for boolean mods', function() {
-
         it('should call properly matched callbacks for boolean mods by order', function() {
             var order = [],
                 spyMod1Val2 = sinon.spy(),
@@ -440,7 +439,7 @@ describe('i-bem', function() {
                     'mod1' : {
                         'true' : function(modName, modVal, oldModVal) {
                             modVal.should.be.true;
-                            oldModVal.should.be.false;
+                            oldModVal.should.be.equal('');
                             order.push(5);
                         }
                     }
@@ -509,7 +508,7 @@ describe('i-bem', function() {
 
                     'mod2' : {
                         '' : function(modName, modVal, oldModVal) {
-                            modVal.should.be.false;
+                            modVal.should.be.equal('');
                             oldModVal.should.be.true;
                             spyMod2ValFalse();
                         },

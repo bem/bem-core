@@ -623,7 +623,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
             (matches = domNode.className
                 .match(this.__self._buildModValRE(modName, elemName || elem)));
 
-        return matches? matches[2] : '';
+        return matches? matches[2] || true : '';
     },
 
     /**
@@ -643,9 +643,11 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
                 '(' + (extractAll? NAME_PATTERN : modNames.join('|')) + ')',
                 elem,
                 'g')) || []).forEach(function(className) {
-                    var iModVal = (className = className.trim()).lastIndexOf(MOD_DELIM),
-                        iModName = className.substr(0, iModVal - 1).lastIndexOf(MOD_DELIM);
-                    res[className.substr(iModName + 1, iModVal - iModName - 1)] = className.substr(iModVal + 1);
+                    var matches = className.match(RegExp(
+                            '[^' + MOD_DELIM + ']' + MOD_DELIM + '(' + NAME_PATTERN + ')' +
+                            '(?:' + MOD_DELIM + '(' + NAME_PATTERN + '))?$'));
+
+                    res[matches[1]] = matches[2] || true;
                     ++countMatched;
                 });
 
@@ -674,15 +676,19 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
         var _self = this.__self,
             classPrefix = _self._buildModClassPrefix(modName, elemName),
             classRE = _self._buildModValRE(modName, elemName),
-            needDel = modVal === '';
+            needDel = modVal === '' || modVal === false;
 
         (elem || this.domElem).each(function() {
-            var className = this.className;
-            className.indexOf(classPrefix) > -1?
+            var className = this.className,
+                modClassName = classPrefix;
+
+            modVal !== true && (modClassName += MOD_DELIM + modVal);
+
+            className.indexOf(classPrefix + MOD_DELIM) > -1?
                 this.className = className.replace(
                     classRE,
-                    (needDel? '' : '$1' + classPrefix + modVal)) :
-                needDel || $(this).addClass(classPrefix + modVal);
+                    (needDel? '' : '$1' + modClassName)) :
+                needDel || $(this).addClass(modClassName);
         });
 
         elemName && this
@@ -1409,7 +1415,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
                (elem?
                    ELEM_DELIM + (typeof elem === 'string'? elem : this._extractElemNameFrom(elem)) :
                    '') +
-               MOD_DELIM + modName + MOD_DELIM;
+               MOD_DELIM + modName;
     },
 
     /**
@@ -1422,7 +1428,11 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @returns {RegExp}
      */
     _buildModValRE : function(modName, elem, quantifiers) {
-        return new RegExp('(\\s|^)' + this._buildModClassPrefix(modName, elem) + '(' + NAME_PATTERN + ')(?=\\s|$)', quantifiers);
+        return new RegExp(
+            '(\\s|^)' +
+            this._buildModClassPrefix(modName, elem) +
+            '(?:' + MOD_DELIM + '(' + NAME_PATTERN + '))?(?=\\s|$)',
+            quantifiers);
     },
 
     /**
