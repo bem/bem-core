@@ -20,15 +20,16 @@ var undefined,
 
 /**
  * Builds the name of the handler method for setting a modifier
- * @static
  * @private
- * @param {String} elemName Element name
+ * @param {String} prefix
  * @param {String} modName Modifier name
  * @param {String} modVal Modifier value
+ * @param {String} [elemName] Element name
  * @returns {String}
  */
-function buildModFnName(elemName, modName, modVal) {
-    return (elemName? '__elem_' + elemName : '') +
+function buildModFnName(prefix, modName, modVal, elemName) {
+    return '__' + prefix +
+        (elemName? '__elem_' + elemName : '') +
        '__mod' +
        (modName? '_' + modName : '') +
        (modVal? '_' + modVal : '');
@@ -38,13 +39,14 @@ function buildModFnName(elemName, modName, modVal) {
  * Transforms a hash of modifier handlers to methods
  * @static
  * @private
+ * @param {String} prefix
  * @param {Object} modFns
  * @param {Object} props
  * @param {String} [elemName]
  */
-function modFnsToProps(modFns, props, elemName) {
+function modFnsToProps(prefix, modFns, props, elemName) {
     if(functions.isFunction(modFns)) {
-        props[buildModFnName(elemName, '*', '*')] = modFns;
+        props[buildModFnName(prefix, '*', '*', elemName)] = modFns;
     }
     else {
         var modName, modVal, modFn;
@@ -52,7 +54,7 @@ function modFnsToProps(modFns, props, elemName) {
             if(modFns.hasOwnProperty(modName)) {
                 modFn = modFns[modName];
                 if(functions.isFunction(modFn)) {
-                    props[buildModFnName(elemName, modName, modName === 'js'? 'inited' : '*')] = modFn;
+                    props[buildModFnName(prefix, modName, modName === 'js'? 'inited' : '*', elemName)] = modFn;
                     /** @deprecated: above code has fallback, replace
                      *  modName === 'js'? 'inited' : '*'
                      *  with
@@ -63,7 +65,7 @@ function modFnsToProps(modFns, props, elemName) {
                 else {
                     for(modVal in modFn) {
                         if(modFn.hasOwnProperty(modVal)) {
-                            props[buildModFnName(elemName, modName, modVal)] = modFn[modVal];
+                            props[buildModFnName(prefix, modName, modVal, elemName)] = modFn[modVal];
                         }
                     }
                 }
@@ -91,15 +93,29 @@ function buildCheckMod(modName, modVal) {
 }
 
 function convertModHandlersToMethods(props) {
+    if(props.beforeSetMod) {
+        modFnsToProps('before', props.beforeSetMod, props);
+        delete props.beforeSetMod;
+    }
+
     if(props.onSetMod) {
-        modFnsToProps(props.onSetMod, props);
+        modFnsToProps('after', props.onSetMod, props);
         delete props.onSetMod;
+    }
+
+    if(props.onBeforeElemSetMod) {
+        for(var elemName in props.onBeforeElemSetMod) {
+            if(props.onBeforeElemSetMod.hasOwnProperty(elemName)) {
+                modFnsToProps('before', props.onBeforeElemSetMod[elemName], props, elemName);
+            }
+        }
+        delete props.onBeforeElemSetMod;
     }
 
     if(props.onElemSetMod) {
         for(var elemName in props.onElemSetMod) {
             if(props.onElemSetMod.hasOwnProperty(elemName)) {
-                modFnsToProps(props.onElemSetMod[elemName], props, elemName);
+                modFnsToProps('after', props.onElemSetMod[elemName], props, elemName);
             }
         }
         delete props.onElemSetMod;
@@ -317,15 +333,28 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
             elem && modFnParams.unshift(elem);
 
-            [['*', '*'], [modName, '*'], [modName, modVal]].forEach(function(mod) {
-                needSetMod = this._callModFn(elemName, mod[0], mod[1], modFnParams) !== false && needSetMod;
-            }, this);
+            var modVars = [['*', '*'], [modName, '*'], [modName, modVal]],
+                prefixes = ['before', 'after'],
+                i = 0, prefix, j, modVar;
 
-            !elem && needSetMod && (this._modCache[modName] = modVal);
+            while(prefix = prefixes[i++]) {
+                j = 0;
+                while(modVar = modVars[j++]) {
+                    if(this._callModFn(prefix, elemName, modVar[0], modVar[1], modFnParams) === false) {
+                        needSetMod = false;
+                        break;
+                    }
+                }
 
-            needSetMod && this._afterSetMod(modName, modVal, curModVal, elem, elemName);
+                if(!needSetMod) break;
 
-            delete this._processingMods[modId];
+                if(prefix === 'before') {
+                    this._onSetMod(modName, modVal, curModVal, elem, elemName);
+                    elem || (this._modCache[modName] = modVal); // cache only block mods
+                }
+            }
+
+            this._processingMods[modId] = null;
         }
 
         return this;
@@ -340,7 +369,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [elem] Nested element
      * @param {String} [elemName] Element name
      */
-    _afterSetMod : function(modName, modVal, oldModVal, elem, elemName) {},
+    _onSetMod : function(modName, modVal, oldModVal, elem, elemName) {},
 
     /**
      * Sets a modifier for a block/nested element, depending on conditions.
@@ -400,13 +429,14 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     /**
      * Executes handlers for setting modifiers
      * @private
+     * @param {String} prefix
      * @param {String} elemName Element name
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
      * @param {Array} modFnParams Handler parameters
      */
-    _callModFn : function(elemName, modName, modVal, modFnParams) {
-        var modFnName = buildModFnName(elemName, modName, modVal);
+    _callModFn : function(prefix, elemName, modName, modVal, modFnParams) {
+        var modFnName = buildModFnName(prefix, modName, modVal, elemName);
         return this[modFnName]?
            this[modFnName].apply(this, modFnParams) :
            undefined;

@@ -666,7 +666,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @param {jQuery} [elem] Element
      * @param {String} [elemName] Element name
      */
-    _afterSetMod : function(modName, modVal, oldModVal, elem, elemName) {
+    _onSetMod : function(modName, modVal, oldModVal, elem, elemName) {
         if(!elem && modName === 'js' && modVal === '') {
             return;
         }
