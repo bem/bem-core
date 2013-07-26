@@ -1,87 +1,106 @@
 # BEM Core Library [![Build Status](https://travis-ci.org/bem/bem-core.png)](https://travis-ci.org/bem/bem-core)
 
+This README is also availabe [in
+Russan](https://github.com/bem/bem-core/blob/v1/README.ru.md).
 
-## Что это?
+## What is it?
 
-Базовая библиотека блоков для разработки веб-интерфейсов.
-Содержит только необходимый минимум для разработки клиентского js и html-шаблонов.
+`bem-core` is a base library for web interfaces development.
+It provides the minimal stack for coding client-side JavaScript and templating.
 
-## Использование
+## Use
 
-Наиболее простым способом начать проект с использованием `bem-core` является [project-stub](https://github.com/bem/project-stub).
+The easiest way to run a project with `bem-core` is to use
+the [project-stub](https://github.com/bem/project-stub).
 
-Вы также можете добавить библиотеку к себе в проект любым известным вам способом.
+You can also include the library into your project with another way which you
+are used to use.
 
-## Состав
+## Inside
 
-### Уровни
+### Levels
   - common.blocks
   - desktop.blocks
   - touch.blocks
 
-### Блоки
+### Blocks
   - i-bem
 
-### Технологии
+### Technologies
   - bemhtml
   - bemtree
 
-## История изменений
+## Changelog
 
-История изменений доступна на [отдельной странице](CHANGELOG.md).
+You can check the changelog at the [changelog page](CHANGELOG.md).
 
-## Миграция
+## Migration
 
-Миграция описана на [отдельной странице](MIGRATION.md).
+If you used BEM before, check the [migration instruction](MIGRATION.md).
 
-## Разработка
+## Development
 
-### Рабочая копия
+### Working copy
 
-1. Получаем исходники нужной версии (например, `v1`):
+1. Get the needed version code (e.g., `v1`):
 ```
 $ git clone -b v1 git@github.com:bem/bem-core.git
 $ cd bem-core
 ```
 
-2. Устанавливаем зависимости:
+2. Install teh dependencies:
 ```
 $ npm install
 ```
-Для последующего запуска локально установленных bem-tools нам потребуется `export PATH=./node_modules/.bin:$PATH` или любой альтернативный способ.
+You need
+`export PATH=./node_modules/.bin:$PATH`
+or an alternative way to run locally-installed bem-tools.
 
-3. С помощью bem-tools устанавливаем все зависимые библиотеки:
+3. Install all the necessary libraries with bem-tools:
 ```
 $ bem make libs
 ```
 
-4. Собираем примеры и тесты:
+4. Build examples and tests:
 ```
 $ bem make sets
 ```
 
-5. Запускаем разработческий сервер:
+5. Run development server:
 ```
 $ bem server
 ```
 
-### Внесение изменений
+### How to contribute
 
-1. [Создать issue](https://github.com/bem/bem-core/issues/new) с описанием сути изменений.
-2. Определить в какую версию необходимо внести изменения.
-3. Сделать feature-branch с указанием номера issue и версии (`issues/<номер issue>@v<номер версии>`) на основе ветки версии.
-Например для issue с номером 42 и версией 1: `git checkout -b issues/42@v1 v1`. Если изменения нужно внести в несколько версий, то для каждой из версий создаётся отдельная ветка.
-4. Сделать изменения, закоммитить и сделать push. Если это необходимо, то нужно сделать rebase от базовой ветки версии.
-5. Создать pull-request на основе созданной ветки (или несколько pull-request-ов для случая изменений в нескольких версиях).
-6. Любым способом связать pull-request и issue (например, c помощью комментария).
-7. Ждать закрытия pull-request и issue ;-)
+1. [Create an issue](https://github.com/bem/bem-core/issues/new) with a proper
+description.
+2. Decide which version needs your changes.
+3. Create a feature-branch with an issue number and a version (`issues/<issue
+number>@v<version number>`) based on a version branch.
+For example, for an issue #42 and a version #1: `git checkout -b issues/42@v1 v1`.
+If you need changes for several versions, each of them has to have a feature
+branch.
+4. Commit changes and `push`. Rebase your branch on a corresponding version
+branch if it is needed.
+5. Create a pull-request from your feature branch; or several pull-requests if
+you changed for several versions.
+6. Link your pull request with an issue any way you like. A comment will work
+perfectly.
+7. Wait your pull request and the issue to be closed ;-)
 
-### Модульное тестирование
+### Modular testing
 
-Сборка дефолтного тестового бандла для `ecma__array`: `bem make common.sets/ecma__array.tests/default`
-После сборки тестового бандла вы увидите результаты выполнения тестов в консоли.
-Их также можно посмотреть в браузере, открыв `common.sets/ecma__array.tests/default/default.html`.
+A default test bundle for `ecma_array`: `bem make common.sets/ecma__array.tests/default`
+You can see the results of the test in the terminal after the building process
+finishes.
+You can also watch them in a browser loading `common.sets/ecma__array.tests/default/default.html`.
 
-По аналогии можно запустить тесты для других БЭМ-сущностей, имеющих реализацию в технологии `test.js`.
+Run tests for other BEM entities in the same way. This will work for those which
+are equiped with `.test.js` file.
 
-Для сборки и запуска тестов используется библиотека [bem-pr](https://github.com/narqo/bem-pr). См. [https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md](подробную информацию) про инфраструктуру тестирования [bem-pr](https://github.com/narqo/bem-pr).
+Test are built with a [bem-pr](https://github.com/narqo/bem-pr) library.
+Check the
+[details](https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md]
+about testing infrastructure of the [bem-pr](https://github.com/narqo/bem-pr)
+library.
