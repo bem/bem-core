@@ -93,9 +93,9 @@ function buildCheckMod(modName, modVal) {
 }
 
 function convertModHandlersToMethods(props) {
-    if(props.onBeforeSetMod) {
-        modFnsToProps('before', props.onBeforeSetMod, props);
-        delete props.onBeforeSetMod;
+    if(props.beforeSetMod) {
+        modFnsToProps('before', props.beforeSetMod, props);
+        delete props.beforeSetMod;
     }
 
     if(props.onSetMod) {

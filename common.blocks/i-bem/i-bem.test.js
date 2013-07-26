@@ -162,7 +162,7 @@ describe('i-bem', function() {
         });
     });
 
-    describe('onBeforeSetMod', function() {
+    describe('beforeSetMod', function() {
         afterEach(function() {
             delete BEM.blocks['block'];
         });
@@ -174,7 +174,7 @@ describe('i-bem', function() {
                 spyMod2Val2 = sinon.spy();
 
             BEM.decl('block', {
-                onBeforeSetMod : {
+                beforeSetMod : {
                     'mod1' : {
                         'val1' : function() {
                             order.push(5);
@@ -184,7 +184,7 @@ describe('i-bem', function() {
             });
 
             BEM.decl('block', {
-                onBeforeSetMod : {
+                beforeSetMod : {
                     'mod1' : function() {
                         order.push(3);
                     },
@@ -197,14 +197,14 @@ describe('i-bem', function() {
 
 
             BEM.decl('block', {
-                onBeforeSetMod : function(modName) {
+                beforeSetMod : function(modName) {
                     this.__base.apply(this, arguments);
                     modName === 'mod1' && order.push(2);
                 }
             });
 
             BEM.decl('block', {
-                onBeforeSetMod : {
+                beforeSetMod : {
                    'mod1' : {
                        '*'    : function() {
                            this.__base.apply(this, arguments);
@@ -234,7 +234,7 @@ describe('i-bem', function() {
 
         it('should call callbacks before set mod', function(done) {
             BEM.decl('block', {
-                onBeforeSetMod : {
+                beforeSetMod : {
                    'mod1' : {
                        'val1' : function() {
                            this.hasMod('mod1', 'val1').should.be.false;
@@ -249,7 +249,7 @@ describe('i-bem', function() {
 
         it('should set mod after callbacks', function() {
              BEM.decl('block', {
-                onBeforeSetMod : {
+                beforeSetMod : {
                    'mod1' : {
                        'val1' : function() {}
                    }
@@ -262,7 +262,7 @@ describe('i-bem', function() {
 
         it('shouldn\'t set mod when callback returns false', function() {
             BEM.decl('block', {
-                onBeforeSetMod : {
+                beforeSetMod : {
                    'mod1' : {
                        'val1' : function() {
                            return false;
@@ -364,7 +364,7 @@ describe('i-bem', function() {
         it('shouldn\'t call callbacks if beforeSetMod cancel set mod', function() {
             var spy = sinon.spy();
             BEM.decl('block', {
-                onBeforeSetMod : {
+                beforeSetMod : {
                    'mod1' : {
                        'val1' : function() {
                            return false;
