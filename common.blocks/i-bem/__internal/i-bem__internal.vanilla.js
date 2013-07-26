@@ -26,7 +26,8 @@ var undefined,
     NAME_PATTERN = '[a-zA-Z0-9-]+';
 
 function buildModPostfix(modName, modVal, buffer) {
-    buffer.push(MOD_DELIM, modName, MOD_DELIM, modVal);
+    buffer.push(MOD_DELIM, modName);
+    modVal !== true && buffer.push(MOD_DELIM, modVal);
 }
 
 function buildBlockClass(name, modName, modVal, buffer) {
@@ -63,18 +64,19 @@ provide({
      * @returns {String|Array} Class or buffer string (depending on whether the buffer parameter is present)
      */
     buildClass : function(block, elem, modName, modVal, buffer) {
-        var typeOf = typeof modName;
-        if(typeOf == 'string') {
-            if(typeof modVal != 'string') {
+        var typeOfModName = typeof modName;
+        if(typeOfModName === 'string' || typeOfModName === 'boolean') {
+            var typeOfModVal = typeof modVal;
+            if(typeOfModVal !== 'string' && typeOfModVal !== 'boolean') {
                 buffer = modVal;
                 modVal = modName;
                 modName = elem;
                 elem = undefined;
             }
-        } else if(typeOf != 'undefined') {
+        } else if(typeOfModName !== 'undefined') {
             buffer = modName;
             modName = undefined;
-        } else if(elem && typeof elem != 'string') {
+        } else if(elem && typeof elem !== 'string') {
             buffer = elem;
             elem = undefined;
         }
