@@ -157,6 +157,68 @@ describe('i-bem__dom', function() {
         });
     });
 
+    describe('findBlocksInside', function() {
+        function getBlockIds(blocks) {
+            return blocks.map(function(block) {
+                return block.params.id;
+            });
+        }
+
+        var rootNode, rootBlock;
+        beforeEach(function() {
+            rootNode = $(BEMHTML.apply(
+                {
+                    block : 'root',
+                    content : {
+                        block : 'b1',
+                        js    : { id : '1' },
+                        content : [
+                            { block : 'b2' },
+                            {
+                                block : 'b1',
+                                mods  : { m1 : 'v1' },
+                                js    : { id : '2' }
+                            },
+                            {
+                                block : 'b3',
+                                content : {
+                                    block   : 'b1',
+                                    mods    : { m1 : 'v2' },
+                                    js      : { id : '3' },
+                                    content : {
+                                        block : 'b1',
+                                        mods  : { m1 : true },
+                                        js    : { id : '4' }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }));
+            rootBlock = DOM.init(rootNode).bem('root');
+        });
+
+        afterEach(function() {
+            DOM.destruct(rootNode);
+            delete DOM.blocks['b-root'];
+            delete DOM.blocks['b1'];
+        });
+
+        it('should find all blocks by name', function() {
+            getBlockIds(rootBlock.findBlocksInside('b1')).should.be.eql(['1', '2', '3', '4']);
+        });
+
+        it('should find all blocks by name, modName and modVal', function() {
+            getBlockIds(rootBlock.findBlocksInside({ block : 'b1', modName : 'm1', modVal : 'v1' }))
+                .should.be.eql(['2']);
+        });
+
+        it('should find all blocks by name and boolean mod', function() {
+            getBlockIds(rootBlock.findBlocksInside({ block : 'b1', modName : 'm1', modVal : true }))
+                .should.be.eql(['4']);
+        });
+    });
+
     describe('DOM.init', function() {
         it('should init block', function() {
             var spy = sinon.spy();
