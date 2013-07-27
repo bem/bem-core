@@ -54,6 +54,10 @@ var undefined,
     MOD_DELIM = INTERNAL.MOD_DELIM,
     ELEM_DELIM = INTERNAL.ELEM_DELIM,
 
+    EXTRACT_MODS_RE = RegExp(
+        '[^' + MOD_DELIM + ']' + MOD_DELIM + '(' + NAME_PATTERN + ')' +
+        '(?:' + MOD_DELIM + '(' + NAME_PATTERN + '))?$'),
+
     buildModPostfix = INTERNAL.buildModPostfix,
     buildClass = INTERNAL.buildClass;
 
@@ -643,10 +647,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
                 '(' + (extractAll? NAME_PATTERN : modNames.join('|')) + ')',
                 elem,
                 'g')) || []).forEach(function(className) {
-                    var matches = className.match(RegExp(
-                            '[^' + MOD_DELIM + ']' + MOD_DELIM + '(' + NAME_PATTERN + ')' +
-                            '(?:' + MOD_DELIM + '(' + NAME_PATTERN + '))?$'));
-
+                    var matches = className.match(EXTRACT_MODS_RE);
                     res[matches[1]] = matches[2] || true;
                     ++countMatched;
                 });
