@@ -105,23 +105,23 @@ describe('i-bem__dom', function() {
             var rootNode;
             [
                 {
-                    cls  : ['block_m1_v1'],
-                    mods : { m1 : 'v1' }
+                    beforeCls : 'block i-bem',
+                    afterCls  : 'block i-bem block_js_inited block_m1_v1',
+                    mods      : { m1 : 'v1' }
                 },
                 {
-                    cls  : ['block_m1_v1', 'block_m2_v2', 'block_m3', 'block_m4_v4', 'block_m5'],
-                    mods : { m1 : 'v1', m2 : 'v2', m3 : true, m4 : 'v4', m5 : true  }
+                    beforeCls : 'block i-bem block_m6 block_m7_v7',
+                    afterCls  : 'block i-bem block_js_inited block_m1_v1 block_m2_v2 block_m3 block_m4_v4 block_m5',
+                    mods      : { m1 : 'v1', m2 : 'v2', m3 : true, m4 : 'v4', m5 : true, m6 : false, m7 : '' }
                 }
             ].forEach(function(data) {
-                var block = (rootNode = $('<div class="bla-block"/>')).bem('block');
+                var block = (rootNode = $('<div class="' + data.beforeCls + '"/>')).bem('block');
 
                 objects.each(data.mods, function(modVal, modName) {
                     block.setMod(modName, modVal);
                 });
 
-                data.cls.forEach(function(cls) {
-                    block.domElem.hasClass(cls);
-                });
+                block.domElem[0].className.should.be.equal(data.afterCls);
 
                 DOM.destruct(rootNode);
             });
