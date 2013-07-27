@@ -684,11 +684,13 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 
             modVal !== true && (modClassName += MOD_DELIM + modVal);
 
-            className.indexOf(classPrefix + MOD_DELIM) > -1?
-                this.className = className.replace(
-                    classRE,
-                    (needDel? '' : '$1' + modClassName)) :
-                needDel || $(this).addClass(modClassName);
+            (oldModVal === true?
+                classRE.test(className) :
+                className.indexOf(classPrefix + MOD_DELIM) > -1)?
+                    this.className = className.replace(
+                        classRE,
+                        (needDel? '' : '$1' + modClassName)) :
+                    needDel || $(this).addClass(modClassName);
         });
 
         elemName && this
