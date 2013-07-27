@@ -73,7 +73,7 @@ describe('i-bem', function() {
         var block;
         beforeEach(function() {
             BEM.decl('block', {});
-            block = BEM.create({ block : 'block', mods : { mod1 : 'val1' }});
+            block = BEM.create({ block : 'block', mods : { mod1 : 'val1', mod2 : true, mod3 : false }});
         });
         afterEach(function() {
             delete BEM.blocks['block'];
@@ -84,8 +84,13 @@ describe('i-bem', function() {
                 block.getMod('mod1').should.be.equal('val1');
             });
 
+            it('should return current boolean mod\'s value', function() {
+                block.getMod('mod2').should.be.true;
+                block.getMod('mod3').should.be.equal('');
+            });
+
             it('should return \'\' for undefined mod', function() {
-                block.getMod('mod2').should.be.equal('');
+                block.getMod('mod4').should.be.equal('');
             });
         });
 
@@ -105,6 +110,10 @@ describe('i-bem', function() {
                 block
                     .setMod('mod1', false)
                     .getMod('mod1').should.be.equal('');
+
+                block
+                    .setMod('mod1')
+                    .getMod('mod1').should.be.true;
             });
         });
 
@@ -142,7 +151,7 @@ describe('i-bem', function() {
             });
 
             it('in short form should return true for undefined mod', function() {
-                block.hasMod('mod2').should.be.false;
+                block.hasMod('mod4').should.be.false;
             });
 
             it('should return true for matching boolean mod\'s value', function() {
