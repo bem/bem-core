@@ -823,7 +823,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
             elemName = this.__self._extractElemNameFrom(elem);
         }
 
-        return extractParams(elem[0])[buildClass(this.__self.getName(), elemName)] || {};
+        return extractParams(elem[0])[this.__self.buildClass(elemName)] || {};
     },
 
     /**

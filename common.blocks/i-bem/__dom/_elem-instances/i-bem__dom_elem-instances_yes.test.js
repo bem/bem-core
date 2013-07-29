@@ -177,6 +177,38 @@ describe('i-bem__dom_elem-instances_yes', function() {
         });
     });
 
+    describe('elemParams', function() {
+        it('should extract element\'s parameters properly', function() {
+            DOM.decl('block', {}, {});
+            DOM.decl({ block: 'block', elem: 'elem1' }, {}, {});
+
+            var rootNode = $(BEMHTML.apply({
+                    block: 'block',
+                    js: true,
+                    content: {
+                        elem: 'elem1',
+                        mix: { block: 'i-bem' },
+                        js: true,
+                        content: [
+                            {
+                                elem: 'elem2',
+                                js: { p1: 'v1' }
+                            }
+                        ]
+                    }
+                })),
+                block = rootNode.bem('block'),
+                elem = block.elemInstance('elem1'),
+                elemParams = elem.elemParams('elem2');
+
+            elemParams.p1.should.be.equal('v1');
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block__elem1'];
+        });
+    });
+
     describe('auto declaration', function() {
         it('should declare element properly on initialization', function() {
             DOM.decl('block', {}, {});
