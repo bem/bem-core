@@ -301,7 +301,7 @@ BEM.decl('i-bem__dom', {
         return (elem?
                    this._blockName + ELEM_DELIM + (typeof elem === 'string'? elem : this._extractElemNameFrom(elem)) :
                    this._name) +
-               MOD_DELIM + modName + MOD_DELIM;
+               MOD_DELIM + modName;
     },
 
     /**
