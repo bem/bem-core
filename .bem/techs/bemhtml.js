@@ -5,12 +5,10 @@ var BEM = require('bem'),
 
 exports.techMixin = {
 
-    getSuffixes : function() {
-        return ['bemhtml', 'bemhtml.xjst'];
-    },
+    API_VER:2,
 
-    getBuildSuffixes : function() {
-        return ['bemhtml.js'];
+    getBuildSuffixesMap : function() {
+        return { 'bemhtml.js' : ['bemhtml', 'bemhtml.xjst'] };
     },
 
     getCreateSuffixes : function() {
@@ -29,16 +27,9 @@ exports.techMixin = {
                 })
     },
 
-    getBuildResult : function(prefixes, suffix, outputDir, outputName) {
-        var _t = this;
-        return this.filterPrefixes(prefixes, this.getCreateSuffixes())
-            .then(function(paths) {
-                return Q.all(paths.map(function(path) {
-                    return _t.getBuildResultChunk(
-                            PATH.relative(outputDir, path), path, suffix);
-                }));
-            })
-            .then(_t.getCompiledResult.bind(_t));
+    getBuildResult : function(files, suffix, output, opts) {
+        return this.__base.apply(this,arguments)
+            .then(this.getCompiledResult.bind(this));
     },
 
     getCompiledResult : function(sources) {

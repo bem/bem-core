@@ -1,0 +1,5 @@
+
+block b-square, this.ctx.supupukukukoku {
+      content : this.ctx.supupukukukoku
+}
+        

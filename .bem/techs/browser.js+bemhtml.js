@@ -1,70 +1,63 @@
-var PATH = require('path');
-
-exports.baseTechName = 'browser.js';
+var BEM = require('bem'),
+    Q = BEM.require('q'),
+    Deps = require('bem/lib/techs/v2/deps.js').Deps,
+    PATH = require("path"),
+    bemUtil = require("bem/lib/util"),
+    __assert = require("assert");
 
 exports.techMixin = {
+    API_VER:2,
 
-    /**
-     * Build and return result of build of specified prefixes
-     * for specified suffix.
-     *
-     * @param {Promise * String[]} prefixes Prefixes to build from.
-     * @param {String} suffix Suffix to build result for.
-     * @param {String} outputDir Output dir name for build result.
-     * @param {String} outputName Output name of build result.
-     * @returns {Promise * String} Promise for build result.
-     */
-    getBuildResult: function(prefixes, suffix, outputDir, outputName) {
+    getWeakBuildSuffixesMap:function(){
+        return { 'js' : ['browser.js', 'vanilla.js', 'js', 'bemhtml'] };
+    },
 
-        var context = this.context,
-            opts = context.opts;
+    getBuildSuffixesMap:function(){
+        return { 'js' : ['browser.js', 'js'] };
+    },
 
-        return this.__base(prefixes, suffix, outputDir, outputName)
-            .then(function(res) {
+    transformBuildDecl: function(decl) {
+        var bb = this.getWeakBuildSuffixesMap();
+        var ss = this.getWeakSuffixesMap();
 
-                return opts.declaration
-                    .then(function(decl) {
-
-                        decl = decl.depsByTechs;
-
-                        // do nothing if decl.depsByTechs.js.bemhtml doesn't exists
-                        if (!decl || !decl.js || !decl.js.bemhtml) return res;
-
-                        // js+bemhtml decl
-                        decl = { deps: decl.js.bemhtml };
-
-                        var bemhtmlTech = context.createTech('bemhtml'),
-                            output = PATH.resolve(
-                                opts.outputDir,
-                                opts.outputName
-                            ),
-                            // get `.js` build prefixes
-                            prefixes = bemhtmlTech.getBuildPrefixes(
-                                bemhtmlTech.transformBuildDecl(decl),
-                                context.getLevels()
-                            ),
-                            // and build bemhtml based on them
-                            bemhtmlResults = bemhtmlTech.getBuildResults(
-                                prefixes,
-                                PATH.dirname(output) + PATH.dirSep,
-                                PATH.basename(output)
-                            );
-
-                        return bemhtmlResults
-                            .then(function(r) {
-
-                                // put bemhtml templates at the top of builded js file
-                                res.push(r['bemhtml.js']);
-
-                                // and return new result
-                                return res;
-
-                            });
-
+        return decl
+            .then(function(decl){
+                var deps = new Deps().parseDepsDecl(decl)
+                    .filter(function(dependson, dependent) {
+                        return (((dependson.item.tech in ss) && dependent.item.tech in bb)
+                          || (!dependson.item.tech && !dependent.item.tech))
+                    }).map(function(item){
+                        return item.item;
                     });
-
+                return {deps: deps};
             });
+    },
 
+    getBuildResult:function(files, suffix, output, opts){
+
+        var bemhtmlTech = this.context.createTech("bemhtml"),
+            browserTech = this.context.createTech("browser.js"),
+            decl = this.transformBuildDecl(this.context.opts.declaration);
+
+        if(!(browserTech.API_VER === 2 && bemhtmlTech.API_VER === 2)){
+            return Q.reject(this.getTechName() + " can't use v1 techs to produce pieces of result");
+        }
+
+        opts = {__proto__:opts, force:true};
+
+        return Q.all(
+            [
+                bemhtmlTech.getBuildResults(
+                    bemhtmlTech.transformBuildDecl(decl),
+                    this.context.getLevels(),output,opts),
+                browserTech.getBuildResults(
+                    browserTech.transformBuildDecl(decl),
+                    this.context.getLevels(),output,opts)])
+            .spread(function(bemhtml,browser){
+                var result = browser.js;
+                result.unshift(bemhtml['bemhtml.js']+'\n');
+                return result;
+            })
     }
 
 };

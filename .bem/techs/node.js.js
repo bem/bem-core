@@ -2,25 +2,19 @@ exports.baseTechName = 'vanilla.js';
 
 exports.techMixin = {
 
-    getSuffixes : function() {
-        return ['vanilla.js', 'node.js'];
+    getWeakBuildSuffixesMap: function(){
+        return { 'node.js' : ['vanilla.js', 'node.js'] };
+    },
+
+    getBuildSuffixesMap: function(){
+        return { 'node.js' : ['node.js'] };
     },
 
     getCreateSuffixes : function() {
         return ['node.js'];
     },
 
-    getBuildSuffixes : function() {
-        return ['node.js'];
-    },
-
-    getBuildSuffixesMap : function() {
-        return {
-            'node.js' : this.getSuffixes()
-        };
-    },
-
-    getYmChunk : function(outputDir, outputName, suffix) {
+    getYmChunk : function() {
         return [
             "if(typeof module !== 'undefined') {",
             "modules = require('ym');",
@@ -28,7 +22,7 @@ exports.techMixin = {
         ].join('');
     },
 
-    getBuildResult : function(prefixes, suffix, outputDir, outputName) {
+    getBuildResult : function(files, suffix, output, opts) {
         var ymChunk = this.getYmChunk();
         return this.__base.apply(this, arguments)
             .then(function(res) {

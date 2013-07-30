@@ -7,20 +7,10 @@ exports.baseTechName = 'js';
 
 exports.techMixin = {
 
-    getSuffixes : function() {
-        return ['vanilla.js'];
-    },
-
-    getBuildSuffixes : function() {
-        return ['vanilla.js'];
-    },
-
     getBuildSuffixesMap : function() {
-        return this.getSuffixes()
-            .reduce(function(map, suffix) {
-                map[suffix] = [suffix];
-                return map;
-            }, {});
+        return {
+            "js":["vanilla.js"]
+        }
     },
 
     getCreateResult : function(path, suffix, vars) {
@@ -41,18 +31,6 @@ exports.techMixin = {
             "});",
             ""
         ], vars);
-    },
-
-    getBuildResult : function(prefixes, suffix, outputDir, outputName) {
-        var _t = this;
-        return Q.when(
-                this.filterPrefixes(prefixes, this.getBuildSuffixesMap()[suffix] || [suffix]),
-                function(paths) {
-                    return Q.all(paths.map(function(path) {
-                        return _t.getBuildResultChunk(
-                            PATH.relative(outputDir, path), path, suffix);
-                    }));
-                });
     }
 
 };
