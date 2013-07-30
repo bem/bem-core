@@ -206,9 +206,9 @@ function cleanupDomNode(domNode) {
 }
 
 /**
- * Uncople DOM node from the block. If this is the last node, then destroys the block.
+ * Uncouple DOM node from the block. If this is the last node, then destroys the block.
  * @private
- * @param {BEM.DOM} block block
+ * @param {DOM} block block
  * @param {HTMLElement} domNode DOM node
  */
 function removeDomNodeFromBlock(block, domNode) {
@@ -217,11 +217,7 @@ function removeDomNodeFromBlock(block, domNode) {
         block.domElem = block.domElem.not(domNode);
 }
 
-/**
- * @namespace
- * @name BEM.DOM
- */
-var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
+var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
     /**
      * @class Base block for creating BEM blocks that have DOM representation
      * @constructs
@@ -901,7 +897,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
         delete _this._elemCache;
     }
 
-}, /** @lends BEM.DOM */{
+}, /** @lends DOM */{
 
     /**
      * Scope
@@ -1466,6 +1462,6 @@ $.fn.bem = function(blockName, params) {
     return initBlock(blockName, this, params, true);
 };
 
-provide(blocks['i-bem__dom']);
+provide(DOM);
 
 });
