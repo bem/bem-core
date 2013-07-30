@@ -1182,8 +1182,6 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
             to = { elem : to };
         }
 
-        to.elemName && (to.elem = to.elemName);
-
         if(to.elem && to.elem.indexOf(' ') > 0) {
             to.elem.split(' ').forEach(function(elem) {
                 this._liveClassBind(
