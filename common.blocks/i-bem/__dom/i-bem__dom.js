@@ -996,12 +996,10 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
      * @static
      * @param {jQuery} ctx Root DOM node
      * @param {jQuery|String} content New content
-     * @param {Function} [callback] Handler to be called after initialization
-     * @param {Object} [callbackCtx] Handler's context
      */
-    update : function(ctx, content, callback, callbackCtx) {
+    update : function(ctx, content) {
         this.destruct(ctx, true);
-        this.init(ctx.html(content), callback, callbackCtx);
+        this.init(ctx.html(content));
     },
 
     /**
