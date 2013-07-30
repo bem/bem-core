@@ -7,12 +7,12 @@ var PATH = require('path'),
 
 exports.getTechs = function() {
     var techs = {
-        'bemjson.js' : '',
-        'bemdecl.js' : 'bemdecl.js',
-        'deps.js'    : 'deps.js',
-        'css'        : 'css',
-        'ie.css'     : 'ie.css',
-        'js'         : 'js-i'
+        'bemjson.js'                 : '',
+        'bemdecl.js'                 : 'v2/bemdecl.js',
+        'deps.js'                    : 'v2/deps.js',
+        'css'                        : 'v2/css',
+        'ie.css'                     : 'v2/ie.css',
+        'js'                         : 'v2/js-i'
     };
 
     [
