@@ -1,7 +1,7 @@
 modules.define('test', ['dom', 'jquery'], function(provide, dom, $) {
 
 describe('dom', function() {
-    describe('containsDomElem', function() {
+    describe('contains', function() {
         var domElem;
         beforeEach(function() {
             domElem = $(
@@ -30,6 +30,33 @@ describe('dom', function() {
 
         it('should returns false for empty jquery chain', function() {
             dom.contains(domElem.find('.a'), domElem.find('.no-exist')).should.be.false;
+        });
+    });
+
+    describe('containsFocus', function() {
+        var domElem;
+        beforeEach(function() {
+            domElem = $(
+                '<div>' +
+                    '<div class="a">' +
+                        '<input class="x"/>' +
+                    '</div>' +
+                    '<div class="b"/>' +
+                '</div>')
+                    .appendTo('body');
+            domElem.find('.x').focus();
+        });
+
+        afterEach(function() {
+            domElem.remove();
+        });
+
+        it('should returns true if context contains focused DOM elem', function() {
+            dom.containsFocus(domElem.find('.a')).should.be.true;
+        });
+
+        it('should returns false if context not contains focused DOM elem', function() {
+            dom.containsFocus(domElem.find('.b')).should.be.false;
         });
     });
 });

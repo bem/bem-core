@@ -37,7 +37,7 @@ provide({
      * @returns {boolean}
      */
     containsFocus : function(domElem) {
-        return this.containsDomElem(domElem, this.getFocusedDomElem());
+        return this.contains(domElem, this.getFocused());
     },
 
     /**
