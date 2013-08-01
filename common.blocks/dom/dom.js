@@ -47,6 +47,9 @@ provide({
     */
     isFocusable : function(domElem) {
         var domNode = domElem[0];
+
+        if(!domNode) return false;
+
         switch(domNode.tagName.toLowerCase()) {
             case 'iframe':
                 return true;
@@ -69,6 +72,9 @@ provide({
     */
     isEditable : function(domElem) {
         var domNode = domElem[0];
+
+        if(!domNode) return false;
+
         switch(domNode.tagName.toLowerCase()) {
             case 'input':
                 var type = domNode.type;
