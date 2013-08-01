@@ -372,6 +372,56 @@ describe('i-bem__dom', function() {
             delete DOM.blocks['block'];
         });
     });
+
+    describe('containsDomElem', function() {
+        var domElem, block, block2;
+        beforeEach(function() {
+            DOM.decl('block');
+            DOM.decl('block2');
+
+            domElem = $(BEMHTML.apply([
+                {
+                    block : 'block',
+                    js : { id: '1' },
+                    content : [
+                        { elem : 'e1' },
+                        { elem : 'e2' }
+                    ]
+                },
+                {
+                    block : 'block',
+                    js : { id: '1' },
+                    content : [
+                        { elem : 'e1' },
+                        { elem : 'e2', content : { elem : 'e2-1' } }
+                    ]
+                },
+                {
+                    block : 'block2'
+                }
+            ]));
+
+            DOM.init(domElem);
+            block = domElem.filter('.block').bem('block');
+            block2 = domElem.filter('.block2').bem('block2');
+        });
+
+        afterEach(function() {
+            DOM.destruct(domElem);
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block2'];
+        });
+
+        it('should properly checks for nested dom elem', function() {
+            block.containsDomElem(block.elem('e2-1')).should.be.true;
+            block.containsDomElem(block2.domElem).should.be.false;
+        });
+
+        it('should properly checks for nested dom elem with given context', function() {
+            block.containsDomElem(block.elem('e1'), block.elem('e2-1')).should.be.false;
+            block.containsDomElem(block.elem('e2'), block.elem('e2-1')).should.be.true;
+        });
+    });
 });
 
 provide();

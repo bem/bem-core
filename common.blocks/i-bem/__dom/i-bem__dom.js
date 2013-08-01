@@ -834,14 +834,23 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
     /**
      * Checks whether a DOM element is in a block
      * @protected
+     * @param {jQuery} [ctx=this.domElem] Element where check is being performed
      * @param {jQuery} domElem DOM element
      * @returns {Boolean}
      */
-    containsDomElem : function(domElem) {
-        var res = false;
+    containsDomElem : function(ctx, domElem) {
+        if(arguments.length === 1) {
+            domElem = ctx;
+            ctx = this.domElem;
+        }
 
-        this.domElem.each(function() {
-            return !(res = domElem.parents().andSelf().index(this) > -1);
+        var res = false,
+            domNode = domElem[0];
+        ctx.each(function() {
+            var node = domNode;
+            do {
+                if(node === this) return !(res = true);
+            } while(node = node.parentNode);
         });
 
         return res;
