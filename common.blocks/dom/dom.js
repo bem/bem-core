@@ -54,11 +54,29 @@ provide({
             case 'button':
             case 'textarea':
             case 'select':
-                return !domNode.hasAttribute('disabled');
+                return !domNode.disabled;
             case 'a':
-                return domNode.hasAttribute('href');
+                return !!domNode.href;
             default:
                 return domNode.hasAttribute('tabindex');
+        }
+    },
+
+    /**
+    * Returns `true` if domElem is intended to edit text
+    * @param {jQuery} domElem
+    * @returns {Boolean}
+    */
+    isEditable : function(domElem) {
+        var domNode = domElem[0];
+        switch(domNode.tagName.toLowerCase()) {
+            case 'input':
+                var type = domNode.type;
+                return (type === 'text' || type === 'password') && !domNode.disabled;
+            case 'textarea':
+                return !domNode.disabled;
+            default:
+                return domNode.getAttribute('contenteditable') === 'true';
         }
     }
 });
