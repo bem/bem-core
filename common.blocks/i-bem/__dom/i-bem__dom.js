@@ -1,7 +1,7 @@
 modules.define(
     'i-bem__dom',
-    ['i-bem', 'i-bem__internal', 'identify', 'objects', 'functions', 'jquery'],
-    function(provide, BEM, INTERNAL, identify, objects, functions, $) {
+    ['i-bem', 'i-bem__internal', 'identify', 'objects', 'functions', 'jquery', 'dom'],
+    function(provide, BEM, INTERNAL, identify, objects, functions, $, dom) {
 
 var undefined,
     win = $(window),
@@ -844,16 +844,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
             ctx = this.domElem;
         }
 
-        var res = false,
-            domNode = domElem[0];
-        ctx.each(function() {
-            var node = domNode;
-            do {
-                if(node === this) return !(res = true);
-            } while(node = node.parentNode);
-        });
-
-        return res;
+        return dom.contains(ctx, domElem);
     },
 
     /**

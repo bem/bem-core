@@ -3,6 +3,7 @@
         'jquery',
         'objects',
         'functions',
+        'dom',
         { block: 'i-bem', elems: ['internal'] },
         { block: 'ecma', elem: 'string' }
     ]
