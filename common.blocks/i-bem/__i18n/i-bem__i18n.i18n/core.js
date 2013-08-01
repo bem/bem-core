@@ -1,12 +1,7 @@
 /* jshint browser:true, node:true */
-/* global BEM:true */
+/* global BEM, i18n */
 if (typeof oninit === 'undefined') oninit = function(cb) { return cb() };
 oninit(function() {
-
-// XXX: Support tanker-like syntax of keys in `i-bem__i18n`
-// i18n['prj']['keyset']['key'](params);
-// FIXME: May not work, because of vars hoisting
-var i18n = i18n || {};
 
 (function(global_, bem_, undefined) {
 
@@ -15,25 +10,38 @@ if(typeof bem_.I18N === 'function' && bem_.I18N._proto) {
     return bem_.I18N;
 }
 
-var cache = {},
-    /** {String[]} A stack used for restoring context with dynamic keysets */
-    stack = [],
-    MOD_DELIM = '_',
+/**
+ * Support tanker-like syntax of keys in `i-bem__i18n`
+ * @example
+ *  i18n['prj']['keyset']['key'](params)
+ */
+if(typeof i18n === 'undefined') {
+    /* jshint -W020 */
+    i18n = {};
+    /* jshint +W020 */
+}
+
+/* jshint -W020 */
+BEM = bem_;
+/* jshint +W020 */
+
+var MOD_DELIM = '_',
     ELEM_DELIM = '__',
-    DEFAULT_LANG = 'ru';
+    DEFAULT_LANG = 'ru',
+    cache = {},
+    // {String[]} A stack used for restoring context of dynamic keysets
+    stack = [],
+    log = (console && console.log)? console.log : function() {};
 
 function bemName(decl) {
-
     typeof decl === 'string' && (decl = { block: decl });
 
     return decl.block +
         (decl.elem ? (ELEM_DELIM + decl.elem) : '') +
         (decl.modName ? MOD_DELIM + decl.modName + MOD_DELIM + decl.modVal : '');
-
 }
 
 function bemParse(name) {
-
     var bemitem = {};
 
     name.split(ELEM_DELIM).forEach(function(item, i) {
@@ -45,12 +53,10 @@ function bemParse(name) {
     });
 
     return bemitem;
-
 }
 
 function _pushStack(name) {
-    if(!name)
-        return false;
+    if(!name) return false;
     return stack.push(name);
 }
 
@@ -116,34 +122,33 @@ _i18n.prototype = {
     },
 
     val : function(params, ctx) {
-        var value = cache[this._lang] && cache[this._lang][this._keyset];
+        var value = cache[this._lang] && cache[this._lang][this._keyset],
+            debugString = 'keyset: ' + this._keyset + ' key: ' + this._key + ' (lang: ' + this._lang + ')';
+
         if(!value) {
-            console &&
-                console.log &&
-                console.log("[BEM.I18N, Error] keyset: " +
-                    this._keyset + " key: " + this._key + " (lang: " + this._lang + ")");
+            log('[I18N_NO_KEYSET] %s', debugString);
             return '';
         }
 
         value = value[this._key];
-        if(!value)
+
+        var valtype = typeof value;
+        if(valtype === 'undefined') {
+            log("[I18N_NO_VALUE] %s", debugString);
             return '';
-
-        try{
-            if(typeof value === 'string') {
-                return value;
-            }
-
-            ctx || (ctx = this);
-
-            return value.call(ctx, params);
-        } catch(e) {
-            throw new Error("[BEM.I18N Error] keyset: " +
-                this._keyset + " key: " + this._key + " (lang: " + this._lang + ")");
         }
+
+        if(valtype === 'string') {
+            return value;
+        }
+
+        ctx || (ctx = this);
+
+        // TODO: try/catch
+        return value.call(ctx, params);
     },
 
-    _c : function() { return cache; }
+    _cache : function() { return cache; }
 
 };
 
@@ -213,19 +218,23 @@ bem_.I18N = (function(base) {
      *
      * @param {String|Object} bemitem
      * @param {Object} keysets
-     * @param {Object} [declProps] declaration params
+     * @param {Object} [params] declaration params
+     * @returns {BEM.I18N}
      */
-    klass.decl = function(bemitem, keysets, declProps) {
-        var proto = this._proto, k;
+    klass.decl = function(bemitem, keysets, params) {
+        var proto = this._proto,
+            k;
 
-        declProps || (declProps = {});
-        declProps.lang && proto.lang(declProps.lang);
+        params || (params = {});
+        params.lang && proto.lang(params.lang);
 
         proto.keyset(bemitem);
 
-        for(k in keysets)
-            keysets.hasOwnProperty(k) &&
+        for(k in keysets) {
+            if(keysets.hasOwnProperty(k)) {
                 proto.key(k).decl(keysets[k]);
+            }
+        }
 
         return this;
     };
@@ -234,7 +243,7 @@ bem_.I18N = (function(base) {
      * Get/set current language
      *
      * @param {String} [lang]
-     * @return {String}
+     * @returns {String}
      */
     klass.lang = function(lang) {
         typeof lang !== 'undefined' && (this._lang = lang);
@@ -247,9 +256,7 @@ bem_.I18N = (function(base) {
 
 }(new _i18n()));
 
-/** Global */
-BEM = bem_;
-
 })(this, typeof BEM === 'undefined' ? {} : BEM);
 
 }); // oninit
+
