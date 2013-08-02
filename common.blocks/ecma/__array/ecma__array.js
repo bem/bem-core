@@ -9,7 +9,7 @@ var ptp = Array.prototype,
          * @param {Number} [fromIdx] Starting from index (length - 1 - fromIdx, if fromIdx < 0)
          * @returns {Number} Element index or -1, if not found
          */
-        indexOf : function(item, fromIdx) {
+        indexOf: function(item, fromIdx) {
             fromIdx = +(fromIdx || 0);
 
             var t = this, len = t.length;
@@ -34,7 +34,7 @@ var ptp = Array.prototype,
          * @param {Function} callback Called for each element
          * @param {Object} [ctx=null] Callback context
          */
-        forEach : function(callback, ctx) {
+        forEach: function(callback, ctx) {
             var i = -1, t = this, len = t.length;
             while(++i < len) i in t &&
                 (ctx? callback.call(ctx, t[i], i, t) : callback(t[i], i, t));
@@ -46,7 +46,7 @@ var ptp = Array.prototype,
          * @param {Object} [ctx=null] Callback context
          * @returns {Array}
          */
-        map : function(callback, ctx) {
+        map: function(callback, ctx) {
             var i = -1, t = this, len = t.length,
                 res = new Array(len);
 
@@ -62,7 +62,7 @@ var ptp = Array.prototype,
          * @param {Object} [ctx] Callback context
          * @returns {Array}
          */
-        filter : function(callback, ctx) {
+        filter: function(callback, ctx) {
             var i = -1, t = this, len = t.length,
                 res = [];
 
@@ -78,7 +78,7 @@ var ptp = Array.prototype,
          * @param {Object} [initialVal] Initial value of the accumulator
          * @returns {Object} Accumulator
          */
-        reduce : function(callback, initialVal) {
+        reduce: function(callback, initialVal) {
             var i = -1, t = this, len = t.length,
                 res;
 
@@ -89,8 +89,7 @@ var ptp = Array.prototype,
                         break;
                     }
                 }
-            }
-            else {
+            } else {
                 res = initialVal;
             }
 
@@ -106,11 +105,11 @@ var ptp = Array.prototype,
          * @param {Object} [ctx=this] Callback context
          * @returns {Boolean}
          */
-        some : function(callback, ctx) {
+        some: function(callback, ctx) {
             var i = -1, t = this, len = t.length;
 
             while(++i < len)
-                if(i in t && (ctx ? callback.call(ctx, t[i], i, t) : callback(t[i], i, t)))
+                if(i in t && (ctx? callback.call(ctx, t[i], i, t) : callback(t[i], i, t)))
                     return true;
 
             return false;
@@ -122,11 +121,11 @@ var ptp = Array.prototype,
          * @param {Object} [ctx=this] Context of the callback call
          * @returns {Boolean}
          */
-        every : function(callback, ctx) {
+        every: function(callback, ctx) {
             var i = -1, t = this, len = t.length;
 
             while(++i < len)
-                if(i in t && !(ctx ? callback.call(ctx, t[i], i, t) : callback(t[i], i, t)))
+                if(i in t && !(ctx? callback.call(ctx, t[i], i, t) : callback(t[i], i, t)))
                     return false;
 
             return true;

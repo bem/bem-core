@@ -24,6 +24,7 @@ var global = this.global,
         }
     };
 
+    /* global process */
     if(typeof process === 'object' && process.nextTick) { // nodejs
         return provide(function(fn) {
             enqueueFn(fn) && process.nextTick(callFns);
@@ -48,7 +49,7 @@ var global = this.global,
         }
 
         if(isPostMessageAsync) {
-            var msg = '__nextTick' + +new Date,
+            var msg = '__nextTick' + (+new Date),
                 onMessage = function(e) {
                     if(e.data === msg) {
                         e.stopPropagation && e.stopPropagation();
@@ -84,6 +85,6 @@ var global = this.global,
     }
 
     provide(function(fn) { // old browsers
-        enqueueFn(fn) && setTimeout(callFns, 0);
+        enqueueFn(fn) && global.setTimeout(callFns, 0);
     });
 });

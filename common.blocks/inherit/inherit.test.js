@@ -23,7 +23,7 @@ describe('inherit', function() {
         it('should be instance of constructor return value', function() {
             var ClsA = inherit({}),
                 ClsB = inherit({
-                    __constructor : function() {
+                    __constructor: function() {
                         return new ClsA();
                     }
                 }),
@@ -35,7 +35,7 @@ describe('inherit', function() {
 
         it('instance should have properties from constructor', function() {
             var Cls = inherit({
-                    __constructor : function() {
+                    __constructor: function() {
                         this._p1 = 'v1';
                         this._p2 = 'v2';
                     }
@@ -55,20 +55,20 @@ describe('inherit', function() {
 
         it('should override methods of base class', function() {
             var ClsA = inherit({
-                    method1 : function() {
+                    method1: function() {
                         return 'A1';
                     },
-                    method2 : function() {
+                    method2: function() {
                         return 'A2';
                     }
                 }),
                 ClsB = inherit(ClsA, {
-                    method1 : function() {
+                    method1: function() {
                         return 'B1';
                     }
                 }),
                 ClsC = inherit(ClsB, {
-                    method2 : function() {
+                    method2: function() {
                         return 'C2';
                     }
                 }),
@@ -80,24 +80,24 @@ describe('inherit', function() {
 
         it('__base should call methods of base class', function() {
             var ClsA = inherit({
-                    method1 : function() {
+                    method1: function() {
                         return 'A1';
                     },
-                    method2 : function() {
+                    method2: function() {
                         return 'A2';
                     }
                 }),
                 ClsB = inherit(ClsA, {
-                    method1 : function() {
+                    method1: function() {
                         return this.__base() + 'B1';
                     }
                 }),
                 ClsC = inherit(ClsB, {
-                    method1 : function() {
+                    method1: function() {
                         return this.__base() + 'C1';
                     },
 
-                    method2 : function() {
+                    method2: function() {
                         return this.__base() + 'C2';
                     }
                 }),
@@ -111,11 +111,11 @@ describe('inherit', function() {
     describe('static', function() {
         it('properties should be assigned', function() {
             var Cls = inherit({}, {
-                method : function() {
+                method: function() {
                     return 'method';
                 },
 
-                prop : 'val'
+                prop: 'val'
             });
 
             Cls.method().should.be.equal('method');
@@ -124,20 +124,20 @@ describe('inherit', function() {
 
         it('properties should override properties of base class', function() {
             var ClsA = inherit({}, {
-                    method1 : function() {
+                    method1: function() {
                         return 'A1';
                     },
-                    method2 : function() {
+                    method2: function() {
                         return 'A2';
                     }
                 }),
                 ClsB = inherit(ClsA, {}, {
-                    method1 : function() {
+                    method1: function() {
                         return 'B1';
                     }
                 }),
                 ClsC = inherit(ClsB, {}, {
-                    method2 : function() {
+                    method2: function() {
                         return 'C2';
                     }
                 });
@@ -148,24 +148,24 @@ describe('inherit', function() {
 
         it('__base should call methods of base class', function() {
             var ClsA = inherit({}, {
-                    method1 : function() {
+                    method1: function() {
                         return 'A1';
                     },
-                    method2 : function() {
+                    method2: function() {
                         return 'A2';
                     }
                 }),
                 ClsB = inherit(ClsA, {}, {
-                    method1 : function() {
+                    method1: function() {
                         return this.__base() + 'B1';
                     }
                 }),
                 ClsC = inherit(ClsB, {}, {
-                    method1 : function() {
+                    method1: function() {
                         return this.__base() + 'C1';
                     },
 
-                    method2 : function() {
+                    method2: function() {
                         return this.__base() + 'C2';
                     }
                 });
@@ -178,17 +178,17 @@ describe('inherit', function() {
     describe('mixin', function() {
         it('properties should be assigned', function() {
             var ClsA = inherit({
-                    method : function() {
+                    method: function() {
                         return 'method';
                     }
                 }),
                 Mix1 = inherit({
-                    method1 : function() {
+                    method1: function() {
                         return 'mix1method';
                     }
                 }),
                 Mix2 = inherit({
-                    method2 : function() {
+                    method2: function() {
                         return 'mix2method';
                     }
                 }),
@@ -202,17 +202,17 @@ describe('inherit', function() {
 
         it('static properties should be assigned', function() {
             var ClsA = inherit({}, {
-                    method : function() {
+                    method: function() {
                         return 'method';
                     }
                 }),
                 Mix1 = inherit({}, {
-                    method1 : function() {
+                    method1: function() {
                         return 'mix1method';
                     }
                 }),
                 Mix2 = inherit({}, {
-                    method2 : function() {
+                    method2: function() {
                         return 'mix2method';
                     }
                 }),
@@ -225,22 +225,22 @@ describe('inherit', function() {
 
         it('__base should call methods of previous object', function() {
             var ClsA = inherit({
-                    method : function() {
+                    method: function() {
                         return 'methodA';
                     }
                 }),
                 Mix1 = inherit({
-                    method : function() {
+                    method: function() {
                         return this.__base() + '_mix1method';
                     }
                 }),
                 Mix2 = inherit({
-                    method : function() {
+                    method: function() {
                         return this.__base() + '_mix2method';
                     }
                 }),
                 ClsB = inherit([ClsA, Mix1, Mix2], {
-                    method : function() {
+                    method: function() {
                         return this.__base() + '_methodB';
                     }
                 }),
@@ -251,22 +251,22 @@ describe('inherit', function() {
 
         it('__base in static methods should call methods of previous object', function() {
             var ClsA = inherit(null, {
-                    method : function() {
+                    method: function() {
                         return 'methodA';
                     }
                 }),
                 Mix1 = inherit(null, {
-                    method : function() {
+                    method: function() {
                         return this.__base() + '_mix1method';
                     }
                 }),
                 Mix2 = inherit(null, {
-                    method : function() {
+                    method: function() {
                         return this.__base() + '_mix2method';
                     }
                 }),
                 ClsB = inherit([ClsA, Mix1, Mix2], null, {
-                    method : function() {
+                    method: function() {
                         return this.__base() + '_methodB';
                     }
                 });

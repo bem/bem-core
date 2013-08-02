@@ -41,7 +41,7 @@ var hasIntrospection = (function(){'_';}).toString().indexOf('_') > -1,
     },
     noOp = function() {},
     needCheckProps = true,
-    testPropObj = { toString : '' };
+    testPropObj = { toString: '' };
 
 for(var i in testPropObj) { // fucking ie hasn't toString, valueOf in for
     testPropObj.hasOwnProperty(i) && (needCheckProps = false);
@@ -82,8 +82,7 @@ function override(base, res, add) {
                     return res;
                 };
             })(name, prop);
-        }
-        else {
+        } else {
             res[name] = prop;
         }
     }
@@ -140,9 +139,9 @@ inherit.self = function() {
         withMixins = isArray(args[0]),
         base = withMixins? applyMixins(args[0], args[0][0]) : args[0],
         props = args[1],
-        staticProps = args[2];
+        staticProps = args[2],
+        basePtp = base.prototype;
 
-    var basePtp = base.prototype;
     props && override(basePtp, basePtp, props);
     staticProps && override(base, base, staticProps);
     

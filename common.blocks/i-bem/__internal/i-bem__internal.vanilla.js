@@ -8,7 +8,7 @@ modules.define('i-bem__internal', function(provide) {
  * @const
  * @type String
  */
-var undefined,
+var undef,
     MOD_DELIM = '_',
 
 /**
@@ -36,18 +36,18 @@ function buildBlockClass(name, modName, modVal, buffer) {
 }
 
 function buildElemClass(block, name, modName, modVal, buffer) {
-    buildBlockClass(block, undefined, undefined, buffer);
+    buildBlockClass(block, undef, undef, buffer);
     buffer.push(ELEM_DELIM, name);
     modVal && buildModPostfix(modName, modVal, buffer);
 }
 
 provide({
-    NAME_PATTERN : NAME_PATTERN,
+    NAME_PATTERN: NAME_PATTERN,
 
-    MOD_DELIM : MOD_DELIM,
-    ELEM_DELIM : ELEM_DELIM,
+    MOD_DELIM: MOD_DELIM,
+    ELEM_DELIM: ELEM_DELIM,
 
-    buildModPostfix : function(modName, modVal, buffer) {
+    buildModPostfix: function(modName, modVal, buffer) {
         var res = buffer || [];
         buildModPostfix(modName, modVal, res);
         return buffer? res : res.join('');
@@ -63,7 +63,7 @@ provide({
      * @param {Array} [buffer] Buffer
      * @returns {String|Array} Class or buffer string (depending on whether the buffer parameter is present)
      */
-    buildClass : function(block, elem, modName, modVal, buffer) {
+    buildClass: function(block, elem, modName, modVal, buffer) {
         var typeOfModName = typeof modName;
         if(typeOfModName === 'string' || typeOfModName === 'boolean') {
             var typeOfModVal = typeof modVal;
@@ -71,14 +71,14 @@ provide({
                 buffer = modVal;
                 modVal = modName;
                 modName = elem;
-                elem = undefined;
+                elem = undef;
             }
         } else if(typeOfModName !== 'undefined') {
             buffer = modName;
-            modName = undefined;
+            modName = undef;
         } else if(elem && typeof elem !== 'string') {
             buffer = elem;
-            elem = undefined;
+            elem = undef;
         }
 
         if(!(elem || modName || buffer)) { // оптимизация для самого простого случая
@@ -103,18 +103,18 @@ provide({
      * @param {Array} [buffer] Buffer
      * @returns {String|Array} Class or buffer string (depending on whether the buffer parameter is present)
      */
-    buildClasses : function(block, elem, mods, buffer) {
-        if(elem && typeof elem != 'string') {
+    buildClasses: function(block, elem, mods, buffer) {
+        if(elem && typeof elem !== 'string') {
             buffer = mods;
             mods = elem;
-            elem = undefined;
+            elem = undef;
         }
 
         var res = buffer || [];
 
         elem?
-            buildElemClass(block, elem, undefined, undefined, res) :
-            buildBlockClass(block, undefined, undefined, res);
+            buildElemClass(block, elem, undef, undef, res) :
+            buildBlockClass(block, undef, undef, res);
 
         if(mods) {
             for(var modName in mods) {

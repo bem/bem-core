@@ -1,3 +1,3 @@
 ({
-    shouldDeps : { elem : 'uri' }
+    shouldDeps: { elem: 'uri' }
 })
