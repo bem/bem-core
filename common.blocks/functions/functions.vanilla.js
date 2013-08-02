@@ -6,11 +6,11 @@ var bindCall = function(fn) {
     toStr = bindCall(Object.prototype.toString);
 
 provide({
-    isFunction : function(obj) {
+    isFunction: function(obj) {
         return toStr(obj) === '[object Function]';
     },
     
-    noop : function() {}
+    noop: function() {}
 });
 
 });

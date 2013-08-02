@@ -1,4 +1,4 @@
-modules.define('test', ['identify'], function(provide, identify) {
+modules.define('test', ['identify', 'chai'], function(provide, identify, chai) {
 
 var should = chai.should();
 
@@ -17,7 +17,7 @@ describe('identify', function() {
     });
 
     it('should use "uniqueID" property if exists', function() {
-        var obj = { uniqueID : 'id007' };
+        var obj = { uniqueID: 'id007' };
         identify(obj).should.be.equal('id007');
     });
 

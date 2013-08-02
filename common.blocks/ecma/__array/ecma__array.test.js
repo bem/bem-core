@@ -3,13 +3,13 @@ modules.define('test', ['sinon'], function(provide, sinon) {
 describe('ecma__array', function() {
     describe('indexOf', function() {
         [
-            { data : [1, 2, 3], args : [1], res : 0 },
-            { data : [1, 2, 3], args : [4], res : -1 },
-            { data : [1, 2, 3, 2], args : [2, 2], res : 3 },
-            { data : [1, 2, 3, 2], args : [1, 2], res : -1 },
-            { data : [1, 2, 3, 2], args : [2, -1], res : 3 },
-            { data : [1, 2, 3, 2], args : [2, -10], res : 1 },
-            { data : (function() { var res = [1,,,2]; res[2] = undefined; return res; })(), args : [undefined], res : 2 }
+            { data: [1, 2, 3], args: [1], res: 0 },
+            { data: [1, 2, 3], args: [4], res: -1 },
+            { data: [1, 2, 3, 2], args: [2, 2], res: 3 },
+            { data: [1, 2, 3, 2], args: [1, 2], res: -1 },
+            { data: [1, 2, 3, 2], args: [2, -1], res: 3 },
+            { data: [1, 2, 3, 2], args: [2, -10], res: 1 },
+            { data: (function() { var res = [1, , , 2]; res[2] = undefined; return res; })(), args: [undefined], res: 2 }
         ].forEach(function(test) {
             it('should be correct result', function() {
                 test.data.indexOf.apply(test.data, test.args).should.to.equal(test.res);
@@ -142,10 +142,10 @@ describe('ecma__array', function() {
             return acc + item;
         };
         [
-            { data : [1, 2, 3], args : [fn], res : 6 },
-            { data : [1, 2, 3], args : [fn, 4], res : 10 },
-            { data : [], args : [fn, 1], res : 1 },
-            { data : (function() { var a = []; a[1] = 1; a[2] = 2; a[3] = 3; return a; })(), args : [fn], res : 6 }
+            { data: [1, 2, 3], args: [fn], res: 6 },
+            { data: [1, 2, 3], args: [fn, 4], res: 10 },
+            { data: [], args: [fn, 1], res: 1 },
+            { data: (function() { var a = []; a[1] = 1; a[2] = 2; a[3] = 3; return a; })(), args: [fn], res: 6 }
         ].forEach(function(test) {
             it('should be correct result', function() {
                 test.data.reduce.apply(test.data, test.args).should.to.equal(test.res);
@@ -156,6 +156,7 @@ describe('ecma__array', function() {
     describe('isArray', function() {
         it('should array\'s type to be Array', function() {
             Array.isArray([]).should.to.be.ok;
+            /* jshint -W009 */
             Array.isArray(new Array()).should.to.be.ok;
         });
 
@@ -258,15 +259,3 @@ describe('ecma__array', function() {
 provide();
 
 });
-
-
-
-
-
-
-
-
-
-
-
-

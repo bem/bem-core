@@ -12,15 +12,15 @@
 modules.define('jquery', function(provide, $) {
 
 var leftClick = $.event.special.pointerclick = {
-    setup : function() {
+    setup: function() {
         $(this).on('click', leftClick.handler);
     },
 
-    teardown : function() {
+    teardown: function() {
         $(this).off('click', leftClick.handler);
     },
 
-    handler : function(e) {
+    handler: function(e) {
         if(!e.button) {
             e.type = 'pointerclick';
             $.event.dispatch.apply(this, arguments);

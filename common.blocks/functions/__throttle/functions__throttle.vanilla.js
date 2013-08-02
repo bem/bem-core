@@ -1,11 +1,12 @@
 modules.define('functions__throttle', function(provide) {
 
+var global = this.global;
+
 provide(function(fn, timeout, invokeAsap, ctx) {
     var typeofInvokeAsap = typeof invokeAsap;
     if(typeofInvokeAsap === 'undefined') {
         invokeAsap = true;
-    }
-    else if(arguments.length === 3 && typeofInvokeAsap !== 'boolean') {
+    } else if(arguments.length === 3 && typeofInvokeAsap !== 'boolean') {
         ctx = invokeAsap;
         invokeAsap = true;
     }
@@ -15,9 +16,8 @@ provide(function(fn, timeout, invokeAsap, ctx) {
             if(needInvoke) {
                 fn.apply(ctx, args);
                 needInvoke = false;
-                timer = setTimeout(wrapper, timeout);
-            }
-            else {
+                timer = global.setTimeout(wrapper, timeout);
+            } else {
                 timer = null;
             }
         };
@@ -30,7 +30,7 @@ provide(function(fn, timeout, invokeAsap, ctx) {
         if(!timer) {
             invokeAsap?
                 wrapper() :
-                timer = setTimeout(wrapper, timeout);
+                timer = global.setTimeout(wrapper, timeout);
         }
     };
 });

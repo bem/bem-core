@@ -1,3 +1,3 @@
 ({
-    shouldDeps : 'jquery'
+    shouldDeps: 'jquery'
 })

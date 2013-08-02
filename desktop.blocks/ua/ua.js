@@ -10,8 +10,8 @@ var ua = navigator.userAgent.toLowerCase(),
 		ua.indexOf('compatible') < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) ||
 		[],
     matched = {
-		browser : match[1] || '',
-		version : match[2] || '0'
+		browser: match[1] || '',
+		version: match[2] || '0'
     },
 	browser = {};
 
@@ -22,8 +22,7 @@ if(matched.browser) {
 
 if(browser.chrome) {
     browser.webkit = true;
-}
-else if(browser.webkit) {
+} else if(browser.webkit) {
     browser.safari = true;
 }
 
