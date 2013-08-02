@@ -66,7 +66,7 @@ provide({
     },
 
     /**
-    * Returns `true` if domElem is intended to edit text
+    * Checks whether a domElem is intended to edit text
     * @param {jQuery} domElem
     * @returns {Boolean}
     */
@@ -78,13 +78,13 @@ provide({
         switch(domNode.tagName.toLowerCase()) {
             case 'input':
                 var type = domNode.type;
-                return (type === 'text' || type === 'password') && !domNode.disabled;
+                return (type === 'text' || type === 'password') && !domNode.disabled && !domNode.readOnly;
 
             case 'textarea':
-                return !domNode.disabled;
+                return !domNode.disabled && !domNode.readOnly;
 
             default:
-                return domNode.getAttribute('contenteditable') === 'true';
+                return domNode.contentEditable === 'true';
         }
     }
 });

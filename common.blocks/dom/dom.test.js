@@ -90,6 +90,33 @@ describe('dom', function() {
             dom.containsFocus(domElem.find('.b')).should.be.false;
         });
     });
+
+    describe('isEditable', function() {
+        it('should returns true if given DOM elem is text or password input', function() {
+            dom.isEditable($('<input type="text"/>')).should.be.true;
+            dom.isEditable($('<input type="password"/>')).should.be.true;
+            dom.isEditable($('<textarea/>')).should.be.true;
+            dom.isEditable($('<input type="radio"/>')).should.be.false;
+            dom.isEditable($('<input type="checkbox"/>')).should.be.false;
+            dom.isEditable($('<div/>')).should.be.false;
+        });
+
+        it('should returns false if given input is readonly', function() {
+            dom.isEditable($('<input type="text" readonly="readonly"/>')).should.be.false;
+            dom.isEditable($('<texarea readonly="readonly"/>')).should.be.false;
+        });
+
+        it('should returns false if given input is disabled', function() {
+            dom.isEditable($('<input type="text" disabled="disabled"/>')).should.be.false;
+            dom.isEditable($('<texarea disabled="disabled"/>')).should.be.false;
+        });
+
+        it('should returns true for contenteditable DOM elems', function() {
+            dom.isEditable($('<div contenteditable="true"/>')).should.be.true;
+            dom.isEditable($('<div contenteditable="false"/>')).should.be.false;
+            dom.isEditable($('<div contenteditable="yet-another-val"/>')).should.be.false;
+        });
+    });
 });
 
 provide();
