@@ -2,7 +2,7 @@ modules.define('dom', ['jquery'], function (provide, $) {
 
 provide({
     /**
-     * Checks whether a DOM element is in a context
+     * Checks whether a DOM elem is in a context
      * @param {jQuery} ctx DOM elem where check is being performed
      * @param {jQuery} domElem DOM elem to check
      * @returns {Boolean}
@@ -41,7 +41,7 @@ provide({
     },
 
     /**
-    * Returns `true` if browser currently can set focus on DOM node
+    * Checks whether a browser currently can set focus on DOM elem
     * @param {jQuery} domElem
     * @returns {Boolean}
     */
