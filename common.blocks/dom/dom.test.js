@@ -86,8 +86,16 @@ describe('dom', function() {
             dom.containsFocus(domElem.find('.a')).should.be.true;
         });
 
+        it('should returns true if context self-focused', function() {
+            dom.containsFocus(domElem.find('.x')).should.be.true;
+        });
+
         it('should returns false if context not contains focused DOM elem', function() {
             dom.containsFocus(domElem.find('.b')).should.be.false;
+        });
+
+        it('should returns false if context empty', function() {
+            dom.containsFocus(domElem.find('.__no-exist')).should.be.false;
         });
     });
 
