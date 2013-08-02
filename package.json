@@ -21,7 +21,11 @@
   },
   "devDependencies": {
     "bem": "~0.5.29",
-    "mocha": "~1.9.0"
+    "mocha": "~1.9.0",
+    "jshint": "2.1.8",
+    "jshint-groups": "0.5.1",
+    "jscs": "1.0.0",
+    "git-hooks": "0.0.3"
   },
   "scripts": {
     "test": "bem make libs && bem make sets && mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/test-*.js"
