@@ -33,6 +33,37 @@ describe('dom', function() {
         });
     });
 
+    describe('isFocusable', function() {
+        it('should returns true if given DOM elem is iframe, input, button, textarea or select', function() {
+            dom.isFocusable($('<iframe/>')).should.be.true;
+            dom.isFocusable($('<input/>')).should.be.true;
+            dom.isFocusable($('<button/>')).should.be.true;
+            dom.isFocusable($('<textarea/>')).should.be.true;
+            dom.isFocusable($('<select/>')).should.be.true;
+        });
+
+        it('should returns false if given DOM elem is disabled', function() {
+            dom.isFocusable($('<input disabled="disabled"/>')).should.be.false;
+            dom.isFocusable($('<button disabled="disabled"/>')).should.be.false;
+            dom.isFocusable($('<textarea disabled="disabled"/>')).should.be.false;
+            dom.isFocusable($('<select disabled="disabled"/>')).should.be.false;
+        });
+
+        it('should returns true if given DOM elem is link with href', function() {
+            dom.isFocusable($('<a href="/"/>')).should.be.true;
+            dom.isFocusable($('<a/>')).should.be.false;
+        });
+
+        it('should returns true if given DOM elem has tabindex', function() {
+            dom.isFocusable($('<span tabindex="4"/>')).should.be.true;
+            dom.isFocusable($('<span/>')).should.be.false;
+        });
+
+        it('should returns false if given DOM elem is empty', function() {
+            dom.isFocusable($('.__no-exist')).should.be.false;
+        });
+    });
+
     describe('containsFocus', function() {
         var domElem;
         beforeEach(function() {
