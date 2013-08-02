@@ -1,5 +1,5 @@
 var BEM = require('bem'),
-    environ = require('../environ');
+    environ = require('bem-environ');
 
 exports.baseLevelPath = require.resolve('./blocks');
 
