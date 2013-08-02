@@ -18,7 +18,7 @@ var undef,
     },
 
     Event = /** @lends Event.prototype */ inherit({
-        __constructor : function(type, target) {
+        __constructor: function(type, target) {
             this.type = type;
             this.target = target;
             this.result = undef;
@@ -28,19 +28,19 @@ var undef,
             this._isPropagationStopped = false;
         },
 
-        preventDefault : function() {
+        preventDefault: function() {
             this._isDefaultPrevented = true;
         },
 
-        isDefaultPrevented : function() {
+        isDefaultPrevented: function() {
             return this._isDefaultPrevented;
         },
 
-        stopPropagation : function() {
+        stopPropagation: function() {
             this._isPropagationStopped = true;
         },
 
-        isPropagationStopped : function() {
+        isPropagationStopped: function() {
             return this._isPropagationStopped;
         }
     }),
@@ -54,7 +54,7 @@ var undef,
          * @param {Object} [ctx] Handler context
          * @returns {this}
          */
-        on : function(e, data, fn, ctx, _special) {
+        on: function(e, data, fn, ctx, _special) {
             if(typeof e === 'string') {
                 if(typeof data === 'function') {
                     ctx = fn;
@@ -69,10 +69,10 @@ var undef,
                     eventStorage;
 
                 while(eventType = eventTypes[i++]) {
-                    eventStorage = storage[eventType] || (storage[eventType] = { ids : {}, list : {}});
+                    eventStorage = storage[eventType] || (storage[eventType] = { ids: {}, list: {} });
                     if(!(id in eventStorage.ids)) {
                         list = eventStorage.list;
-                        item = { fn : fn, data : data, ctx : ctx, special : _special };
+                        item = { fn: fn, data: data, ctx: ctx, special: _special };
                         if(list.last) {
                             list.last.next = item;
                             item.prev = list.last;
@@ -91,8 +91,8 @@ var undef,
             return this;
         },
 
-        once : function(e, data, fn, ctx) {
-            return this.on(e, data, fn, ctx, { once : true });
+        once: function(e, data, fn, ctx) {
+            return this.on(e, data, fn, ctx, { once: true });
         },
 
         /**
@@ -102,7 +102,7 @@ var undef,
          * @param {Object} [ctx] Handler context
          * @returns {this}
          */
-        un : function(e, fn, ctx) {
+        un: function(e, fn, ctx) {
             if(typeof e === 'string' || typeof e === 'undefined') {
                 var storage = this[storageExpando];
                 if(storage) {
@@ -122,15 +122,13 @@ var undef,
 
                                         if(prev) {
                                             prev.next = next;
-                                        }
-                                        else if(item === list.first) {
+                                        } else if(item === list.first) {
                                             list.first = next;
                                         }
 
                                         if(next) {
                                             next.prev = prev;
-                                        }
-                                        else if(item === list.last) {
+                                        } else if(item === list.last) {
                                             list.last = prev;
                                         }
 
@@ -160,7 +158,7 @@ var undef,
          * @param {Object} [data] Additional data
          * @returns {this}
          */
-        emit : function(e, data) {
+        emit: function(e, data) {
             var storage = this[storageExpando],
                 eventInstantiated = false;
 
@@ -212,8 +210,8 @@ Emitter.trigger = Emitter.emit;
 Emitter.onFirst = Emitter.once;
 
 provide({
-    Emitter : inherit(Emitter, Emitter),
-    Event   : Event
+    Emitter: inherit(Emitter, Emitter),
+    Event: Event
 });
 
 });

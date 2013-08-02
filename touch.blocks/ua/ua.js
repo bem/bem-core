@@ -7,36 +7,36 @@ var win = window,
     device = {},
     match;
 
-if (match = ua.match(/Android\s+([\d.]+)/)) {
+if(match = ua.match(/Android\s+([\d.]+)/)) {
     platform.android = match[1];
-} else if (ua.match(/\sHTC[\s_].*AppleWebKit/)) {
+} else if(ua.match(/\sHTC[\s_].*AppleWebKit/)) {
     // фэйковый десктопный UA по умолчанию у некоторых HTC (например, HTC Sensation)
     platform.android = '2.3';
-} else if (match = ua.match(/iPhone\sOS\s([\d_]+)/)) {
+} else if(match = ua.match(/iPhone\sOS\s([\d_]+)/)) {
     platform.ios = match[1].replace(/_/g, '.');
     device.iphone = true;
-} else if (match = ua.match(/iPad.*OS\s([\d_]+)/)) {
+} else if(match = ua.match(/iPad.*OS\s([\d_]+)/)) {
     platform.ios = match[1].replace(/_/g, '.');
     device.ipad = true;
-} else if (match = ua.match(/Bada\/([\d.]+)/)) {
+} else if(match = ua.match(/Bada\/([\d.]+)/)) {
     platform.bada = match[1];
-} else if (match = ua.match(/Windows\sPhone.*\s([\d.]+)/)) {
+} else if(match = ua.match(/Windows\sPhone.*\s([\d.]+)/)) {
     platform.wp = match[1];
 } else {
     platform.other = true;
 }
 
 var browser = {};
-if (win.opera) {
+if(win.opera) {
     browser.opera = win.opera.version();
-} else if (match = ua.match(/\sCrMo\/([\d.]+)/)) {
+} else if(match = ua.match(/\sCrMo\/([\d.]+)/)) {
     browser.chrome = match[1];
 }
 
 var support = {},
     connection = navigator.connection;
 
-if (connection) {
+if(connection) {
     var connections = {};
     connections[connection.ETHERNET] = connections[connection.WIFI] = 'wifi';
     connections[connection.CELL_3G] = '3g';
@@ -51,10 +51,10 @@ support.svg = !!(doc.createElementNS && doc.createElementNS('http://www.w3.org/2
 
 var plugins = navigator.plugins,
     i = plugins.length;
-if (plugins && i) {
+if(plugins && i) {
     var plugin;
     while(plugin = plugins[--i])
-        if (plugin.name == 'Shockwave Flash' && (match = plugin.description.match(/Flash ([\d.]+)/))) {
+        if(plugin.name === 'Shockwave Flash' && (match = plugin.description.match(/Flash ([\d.]+)/))) {
             support.flash = match[1];
             break;
         }
@@ -70,7 +70,7 @@ var lastOrient = win.innerWidth > win.innerHeight,
 
         // http://alxgbsn.co.uk/2012/08/27/trouble-with-web-browser-orientation/
         // check previous device width to disallow Android shrink page and change orientation on opening software keyboard
-        if (landscape !== lastOrient && width !== lastWidth) {
+        if(landscape !== lastOrient && width !== lastWidth) {
             $win.trigger('orientchange', {
                 landscape: landscape,
                 width: width,
@@ -82,7 +82,7 @@ var lastOrient = win.innerWidth > win.innerHeight,
         }
     });
 
-var api = {
+provide({
     ua: ua,
     ios: platform.ios,
     iphone: device.iphone,
@@ -93,7 +93,7 @@ var api = {
     other: platform.other,
     opera: browser.opera,
     chrome: browser.chrome,
-    screenSize: screen.width > 320 ? 'large' : screen.width < 320 ? 'small' : 'normal',
+    screenSize: screen.width > 320? 'large' : screen.width < 320? 'small' : 'normal',
     dpr: win.devicePixelRatio || 1,
     connection: support.connection,
     flash: support.flash,
@@ -102,8 +102,6 @@ var api = {
     width: win.innerWidth,
     height: win.innerHeight,
     landscape: lastOrient
-};
-
-provide(api);
+});
 
 });

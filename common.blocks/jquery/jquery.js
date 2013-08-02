@@ -3,6 +3,8 @@ modules.define(
     ['loader_type_js', 'jquery__config'],
     function(provide, loader, cfg) {
 
+/* global jQuery */
+
 function doProvide() {
     provide(jQuery.noConflict(true));
 }

@@ -4,13 +4,13 @@ var IDLE_TIMEOUT = 3000,
     USER_EVENTS = 'mousemove keydown click';
 
 provide(new (inherit(events.Emitter, {
-    __constructor : function() {
+    __constructor: function() {
         this._timer = null;
         this._isStarted = false;
         this._isIdle = false;
     },
 
-    start : function() {
+    start: function() {
         if(!this._isStarted) {
             this._isStarted = true;
             this._startTimer();
@@ -18,7 +18,7 @@ provide(new (inherit(events.Emitter, {
         }
     },
 
-    stop : function() {
+    stop: function() {
         if(this._isStarted) {
             this._isStarted = false;
             this._stopTimer();
@@ -26,11 +26,11 @@ provide(new (inherit(events.Emitter, {
         }
     },
 
-    isIdle : function() {
+    isIdle: function() {
         return this._isIdle;
     },
 
-    _onUserAction : function() {
+    _onUserAction: function() {
         if(this._isIdle) {
             this._isIdle = false;
             this.emit('wakeup');
@@ -40,15 +40,15 @@ provide(new (inherit(events.Emitter, {
         this._startTimer();
     },
 
-    _startTimer : function() {
+    _startTimer: function() {
         this._timer = setTimeout(this._onTimeout.bind(this), IDLE_TIMEOUT);
     },
 
-    _stopTimer : function() {
+    _stopTimer: function() {
         this._timer && clearTimeout(this._timer);
     },
 
-    _onTimeout : function() {
+    _onTimeout: function() {
         this._isIdle = true;
         this.emit('idle');
     }

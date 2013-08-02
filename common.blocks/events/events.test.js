@@ -71,7 +71,7 @@ describe('events', function() {
 
             it('should pass event to callback', function() {
                 var spy = sinon.spy(),
-                    data = { data : 'ok' };
+                    data = { data: 'ok' };
 
                 emitter
                     .on('event', spy)
@@ -84,7 +84,7 @@ describe('events', function() {
 
             it('should pass additional data to callback', function() {
                 var spy = sinon.spy(),
-                    data = { data : 'ok' };
+                    data = { data: 'ok' };
 
                 emitter
                     .on('event', spy)
