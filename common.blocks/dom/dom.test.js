@@ -37,6 +37,18 @@ describe('dom', function() {
         });
     });
 
+    describe('getFocused', function() {
+        it('should returns focused DOM elem', function() {
+            var elem = $('<input/>')
+                .appendTo('body')
+                .focus();
+            dom.getFocused()[0].should.be.eql(elem[0]);
+            elem.blur();
+            dom.getFocused()[0].should.not.be.eql(elem[0]);
+            elem.remove();
+        });
+    });
+
     describe('isFocusable', function() {
         it('should returns true if given DOM elem is iframe, input, button, textarea or select', function() {
             dom.isFocusable($('<iframe/>')).should.be.true;
