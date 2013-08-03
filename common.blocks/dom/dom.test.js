@@ -28,7 +28,11 @@ describe('dom', function() {
             dom.contains(domElem.find('.c'), domElem.find('.x')).should.be.false;
         });
 
-        it('should returns false for empty jquery chain', function() {
+        it('should returns true for itself', function() {
+            dom.contains(domElem.find('.x'), domElem.find('.x')).should.be.true;
+        });
+
+        it('should returns false for empty DOM elem', function() {
             dom.contains(domElem.find('.a'), domElem.find('.no-exist')).should.be.false;
         });
     });
