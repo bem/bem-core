@@ -2,7 +2,7 @@
  * @module dom
  */
 
-modules.define('dom', ['jquery'], function (provide, $) {
+modules.define('dom', ['jquery'], function(provide, $) {
 
 provide({
     /**
