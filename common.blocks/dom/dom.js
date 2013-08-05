@@ -38,7 +38,7 @@ provide({
     /**
      * Checks whether a DOM element contains focus
      * @param domElem
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     containsFocus: function(domElem) {
         return this.contains(domElem, this.getFocused());
@@ -57,13 +57,16 @@ provide({
         switch(domNode.tagName.toLowerCase()) {
             case 'iframe':
                 return true;
+
             case 'input':
             case 'button':
             case 'textarea':
             case 'select':
                 return !domNode.disabled;
+
             case 'a':
                 return !!domNode.href;
+
             default:
                 return domNode.hasAttribute('tabindex');
         }

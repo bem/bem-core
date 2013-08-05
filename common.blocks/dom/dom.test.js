@@ -110,7 +110,7 @@ describe('dom', function() {
             dom.containsFocus(domElem.find('.b')).should.be.false;
         });
 
-        it('should returns false if context empty', function() {
+        it('should returns false if context is empty', function() {
             dom.containsFocus(domElem.find('.__no-exist')).should.be.false;
         });
     });
@@ -139,6 +139,10 @@ describe('dom', function() {
             dom.isEditable($('<div contenteditable="true"/>')).should.be.true;
             dom.isEditable($('<div contenteditable="false"/>')).should.be.false;
             dom.isEditable($('<div contenteditable="yet-another-val"/>')).should.be.false;
+        });
+
+        it('should returns false if given DOM elem is empty', function() {
+            dom.isEditable($('.__no-exist')).should.be.false;
         });
     });
 });
