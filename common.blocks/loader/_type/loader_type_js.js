@@ -1,12 +1,7 @@
 /**
- * Loader module
- *
- * Copyright (c) 2013 Filatov Dmitry (dfilatov@yandex-team.ru)
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- *
+ * @module loader_type_js
  * @version 1.0.0
+ * @author Filatov Dmitry <dfilatov@yandex-team.ru>
  */
 
 modules.define('loader_type_js', function(provide) {

@@ -1,3 +1,7 @@
+/**
+ * @module tick
+ */
+
 modules.define('tick', ['inherit', 'events'], function(provide, inherit, events) {
 
 var TICK_INTERVAL = 50,

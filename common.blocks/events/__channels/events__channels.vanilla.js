@@ -1,3 +1,7 @@
+/**
+ * @module events__channels
+ */
+
 modules.define('events__channels', ['events'], function(provide, events) {
 
 var undef,

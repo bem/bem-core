@@ -1,3 +1,7 @@
+/**
+ * @module objects
+ */
+
 modules.define('objects', function(provide) {
 
 var bindCall = function(fn) {

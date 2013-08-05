@@ -1,3 +1,7 @@
+/**
+ * @module querystring
+ */
+
 modules.define('querystring', ['querystring__uri'], function(provide, uri) {
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;

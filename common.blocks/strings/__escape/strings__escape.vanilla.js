@@ -1,3 +1,7 @@
+/**
+ * @module strings__escape
+ */
+
 modules.define('strings__escape', function(provide) {
 
 var symbols = {

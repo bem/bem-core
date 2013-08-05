@@ -1,3 +1,7 @@
+/**
+ * @module jquery
+ */
+
 modules.define(
     'jquery',
     ['loader_type_js', 'jquery__config'],

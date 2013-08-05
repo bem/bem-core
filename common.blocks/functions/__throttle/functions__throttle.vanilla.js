@@ -1,3 +1,7 @@
+/**
+ * @module functions__throttle
+ */
+
 modules.define('functions__throttle', function(provide) {
 
 var global = this.global;

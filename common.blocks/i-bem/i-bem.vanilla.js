@@ -1,3 +1,7 @@
+/**
+ * @module i-bem
+ */
+
 modules.define(
     'i-bem',
     ['inherit', 'identify', 'next-tick', 'objects', 'functions', 'events', 'events__channels'],

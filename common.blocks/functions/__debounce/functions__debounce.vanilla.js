@@ -1,3 +1,7 @@
+/**
+ * @module functions__debounce
+ */
+
 modules.define('functions__debounce', function(provide) {
 
 var global = this.global;

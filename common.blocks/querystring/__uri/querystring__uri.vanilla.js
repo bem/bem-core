@@ -1,3 +1,7 @@
+/**
+ * @module querystring__uri
+ */
+
 modules.define('querystring__uri',  function(provide) {
 
 // Equivalency table for cp1251 and utf8.

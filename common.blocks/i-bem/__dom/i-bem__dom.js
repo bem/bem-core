@@ -1,3 +1,7 @@
+/**
+ * @module i-bem__dom
+ */
+
 modules.define(
     'i-bem__dom',
     ['i-bem', 'i-bem__internal', 'identify', 'objects', 'functions', 'jquery', 'dom'],

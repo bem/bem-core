@@ -1,3 +1,7 @@
+/**
+ * @module jquery__config
+ */
+
 modules.define('jquery__config', function(provide) {
 
 provide({
