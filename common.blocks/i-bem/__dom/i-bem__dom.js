@@ -10,7 +10,6 @@ modules.define(
 var undef,
     win = $(window),
     doc = $(document),
-    scope = $('body'),
 
 /**
  * Storage for DOM elements by unique key
@@ -920,7 +919,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @protected
      * @type jQuery
      */
-    scope: scope,
+    scope: $('body'),
 
     /**
      * Document shortcut
