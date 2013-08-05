@@ -423,6 +423,156 @@ describe('i-bem__dom', function() {
             block.containsDomElem(block.elem('e2'), block.elem('e2-1')).should.be.true;
         });
     });
+
+    describe('DOM events', function() {
+        var block, spy1, spy2, spy3, spy4, spy5, spy6, spy7,
+            win = $(window);
+
+        beforeEach(function() {
+            spy1 = sinon.spy();
+            spy2 = sinon.spy();
+            spy3 = sinon.spy();
+            spy4 = sinon.spy();
+            spy5 = sinon.spy();
+            spy6 = sinon.spy();
+            spy7 = sinon.spy();
+
+            DOM.decl('block', {
+                 bindToClick: function() {
+                    this
+                        .bindTo('click', this._handler1)
+                        .bindTo('click', this._handler2)
+                        .bindTo('elem', 'click', this._handler3)
+                        .bindTo(this.elem('elem'), 'click', this._handler4)
+                        .bindTo(this.elem('elem2'), 'click', this._handler5)
+                        .bindToWin('resize', this._handler6)
+                        .bindToWin('resize', this._handler7);
+                },
+
+                _handler1: spy1,
+                _handler2: spy2,
+                _handler3: spy3,
+                _handler4: spy4,
+                _handler5: spy5,
+                _handler6: spy6,
+                _handler7: spy7,
+
+                unbindAllFromDomElem: function() {
+                    this.unbindFrom('click');
+                },
+
+                unbindHandler1FromDomElem: function() {
+                    this.unbindFrom('click', this._handler1);
+                },
+
+                unbindAllFromElemByString: function() {
+                    this.unbindFrom('elem', 'click');
+                },
+
+                unbindAllFromElemByElem: function() {
+                    this.unbindFrom(this.elem('elem'), 'click');
+                },
+
+                unbindHandler3FromElemByString: function() {
+                    this.unbindFrom('elem', 'click', this._handler3);
+                },
+
+                unbindClick4FromElemByElem: function() {
+                    this.unbindFrom(this.elem('elem'), 'click', this._handler4);
+                },
+
+                unbindHandler6FromWin: function() {
+                    this.unbindFromWin('resize', this._handler6);
+                }
+            });
+
+            block = DOM.init($(BEMHTML.apply({ block: 'block', content: { elem: 'elem' } }))).bem('block');
+            block.bindToClick();
+        });
+
+        afterEach(function() {
+            DOM.destruct(block.domElem);
+            delete DOM.blocks['block'];
+        });
+
+        it('should properly bind to block-self DOM elem', function() {
+            block.domElem.click();
+            spy1.should.have.been.calledOnce;
+            spy2.should.have.been.calledOnce;
+            spy3.should.not.have.been.called;
+            spy4.should.not.have.been.called;
+            spy5.should.not.have.been.called;
+        });
+
+        it('should properly unbind to block-self DOM elem', function() {
+            block.unbindAllFromDomElem();
+            block.domElem.click();
+            spy1.should.not.have.been.called;
+            spy2.should.not.have.been.called;
+        });
+
+        it('should unbind from block-self DOM elem specified function only', function() {
+            block.unbindHandler1FromDomElem();
+            block.domElem.click();
+            spy1.should.not.have.been.called;
+            spy2.should.have.been.calledOnce;
+        });
+
+        it('should properly bind to block elem', function() {
+            block.elem('elem').click();
+            spy3.should.have.been.calledOnce;
+            spy4.should.have.been.calledOnce;
+            spy5.should.not.have.been.called;
+        });
+
+        it('should properly unbind from block elem by string', function() {
+            block.unbindAllFromElemByString();
+            block.elem('elem').click();
+            spy3.should.not.have.been.called;
+            spy4.should.not.have.been.called;
+        });
+
+        it('should properly unbind from block elem by elem', function() {
+            block.unbindAllFromElemByElem();
+            block.elem('elem').click();
+            spy3.should.not.have.been.called;
+            spy4.should.not.have.been.called;
+        });
+
+        it('should properly unbind specified function from block elem by elem', function() {
+            block.unbindHandler3FromElemByString();
+            block.elem('elem').click();
+            spy3.should.not.have.been.called;
+            spy4.should.have.been.calledOnce;
+        });
+
+        it('should properly unbind specified function from block elem by string', function() {
+            block.unbindClick4FromElemByElem();
+            block.elem('elem').click();
+            spy3.should.have.been.calledOnce;
+            spy4.should.not.have.been.called;
+        });
+
+        it('should properly bind to window event', function() {
+            win.trigger('resize');
+            spy6.should.have.been.calledOnce;
+            spy7.should.have.been.calledOnce;
+        });
+
+        it('should properly unbind from window event', function() {
+            block.unbindFromWin('resize');
+            win.trigger('resize');
+            spy6.should.not.have.been.called;
+            spy7.should.not.have.been.called;
+        });
+
+        it('should properly unbind specified function from window event', function() {
+            block.unbindHandler6FromWin();
+            win.trigger('resize');
+            spy6.should.not.have.been.called;
+            spy7.should.have.been.calledOnce;
+        });
+    });
 });
 
 provide();

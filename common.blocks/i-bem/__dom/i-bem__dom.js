@@ -384,11 +384,10 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         fn?
             domElem.bind(
                 _this._buildEventName(event),
-                function(e) {
+                fn.__bemFn || (fn.__bemFn = function(e) {
                     e.domElem = $(this);
                     return fn.apply(_this, arguments);
-                }
-            ) :
+                })) :
             objects.each(event, function(fn, event) {
                 _this.bindToDomElem(domElem, event, fn);
             });
@@ -416,11 +415,11 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @returns {BEM}
      */
     bindToWin: function(event, fn) {
-        var _fn = fn,
-            currentHeight,
-            currentWidth;
-
         if(event === 'resize') {
+            var _fn = fn,
+                currentHeight,
+                currentWidth;
+
             fn = function() {
                 var height = win.height(),
                     width = win.width();
@@ -431,6 +430,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
                     _fn.apply(this, arguments);
                 }
             };
+            fn.__bemFn = _fn;
         }
         
         this._needSpecialUnbind = true;
@@ -462,10 +462,14 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @protected
      * @param {jQuery} domElem DOM element where the event was being listened for
      * @param {String} event Event name
+     * @param {Function} [fn] Handler function
      * @returns {BEM}
      */
-    unbindFromDomElem: function(domElem, event) {
-        domElem.unbind(this._buildEventName(event));
+    unbindFromDomElem: function(domElem, event, fn) {
+        event = this._buildEventName(event);
+        fn?
+            domElem.unbind(event, fn.__bemFn || fn) :
+            domElem.unbind(event);
         return this;
     },
 
@@ -473,20 +477,22 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * Removes event handler from document
      * @protected
      * @param {String} event Event name
+     * @param {Function} [fn] Handler function
      * @returns {BEM}
      */
-    unbindFromDoc: function(event) {
-        return this.unbindFromDomElem(doc, event);
+    unbindFromDoc: function(event, fn) {
+        return this.unbindFromDomElem(doc, event, fn);
     },
 
     /**
      * Removes event handler from window
      * @protected
      * @param {String} event Event name
+     * @param {Function} [fn] Handler function
      * @returns {BEM}
      */
-    unbindFromWin: function(event) {
-        return this.unbindFromDomElem(win, event);
+    unbindFromWin: function(event, fn) {
+        return this.unbindFromDomElem(win, event, fn);
     },
 
     /**
@@ -494,17 +500,23 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @protected
      * @param {jQuery|String} [elem] Nested element
      * @param {String} event Event name
+     * @param {Function} [fn] Handler function
      * @returns {BEM}
      */
-    unbindFrom: function(elem, event) {
-        if(!event) {
+    unbindFrom: function(elem, event, fn) {
+        var argLen = arguments.length;
+        if(argLen === 1) {
+            event = elem;
+            elem = this.domElem;
+        } else if(argLen === 2 && functions.isFunction(event)) {
+            fn = event;
             event = elem;
             elem = this.domElem;
         } else if(typeof elem === 'string') {
             elem = this.elem(elem);
         }
 
-        return this.unbindFromDomElem(elem, event);
+        return this.unbindFromDomElem(elem, event, fn);
     },
 
     /**
