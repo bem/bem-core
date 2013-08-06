@@ -4,14 +4,11 @@
 
 modules.define('functions', function(provide) {
 
-var bindCall = function(fn) {
-        return fn.call.bind(fn);
-    },
-    toStr = bindCall(Object.prototype.toString);
+var toStr = Object.prototype.toString;
 
 provide({
     isFunction: function(obj) {
-        return toStr(obj) === '[object Function]';
+        return toStr.call(obj) === '[object Function]';
     },
     
     noop: function() {}
