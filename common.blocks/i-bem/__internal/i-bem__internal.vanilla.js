@@ -1,14 +1,15 @@
-/** @fileOverview Module for internal BEM helpers */
-/** @requires BEM */
+/**
+ * @module i-bem__internal
+ */
 
 modules.define('i-bem__internal', function(provide) {
 
+var undef,
 /**
  * Separator for modifiers and their values
  * @const
  * @type String
  */
-var undef,
     MOD_DELIM = '_',
 
 /**
@@ -30,23 +31,24 @@ function isSimple(obj) {
     return typeOf === 'string' || typeOf === 'number' || typeOf === 'boolean';
 }
 
-function buildModPostfix(modName, modVal, buffer) {
+function buildModPostfix(modName, modVal) {
+    var res = '';
     /* jshint eqnull: true */
     if(modVal != null && modVal !== false) {
-        buffer.push(MOD_DELIM, modName);
-        modVal !== true && buffer.push(MOD_DELIM, modVal);
+        res += MOD_DELIM + modName;
+        modVal !== true && (res += MOD_DELIM + modVal);
     }
+    return res;
 }
 
-function buildBlockClass(name, modName, modVal, buffer) {
-    buffer.push(name);
-    buildModPostfix(modName, modVal, buffer);
+function buildBlockClass(name, modName, modVal) {
+    return name + buildModPostfix(modName, modVal);
 }
 
-function buildElemClass(block, name, modName, modVal, buffer) {
-    buildBlockClass(block, undef, undef, buffer);
-    buffer.push(ELEM_DELIM, name);
-    buildModPostfix(modName, modVal, buffer);
+function buildElemClass(block, name, modName, modVal) {
+    return buildBlockClass(block, undef, undef) +
+        ELEM_DELIM + name +
+        buildModPostfix(modName, modVal);
 }
 
 provide({
@@ -55,11 +57,7 @@ provide({
     MOD_DELIM: MOD_DELIM,
     ELEM_DELIM: ELEM_DELIM,
 
-    buildModPostfix: function(modName, modVal, buffer) {
-        var res = buffer || [];
-        buildModPostfix(modName, modVal, res);
-        return buffer? res : res.join('');
-    },
+    buildModPostfix: buildModPostfix,
 
     /**
      * Builds the class of a block or element with a modifier
@@ -68,36 +66,28 @@ provide({
      * @param {String} [elem] Element name
      * @param {String} [modName] Modifier name
      * @param {String|Number} [modVal] Modifier value
-     * @param {Array} [buffer] Buffer
-     * @returns {String|Array} Class or buffer string (depending on whether the buffer parameter is present)
+     * @returns {String} Class
      */
-    buildClass: function(block, elem, modName, modVal, buffer) {
+    buildClass: function(block, elem, modName, modVal) {
         if(isSimple(modName)) {
             if(!isSimple(modVal)) {
-                buffer = modVal;
                 modVal = modName;
                 modName = elem;
                 elem = undef;
             }
         } else if(typeof modName !== 'undefined') {
-            buffer = modName;
             modName = undef;
         } else if(elem && typeof elem !== 'string') {
-            buffer = elem;
             elem = undef;
         }
 
-        if(!(elem || modName || buffer)) { // optimization for simple case
+        if(!(elem || modName)) { // optimization for simple case
             return block;
         }
 
-        var res = buffer || [];
-
-        elem?
-            buildElemClass(block, elem, modName, modVal, res) :
-            buildBlockClass(block, modName, modVal, res);
-
-        return buffer? res : res.join('');
+        return elem?
+            buildElemClass(block, elem, modName, modVal) :
+            buildBlockClass(block, modName, modVal);
     },
 
     /**
@@ -106,34 +96,29 @@ provide({
      * @param {String} block Block name
      * @param {String} [elem] Element name
      * @param {Object} [mods] Modifiers
-     * @param {Array} [buffer] Buffer
-     * @returns {String|Array} Class or buffer string (depending on whether the buffer parameter is present)
+     * @returns {String} Class
      */
-    buildClasses: function(block, elem, mods, buffer) {
+    buildClasses: function(block, elem, mods) {
         if(elem && typeof elem !== 'string') {
-            buffer = mods;
             mods = elem;
             elem = undef;
         }
 
-        var res = buffer || [];
-
-        elem?
-            buildElemClass(block, elem, undef, undef, res) :
-            buildBlockClass(block, undef, undef, res);
+        var res = elem?
+            buildElemClass(block, elem, undef, undef) :
+            buildBlockClass(block, undef, undef);
 
         if(mods) {
             for(var modName in mods) {
                 if(mods.hasOwnProperty(modName) && mods[modName]) {
-                    res.push(' ');
-                    elem?
-                        buildElemClass(block, elem, modName, mods[modName], res) :
-                        buildBlockClass(block, modName, mods[modName], res);
+                    res += ' ' + (elem?
+                        buildElemClass(block, elem, modName, mods[modName]) :
+                        buildBlockClass(block, modName, mods[modName]));
                 }
             }
         }
 
-        return buffer? res : res.join('');
+        return res;
     }
 });
 
