@@ -25,20 +25,28 @@ var undef,
  */
     NAME_PATTERN = '[a-zA-Z0-9-]+';
 
+function isSimple(obj) {
+    var typeOf = typeof obj;
+    return typeOf === 'string' || typeOf === 'number' || typeOf === 'boolean';
+}
+
 function buildModPostfix(modName, modVal, buffer) {
-    buffer.push(MOD_DELIM, modName);
-    modVal !== true && buffer.push(MOD_DELIM, modVal);
+    /* jshint eqnull: true */
+    if(modVal != null && modVal !== false) {
+        buffer.push(MOD_DELIM, modName);
+        modVal !== true && buffer.push(MOD_DELIM, modVal);
+    }
 }
 
 function buildBlockClass(name, modName, modVal, buffer) {
     buffer.push(name);
-    modVal && buildModPostfix(modName, modVal, buffer);
+    buildModPostfix(modName, modVal, buffer);
 }
 
 function buildElemClass(block, name, modName, modVal, buffer) {
     buildBlockClass(block, undef, undef, buffer);
     buffer.push(ELEM_DELIM, name);
-    modVal && buildModPostfix(modName, modVal, buffer);
+    buildModPostfix(modName, modVal, buffer);
 }
 
 provide({
@@ -59,21 +67,19 @@ provide({
      * @param {String} block Block name
      * @param {String} [elem] Element name
      * @param {String} [modName] Modifier name
-     * @param {String} [modVal] Modifier value
+     * @param {String|Number} [modVal] Modifier value
      * @param {Array} [buffer] Buffer
      * @returns {String|Array} Class or buffer string (depending on whether the buffer parameter is present)
      */
     buildClass: function(block, elem, modName, modVal, buffer) {
-        var typeOfModName = typeof modName;
-        if(typeOfModName === 'string' || typeOfModName === 'boolean') {
-            var typeOfModVal = typeof modVal;
-            if(typeOfModVal !== 'string' && typeOfModVal !== 'boolean') {
+        if(isSimple(modName)) {
+            if(!isSimple(modVal)) {
                 buffer = modVal;
                 modVal = modName;
                 modName = elem;
                 elem = undef;
             }
-        } else if(typeOfModName !== 'undefined') {
+        } else if(typeof modName !== 'undefined') {
             buffer = modName;
             modName = undef;
         } else if(elem && typeof elem !== 'string') {
@@ -81,7 +87,7 @@ provide({
             elem = undef;
         }
 
-        if(!(elem || modName || buffer)) { // оптимизация для самого простого случая
+        if(!(elem || modName || buffer)) { // optimization for simple case
             return block;
         }
 
