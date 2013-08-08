@@ -382,20 +382,15 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @returns {BEM}
      */
     bindToDomElem: function(domElem, event, fn) {
-        var _this = this;
-
         fn?
             domElem.bind(
-                _this._buildEventName(event),
-                fn.__bemFn || (fn.__bemFn = function(e) {
-                    e.domElem = $(this);
-                    return fn.apply(_this, arguments);
-                })) :
+                this._buildEventName(event),
+                $.proxy(fn, this)) :
             objects.each(event, function(fn, event) {
-                _this.bindToDomElem(domElem, event, fn);
-            });
+                this.bindToDomElem(domElem, event, fn);
+            }, this);
 
-        return _this;
+        return this;
     },
 
     /**
@@ -433,7 +428,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
                     _fn.apply(this, arguments);
                 }
             };
-            fn.__bemFn = _fn;
         }
         
         this._needSpecialUnbind = true;
@@ -470,8 +464,9 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      */
     unbindFromDomElem: function(domElem, event, fn) {
         event = this._buildEventName(event);
+
         fn?
-            domElem.unbind(event, fn.__bemFn || fn) :
+            domElem.unbind(event, fn) :
             domElem.unbind(event);
         return this;
     },
@@ -1151,7 +1146,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         return function(e) {
             var args = [
                     _this._name,
-                    (e.domElem = $(this)).closest(_this.buildSelector()),
+                    $(this).closest(_this.buildSelector()),
                     true
                 ],
                 block = initBlock.apply(null, invokeOnInit? args.concat([callback, e]) : args);
