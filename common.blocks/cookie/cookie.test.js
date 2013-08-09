@@ -18,6 +18,12 @@ describe('cookie', function() {
         cookie.set('name', 'val');
         cookie.get('name').should.be.equal('val');
     });
+
+    it('should properly removes cookie', function() {
+        cookie.set('name', 'val');
+        cookie.set('name', null);
+        expect(cookie.get('name')).to.be.null;
+    });
 });
 
 provide();
