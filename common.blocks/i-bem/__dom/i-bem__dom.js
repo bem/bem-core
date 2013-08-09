@@ -413,23 +413,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @returns {BEM}
      */
     bindToWin: function(event, fn) {
-        if(event === 'resize') {
-            var _fn = fn,
-                currentHeight,
-                currentWidth;
-
-            fn = function() {
-                var height = win.height(),
-                    width = win.width();
-
-                if(currentHeight !== height || currentWidth !== width) {
-                    currentHeight = height;
-                    currentWidth = width;
-                    _fn.apply(this, arguments);
-                }
-            };
-        }
-        
         this._needSpecialUnbind = true;
         return this.bindToDomElem(win, event, fn);
     },
