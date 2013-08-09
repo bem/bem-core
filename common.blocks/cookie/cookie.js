@@ -1,19 +1,43 @@
 /**
  * @module cookie
- *
- * Copyright (c) 2006 Klaus Hartl (stilbuero.de)
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
+ * inspired from $.cookie plugin by Klaus Hartl (stilbuero.de)
  */
 
 modules.define('cookie', function(provide) {
 
-provide(function(name, value, options) {
-    if(typeof value !== 'undefined') { // name and value given, set cookie
+provide({
+    /**
+     * Returns cookie by given name
+     * @param {String} name
+     * @returns {String|null}
+     */
+    get: function(name) {
+        var res = null;
+        if(document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for(var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if(cookie.substring(0, name.length + 1) === (name + '=')) {
+                    res = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return res;
+    },
+
+    /**
+     * Sets cookie by given name
+     * @param {String} name
+     * @param {String} val
+     * @param {Object} options
+     * @returns {this}
+     */
+    set: function(name, val, options) {
         options = options || {};
-        if(value === null) {
-            value = '';
+        if(val === null) {
+            val = '';
             options.expires = -1;
         }
         var expires = '';
@@ -33,21 +57,9 @@ provide(function(name, value, options) {
         var path = options.path? '; path=' + (options.path) : '',
             domain = options.domain? '; domain=' + (options.domain) : '',
             secure = options.secure? '; secure' : '';
-        document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
-    } else { // only name given, get cookie
-        var cookieValue = null;
-        if(document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for(var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if(cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
+        document.cookie = [name, '=', encodeURIComponent(val), expires, path, domain, secure].join('');
+
+        return this;
     }
 });
 
