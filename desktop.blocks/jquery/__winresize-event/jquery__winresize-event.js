@@ -1,24 +1,29 @@
 /**
- * @modules jquery__resize-event
+ * @modules jquery__winresize-event
  */
 
 modules.define('jquery', ['ua'], function(provide, ua, $) {
 
-var event = $.event.special.winresize = {
-        setup: function() {
-            $(this).on('resize', event.handler);
-        },
+if(ua.ie) { // TODO: investigate for which version of IE we need this workaround
+    var win = window,
+        $win = $(window),
+        winWidth = $win.width(),
+        winHeight = $win.height();
 
-        teardown: function() {
-            $(this).off('resize', event.handler);
-        },
+    ($.event.special.resize || ($.event.special.resize = {})).preDispatch = function(e) {
+        if(e.target === win) {
+            var curWinWidth = $win.width(),
+                curWinHeight = $win.height();
 
-        handler: function(e) {
-            e.type = 'winresize';
-            $.event.dispatch.apply(this, arguments);
-            e.type = 'resize';
+            if(curWinWidth === winWidth && curWinHeight === winHeight) {
+                return false;
+            } else {
+                winWidth = curWinWidth;
+                winHeight = curWinHeight;
+            }
         }
     };
+}
 
 provide($);
 

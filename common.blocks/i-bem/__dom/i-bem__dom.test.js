@@ -445,8 +445,8 @@ describe('i-bem__dom', function() {
                         .bindTo('elem', 'click', this._handler3)
                         .bindTo(this.elem('elem'), 'click', this._handler4)
                         .bindTo(this.elem('elem2'), 'click', this._handler5)
-                        .bindToWin('scroll', this._handler6)
-                        .bindToWin('scroll', this._handler7);
+                        .bindToWin('resize', this._handler6)
+                        .bindToWin('resize', this._handler7);
                 },
 
                 _handler1: spy1,
@@ -482,7 +482,7 @@ describe('i-bem__dom', function() {
                 },
 
                 unbindHandler6FromWin: function() {
-                    this.unbindFromWin('scroll', this._handler6);
+                    this.unbindFromWin('resize', this._handler6);
                 }
             });
 
@@ -554,21 +554,21 @@ describe('i-bem__dom', function() {
         });
 
         it('should properly bind to window event', function() {
-            win.trigger('scroll');
+            win.trigger('resize');
             spy6.should.have.been.calledOnce;
             spy7.should.have.been.calledOnce;
         });
 
         it('should properly unbind from window event', function() {
-            block.unbindFromWin('scroll');
-            win.trigger('scroll');
+            block.unbindFromWin('resize');
+            win.trigger('resize');
             spy6.should.not.have.been.called;
             spy7.should.not.have.been.called;
         });
 
         it('should properly unbind specified function from window event', function() {
             block.unbindHandler6FromWin();
-            win.trigger('scroll');
+            win.trigger('resize');
             spy6.should.not.have.been.called;
             spy7.should.have.been.calledOnce;
         });
