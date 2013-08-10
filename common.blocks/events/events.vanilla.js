@@ -14,10 +14,10 @@ var undef,
 
     /**
      * @class Event
-     * @alias events:Event
+     * @alias events :Event
      */
     Event = inherit(/** @lends Event.prototype */{
-        __constructor: function(type, target) {
+        __constructor : function(type, target) {
             this.type = type;
             this.target = target;
             this.result = undef;
@@ -27,19 +27,19 @@ var undef,
             this._isPropagationStopped = false;
         },
 
-        preventDefault: function() {
+        preventDefault : function() {
             this._isDefaultPrevented = true;
         },
 
-        isDefaultPrevented: function() {
+        isDefaultPrevented : function() {
             return this._isDefaultPrevented;
         },
 
-        stopPropagation: function() {
+        stopPropagation : function() {
             this._isPropagationStopped = true;
         },
 
-        isPropagationStopped: function() {
+        isPropagationStopped : function() {
             return this._isPropagationStopped;
         }
     }),
@@ -53,7 +53,7 @@ var undef,
          * @param {Object} [ctx] Handler context
          * @returns {this}
          */
-        on: function(e, data, fn, ctx, _special) {
+        on : function(e, data, fn, ctx, _special) {
             if(typeof e === 'string') {
                 if(typeof data === 'function') {
                     ctx = fn;
@@ -68,10 +68,10 @@ var undef,
                     eventStorage;
 
                 while(eventType = eventTypes[i++]) {
-                    eventStorage = storage[eventType] || (storage[eventType] = { ids: {}, list: {} });
+                    eventStorage = storage[eventType] || (storage[eventType] = { ids : {}, list : {} });
                     if(!(id in eventStorage.ids)) {
                         list = eventStorage.list;
-                        item = { fn: fn, data: data, ctx: ctx, special: _special };
+                        item = { fn : fn, data : data, ctx : ctx, special : _special };
                         if(list.last) {
                             list.last.next = item;
                             item.prev = list.last;
@@ -90,8 +90,8 @@ var undef,
             return this;
         },
 
-        once: function(e, data, fn, ctx) {
-            return this.on(e, data, fn, ctx, { once: true });
+        once : function(e, data, fn, ctx) {
+            return this.on(e, data, fn, ctx, { once : true });
         },
 
         /**
@@ -101,7 +101,7 @@ var undef,
          * @param {Object} [ctx] Handler context
          * @returns {this}
          */
-        un: function(e, fn, ctx) {
+        un : function(e, fn, ctx) {
             if(typeof e === 'string' || typeof e === 'undefined') {
                 var storage = this[storageExpando];
                 if(storage) {
@@ -157,7 +157,7 @@ var undef,
          * @param {Object} [data] Additional data
          * @returns {this}
          */
-        emit: function(e, data) {
+        emit : function(e, data) {
             var storage = this[storageExpando],
                 eventInstantiated = false;
 
@@ -210,7 +210,7 @@ EmitterProps.onFirst = EmitterProps.once;
 
 /**
  * @class Emitter
- * @alias events:Emitter
+ * @alias events :Emitter
  */
 var Emitter = inherit(
         /** @lends Emitter.prototype */
@@ -219,8 +219,8 @@ var Emitter = inherit(
         EmitterProps);
 
 provide({
-    Emitter: Emitter,
-    Event: Event
+    Emitter : Emitter,
+    Event : Event
 });
 
 });

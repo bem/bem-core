@@ -1,6 +1,6 @@
 /* jshint browser:true, node:true */
 /* global BEM, i18n */
-if (typeof oninit === 'undefined') oninit = function(cb) { return cb() };
+if(typeof oninit === 'undefined') oninit = function(cb) { return cb() };
 oninit(function() {
 
 (function(global_, bem_, undefined) {
@@ -34,18 +34,18 @@ var MOD_DELIM = '_',
     log = (console && console.log)? console.log : function() {};
 
 function bemName(decl) {
-    typeof decl === 'string' && (decl = { block: decl });
+    typeof decl === 'string' && (decl = { block : decl });
 
     return decl.block +
-        (decl.elem ? (ELEM_DELIM + decl.elem) : '') +
-        (decl.modName ? MOD_DELIM + decl.modName + MOD_DELIM + decl.modVal : '');
+        (decl.elem? (ELEM_DELIM + decl.elem) : '') +
+        (decl.modName? MOD_DELIM + decl.modName + MOD_DELIM + decl.modVal : '');
 }
 
 function bemParse(name) {
     var bemitem = {};
 
     name.split(ELEM_DELIM).forEach(function(item, i) {
-        var keys = [ i ? 'elem' : 'block', 'mod', 'val' ];
+        var keys = [i? 'elem' : 'block', 'mod', 'val'];
 
         item.split(MOD_DELIM).forEach(function(part, j) {
             bemitem[keys[j]] = part;
@@ -63,7 +63,6 @@ function _pushStack(name) {
 function _popStack() {
     return stack.length && stack.pop();
 }
-
 
 /**
  * @constructor
@@ -256,7 +255,6 @@ bem_.I18N = (function(base) {
 
 }(new _i18n()));
 
-})(this, typeof BEM === 'undefined' ? {} : BEM);
+})(this, typeof BEM === 'undefined'? {} : BEM);
 
 }); // oninit
-

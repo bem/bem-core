@@ -1,3 +1,3 @@
 ({
-    shouldDeps: { block: 'ua', elem: 'dom' }
+    shouldDeps : { block : 'ua', elem : 'dom' }
 })

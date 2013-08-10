@@ -11,7 +11,7 @@ provide({
      * @param {jQuery} domElem DOM elem to check
      * @returns {Boolean}
      */
-    contains: function(ctx, domElem) {
+    contains : function(ctx, domElem) {
         var res = false;
 
         domElem.each(function() {
@@ -30,7 +30,7 @@ provide({
      * Returns current focused DOM elem in document
      * @returns {jQuery}
      */
-    getFocused: function() {
+    getFocused : function() {
         // "Error: Unspecified error." in iframe in IE9
         try { return $(document.activeElement); } catch(e) {}
     },
@@ -40,7 +40,7 @@ provide({
      * @param domElem
      * @returns {Boolean}
      */
-    containsFocus: function(domElem) {
+    containsFocus : function(domElem) {
         return this.contains(domElem, this.getFocused());
     },
 
@@ -49,7 +49,7 @@ provide({
     * @param {jQuery} domElem
     * @returns {Boolean}
     */
-    isFocusable: function(domElem) {
+    isFocusable : function(domElem) {
         var domNode = domElem[0];
 
         if(!domNode) return false;
@@ -77,7 +77,7 @@ provide({
     * @param {jQuery} domElem
     * @returns {Boolean}
     */
-    isEditable: function(domElem) {
+    isEditable : function(domElem) {
         var domNode = domElem[0];
 
         if(!domNode) return false;

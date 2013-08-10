@@ -4,7 +4,7 @@ var assert = require('assert'),
 suite('BEMHTML Compiler', function() {
   function unit(name, src, data, dst) {
     test(name, function() {
-      assert.equal(bemhtml.compile(src, { raw: true }).apply.call(data), dst);
+      assert.equal(bemhtml.compile(src, { raw : true }).apply.call(data), dst);
     });
   }
 
@@ -14,14 +14,14 @@ suite('BEMHTML Compiler', function() {
        {},
        false);
   unit('mode predicate: true case', 'match()(false);mode("mode")(true)', {
-    _mode: 'mode'
+    _mode : 'mode'
   }, true);
   unit(
     'apply mode',
     'match()(false);mode("mode2")(true);mode("mode1")(function() {' +
     '  return apply("mode2");' +
     '})',
-    { _mode: 'mode1' },
+    { _mode : 'mode1' },
     true
   );
   unit(
@@ -29,7 +29,7 @@ suite('BEMHTML Compiler', function() {
     'match()(false);mode("mode1")(true);mode("mode2")(function() {' +
     '  return applyNext("mode1");' +
     '})',
-    { _mode: 'mode1' },
+    { _mode : 'mode1' },
     true
   );
 });

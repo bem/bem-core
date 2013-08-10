@@ -22,19 +22,19 @@ suite('Tests for BEM.I18N API stub for BEMHTML', function() {
     function unit(name, file, raw) {
         test(name, function() {
             var contents = {
-                src: readFile(file + '.bemhtml'),
-                data: JSON.parse(readFile(file + '.json')),
-                dst: readFile(file + '.html')
+                src : readFile(file + '.bemhtml'),
+                data : JSON.parse(readFile(file + '.json')),
+                dst : readFile(file + '.html')
             };
 
             ASSERT.equal(BEMHTML.compile(icores.join('') + contents.src, {
-                    devMode: true,
-                    raw: raw
+                    devMode : true,
+                    raw : raw
                 }).apply.call(contents.data) + '\n', contents.dst);
 
             ASSERT.equal(BEMHTML.compile(icores.join('') + contents.src, {
-                    devMode: false,
-                    raw: raw
+                    devMode : false,
+                    raw : raw
                 }).apply.call(contents.data) + '\n', contents.dst);
         });
     }

@@ -1,3 +1,3 @@
 ({
-   shouldDeps: 'events'
+   shouldDeps : 'events'
 })

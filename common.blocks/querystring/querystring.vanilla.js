@@ -18,7 +18,7 @@ provide({
      * @param {String} str
      * @returns {Object}
      */
-    parse: function (str) {
+    parse : function (str) {
         if(!str) {
             return {};
         }
@@ -60,7 +60,7 @@ provide({
      * @param {Object} obj
      * @returns {String}
      */
-    stringify: function(obj) {
+    stringify : function(obj) {
         return Object.keys(obj)
             .reduce(
                 function(res, name) {

@@ -52,12 +52,12 @@ function buildElemClass(block, name, modName, modVal) {
 }
 
 provide({
-    NAME_PATTERN: NAME_PATTERN,
+    NAME_PATTERN : NAME_PATTERN,
 
-    MOD_DELIM: MOD_DELIM,
-    ELEM_DELIM: ELEM_DELIM,
+    MOD_DELIM : MOD_DELIM,
+    ELEM_DELIM : ELEM_DELIM,
 
-    buildModPostfix: buildModPostfix,
+    buildModPostfix : buildModPostfix,
 
     /**
      * Builds the class of a block or element with a modifier
@@ -68,7 +68,7 @@ provide({
      * @param {String|Number} [modVal] Modifier value
      * @returns {String} Class
      */
-    buildClass: function(block, elem, modName, modVal) {
+    buildClass : function(block, elem, modName, modVal) {
         if(isSimple(modName)) {
             if(!isSimple(modVal)) {
                 modVal = modName;
@@ -98,7 +98,7 @@ provide({
      * @param {Object} [mods] Modifiers
      * @returns {String} Class
      */
-    buildClasses: function(block, elem, mods) {
+    buildClasses : function(block, elem, mods) {
         if(elem && typeof elem !== 'string') {
             mods = elem;
             elem = undef;

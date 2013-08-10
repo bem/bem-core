@@ -1,9 +1,9 @@
 modules.define('i-bem__dom', ['ua'], function(provide, ua, DOM) {
 
 DOM.decl('ua', {
-    onSetMod: {
-        'js': {
-            'inited': function() {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
                 this
                     .setMod('platform',
                         ua.ios? 'ios' :

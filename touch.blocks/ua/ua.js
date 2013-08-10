@@ -72,9 +72,9 @@ var lastOrient = win.innerWidth > win.innerHeight,
         // check previous device width to disallow Android shrink page and change orientation on opening software keyboard
         if(landscape !== lastOrient && width !== lastWidth) {
             $win.trigger('orientchange', {
-                landscape: landscape,
-                width: width,
-                height: height
+                landscape : landscape,
+                width : width,
+                height : height
             });
 
             lastOrient = landscape;
@@ -83,25 +83,25 @@ var lastOrient = win.innerWidth > win.innerHeight,
     });
 
 provide({
-    ua: ua,
-    ios: platform.ios,
-    iphone: device.iphone,
-    ipad: device.ipad,
-    android: platform.android,
-    bada: platform.bada,
-    wp: platform.wp,
-    other: platform.other,
-    opera: browser.opera,
-    chrome: browser.chrome,
-    screenSize: screen.width > 320? 'large' : screen.width < 320? 'small' : 'normal',
-    dpr: win.devicePixelRatio || 1,
-    connection: support.connection,
-    flash: support.flash,
-    video: support.video,
-    svg: support.svg,
-    width: win.innerWidth,
-    height: win.innerHeight,
-    landscape: lastOrient
+    ua : ua,
+    ios : platform.ios,
+    iphone : device.iphone,
+    ipad : device.ipad,
+    android : platform.android,
+    bada : platform.bada,
+    wp : platform.wp,
+    other : platform.other,
+    opera : browser.opera,
+    chrome : browser.chrome,
+    screenSize : screen.width > 320? 'large' : screen.width < 320? 'small' : 'normal',
+    dpr : win.devicePixelRatio || 1,
+    connection : support.connection,
+    flash : support.flash,
+    video : support.video,
+    svg : support.svg,
+    width : win.innerWidth,
+    height : win.innerHeight,
+    landscape : lastOrient
 });
 
 });

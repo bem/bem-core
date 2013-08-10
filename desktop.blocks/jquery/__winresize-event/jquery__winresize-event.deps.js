@@ -1,3 +1,3 @@
 ({
-    shouldDeps: ['jquery', 'ua']
+    shouldDeps : ['jquery', 'ua']
 })

@@ -5,9 +5,7 @@ var assert = require('assert'),
 require('vm').runInThisContext(
     fs.readFileSync(path.resolve(__dirname, '../i-bem__i18n.i18n/core.js')));
 
-
 suite('BEM.I18N Lang', function() {
-
     test('Lang getter', function() {
 
         assert.ok(BEM.I18N.lang(), 'Lang should always be defined');
@@ -29,12 +27,9 @@ suite('BEM.I18N Lang', function() {
         assert.equal(BEM.I18N.lang('ua'), 'ua', 'Setting lang with value should return new value');
 
     });
-
 });
 
-
 suite('BEM.I18N Simple test', function() {
-
     setup(function() {
 
         BEM.I18N.lang('ru');
@@ -53,7 +48,7 @@ suite('BEM.I18N Simple test', function() {
             },
 
             "complex" : function(param) {
-                return this.key('dynamic', { num: param['num'] }) + ' : ' + param['text'];
+                return this.key('dynamic', { num : param['num'] }) + ' : ' + param['text'];
             }
 
         }, { "lang" : "ru" });
@@ -68,7 +63,6 @@ suite('BEM.I18N Simple test', function() {
             }
 
         }, { "lang" : "ru" });
-
     });
 
     test('Simple', function() {
@@ -76,15 +70,14 @@ suite('BEM.I18N Simple test', function() {
     });
 
     test('Simple dynamic with param', function() {
-        assert.equal('Ключ1', BEM.I18N('i-keyset-1', 'dynamic', { num: 1 }));
+        assert.equal('Ключ1', BEM.I18N('i-keyset-1', 'dynamic', { num : 1 }));
     });
 
     test('Complext dynamic with param', function() {
-        assert.equal('Ключ1 : Бла', BEM.I18N('i-keyset-1', 'complex', { num: 1, text: 'Бла' }));
+        assert.equal('Ключ1 : Бла', BEM.I18N('i-keyset-1', 'complex', { num : 1, text : 'Бла' }));
     });
 
     test('Complect dynamic with dynamic value as param', function() {
         assert.equal('Ключ1 : Ключ1', BEM.I18N('i-keyset-2', 'key', { }));
     });
-
 });

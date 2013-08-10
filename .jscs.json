@@ -1,17 +1,17 @@
 {
-    "requireSpaceAfterKeywords": ["do", "else"],
-    "disallowSpaceAfterKeywords": ["if", "for", "while", "switch"],
-    "requireSpacesInsideObjectBrackets": "all",
-    "disallowSpacesInsideArrayBrackets": true,
-    "requireMultipleVarDecl": true,
-    "disallowSpaceAfterObjectKeys": true,
-    "requireLeftStickedOperators": [",", "?"],
-    "disallowRightStickedOperators": [",", "?", ":"],
-    "disallowKeywords": ["with"],
-    "disallowMultipleLineBreaks": true,
-    "disallowKeywordsOnNewLine": ["else"],
+    "requireSpaceAfterKeywords" : ["do", "else"],
+    "disallowSpaceAfterKeywords" : ["if", "for", "while", "switch"],
+    "requireSpacesInsideObjectBrackets" : "all",
+    "disallowSpacesInsideArrayBrackets" : true,
+    "requireMultipleVarDecl" : true,
+    "requireSpaceAfterObjectKeys" : true,
+    "requireLeftStickedOperators" : [",", "?"],
+    "disallowRightStickedOperators" : [",", "?", ":"],
+    "disallowKeywords" : ["with"],
+    "disallowMultipleLineBreaks" : true,
+    "disallowKeywordsOnNewLine" : ["else"],
 
-    "excludeFiles": [
+    "excludeFiles" : [
         ".bem/**",
         "common.blocks/vow/**",
         "common.blocks/ecma/__array/ecma__array.test.js"

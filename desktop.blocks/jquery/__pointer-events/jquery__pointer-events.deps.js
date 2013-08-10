@@ -1,3 +1,3 @@
 ({
-    shouldDeps: ['jquery', 'objects']
+    shouldDeps : ['jquery', 'objects']
 })

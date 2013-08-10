@@ -7,7 +7,7 @@ modules.define('objects', function(provide) {
 var hasOwnProp = Object.prototype.hasOwnProperty;
 
 provide({
-    extend: function(target) {
+    extend : function(target) {
         typeof target !== 'object' && (target = {});
 
         for(var i = 1, len = arguments.length; i < len; i++) {
@@ -22,7 +22,7 @@ provide({
         return target;
     },
 
-    isEmpty: function(obj) {
+    isEmpty : function(obj) {
         for(var key in obj) {
             if(hasOwnProp.call(obj, key)) {
                 return false;
@@ -32,7 +32,7 @@ provide({
         return true;
     },
 
-    each: function(obj, fn, ctx) {
+    each : function(obj, fn, ctx) {
         for(var key in obj) {
             if(hasOwnProp.call(obj, key)) {
                 ctx? fn.call(ctx, obj[key], key) : fn(obj[key], key);

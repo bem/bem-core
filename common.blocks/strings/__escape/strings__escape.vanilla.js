@@ -5,11 +5,11 @@
 modules.define('strings__escape', function(provide) {
 
 var symbols = {
-        '"': '&quot;',
-        '\'': '&apos;',
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;'
+        '"' : '&quot;',
+        '\'' : '&apos;',
+        '&' : '&amp;',
+        '<' : '&lt;',
+        '>' : '&gt;'
     },
     mapSymbol = function(s) {
         return symbols[s] || s;
@@ -22,9 +22,9 @@ var symbols = {
     };
 
 provide({
-    xml: buildEscape('[&<>]'),
-    html: buildEscape('[&<>]'),
-    attr: buildEscape('["\'&<>]')
+    xml : buildEscape('[&<>]'),
+    html : buildEscape('[&<>]'),
+    attr : buildEscape('["\'&<>]')
 });
 
 });

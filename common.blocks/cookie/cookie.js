@@ -11,7 +11,7 @@ provide({
      * @param {String} name
      * @returns {String|null}
      */
-    get: function(name) {
+    get : function(name) {
         var res = null;
         if(document.cookie && document.cookie !== '') {
             var cookies = document.cookie.split(';');
@@ -34,7 +34,7 @@ provide({
      * @param {Object} options
      * @returns {this}
      */
-    set: function(name, val, options) {
+    set : function(name, val, options) {
         options = options || {};
         if(val === null) {
             val = '';

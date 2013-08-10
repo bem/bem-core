@@ -8,21 +8,21 @@ modules.define('jquery', ['objects'], function(provide, objects, $) {
 
 objects.each(
     {
-        pointerclick: 'click',
-        pointerdown: 'mousedown',
-        pointerup: 'mouseup'
+        pointerclick : 'click',
+        pointerdown : 'mousedown',
+        pointerup : 'mouseup'
     },
     function(mouseEvent, pointerEvent) {
         var event = $.event.special[pointerEvent] = {
-                setup: function() {
+                setup : function() {
                     $(this).on(mouseEvent, event.handler);
                 },
 
-                teardown: function() {
+                teardown : function() {
                     $(this).off(mouseEvent, event.handler);
                 },
 
-                handler: function(e) {
+                handler : function(e) {
                     if(!e.button) {
                         e.type = pointerEvent;
                         $.event.dispatch.apply(this, arguments);

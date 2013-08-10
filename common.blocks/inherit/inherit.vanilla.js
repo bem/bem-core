@@ -36,7 +36,7 @@ var hasIntrospection = (function(){'_';}).toString().indexOf('_') > -1,
     },
     noOp = function() {},
     needCheckProps = true,
-    testPropObj = { toString: '' };
+    testPropObj = { toString : '' };
 
 for(var i in testPropObj) { // fucking ie hasn't toString, valueOf in for
     testPropObj.hasOwnProperty(i) && (needCheckProps = false);
