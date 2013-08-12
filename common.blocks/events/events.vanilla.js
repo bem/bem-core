@@ -4,7 +4,10 @@
  * @author Filatov Dmitry <dfilatov@yandex-team.ru>
  */
 
-modules.define('events', ['identify', 'inherit'], function(provide, identify, inherit) {
+modules.define(
+    'events',
+    ['identify', 'inherit', 'functions'],
+    function(provide, identify, inherit, functions) {
 
 var undef,
     storageExpando = '__' + (+new Date) + 'storage',
@@ -55,7 +58,7 @@ var undef,
          */
         on : function(e, data, fn, ctx, _special) {
             if(typeof e === 'string') {
-                if(typeof data === 'function') {
+                if(functions.isFunction(data)) {
                     ctx = fn;
                     fn = data;
                     data = undef;
