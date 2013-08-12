@@ -25,14 +25,15 @@ exports.techMixin = {
         };
     },
 
-    getYmChunk : function(outputDir, outputName, suffix) {
-        var ymRelPath = PATH.relative(outputDir, ymPath);
+    getYmChunk : function(output) {
+        var outputDir = PATH.resolve(output, '..'),
+            ymRelPath = PATH.relative(outputDir, ymPath);
         return this.getBuildResultChunk(ymRelPath, ymPath);
     },
 
-    getBuildResult : function(prefixes, suffix, outputDir, outputName) {
+    getBuildResult : function(files, suffix, output, opts) {
         return Q.all([
-                this.getYmChunk(outputDir, outputName, suffix),
+                this.getYmChunk(output),
                 this.__base.apply(this, arguments)
             ])
             .spread(function(ym, res) {
