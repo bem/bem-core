@@ -17,6 +17,7 @@ exports.getTechs = function() {
 
     [
         'test.js',
+        'sets',
         'test.js+browser.js+bemhtml'
     ].forEach(function(name) {
         techs[name] = environ.getLibPath('bem-pr', 'bem', 'techs', name + '.js');
