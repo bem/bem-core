@@ -20,7 +20,7 @@
     "bem-environ": "~1.2.0"
   },
   "devDependencies": {
-    "bem": "0.6.13",
+    "bem": "~0.6.15",
     "mocha": "~1.9.0",
     "jshint": "2.1.8",
     "jshint-groups": "0.5.1",
