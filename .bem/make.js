@@ -23,7 +23,7 @@ MAKE.decl('Arch', {
 
     bundlesLevelsRegexp: /^.+?\.bundles$/,
 
-    libraries : [ 'bem-pr@origin/v0.2' ],
+    libraries : [ 'bem-pr@origin/v0.3' ],
 
     createCustomNodes: function(common, libs, blocks) {
         if(!setsNodes) return;

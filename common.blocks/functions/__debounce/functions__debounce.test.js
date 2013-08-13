@@ -23,7 +23,7 @@ describe('functions__debounce', function() {
         setTimeout(function() {
             res.should.be.eql([5, 7]);
             done();
-        }, 300);
+        }, 400);
     });
 
     it('should properly debounce given function according "invokeAsap" param', function(done) {
