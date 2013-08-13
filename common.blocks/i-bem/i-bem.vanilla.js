@@ -159,7 +159,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
         initImmediately !== false?
             this._init() :
-            initFns.push(this._init.bind(this));
+            initFns.push(this._init, this);
     },
 
     /**
@@ -489,9 +489,10 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @returns {this}
      */
     nextTick : function(fn) {
+        var _this = this;
         nextTick(function() {
-            this.hasMod('js', 'inited') && fn.call(this);
-        }.bind(this));
+            _this.hasMod('js', 'inited') && fn.call(_this);
+        });
         return this;
     },
 
@@ -645,14 +646,14 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @private
      */
     _runInitFns : function() {
-        var fnsLen = initFns.length;
-        if(fnsLen) {
-            var fnsCopy = initFns.slice(),
+        if(initFns.length) {
+            var fns = initFns,
                 fn, i = 0;
 
             initFns = [];
-            while(fn = fnsCopy[i++]) {
-                fn();
+            while(fn = fns[i]) {
+                fn.call(fns[i + 1]);
+                i += 2;
             }
         }
     },
