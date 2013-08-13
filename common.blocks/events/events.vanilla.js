@@ -17,7 +17,7 @@ var undef,
 
     /**
      * @class Event
-     * @alias events :Event
+     * @alias events:Event
      */
     Event = inherit(/** @lends Event.prototype */{
         __constructor : function(type, target) {
@@ -49,7 +49,7 @@ var undef,
 
     EmitterProps = {
         /**
-         * Adding event handler
+         * Adds an event handler
          * @param {String} e Event type
          * @param {Object} [data] Additional data that the handler gets as e.data
          * @param {Function} fn Handler
@@ -93,12 +93,21 @@ var undef,
             return this;
         },
 
+        /**
+         * Adds a one time handler for the event.
+         * Handler is executed only the next time the event is fired, after which it is removed.
+         * @param {String} e Event type
+         * @param {Object} [data] Additional data that the handler gets as e.data
+         * @param {Function} fn Handler
+         * @param {Object} [ctx] Handler context
+         * @returns {this}
+         */
         once : function(e, data, fn, ctx) {
             return this.on(e, data, fn, ctx, { once : true });
         },
 
         /**
-         * Removing event handler(s)
+         * Removes event handler or handlers
          * @param {String} [e] Event type
          * @param {Function} [fn] Handler
          * @param {Object} [ctx] Handler context
@@ -213,7 +222,7 @@ EmitterProps.onFirst = EmitterProps.once;
 
 /**
  * @class Emitter
- * @alias events :Emitter
+ * @alias events:Emitter
  */
 var Emitter = inherit(
         /** @lends Emitter.prototype */
