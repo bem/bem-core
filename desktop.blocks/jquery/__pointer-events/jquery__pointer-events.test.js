@@ -21,7 +21,7 @@ describe('jquery__pointer-events', function() {
         spy.should.have.been.calledOnce;
     });
 
-    it('should trigger "pointerdown" event on click by left button', function() {
+    it('should trigger "pointerdown" event on mousedown by left button', function() {
         var spy = sinon.spy(),
             elem = $('<div/>'),
             e = $.Event('mousedown', { button : 1 });
@@ -38,7 +38,7 @@ describe('jquery__pointer-events', function() {
         spy.should.have.been.calledOnce;
     });
     
-    it('should trigger "pointerup" event on click by left button', function() {
+    it('should trigger "pointerup" event on mouseup by left button', function() {
         var spy = sinon.spy(),
             elem = $('<div/>'),
             e = $.Event('mouseup', { button : 1 });
