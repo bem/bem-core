@@ -31,7 +31,7 @@ var MOD_DELIM = '_',
     cache = {},
     // {String[]} A stack used for restoring context of dynamic keysets
     stack = [],
-    log = (typeof console !== 'undefined' && console.log)? console.log : function() {};
+    log = (typeof console !== 'undefined' && console.log)? console.log.bind(console) : function() {};
 
 function bemName(decl) {
     typeof decl === 'string' && (decl = { block : decl });
