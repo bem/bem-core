@@ -183,6 +183,7 @@ var undef,
                             res;
                         while(item) {
                             if(!eventInstantiated) { // instantiate Event only on demand
+                                eventInstantiated = true;
                                 typeof e === 'string' && (e = new Event(e));
                                 e.target || (e.target = this);
                             }
