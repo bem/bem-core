@@ -997,8 +997,14 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @param {jQuery|String} content Content to be added
      */
     replace : function(ctx, content) {
-        this.destruct(true, ctx);
-        this.init($(content).replaceAll(ctx));
+        var prev = ctx.prev(),
+            parent = ctx.parent();
+
+        this.destruct(ctx);
+
+        this.init(prev.length?
+            $(content).insertAfter(prev) :
+            $(content).prependTo(parent));
     },
 
     /**

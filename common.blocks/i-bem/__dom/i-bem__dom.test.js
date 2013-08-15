@@ -347,6 +347,55 @@ describe('i-bem__dom', function() {
         });
     });
 
+    describe('DOM.replace', function() {
+        it('should properly replace tree', function() {
+            var spyBlock1Destructed = sinon.spy(),
+                spyBlock2Inited = sinon.spy();
+
+            DOM.decl('block1', {
+                onSetMod : {
+                    js : {
+                        '' : spyBlock1Destructed
+                    }
+                }
+            });
+            DOM.decl('block2', {
+                onSetMod : {
+                    js : {
+                        inited : spyBlock2Inited
+                    }
+                }
+            });
+
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    tag : 'div',
+                    content : { block : 'block1', js : true } })));
+
+            DOM.replace(rootNode.find('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
+
+            spyBlock1Destructed.should.have.been.calledOnce;
+            spyBlock2Inited.should.have.been.calledOnce;
+
+            rootNode.html().should.be.equal('<div class="block2 i-bem block2_js_inited" onclick="return {&quot;block2&quot;:{}}"></div>');
+
+            DOM.destruct(rootNode);
+
+            rootNode = DOM.init($(BEMHTML.apply({
+                    tag : 'div',
+                    content : [{ tag : 'p' }, { block : 'block1', js : true }, { tag : 'p' }] })));
+
+            DOM.replace(rootNode.find('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
+
+            spyBlock1Destructed.should.have.been.calledTwice;
+            spyBlock2Inited.should.have.been.calledTwice;
+
+            rootNode.html().should.be.equal('<p></p><div class="block2 i-bem block2_js_inited" onclick="return {&quot;block2&quot;:{}}"></div><p></p>');
+
+            delete DOM.blocks['block1'];
+            delete DOM.blocks['block2'];
+        });
+    });
+
     describe('emit', function() {
         it('should emit context event with target', function() {
             DOM.decl('block', {
