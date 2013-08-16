@@ -1,0 +1,2 @@
+block('b1').tag()('span');
+block('b2').tag()('a');
