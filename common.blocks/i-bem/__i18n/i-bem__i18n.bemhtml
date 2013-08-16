@@ -13,11 +13,8 @@ block('i-bem').elem('i18n').def()(function() {
      * Consider `content` is a reserved param that contains
      * valid bemjson data
      */
-    if(ctx.content) {
-        var cnt;
-        params.content = (cnt = [],
-            apply('', { _buf: cnt, ctx: ctx.context }),
-            cnt.join(''));
+    if(ctx.content !== null) {
+        params.content = exports.apply(ctx.content);
     }
 
     this._buf.push(BEM.I18N(keyset, key, params));
