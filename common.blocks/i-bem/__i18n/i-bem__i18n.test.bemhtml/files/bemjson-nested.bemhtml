@@ -1,0 +1,15 @@
+oninit(function() {
+    BEM.I18N.lang('all');
+
+    BEM.I18N.decl('kk', {
+        'k1' : function(param) {
+            return 'key-one' + param.content
+        }
+    }, { lang : 'all' });
+});
+
+block('b1').tag()('span');
+block('b2')(
+    tag()('a'),
+    content()('some-thing')
+);
