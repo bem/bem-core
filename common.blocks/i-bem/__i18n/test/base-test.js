@@ -1,3 +1,6 @@
+/* jshint node:true */
+/* global suite, setup, test, BEM */
+
 var assert = require('assert'),
     fs = require('fs'),
     path = require('path');
@@ -35,34 +38,27 @@ suite('BEM.I18N Simple test', function() {
         BEM.I18N.lang('ru');
 
         BEM.I18N.decl('i-keyset-0', {
-
-            "key1" : "Ключ1",
-            "key2" : "Ключ2"
-
-        }, { "lang" : "ru" });
+            'key1' : 'Ключ1',
+            'key2' : 'Ключ2'
+        }, { 'lang' : 'ru' });
 
         BEM.I18N.decl('i-keyset-1', {
-
-            "dynamic" : function(param) {
+            'dynamic' : function(param) {
                 return this.keyset('i-keyset-0').key('key' + param['num']);
             },
-
-            "complex" : function(param) {
+            'complex' : function(param) {
                 return this.key('dynamic', { num : param['num'] }) + ' : ' + param['text'];
             }
-
-        }, { "lang" : "ru" });
+        }, { 'lang' : 'ru' });
 
         BEM.I18N.decl('i-keyset-2', {
-
-            "key" : function(param) {
+            'key' : function(param) {
                 return this.keyset('i-keyset-1').key('complex', {
                         num : 1,
                         text : this.keyset('i-keyset-0').key('key1')
                     });
             }
-
-        }, { "lang" : "ru" });
+        }, { 'lang' : 'ru' });
     });
 
     test('Simple', function() {
