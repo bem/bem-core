@@ -118,10 +118,45 @@ describe('i-bem__dom', function() {
                 var block = (rootNode = $('<div class="' + data.beforeCls + '"/>')).bem('block');
 
                 objects.each(data.mods, function(modVal, modName) {
-                    block.setMod(modName, modVal);
+                    modName === 'm3'?
+                        block.setMod(modName) :
+                        block.setMod(modName, modVal);
                 });
 
                 block.domElem[0].className.should.be.equal(data.afterCls);
+
+                DOM.destruct(rootNode);
+            });
+
+            delete DOM.blocks['block'];
+        });
+
+        it('should properly set elem CSS classes', function() {
+            DOM.decl('block', {});
+
+            var rootNode;
+            [
+                {
+                    beforeCls : 'block__elem',
+                    afterCls : 'block__elem block__elem_m1_v1',
+                    mods : { m1 : 'v1' }
+                },
+                {
+                    beforeCls : 'block__elem block__elem_m6 block__elem_m7_v7',
+                    afterCls : 'block__elem block__elem_m1_v1 block__elem_m2_v2 block__elem_m3 block__elem_m4_v4 block__elem_m5',
+                    mods : { m1 : 'v1', m2 : 'v2', m3 : true, m4 : 'v4', m5 : true, m6 : false, m7 : '' }
+                }
+            ].forEach(function(data) {
+                var block = (rootNode = $('<div class="block"><div class="' + data.beforeCls + '"/></div>')).bem('block'),
+                    elem = block.elem('elem');
+
+                objects.each(data.mods, function(modVal, modName) {
+                    modName === 'm3'?
+                        block.setMod(elem, modName) :
+                        block.setMod(elem, modName, modVal);
+                });
+
+                elem[0].className.should.be.equal(data.afterCls);
 
                 DOM.destruct(rootNode);
             });

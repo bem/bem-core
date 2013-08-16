@@ -308,9 +308,15 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     setMod : function(elem, modName, modVal) {
         if(typeof modVal === 'undefined') {
-            modVal = typeof modName === 'undefined'? true : modName;
-            modName = elem;
-            elem = undef;
+            if(typeof elem === 'string') { // if no elem
+                modVal = typeof modName === 'undefined'?
+                    true :  // e.g. setMod('focused')
+                    modName; // e.g. setMod('js', 'inited')
+                modName = elem;
+                elem = undef;
+            } else { // if elem
+                modVal = true; // e.g. setMod(elem, 'focused')
+            }
         }
 
         if(!elem || elem[0]) {
