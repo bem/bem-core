@@ -1,0 +1,13 @@
+{
+    "block" : "b1",
+    "content" : {
+        "block" : "i-bem",
+        "elem" : "i18n",
+        "keyset" : "kk",
+        "key" : "k1",
+        "content" : {
+            "block" : "b2",
+            "content" : "some-thing"
+        }
+    }
+}
