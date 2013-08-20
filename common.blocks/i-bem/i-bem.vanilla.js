@@ -400,6 +400,11 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             modName = elem;
             elem = undef;
         }
+
+        if(typeof modVal1 === 'undefined') { // boolean mod
+            modVal1 = true;
+        }
+
         if(typeof modVal2 === 'undefined') {
             modVal2 = '';
         } else if(typeof modVal2 === 'boolean') {
