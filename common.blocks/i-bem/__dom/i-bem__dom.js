@@ -894,10 +894,11 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
 
     /**
      * Scope
+     * Will be set on onDomReady to `<body>`
      * @protected
      * @type jQuery
      */
-    scope : $('body'),
+    scope : null,
 
     /**
      * Document shortcut
@@ -1459,6 +1460,13 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
 $.fn.bem = function(blockName, params) {
     return initBlock(blockName, this, params, true);
 };
+
+/**
+ * Set default scope after DOM ready
+ */
+$(function() {
+    DOM.scope = $('body');
+});
 
 provide(DOM);
 
