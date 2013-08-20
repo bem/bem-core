@@ -188,6 +188,18 @@ describe('i-bem', function() {
                         .should.be.true;
             });
 
+            it('should switch boolean mod\'s value', function() {
+                block
+                    .toggleMod('mod2')
+                    .hasMod('mod2')
+                        .should.be.false;
+
+                block
+                    .toggleMod('mod2')
+                    .hasMod('mod2')
+                        .should.be.true;
+            });
+
             it('should switch mod\'s values according to "condition" param', function() {
                 block
                     .toggleMod('mod1', 'val1', 'val2', true)
