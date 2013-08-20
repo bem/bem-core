@@ -36,20 +36,22 @@ var MOD_DELIM = '_',
  */
     NAME_PATTERN = '[a-zA-Z0-9-]+';
 
-function buildModPostfix(modName, modVal, buffer) {
-    buffer.push(MOD_DELIM, modName);
-    modVal !== true && buffer.push(MOD_DELIM, modVal);
+function buildModPostfix(modName, modVal) {
+    var res = MOD_DELIM + modName;
+    if (modVal !== true) res += MOD_DELIM + modVal;
+    return res;
 }
 
-function buildBlockClass(name, modName, modVal, buffer) {
-    buffer.push(name);
-    modVal && buildModPostfix(modName, modVal, buffer);
+function buildBlockClass(name, modName, modVal) {
+    var res = name;
+    if (modVal) res += buildModPostfix(modName, modVal);
+    return res;
 }
 
-function buildElemClass(block, name, modName, modVal, buffer) {
-    buildBlockClass(block, undefined, undefined, buffer);
-    buffer.push(ELEM_DELIM, name);
-    modVal && buildModPostfix(modName, modVal, buffer);
+function buildElemClass(block, name, modName, modVal) {
+    var res = buildBlockClass(block) + ELEM_DELIM + name;
+    if (modVal) res += buildModPostfix(modName, modVal);
+    return res;
 }
 
 BEM.INTERNAL = {
@@ -59,13 +61,7 @@ BEM.INTERNAL = {
     MOD_DELIM : MOD_DELIM,
     ELEM_DELIM : ELEM_DELIM,
 
-    buildModPostfix : function(modName, modVal, buffer) {
-
-        var res = buffer || [];
-        buildModPostfix(modName, modVal, res);
-        return buffer? res : res.join('');
-
-    },
+    buildModPostfix : buildModPostfix,
 
     /**
      * Builds the class for a block or element with a modifier
@@ -74,39 +70,31 @@ BEM.INTERNAL = {
      * @param {String} [elem] Element name
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Element name
-     * @param {Array} [buffer] Buffer
-     * @returns {String|Array} Class or buffer string (depending on whether the buffer parameter is present)
+     * @returns {String} Class string
      */
-    buildClass : function(block, elem, modName, modVal, buffer) {
+    buildClass : function(block, elem, modName, modVal) {
         var typeOfModName = typeof modName;
         if(typeOfModName === 'string' || typeOfModName === 'boolean') {
             var typeOfModVal = typeof modVal;
             if(typeOfModVal !== 'string' && typeOfModVal !== 'boolean') {
-                buffer = modVal;
                 modVal = modName;
                 modName = elem;
                 elem = undefined;
             }
         } else if(typeOfModName !== 'undefined') {
-            buffer = modName;
             modName = undefined;
         } else if(elem && typeof elem !== 'string') {
-            buffer = elem;
             elem = undefined;
         }
 
-        if(!(elem || modName || buffer)) { // оптимизация для самого простого случая
+        if(!(elem || modName)) { // оптимизация для самого простого случая
             return block;
         }
 
-        var res = buffer || [];
-
-        elem?
-            buildElemClass(block, elem, modName, modVal, res) :
-            buildBlockClass(block, modName, modVal, res);
-
-        return buffer? res : res.join('');
-
+        if (elem)
+            return buildElemClass(block, elem, modName, modVal);
+        else
+            return buildBlockClass(block, modName, modVal);
     },
 
     /**
@@ -115,12 +103,11 @@ BEM.INTERNAL = {
      * @param {String} block Block name
      * @param {String} [elem] Element name
      * @param {Object} [mods] Modifier name
-     * @param {Array} [buffer] Buffer
-     * @returns {String|Array} Class or buffer string (depending on whether the buffer parameter is present)
+     * @returns {String} Class string
      */
-    buildModsClasses : function(block, elem, mods, buffer) {
+    buildModsClasses : function(block, elem, mods) {
 
-        var res = buffer || [];
+        var res = '';
 
         if(mods) {
             var modName; // TODO: разобраться с OmetaJS и YUI Compressor
@@ -128,22 +115,16 @@ BEM.INTERNAL = {
                 if(!mods.hasOwnProperty(modName)) continue;
 
                 var modVal = mods[modName];
-                if(modVal == null) continue;
-
-                modVal = mods[modName];
+                if(!modVal && modVal !== 0) continue;
                 typeof modVal !== 'boolean' && (modVal += '');
-                if(!modVal) continue;
 
-                res.push(' ');
-                if(elem) {
-                  buildElemClass(block, elem, modName, modVal, res);
-                } else {
-                  buildBlockClass(block, modName, modVal, res);
-                }
+                res += ' ' + (elem?
+                    buildElemClass(block, elem, modName, modVal) :
+                    buildBlockClass(block, modName, modVal));
             }
         }
 
-        return buffer? res : res.join('');
+        return res;
 
     },
 
@@ -153,20 +134,20 @@ BEM.INTERNAL = {
      * @param {String} block Block name
      * @param {String} [elem] Element name
      * @param {Object} [mods] Modifier name
-     * @param {Array} [buffer] Buffer
-     * @returns {String|Array} Class or buffer string (depending on whether the buffer parameter is present)
+     * @returns {String} Class string
      */
-    buildClasses : function(block, elem, mods, buffer) {
+    buildClasses : function(block, elem, mods) {
 
-        var res = buffer || [];
+        var res = '';
 
-        elem?
-            buildElemClass(block, elem, undefined, undefined, res) :
-            buildBlockClass(block, undefined, undefined, res);
+        if (elem)
+            res += buildElemClass(block, elem);
+        else
+            res += buildBlockClass(block);
 
-        this.buildModsClasses(block, elem, mods, buffer);
+        res += this.buildModsClasses(block, elem, mods);
 
-        return buffer? res : res.join('');
+        return res;
 
     }
 
@@ -184,9 +165,21 @@ var buildEscape = (function() {
 })();
 
 function BEMContext(context, apply_) {
-    this.ctx = typeof context === null? '' : context;
+    this.ctx = typeof context === null ? '' : context;
     this.apply = apply_;
-    this._buf = [];
+    this._str = '';
+
+    // Compatibility stuff, just in case
+    var self = this;
+    this._buf = {
+      push: function() {
+        var chunks = Array.prototype.slice.call(arguments).join('');
+        self._str += chunks;
+      },
+      join: function() {
+        return this._str;
+      }
+    };
     this._ = this;
 
     // Stub out fields that will be used later
@@ -224,7 +217,7 @@ BEMContext.prototype.identify = (function() {
     var cnt = 0,
         id = (+new Date()),
         expando = '__' + id,
-        get = function() { return 'uniq' + id + ++cnt; };
+        get = function() { return 'uniq' + id + (++cnt); };
     return function(obj, onlyGet) {
         if(!obj) return get();
         if(onlyGet || obj[expando]) {
@@ -257,7 +250,7 @@ var oldApply = exports.apply;
 exports.apply = BEMContext.apply = function _apply(context) {
     var ctx = new BEMContext(context || this, oldApply);
     ctx.apply();
-    return ctx._buf.join('');
+    return ctx._str;
 };
 
 BEMContext.prototype.reapply = BEMContext.apply;
@@ -317,7 +310,9 @@ match(this._mode === '')(
         this._listLength--;
 
         var ctx = this.ctx;
-        (ctx && ctx !== true || ctx === 0) && this._buf.push(ctx);
+        if (ctx && ctx !== true || ctx === 0) {
+            this._buf.push(ctx + '');
+        }
     }),
 
     // hack-check for Vow-promise
@@ -330,146 +325,152 @@ match(this._mode === '')(
 def()(function() {
     var _this = this,
         BEM_ = _this.BEM,
-        isBEM,
         v = this.ctx,
-        buf = this._buf,
-        tag;
+        isBEM,
+        tag,
+        result;
 
-    tag = apply('tag');
-    typeof tag !== 'undefined' || (tag = v.tag);
-    typeof tag !== 'undefined' || (tag = 'div');
+    local({ _str: '' })(function() {
+        tag = apply('tag');
+        typeof tag !== 'undefined' || (tag = v.tag);
+        typeof tag !== 'undefined' || (tag = 'div');
 
-    if(tag) {
-        var jsParams, js;
-        if(this.block && v.js !== false) {
-            js = apply('js');
-            js = js? this._.extend(v.js, js === true? {} : js) : v.js === true? {} : v.js;
-            js && ((jsParams = {})[BEM_.INTERNAL.buildClass(this.block, v.elem)] = js);
-        }
+        if(tag) {
+            var jsParams, js;
+            if(this.block && v.js !== false) {
+                js = apply('js');
+                js = js? this._.extend(v.js, js === true? {} : js) : v.js === true? {} : v.js;
+                js && ((jsParams = {})[BEM_.INTERNAL.buildClass(this.block, v.elem)] = js);
+            }
 
-        buf.push('<', tag);
+            this._str += '<' + tag;
 
-        isBEM = apply('bem');
-        typeof isBEM !== 'undefined' || (isBEM = typeof v.bem !== 'undefined'? v.bem : v.block || v.elem);
+            isBEM = apply('bem');
+            typeof isBEM !== 'undefined' || (isBEM = typeof v.bem !== 'undefined' ? v.bem : v.block || v.elem);
 
-        var cls = apply('cls');
-        cls || (cls = v.cls);
+            var cls = apply('cls');
+            cls || (cls = v.cls);
 
-        var addJSInitClass = v.block && jsParams;
-        if(isBEM || cls) {
-            buf.push(' class="');
-            if(isBEM) {
+            var addJSInitClass = v.block && jsParams;
+            if(isBEM || cls) {
+                this._str += ' class="';
+                if(isBEM) {
 
-                BEM_.INTERNAL.buildClasses(this.block, v.elem, v.elemMods || v.mods, buf);
+                    this._str += BEM_.INTERNAL.buildClasses(this.block, v.elem, v.elemMods || v.mods);
 
-                var mix = apply('mix');
-                v.mix && (mix = mix? mix.concat(v.mix) : v.mix);
+                    var mix = apply('mix');
+                    v.mix && (mix = mix? mix.concat(v.mix) : v.mix);
 
-                if(mix) {
-                    var visited = {},
-                        visitedKey = function(block, elem) {
-                            return (block || '') + '__' + (elem || '');
-                        };
+                    if(mix) {
+                        var visited = {},
+                            visitedKey = function (block, elem) {
+                              return (block || '') + '__' + (elem || '');
+                            };
 
-                    visited[visitedKey(this.block, this.elem)] = true;
+                        visited[visitedKey(this.block, this.elem)] = true;
 
-                    // Transform mix to the single-item array if it's not array
-                    if(!this._.isArray(mix)) mix = [mix];
-                    for(var i = 0; i < mix.length; i++) {
-                        var mixItem = mix[i],
-                            hasItem = mixItem.block || mixItem.elem,
-                            block = mixItem.block || mixItem._block || _this.block,
-                            elem = mixItem.elem || mixItem._elem || _this.elem;
+                        // Transform mix to the single-item array if it's not array
+                        if (!this._.isArray(mix)) mix = [mix];
+                        for (var i = 0; i < mix.length; i++) {
+                            var mixItem = mix[i],
+                                hasItem = mixItem.block || mixItem.elem,
+                                block = mixItem.block || mixItem._block || _this.block,
+                                elem = mixItem.elem || mixItem._elem || _this.elem;
 
-                        hasItem && buf.push(' ');
-                        BEM_.INTERNAL[hasItem? 'buildClasses' : 'buildModsClasses'](
-                            block,
-                            mixItem.elem || mixItem._elem ||
-                                (mixItem.block? undefined : _this.elem),
-                            mixItem.elemMods || mixItem.mods,
-                            buf);
+                            if (hasItem) this._str += ' ';
+                            this._str += BEM_.INTERNAL[hasItem? 'buildClasses' : 'buildModsClasses'](
+                                block,
+                                mixItem.elem || mixItem._elem ||
+                                    (mixItem.block ? undefined : _this.elem),
+                                mixItem.elemMods || mixItem.mods);
 
-                        if(mixItem.js) {
-                            (jsParams || (jsParams = {}))[BEM_.INTERNAL.buildClass(block, mixItem.elem)] = mixItem.js === true? {} : mixItem.js;
-                            addJSInitClass || (addJSInitClass = block && !mixItem.elem);
-                        }
+                            if(mixItem.js) {
+                                (jsParams || (jsParams = {}))[BEM_.INTERNAL.buildClass(block, mixItem.elem)] = mixItem.js === true? {} : mixItem.js;
+                                addJSInitClass || (addJSInitClass = block && !mixItem.elem);
+                            }
 
-                        // Process nested mixes
-                        if(hasItem && !visited[visitedKey(block, elem)]) {
-                            visited[visitedKey(block, elem)] = true;
-                            var nestedMix = apply('mix', {
-                                block : block,
-                                elem : elem
-                            });
+                            // Process nested mixes
+                            if (hasItem && !visited[visitedKey(block, elem)]) {
+                                visited[visitedKey(block, elem)] = true;
+                                var nestedMix = apply('mix', {
+                                    block: block,
+                                    elem: elem
+                                });
 
-                            if(nestedMix) {
-                                for(var j = 0; j < nestedMix.length; j++) {
-                                    var nestedItem = nestedMix[j];
-                                    if(!nestedItem.block &&
-                                        !nestedItem.elem ||
-                                        !visited[visitedKey(
-                                          nestedItem.block,
-                                          nestedItem.elem
-                                        )]) {
-                                        nestedItem._block = block;
-                                        nestedItem._elem = elem;
-                                        mix.splice(i + 1, 0, nestedItem);
+                                if (nestedMix) {
+                                    for (var j = 0; j < nestedMix.length; j++) {
+                                        var nestedItem = nestedMix[j];
+                                        if (!nestedItem.block &&
+                                            !nestedItem.elem ||
+                                            !visited[visitedKey(
+                                              nestedItem.block,
+                                              nestedItem.elem
+                                            )]) {
+                                            nestedItem._block = block;
+                                            nestedItem._elem = elem;
+                                            mix.splice(i + 1, 0, nestedItem);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+
+                if (cls) this._str += isBEM? ' ' + cls : cls;
+
+                if (addJSInitClass)
+                    this._str += ' i-bem"';
+                else
+                    this._str += '"';
             }
 
-            cls && buf.push(isBEM? ' ' : '', cls);
+            if(isBEM && jsParams) {
+                this._str += ' data-bem="' +
+                    this._.attrEscape(JSON.stringify(jsParams)) +
+                    '"';
+            }
 
-            addJSInitClass && buf.push(' i-bem');
-            buf.push('"');
-        }
-
-        if(isBEM && jsParams) {
-            buf.push(
-                ' data-bem="',
-                this._.attrEscape(JSON.stringify(jsParams)),
-                '"');
-        }
-
-        var attrs = apply('attrs');
-        attrs = this._.extend(attrs, v.attrs); // NOTE : возможно стоит делать массив, чтобы потом быстрее сериализовывать
-        if(attrs) {
-            var name, attr; // TODO: разобраться с OmetaJS и YUI Compressor
-            for(name in attrs) {
-                attr = attrs[name];
-                if(attr === undefined) continue;
-                buf.push(
-                    ' ', name, '="',
-                    this._.attrEscape(this._.isSimple(attr)?
-                        attr :
-                        this.reapply(attr)),
-                    '"');
+            var attrs = apply('attrs');
+            attrs = this._.extend(attrs, v.attrs); // NOTE: возможно стоит делать массив, чтобы потом быстрее сериализовывать
+            if(attrs) {
+                var name, attr; // TODO: разобраться с OmetaJS и YUI Compressor
+                for(name in attrs) {
+                    attr = attrs[name];
+                    if(attr === undefined) continue;
+                    this._str += ' ' + name + '="' +
+                        this._.attrEscape(this._.isSimple(attr)?
+                            attr :
+                            this.reapply(attr)) +
+                        '"';
+                }
             }
         }
-    }
 
-    if(this._.isShortTag(tag)) {
-        buf.push('/>');
-    } else {
-        tag && buf.push('>');
+        if(this._.isShortTag(tag)) {
+            this._str += '/>';
+        } else {
+            if(tag) this._str += '>';
 
-        var content = apply('content');
-        if(content || content === 0) {
-            isBEM = this.block || this.elem;
-            apply('', {
-                _notNewList : false,
-                position : isBEM? 1 : this.position,
-                _listLength : isBEM? 1 : this._listLength,
-                ctx : content
-            });
+            var content = apply('content');
+            if(content || content === 0) {
+                isBEM = this.block || this.elem;
+                apply('', {
+                    _notNewList: false,
+                    position: isBEM ? 1 : this.position,
+                    _listLength: isBEM ? 1 : this._listLength,
+                    ctx: content
+                });
+            }
+
+            if (tag) this._str += '</' + tag + '>';
         }
 
-        tag && buf.push('</', tag, '>');
-    }
+        // If the buffer was replaced, pretend that we're pushing to the buffer
+        result = this._str;
+    });
+
+    this._buf.push(result);
 });
 
 tag()(undefined);
