@@ -1134,6 +1134,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
     _buildLiveEventFn : function(callback, invokeOnInit) {
         var _this = this;
         return function(e) {
+            e.currentTarget = this;
             var args = [
                     _this._name,
                     $(this).closest(_this.buildSelector()),
