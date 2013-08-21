@@ -162,9 +162,11 @@
     };
 
     var generateMouseProxy = function (evt, eventName) {
-        evt.pointerId = 1;
-        evt.pointerType = POINTER_TYPE_MOUSE;
-        generateTouchClonedEvent(evt, eventName);
+        if (!evt.button) {
+            evt.pointerId = 1;
+            evt.pointerType = POINTER_TYPE_MOUSE;
+            generateTouchClonedEvent(evt, eventName);
+        }
     };
 
     var generateTouchEventProxy = function (name, touchPoint, target, eventObject) {
