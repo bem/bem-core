@@ -942,7 +942,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @returns {jQuery} ctx Initialization context
      */
     init : function(ctx) {
-        ctx || (ctx = this.scope);
+        ctx || (ctx = DOM.scope);
 
         var uniqInitId = identify();
         findDomElem(ctx, BEM_SELECTOR).each(function() {
@@ -1070,7 +1070,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
 
             if(!storage) {
                 storage = liveClassEventStorage[e] = {};
-                this.scope.bind(e, this._liveClassTrigger.bind(this));
+                DOM.scope.bind(e, this._liveClassTrigger.bind(this));
             }
 
             storage = storage[className] || (storage[className] = { uniqIds : {}, fns : [] });
