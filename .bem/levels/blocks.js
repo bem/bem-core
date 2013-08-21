@@ -1,5 +1,6 @@
 var PATH = require('path'),
     BEM = require('bem'),
+    coreTechs = require('bem-techs-core'),
     environ = require('bem-environ'),
 
     PRJ_TECHS = PATH.resolve(__dirname, '../techs'),
@@ -27,12 +28,17 @@ exports.getTechs = function() {
         'bemhtml',
         'bemtree',
         'html',
-        'examples',
-        'tests',
         'vanilla.js',
         'browser.js',
         'node.js',
         'browser.js+bemhtml'
+    ].forEach(function(name) {
+        techs[name] = coreTechs.resolveTech(name);
+    });
+
+    [
+        'examples',
+        'tests',
     ].forEach(function(name) {
         techs[name] = join(PRJ_TECHS, name + '.js');
     });
