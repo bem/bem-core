@@ -255,6 +255,9 @@ exports.apply = BEMContext.apply = function _apply(context) {
     ctx.apply();
     return ctx._buf.join('');
 };
+
+BEMContext.prototype.reapply = BEMContext.apply;
+
 }); // oninit
 
 match(this._mode === '')(
