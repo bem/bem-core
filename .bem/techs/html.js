@@ -2,6 +2,8 @@ var BEM = require('bem'),
     Q = BEM.require('q'),
     VM = require('vm');
 
+exports.API_VER = 2;
+
 exports.techMixin = {
 
     getBemhtml: function(prefix) {

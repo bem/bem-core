@@ -7,7 +7,10 @@ var PATH = require('path'),
 
 exports.getTechs = function() {
     var techs = {
-        'bemjson.js' : '',
+        'bemjson.js' : 'bem/lib/tech/v2',
+        'bemhtml.js' : 'bem/lib/tech/v2',
+        'md'         : 'bem/lib/tech/v2',
+        'wiki'       : 'bem/lib/tech/v2',
         'bemdecl.js' : 'v2/bemdecl.js',
         'deps.js'    : 'v2/deps.js',
         'css'        : 'v2/css',
