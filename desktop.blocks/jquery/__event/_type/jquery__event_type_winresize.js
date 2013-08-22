@@ -1,5 +1,5 @@
 /**
- * @modules jquery__winresize-event
+ * @modules jquery__event_type_winresize
  */
 
 modules.define('jquery', ['ua'], function(provide, ua, $) {

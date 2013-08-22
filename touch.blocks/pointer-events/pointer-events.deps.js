@@ -1,5 +1,3 @@
 ({
-    shouldDeps : [
-        { block : 'pointer-events', elem : 'click' }
-    ]
+    shouldDeps : { elem : 'pointer-click' }
 })

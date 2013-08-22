@@ -14,6 +14,7 @@
     "excludeFiles" : [
         ".bem/**",
         "common.blocks/vow/**",
-        "common.blocks/ecma/__array/ecma__array.test.js"
+        "common.blocks/ecma/__array/ecma__array.test.js",
+        "touch.blocks/pointer-events/__pointer-click/pointer-events__pointer-click.js"
     ]
 }
