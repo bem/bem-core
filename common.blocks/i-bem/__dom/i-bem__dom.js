@@ -190,16 +190,10 @@ function getParams(domNode) {
  * @param {HTMLElement} domNode DOM node
  * @returns {Object}
  */
-var extractParams = typeof JSON !== 'undefined' && functions.isFunction(JSON.parse)?
-    function(domNode) {
-        var attrVal = domNode.getAttribute(BEM_PARAMS_ATTR);
-        return attrVal? JSON.parse(attrVal) : {};
-    } :
-    function(domNode) {
-        var attrVal = domNode.getAttribute(BEM_PARAMS_ATTR);
-        /*jshint -W061 */
-        return attrVal? Function('return ' + attrVal)() : {};
-    };
+function extractParams(domNode) {
+    var attrVal = domNode.getAttribute(BEM_PARAMS_ATTR);
+    return attrVal? JSON.parse(attrVal) : {};
+}
 
 /**
  * Cleans up all the BEM storages associated with a DOM node
