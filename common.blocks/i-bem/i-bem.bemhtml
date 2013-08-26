@@ -422,9 +422,8 @@ def()(function() {
         }
 
         if(jsParams) {
-            var jsAttr = apply('jsAttr');
             buf.push(
-                ' ', jsAttr || 'onclick', '="return ',
+                ' data-bem="',
                 this._.attrEscape(JSON.stringify(jsParams)),
                 '"');
         }
@@ -464,7 +463,6 @@ tag()(undefined);
 attrs()(undefined);
 cls()(undefined);
 js()(undefined);
-jsAttr()(undefined);
 bem()(undefined);
 mix()(undefined);
 content()(function() { return this.ctx.content });

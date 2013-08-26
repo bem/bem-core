@@ -411,7 +411,7 @@ describe('i-bem__dom', function() {
             spyBlock1Destructed.should.have.been.calledOnce;
             spyBlock2Inited.should.have.been.calledOnce;
 
-            rootNode.html().should.be.equal('<div class="block2 i-bem block2_js_inited" onclick="return {&quot;block2&quot;:{}}"></div>');
+            rootNode.html().should.be.equal('<div class="block2 i-bem block2_js_inited" data-bem="{&quot;block2&quot;:{}}"></div>');
 
             DOM.destruct(rootNode);
 
@@ -424,7 +424,7 @@ describe('i-bem__dom', function() {
             spyBlock1Destructed.should.have.been.calledTwice;
             spyBlock2Inited.should.have.been.calledTwice;
 
-            rootNode.html().should.be.equal('<p></p><div class="block2 i-bem block2_js_inited" onclick="return {&quot;block2&quot;:{}}"></div><p></p>');
+            rootNode.html().should.be.equal('<p></p><div class="block2 i-bem block2_js_inited" data-bem="{&quot;block2&quot;:{}}"></div><p></p>');
 
             delete DOM.blocks['block1'];
             delete DOM.blocks['block2'];
