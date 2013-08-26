@@ -5,7 +5,7 @@
         'functions',
         'dom',
         { block : 'i-bem', elems : ['internal'] },
-        { block : 'ecma', elem : 'string' }
+        { block : 'ecma', elems : ['string', 'json'] }
     ]
 },
 {

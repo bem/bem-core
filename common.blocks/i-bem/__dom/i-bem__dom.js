@@ -51,6 +51,7 @@ var undef,
 
     BEM_CLASS = 'i-bem',
     BEM_SELECTOR = '.' + BEM_CLASS,
+    BEM_PARAMS_ATTR = 'data-bem',
 
     NAME_PATTERN = INTERNAL.NAME_PATTERN,
 
@@ -190,14 +191,8 @@ function getParams(domNode) {
  * @returns {Object}
  */
 function extractParams(domNode) {
-    var fn = domNode.onclick || domNode.ondblclick;
-    if(!fn && domNode.tagName.toLowerCase() === 'body') { // LEGO-2027 in FF onclick doesn't work on body
-        var elem = $(domNode),
-            attr = elem.attr('onclick') || elem.attr('ondblclick');
-        /*jshint -W061 */
-        attr && (fn = Function(attr));
-    }
-    return fn? fn() : {};
+    var attrVal = domNode.getAttribute(BEM_PARAMS_ATTR);
+    return attrVal? JSON.parse(attrVal) : {};
 }
 
 /**
