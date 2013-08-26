@@ -34,7 +34,7 @@ English](https://github.com/bem/bem-core/blob/v1/README.md).
 
 ## Миграция
 
-Миграция описана на [отдельной странице](MIGRATION.md).
+Миграция описана на [отдельной странице](MIGRATION.ru.md).
 
 ## Разработка
 

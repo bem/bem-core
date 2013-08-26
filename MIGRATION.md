@@ -1,66 +1,75 @@
-# Миграция
+# Migration
 
-## Модули
-Весь код теперь пишется в терминах модульной системы https://github.com/ymaps/modules.
-Все зависимости должны явно указываться в коде, обращения к глобальным объектом необходимо минимизировать, а, по возможности, и полностью исключить.
+## Modules
+From now everything should be under the modular system
+https://github.com/ymaps/modules.
+All the dependencies have to be mentioned in the code, using global variables
+have to be minimized to 0 if possible.
 
-Пример:
+Example
 ````javascript
 modules.define(
-    'my-module', // имя модуля
-    ['module-from-library', 'my-another-module'], // зависимости модуля
-    function(provide, moduleFromLibrary, myAnotherModule) { // декларация модуля, вызывается когда все зависимости "разрезолвлены"
+    'my-module', // Module name
+    ['module-from-library', 'my-another-module'], // Module's dependencies
+    function(provide, moduleFromLibrary, myAnotherModule) { // Module declaration, runs when all the dependencies are resolved
 
-// предоставление модуля
+//Module providing
 provide({
     myModuleMethod : function() {}
-}); 
-    
+});
+
 });
 ````
 
 TODO: дописать про изменение сборки (использование специальных технологий для js и как быть с кастомными сборщиками)
 
-## jQuery и jQuery-плагины
-jQuery представлен модулем-оберткой `jquery`, который использует глобальный объект jQuery, в случае если он уже присутствует на странице, в противном случае загружая его самостоятельно.
-jQuery теперь используется только для операций, связанных непосредственно с DOM (поиск элементов, подписка на события, установка/получение атрибутов элементов, и т.д.).
+## jQuery and plugins
+jQuery is represented with a wrapping module `jquery` which uses the `jQuery`
+global object if it is available or loads jQuery additionally.
+From now jQuery is used only for operations on DOM such as selecting nodes,
+binding listeners to events, getting and setting attribute values and so on.
 
-Для всех остальных операций написаны соответствующие модули, предоставляющие аналогичный функционал, но, при этом, не зависящие от jQuery:
- * модуль `objects` для работы с объектами (с методами `extend`, `isEmpty`, `each`)
- * модуль `functions` для работы с функциями (с методами `isFunction` и `noop`)
+For other operations there are special modules non-dependable on jQuery.
+ * the `objects` module to operate on objects (with `extend`, `isEmpty` and `each` methods)
+ *the `functions` module to operate on functions (with `isFunction` and `noop` methods)
 
-Также, все jQuery-плагины, не связанные непосредственно с jQuery (`$.observable`, `$.inherit`, `$.cookie`, `$.identify`, `$.throttle`) стали модулями:
- * модуль `events` вместо `$.observable` для работы с событиями, предоставляющий "классы" `EventsEmitter` и `Event`)
- * модуль `inherit` вместо `$.inherit` для работы с "классами" и наследованием
- * модуль `cookie` вместо `$.cookie`
- * модуль `identify` вместо `$.identify`
- * модули `functions__throttle`, `functions__debounce` вместо $.throttle и $.debounce, соответственно
+All the jQuery plugins which are not fo DOM operation became modules:
 
-Было:
+ * the `events` module used to be the `$.observable` jQuery plugin<br/>
+ It works with events, provides "classes" `EventsEmitter` and `Event`
+ * the `inherit` module used to be the `$.inherit` plugin<br/>
+ It provides an inherit module with classes.
+ * the `cookie` module used to be the `$.cookie` plugin
+ * the `identify` module used to be `$.identify` plugin
+ * the `functions__throttle` and `functions__debounce` used to be the
+ `$.throttle` and the `$.debounce` plugins
+
+Before:
 ````javascript
-// код блока
+// block code
 $.throttle(...
-// код блока
+// block code
 ````
 
-Стало:
+After:
 ````javascript
 module.define('my-module', ['functions__throttle'], function(provide, throttle) {
-// код модуля
+// module code
 throttle(...
-// код модуля
+// module code
 ````
 
-## BEM.DOM-блоки
+## BEM.DOM blocks
 
-### Декларация
-Вместо декларации через BEM.DOM.decl необходимо доопределять модуль `i-bem__dom`.
+### Declaration
+Blocks represented in DOM were declared with BEM.DOM.decl. Now they must use
+`i-bem__dom` module and extend it.
 
-Было:
+Before:
 ````javascript
 BEM.DOM.decl('block', ...);
 ````
-Стало:
+After:
 ````javascript
 modules.define('i-bem__dom', function(provide, DOM) {
 
@@ -70,100 +79,108 @@ provide(DOM);
 
 });
 ````
-### Конструктор
-Необходимо использовать полную нотацию для обработчика установки модификатора `js` в значение `inited`.
+### Constructor
+You have to use full notation for the callback for the `js` modifier in its
+`inited` value.
 
-Было:
+Before:
 ````javascript
 onSetMod : {
     js : function() {
-        // код конструктора
+        // constructor code
 ````
-Стало:
+After:
 ````javascript
 onSetMod : {
     js : {
-        inited : function() { 
-            // код конструктора
+        inited : function() {
+            // constructor code
 ````
-### Деструктор
-Вместо метода `destruct` необходимо использовать обработчик установки модификатора `js` в пустое значение (удаление модификатора).
-Вызывать `__base` для того, чтобы у блоков работал базовый деструктор, определенный в `i-bem__dom`, больше не нужно.
+### Destructor
+Instead of `destruct` method the destructive callback has to be applyed to the
+empty value of `js` modifier, which corresponds removing a modifier from a
+block.
+Also you do not need to call `__base` to run a descructor from the basic
+`i-bem__dom` module.
 
-Было:
+Before:
 ````javascript
 destruct : function() {
     this.__base.apply(this, arguments);
-    // код деструктора
+    // destructor code
 ````
-Стало:
+After:
 ````javascript
 onSetMod : {
     js : {
         '' : function() {
-            // код деструктора
+            // destructor code
 ````
 
-### Метод changeThis ###
-Вместо метода `changeThis` необходимо использовать нативный метод `bind`.
+### The changeThis method ###
+Instead of `changeThis` method you have to use native `bind`.
 
-Было:
+Before:
 ````javascript
-// код блока
+// block code
 obj.on('event', this.changeThis(this._method);
-// код блока
+// block code
 ````
 
-Стало:
+After:
 ````javascript
 obj.on('event', this._method.bind(this));
 ````
 
-### Метод afterCurrentEvent ###
-Вместо метода `afterCurrentEvent` необходимо использовать метод `nextTick`, который гарантирует, что блок еще существует в момент исполнения колбэка (если блок уже уничтожен к этому моменту, то колбэк не исполняется).
+### The afterCurrentEvent method ###
+Use the `nextTick` method instead of `afterCurrentEvent`. The `nextTick` assures
+that the block exists at the time of running a callback. If the block is already
+destructed, the callback will not be run.
 
-Было:
+Before:
 ````javascript
 BEM.DOM.decl('block', {
     method : function() {
         this.afterCurrentEvent(function() { ...
 ````
 
-Стало:
+After:
 ````javascript
-modules.define('i-bem__dom', function(provide, DOM) {    
+modules.define('i-bem__dom', function(provide, DOM) {
 
 DOM.decl('block', {
     method : function() {
         this.nextTick(function() { ...
 ````
 
-### Доступ до DOM-элемента в обработчике события
-DOM-элемент, к которому был подвешен обработчик события теперь доступен как `e.domElem` вместо `e.data.domElem`.
+### Access to a DOM element from an event handler callback
+The callback binded to a DOM element as an event handler is now provided with
+the link to this DOM element as `e.domElem`.
 
-Было:
+Before:
 ````javascript
 onClick : function(e) {
     e.data.domElem.attr(...
 ````
 
-Стало:
+After:
 ````javascript
 onClick : function(e) {
     e.domElem.attr(...
 ````
 
-### Каналы (channels)
-Каналы больше не являются встроенными в BEM, теперь они являются самостоятельным модулем `events__channels`.
+### Channels
+Channels are not embedded into BEM any more. Now they are the separate
+`events__channels` module.
 
-Было:
+Before:
 ````javascript
 BEM.DOM.decl('block', {
     method : function() {
         BEM.channel('channel-name').on(....
 ````
 
-Стало:
+After:
 ````javascript
 modules.define('i-bem__dom', ['events__channels'], function(provide, channels, DOM) {    
 
@@ -172,17 +189,19 @@ DOM.decl('block', {
         channels('channel-name').on(....    
 ````
 
-### Блок `i-system` и канал `sys` событий tick, idle, wakeup.
-Этот блок и канал перестали существовать, вместо них появились отдельные модули: `tick` с событием tick  и `idle` с событиями idle и wakeup.
+### The `i-system` block, the `sys` channel and the `tick`, `idle` and `wakeup`
+events
+The is no `i-system` block any more. Instead you can use special modules: 
+`tick` with the tick event and `idle` with the events idle and wakeup.
 
-Было:
+Before:
 ````javascript
 BEM.DOM.decl('block', {
     method : function() {
         BEM.channel('sys').on('tick', ...
 ````
 
-Стало:
+After:
 ````javascript
 modules.define('i-bem__dom', ['tick'], function(provide, tick, DOM) {    
 
@@ -191,14 +210,14 @@ DOM.decl('block', {
         tick.on('tick', ...
 ````
 
-Было:
+Before:
 ````javascript
 BEM.DOM.decl('block', {
     method : function() {
         BEM.channel('sys').on('wakeup', ...
 ````
 
-Стало:
+After:
 ````javascript
 modules.define('i-bem__dom', ['idle'], function(provide, idle, DOM) {    
 
@@ -207,18 +226,18 @@ DOM.decl('block', {
         idle.on('wakeup', ...
 ````
 
-## BEM-блоки
-Те BEM-блоки, которые использовались как хранилище для каких-то методов, при этом никак не использующие BEM-методологию, теперь 
-могут быть написаны как модули.
+## The BEM blocks
+If you have BEM blocks just containing some modules without using BEM
+methodology in them, you can now rewrite them as modules.
 
-Было:
+Before:
 ````javascript
 BEM.decl('i-router', {
     route : function() { ... }
 });
 ````
 
-Стало:
+After:
 ````javascript
 modules.define('router', function(provide) {
 
@@ -230,14 +249,15 @@ provide({
 
 ````
 
-Если же, по каким-то причинам, нужны именно BEM-блоки (не BEM.DOM-блоки), то их можно объявлять, доопределяя модуль `i-bem`.
+If you need BEM blocks (not BEM.DOM blocks) anyway, you can extend the `i-bem`
+module.
 
-Было:
+Before:
 ````javascript
 BEM.decl('my-block', { ... });
 ````
 
-Стало:
+After:
 ````javascript
 modules.define('i-bem', function(provide, BEM) {
 
@@ -248,8 +268,8 @@ provide(BEM);
 });
 ````
 
-### Рефакторинг на примере блока `b-spin`
-Было:
+### The example of migration refactoring for the `b-spin` block
+Before:
 ````javascript
 BEM.DOM.decl('b-spin', {
 
@@ -262,7 +282,7 @@ BEM.DOM.decl('b-spin', {
             this._bgProp = 'background-position';
             this._posPrefix = '0 -';
 
-            if (this.elem('icon').css('background-position-y')) { /* В IE нельзя получить свойство background-position, только background-position-y, поэтому костыляем */
+            if (this.elem('icon').css('background-position-y')) { /* A dirty hack for IE which cannot get a background-position property but packground-position-y only */
                 this._bgProp = 'background-position-y';
                 this._posPrefix = '-';
             }
@@ -309,7 +329,7 @@ BEM.DOM.decl('b-spin', {
 
 });
 ````
-Стало:
+After:
 ````javascript
 modules.define(
     'i-bem__dom',
@@ -321,8 +341,8 @@ var FRAME_COUNT = 36;
 DOM.decl('b-spin', {
     onSetMod : {
         js : {
-            inited : function() { // конструктор
-                var hasBackgroundPositionY = !!this.elem('icon').css('background-position-y')); /* В IE нельзя получить свойство background-position, только background-position-y */
+            inited : function() { // constructor
+                var hasBackgroundPositionY = !!this.elem('icon').css('background-position-y'));
 
                 this._bgProp = hasBackgroundPositionY? 'background-position-y' : 'background-position';
                 this._posPrefix = hasBackgroundPositionY? '-' : '0 -';
@@ -332,7 +352,7 @@ DOM.decl('b-spin', {
                 this.hasMod('progress') && this._bindToTick();
             },
 
-            '' : function() { // деструктор
+            '' : function() { // destructor
                 this._unbindFromTick();
             }
         },
