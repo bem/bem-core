@@ -3,7 +3,7 @@
 ## Modules
 From now everything should be under the modular system
 https://github.com/ymaps/modules.
-All the dependencies have to be mantioned in the code, using global variables
+All the dependencies have to be mentioned in the code, using global variables
 have to be minimized to 0 if possible.
 
 Example
