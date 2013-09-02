@@ -727,7 +727,7 @@ The variables get back their original values in the order reverse to the order o
 
 ---
 **NB** If a variable (an object field), that wasn't previously defined, is assigned to a value within the block `expressions`, it will exist after leaving the block 'local', but its value will be set to 'undefined`.
----
+***
 
 **See also**:
 
