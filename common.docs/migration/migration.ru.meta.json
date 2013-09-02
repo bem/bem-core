@@ -1,0 +1,14 @@
+{
+    "title": "Миграция",
+    "longTitle":  "bem-core: Миграция",
+    "createDate": "04-08-2013",
+    "editDate": "21-06-2013",
+    "summary": "Миграция на bem-core.",
+    "thumbnail": "",
+    "authors": ["filatov-dmitry"],
+    "tags": ["bem-core"],
+    "categories": [{"name": "bem-core/1.0.0", "url": "bem-core/1.0.0"}],
+    "translators": [],
+    "url": "/common.docs/i-bem-js/",
+    "type": "libs"
+}

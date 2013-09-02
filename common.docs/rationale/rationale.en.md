@@ -450,7 +450,7 @@ their own templating engine because of the following reasons:
     expect performance improvements or extension of functionality.
 
   * **XSLT is not designed to work in BEM-terms**
-    In order to maximize the integration of templating engine in a set of BEM tools,
+    In order to maximize the integration of templating engine in a set of bem-tools,
     a native support of BEM data scope is needed at the level of the template engine.
 
 

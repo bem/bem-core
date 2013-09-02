@@ -1,0 +1,15 @@
+{
+    "title": "Library",
+    "longTitle": "bem-core Library",
+    "createDate": "26-07-2013",
+    "editDate": "",
+    "summary": "bem-core is a base library for web interface development. It provides the minimal stack for coding client-side JavaScript and templating.",
+    "thumbnail": "",
+    "authors": ["berezhnoy-sergey"],
+    "tags": ["bem-core"],
+    "categories": [{"name": "bem-core/1.0.0", "url" : "bem-core/1.0.0"}],
+    "translators": ["stepanova-varvara"],
+    "url": "/common.docs/bem-core/1.0.0",
+    "type": "libs",
+    "root": "true"
+}

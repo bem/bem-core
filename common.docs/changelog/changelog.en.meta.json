@@ -1,0 +1,14 @@
+{
+    "title": "Changelog",
+    "longTitle": "bem-core: Changelog",
+    "createDate": "26-07-2013",
+    "editDate": "",
+    "summary": "The history of bem-core changes.",
+    "thumbnail": "",
+    "authors": ["berezhnoy-sergey","filatov-dmitry"],
+    "tags": ["bem-core"],
+    "categories": [{"name": "bem-core/1.0.0", "url": "bem-core/1.0.0"}],
+    "translators": [],
+    "url": "/common.docs/changelog/",
+    "type": "libs"
+}

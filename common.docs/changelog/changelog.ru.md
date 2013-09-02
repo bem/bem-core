@@ -1,1 +1,1 @@
-../../CHANGELOG.md
+../../CHANGELOG.ru.md

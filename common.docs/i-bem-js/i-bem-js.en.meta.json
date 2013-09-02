@@ -1,0 +1,13 @@
+{
+    "title": "i-bem.js Guide Book",
+    "createDate": "17-09-2013",
+    "editDate": "",
+    "summary": "i-bem.js guide book.",
+    "thumbnail": "",
+    "authors": ["maslinsky-kirill"],
+    "tags": ["bem-core","i-bem"],
+    "categories": [{"name": "bem-core/1.0.0/i-bem.js", "url": "bem-core/1.0.0/i-bem.js"}],
+    "translators": [],
+    "url": "/common.docs/i-bem-js/",
+    "type": "libs"
+}
