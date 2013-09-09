@@ -1,6 +1,8 @@
 /* jshint browser:true, node:true */
-/* global BEM, i18n */
+/* global BEM, i18n, oninit:true */
+
 if(typeof oninit === 'undefined') oninit = function(cb) { return cb() };
+
 oninit(function() {
 
 (function(global_, bem_, undefined) {
@@ -31,7 +33,9 @@ var MOD_DELIM = '_',
     cache = {},
     // {String[]} A stack used for restoring context of dynamic keysets
     stack = [],
-    log = (typeof console !== 'undefined' && console.log)? console.log.bind(console) : function() {};
+    // @see http://whattheheadsaid.com/2011/04/internet-explorer-9s-problematic-console-object
+    log = (typeof console !== 'undefined' && typeof console.log === 'function')?
+        console.log.bind(console) : function() {};
 
 function bemName(decl) {
     typeof decl === 'string' && (decl = { block : decl });
@@ -133,7 +137,7 @@ _i18n.prototype = {
 
         var valtype = typeof value;
         if(valtype === 'undefined') {
-            log("[I18N_NO_VALUE] %s", debugString);
+            log('[I18N_NO_VALUE] %s', debugString);
             return '';
         }
 
