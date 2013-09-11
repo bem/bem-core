@@ -3,7 +3,7 @@ block('page')(
     mode('doctype')(function() { return this.ctx.doctype || '<!DOCTYPE html>'}),
 
     mode('xUACompatible')(function() {
-        this.ctx['x-ua-compatible'] === false
+        return this.ctx['x-ua-compatible'] === false
             ? false
             : {
                 tag: 'meta',
