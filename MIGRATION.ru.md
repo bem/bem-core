@@ -139,7 +139,7 @@ DOM.decl('block', {
 ````
 
 ### Доступ до DOM-элемента в обработчике события
-DOM-элемент, к которому был подвешен обработчик события теперь доступен как `e.domElem` вместо `e.data.domElem`.
+DOM-элемент, к которому был подвешен обработчик события теперь доступен как `$(e.currentTarget)` вместо `e.data.domElem`.
 
 Было:
 ````javascript
@@ -150,7 +150,7 @@ onClick : function(e) {
 Стало:
 ````javascript
 onClick : function(e) {
-    e.domElem.attr(...
+    $(e.currentTarget).attr(...
 ````
 
 ### Каналы (channels)
