@@ -5,9 +5,9 @@
         js : { a : 'b' },
         title : 'заголовок',
         head : [
-            { elem : 'css', url : '_10-page_simple.css' },
-            { elem : 'css', url : '_10-page_simple.ie.css', ie : true },
-            { elem : 'js', url : '_10-page_simple.js' }
+            { elem : 'css', url : '_10-page-simple.css' },
+            { elem : 'css', url : '_10-page-simple.ie.css', ie : true },
+            { elem : 'js', url : '_10-page-simple.js' }
         ],
         content : [
             {
