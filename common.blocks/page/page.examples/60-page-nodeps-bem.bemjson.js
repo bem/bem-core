@@ -2,8 +2,8 @@
     block : 'page',
     title : 'noDeps',
     head : [
-        { elem : 'css', url : '_60page-nodeps_bem.css' },
-        { elem : 'js', url : '_60page-nodeps_bem.js' }
+        { elem : 'css', url : '_60page-nodeps-bem.css' },
+        { elem : 'js', url : '_60page-nodeps-bem.js' }
     ],
     content : [
         {

@@ -29,7 +29,8 @@ module.exports = {
                 '**/*.vanilla.js',
                 '**/*.test.js',
                 '**/*.node.js',
-                '**/*.deps.js'
+                '**/*.deps.js',
+                '**/*.bemjson.js'
             ]
         },
 
@@ -47,6 +48,13 @@ module.exports = {
                 ]
             },
             includes : ['**/*.test.js']
+        },
+
+        bemjsonjs : {
+            options : {
+                asi : true
+            },
+            includes : ['**/*.bemjson.js']
         }
     }
 };
