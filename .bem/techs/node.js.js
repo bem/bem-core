@@ -21,19 +21,20 @@ exports.techMixin = {
     },
 
     getYmChunk : function() {
+        var ymRelPath = this.__base.apply(this, arguments);
         return [
-            "if(typeof module !== 'undefined') {",
-            "modules = require('ym');",
+            "if(typeof module !== 'undefined') {\n",
+            "modules = " + this.getBuildResultChunk(ymRelPath),
             "}\n"
         ].join('');
     },
 
-    getBuildResult : function(files, suffix, output, opts) {
-        var ymChunk = this.getYmChunk();
-        return this.__base.apply(this, arguments)
-            .then(function(res) {
-                return [ymChunk].concat(res);
-            });
+    getBuildResultChunk : function(relPath, path) {
+        var fChar = relPath.charAt(0);
+        if(fChar !== '/' && fChar !== '.') {
+            relPath = './' + relPath;
+        }
+        return "require('" + relPath + "');\n";
     }
 
 };

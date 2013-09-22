@@ -1,7 +1,7 @@
 var PATH = require('path'),
     BEM = require('bem'),
-    Template = BEM.require('./template'),
-    Q = BEM.require('q');
+    Q = BEM.require('q'),
+    ymPath = require.resolve('ym');
 
 exports.baseTechName = 'js';
 
@@ -33,14 +33,31 @@ exports.techMixin = {
             (moduleName += '_' + vars.ModVal);
         vars.ModuleName = moduleName;
 
-        return Template.process([
+        return BEM.template.process([
             "/*global modules:false */",
             "",
             "modules.define('{{bemModuleName}}', function(provide) {",
             "",
+            "provide();",
+            "",
             "});",
             ""
         ], vars);
+    },
+
+    getYmChunk : function(output) {
+        var outputDir = PATH.resolve(output, '..');
+        return PATH.relative(outputDir, ymPath);
+    },
+
+    getBuildResult : function(files, suffix, output, opts) {
+        return Q.all([
+                this.getYmChunk(output),
+                this.__base.apply(this, arguments)
+            ])
+            .spread(function(ym, res) {
+                return [ym].concat(res);
+            });
     }
 
 };
