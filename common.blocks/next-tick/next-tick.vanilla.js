@@ -1,17 +1,12 @@
 /**
- * next-tick module
- *
- * Copyright (c) 2013 Filatov Dmitry (dfilatov@yandex-team.ru)
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- *
+ * @module next-tick
  * @version 1.0.1
+ * @author Filatov Dmitry <dfilatov@yandex-team.ru>
  */
 
 modules.define('next-tick', function(provide) {
 
-var global = this,
+var global = this.global,
     fns = [],
     enqueueFn = function(fn) {
         return fns.push(fn) === 1;
@@ -24,6 +19,7 @@ var global = this,
         }
     };
 
+    /* global process */
     if(typeof process === 'object' && process.nextTick) { // nodejs
         return provide(function(fn) {
             enqueueFn(fn) && process.nextTick(callFns);
@@ -48,7 +44,7 @@ var global = this,
         }
 
         if(isPostMessageAsync) {
-            var msg = '__nextTick' + +new Date,
+            var msg = '__nextTick' + (+new Date),
                 onMessage = function(e) {
                     if(e.data === msg) {
                         e.stopPropagation && e.stopPropagation();
@@ -84,6 +80,6 @@ var global = this,
     }
 
     provide(function(fn) { // old browsers
-        enqueueFn(fn) && setTimeout(callFns, 0);
+        enqueueFn(fn) && global.setTimeout(callFns, 0);
     });
 });

@@ -1,6 +1,6 @@
 {
   "name": "bem-core",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "BEM Core Library",
   "repository": {
@@ -14,15 +14,21 @@
   "author": "Sergey Belov <peimei@ya.ru>",
   "license": "MIT",
   "dependencies": {
-    "ym": "0.0.5",
-    "bem-xjst": "~0.1.0",
-    "bemhtml-compat": "~0.0.4"
+    "ym": "0.0.8",
+    "bem-xjst": "~0.3.1",
+    "bemhtml-compat": "~0.0.4",
+    "bem-environ": "~1.2.0",
+    "dom-js": "*"
   },
   "devDependencies": {
-    "bem": "~0.5.29",
-    "mocha": "~1.9.0"
+    "bem": "~0.6.15",
+    "mocha": "~1.9.0",
+    "jshint": "2.1.8",
+    "jshint-groups": "0.5.1",
+    "jscs": "1.0.0",
+    "git-hooks": "0.0.3"
   },
   "scripts": {
-    "test": "mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/test-*.js"
+    "test": "bem make libs && bem make sets && mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.test.bemhtml/*-test.js"
   }
 }

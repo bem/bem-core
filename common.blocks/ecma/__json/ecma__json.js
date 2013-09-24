@@ -10,7 +10,7 @@ var _toString = Object.prototype.toString,
         '\n' : '\\n',
         '\f' : '\\f',
         '\r' : '\\r',
-        '"'  : '\\"',
+        '"' : '\\"',
         '\\' : '\\\\'
     },
     stringify;
@@ -23,6 +23,7 @@ window.JSON = {
         if(typeof val === 'undefined') {
             return undefined;
         }
+        var res, i, strVal;
         switch(_toString.call(val)) {
             case '[object String]':
                 escapable.lastIndex = 0;
@@ -34,21 +35,25 @@ window.JSON = {
                         }) :
                         val) +
                     '"';
+
             case '[object Number]':
             case '[object Boolean]':
                 return '' + val;
+
             case '[object Array]':
-                var res = '[', i = 0, len = val.length, strVal;
+                res = '['; i = 0;
+                var len = val.length;
                 while(i < len) {
                     strVal = stringify(val[i]);
                     res += (i++? ',' : '') + (typeof strVal === 'undefined'? 'null' : strVal);
                 }
                 return res + ']';
+
             case '[object Object]':
                 if(_toString.call(val.toJSON) === '[object Function]') {
                     return stringify(val.toJSON());
                 }
-                var res = '{', i = 0, strVal;
+                res = '{'; i = 0;
                 for(var key in val) {
                     if(val.hasOwnProperty(key)) {
                         strVal = stringify(val[key]);
@@ -56,9 +61,15 @@ window.JSON = {
                     }
                 }
                 return res + '}';
+
             default:
                 return undefined;
         }
+    },
+
+    parse : function(str) {
+        /*jshint -W061 */
+        return Function('return ' + str)();
     }
 };
 })();

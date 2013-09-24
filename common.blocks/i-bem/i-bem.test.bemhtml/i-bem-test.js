@@ -15,18 +15,18 @@ suite('i-bem block and others', function() {
   function unit(name, file, raw) {
     test(name, function() {
       var contents = {
-        src: readFile('i-bem/' + file + '.bemhtml'),
-        data: JSON.parse(readFile('i-bem/' + file + '.json')),
-        dst: readFile('i-bem/' + file + '.html')
+        src : readFile('i-bem/' + file + '.bemhtml'),
+        data : JSON.parse(readFile('i-bem/' + file + '.json')),
+        dst : readFile('i-bem/' + file + '.html')
       };
 
       assert.equal(
-        bemhtml.compile(iBem + contents.src, { devMode: true, raw: raw })
+        bemhtml.compile(iBem + contents.src, { devMode : true, raw : raw })
             .apply.call(contents.data) + '\n',
         contents.dst
       );
       assert.equal(
-        bemhtml.compile(iBem + contents.src, { devMode: false, raw: raw })
+        bemhtml.compile(iBem + contents.src, { devMode : false, raw : raw })
             .apply.call(contents.data) + '\n',
         contents.dst
       );
@@ -44,4 +44,5 @@ suite('i-bem block and others', function() {
   unit('condition regression #239', 'gh-239', true);
   unit('simple types regression #254', 'gh-254');
   unit('applyNext in content regression #289', 'gh-289');
+  unit('boolean mods bem-core/169', 'boolean-mods');
 });

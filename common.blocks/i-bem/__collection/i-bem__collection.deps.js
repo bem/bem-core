@@ -1,7 +1,7 @@
 ({
-    mustDeps: [
-        {elem: 'dom'},
-        {block: 'ecma', elem: 'array'},
+    mustDeps : [
+        { elem : 'dom' },
+        { block : 'ecma', elem : 'array' },
         'inherit'
     ]
 })

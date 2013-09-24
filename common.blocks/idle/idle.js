@@ -1,3 +1,7 @@
+/**
+ * @module idle
+ */
+
 modules.define('idle', ['inherit', 'events', 'jquery'], function(provide, inherit, events, $) {
 
 var IDLE_TIMEOUT = 3000,

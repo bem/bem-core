@@ -1,4 +1,10 @@
+/**
+ * @module functions__debounce
+ */
+
 modules.define('functions__debounce', function(provide) {
+
+var global = this.global;
 
 provide(function(fn, timeout, invokeAsap, ctx) {
     if(arguments.length === 3 && typeof invokeAsap !== 'boolean') {
@@ -13,9 +19,9 @@ provide(function(fn, timeout, invokeAsap, ctx) {
 
         invokeAsap && !timer && fn.apply(ctx, args);
 
-        clearTimeout(timer);
+        global.clearTimeout(timer);
 
-        timer = setTimeout(function() {
+        timer = global.setTimeout(function() {
             invokeAsap || fn.apply(ctx, args);
             timer = null;
         }, timeout);

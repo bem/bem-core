@@ -1,15 +1,24 @@
+/**
+ * @module functions
+ */
+
 modules.define('functions', function(provide) {
 
-var bindCall = function(fn) {
-        return fn.call.bind(fn);
-    },
-    toStr = bindCall(Object.prototype.toString);
+var toStr = Object.prototype.toString;
 
 provide({
+    /**
+     * Checks whether a given object is function
+     * @param {*} obj
+     * @returns {Boolean}
+     */
     isFunction : function(obj) {
-        return toStr(obj) === '[object Function]';
+        return toStr.call(obj) === '[object Function]';
     },
-    
+
+    /**
+     * @type {Function}
+     */
     noop : function() {}
 });
 

@@ -1,9 +1,13 @@
+/**
+ * @module i-bem
+ */
+
 modules.define(
     'i-bem',
     ['inherit', 'identify', 'next-tick', 'objects', 'functions', 'events', 'events__channels'],
     function(provide, inherit, identify, nextTick, objects, functions, events, channels) {
 
-var undefined,
+var undef,
 /**
  * Storage for block init functions
  * @private
@@ -20,15 +24,16 @@ var undefined,
 
 /**
  * Builds the name of the handler method for setting a modifier
- * @static
  * @private
- * @param {String} elemName Element name
+ * @param {String} prefix
  * @param {String} modName Modifier name
  * @param {String} modVal Modifier value
+ * @param {String} [elemName] Element name
  * @returns {String}
  */
-function buildModFnName(elemName, modName, modVal) {
-    return (elemName? '__elem_' + elemName : '') +
+function buildModFnName(prefix, modName, modVal, elemName) {
+    return '__' + prefix +
+        (elemName? '__elem_' + elemName : '') +
        '__mod' +
        (modName? '_' + modName : '') +
        (modVal? '_' + modVal : '');
@@ -38,32 +43,31 @@ function buildModFnName(elemName, modName, modVal) {
  * Transforms a hash of modifier handlers to methods
  * @static
  * @private
+ * @param {String} prefix
  * @param {Object} modFns
  * @param {Object} props
  * @param {String} [elemName]
  */
-function modFnsToProps(modFns, props, elemName) {
+function modFnsToProps(prefix, modFns, props, elemName) {
     if(functions.isFunction(modFns)) {
-        props[buildModFnName(elemName, '*', '*')] = modFns;
-    }
-    else {
+        props[buildModFnName(prefix, '*', '*', elemName)] = modFns;
+    } else {
         var modName, modVal, modFn;
         for(modName in modFns) {
             if(modFns.hasOwnProperty(modName)) {
                 modFn = modFns[modName];
                 if(functions.isFunction(modFn)) {
-                    props[buildModFnName(elemName, modName, modName === 'js'? 'inited' : '*')] = modFn;
+                    props[buildModFnName(prefix, modName, modName === 'js'? 'inited' : '*', elemName)] = modFn;
                     /** @deprecated: above code has fallback, replace
-                     *  modName === 'js'? 'inited' : '*'
+                     *  modName === 'js'? 'inited': '*'
                      *  with
                      *  '*'
                      *  in next version
                      */
-                }
-                else {
+                } else {
                     for(modVal in modFn) {
                         if(modFn.hasOwnProperty(modVal)) {
-                            props[buildModFnName(elemName, modName, modVal)] = modFn[modVal];
+                            props[buildModFnName(prefix, modName, modVal, elemName)] = modFn[modVal];
                         }
                     }
                 }
@@ -88,6 +92,37 @@ function buildCheckMod(modName, modVal) {
         function(block) {
             return block.hasMod(modName);
         };
+}
+
+function convertModHandlersToMethods(props) {
+    if(props.beforeSetMod) {
+        modFnsToProps('before', props.beforeSetMod, props);
+        delete props.beforeSetMod;
+    }
+
+    if(props.onSetMod) {
+        modFnsToProps('after', props.onSetMod, props);
+        delete props.onSetMod;
+    }
+
+    var elemName;
+    if(props.beforeElemSetMod) {
+        for(elemName in props.beforeElemSetMod) {
+            if(props.beforeElemSetMod.hasOwnProperty(elemName)) {
+                modFnsToProps('before', props.beforeElemSetMod[elemName], props, elemName);
+            }
+        }
+        delete props.beforeElemSetMod;
+    }
+
+    if(props.onElemSetMod) {
+        for(elemName in props.onElemSetMod) {
+            if(props.onElemSetMod.hasOwnProperty(elemName)) {
+                modFnsToProps('after', props.onElemSetMod[elemName], props, elemName);
+            }
+        }
+        delete props.onElemSetMod;
+    }
 }
 
 var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
@@ -124,7 +159,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
         initImmediately !== false?
             this._init() :
-            initFns.push(this._init.bind(this));
+            initFns.push(this._init, this);
     },
 
     /**
@@ -155,7 +190,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [data] Additional information
      * @returns {BEM}
      */
-    trigger : function(e, data) {
+    emit : function(e, data) {
         this
             .__base(e = this._buildEvent(e), data)
             .__self.trigger(e, data);
@@ -163,8 +198,17 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         return this;
     },
 
+    /** @deprecated use emit */
+    trigger : function() {
+        return this.emit.apply(this, arguments);
+    },
+
     _buildEvent : function(e) {
-        return typeof e === 'string'? new events.Event(e) : e;
+        typeof e === 'string'?
+            e = new events.Event(e, this) :
+            e.target || (e.target = this);
+
+        return e;
     },
 
     /**
@@ -182,16 +226,14 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         if(len === 1) {
             modVal = '';
             modName = elem;
-            elem = undefined;
+            elem = undef;
             invert = true;
-        }
-        else if(len === 2) {
+        } else if(len === 2) {
             if(typeof elem === 'string') {
                 modVal = modName;
                 modName = elem;
-                elem = undefined;
-            }
-            else {
+                elem = undef;
+            } else {
                 modVal = '';
                 invert = true;
             }
@@ -214,7 +256,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             modName = elem || modName;
             var modCache = this._modCache;
             return modName in modCache?
-                modCache[modName] :
+                modCache[modName] || '' :
                 modCache[modName] = this._extractModVal(modName);
         }
 
@@ -243,13 +285,13 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     getMods : function(elem) {
         var hasElem = elem && typeof elem !== 'string',
             modNames = [].slice.call(arguments, hasElem? 1 : 0),
-            res = this._extractMods(modNames, hasElem? elem : undefined);
+            res = this._extractMods(modNames, hasElem? elem : undef);
 
         if(!hasElem) { // caching
             modNames.length?
                 modNames.forEach(function(name) {
                     this._modCache[name] = res[name];
-                }, this):
+                }, this) :
                 this._modCache = res;
         }
 
@@ -266,12 +308,20 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     setMod : function(elem, modName, modVal) {
         if(typeof modVal === 'undefined') {
-            modVal = modName;
-            modName = elem;
-            elem = undefined;
+            if(typeof elem === 'string') { // if no elem
+                modVal = typeof modName === 'undefined'?
+                    true :  // e.g. setMod('focused')
+                    modName; // e.g. setMod('js', 'inited')
+                modName = elem;
+                elem = undef;
+            } else { // if elem
+                modVal = true; // e.g. setMod(elem, 'focused')
+            }
         }
 
         if(!elem || elem[0]) {
+            modVal === false && (modVal = '');
+
             var modId = (elem && elem[0]? identify(elem[0]) : '') + '_' + modName;
 
             if(this._processingMods[modId])
@@ -292,15 +342,28 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
             elem && modFnParams.unshift(elem);
 
-            [['*', '*'], [modName, '*'], [modName, modVal]].forEach(function(mod) {
-                needSetMod = this._callModFn(elemName, mod[0], mod[1], modFnParams) !== false && needSetMod;
-            }, this);
+            var modVars = [['*', '*'], [modName, '*'], [modName, modVal]],
+                prefixes = ['before', 'after'],
+                i = 0, prefix, j, modVar;
 
-            !elem && needSetMod && (this._modCache[modName] = modVal);
+            while(prefix = prefixes[i++]) {
+                j = 0;
+                while(modVar = modVars[j++]) {
+                    if(this._callModFn(prefix, elemName, modVar[0], modVar[1], modFnParams) === false) {
+                        needSetMod = false;
+                        break;
+                    }
+                }
 
-            needSetMod && this._afterSetMod(modName, modVal, curModVal, elem, elemName);
+                if(!needSetMod) break;
 
-            delete this._processingMods[modId];
+                if(prefix === 'before') {
+                    this._onSetMod(modName, modVal, curModVal, elem, elemName);
+                    elem || (this._modCache[modName] = modVal); // cache only block mods
+                }
+            }
+
+            this._processingMods[modId] = null;
         }
 
         return this;
@@ -315,7 +378,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [elem] Nested element
      * @param {String} [elemName] Element name
      */
-    _afterSetMod : function(modName, modVal, oldModVal, elem, elemName) {},
+    _onSetMod : function(modName, modVal, oldModVal, elem, elemName) {},
 
     /**
      * Sets a modifier for a block/nested element, depending on conditions.
@@ -335,8 +398,13 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             modVal2 = modVal1;
             modVal1 = modName;
             modName = elem;
-            elem = undefined;
+            elem = undef;
         }
+
+        if(typeof modVal1 === 'undefined') { // boolean mod
+            modVal1 = true;
+        }
+
         if(typeof modVal2 === 'undefined') {
             modVal2 = '';
         } else if(typeof modVal2 === 'boolean') {
@@ -366,7 +434,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     delMod : function(elem, modName) {
         if(!modName) {
             modName = elem;
-            elem = undefined;
+            elem = undef;
         }
 
         return this.setMod(elem, modName, '');
@@ -375,16 +443,17 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     /**
      * Executes handlers for setting modifiers
      * @private
+     * @param {String} prefix
      * @param {String} elemName Element name
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
      * @param {Array} modFnParams Handler parameters
      */
-    _callModFn : function(elemName, modName, modVal, modFnParams) {
-        var modFnName = buildModFnName(elemName, modName, modVal);
+    _callModFn : function(prefix, elemName, modName, modVal, modFnParams) {
+        var modFnName = buildModFnName(prefix, modName, modVal, elemName);
         return this[modFnName]?
            this[modFnName].apply(this, modFnParams) :
-           undefined;
+           undef;
     },
 
     /**
@@ -425,6 +494,19 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         this.delMod('js');
     },
 
+    /**
+     * Executes given callback on next turn evenloop in block's context
+     * @param {Function} fn callback
+     * @returns {this}
+     */
+    nextTick : function(fn) {
+        var _this = this;
+        nextTick(function() {
+            _this.hasMod('js', 'inited') && fn.call(_this);
+        });
+        return this;
+    },
+
     /** @deprecated use onSetMod js '' */
     destruct : function() {},
 
@@ -463,7 +545,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {String} [decl.baseBlock] Name of the parent block
      * @param {Array} [decl.baseMix] Mixed block names
      * @param {String} [decl.modName] Modifier name
-     * @param {String} [decl.modVal] Modifier value
+     * @param {String|Array} [decl.modVal] Modifier value
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      */
@@ -473,23 +555,9 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         if(decl.baseBlock && !blocks[decl.baseBlock])
             throw('baseBlock "' + decl.baseBlock + '" for "' + decl.block + '" is undefined');
 
-        props || (props = {});
+        convertModHandlersToMethods(props || (props = {}));
 
-        if(props.onSetMod) {
-            modFnsToProps(props.onSetMod, props);
-            delete props.onSetMod;
-        }
-
-        if(props.onElemSetMod) {
-            for(var elemName in props.onElemSetMod) {
-                if(props.onElemSetMod.hasOwnProperty(elemName)) {
-                    modFnsToProps(props.onElemSetMod[elemName], props, elemName);
-                }
-            }
-            delete props.onElemSetMod;
-        }
-
-        var baseBlock = blocks[decl.baseBlock || decl.block] || BEM;
+        var baseBlock = blocks[decl.baseBlock || decl.block] || this;
 
         if(decl.modName) {
             var checkMod = buildCheckMod(decl.modName, decl.modVal);
@@ -506,7 +574,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
                         }
                         return method?
                             method.apply(this, arguments) :
-                            undefined;
+                            undef;
                     });
             });
         }
@@ -538,22 +606,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     },
 
     declMix : function(block, props, staticProps) {
-        props || (props = {});
-
-        if(props.onSetMod) {
-            modFnsToProps(props.onSetMod, props);
-            delete props.onSetMod;
-        }
-
-        if(props.onElemSetMod) {
-            for(var elemName in props.onElemSetMod) {
-                if(props.onElemSetMod.hasOwnProperty(elemName)) {
-                    modFnsToProps(props.onElemSetMod[elemName], props, elemName);
-                }
-            }
-            delete props.onElemSetMod;
-        }
-
+        convertModHandlersToMethods(props || (props = {}));
         return blocks[block] = inherit(props, staticProps);
     },
 
@@ -595,7 +648,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @static
      * @private
      * @param {Object} elem Nested element
-     * @returns {String|undefined}
+     * @returns {String|undef}
      */
     _extractElemNameFrom : function(elem) {},
 
@@ -604,14 +657,14 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @private
      */
     _runInitFns : function() {
-        var fnsLen = initFns.length;
-        if(fnsLen) {
-            var fnsCopy = initFns.slice(),
+        if(initFns.length) {
+            var fns = initFns,
                 fn, i = 0;
 
             initFns = [];
-            while(fn = fnsCopy[i++]) {
-                fn();
+            while(fn = fns[i]) {
+                fn.call(fns[i + 1]);
+                i += 2;
             }
         }
     },

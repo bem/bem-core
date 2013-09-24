@@ -1,5 +1,3 @@
 ({
-    mustDeps: [
-        {elem: 'collection'}
-    ]
+    mustDeps : { elem : 'collection' }
 })

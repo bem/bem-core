@@ -1,0 +1,3 @@
+({
+    shouldDeps : { elem : 'pointer-click' }
+})

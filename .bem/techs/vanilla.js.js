@@ -1,17 +1,13 @@
 var PATH = require('path'),
     BEM = require('bem'),
-    Template = BEM.require('./template'),
-    Q = BEM.require('q');
+    Q = BEM.require('q'),
+    ymPath = require.resolve('ym');
 
 exports.baseTechName = 'js';
 
 exports.techMixin = {
 
     getSuffixes : function() {
-        return ['vanilla.js'];
-    },
-
-    getBuildSuffixes : function() {
         return ['vanilla.js'];
     },
 
@@ -33,26 +29,31 @@ exports.techMixin = {
             (moduleName += '_' + vars.ModVal);
         vars.ModuleName = moduleName;
 
-        return Template.process([
+        return BEM.template.process([
             "/*global modules:false */",
             "",
             "modules.define('{{bemModuleName}}', function(provide) {",
+            "",
+            "provide();",
             "",
             "});",
             ""
         ], vars);
     },
 
-    getBuildResult : function(prefixes, suffix, outputDir, outputName) {
-        var _t = this;
-        return Q.when(
-                this.filterPrefixes(prefixes, this.getBuildSuffixesMap()[suffix] || [suffix]),
-                function(paths) {
-                    return Q.all(paths.map(function(path) {
-                        return _t.getBuildResultChunk(
-                            PATH.relative(outputDir, path), path, suffix);
-                    }));
-                });
+    getYmChunk : function(output) {
+        return this.getBuildResultChunk(
+            PATH.relative(PATH.resolve(output, '..'), ymPath));
+    },
+
+    getBuildResult : function(files, suffix, output, opts) {
+        return Q.all([
+                this.getYmChunk(output),
+                this.__base.apply(this, arguments)
+            ])
+            .spread(function(ym, res) {
+                return [ym].concat(res);
+            });
     }
 
 };

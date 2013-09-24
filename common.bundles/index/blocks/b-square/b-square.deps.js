@@ -1,6 +1,6 @@
 [
 {
-    mustDeps : { block : 'i-bem', elems : 'dom' },
+    mustDeps : { block : 'i-bem', elems : ['dom', 'i18n'] },
     shouldDeps : { block : 'b-square', mods : { color : 'green' } }
 },
 {

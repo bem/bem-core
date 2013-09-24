@@ -1,15 +1,13 @@
 /**
- * Events module
- *
- * Copyright (c) 2010-2013 Filatov Dmitry (alpha@zforms.ru)
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- *
- * @version 1.0.0
+ * @module events
+ * @version 1.0.4
+ * @author Filatov Dmitry <dfilatov@yandex-team.ru>
  */
 
-modules.define('events', ['identify', 'inherit'], function(provide, identify, inherit) {
+modules.define(
+    'events',
+    ['identify', 'inherit', 'functions'],
+    function(provide, identify, inherit, functions) {
 
 var undef,
     storageExpando = '__' + (+new Date) + 'storage',
@@ -17,10 +15,16 @@ var undef,
         return identify(fn) + (ctx? identify(ctx) : '');
     },
 
-    Event = /** @lends Event.prototype */ inherit({
+    /**
+     * @class Event
+     * @alias events:Event
+     */
+    Event = inherit(/** @lends Event.prototype */{
         __constructor : function(type, target) {
             this.type = type;
             this.target = target;
+            this.result = undef;
+            this.data = undef;
 
             this._isDefaultPrevented = false;
             this._isPropagationStopped = false;
@@ -43,9 +47,9 @@ var undef,
         }
     }),
 
-    Emitter = /** @lends Emitter.prototype */{
+    EmitterProps = {
         /**
-         * Adding event handler
+         * Adds an event handler
          * @param {String} e Event type
          * @param {Object} [data] Additional data that the handler gets as e.data
          * @param {Function} fn Handler
@@ -54,7 +58,7 @@ var undef,
          */
         on : function(e, data, fn, ctx, _special) {
             if(typeof e === 'string') {
-                if(typeof data === 'function') {
+                if(functions.isFunction(data)) {
                     ctx = fn;
                     fn = data;
                     data = undef;
@@ -62,15 +66,14 @@ var undef,
 
                 var id = getFnId(fn, ctx),
                     storage = this[storageExpando] || (this[storageExpando] = {}),
-                    eList = e.split(' '),
+                    eventTypes = e.split(' '), eventType,
                     i = 0, list, item,
-                    eStorage;
+                    eventStorage;
 
-                while(e = eList[i++]) {
-                    eStorage = storage[e] || (storage[e] = { ids : {}, list : {}});
-
-                    if(!(id in eStorage.ids)) {
-                        list = eStorage.list;
+                while(eventType = eventTypes[i++]) {
+                    eventStorage = storage[eventType] || (storage[eventType] = { ids : {}, list : {} });
+                    if(!(id in eventStorage.ids)) {
+                        list = eventStorage.list;
                         item = { fn : fn, data : data, ctx : ctx, special : _special };
                         if(list.last) {
                             list.last.next = item;
@@ -78,8 +81,7 @@ var undef,
                         } else {
                             list.first = item;
                         }
-
-                        eStorage.ids[id] = list.last = item;
+                        eventStorage.ids[id] = list.last = item;
                     }
                 }
             } else {
@@ -91,12 +93,21 @@ var undef,
             return this;
         },
 
+        /**
+         * Adds a one time handler for the event.
+         * Handler is executed only the next time the event is fired, after which it is removed.
+         * @param {String} e Event type
+         * @param {Object} [data] Additional data that the handler gets as e.data
+         * @param {Function} fn Handler
+         * @param {Object} [ctx] Handler context
+         * @returns {this}
+         */
         once : function(e, data, fn, ctx) {
             return this.on(e, data, fn, ctx, { once : true });
         },
 
         /**
-         * Removing event handler(s)
+         * Removes event handler or handlers
          * @param {String} [e] Event type
          * @param {Function} [fn] Handler
          * @param {Object} [ctx] Handler context
@@ -107,31 +118,28 @@ var undef,
                 var storage = this[storageExpando];
                 if(storage) {
                     if(e) { // if event type was passed
-                        var eList = e.split(' '),
-                            i = 0,
-                            eStorage;
-                        while(e = eList[i++]) {
-                            if(eStorage = storage[e]) {
+                        var eventTypes = e.split(' '),
+                            i = 0, eventStorage;
+                        while(e = eventTypes[i++]) {
+                            if(eventStorage = storage[e]) {
                                 if(fn) {  // if specific handler was passed
                                     var id = getFnId(fn, ctx),
-                                        ids = eStorage.ids;
+                                        ids = eventStorage.ids;
                                     if(id in ids) {
-                                        var list = eStorage.list,
+                                        var list = eventStorage.list,
                                             item = ids[id],
                                             prev = item.prev,
                                             next = item.next;
 
                                         if(prev) {
                                             prev.next = next;
-                                        }
-                                        else if(item === list.first) {
+                                        } else if(item === list.first) {
                                             list.first = next;
                                         }
 
                                         if(next) {
                                             next.prev = prev;
-                                        }
-                                        else if(item === list.last) {
+                                        } else if(item === list.last) {
                                             list.last = prev;
                                         }
 
@@ -162,43 +170,70 @@ var undef,
          * @returns {this}
          */
         emit : function(e, data) {
-            var _this = this,
-                storage = _this[storageExpando];
+            var storage = this[storageExpando],
+                eventInstantiated = false;
 
-            typeof e === 'string' && (e = new Event(e));
+            if(storage) {
+                var eventTypes = [typeof e === 'string'? e : e.type, '*'],
+                    i = 0, eventType, eventStorage;
+                while(eventType = eventTypes[i++]) {
+                    if(eventStorage = storage[eventType]) {
+                        var item = eventStorage.list.first,
+                            lastItem = eventStorage.list.last,
+                            res;
+                        while(item) {
+                            if(!eventInstantiated) { // instantiate Event only on demand
+                                eventInstantiated = true;
+                                typeof e === 'string' && (e = new Event(e));
+                                e.target || (e.target = this);
+                            }
 
-            e.target || (e.target = _this);
+                            e.data = item.data;
+                            res = item.fn.apply(item.ctx || this, arguments);
+                            if(typeof res !== 'undefined') {
+                                e.result = res;
+                                if(res === false) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                }
+                            }
 
-            if(storage && (storage = storage[e.type])) {
-                var item = storage.list.first,
-                    ret;
-                while(item) {
-                    e.data = item.data;
-                    ret = item.fn.apply(item.ctx || _this, arguments);
-                    if(typeof ret !== 'undefined') {
-                        e.result = ret;
-                        if(ret === false) {
-                            e.preventDefault();
-                            e.stopPropagation();
+                            item.special && item.special.once &&
+                                this.un(e.type, item.fn, item.ctx);
+
+                            if(item === lastItem) {
+                                break;
+                            }
+
+                            item = item.next;
                         }
                     }
-
-                    item.special && item.special.once &&
-                        _this.un(e.type, item.fn, item.ctx);
-                    item = item.next;
                 }
             }
 
-            return _this;
+            return this;
         }
     };
 
-Emitter.trigger = Emitter.emit;
-Emitter.onFirst = Emitter.once;
+/** @deprecated use emit */
+EmitterProps.trigger = EmitterProps.emit;
+
+/** @deprecated use once */
+EmitterProps.onFirst = EmitterProps.once;
+
+/**
+ * @class Emitter
+ * @alias events:Emitter
+ */
+var Emitter = inherit(
+        /** @lends Emitter.prototype */
+        EmitterProps,
+        /** @lends Emitter */
+        EmitterProps);
 
 provide({
-    Emitter : inherit(Emitter, Emitter),
-    Event   : Event
+    Emitter : Emitter,
+    Event : Event
 });
 
 });
