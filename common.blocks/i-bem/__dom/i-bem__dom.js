@@ -126,7 +126,7 @@ function initBlock(blockName, domElem, params, forceLive, callback) {
         $.unique(uniqIdToDomElems[uniqId]);
     }
 
-    var blockClass = blocks[blockName] || DOM.decl(blockName, {}, { live : true });
+    var blockClass = blocks[blockName] || DOM.decl(blockName, {}, { live : true }, true);
     if(!(blockClass._liveInitable = !!blockClass._processLive()) || forceLive || params.live === false) {
         forceLive && domElem.addClass(BEM_CLASS); // add css class for preventing memory leaks in further destructing
 
@@ -711,12 +711,19 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         var _self = this.__self,
             selector = '.' +
                 names.split(' ').map(function(name) {
-                    return buildClass(_self._name, name, modName, modVal);
+                    return _self.buildClass(name, modName, modVal);
                 }).join(',.'),
             res = findDomElem(ctx, selector);
 
-        if(!strictMode) return res;
+        return strictMode? this._filterFindElemResults(res) : res;
+    },
 
+    /**
+     * Filters results of findElem helper execution in strict mode
+     * @param {jQuery} res DOM elements
+     * @returns {jQuery} DOM elements
+     */
+    _filterFindElemResults : function(res) {
         var blockSelector = this.buildSelector(),
             domElem = this.domElem;
         return res.filter(function() {
@@ -770,6 +777,16 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
     },
 
     /**
+     * Finds elements outside the context
+     * @param {jQuery} ctx context
+     * @param {String} elemName Element name
+     * @returns {jQuery} DOM elements
+     */
+    closestElem : function(ctx, elemName) {
+        return ctx.closest(this.buildSelector(elemName));
+    },
+
+    /**
      * Clearing the cache for elements
      * @protected
      * @param {String} names Nested element name (or names separated by spaces)
@@ -806,7 +823,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
             elemName = this.__self._extractElemNameFrom(elem);
         }
 
-        return extractParams(elem[0])[buildClass(this.__self.getName(), elemName)] || {};
+        return extractParams(elem[0])[this.__self.buildClass(elemName)] || {};
     },
 
     /**
@@ -1176,7 +1193,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         if(to.elem && to.elem.indexOf(' ') > 0) {
             to.elem.split(' ').forEach(function(elem) {
                 this._liveClassBind(
-                    buildClass(this._name, elem, to.modName, to.modVal),
+                    this.buildClass(elem, to.modName, to.modVal),
                     event,
                     callback,
                     invokeOnInit);
@@ -1185,7 +1202,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         }
 
         return this._liveClassBind(
-            buildClass(this._name, to.elem, to.modName, to.modVal),
+            this.buildClass(to.elem, to.modName, to.modVal),
             event,
             callback,
             invokeOnInit);
@@ -1203,7 +1220,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         if(elem.indexOf(' ') > 1) {
             elem.split(' ').forEach(function(elem) {
                 this._liveClassUnbind(
-                    buildClass(this._name, elem),
+                    this.buildClass(elem),
                     event,
                     callback);
             }, this);
@@ -1211,7 +1228,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         }
 
         return this._liveClassUnbind(
-            buildClass(this._name, elem),
+            this.buildClass(elem),
             event,
             callback);
     },
@@ -1401,7 +1418,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @returns {String}
      */
     _buildModClassPrefix : function(modName, elem) {
-        return buildClass(this._name) +
+        return this._name +
                (elem?
                    ELEM_DELIM + (typeof elem === 'string'? elem : this._extractElemNameFrom(elem)) :
                    '') +
@@ -1436,6 +1453,17 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
     },
 
     /**
+     * Builds a CSS class corresponding to the block/element and modifier
+     * @param {String} [elem] Element name
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {String}
+     */
+    buildClass : function(elem, modName, modVal) {
+        return buildClass(this._name, elem, modName, modVal);
+    },
+
+    /**
      * Builds a CSS selector corresponding to the block/element and modifier
      * @param {String} [elem] Element name
      * @param {String} [modName] Modifier name
@@ -1443,7 +1471,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      * @returns {String}
      */
     buildSelector : function(elem, modName, modVal) {
-        return '.' + buildClass(this._name, elem, modName, modVal);
+        return '.' + this.buildClass(elem, modName, modVal);
     }
 });
 

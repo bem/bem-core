@@ -657,6 +657,96 @@ describe('i-bem__dom', function() {
             spy7.should.have.been.calledOnce;
         });
     });
+
+    describe('closestElem', function() {
+        it('should return the closest element', function() {
+            DOM.decl('block', {}, {});
+
+            var rootNode = $(BEMHTML.apply({
+                    block: 'block',
+                    js: true,
+                    content: {
+                        elem: 'elem1',
+                        content: {
+                            elem: 'elem2'
+                        }
+                    }
+                })),
+                block = rootNode.bem('block'),
+                closest = block.closestElem(block.elem('elem2'), 'elem1');
+
+            closest[0].should.be.equal(block.elem('elem1')[0]);
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+        });
+    });
+
+    describe('closestElem', function() {
+        it('should return the closest element', function() {
+            DOM.decl('block', {}, {});
+
+            var rootNode = $(BEMHTML.apply({
+                    block: 'block',
+                    js: true,
+                    content: {
+                        elem: 'elem1',
+                        content: {
+                            elem: 'elem2'
+                        }
+                    }
+                })),
+                block = rootNode.bem('block'),
+                closest = block.closestElem(block.elem('elem2'), 'elem1');
+
+            closest[0].should.be.equal(block.elem('elem1')[0]);
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+        });
+    });
+
+    describe('liveInitOnBlockInsideEvent', function() {
+        it('should init and call handler on live initialization', function() {
+            var spyInit = sinon.spy(),
+                spyHandler = sinon.spy();
+
+            DOM.decl('block1', {
+                onSetMod: {
+                    js: {
+                        inited: spyInit
+                    }
+                }
+            }, {
+                live: function() {
+                    this.liveInitOnBlockInsideEvent('event', 'block2', spyHandler);
+                }
+            });
+            DOM.decl('block2', {}, {});
+
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    block: 'block1',
+                    js: true,
+                    content: {
+                        block: 'block2',
+                        js: true
+                    }
+                }))),
+                block = rootNode.find('.block2').bem('block2');
+
+            spyInit.called.should.be.false;
+            spyHandler.called.should.be.false;
+
+            block.emit('event');
+
+            spyInit.called.should.be.true;
+            spyHandler.called.should.be.true;
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block1'];
+            delete DOM.blocks['block2'];
+        });
+    });
 });
 
 provide();
