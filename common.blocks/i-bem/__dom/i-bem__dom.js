@@ -196,15 +196,6 @@ function extractParams(domNode) {
 }
 
 /**
- * Cleans up all the BEM storages associated with a DOM node
- * @private
- * @param {HTMLElement} domNode DOM node
- */
-function cleanupDomNode(domNode) {
-    delete domElemToParams[identify(domNode)];
-}
-
-/**
  * Uncouple DOM node from the block. If this is the last node, then destroys the block.
  * @private
  * @param {DOM} block block
@@ -890,7 +881,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
                     delete uniqIdToDomElems[blockParams.uniqId];
                 }
             });
-            objects.isEmpty(params) && cleanupDomNode(domNode);
         });
 
         _this.domElem.remove();
@@ -974,19 +964,16 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
      */
     destruct : function(ctx, excludeSelf) {
         findDomElem(ctx, BEM_SELECTOR, excludeSelf).each(function(i, domNode) {
-            var params = getParams(this);
-            objects.each(params, function(blockParams, blockName) {
+            var params = getParams(domNode);
+            objects.each(params, function(blockParams) {
                 if(blockParams.uniqId) {
                     var block = uniqIdToBlock[blockParams.uniqId];
-                    if(block) {
-                        removeDomNodeFromBlock(block, domNode);
-                        delete params[blockName];
-                    } else {
+                    block?
+                        removeDomNodeFromBlock(block, domNode) :
                         delete uniqIdToDomElems[blockParams.uniqId];
-                    }
                 }
             });
-            objects.isEmpty(params) && cleanupDomNode(this);
+            delete domElemToParams[identify(domNode)];
         });
 
         excludeSelf? ctx.empty() : ctx.remove();
