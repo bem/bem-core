@@ -865,31 +865,11 @@ var DOM = BEM.decl('i-bem__dom',/** @lends DOM.prototype */{
         var _this = this,
             _self = _this.__self;
 
-        _this._isDestructing = true;
         _this._needSpecialUnbind && _self.doc.add(_self.win).unbind('.' + _this._uniqId);
-
-        _this.dropElemCache().domElem.each(function(i, domNode) {
-            var params = getParams(domNode);
-            objects.each(params, function(blockParams, blockName) {
-                var block = uniqIdToBlock[blockParams.uniqId];
-                if(block) {
-                    if(!block._isDestructing) {
-                        removeDomNodeFromBlock(block, domNode);
-                        delete params[blockName];
-                    }
-                } else {
-                    delete uniqIdToDomElems[blockParams.uniqId];
-                }
-            });
-        });
-
-        _this.domElem.remove();
 
         _this.__base();
 
         delete uniqIdToBlock[_this.un()._uniqId];
-        delete _this.domElem;
-        delete _this._elemCache;
     }
 
 }, /** @lends DOM */{
