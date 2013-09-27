@@ -1,5 +1,10 @@
-(function() {
-
+/**
+ * FastClick to jQuery module wrapper.
+ * @see https://github.com/ftlabs/fastclick
+ *
+ * @modules fastclick
+ */
+modules.define('jquery', function(provide, $) {
 	/**
 	 * @preserve FastClick: polyfill to remove click delays on browsers with touch UIs.
 	 *
@@ -728,6 +733,7 @@
 
 	document.addEventListener('DOMContentLoaded', function() {
 		FastClick.attach(document.body);
+		provide($);
 	});
 
-})();
+});
