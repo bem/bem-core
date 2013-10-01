@@ -19,9 +19,9 @@ the project.
 ## Inside
 
 ### Levels
-  - common.blocks
-  - desktop.blocks
-  - touch.blocks
+  - `common.blocks` — suited for any devices and browsers
+  - `desktop.blocks` — should be used for desktop browsers
+  - `touch.blocks` — implement some touch-platforms specifics
 
 ### Blocks
   - i-bem
