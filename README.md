@@ -24,7 +24,27 @@ the project.
   - touch.blocks
 
 ### Blocks
-  - i-bem
+  - `i-bem` — base block with helpers for JS and HTML
+  - `ecma` — some ES5 polyfils
+  - `strings` — helpers for JS-strings
+  - `objects` — helpers for JS-objects
+  - `functions` — helpers for JS-functions
+  - `events` — JS-events
+  - `querystring` — helpers for work with querystring
+  - `tick` — global timer
+  - `idle` — IDLE event
+  - `next-tick` — polyfil for `nextTick`/`setTimeout(0, ...)`
+  - `inherit` — OOP helpers
+  - `jquery` — jQuery
+  - `clearfix` — CSS clearfix trick
+  - `identify` — identify JS-objects
+  - `cookie` — helpers for work with browser cookies
+  - `vow` — Promises/A+ implementation
+  - `dom` — helpers for work with DOM
+  - `loader` — loader for JS files
+  - `pointer-events` — polyfils for crossplatform pointer events
+  - `ua` — browser features detection
+  - `page` — html/head/body scaffold
 
 ### Technologies
   - bemhtml

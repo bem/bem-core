@@ -22,7 +22,27 @@ English](https://github.com/bem/bem-core/blob/v1/README.md).
   - touch.blocks
 
 ### Блоки
-  - i-bem
+  - `i-bem` — базовый блок с хелперами для JS и HTML
+  - `ecma` — некоторые ES5-полифилы
+  - `strings` — хелперы для JS-строк
+  - `objects` — хелперы для JS-объектов
+  - `functions` — хелперы для JS-функций
+  - `events` — JS-события
+  - `querystring` — работа со строкой запроса
+  - `tick` — глобальный таймер
+  - `idle` — IDLE-событие
+  - `next-tick` — полифил для `nextTick`/`setTimeout(0, ...)`
+  - `inherit` — ООП-хелперы
+  - `jquery` — jQuery
+  - `clearfix` — CSS-трюк clearfix
+  - `identify` — идентификация JS-объектов
+  - `cookie` — хелперы для работы с браузерными куками
+  - `vow` — реализация Promises/A+
+  - `dom` — хелперы для работы с DOM
+  - `loader` — загрузчик для JS-файлов
+  - `pointer-events` — полифилы для кроссплатформенных событий указателя
+  - `ua` — определение возможностей браузера
+  - `page` — скелет для html/head/body
 
 ### Технологии
   - bemhtml
