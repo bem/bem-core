@@ -62,11 +62,11 @@ BEM.DOM.decl('block', ...);
 ````
 Стало:
 ````javascript
-modules.define('i-bem__dom', function(provide, DOM) {
+modules.define('i-bem__dom', function(provide, BEMDOM) {
 
-DOM.decl('block', ...);
+BEMDOM.decl('block', ...);
 
-provide(DOM);
+provide(BEMDOM);
 
 });
 ````
@@ -82,8 +82,8 @@ onSetMod : {
 Стало:
 ````javascript
 onSetMod : {
-    js : {
-        inited : function() { 
+    'js' : {
+        'inited' : function() { 
             // код конструктора
 ````
 ### Деструктор
@@ -165,9 +165,9 @@ BEM.DOM.decl('block', {
 
 Стало:
 ````javascript
-modules.define('i-bem__dom', ['events__channels'], function(provide, channels, DOM) {    
+modules.define('i-bem__dom', ['events__channels'], function(provide, channels, BEMDOM) {    
 
-DOM.decl('block', {
+BEMDOM.decl('block', {
     method : function() {
         channels('channel-name').on(....    
 ````
