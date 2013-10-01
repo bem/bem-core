@@ -1,6 +1,11 @@
 ﻿// https://handjs.codeplex.com/
 
 (function () {
+
+    //fix for msie < 9
+    if (!window.HTMLElement)
+        return false;
+	 
     // Installing Hand.js
     var supportedEventsNames = ["PointerDown", "PointerUp", "PointerMove", "PointerOver", "PointerOut", "PointerCancel", "PointerEnter", "PointerLeave",
                                 "pointerdown", "pointerup", "pointermove", "pointerover", "pointerout", "pointercancel", "pointerenter", "pointerleave"
