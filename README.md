@@ -27,6 +27,7 @@ the project.
   - i-bem
 
 ### Technologies
+  - vanilla.js + browser.js
   - bemhtml
   - bemtree
 

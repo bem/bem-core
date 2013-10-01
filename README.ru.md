@@ -25,6 +25,7 @@ English](https://github.com/bem/bem-core/blob/v1/README.md).
   - i-bem
 
 ### Технологии
+  - vanilla.js + browser.js
   - bemhtml
   - bemtree
 
