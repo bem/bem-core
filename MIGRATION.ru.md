@@ -131,9 +131,9 @@ BEM.DOM.decl('block', {
 
 Стало:
 ````javascript
-modules.define('i-bem__dom', function(provide, DOM) {    
+modules.define('i-bem__dom', function(provide, BEMDOM) {    
 
-DOM.decl('block', {
+BEMDOM.decl('block', {
     method : function() {
         this.nextTick(function() { ...
 ````
@@ -184,9 +184,9 @@ BEM.DOM.decl('block', {
 
 Стало:
 ````javascript
-modules.define('i-bem__dom', ['tick'], function(provide, tick, DOM) {    
+modules.define('i-bem__dom', ['tick'], function(provide, tick, BEMDOM) {    
 
-DOM.decl('block', {
+BEMDOM.decl('block', {
     method : function() {
         tick.on('tick', ...
 ````
@@ -200,9 +200,9 @@ BEM.DOM.decl('block', {
 
 Стало:
 ````javascript
-modules.define('i-bem__dom', ['idle'], function(provide, idle, DOM) {    
+modules.define('i-bem__dom', ['idle'], function(provide, idle, BEMDOM) {    
 
-DOM.decl('block', {
+BEMDOM.decl('block', {
     method : function() {
         idle.on('wakeup', ...
 ````
@@ -314,14 +314,14 @@ BEM.DOM.decl('b-spin', {
 modules.define(
     'i-bem__dom',
     ['tick'],
-    function(provide, tick, DOM) {
+    function(provide, tick, BEMDOM) {
 
 var FRAME_COUNT = 36;
 
-DOM.decl('b-spin', {
+BEMDOM.decl('b-spin', {
     onSetMod : {
-        js : {
-            inited : function() { // конструктор
+        'js' : {
+            'inited' : function() { // конструктор
                 var hasBackgroundPositionY = !!this.elem('icon').css('background-position-y')); /* В IE нельзя получить свойство background-position, только background-position-y */
 
                 this._bgProp = hasBackgroundPositionY? 'background-position-y' : 'background-position';
@@ -337,8 +337,8 @@ DOM.decl('b-spin', {
             }
         },
 
-        progress : {
-            yes : function() {
+        'progress' : {
+            'true' : function() {
                 this._bindToTick();
             },
 
@@ -366,7 +366,7 @@ DOM.decl('b-spin', {
     }
 });
 
-provide(DOM);
+provide(BEMDOM);
 
 });
 ````
