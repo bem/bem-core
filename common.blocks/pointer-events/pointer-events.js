@@ -402,41 +402,61 @@
     };
 
     // Hooks
-    interceptAddEventListener(HTMLElement);
     interceptAddEventListener(document);
-    interceptAddEventListener(HTMLBodyElement);
-    interceptAddEventListener(HTMLDivElement);
-    interceptAddEventListener(HTMLImageElement);
-    interceptAddEventListener(HTMLUListElement);
-    interceptAddEventListener(HTMLAnchorElement);
-    interceptAddEventListener(HTMLLIElement);
-    interceptAddEventListener(HTMLTableElement);
-    if (window.HTMLSpanElement) {
-        interceptAddEventListener(HTMLSpanElement);
-    }
-    if (window.HTMLCanvasElement) {
-        interceptAddEventListener(HTMLCanvasElement);
-    }
-    if (window.SVGElement) {
-        interceptAddEventListener(SVGElement);
+    interceptRemoveEventListener(document);
+
+    if (window.HTMLElement) {
+        interceptAddEventListener(HTMLElement);
+        interceptRemoveEventListener(HTMLElement);
     }
 
-    interceptRemoveEventListener(HTMLElement);
-    interceptRemoveEventListener(document);
-    interceptRemoveEventListener(HTMLBodyElement);
-    interceptRemoveEventListener(HTMLDivElement);
-    interceptRemoveEventListener(HTMLImageElement);
-    interceptRemoveEventListener(HTMLUListElement);
-    interceptRemoveEventListener(HTMLAnchorElement);
-    interceptRemoveEventListener(HTMLLIElement);
-    interceptRemoveEventListener(HTMLTableElement);
+    if (window.HTMLBodyElement) {
+        interceptAddEventListener(HTMLBodyElement);
+        interceptRemoveEventListener(HTMLBodyElement);
+    }
+
+    if (window.HTMLDivElement) {
+        interceptAddEventListener(HTMLDivElement);
+        interceptRemoveEventListener(HTMLDivElement);
+    }
+
+    if (window.HTMLImageElement) {
+        interceptAddEventListener(HTMLImageElement);
+        interceptRemoveEventListener(HTMLImageElement);
+    }
+
+    if (window.HTMLAnchorElement) {
+        interceptAddEventListener(HTMLAnchorElement);
+        interceptRemoveEventListener(HTMLAnchorElement);
+    }
+
+    if (window.HTMLUListElement) {
+        interceptAddEventListener(HTMLUListElement);
+        interceptRemoveEventListener(HTMLUListElement);
+    }
+
+    if (window.HTMLLIElement) {
+        interceptAddEventListener(HTMLLIElement);
+        interceptRemoveEventListener(HTMLLIElement);
+    }
+
+    if (window.HTMLTableElement) {
+        interceptAddEventListener(HTMLTableElement);
+        interceptRemoveEventListener(HTMLTableElement);
+    }
+
     if (window.HTMLSpanElement) {
+        interceptAddEventListener(HTMLSpanElement);
         interceptRemoveEventListener(HTMLSpanElement);
     }
+
     if (window.HTMLCanvasElement) {
+        interceptAddEventListener(HTMLCanvasElement);
         interceptRemoveEventListener(HTMLCanvasElement);
     }
+
     if (window.SVGElement) {
+        interceptAddEventListener(SVGElement);
         interceptRemoveEventListener(SVGElement);
     }
 
