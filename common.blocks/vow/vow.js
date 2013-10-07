@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * @version 0.3.9
+ * @version 0.3.10
  */
 
 (function(global) {
@@ -453,15 +453,15 @@ var undef,
                 }
             };
 
-        if(typeof process === 'object' && process.nextTick) { // nodejs
+        if(typeof setImmediate === 'function') { // ie10, nodejs >= 0.10
             return function(fn) {
-                enqueueFn(fn) && process.nextTick(callFns);
+                enqueueFn(fn) && setImmediate(callFns);
             };
         }
 
-        if(global.setImmediate) { // ie10
+        if(typeof process === 'object' && process.nextTick) { // nodejs < 0.10
             return function(fn) {
-                enqueueFn(fn) && global.setImmediate(callFns);
+                enqueueFn(fn) && process.nextTick(callFns);
             };
         }
 
