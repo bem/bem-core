@@ -19,6 +19,6 @@ block('page')(
     }),
 
     mix()(function() {
-        return applyNext().concat({ block: 'ua' })
+        return applyNext().concat({ block: 'ua', js : true })
     })
 )

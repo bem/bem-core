@@ -4,35 +4,6 @@ block('page').elem('css')(
 
     tag()('style'),
 
-    def()
-        .match(function() { return this.ctx.hasOwnProperty('ie') })
-        .match(function() { return !this.ctx._ieCommented })(
-            function() {
-                var ie = this.ctx.ie;
-                var hideRule = !ie ?
-                        ['gt IE 9', '<!-->', '<!--'] :
-                        ie === '!IE' ?
-                            [ie, '<!-->', '<!--'] :
-                            [ie, '', ''];
-                apply(
-                    '',
-                    { 'ctx._ieCommented': true },
-                    {
-                        ctx: [
-                            '<!--[if ' + hideRule[0] + ']>' + hideRule[1],
-                            this.ctx,
-                            hideRule[2] + '<![endif]-->'
-                        ]
-                    }
-                );
-            },
-            match(function() { return this.ctx.ie === true })(function() {
-                var url = this.ctx.url;
-                applyCtx([6, 7, 8, 9].map(function(v) {
-                    return { elem: 'css', url: url + '.ie' + v + '.css', ie: 'IE ' + v }
-                }));
-            })),
-
     match(function() { return this.ctx.url })(
         tag()('link'),
         attrs()(function() { return { rel: 'stylesheet', href: this.ctx.url } })

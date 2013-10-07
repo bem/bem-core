@@ -5,7 +5,6 @@ block('page')(
     mode('head')(function() { return [{ block: 'ua' }, this.ctx.head] }),
 
     def()
-        .match(!this.elem) // TODO: remove after https://github.com/bem/bem-xjst/issues/1
         .match(function() { return !this.ctx._wrapped })(function() {
             var ctx = this.ctx;
             ctx._wrapped = true;
