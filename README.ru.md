@@ -17,9 +17,9 @@ English](https://github.com/bem/bem-core/blob/v1/README.md).
 ## Состав
 
 ### Уровни
-  - common.blocks
-  - desktop.blocks
-  - touch.blocks
+  - `common.blocks` — предназначен для любых устройств и браузеров
+  - `desktop.blocks` — следует использовать для всех десктопных браузеров
+  - `touch.blocks` — реализует некоторую специфику для тач-платформ
 
 ### Блоки
   - `i-bem` — базовый блок с хелперами для JS и HTML
