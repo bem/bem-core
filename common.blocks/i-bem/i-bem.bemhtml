@@ -424,7 +424,7 @@ def()(function() {
             buf.push('"');
         }
 
-        if(jsParams) {
+        if(isBEM && jsParams) {
             buf.push(
                 ' data-bem="',
                 this._.attrEscape(JSON.stringify(jsParams)),
