@@ -3,7 +3,7 @@ block('b1')(
     var x;
     if (x !== undefined) throw new Error('x should not change');
     x = true;
-    applyNext();
+    return applyNext();
   },
   tag()('div')
 );
@@ -14,7 +14,7 @@ block('b2')(
 
     if (x !== undefined) throw new Error('x should not change');
     x = true;
-    applyNext();
+    return applyNext();
   },
   tag()('div')
 );
