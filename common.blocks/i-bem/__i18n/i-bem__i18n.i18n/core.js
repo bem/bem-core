@@ -33,9 +33,15 @@ var MOD_DELIM = '_',
     cache = {},
     // {String[]} A stack used for restoring context of dynamic keysets
     stack = [],
+    debug = false,
     // @see http://whattheheadsaid.com/2011/04/internet-explorer-9s-problematic-console-object
-    log = (typeof console !== 'undefined' && typeof console.log === 'function')?
-        console.log.bind(console) : function() {};
+    hasConsole = typeof console !== 'undefined' && typeof console.log === 'function';
+
+function log() {
+    if(debug && hasConsole) {
+        console.log.apply(console, arguments);
+    }
+}
 
 function bemName(decl) {
     typeof decl === 'string' && (decl = { block : decl });
@@ -251,6 +257,10 @@ bem_.I18N = (function(base) {
     klass.lang = function(lang) {
         typeof lang !== 'undefined' && (this._lang = lang);
         return this._lang;
+    };
+
+    klass.debug = function(flag) {
+        debug = !!flag;
     };
 
     klass.lang(DEFAULT_LANG);
