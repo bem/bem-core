@@ -1,0 +1,39 @@
+{
+  "name": "bem-core",
+  "version": "1.0.0",
+  "homepage": "https://github.com/bem/bem-core",
+  "authors": [
+    "Andrey Smirnov <smirnovandr@yandex.ru>",
+    "Dmitry Filatov <dfilatov@yandex-team.ru>",
+    "Dmitry Moskowski <me@corpix.ru>",
+    "Dmitry Unkovsky <oil.crayons@gmail.com>",
+    "Fedor Indutny <fedor.indutny@gmail.com>",
+    "Kirill Maslinsky <kirill@altlinux.org>",
+    "Maxim Didkivskyi <mdidkivskyi@yandex-team.ru>",
+    "Mikhail Troshev <mishanga@yandex-team.ru>",
+    "Misha Berezin <mishaberezin@gmail.com>",
+    "Oleg Apostol <apostol@yandex-team.ru>",
+    "Sergey Belov <peimei@ya.ru>",
+    "Sergey Berezhnoy <veged@yandex-team.ru>",
+    "Sergey Tatarintsev <sevinf@yandex-team.ru>",
+    "Varvara Stepanova <mail@varya.me>",
+    "Vitaly Harisov <vitaly@yandex-team.ru>",
+    "Vladimir Grinenko <i@tadatuta.com>",
+    "Vladimir Varankin <nek.narqo+git@gmail.com>",
+    "Yelena Jetpyspayeva <mursya@gmail.com>",
+    "deepsweet <kir@soulshine.in>",
+    "ikokostya <ikokostya@gmail.com>",
+    "salivan <salivan@yandex-team.ru>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    ".bem/cache",
+     "node_modules",
+     "libs",
+     "test",
+     "tests"
+  ],
+  "dependencies": {
+    "bem-pr": "git://github.com/diunko/bem-pr.git#705fe05f63a76df3841e8139ff5f7ccbc00972a5"
+  }
+}
