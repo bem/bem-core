@@ -18,7 +18,7 @@ title: 'Page with link',
 %%
 
 Указание свойства ##head## дополняет элемент ##head##, соответствующий ##HTML## тегу ##<head>##,
-элементами для подключения ##CSS## и ##JS## файлов:
+элементами для подключения ##CSS## и ##JS## файлов, а также указания ##meta##:
 
 %%hl js
 ({
@@ -26,11 +26,15 @@ title: 'Page with link',
 head: [
     { elem: 'css', url: 'example.css', ie: false },
     { elem: 'css', url: 'example.ie.css', ie: 'lt IE 8' },
-    { elem: 'js', url: 'example.js' }
+    { elem: 'js', url: 'example.js' },
+    { elem: 'meta', attrs: { name: 'keywords', content: 'js, css, html' } },
+    { elem: 'meta', attrs: { name: 'description', content: 'Yet another webdev blog' } }
 ],
 ...
 })
 %%
+
+
 
 Элемент ##css## превращается в ##HTML## в тег ##<link>##, подключающий как ##CSS## стиль тот файл,
 что указан в свойстве ##url## этого элемента. Также у такого элемента может быть свойство ##ie##.
@@ -119,46 +123,6 @@ content: [
     block: 'ua'
 },
 ...
-%%
-
-Аналогично указанию свойства ##head##, может быть задано свойство ##meta##,
-содержашее один или несколько элементов ##meta##:
-
-%%hl js
-({
-...
-meta: {
-    elem: 'meta',
-    attrs: {
-        name: 'keywords',
-        content: 'js, css, html'
-    }
-},
-...
-})
-%%
-
-%%hl js
-({
-...
-meta: [
-    {
-        elem: 'meta',
-        attrs: {
-            name: 'keywords',
-            content: 'js, css, html'
-        }
-    },
-    {
-        elem: 'meta',
-        attrs: {
-            name : 'description',
-            content : 'Yet another webdev blog'
-        }
-    }
-]
-...
-})
 %%
 
 Значением свойства ##content## блока ##page## может быть хеш-описание содержимого

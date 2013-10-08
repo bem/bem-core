@@ -19,8 +19,7 @@ block('page')(
                                 { tag: 'meta', attrs: { charset: 'utf-8' } },
                                 { tag: 'title', content: ctx.title },
                                 apply('head'),
-                                ctx.favicon? { elem: 'favicon', url: ctx.favicon } : '',
-                                ctx.meta
+                                ctx.favicon? { elem: 'favicon', url: ctx.favicon } : ''
                             ]
                         },
                         ctx
