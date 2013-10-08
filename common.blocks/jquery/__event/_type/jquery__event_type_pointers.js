@@ -25,16 +25,7 @@ if(window.navigator.pointerEnabled) {
 }
 
 // current events type and aliases
-var current,
-    pointerenter,
-    pointerover,
-    pointerdown,
-    pointermove,
-    pointerup,
-    pointerout,
-    pointerleave,
-    pointerpress,
-    pointerrelease;
+var current;
 
 // touch
 // https://github.com/ariya/phantomjs/issues/10375
@@ -77,6 +68,9 @@ if('ontouchstart' in window && !('_phantom' in window)) {
     };
 }
 
+var isTouch = current.type === 'touch',
+    isMouse = current.type === 'mouse';
+
 /**
  * Mutate an argument event to PointerEvent.
  *
@@ -85,50 +79,50 @@ if('ontouchstart' in window && !('_phantom' in window)) {
  */
 function PointerEvent(e, type) {
     e.type = type;
-    e = this._prepareEvent(e);
-
-    if(e) {
-        e = this._extendToPointer(e);
+    // do not do anything with multiple touch-events because of gestures
+    if(!(type === 'touch' && e.originalEvent.changedTouches.length > 1)) {
+        normalizeToJQueryEvent(e);
+        extendToPointerEvent(e);
         $.extend(this, e);
     }
 }
 
 /**
- * Prepare (touch-)event and keep all the properties normalized by jQuery.
+ * Dispatch current event.
+ *
+ * @param {Element} target target element
+ */
+PointerEvent.prototype.dispatch = function(target) {
+    this.type && ($.event.handle || $.event.dispatch).call(target, this);
+    return this;
+};
+
+/**
+ * Normalize only touch-event to jQuery event interface.
  *
  * @see http://api.jquery.com/category/events/event-object/
  *
  * @param {Object} e input event
- * @return {Object} output event
  */
-PointerEvent.prototype._prepareEvent = function(e) {
+function normalizeToJQueryEvent(e) {
+    if(!isTouch) return;
 
-    if(current.type === 'touch') {
-        // do not do anything with multiple touch-events bacause of gestures
-        if(e.originalEvent.changedTouches.length > 1) {
-            return;
-        }
+    var touchPoint = e.originalEvent.changedTouches[0];
 
-        var touchPoint = e.originalEvent.changedTouches[0];
-
-        // keep all the properties normalized by jQuery
-        e.clientX = touchPoint.clientX;
-        e.clientY = touchPoint.clientY;
-        e.pageX = touchPoint.pageX;
-        e.pageY = touchPoint.pageY;
-        e.screenX = touchPoint.screenX;
-        e.screenY = touchPoint.screenY;
-        e.layerX = e.originalEvent.layerX;
-        e.layerY = e.originalEvent.layerY;
-        e.offsetX = e.layerX - e.currentTarget.offsetLeft;
-        e.offsetY = e.layerY - e.currentTarget.offsetTop;
-        e.target = touchPoint.target;
-        e.identifier = touchPoint.identifier;
-    }
-
-    return e;
-
-};
+    // keep all the properties normalized by jQuery
+    e.clientX = touchPoint.clientX;
+    e.clientY = touchPoint.clientY;
+    e.pageX = touchPoint.pageX;
+    e.pageY = touchPoint.pageY;
+    e.screenX = touchPoint.screenX;
+    e.screenY = touchPoint.screenY;
+    e.layerX = e.originalEvent.layerX;
+    e.layerY = e.originalEvent.layerY;
+    e.offsetX = e.layerX - e.currentTarget.offsetLeft;
+    e.offsetY = e.layerY - e.currentTarget.offsetTop;
+    e.target = touchPoint.target;
+    e.identifier = touchPoint.identifier;
+}
 
 /**
  * Extend event to match PointerEvent Interface.
@@ -136,27 +130,25 @@ PointerEvent.prototype._prepareEvent = function(e) {
  * @see https://dvcs.w3.org/hg/pointerevents/raw-file/tip/pointerEvents.html#pointer-events-and-interfaces
  * @see https://dvcs.w3.org/hg/webevents/raw-file/default/touchevents.html
  * @param {Object} e input event
- * @return {Object} output event
  */
-PointerEvent.prototype._extendToPointer = function(e) {
-
+function extendToPointerEvent(e) {
     e.width = e.width ||
-              e.webkitRadiusX ||
-              e.radiusX ||
-              0;
+        e.webkitRadiusX ||
+        e.radiusX ||
+        0;
 
     e.height = e.width ||
-               e.webkitRadiusY ||
-               e.radiusY ||
-               0;
+        e.webkitRadiusY ||
+        e.radiusY ||
+        0;
 
     // TODO: stupid Android somehow could send "force" > 1 ;(
     e.pressure = e.pressure ||
-                 e.mozPressure ||
-                 e.webkitForce ||
-                 e.force ||
-                 e.which && 0.5 ||
-                 0;
+        e.mozPressure ||
+        e.webkitForce ||
+        e.force ||
+        e.which && 0.5 ||
+        0;
 
     e.tiltX = e.tiltX || 0;
     e.tiltY = e.tiltY || 0;
@@ -167,405 +159,222 @@ PointerEvent.prototype._extendToPointer = function(e) {
 
     // "1" is always for mouse, need to +2 for touch which can start from "0"
     e.pointerId = e.identifier? e.identifier + 2 : 1;
+}
 
-    return e;
+function addSpecialEvent(eventType, extend) {
+    var pointerEventType = 'pointer' + eventType,
+        handlerFn = 'handler' + (isTouch? 'Touch' : 'NonTouch'),
+        specialEvent = $.event.special[pointerEventType] = {
+            setup : function() {
+                $(this).on(current[eventType], specialEvent.handler);
+            },
 
-};
+            teardown : function() {
+                $(this).off(current[eventType], specialEvent.handler);
+            },
 
-/**
- * Dispatch current event.
- *
- * @param {Element} target target element
- */
-PointerEvent.prototype.dispatch = function(target) {
+            handler : function() {
+                specialEvent[handlerFn].apply(this, arguments);
+            },
 
-    if(this.type) {
-        ($.event.handle || $.event.dispatch).call(target, this);
-    }
+            handlerTouch : function(e) {
+                var pointerEvent = new PointerEvent(e, pointerEventType);
+                pointerEvent.dispatch(pointerEvent.target);
+            },
 
-    return this;
-
-};
-
-// pointerenter
-pointerenter = $.event.special.pointerenter = {
-
-    setup : function() {
-        $(this).on(current.enter, pointerenter.handler);
-    },
-
-    teardown : function() {
-        $(this).off(current.enter, pointerenter.handler);
-    },
-
-    handler : function() {
-        var handlerType = current.type === 'touch'? 'Touch' : 'NonTouch';
-        pointerenter['handler' + handlerType].apply(this, arguments);
-    },
-
-    handlerTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerenter');
-        pointerevent.dispatch(pointerevent.target);
-    },
-
-    handlerNonTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerenter');
-        pointerevent.dispatch(this);
-    }
-
-};
-
-// pointerover
-pointerover = $.event.special.pointerover = {
-
-    setup : function() {
-        $(this).on(current.over, pointerover.handler);
-    },
-
-    teardown : function() {
-        $(this).off(current.over, pointerover.handler);
-    },
-
-    handler : function() {
-        var handlerType = current.type === 'touch'? 'Touch' : 'NonTouch';
-        pointerover['handler' + handlerType].apply(this, arguments);
-    },
-
-    handlerTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerover');
-        pointerevent.dispatch(pointerevent.target);
-    },
-
-    handlerNonTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerover');
-        pointerevent.dispatch(this);
-    }
-
-};
-
-// pointerdown
-pointerdown = $.event.special.pointerdown = {
-
-    setup : function() {
-        $(this).on(current.down, pointerdown.handler);
-    },
-
-    teardown : function() {
-        $(this).off(current.down, pointerdown.handler);
-    },
-
-    handler : function() {
-        var handlerType = current.type === 'touch'? 'Touch' : 'NonTouch';
-        pointerdown['handler' + handlerType].apply(this, arguments);
-    },
-
-    handlerTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerdown');
-        pointerevent.dispatch(pointerevent.target);
-    },
-
-    handlerNonTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerdown');
-        pointerevent.dispatch(this);
-    }
-
-};
-
-// pointermove
-pointermove = $.event.special.pointermove = {
-
-    setup : function() {
-        if(current.type === 'touch') {
-            $(this).on(current.down, pointermove.downHandler);
-        }
-
-        $(this).on(current.move, pointermove.moveHandler);
-    },
-
-    teardown : function() {
-        if(current.type === 'touch') {
-            $(this).off(current.down, pointermove.downHandler);
-        }
-
-        $(this).off(current.move, pointermove.moveHandler);
-    },
-
-    downHandler : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerdown');
-        pointermove.target = pointerevent.target;
-    },
-
-    moveHandler : function(e) {
-
-        var pointerevent = new PointerEvent(e, 'pointermove');
-
-        if(current.type === 'touch') {
-            var newTarget = document.elementFromPoint(pointerevent.clientX, pointerevent.clientY),
-                currentTarget = pointermove.target;
-
-            pointerevent.dispatch(currentTarget);
-
-            if(currentTarget !== newTarget) {
-
-                // out current target
-                pointerevent = new PointerEvent(e, 'pointerout');
-                pointerevent.dispatch(currentTarget);
-
-                // new target is not a child of the current -> leave current target
-                if(!currentTarget.contains(newTarget)) {
-                    pointerevent = new PointerEvent(e, 'pointerleave');
-                    pointerevent.dispatch(currentTarget);
-                }
-
-                // new target is not the parent of the current -> leave new target
-                if(!newTarget.contains(currentTarget)) {
-                    pointerevent = new PointerEvent(e, 'pointerenter');
-                    pointerevent.dispatch(newTarget);
-                }
-
-                // over new target
-                pointerevent = new PointerEvent(e, 'pointerover');
-                pointerevent.dispatch(newTarget);
-
-                // new target -> current target
-                pointermove.target = newTarget;
+            handlerNonTouch : function(e) {
+                new PointerEvent(e, pointerEventType).dispatch(this);
             }
-        } else {
-            pointerevent.dispatch(this);
-        }
-
-    }
-
-};
-
-// pointerup
-pointerup = $.event.special.pointerup = {
-
-    setup : function() {
-        $(this).on(current.up, pointerup.handler);
-    },
-
-    teardown : function() {
-        $(this).off(current.up, pointerup.handler);
-    },
-
-    handler : function() {
-        var handlerType = current.type === 'touch'? 'Touch' : 'NonTouch';
-        pointerup['handler' + handlerType].apply(this, arguments);
-    },
-
-    handlerTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerup'),
-            data = pointerevent.e;
-
-        pointerevent.dispatch(document.elementFromPoint(data.clientX, data.clientY));
-    },
-
-    handlerNonTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerup');
-        pointerevent.dispatch(this);
-    }
-
-};
-
-// pointerout
-pointerout = $.event.special.pointerout = {
-
-    setup : function() {
-        $(this).on(current.out, pointerout.handler);
-    },
-
-    teardown : function() {
-        $(this).off(current.out, pointerout.handler);
-    },
-
-    handler : function() {
-        var handlerType = current.type === 'touch'? 'Touch' : 'NonTouch';
-        pointerout['handler' + handlerType].apply(this, arguments);
-    },
-
-    handlerTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerout'),
-            data = pointerevent.e;
-
-        pointerevent.dispatch(document.elementFromPoint(data.clientX, data.clientY));
-    },
-
-    handlerNonTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerout');
-        pointerevent.dispatch(this);
-    }
-
-};
-
-// pointerleave
-pointerleave = $.event.special.pointerleave = {
-
-    setup : function() {
-        $(this).on(current.leave, pointerleave.handler);
-    },
-
-    teardown : function() {
-        $(this).off(current.leave, pointerleave.handler);
-    },
-
-    handler : function() {
-        var handlerType = current.type === 'touch'? 'Touch' : 'NonTouch';
-        pointerleave['handler' + handlerType].apply(this, arguments);
-    },
-
-    handlerTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerleave'),
-            data = pointerevent.e;
-
-        pointerevent.dispatch(document.elementFromPoint(data.clientX, data.clientY));
-    },
-
-    handlerNonTouch : function(e) {
-        var pointerevent = new PointerEvent(e, 'pointerleave');
-        pointerevent.dispatch(this);
-    }
-
-};
-
-// pointerpress
-pointerpress = $.event.special.pointerpress = {
-
-    setup : function() {
-        if(current.type === 'mouse') {
-            $(this).on(current.down, pointerpress.handlerMouse);
-        } else {
-            $(this)
-                .on(current.down, pointerpress.handlerNonMouseDown)
-                .on(current.move, pointerpress.handlerNonMouseMove)
-                .on(current.up, pointerpress.handlerNonMouseUp);
-        }
-    },
-
-    teardown : function() {
-        if(current.type === 'mouse') {
-            $(this).off(current.down, pointerpress.handlerMouse);
-        } else {
-            $(this)
-                .off(current.down, pointerpress.handlerNonMouseDown)
-                .off(current.move, pointerpress.handlerNonMouseMove)
-                .off(current.up, pointerpress.handlerNonMouseUp);
-        }
-    },
-
-    handler : function() {
-        var handlerType = current.type === 'touch'? 'Touch' : 'NonTouch';
-        pointerpress['handler' + handlerType].apply(this, arguments);
-    },
-
-    handlerNonMouseDown : function(e) {
-        pointerpress.data = {
-            timer : (function() {
-                return setTimeout(function() {
-                    if(!pointerpress.data.move) {
-                        var pointerevent = new PointerEvent(e, 'pointerpress');
-                        pointerevent.dispatch(pointerevent.target);
-                    }
-                }, 80);
-            })(),
-            clientX : e.clientX,
-            clientY : e.clientY
         };
-    },
 
-    handlerNonMouseMove : function(e) {
-        if(Math.abs(e.clientX - pointerpress.data.clientX) > 5 ||
-           Math.abs(e.clientY - pointerpress.data.clientY) > 5) {
-            pointerpress.data.move = true;
+    extend && $.extend(specialEvent, extend(specialEvent, pointerEventType));
+}
+
+function extendHandlerTouchByElement(specialEvent, pointerEventType) {
+    return {
+        handlerTouch : function(e) {
+            var pointerEvent = new PointerEvent(e, pointerEventType),
+                target = document.elementFromPoint(pointerEvent.clientX, pointerEvent.clientY);
+            pointerEvent.dispatch(target);
         }
-    },
+    };
+}
 
-    handlerNonMouseUp : function() {
-        clearTimeout(pointerpress.data.timer);
-        delete pointerpress.data;
-    },
+addSpecialEvent('enter');
+addSpecialEvent('over');
+addSpecialEvent('down');
+addSpecialEvent('up', extendHandlerTouchByElement);
+addSpecialEvent('out', extendHandlerTouchByElement);
+addSpecialEvent('leave', extendHandlerTouchByElement);
+addSpecialEvent('move', function(specialEvent) {
+    return {
+        setup : function() {
+            isTouch && $(this).on(current.down, specialEvent.downHandler);
+            $(this).on(current.move, specialEvent.moveHandler);
+        },
 
-    handlerMouse : function(e) {
-        // only left mouse button
-        if(e.which === 1) {
-            var pointerevent = new PointerEvent(e, 'pointerpress');
-            pointerevent.dispatch(this);
-        }
-    }
+        teardown : function() {
+            isTouch && $(this).off(current.down, specialEvent.downHandler);
+            $(this).off(current.move, specialEvent.moveHandler);
+        },
 
-};
+        downHandler : function(e) {
+            var pointerEvent = new PointerEvent(e, 'pointerdown');
+            specialEvent.target = pointerEvent.target;
+        },
 
-// pointerrelease
-pointerrelease = $.event.special.pointerrelease = {
+        moveHandler : function(e) {
+            var pointerEvent = new PointerEvent(e, 'pointermove');
+            if(isTouch) {
+                var newTarget = document.elementFromPoint(pointerEvent.clientX, pointerEvent.clientY),
+                    currentTarget = specialEvent.target;
 
-    setup : function() {
-        if(current.type === 'mouse') {
-            $(this).on(current.up, pointerrelease.handlerMouse);
-        } else {
-            $(this)
-                .on(current.down, pointerrelease.handlerNonMouseDown)
-                .on(current.move, pointerrelease.handlerNonMouseMove)
-                .on(current.up, pointerrelease.handlerNonMouseUp);
-        }
-    },
+                pointerEvent.dispatch(currentTarget);
 
-    teardown : function() {
-        if(current.type === 'mouse') {
-            $(this).off(current.down, pointerrelease.handlerMouse);
-        } else {
-            $(this)
-                .off(current.down, pointerrelease.handlerNonMouseDown)
-                .off(current.move, pointerrelease.handlerNonMouseMove)
-                .off(current.up, pointerrelease.handlerNonMouseUp);
-        }
-    },
+                if(currentTarget !== newTarget) {
+                    // out current target
+                    pointerEvent = new PointerEvent(e, 'pointerout');
+                    pointerEvent.dispatch(currentTarget);
 
-    handler : function() {
-        var handlerType = current.type === 'touch'? 'Touch' : 'NonTouch';
-        pointerrelease['handler' + handlerType].apply(this, arguments);
-    },
-
-    handlerNonMouseDown : function(e) {
-        pointerrelease.data = {
-            timer : (function() {
-                return setTimeout(function() {
-                    if(!pointerrelease.data.move) {
-                        pointerrelease.data.pressed = true;
+                    // new target is not a child of the current -> leave current target
+                    if(!currentTarget.contains(newTarget)) {
+                        pointerEvent = new PointerEvent(e, 'pointerleave');
+                        pointerEvent.dispatch(currentTarget);
                     }
-                }, 80);
-            })(),
-            clientX : e.clientX,
-            clientY : e.clientY
-        };
-    },
 
-    handlerNonMouseMove : function(e) {
-        if(Math.abs(e.clientX - pointerrelease.data.clientX) > 5 ||
-           Math.abs(e.clientY - pointerrelease.data.clientY) > 5) {
-            pointerrelease.data.move = true;
+                    // new target is not the parent of the current -> leave new target
+                    if(!newTarget.contains(currentTarget)) {
+                        pointerEvent = new PointerEvent(e, 'pointerenter');
+                        pointerEvent.dispatch(newTarget);
+                    }
+
+                    // over new target
+                    pointerEvent = new PointerEvent(e, 'pointerover');
+                    pointerEvent.dispatch(newTarget);
+
+                    // new target -> current target
+                    specialEvent.target = newTarget;
+                }
+            } else {
+                pointerEvent.dispatch(this);
+            }
         }
-    },
+    };
+});
 
-    handlerNonMouseUp : function(e) {
-        clearTimeout(pointerrelease.data.timer);
+addSpecialEvent('press', function(specialEvent) {
+    return {
+        setup : function() {
+            isMouse?
+                $(this).on(current.down, specialEvent.handlerMouse) :
+                $(this)
+                    .on(current.down, specialEvent.handlerNonMouseDown)
+                    .on(current.move, specialEvent.handlerNonMouseMove)
+                    .on(current.up, specialEvent.handlerNonMouseUp);
+        },
 
-        if(pointerrelease.data.pressed) {
-            var pointerevent = new PointerEvent(e, 'pointerrelease');
-            pointerevent.dispatch(pointerevent.target);
+        teardown : function() {
+            isMouse?
+                $(this).off(current.down, specialEvent.handlerMouse) :
+                $(this)
+                    .off(current.down, specialEvent.handlerNonMouseDown)
+                    .off(current.move, specialEvent.handlerNonMouseMove)
+                    .off(current.up, specialEvent.handlerNonMouseUp);
+        },
+
+        handlerNonMouseDown : function(e) {
+            specialEvent.data = {
+                timer : (function() {
+                    return setTimeout(function() {
+                        if(!specialEvent.data.move) {
+                            var pointerevent = new PointerEvent(e, 'pointerpress');
+                            pointerevent.dispatch(pointerevent.target);
+                        }
+                    }, 80);
+                })(),
+                clientX : e.clientX,
+                clientY : e.clientY
+            };
+        },
+
+        handlerNonMouseMove : function(e) {
+            var data = specialEvent.data;
+            if(Math.abs(e.clientX - data.clientX) > 5 ||
+                Math.abs(e.clientY - data.clientY) > 5) {
+                data.move = true;
+            }
+        },
+
+        handlerNonMouseUp : function() {
+            clearTimeout(specialEvent.data.timer);
+            delete specialEvent.data;
+        },
+
+        handlerMouse : function(e) {
+            // only left mouse button
+            e.which === 1 && new PointerEvent(e, 'pointerpress').dispatch(this);
         }
+    };
+});
 
-        delete pointerrelease.data;
-    },
+addSpecialEvent('release', function(specialEvent) {
+    return {
+        setup : function() {
+            isMouse?
+                $(this).on(current.up, specialEvent.handlerMouse) :
+                $(this)
+                    .on(current.down, specialEvent.handlerNonMouseDown)
+                    .on(current.move, specialEvent.handlerNonMouseMove)
+                    .on(current.up, specialEvent.handlerNonMouseUp);
+        },
 
-    handlerMouse : function(e) {
-        // only left mouse button
-        if(e.which === 1) {
-            var pointerevent = new PointerEvent(e, 'pointerrelease');
-            pointerevent.dispatch(this);
+        teardown : function() {
+            isMouse?
+                $(this).off(current.down, specialEvent.handlerMouse) :
+                $(this)
+                    .off(current.down, specialEvent.handlerNonMouseDown)
+                    .off(current.move, specialEvent.handlerNonMouseMove)
+                    .off(current.up, specialEvent.handlerNonMouseUp);
+        },
+
+        handlerNonMouseDown : function(e) {
+            var data = specialEvent.data = {
+                timer : (function() {
+                    return setTimeout(function() {
+                        data.move || (data.pressed = true);
+                    }, 80);
+                })(),
+                clientX : e.clientX,
+                clientY : e.clientY
+            };
+        },
+
+        handlerNonMouseMove : function(e) {
+            var data = specialEvent.data;
+            if(Math.abs(e.clientX - data.clientX) > 5 ||
+                Math.abs(e.clientY - data.clientY) > 5) {
+                data.move = true;
+            }
+        },
+
+        handlerNonMouseUp : function(e) {
+            clearTimeout(specialEvent.data.timer);
+
+            if(specialEvent.data.pressed) {
+                var pointerEvent = new PointerEvent(e, 'pointerrelease'),
+                    target = document.elementFromPoint(pointerEvent.clientX, pointerEvent.clientY);
+                pointerEvent.dispatch(target);
+            }
+
+            delete specialEvent.data;
+        },
+
+        handlerMouse : function(e) {
+            // only left mouse button
+            e.which === 1 && new PointerEvent(e, 'pointerrelease').dispatch(this);
         }
-    }
-
-};
+    };
+});
 
 provide($);
 
