@@ -5,7 +5,7 @@ require('./nodes');
 var PATH = require('path'),
     environ = require('bem-environ')(__dirname);
 
-exports = function(MAKE) {
+module.exports = function(MAKE) {
 
 environ.extendMake(MAKE);
 
