@@ -190,12 +190,48 @@ function addSpecialEvent(eventType, extend) {
     extend && $.extend(specialEvent, extend(specialEvent, pointerEventType));
 }
 
-function extendHandlerTouchByElement(specialEvent, pointerEventType) {
+function extendHandlerTouchByElement(_, pointerEventType) {
     return {
         handlerTouch : function(e) {
             var pointerEvent = new PointerEvent(e, pointerEventType),
                 target = document.elementFromPoint(pointerEvent.clientX, pointerEvent.clientY);
             pointerEvent.dispatch(target);
+        }
+    };
+}
+
+function pressAndReleaseHandlerStub(specialEvent, pointerEventType) {
+    var eventTypeForMouse = current[pointerEventType === 'pointerpress'? 'down' : 'up'];
+    return {
+        setup : function() {
+            isMouse?
+                $(this).on(eventTypeForMouse, specialEvent.handlerMouse) :
+                $(this)
+                    .on(current.down, specialEvent.handlerNonMouseDown)
+                    .on(current.move, specialEvent.handlerNonMouseMove)
+                    .on(current.up, specialEvent.handlerNonMouseUp);
+        },
+
+        teardown : function() {
+            isMouse?
+                $(this).off(eventTypeForMouse, specialEvent.handlerMouse) :
+                $(this)
+                    .off(current.down, specialEvent.handlerNonMouseDown)
+                    .off(current.move, specialEvent.handlerNonMouseMove)
+                    .off(current.up, specialEvent.handlerNonMouseUp);
+        },
+
+        handlerNonMouseMove : function(e) {
+            var data = specialEvent.data;
+            if(Math.abs(e.clientX - data.clientX) > 5 ||
+                Math.abs(e.clientY - data.clientY) > 5) {
+                data.move = true;
+            }
+        },
+
+        handlerMouse : function(e) {
+            // only left mouse button
+            e.which === 1 && new PointerEvent(e, pointerEventType).dispatch(this);
         }
     };
 }
@@ -262,118 +298,60 @@ addSpecialEvent('move', function(specialEvent) {
     };
 });
 
-addSpecialEvent('press', function(specialEvent) {
-    return {
-        setup : function() {
-            isMouse?
-                $(this).on(current.down, specialEvent.handlerMouse) :
-                $(this)
-                    .on(current.down, specialEvent.handlerNonMouseDown)
-                    .on(current.move, specialEvent.handlerNonMouseMove)
-                    .on(current.up, specialEvent.handlerNonMouseUp);
-        },
+addSpecialEvent('press', function(specialEvent, pointerEventType) {
+    return $.extend(
+        pressAndReleaseHandlerStub(specialEvent, pointerEventType),
+        {
+            handlerNonMouseDown : function(e) {
+                specialEvent.data = {
+                    timer : (function() {
+                        return setTimeout(function() {
+                            if(!specialEvent.data.move) {
+                                var pointerevent = new PointerEvent(e, pointerEventType);
+                                pointerevent.dispatch(pointerevent.target);
+                            }
+                        }, 80);
+                    })(),
+                    clientX : e.clientX,
+                    clientY : e.clientY
+                };
+            },
 
-        teardown : function() {
-            isMouse?
-                $(this).off(current.down, specialEvent.handlerMouse) :
-                $(this)
-                    .off(current.down, specialEvent.handlerNonMouseDown)
-                    .off(current.move, specialEvent.handlerNonMouseMove)
-                    .off(current.up, specialEvent.handlerNonMouseUp);
-        },
-
-        handlerNonMouseDown : function(e) {
-            specialEvent.data = {
-                timer : (function() {
-                    return setTimeout(function() {
-                        if(!specialEvent.data.move) {
-                            var pointerevent = new PointerEvent(e, 'pointerpress');
-                            pointerevent.dispatch(pointerevent.target);
-                        }
-                    }, 80);
-                })(),
-                clientX : e.clientX,
-                clientY : e.clientY
-            };
-        },
-
-        handlerNonMouseMove : function(e) {
-            var data = specialEvent.data;
-            if(Math.abs(e.clientX - data.clientX) > 5 ||
-                Math.abs(e.clientY - data.clientY) > 5) {
-                data.move = true;
+            handlerNonMouseUp : function() {
+                clearTimeout(specialEvent.data.timer);
+                delete specialEvent.data;
             }
-        },
-
-        handlerNonMouseUp : function() {
-            clearTimeout(specialEvent.data.timer);
-            delete specialEvent.data;
-        },
-
-        handlerMouse : function(e) {
-            // only left mouse button
-            e.which === 1 && new PointerEvent(e, 'pointerpress').dispatch(this);
-        }
-    };
+        });
 });
 
-addSpecialEvent('release', function(specialEvent) {
-    return {
-        setup : function() {
-            isMouse?
-                $(this).on(current.up, specialEvent.handlerMouse) :
-                $(this)
-                    .on(current.down, specialEvent.handlerNonMouseDown)
-                    .on(current.move, specialEvent.handlerNonMouseMove)
-                    .on(current.up, specialEvent.handlerNonMouseUp);
-        },
+addSpecialEvent('release', function(specialEvent, pointerEventType) {
+    return $.extend(
+        pressAndReleaseHandlerStub(specialEvent, pointerEventType),
+        {
+            handlerNonMouseDown : function(e) {
+                var data = specialEvent.data = {
+                    timer : (function() {
+                        return setTimeout(function() {
+                            data.move || (data.pressed = true);
+                        }, 80);
+                    })(),
+                    clientX : e.clientX,
+                    clientY : e.clientY
+                };
+            },
 
-        teardown : function() {
-            isMouse?
-                $(this).off(current.down, specialEvent.handlerMouse) :
-                $(this)
-                    .off(current.down, specialEvent.handlerNonMouseDown)
-                    .off(current.move, specialEvent.handlerNonMouseMove)
-                    .off(current.up, specialEvent.handlerNonMouseUp);
-        },
+            handlerNonMouseUp : function(e) {
+                clearTimeout(specialEvent.data.timer);
 
-        handlerNonMouseDown : function(e) {
-            var data = specialEvent.data = {
-                timer : (function() {
-                    return setTimeout(function() {
-                        data.move || (data.pressed = true);
-                    }, 80);
-                })(),
-                clientX : e.clientX,
-                clientY : e.clientY
-            };
-        },
+                if(specialEvent.data.pressed) {
+                    var pointerEvent = new PointerEvent(e, pointerEventType),
+                        target = document.elementFromPoint(pointerEvent.clientX, pointerEvent.clientY);
+                    pointerEvent.dispatch(target);
+                }
 
-        handlerNonMouseMove : function(e) {
-            var data = specialEvent.data;
-            if(Math.abs(e.clientX - data.clientX) > 5 ||
-                Math.abs(e.clientY - data.clientY) > 5) {
-                data.move = true;
+                delete specialEvent.data;
             }
-        },
-
-        handlerNonMouseUp : function(e) {
-            clearTimeout(specialEvent.data.timer);
-
-            if(specialEvent.data.pressed) {
-                var pointerEvent = new PointerEvent(e, 'pointerrelease'),
-                    target = document.elementFromPoint(pointerEvent.clientX, pointerEvent.clientY);
-                pointerEvent.dispatch(target);
-            }
-
-            delete specialEvent.data;
-        },
-
-        handlerMouse : function(e) {
-            // only left mouse button
-            e.which === 1 && new PointerEvent(e, 'pointerrelease').dispatch(this);
-        }
-    };
+        });
 });
 
 provide($);
