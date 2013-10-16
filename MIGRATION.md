@@ -1,13 +1,17 @@
 # Migration
 
-## Modules
+## 1.0.0
+
+For 1.0.0 version we assume migration from [bem-bl](https://github.com/bem/bem-bl/) to [bem-core](https://github.com/bem/bem-core/).
+
+### Modules
 From now everything should be under the modular system
 https://github.com/ymaps/modules.
 All the dependencies have to be mentioned in the code, using global variables
 have to be minimized to 0 if possible.
 
 Example
-````javascript
+```js
 modules.define(
     'my-module', // Module name
     ['module-from-library', 'my-another-module'], // Module's dependencies
@@ -19,11 +23,11 @@ provide({
 });
 
 });
-````
+```
 
 TODO: дописать про изменение сборки (использование специальных технологий для js и как быть с кастомными сборщиками)
 
-## jQuery and plugins
+### jQuery and plugins
 jQuery is represented with a wrapping module `jquery` which uses the `jQuery`
 global object if it is available or loads jQuery additionally.
 From now jQuery is used only for operations on DOM such as selecting nodes,
@@ -45,32 +49,32 @@ All the jQuery plugins which are not fo DOM operation became modules:
  `$.throttle` and the `$.debounce` plugins
 
 Before:
-````javascript
+```js
 // block code
 $.throttle(...
 // block code
-````
+```
 
 After:
-````javascript
+```js
 module.define('my-module', ['functions__throttle'], function(provide, throttle) {
 // module code
 throttle(...
 // module code
-````
+```
 
-## BEM.DOM blocks
+### BEM.DOM blocks
 
-### Declaration
+#### Declaration
 Blocks represented in DOM were declared with BEM.DOM.decl. Now they must use
 `i-bem__dom` module and extend it.
 
 Before:
-````javascript
+```js
 BEM.DOM.decl('block', ...);
-````
+```
 After:
-````javascript
+```js
 modules.define('i-bem__dom', function(provide, DOM) {
 
 DOM.decl('block', ...);
@@ -78,25 +82,25 @@ DOM.decl('block', ...);
 provide(DOM);
 
 });
-````
-### Constructor
+```
+#### Constructor
 You have to use full notation for the callback for the `js` modifier in its
 `inited` value.
 
 Before:
-````javascript
+```js
 onSetMod : {
     js : function() {
         // constructor code
-````
+```
 After:
-````javascript
+```js
 onSetMod : {
     js : {
         inited : function() {
             // constructor code
-````
-### Destructor
+```
+#### Destructor
 Instead of `destruct` method the destructive callback has to be applyed to the
 empty value of `js` modifier, which corresponds removing a modifier from a
 block.
@@ -104,141 +108,141 @@ Also you do not need to call `__base` to run a descructor from the basic
 `i-bem__dom` module.
 
 Before:
-````javascript
+```js
 destruct : function() {
     this.__base.apply(this, arguments);
     // destructor code
-````
+```
 After:
-````javascript
+```js
 onSetMod : {
     js : {
         '' : function() {
             // destructor code
-````
+```
 
-### The changeThis method ###
+#### The changeThis method ###
 Instead of `changeThis` method you have to use native `bind`.
 
 Before:
-````javascript
+```js
 // block code
 obj.on('event', this.changeThis(this._method);
 // block code
-````
+```
 
 After:
-````javascript
+```js
 obj.on('event', this._method.bind(this));
-````
+```
 
-### The afterCurrentEvent method ###
+#### The afterCurrentEvent method ###
 Use the `nextTick` method instead of `afterCurrentEvent`. The `nextTick` assures
 that the block exists at the time of running a callback. If the block is already
 destructed, the callback will not be run.
 
 Before:
-````javascript
+```js
 BEM.DOM.decl('block', {
     method : function() {
         this.afterCurrentEvent(function() { ...
-````
+```
 
 After:
-````javascript
+```js
 modules.define('i-bem__dom', function(provide, DOM) {
 
 DOM.decl('block', {
     method : function() {
         this.nextTick(function() { ...
-````
+```
 
-### Access to a DOM element from an event handler callback
+#### Access to a DOM element from an event handler callback
 The callback binded to a DOM element as an event handler is now provided with
 the link to this DOM element as `e.domElem`.
 
 Before:
-````javascript
+```js
 onClick : function(e) {
     e.data.domElem.attr(...
-````
+```
 
 After:
-````javascript
+```js
 onClick : function(e) {
     e.domElem.attr(...
-````
+```
 
-### Channels
+#### Channels
 Channels are not embedded into BEM any more. Now they are the separate
 `events__channels` module.
 
 Before:
-````javascript
+```js
 BEM.DOM.decl('block', {
     method : function() {
         BEM.channel('channel-name').on(....
-````
+```
 
 After:
-````javascript
+```js
 modules.define('i-bem__dom', ['events__channels'], function(provide, channels, DOM) {    
 
 DOM.decl('block', {
     method : function() {
         channels('channel-name').on(....    
-````
+```
 
-### The `i-system` block, the `sys` channel and the `tick`, `idle` and `wakeup`
+#### The `i-system` block, the `sys` channel and the `tick`, `idle` and `wakeup`
 events
 The is no `i-system` block any more. Instead you can use special modules: 
 `tick` with the tick event and `idle` with the events idle and wakeup.
 
 Before:
-````javascript
+```js
 BEM.DOM.decl('block', {
     method : function() {
         BEM.channel('sys').on('tick', ...
-````
+```
 
 After:
-````javascript
+```js
 modules.define('i-bem__dom', ['tick'], function(provide, tick, DOM) {    
 
 DOM.decl('block', {
     method : function() {
         tick.on('tick', ...
-````
+```
 
 Before:
-````javascript
+```js
 BEM.DOM.decl('block', {
     method : function() {
         BEM.channel('sys').on('wakeup', ...
-````
+```
 
 After:
-````javascript
+```js
 modules.define('i-bem__dom', ['idle'], function(provide, idle, DOM) {    
 
 DOM.decl('block', {
     method : function() {
         idle.on('wakeup', ...
-````
+```
 
-## The BEM blocks
+### The BEM blocks
 If you have BEM blocks just containing some modules without using BEM
 methodology in them, you can now rewrite them as modules.
 
 Before:
-````javascript
+```js
 BEM.decl('i-router', {
     route : function() { ... }
 });
-````
+```
 
 After:
-````javascript
+```js
 modules.define('router', function(provide) {
 
 provide({
@@ -247,18 +251,18 @@ provide({
 
 });
 
-````
+```
 
 If you need BEM blocks (not BEM.DOM blocks) anyway, you can extend the `i-bem`
 module.
 
 Before:
-````javascript
+```js
 BEM.decl('my-block', { ... });
-````
+```
 
 After:
-````javascript
+```js
 modules.define('i-bem', function(provide, BEM) {
 
 BEM.decl('my-block', { ... });
@@ -266,11 +270,11 @@ BEM.decl('my-block', { ... });
 provide(BEM);
 
 });
-````
+```
 
-### The example of migration refactoring for the `b-spin` block
+#### The example of migration refactoring for the `b-spin` block
 Before:
-````javascript
+```js
 BEM.DOM.decl('b-spin', {
 
     onSetMod : {
@@ -328,9 +332,9 @@ BEM.DOM.decl('b-spin', {
     }
 
 });
-````
+```
 After:
-````javascript
+```js
 modules.define(
     'i-bem__dom',
     ['tick'],
@@ -389,4 +393,4 @@ DOM.decl('b-spin', {
 provide(DOM);
 
 });
-````
+```
