@@ -193,7 +193,8 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     emit : function(e, data) {
         this
             .__base(e = this._buildEvent(e), data)
-            .__self.trigger(e, data);
+            .hasMod('js', 'inited') &&
+                this.__self.trigger(e, data);
 
         return this;
     },
