@@ -40,7 +40,6 @@ English](https://github.com/bem/bem-core/blob/v1/README.md).
   - `vow` — реализация Promises/A+
   - `dom` — хелперы для работы с DOM
   - `loader` — загрузчик для JS-файлов
-  - `pointer-events` — полифилы для кроссплатформенных событий указателя
   - `ua` — определение возможностей браузера
   - `page` — скелет для html/head/body
 

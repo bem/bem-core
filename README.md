@@ -42,7 +42,6 @@ the project.
   - `vow` — Promises/A+ implementation
   - `dom` — helpers for work with DOM
   - `loader` — loader for JS files
-  - `pointer-events` — polyfill for crossplatform pointer events
   - `ua` — browser features detection
   - `page` — html/head/body scaffold
 
