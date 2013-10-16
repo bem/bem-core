@@ -3,7 +3,7 @@ modules.define(
     ['jquery', 'sinon'],
     function(provide, $, sinon) {
 
-describe('jquery__event_type_pointers', function() {
+describe('jquery__event_type_pointer', function() {
     it('should trigger "pointerenter" event on "mouseenter"', function() {
         var spy = sinon.spy(),
             elem = $('<div/>');

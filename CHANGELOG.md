@@ -13,7 +13,7 @@
 - Introduces new tech `vanilla.js` for JS-implementations that does not depend on particular JS-engine.
 - Introduces new techs `browser.js` и `node.js` for JS-implementations targeted corresponding engines.
   For backward compatibility we assume that `.js`-files contains `browser.js` implementation.
-- Introduces polyfill (`jquery__event_type_pointers` and `jquery__event_type_pointerclick` as a jQuery-plugins)
+- Introduces polyfill (`jquery__event_type_pointer` and `jquery__event_type_pointerclick` as a jQuery-plugins)
   for universalize desktop and touch pointer events.
 - Introduces system for unit testing and blocks examples generation.
 - Introduces "simple" modifiers (modifiers without value) support in `i-bem` and BEMHTML.
