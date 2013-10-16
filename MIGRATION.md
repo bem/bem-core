@@ -5,8 +5,8 @@
 For 1.0.0 version we assume migration from [bem-bl](https://github.com/bem/bem-bl/) to [bem-core](https://github.com/bem/bem-core/).
 
 ### Modules
-From now everything should be under the modular system
-https://github.com/ymaps/modules.
+
+From now everything should be under the [ym modular system](https://github.com/ymaps/modules).
 All the dependencies have to be mentioned in the code, using global variables
 have to be minimized to 0 if possible.
 
@@ -25,9 +25,10 @@ provide({
 });
 ```
 
-TODO: дописать про изменение сборки (использование специальных технологий для js и как быть с кастомными сборщиками)
+TODO: add information about changes in build process (usage of special techs for js and instructions for custom builders).
 
 ### jQuery and plugins
+
 jQuery is represented with a wrapping module `jquery` which uses the `jQuery`
 global object if it is available or loads jQuery additionally.
 From now jQuery is used only for operations on DOM such as selecting nodes,
@@ -66,6 +67,7 @@ throttle(...
 ### BEM.DOM blocks
 
 #### Declaration
+
 Blocks represented in DOM were declared with BEM.DOM.decl. Now they must use
 `i-bem__dom` module and extend it.
 
@@ -75,15 +77,17 @@ BEM.DOM.decl('block', ...);
 ```
 After:
 ```js
-modules.define('i-bem__dom', function(provide, DOM) {
+modules.define('i-bem__dom', function(provide, BEMDOM) {
 
-DOM.decl('block', ...);
+BEMDOM.decl('block', ...);
 
-provide(DOM);
+provide(BEMDOM);
 
 });
 ```
+
 #### Constructor
+
 You have to use full notation for the callback for the `js` modifier in its
 `inited` value.
 
@@ -100,7 +104,9 @@ onSetMod : {
         inited : function() {
             // constructor code
 ```
+
 #### Destructor
+
 Instead of `destruct` method the destructive callback has to be applyed to the
 empty value of `js` modifier, which corresponds removing a modifier from a
 block.
@@ -113,6 +119,7 @@ destruct : function() {
     this.__base.apply(this, arguments);
     // destructor code
 ```
+
 After:
 ```js
 onSetMod : {
@@ -121,7 +128,8 @@ onSetMod : {
             // destructor code
 ```
 
-#### The changeThis method ###
+#### The `changeThis` method
+
 Instead of `changeThis` method you have to use native `bind`.
 
 Before:
@@ -134,9 +142,12 @@ obj.on('event', this.changeThis(this._method);
 After:
 ```js
 obj.on('event', this._method.bind(this));
+// or better
+obj.on('event', this._method, this);
 ```
 
-#### The afterCurrentEvent method ###
+#### The `afterCurrentEvent` method
+
 Use the `nextTick` method instead of `afterCurrentEvent`. The `nextTick` assures
 that the block exists at the time of running a callback. If the block is already
 destructed, the callback will not be run.
@@ -158,8 +169,9 @@ DOM.decl('block', {
 ```
 
 #### Access to a DOM element from an event handler callback
+
 The callback binded to a DOM element as an event handler is now provided with
-the link to this DOM element as `e.domElem`.
+the link to this DOM element as `$(e.currentTarget)` instead of `e.data.domElem`.
 
 Before:
 ```js
@@ -170,10 +182,13 @@ onClick : function(e) {
 After:
 ```js
 onClick : function(e) {
-    e.domElem.attr(...
+    $(e.currentTarget).attr(...
 ```
 
+Note: Remember that jQuery is unavailable in global scope and you must use `jquery` module for access to it.
+
 #### Channels
+
 Channels are not embedded into BEM any more. Now they are the separate
 `events__channels` module.
 
@@ -186,15 +201,15 @@ BEM.DOM.decl('block', {
 
 After:
 ```js
-modules.define('i-bem__dom', ['events__channels'], function(provide, channels, DOM) {    
+modules.define('i-bem__dom', ['events__channels'], function(provide, channels, BEMDOM) {
 
-DOM.decl('block', {
+BEMDOM.decl('block', {
     method : function() {
         channels('channel-name').on(....    
 ```
 
-#### The `i-system` block, the `sys` channel and the `tick`, `idle` and `wakeup`
-events
+#### The `i-system` block, the `sys` channel and the `tick`, `idle` and `wakeup` events
+
 The is no `i-system` block any more. Instead you can use special modules: 
 `tick` with the tick event and `idle` with the events idle and wakeup.
 
@@ -207,9 +222,9 @@ BEM.DOM.decl('block', {
 
 After:
 ```js
-modules.define('i-bem__dom', ['tick'], function(provide, tick, DOM) {    
+modules.define('i-bem__dom', ['tick'], function(provide, tick, BEMDOM) {
 
-DOM.decl('block', {
+BEMDOM.decl('block', {
     method : function() {
         tick.on('tick', ...
 ```
@@ -223,9 +238,9 @@ BEM.DOM.decl('block', {
 
 After:
 ```js
-modules.define('i-bem__dom', ['idle'], function(provide, idle, DOM) {    
+modules.define('i-bem__dom', ['idle'], function(provide, idle, BEMDOM) {    
 
-DOM.decl('block', {
+BEMDOM.decl('block', {
     method : function() {
         idle.on('wakeup', ...
 ```
@@ -273,6 +288,7 @@ provide(BEM);
 ```
 
 #### The example of migration refactoring for the `b-spin` block
+
 Before:
 ```js
 BEM.DOM.decl('b-spin', {
@@ -338,14 +354,14 @@ After:
 modules.define(
     'i-bem__dom',
     ['tick'],
-    function(provide, tick, DOM) {
+    function(provide, tick, BEMDOM) {
 
 var FRAME_COUNT = 36;
 
-DOM.decl('b-spin', {
+BEMDOM.decl('b-spin', {
     onSetMod : {
-        js : {
-            inited : function() { // constructor
+        'js' : {
+            'inited' : function() { // constructor
                 var hasBackgroundPositionY = !!this.elem('icon').css('background-position-y'));
 
                 this._bgProp = hasBackgroundPositionY? 'background-position-y' : 'background-position';
@@ -361,8 +377,8 @@ DOM.decl('b-spin', {
             }
         },
 
-        progress : {
-            yes : function() {
+        'progress' : {
+            'yes' : function() {
                 this._bindToTick();
             },
 
@@ -390,7 +406,7 @@ DOM.decl('b-spin', {
     }
 });
 
-provide(DOM);
+provide(BEMDOM);
 
 });
 ```
