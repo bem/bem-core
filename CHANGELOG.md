@@ -4,7 +4,7 @@
 
 ### Major changes
 
-- Starts using modules system [ym](https://github.com/ymaps/modules).
+- Starts using modular system [ym](https://github.com/ymaps/modules).
 - Removes all deprecated methods from `i-bem` and `i-bem__dom`.
 - `i-bem` now has no dependency on jQuery. `i-bem__dom` still depends on jQuery.
 - BEMHTML-template can be written with JS-syntax (TODO: link to documentation).
