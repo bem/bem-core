@@ -33,7 +33,7 @@ the project.
   - `querystring` — helpers for work with querystring
   - `tick` — global timer
   - `idle` — IDLE event
-  - `next-tick` — polyfil for `nextTick`/`setTimeout(0, ...)`
+  - `next-tick` — polyfill for `nextTick`/`setTimeout(0, ...)`
   - `inherit` — OOP helpers
   - `jquery` — jQuery
   - `clearfix` — CSS clearfix trick
@@ -42,7 +42,7 @@ the project.
   - `vow` — Promises/A+ implementation
   - `dom` — helpers for work with DOM
   - `loader` — loader for JS files
-  - `pointer-events` — polyfils for crossplatform pointer events
+  - `pointer-events` — polyfill for crossplatform pointer events
   - `ua` — browser features detection
   - `page` — html/head/body scaffold
 
