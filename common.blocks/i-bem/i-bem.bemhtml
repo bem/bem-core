@@ -434,10 +434,16 @@ def()(function() {
         var attrs = apply('attrs');
         attrs = this._.extend(attrs, v.attrs); // NOTE: возможно стоит делать массив, чтобы потом быстрее сериализовывать
         if(attrs) {
-            var name; // TODO: разобраться с OmetaJS и YUI Compressor
+            var name, attr; // TODO: разобраться с OmetaJS и YUI Compressor
             for(name in attrs) {
-                if (attrs[name] === undefined) continue;
-                buf.push(' ', name, '="', this._.attrEscape(attrs[name]), '"');
+                attr = attrs[name];
+                if (attr === undefined) continue;
+                buf.push(
+                    ' ', name, '="',
+                    this._.attrEscape(this._.isSimple(attr)?
+                        attr :
+                        this.reapply(attr)),
+                    '"');
             }
         }
     }
