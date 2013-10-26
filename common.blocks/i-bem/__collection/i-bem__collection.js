@@ -5,7 +5,7 @@
  * @inherit Array
  */
 
-modules.define('i-bem__collection', ['inherit'], function(provide, inherit) {
+modules.define('i-bem__collection', ['inherit', 'objects'], function(provide, inherit, objects) {
 
 provide(inherit(null, {
     /**
@@ -62,7 +62,7 @@ provide(inherit(null, {
         this.create = function(arr) {
             arr || (arr = []);
             arr.__self = this;
-            return jQuery.extend(arr, decl);
+            return objects.extend(arr, decl);
         };
 
         return this.create(a);
