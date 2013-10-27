@@ -22,7 +22,7 @@
 
 - Gets rid of prefixes in all block names (except `i-bem`).
 - Block `i-bem__dom` becomes a module (in terms of [ym](https://github.com/ymaps/modules))
-  and all `BEM.DOM`-block must define additions to `i-bem__dom` ([example](common.bundles/index/blocks/b-square/b-square.js)).
+  and all `BEM.DOM`-block must define additions to `i-bem__dom` ([example](https://github.com/bem/bem-core/blob/v1/common.bundles/index/blocks/b-square/b-square.js)).
 - Method for blocks declaration (`.decl()`) does not accept object with `name` field as first parameter.
   Required form with `block` field: `BEM.decl({ block: 'b1', modName: 'm', modVal: 'v' }, ...)`.
 - Introduces `nextTick` method as replacement for `afterCurrentEvent` method
