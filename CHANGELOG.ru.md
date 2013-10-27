@@ -24,7 +24,7 @@
 
 - Все блоки-модули, кроме `i-bem`, избавились от префиксов.
 - Блок `i-bem__dom` становится модулем `i-bem__dom`. Все BEM.DOM-блоки должны теперь доопределять
-  этот модуль ([пример](common.bundles/index/blocks/b-square/b-square.js)).
+  этот модуль ([пример](https://github.com/bem/bem-core/blob/v1/common.bundles/index/blocks/b-square/b-square.js)).
 - Метод для декларации блоков (`.decl()`) больше не принимает первым параметром объект с полем `name`,
   теперь обязательная форма записи с полем `block`: `BEM.decl({ block: 'b1', modName: 'm', modVal: 'v' }, ...)`.
 - Вместо метода `afterCurrentEvent` у блоков появился метод `nextTick`, который проверят существование блока в момент исполнения колбэка. `BEM.afterCurrentEvent` теперь **deprecated**.
@@ -43,7 +43,7 @@
 - Блок `i-system` разбит на 2 модуля: `idle` и `tick`.
 - Вместо события `leftclick` следует использовать `pointerclick` (предоставляемый полифилом `jquery__event_type_pointerclick`).
 - Триггеры на установку модификаторов теперь разделены на две группы: до установки модификатора (`beforeSetMod` и `beforeElemSetMod`) и после (`onSetMod` и `onElemSetMod`). Отмена установки модификатора теперь возможна только из триггеров первой группы.
-- Использовать конструкцию `{ onSetMod : { js : function() { ... } } }` в качестве конструктора теперь **deprecated**, необходимо использовать `onSetMod: { js : { inited : ... } } }`. 
+- Использовать конструкцию `{ onSetMod : { js : function() { ... } } }` в качестве конструктора теперь **deprecated**, необходимо использовать `onSetMod: { js : { inited : ... } } }`.
 - Вместо метода `destruct` в `i-bem` появился зеркальный метод
   для `onSetMod: { js : { inited : ... } } }` — `{ onSetMod : { js : { '' : ... } } }`.
   Метод `destruct` теперь **deprecated**.
