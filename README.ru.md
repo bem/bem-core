@@ -1,7 +1,7 @@
 # BEM Core Library [![Build Status](https://travis-ci.org/bem/bem-core.png)](https://travis-ci.org/bem/bem-core)
 
 This README is also availabe [in
-English](https://github.com/bem/bem-core/blob/v1/README.md).
+English](http://bem.info/libs/bem-core/).
 
 ## Что это?
 
@@ -50,11 +50,11 @@ English](https://github.com/bem/bem-core/blob/v1/README.md).
 
 ## История изменений
 
-История изменений доступна на [отдельной странице](CHANGELOG.md).
+История изменений доступна на [отдельной странице](http://ru.bem.info/libs/bem-core/changelog/).
 
 ## Миграция
 
-Миграция описана на [отдельной странице](MIGRATION.ru.md).
+Миграция описана на [отдельной странице](http://ru.bem.info/libs/bem-core/migration/).
 
 ## Разработка
 
@@ -106,4 +106,4 @@ $ bem server
 
 По аналогии можно запустить тесты для других БЭМ-сущностей, имеющих реализацию в технологии `test.js`.
 
-Для сборки и запуска тестов используется библиотека [bem-pr](https://github.com/narqo/bem-pr). См. [https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md](подробную информацию) про инфраструктуру тестирования [bem-pr](https://github.com/narqo/bem-pr).
+Для сборки и запуска тестов используется библиотека [bem-pr](https://github.com/narqo/bem-pr). См. [подробную информацию](https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md) про инфраструктуру тестирования [bem-pr](https://github.com/narqo/bem-pr).
