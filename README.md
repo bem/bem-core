@@ -1,7 +1,7 @@
 # BEM Core Library [![Build Status](https://travis-ci.org/bem/bem-core.png)](https://travis-ci.org/bem/bem-core)
 
 This README is also availabe [in
-Russian](https://github.com/bem/bem-core/blob/v1/README.ru.md).
+Russian](http://ru.bem.info/libs/bem-core/).
 
 ## What is this?
 
@@ -52,11 +52,11 @@ the project.
 
 ## Changelog
 
-You can check the changelog at the [changelog page](CHANGELOG.md).
+You can check the changelog at the [changelog page](http://bem.info/libs/bem-core/changelog/).
 
 ## Migration
 
-If you used BEM before, check the [migration instructions](MIGRATION.md).
+If you used BEM before, check the [migration instructions](http://bem.info/libs/bem-core/migration/).
 
 ## Development
 
