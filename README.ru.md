@@ -34,7 +34,6 @@ English](http://bem.info/libs/bem-core/).
   - `next-tick` — полифил для `nextTick`/`setTimeout(0, ...)`
   - `inherit` — ООП-хелперы
   - `jquery` — jQuery
-  - `clearfix` — CSS-трюк clearfix
   - `identify` — идентификация JS-объектов
   - `cookie` — хелперы для работы с браузерными куками
   - `vow` — реализация Promises/A+
