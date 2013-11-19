@@ -7,7 +7,7 @@
 - Starts using modular system [ym](https://github.com/ymaps/modules).
 - Removes all deprecated methods from `i-bem` and `i-bem__dom`.
 - `i-bem` now has no dependency on jQuery. `i-bem__dom` still depends on jQuery.
-- BEMHTML-template can be written with JS-syntax (TODO: link to documentation).
+- BEMHTML-template can be written with [JS-syntax](https://gist.github.com/veged/6150760).
 - Introduces new tech `bemtree` (based on [bem-xjst](https://github.com/bem/bem-xjst))
   for describing dynamic generation of BEM-tree.
 - Introduces new tech `vanilla.js` for JS-implementations that does not depend on particular JS-engine.
