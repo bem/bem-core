@@ -7,25 +7,27 @@ block('page')(
     def()
         .match(function() { return !this.ctx._wrapped })(function() {
             var ctx = this.ctx;
-            ctx._wrapped = true;
-            applyCtx([
-                apply('doctype'),
-                {
-                    elem: 'root',
-                    content: [
-                        {
-                            elem: 'head',
-                            content: [
-                                { tag: 'meta', attrs: { charset: 'utf-8' } },
-                                { tag: 'title', content: ctx.title },
-                                apply('head'),
-                                ctx.favicon? { elem: 'favicon', url: ctx.favicon } : ''
-                            ]
-                        },
-                        ctx
-                    ]
-                }
-            ]);
+
+            local({ 'ctx._wrapped': true })(
+                applyCtx([
+                    apply('doctype'),
+                    {
+                        elem: 'root',
+                        content: [
+                            {
+                                elem: 'head',
+                                content: [
+                                    { tag: 'meta', attrs: { charset: 'utf-8' } },
+                                    { tag: 'title', content: ctx.title },
+                                    apply('head'),
+                                    ctx.favicon? { elem: 'favicon', url: ctx.favicon } : ''
+                                ]
+                            },
+                            ctx
+                        ]
+                    }
+                ])
+            );
         }),
 
     tag()('body'),
