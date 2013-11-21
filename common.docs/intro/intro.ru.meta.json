@@ -1,0 +1,13 @@
+{
+    "title": "Hello, BEMHTML!",
+    "createDate": "01-01-2013",
+    "editDate": "",
+    "summary": "Руководство рассказывает как попробовать шаблонизатор BEMHTML и понять основные принципы работы с ним, пройдя семь простых шагов.",
+    "thumbnail": "",
+    "authors": ["maslinsky-kirill"],
+    "tags": ["BEMHTML"],
+    "categories": [{"name": "bem-core/1.0.0/BEMHTML", "url": "bem-core/1.0.0/bemhtml"}],
+    "translators": [],
+    "url": "/common.docs/intro/",
+    "type": "libs"
+}

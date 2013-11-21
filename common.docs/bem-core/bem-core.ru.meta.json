@@ -1,0 +1,15 @@
+{
+    "title": "bem-core Library",
+    "longTitle": "Библиотека bem-core",
+    "createDate": "27-05-2013",
+    "editDate": "23-07-2012",
+    "summary": "bem-core это базовая библиотека блоков для разработки веб-интерфейсов. Содержит только необходимый минимум для разработки клиентского js и html-шаблонов.",
+    "thumbnail": "",
+    "authors": ["berezhnoy-sergey"],
+    "tags": ["bem-core"],
+    "categories": [{"name": "bem-core/1.0.0", "url" : "bem-core/1.0.0"}],
+    "translators": [],
+    "url": "/common.docs/bem-core/1.0.0",
+    "type": "libs",
+    "root": "true"
+}

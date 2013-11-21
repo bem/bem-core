@@ -1,0 +1,14 @@
+{
+    "title": "Migration",
+    "longTitle": "bem-core: Migration",
+    "createDate": "26-08-2013",
+    "editDate": "",
+    "summary": "Migration to bem-core.",
+    "thumbnail": "",
+    "authors": ["filatov-dmitry"],
+    "tags": ["bem-core","i-bem"],
+    "categories": [{"name": "bem-core/1.0.0", "url": "bem-core/1.0.0"}],
+    "translators": ["stepanova-varvara"],
+    "url": "/common.docs/i-bem-js/",
+    "type": "libs"
+}
