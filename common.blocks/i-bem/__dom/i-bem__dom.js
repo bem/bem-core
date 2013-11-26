@@ -84,7 +84,7 @@ function init(domElem, uniqInitId) {
             if(block) {
                 if(block.domElem.index(domNode) < 0) {
                     block.domElem = block.domElem.add(domElem);
-                    objects.extend(block._params, blockParams);
+                    objects.extend(block.params, blockParams);
                 }
             } else {
                 initBlock(blockName, domElem, blockParams);

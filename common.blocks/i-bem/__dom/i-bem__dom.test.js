@@ -318,7 +318,7 @@ describe('i-bem__dom', function() {
                     ]
                 })));
 
-            DOM.destruct(rootNode.find('.block:eq(0)'));
+            DOM.destruct(rootNode.find('.block :eq(0)'));
             spy.called.should.be.false;
 
             DOM.destruct(rootNode.find('.block'));
@@ -427,6 +427,41 @@ describe('i-bem__dom', function() {
             rootNode.html().should.be.equal('<p></p><div class="block2 i-bem block2_js_inited" data-bem="{&quot;block2&quot;:{}}"></div><p></p>');
 
             delete DOM.blocks['block1'];
+            delete DOM.blocks['block2'];
+        });
+    });
+
+    describe('params', function() {
+        it('should properly join params', function() {
+            DOM.decl('block', {
+                getDefaultParams : function() {
+                    return { p1 : 1 };
+                }
+            });
+
+            DOM.decl('block2', {
+                onSetMod : {
+                    'js' : {
+                        'inited' : function() {
+                            var params = this.findBlockOn('block').params;
+                            params.p1.should.be.equal(1);
+                            params.p2.should.be.equal(2);
+                            params.p3.should.be.equal(3);
+                        }
+                    }
+                }
+            });
+
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    tag : 'div',
+                    content : [
+                        { block : 'block', js : { id : 'bla', p2 : 2 }, mix : { block : 'block2', js : true } },
+                        { block : 'block', js : { id : 'bla', p3 : 3 } }
+                    ]
+                })));
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
             delete DOM.blocks['block2'];
         });
     });
@@ -663,36 +698,12 @@ describe('i-bem__dom', function() {
             DOM.decl('block', {}, {});
 
             var rootNode = $(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem1',
-                        content: {
-                            elem: 'elem2'
-                        }
-                    }
-                })),
-                block = rootNode.bem('block'),
-                closest = block.closestElem(block.elem('elem2'), 'elem1');
-
-            closest[0].should.be.equal(block.elem('elem1')[0]);
-
-            DOM.destruct(rootNode);
-            delete DOM.blocks['block'];
-        });
-    });
-
-    describe('closestElem', function() {
-        it('should return the closest element', function() {
-            DOM.decl('block', {}, {});
-
-            var rootNode = $(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem1',
-                        content: {
-                            elem: 'elem2'
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem1',
+                        content : {
+                            elem : 'elem2'
                         }
                     }
                 })),
@@ -712,24 +723,24 @@ describe('i-bem__dom', function() {
                 spyHandler = sinon.spy();
 
             DOM.decl('block1', {
-                onSetMod: {
-                    js: {
-                        inited: spyInit
+                onSetMod : {
+                    js : {
+                        inited : spyInit
                     }
                 }
             }, {
-                live: function() {
+                live : function() {
                     this.liveInitOnBlockInsideEvent('event', 'block2', spyHandler);
                 }
             });
             DOM.decl('block2', {}, {});
 
             var rootNode = DOM.init($(BEMHTML.apply({
-                    block: 'block1',
-                    js: true,
-                    content: {
-                        block: 'block2',
-                        js: true
+                    block : 'block1',
+                    js : true,
+                    content : {
+                        block : 'block2',
+                        js : true
                     }
                 }))),
                 block = rootNode.find('.block2').bem('block2');
