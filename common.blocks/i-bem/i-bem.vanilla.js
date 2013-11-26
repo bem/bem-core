@@ -154,8 +154,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
          * @protected
          * @type Object
          */
-        this._params = params; // это нужно для правильной сборки параметров у блока из нескольких нод
-        this.params = null;
+        this.params = objects.extend(this.getDefaultParams(), params);
 
         initImmediately !== false?
             this._init() :
@@ -167,20 +166,9 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @private
      */
     _init : function() {
-        if(!this._initing && !this.hasMod('js', 'inited')) {
-            this._initing = true;
-
-            if(!this.params) {
-                this.params = objects.extend(this.getDefaultParams(), this._params);
-                delete this._params;
-            }
-
-            this.setMod('js', 'inited');
-            delete this._initing;
-            this.hasMod('js', 'inited') && this.trigger('init');
-        }
-
-        return this;
+        return this
+            .setMod('js', 'inited')
+            .emit('init');
     },
 
     /**
@@ -194,7 +182,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         this
             .__base(e = this._buildEvent(e), data)
             .hasMod('js', 'inited') &&
-                this.__self.trigger(e, data);
+                this.__self.emit(e, data);
 
         return this;
     },
