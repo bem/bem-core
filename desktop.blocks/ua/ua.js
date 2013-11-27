@@ -1,9 +1,12 @@
-// inspired by http://code.jquery.com/jquery-migrate-1.1.1.js
+/** 
+ * @module ua
+ * @description inspired by http://code.jquery.com/jquery-migrate-1.1.1.js
+ */
 
 modules.define('ua', function(provide) {
 
 var ua = navigator.userAgent.toLowerCase(),
-	match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
+    match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
 		/(webkit)[ \/]([\w.]+)/.exec(ua) ||
 		/(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
 		/(msie) ([\w.]+)/.exec(ua) ||
