@@ -1,0 +1,5 @@
+
+block b-square, this.ctx.caption {
+    content: this.ctx.caption
+}
+
