@@ -124,3 +124,37 @@ Check the
 [details](https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md]
 about testing infrastructure of the [bem-pr](https://github.com/narqo/bem-pr)
 library.
+
+## Supported browsers
+Our browser support policy is based on statistics we get from Yandex services.
+
+Browsers with more then 2% users get full compliant support, more then 0.5% — partially compliant (which means that data is accessible but not necessary 100% functional). New features testing is not provided by us for  browsers with less then 0.5% users.
+
+### Desktop
+#### Fully compliant
+  - Google Chrome 29+
+  - Firefox 24+
+  - Yandex 1.7+
+  - Opera 12.16
+  - MSIE 10.0
+  - MSIE 9.0
+  - MSIE 8.0
+  - Opera 12.15
+
+#### Partially compliant
+  - Opera 17.0
+  - Opera 16.0
+  - Opera 12.14
+  - Opera 12.2
+  - Firefox 23
+
+### Touch
+#### Fully compliant
+  - iOS 6+
+  - Android 2.3+
+  - Opera Mobile 12+
+  - Windows Phone 7+
+
+#### Partially compliant
+  - iOS 5
+  - Android 2.2
