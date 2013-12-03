@@ -1,4 +1,4 @@
-modules.define('test', ['functions__throttle'], function(provide, throttle) {
+modules.define('spec', ['functions__throttle'], function(provide, throttle) {
 
 describe('functions__throttle', function() {
     it('should properly throttle given function', function(done) {

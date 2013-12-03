@@ -1,4 +1,4 @@
-modules.define('test', ['inherit'], function(provide, inherit) {
+modules.define('spec', ['inherit'], function(provide, inherit) {
 
 describe('inherit', function() {
     describe('instance', function() {

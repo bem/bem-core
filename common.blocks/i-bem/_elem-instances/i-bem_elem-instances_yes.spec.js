@@ -1,4 +1,4 @@
-modules.define('test', ['i-bem', 'sinon'], function(provide, BEM, sinon) {
+modules.define('spec', ['i-bem', 'sinon'], function(provide, BEM, sinon) {
 
 describe('i-bem_elem-instances_yes', function() {
     describe('decl', function() {

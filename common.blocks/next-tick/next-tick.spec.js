@@ -1,4 +1,4 @@
-modules.define('test', ['next-tick'], function(provide, nextTick) {
+modules.define('spec', ['next-tick'], function(provide, nextTick) {
 
 describe('next-tick', function() {
     it('should call callback asynchronously', function(done) {

@@ -1,4 +1,4 @@
-modules.define('test', function(provide) {
+modules.define('spec', function(provide) {
 
 describe('ecma__object', function() {
     describe('keys', function() {

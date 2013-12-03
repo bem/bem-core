@@ -1,4 +1,4 @@
-modules.define('test', ['objects'], function(provide, objects) {
+modules.define('spec', ['objects'], function(provide, objects) {
 
 describe('objects', function() {
     var undef;

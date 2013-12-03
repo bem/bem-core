@@ -1,4 +1,4 @@
-modules.define('test', ['chai'], function(provide, chai) {
+modules.define('spec', ['chai'], function(provide, chai) {
 
 var expect = chai.expect;
 

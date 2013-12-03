@@ -1,4 +1,4 @@
-modules.define('test', ['strings__escape'], function(provide, escape) {
+modules.define('spec', ['strings__escape'], function(provide, escape) {
 
 describe('strings__escape', function() {
     it('should properly escape XML', function() {
