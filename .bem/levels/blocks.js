@@ -1,9 +1,13 @@
 var PATH = require('path'),
-    BEM = require('bem'),
     environ = require('bem-environ'),
+    BEMPR_TECHS = environ.getLibPath('bem-pr', 'bem/techs'),
+    PRJ_TECHS = PATH.resolve(__dirname, '../techs');
 
-    PRJ_TECHS = PATH.resolve(__dirname, '../techs'),
-    join = PATH.join;
+var resolveTechs = exports.resolveTechs = function(registry, prefix) {
+    return function(name) {
+        registry[name] = PATH.join(prefix, name + '.js');
+    };
+};
 
 exports.getTechs = function() {
     var techs = {
@@ -15,30 +19,30 @@ exports.getTechs = function() {
         'deps.js'    : 'v2/deps.js',
         'css'        : 'v2/css',
         'ie.css'     : 'v2/ie.css',
-        'js'         : 'v2/js-i'
+        'js'         : 'v2/js-i',
+        'blocks'     : 'level-proto',
+        'bundles'    : 'level-proto',
+        'examples'   : 'level-proto',
+        'specs'      : 'level-proto',
+        'tests'      : 'level-proto'
     };
 
     [
-        'test.js',
-        'sets',
-        'test.js+browser.js+bemhtml'
-    ].forEach(function(name) {
-        techs[name] = environ.getLibPath('bem-pr', 'bem', 'techs', name + '.js');
-    });
+        'spec.js',
+        'spec.js+browser.js+bemhtml',
+        'spec.bemjson.js'
+    ].forEach(resolveTechs(techs, BEMPR_TECHS));
 
     [
         'bemhtml',
         'bemtree',
         'html',
-        'examples',
-        'tests',
         'vanilla.js',
         'browser.js',
         'node.js',
         'browser.js+bemhtml'
-    ].forEach(function(name) {
-        techs[name] = join(PRJ_TECHS, name + '.js');
-    });
+    ].forEach(resolveTechs(techs, PRJ_TECHS));
 
     return techs;
 };
+

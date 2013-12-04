@@ -1,13 +1,14 @@
-var BEM = require('bem'),
-    environ = require('bem-environ');
+var environ = require('bem-environ'),
+    BEMPR_TECHS = environ.getLibPath('bem-pr', 'bem/techs');
 
 exports.baseLevelPath = require.resolve('./blocks');
 
 exports.getTechs = function() {
+    var techs = this.__base();
 
-    return BEM.util.extend(this.__base(), {
-        'phantomjs' : environ.getLibPath('bem-pr', 'bem/techs/phantomjs.js'),
-        'test-tmpl' : environ.getLibPath('bem-pr', 'bem/techs/test-tmpl.js')
-    });
+    ['phantomjs', 'spec.bemjson.js'].forEach(
+        this.resolveTechs(techs, BEMPR_TECHS));
 
+    return techs;
 };
+

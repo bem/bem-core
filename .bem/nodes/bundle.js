@@ -1,4 +1,6 @@
-require('bem/lib/nodesregistry').decl('BundleNode', {
+module.exports = function(registry) {
+
+registry.decl('BundleNode', {
 
     getTechs : function() {
         if(~this.getPath().indexOf('test-bemtree')) {
@@ -33,19 +35,11 @@ require('bem/lib/nodesregistry').decl('BundleNode', {
         return this.__base.apply(this, [tech].concat(args));
     },
 
-    'create-test.js-optimizer-node': function(tech, sourceNode, bundleNode) {
-        return this.createBorschikOptimizerNode('js', sourceNode, bundleNode);
-    },
-
-    'create-test.js+browser.js+bemhtml-optimizer-node': function(tech, sourceNode, bundleNode) {
-        return this.createBorschikOptimizerNode('js', sourceNode, bundleNode);
-    },
-
-    'create-browser.js+bemhtml-optimizer-node' : function() {
+    'create-browser.js-optimizer-node' : function() {
         return this['create-js-optimizer-node'].apply(this, arguments);
     },
 
-    'create-browser.js-optimizer-node' : function() {
+    'create-browser.js+bemhtml-optimizer-node' : function() {
         return this['create-js-optimizer-node'].apply(this, arguments);
     },
 
@@ -62,3 +56,6 @@ require('bem/lib/nodesregistry').decl('BundleNode', {
     }
 
 });
+
+};
+

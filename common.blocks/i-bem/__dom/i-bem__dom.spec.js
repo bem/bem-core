@@ -1,5 +1,5 @@
 modules.define(
-    'test',
+    'spec',
     ['i-bem__dom', 'objects', 'jquery', 'sinon', 'BEMHTML'],
     function(provide, DOM, objects, $, sinon, BEMHTML) {
 

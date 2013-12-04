@@ -1,4 +1,4 @@
-modules.define('test', ['i-bem__internal'], function(provide, internal) {
+modules.define('spec', ['i-bem__internal'], function(provide, internal) {
 
 describe('i-bem__internal', function() {
     describe('buildClass', function() {

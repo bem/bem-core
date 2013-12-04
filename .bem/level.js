@@ -1,11 +1,2 @@
-var environ = require('bem-environ');
+exports.baseLevelName = 'project';
 
-exports.baseLevelPath = require.resolve('bem/lib/levels/simple');
-
-exports.getTechs = function() {
-
-    return require('bem').util.extend(this.__base() || {}, {
-        'sets' : environ.getLibPath('bem-pr', 'bem/techs/sets.js')
-    });
-
-};

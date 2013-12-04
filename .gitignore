@@ -12,5 +12,7 @@ node_modules
 !*.bundles/*/blocks
 !*.bundles/*/*.bemjson.js
 
-*.sets/*.examples
-*.sets/*.tests
+/*.examples
+/*.specs
+/*.tests
+

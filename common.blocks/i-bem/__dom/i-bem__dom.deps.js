@@ -9,7 +9,7 @@
     ]
 },
 {
-    tech : 'test.js',
+    tech : 'spec.js',
     mustDeps : [
         {
             block : 'i-bem',

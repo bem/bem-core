@@ -1,4 +1,4 @@
-modules.define('test', ['functions__debounce'], function(provide, throttle) {
+modules.define('spec', ['functions__debounce'], function(provide, throttle) {
 
 describe('functions__debounce', function() {
     it('should properly debounce given function', function(done) {

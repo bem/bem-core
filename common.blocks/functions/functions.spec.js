@@ -1,4 +1,4 @@
-modules.define('test', ['functions'], function(provide, functions) {
+modules.define('spec', ['functions'], function(provide, functions) {
 
 describe('functions', function() {
     describe('isFunction', function() {

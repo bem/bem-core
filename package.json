@@ -20,7 +20,7 @@
     "bem-environ": "~1.2.0"
   },
   "devDependencies": {
-    "bem": "~0.6.15",
+    "bem": "~0.7.2",
     "mocha": "~1.9.0",
     "jshint": "2.1.8",
     "jshint-groups": "0.5.1",
@@ -28,6 +28,8 @@
     "git-hooks": "0.0.3"
   },
   "scripts": {
-    "test": "bem make libs && bem make sets && mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.test.bemhtml/*-test.js"
+    "libs": "bem make libs",
+    "bem-test": "npm run libs && bem make sets",
+    "test": "npm run bem-test && mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.test.bemhtml/*-test.js"
   }
 }

@@ -1,4 +1,4 @@
-modules.define('test', ['sinon'], function(provide, sinon) {
+modules.define('spec', ['sinon'], function(provide, sinon) {
 
 describe('ecma__function', function() {
     describe('bind', function() {
