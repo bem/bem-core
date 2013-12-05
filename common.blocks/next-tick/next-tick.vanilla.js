@@ -64,15 +64,16 @@ var global = this.global,
 
     var doc = global.document;
     if('onreadystatechange' in doc.createElement('script')) { // ie6-ie8
-        var createScript = function() {
+        var head = doc.getElementsByTagName('head')[0],
+            createScript = function() {
                 var script = doc.createElement('script');
                 script.onreadystatechange = function() {
                     script.parentNode.removeChild(script);
                     script = script.onreadystatechange = null;
                     callFns();
+                };
+                head.appendChild(script);
             };
-            (doc.documentElement || doc.body).appendChild(script);
-        };
 
         return provide(function(fn) {
             enqueueFn(fn) && createScript();
