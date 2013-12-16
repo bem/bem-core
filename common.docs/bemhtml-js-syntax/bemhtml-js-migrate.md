@@ -516,7 +516,7 @@ block link, tag, this.ctx.url {
 В JS-синтаксисе тело шаблона передается функции, возвращаемой хелпером, первым аргументом, а подшаблоны следующими:
 
 ```js
-block('link').tag().match(this.ctx.url)(
+block('link').tag().match(function() { return this.ctx.url})(
     'a',
     mods('not-link', 'yes')('span')
 )
@@ -529,7 +529,7 @@ block('link').tag().match(this.ctx.url)(
 ```js
 block('link')(
     tag()('span'),
-    match(this.ctx.url)(
+    match(function() { return this.ctx.url})(
         tag()('a'),
         attrs()({ href: this.ctx.url })
     )
