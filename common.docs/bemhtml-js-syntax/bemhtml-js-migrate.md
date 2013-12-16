@@ -722,8 +722,8 @@ block('b-text')(
 ```
 block b-bla {
   tag:'span'
-  mod '0-mode', 'v2', tag:'yay'
-  mix: [{ mods: { m2: 'v2' } }]
+  mod 0-mode v2, tag:'yay'
+  mix: [ { elemMods: { m2: 'v2' }} ]
   js: true
 }
 ```
