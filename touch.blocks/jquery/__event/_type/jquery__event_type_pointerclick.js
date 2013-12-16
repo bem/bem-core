@@ -765,10 +765,13 @@ FastClick.attach = function(layer) {
 	return new FastClick(layer);
 };
 
-
-document.addEventListener('DOMContentLoaded', function() {
+function doProvide() {
 	FastClick.attach(document.body);
 	provide($);
-});
+}
+
+document.readyState === 'complete'?
+	doProvide() :
+	document.addEventListener('DOMContentLoaded', doProvide);
 
 });
