@@ -784,11 +784,12 @@ elem('favicon')(
 block b-link, elem e1 { 
   tag: 'span' 
   this.ctx.url { 
-     tag: 'a' // стандартной моде tag в качестве тела передается строка 'a'
-     attrs: { href: this.ctx.url } // стандартной моде attrs в качестве тела передается хеш
-     reset:  // нестандартная мода
-         attrs: { href: undefined } // стандартной моде attrs в качестве тела передается хеш
-  }
+     tag: 'a' 
+     attrs: { href: this.ctx.url } 
+     reset { 
+         attrs: { href: undefined } 
+      }
+   }
 }
 ```
 
@@ -797,10 +798,10 @@ JS-синтаксис:
 
 ```js
 block('b-link').elem('e1') ( 
-  tag()('span')
-  match(function() { return this.ctx.url }) (
-     tag()('a')
-     attrs()({ href: this.ctx.url })
+  tag()('span'),
+  match(function() { return this.ctx.url })(
+     tag()('a'),
+     attrs()({ href: this.ctx.url }),
      mode('reset')( 
          attrs()({ href: undefined })
       ) 
@@ -808,4 +809,3 @@ block('b-link').elem('e1') (
 )
 ```
 
-В результате выполнения цепочки преобразований получился валидный шаблон в JS-синтаксисе.
