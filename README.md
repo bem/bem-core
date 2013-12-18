@@ -1,7 +1,6 @@
 # bem-core Library [![Build Status](https://travis-ci.org/bem/bem-core.png)](https://travis-ci.org/bem/bem-core)
 
-This README is also availabe [in
-Russian](http://ru.bem.info/libs/bem-core/).
+This README is also available [in Russian](http://ru.bem.info/libs/bem-core/).
 
 ## What is this?
 
@@ -64,7 +63,7 @@ If you used BEM before, check the [migration instructions](http://bem.info/libs/
 
 1. Get the needed version code (e.g., `v1`):
 ```
-$ git clone -b v1 git@github.com:bem/bem-core.git
+$ git clone -b v1 git://github.com/bem/bem-core.git
 $ cd bem-core
 ```
 
@@ -72,11 +71,11 @@ $ cd bem-core
 ```
 $ npm install
 ```
-You need
-`export PATH=./node_modules/.bin:$PATH`
-or an alternative way to run locally-installed bem-tools.
 
-3. Install all the necessary libraries with bem-tools:
+You need `export PATH=./node_modules/.bin:$PATH`
+or an alternative way to run locally-installed [bem-tools](https://github.com/bem/bem-tools).
+
+3. Install all the necessary libraries:
 ```
 $ bem make libs
 ```
@@ -111,24 +110,29 @@ perfectly.
 
 ### Modular testing
 
-A default test bundle for `ecma_array`: `bem make common.sets/ecma__array.tests/default`
+A default test bundle for `ecma_array`:
+```
+$ bem make desktop.specs/ecma__array
+```
+
 You can see the results of the tests in the terminal after the building process
 finishes.
-You can also watch them in a browser loading `common.sets/ecma__array.tests/default/default.html`.
+You can also watch them in a browser loading `desktop.specs/ecma__array/spec-js+browser-js+bemhtml/spec-js+browser-js+bemhtml.html`.
 
 Run tests for other BEM entities in the same way. This will work for those which
-are equiped with `.test.js` file.
+are equipped with `.spec.js` file.
 
 Test are built with a [bem-pr](https://github.com/narqo/bem-pr) library.
 Check the
-[details](https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md]
-about testing infrastructure of the [bem-pr](https://github.com/narqo/bem-pr)
-library.
+[details](https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md)
+about testing infrastructure of the bem-pr.
 
 ## Supported browsers
-Our browser support policy is based on statistics we get from Yandex services.
+Our browser support policy is based on statistics we get from [Yandex](http://company.yandex.com) services.
 
-Browsers with more then 2% users get full compliant support, more then 0.5% — partially compliant (which means that data is accessible but not necessary 100% functional). New features testing is not provided by us for  browsers with less then 0.5% users.
+Browsers with more then 2% users get full compliant support, more then 0.5% — partially compliant
+(which means that data is accessible but not necessary 100% functional). New features testing
+is not provided by us for  browsers with less then 0.5% users.
 
 ### Desktop
 #### Fully compliant
