@@ -4,20 +4,23 @@
 
 ### Основные изменения
 
-- Добавлена возможность использовать произвольный BEMJSON в качестве значения атрибутов в BEMHTML (#290).
-- Исправлены зависимости в i-bem__collection` (#292).
-- Удалены CSS-стили блока `page` из уровня `touch.blocks` (#306).
-- Исправена ошибка в BEMHTML-шаблоне блока `page`, приводящая к зацикливанию шаблонизатора в production-режиме (#309).
-- Модуль [ym](https://github.com/ymaps/modules) обновлен до версии 0.0.12 (#326).
+- Для современных браузеров, `jquery__config` подключает jQuery 2.x (bem/bem-core#319).
+- Добавлена возможность использовать произвольный BEMJSON в качестве значения атрибутов в BEMHTML (bem/bem-core#290).
+- Исправлены зависимости в `i-bem__collection` (bem/bem-core#292).
+- Удалены CSS-стили блока `page` из уровня `touch.blocks` (bem/bem-core#306).
+- Исправена ошибка в BEMHTML-шаблоне блока `page`, приводящая к зацикливанию шаблонизатора
+  в production-режиме (bem/bem-core#309).
 - Исправлена ошибка в инициализации плагина `FastClick` в модуле `jquery__event_type_pointerclick`
-  на уровне `touch.blocks` (#332).
+  на уровне `touch.blocks` (bem/bem-core#332).
 
 ### Остальные изменения
 
-- В ядре локализации `i-bem__i18n` отключен вывод сообщений о неизвестных ключах, если не включен debug-режим (#285).
+- Модуль [ym](https://github.com/ymaps/modules) обновлен до версии 0.0.12 (bem/bem-core#326).
+- В ядре локализации `i-bem__i18n` отключен вывод сообщений о неизвестных ключах, если не включен
+  debug-режим (bem/bem-core#285).
 - Инфраструктура сборки тестов и примеров переведена
-  на [bem-pr@v0.5.x](https://github.com/narqo/bem-pr/blob/0.5.3/HISTORY.md) (#323).
-- Исправлен jsdoc для метода `dropElemCache()` в `i-bem__dom` (#296).
+  на [bem-pr@v0.5.x](https://github.com/narqo/bem-pr/blob/0.5.3/HISTORY.md) (bem/bem-core#323).
+- Исправлен jsdoc для метода `dropElemCache()` в `i-bem__dom` (bem/bem-core#296).
 - Доработана русская документация для блока `i-bem.js`.
 - В README проекта добавлен [список поддерживаемых браузеров](https://github.com/bem/bem-core/blob/v1/README.ru.md#%D0%9F%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC%D1%8B%D0%B5-%D0%B1%D1%80%D0%B0%D1%83%D0%B7%D0%B5%D1%80%D1%8B).
 

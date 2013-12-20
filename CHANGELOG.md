@@ -4,18 +4,20 @@
 
 ### Major changes
 
-- Add ability to use any BEMJSON as value of attributes in BEMHTML templates (#290).
-- Fix dependencies in `i-bem__collection` (#292).
-- Remove `page` block's touch styles (#306).
-- Fix `page` BEMHTML wrapping in production mode (#309).
-- [ym](https://github.com/ymaps/modules) was updated to 0.0.12 (#326).
-- Fix `FastClick` initialisation in `jquery__event_type_pointerclick` of `touch.blocks` (#332).
+- `jquery__config` uses jQuery 2.x by default for modern browsers (bem/bem-core#319).
+- Add ability to use any BEMJSON as value of attributes in BEMHTML templates (bem/bem-core#290).
+- Fix dependencies in `i-bem__collection` (bem/bem-core#292).
+- Remove `page` block's touch styles (bem/bem-core#306).
+- Fix `page` BEMHTML wrapping in production mode (bem/bem-core#309).
+- Fix `FastClick` initialisation in `jquery__event_type_pointerclick` of `touch.blocks` (bem/bem-core#332).
 
 ### Other changes
 
-- Do not flood `console` with messages if `i-bem__i18n` is not in debug mode (#285).
-- Fix jsdoc for `dropElemCache()` method of `i-bem__dom` module (#296).
-- Development infrastructure was updated to [bem-pr@v0.5.x](https://github.com/narqo/bem-pr/blob/0.5.3/HISTORY.md) (#323).
+- [ym](https://github.com/ymaps/modules) was updated to 0.0.12 (bem/bem-core#326).
+- Do not flood `console` with messages if `i-bem__i18n` is not in debug mode (bem/bem-core#285).
+- Fix jsdoc for `dropElemCache()` method of `i-bem__dom` module (bem/bem-core#296).
+- Development infrastructure was updated to
+  [bem-pr@v0.5.x](https://github.com/narqo/bem-pr/blob/0.5.3/HISTORY.md) (bem/bem-core#323).
 - Russian documentation for `i-bem.js` was updated.
 - [List of supported browsers](https://github.com/bem/bem-core/blob/v1/README.md#supported-browsers)
   was specified in project's README.
