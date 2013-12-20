@@ -9,6 +9,7 @@
 - Fix dependencies in `i-bem__collection` (bem/bem-core#292).
 - Remove `page` block's touch styles (bem/bem-core#306).
 - Fix `page` BEMHTML wrapping in production mode (bem/bem-core#309).
+- Fix possible JavaScript error in script injection in IE<9 in `next-tick` (bem/bem-core#324).
 - Fix `FastClick` initialisation in `jquery__event_type_pointerclick` of `touch.blocks` (bem/bem-core#332).
 
 ### Other changes

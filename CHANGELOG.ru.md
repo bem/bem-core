@@ -10,6 +10,7 @@
 - Удалены CSS-стили блока `page` из уровня `touch.blocks` (bem/bem-core#306).
 - Исправена ошибка в BEMHTML-шаблоне блока `page`, приводящая к зацикливанию шаблонизатора
   в production-режиме (bem/bem-core#309).
+- Исправленая возможная ошибка в `next-tick`, возникающая при вставки скрипта в DOM в IE<9 (bem/bem-core#324).
 - Исправлена ошибка в инициализации плагина `FastClick` в модуле `jquery__event_type_pointerclick`
   на уровне `touch.blocks` (bem/bem-core#332).
 
