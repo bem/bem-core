@@ -1,6 +1,7 @@
 var BEM = require('bem'),
     Q = BEM.require('q'),
     PATH = require('path'),
+    Template = require('bem/lib/template'),
     compat = require('bemhtml-compat');
 
 exports.API_VER = 2;
@@ -44,6 +45,10 @@ exports.techMixin = {
                 cache   : process.env.BEMHTML_CACHE == 'on',
                 exportName : 'BEMHTML'
             });
+    },
+
+    getCreateResult : function(path, suffix, vars) {
+        return Template.process(["block('{{bemBlockName}}')"], vars);
     }
 
 };
