@@ -27,14 +27,14 @@ module.exports = {
             includes : ['**/*.js'],
             excludes : [
                 '**/*.vanilla.js',
-                '**/*.test.js',
+                '**/*.spec.js',
                 '**/*.node.js',
                 '**/*.deps.js',
                 '**/*.bemjson.js'
             ]
         },
 
-        testjs : {
+        specjs : {
             options : {
                 browser : true,
                 predef : [
@@ -47,7 +47,7 @@ module.exports = {
                     'afterEach'
                 ]
             },
-            includes : ['**/*.test.js']
+            includes : ['**/*.spec.js']
         },
 
         bemjsonjs : {
