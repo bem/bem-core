@@ -4,21 +4,22 @@
 
 ### Major changes
 
-- `jquery__config` uses jQuery 2.x by default for modern browsers (bem/bem-core#319).
-- Add ability to use any BEMJSON as value of attributes in BEMHTML templates (bem/bem-core#290).
-- Fix dependencies in `i-bem__collection` (bem/bem-core#292).
-- Remove `page` block's touch styles (bem/bem-core#306).
-- Fix `page` BEMHTML wrapping in production mode (bem/bem-core#309).
-- Fix possible JavaScript error in script injection in IE<9 in `next-tick` (bem/bem-core#324).
-- Fix `FastClick` initialisation in `jquery__event_type_pointerclick` of `touch.blocks` (bem/bem-core#332).
+- `jquery__config` uses jQuery 2.x by default for modern browsers ([#319](https://github.com/bem/bem-core/issues/319)).
+- Add ability to use any BEMJSON as value of attributes in BEMHTML templates ([#290](https://github.com/bem/bem-core/issues/290)).
+- Fix dependencies in `i-bem__collection` ([#292](https://github.com/bem/bem-core/issues/292)).
+- Remove `page` block's touch styles ([#306](https://github.com/bem/bem-core/issues/306)).
+- Fix `page` BEMHTML wrapping in production mode ([#309](https://github.com/bem/bem-core/issues/309)).
+- Fix possible JavaScript error in script injection in IE<9 in `next-tick` ([#324](https://github.com/bem/bem-core/issues/324)).
+- Fix `FastClick` initialisation in `jquery__event_type_pointerclick` of `touch.blocks` ([#332](https://github.com/bem/bem-core/issues/332)).
+- Fix `node.js` tech bug on Windows systems ([#274](https://github.com/bem/bem-core/issues/274)).
 
 ### Other changes
 
-- [ym](https://github.com/ymaps/modules) was updated to 0.0.12 (bem/bem-core#326).
-- Do not flood `console` with messages if `i-bem__i18n` is not in debug mode (bem/bem-core#285).
-- Fix jsdoc for `dropElemCache()` method of `i-bem__dom` module (bem/bem-core#296).
+- [ym](https://github.com/ymaps/modules) was updated to 0.0.12 ([#326](https://github.com/bem/bem-core/issues/326)).
+- Do not flood `console` with messages if `i-bem__i18n` is not in debug mode ([#285](https://github.com/bem/bem-core/issues/285)).
+- Fix jsdoc for `dropElemCache()` method of `i-bem__dom` module ([#296](https://github.com/bem/bem-core/issues/296)).
 - Development infrastructure was updated to
-  [bem-pr@v0.5.x](https://github.com/narqo/bem-pr/blob/0.5.3/HISTORY.md) (bem/bem-core#323).
+  [bem-pr@v0.5.x](https://github.com/narqo/bem-pr/blob/0.5.3/HISTORY.md) ([#323](https://github.com/bem/bem-core/issues/323)).
 - Russian documentation for `i-bem.js` was updated.
 - [List of supported browsers](https://github.com/bem/bem-core/blob/v1/README.md#supported-browsers)
   was specified in project's README.
