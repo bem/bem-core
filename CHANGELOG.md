@@ -80,7 +80,7 @@
 - `trigger` method from `i-bem` block is **deprecated** in flavor of `emit` method.
 - `onFirst` method from `i-bem` block is **deprecated** in flavor of `once` method.
 - **Deprecated** field `e.block` that provided block-target of BEM-events was removed. Use `e.target` field instead.
-- Field `e.domElem` that provided DOM-element of block in DOM-events was removed. Use `$(e.currentTarget)` (provided by jQuery).
+- Field `e.data.domElem` that provided DOM-element of block in DOM-events was removed. Use `$(e.currentTarget)` (provided by jQuery).
 - Introduces parameter for `findElem` method that allows to search elements
   of particular block instance (in case of nested blocks with same name).
 - Introduces possibility to point particular function in `unbindFrom*` methods.
