@@ -14,6 +14,8 @@
 - Исправлена ошибка в инициализации плагина `FastClick` в модуле `jquery__event_type_pointerclick`
   на уровне `touch.blocks` ([#332](https://github.com/bem/bem-core/issues/332)).
 - Исправлена ошибка в технологии `node.js` в Windows ([#274](https://github.com/bem/bem-core/issues/274)).
+- Исправлена ошибка в `onElemSetMod` в `i-bem__dom_elem-instances` ([#340](https://github.com/bem/bem-core/issues/340)).
+- В технологии `bemhtml` используется [bem-xjst](https://github.com/bem/bem-xjst) ([#329](https://github.com/bem/bem-core/issues/329)).
 
 ### Остальные изменения
 

@@ -12,6 +12,8 @@
 - Fix possible JavaScript error in script injection in IE<9 in `next-tick` ([#324](https://github.com/bem/bem-core/issues/324)).
 - Fix `FastClick` initialisation in `jquery__event_type_pointerclick` of `touch.blocks` ([#332](https://github.com/bem/bem-core/issues/332)).
 - Fix `node.js` tech bug on Windows systems ([#274](https://github.com/bem/bem-core/issues/274)).
+- Fix `i-bem__dom_elem-instances` bug with `onElemSetMod` ([#340](https://github.com/bem/bem-core/issues/340)).
+- Use bemhtml from [bem-xjst](https://github.com/bem/bem-xjst) ([#329](https://github.com/bem/bem-core/issues/329)).
 
 ### Other changes
 
