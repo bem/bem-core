@@ -89,18 +89,17 @@ BEM.decl('i-bem__dom', {
      */
     _callModFn : function(prefix, elemName, modName, modVal, modFnParams) {
         var result = this.__base.apply(this, arguments),
-            elemName = this.__self._elemName;
+            selfElemName = this.__self._elemName;
 
-        if(elemName) {
+        if(selfElemName) {
             this.__base.call(
                 this.block(),
                 prefix,
-                elemName,
+                elemName || selfElemName,
                 modName,
                 modVal,
-                [ this.domElem ].concat(modFnParams)
-            )
-                === false && (result = false);
+                elemName? modFnParams : [this.domElem].concat(modFnParams)
+            ) === false && (result = false);
         }
         return result;
     },
@@ -233,7 +232,7 @@ BEM.decl('i-bem__dom', {
     decl : function(name, props, staticProps, _autoDecl) {
         if(_autoDecl) {
             var names = name.split(ELEM_DELIM);
-            return this.__base({ block: names[0], elem: names[1] }, props, staticProps);
+            return this.__base({ block : names[0], elem : names[1] }, props, staticProps);
         } else {
             return this.__base(name, props, staticProps);
         }

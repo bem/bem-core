@@ -7,14 +7,14 @@ describe('i-bem__dom_elem-instances_yes', function() {
     describe('elemInstance', function() {
         it('should return the instance of element', function() {
             DOM.decl('block', {}, {});
-            DOM.decl({ block: 'block', elem: 'elem' }, {}, {});
+            DOM.decl({ block : 'block', elem : 'elem' }, {}, {});
 
             var rootNode = $(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem',
-                        js: true
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        js : true
                     }
                 })),
                 block = rootNode.bem('block'),
@@ -32,14 +32,14 @@ describe('i-bem__dom_elem-instances_yes', function() {
     describe('block', function() {
         it('should return instance of the own block', function() {
             DOM.decl('block', {}, {});
-            DOM.decl({ block: 'block', elem: 'elem' }, {}, {});
+            DOM.decl({ block : 'block', elem : 'elem' }, {}, {});
 
             var rootNode = $(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem',
-                        js: true
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        js : true
                     }
                 })),
                 block = rootNode.bem('block'),
@@ -56,16 +56,16 @@ describe('i-bem__dom_elem-instances_yes', function() {
     describe('closestElem', function() {
         it('should return the closest element', function() {
             DOM.decl('block', {}, {});
-            DOM.decl({ block: 'block', elem: 'elem2' }, {}, {});
+            DOM.decl({ block : 'block', elem : 'elem2' }, {}, {});
 
             var rootNode = $(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem1',
-                        content: {
-                            elem: 'elem2',
-                            js: true
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem1',
+                        content : {
+                            elem : 'elem2',
+                            js : true
                         }
                     }
                 })),
@@ -84,16 +84,16 @@ describe('i-bem__dom_elem-instances_yes', function() {
     describe('mods', function() {
         it('should update element\'s modifier properly', function() {
             DOM.decl('block', {}, {});
-            DOM.decl({ block: 'block', elem: 'elem' }, {}, {});
+            DOM.decl({ block : 'block', elem : 'elem' }, {}, {});
 
             var rootNode = $(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem',
-                        elemMods: { mod: 'val1' },
-                        mix: { block: 'i-bem' },
-                        js: true
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        elemMods : { mod : 'val1' },
+                        mix : { block : 'i-bem' },
+                        js : true
                     }
                 })),
                 block = rootNode.bem('block'),
@@ -112,23 +112,23 @@ describe('i-bem__dom_elem-instances_yes', function() {
         it('should call block\'s onElemSetMod handler when element updates it\'s own modifier', function() {
             var spy = sinon.spy();
             DOM.decl('block', {
-                onElemSetMod : {
-                    elem: {
-                        mod: {
-                            val: spy
+                onElemSetMod  : {
+                    elem : {
+                        mod : {
+                            val : spy
                         }
                     }
                 }
             }, {});
-            DOM.decl({ block: 'block', elem: 'elem' }, {}, {});
+            DOM.decl({ block : 'block', elem : 'elem' }, {}, {});
 
             var rootNode = $(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem',
-                        mix: { block: 'i-bem' },
-                        js: true
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        mix : { block : 'i-bem' },
+                        js : true
                     }
                 })),
                 block = rootNode.bem('block'),
@@ -141,25 +141,69 @@ describe('i-bem__dom_elem-instances_yes', function() {
             delete DOM.blocks['block'];
             delete DOM.blocks['block__elem'];
         });
+
+        it('should call block\'s onElemSetMod handler when element updates modifier of another element', function() {
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy();
+
+            DOM.decl('block', {
+                onElemSetMod  : {
+                    elem1 : {
+                        mod : {
+                            val : spy1
+                        }
+                    },
+                    elem2 : {
+                        mod : {
+                            val : spy2
+                        }
+                    }
+                }
+            }, {});
+            DOM.decl({ block : 'block', elem : 'elem1' }, {}, {});
+
+            var rootNode = $(BEMHTML.apply({
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem1',
+                        mix : { block : 'i-bem' },
+                        js : true,
+                        content : { elem : 'elem2' }
+                    }
+                })),
+                block = rootNode.bem('block'),
+                elem1 = block.elemInstance('elem1'),
+                elem2 = block.elem('elem2');
+
+            elem1.setMod(elem2, 'mod', 'val');
+
+            spy1.called.should.be.false;
+            spy2.called.should.be.true;
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block__elem'];
+        });
     });
 
     describe('findElem', function() {
         it('should filter nested block\'s elements in strict mode', function() {
             DOM.decl('block', {}, {});
-            DOM.decl({ block: 'block', elem: 'elem' }, {}, {});
+            DOM.decl({ block : 'block', elem : 'elem' }, {}, {});
 
             var rootNode = $(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem',
-                        mix: { block: 'i-bem' },
-                        js: true,
-                        content: [
-                            { elem: 'nested' },
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        mix : { block : 'i-bem' },
+                        js : true,
+                        content : [
+                            { elem : 'nested' },
                             {
-                                block: 'block',
-                                content: { elem: 'nested' }
+                                block : 'block',
+                                content : { elem : 'nested' }
                             }
                         ]
                     }
@@ -180,19 +224,19 @@ describe('i-bem__dom_elem-instances_yes', function() {
     describe('elemParams', function() {
         it('should extract element\'s parameters properly', function() {
             DOM.decl('block', {}, {});
-            DOM.decl({ block: 'block', elem: 'elem1' }, {}, {});
+            DOM.decl({ block : 'block', elem : 'elem1' }, {}, {});
 
             var rootNode = $(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem1',
-                        mix: { block: 'i-bem' },
-                        js: true,
-                        content: [
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem1',
+                        mix : { block : 'i-bem' },
+                        js : true,
+                        content : [
                             {
-                                elem: 'elem2',
-                                js: { p1: 'v1' }
+                                elem : 'elem2',
+                                js : { p1 : 'v1' }
                             }
                         ]
                     }
@@ -214,10 +258,10 @@ describe('i-bem__dom_elem-instances_yes', function() {
             DOM.decl('block', {}, {});
 
             var rootNode = $(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem'
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem'
                     }
                 })),
                 block = rootNode.bem('block'),
@@ -238,25 +282,25 @@ describe('i-bem__dom_elem-instances_yes', function() {
                 spyHandler = sinon.spy();
 
             DOM.decl('block', {}, {});
-            DOM.decl({ block: 'block', elem: 'elem' }, {
-                onSetMod: {
-                    js: {
-                        inited: spyInit
+            DOM.decl({ block : 'block', elem : 'elem' }, {
+                onSetMod : {
+                    js : {
+                        inited : spyInit
                     }
                 }
             }, {
-                live: function() {
+                live : function() {
                     this.liveInitOnBlockEvent('event', spyHandler);
                 }
             });
 
             var rootNode = DOM.init($(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem',
-                        js: true,
-                        mix: { block: 'i-bem' }
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        js : true,
+                        mix : { block : 'i-bem' }
                     }
                 }))),
                 block = rootNode.bem('block');
@@ -280,21 +324,21 @@ describe('i-bem__dom_elem-instances_yes', function() {
             var spy = sinon.spy();
 
             DOM.decl('block', {}, {});
-            DOM.decl({ block: 'block', elem: 'elem' }, {
-                onSetMod: {
-                    js: {
-                        '': spy
+            DOM.decl({ block : 'block', elem : 'elem' }, {
+                onSetMod : {
+                    js : {
+                        '' : spy
                     }
                 }
             });
 
             var rootNode = DOM.init($(BEMHTML.apply({
-                    block: 'block',
-                    js: true,
-                    content: {
-                        elem: 'elem',
-                        js: true,
-                        mix: { block: 'i-bem' }
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        js : true,
+                        mix : { block : 'i-bem' }
                     }
                 })));
 
