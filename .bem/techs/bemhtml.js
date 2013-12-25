@@ -38,12 +38,20 @@ exports.techMixin = {
     getCompiledResult : function(sources) {
         sources = sources.join('\n');
 
-        var BEMHTML = require('../lib/bemhtml');
-        return BEMHTML.translate(sources, {
-                devMode : process.env.BEMHTML_ENV == 'development',
-                cache   : process.env.BEMHTML_CACHE == 'on',
-                exportName : 'BEMHTML'
-            });
+        var BEMHTML = require('bem-xjst/lib/bemhtml'),
+            exportName = this.getExportName(),
+            optimize = process.env[exportName + '_ENV'] != 'development';
+
+        return BEMHTML.generate(sources, {
+            wrap: true,
+            exportName: exportName,
+            optimize: optimize,
+            cache   : optimize && process.env[exportName + '_CACHE'] == 'on'
+        });
+    },
+
+    getExportName: function() {
+        return 'BEMHTML';
     }
 
 };
