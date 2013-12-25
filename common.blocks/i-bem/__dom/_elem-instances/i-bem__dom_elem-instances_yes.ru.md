@@ -5,13 +5,13 @@
 Декларация элемента
 
 ```javascript
-BEM.DOM.decl({ block: 'menu', elem: 'item' }, { /* properties */ }, { /* static properties */ });
+BEMDOM.decl({ block: 'menu', elem: 'item' }, { /* properties */ }, { /* static properties */ });
 ```
 
 Декларация модификатора элемента:
 
 ```javascript
-BEM.DOM.decl({
+BEMDOM.decl({
     block: 'menu',
     elem: 'item',
     modName: 'state',
@@ -202,7 +202,7 @@ this.block().findElem('link');    // будут найдены элементы 
 ### Реакция на установку модификаторов
 
 Блок делегирует установку модификаторов тем элементам, у которых есть свои BEM-декларации.
-Поэму обработчики ```onSetMod``` элемента выполнятся, если родительский блок установит этому элементу соответствующие модификаторы:
+Поэтому обработчики ```onSetMod``` элемента выполнятся, если родительский блок установит этому элементу соответствующие модификаторы:
 
 ```javascript
 // this => element 'menu__item'
