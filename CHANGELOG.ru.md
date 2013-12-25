@@ -1,5 +1,33 @@
 # История изменений
 
+## 1.1.0
+
+### Основные изменения
+
+- Для современных браузеров, `jquery__config` подключает jQuery 2.x ([#319](https://github.com/bem/bem-core/issues/319)).
+- Добавлена возможность использовать произвольный BEMJSON в качестве значения атрибутов в BEMHTML ([#290](https://github.com/bem/bem-core/issues/290)).
+- Исправлены зависимости в `i-bem__collection` ([#292](https://github.com/bem/bem-core/issues/292)).
+- Удалены CSS-стили блока `page` из уровня `touch.blocks` ([#306](https://github.com/bem/bem-core/issues/306)).
+- Исправена ошибка в BEMHTML-шаблоне блока `page`, приводящая к зацикливанию шаблонизатора
+  в production-режиме ([#309](https://github.com/bem/bem-core/issues/309)).
+- Исправленая возможная ошибка в `next-tick`, возникающая при вставки скрипта в DOM в IE<9 ([#324](https://github.com/bem/bem-core/issues/324)).
+- Исправлена ошибка в инициализации плагина `FastClick` в модуле `jquery__event_type_pointerclick`
+  на уровне `touch.blocks` ([#332](https://github.com/bem/bem-core/issues/332)).
+- Исправлена ошибка в технологии `node.js` в Windows ([#274](https://github.com/bem/bem-core/issues/274)).
+- Исправлена ошибка в `onElemSetMod` в `i-bem__dom_elem-instances` ([#340](https://github.com/bem/bem-core/issues/340)).
+- В технологии `bemhtml` используется [bem-xjst](https://github.com/bem/bem-xjst) ([#329](https://github.com/bem/bem-core/issues/329)).
+
+### Остальные изменения
+
+- Модуль [ym](https://github.com/ymaps/modules) обновлен до версии 0.0.12 ([#326](https://github.com/bem/bem-core/issues/326)).
+- В ядре локализации `i-bem__i18n` отключен вывод сообщений о неизвестных ключах, если не включен
+  debug-режим ([#285](https://github.com/bem/bem-core/issues/285)).
+- Инфраструктура сборки тестов и примеров переведена
+  на [bem-pr@v0.5.x](https://github.com/narqo/bem-pr/blob/0.5.3/HISTORY.md) ([#323](https://github.com/bem/bem-core/issues/323)).
+- Исправлен jsdoc для метода `dropElemCache()` в `i-bem__dom` ([#296](https://github.com/bem/bem-core/issues/296)).
+- Доработана русская документация для блока `i-bem.js`.
+- В README проекта добавлен [список поддерживаемых браузеров](https://github.com/bem/bem-core/blob/v1/README.ru.md#%D0%9F%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC%D1%8B%D0%B5-%D0%B1%D1%80%D0%B0%D1%83%D0%B7%D0%B5%D1%80%D1%8B).
+
 ## 1.0.0
 
 ### Крупные изменения
@@ -51,7 +79,7 @@
 - Метод `trigger` в `i-bem` теперь **deprecated**, нужно использовать `emit`.
 - Метод `onFirst` в `i-bem` теперь **deprecated**, нужно использовать `once`.
 - Удалено **deprecated** поле `e.block`, представляющее блок-источник события для BEM-событий. Вместо него следует использовать поле `e.target`.
-- Для доступа к DOM-элементу блока в обработчике DOM-событий теперь нужно использовать поле `currentTarget`, предоставляемое jQuery. Вместо `e.domElem`нужно писать `$(e.currentTarget)`.
+- Для доступа к DOM-элементу блока в обработчике DOM-событий теперь нужно использовать поле `currentTarget`, предоставляемое jQuery. Вместо `e.data.domElem`нужно писать `$(e.currentTarget)`.
 - В методе `findElem` добавлен параметр, позволяющий находить элемента блока с учетом вложенных блоков.
 - Добавлена возможность указывать конкретную функцию для отписки от событий в методах `unbindFrom*`.
 - Добавлен модуль `objects` для работы с JS-объектами (содержит методы `extend`, `isEmpty`, `each`).
