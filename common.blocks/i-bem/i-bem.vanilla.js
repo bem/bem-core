@@ -8,23 +8,22 @@ modules.define(
     function(provide, inherit, identify, nextTick, objects, functions, events, channels) {
 
 var undef,
-/**
- * Storage for block init functions
- * @private
- * @type Array
- */
+    /**
+     * Storage for block init functions
+     * @private
+     * @type Array
+     */
     initFns = [],
 
-/**
- * Storage for block declarations (hash by block name)
- * @private
- * @type Object
- */
+    /**
+     * Storage for block declarations (hash by block name)
+     * @private
+     * @type Object
+     */
     blocks = {};
 
 /**
  * Builds the name of the handler method for setting a modifier
- * @private
  * @param {String} prefix
  * @param {String} modName Modifier name
  * @param {String} modVal Modifier value
@@ -41,8 +40,6 @@ function buildModFnName(prefix, modName, modVal, elemName) {
 
 /**
  * Transforms a hash of modifier handlers to methods
- * @static
- * @private
  * @param {String} prefix
  * @param {Object} modFns
  * @param {Object} props
@@ -125,10 +122,15 @@ function convertModHandlersToMethods(props) {
     }
 }
 
+/**
+ * @class BEM
+ * @description Base block for creating BEM blocks
+ * @augments events:Emitter
+ * @exports
+ */
 var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     /**
-     * @class Base block for creating BEM blocks
-     * @constructs
+     * @constructor
      * @private
      * @param {Object} mods Block modifiers
      * @param {Object} params Block parameters
@@ -136,23 +138,23 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     __constructor : function(mods, params, initImmediately) {
         /**
-         * Cache of block modifiers
+         * @member {Object}
+         * @description Cache of block modifiers
          * @private
-         * @type Object
          */
         this._modCache = mods || {};
 
         /**
-         * Current modifiers in the stack
+         * @member {Object}
+         * @description Current modifiers in the stack
          * @private
-         * @type Object
          */
         this._processingMods = {};
 
         /**
-         * The block's parameters, taking into account the defaults
+         * @member {Object}
+         * @description The block's parameters, taking into account the defaults
          * @protected
-         * @type Object
          */
         this.params = objects.extend(this.getDefaultParams(), params);
 
@@ -176,7 +178,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @protected
      * @param {String} e Event name
      * @param {Object} [data] Additional information
-     * @returns {BEM}
+     * @returns {this}
      */
     emit : function(e, data) {
         this
@@ -192,6 +194,12 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         return this.emit.apply(this, arguments);
     },
 
+    /**
+     * Builds event
+     * @private
+     * @param {String|events:Event} e
+     * @returns {events:Event}
+     */
     _buildEvent : function(e) {
         typeof e === 'string'?
             e = new events.Event(e, this) :
@@ -257,7 +265,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @private
      * @param {String} modName Modifier name
      * @param {Object} elem Nested element
-     * @param {Object} [elem] Nested element name
+     * @param {Object} [elemName] Nested element name
      * @returns {String} Modifier value
      */
     _getElemMod : function(modName, elem, elemName) {
@@ -268,7 +276,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * Returns values of modifiers of the block/nested element
      * @protected
      * @param {Object} [elem] Nested element
-     * @param {String} [modName1, ..., modNameN] Modifier names
+     * @param {String} [...modNames] Modifier names
      * @returns {Object} Hash of modifier values
      */
     getMods : function(elem) {
@@ -293,7 +301,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
-     * @returns {BEM}
+     * @returns {this}
      */
     setMod : function(elem, modName, modVal) {
         if(typeof modVal === 'undefined') {
@@ -379,7 +387,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {String} modVal1 First modifier value
      * @param {String} [modVal2] Second modifier value
      * @param {Boolean} [condition] Condition
-     * @returns {BEM}
+     * @returns {this}
      */
     toggleMod : function(elem, modName, modVal1, modVal2, condition) {
         if(typeof elem === 'string') { // if this is a block
@@ -418,7 +426,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @protected
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
-     * @returns {BEM}
+     * @returns {this}
      */
     delMod : function(elem, modName) {
         if(!modName) {
@@ -484,7 +492,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     },
 
     /**
-     * Executes given callback on next turn evenloop in block's context
+     * Executes given callback on next turn eventloop in block's context
      * @param {Function} fn callback
      * @returns {this}
      */
@@ -519,7 +527,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Storage for block declarations (hash by block name)
-     * @static
      * @protected
      * @type Object
      */
@@ -527,7 +534,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Declares blocks and creates a block class
-     * @static
      * @protected
      * @param {String|Object} decl Block name (simple syntax) or description
      * @param {String} decl.block|decl.name Block name
@@ -537,6 +543,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {String|Array} [decl.modVal] Modifier value
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
+     * @returns {Function}
      */
     decl : function(decl, props, staticProps) {
         typeof decl === 'string' && (decl = { block : decl });
@@ -611,7 +618,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Factory method for creating an instance of the block named
-     * @static
      * @param {String|Object} block Block name or description
      * @param {Object} [params] Block parameters
      * @returns {BEM}
@@ -624,7 +630,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Returns the name of the current block
-     * @static
      * @protected
      * @returns {String}
      */
@@ -634,10 +639,9 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Retrieves the name of an element nested in a block
-     * @static
      * @private
      * @param {Object} elem Nested element
-     * @returns {String|undef}
+     * @returns {String|undefined}
      */
     _extractElemNameFrom : function(elem) {},
 

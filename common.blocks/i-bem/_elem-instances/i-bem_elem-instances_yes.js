@@ -1,5 +1,6 @@
-/** @requires BEM */
-/** @requires BEM.INTERNAL */
+/**
+ * @module i-bem_elem-instances_yes
+ */
 
 modules.define(
     'i-bem',
@@ -8,11 +9,15 @@ modules.define(
 
 var buildClass = INTERNAL.buildClass;
 
-provide(inherit.self(BEM, {}, {
+/**
+ * @class BEM
+ * @augments BEM
+ * @exports
+ */
+provide(inherit.self(BEM, {}, /** @lends BEM */{
 
     /**
      * Declares elements and creates an elements class
-     * @static
      * @protected
      * @param {Object} decl Element description
      * @param {String} decl.block Block name
@@ -23,17 +28,18 @@ provide(inherit.self(BEM, {}, {
      * @param {String|Array} [decl.modVal] Modifier value
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
+     * @returns {Function}
      */
     decl : function(decl, props, staticProps) {
         var block;
         if(decl.elem) {
             block = this.__base(
                 {
-                    block: buildClass(decl.block, decl.elem),
-                    baseBlock: decl.baseBlock,
-                    baseMix: decl.baseMix,
-                    modName: decl.modName,
-                    modVal: decl.modVal
+                    block : buildClass(decl.block, decl.elem),
+                    baseBlock : decl.baseBlock,
+                    baseMix : decl.baseMix,
+                    modName : decl.modName,
+                    modVal : decl.modVal
                 },
                 props,
                 staticProps);
@@ -48,7 +54,6 @@ provide(inherit.self(BEM, {}, {
 
     /**
      * Factory method for creating an instance of the element named
-     * @static
      * @param {Object} desc Description
      * @param {Object} [params] Instance parameters
      * @returns {BEM}
@@ -61,7 +66,6 @@ provide(inherit.self(BEM, {}, {
 
     /**
      * Returns the name of the current instance
-     * @static
      * @protected
      * @param {Boolean} [shortName] return the short name of the current instance
      * @returns {String}
@@ -69,7 +73,6 @@ provide(inherit.self(BEM, {}, {
     getName : function(shortName) {
         return shortName? (this._elemName || this._blockName) : this._name;
     }
-
 }));
 
 });

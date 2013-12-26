@@ -1,5 +1,6 @@
 /**
  * @module jquery
+ * @description Provide jQuery (load if it does not exist).
  */
 
 modules.define(
@@ -10,11 +11,14 @@ modules.define(
 /* global jQuery */
 
 function doProvide() {
+    /**
+     * @exports
+     * @type {Function} jQuery
+     */
     provide(jQuery.noConflict(true));
 }
 
 typeof jQuery !== 'undefined'?
     doProvide() :
     loader(cfg.url, doProvide);
-
 });

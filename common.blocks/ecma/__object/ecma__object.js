@@ -1,6 +1,10 @@
 /**
- * Возвращает массив свойств объекта
- * @param {Object} obj объект
+ * @module ecma__object
+ */
+
+/**
+ * @exports ecma__object:Object.keys
+ * @param {Object} obj
  * @returns {Array}
  */
 Object.keys || (Object.keys = function(obj) {

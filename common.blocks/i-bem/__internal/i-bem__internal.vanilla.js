@@ -5,25 +5,25 @@
 modules.define('i-bem__internal', function(provide) {
 
 var undef,
-/**
- * Separator for modifiers and their values
- * @const
- * @type String
- */
+    /**
+     * Separator for modifiers and their values
+     * @const
+     * @type String
+     */
     MOD_DELIM = '_',
 
-/**
- * Separator between names of a block and a nested element
- * @const
- * @type String
- */
+    /**
+     * Separator between names of a block and a nested element
+     * @const
+     * @type String
+     */
     ELEM_DELIM = '__',
 
-/**
- * Pattern for acceptable element and modifier names
- * @const
- * @type String
- */
+    /**
+     * Pattern for acceptable element and modifier names
+     * @const
+     * @type String
+     */
     NAME_PATTERN = '[a-zA-Z0-9-]+';
 
 function isSimple(obj) {
@@ -51,7 +51,7 @@ function buildElemClass(block, name, modName, modVal) {
         buildModPostfix(modName, modVal);
 }
 
-provide({
+provide(/** @exports */{
     NAME_PATTERN : NAME_PATTERN,
 
     MOD_DELIM : MOD_DELIM,
@@ -61,7 +61,6 @@ provide({
 
     /**
      * Builds the class of a block or element with a modifier
-     * @private
      * @param {String} block Block name
      * @param {String} [elem] Element name
      * @param {String} [modName] Modifier name
@@ -92,7 +91,6 @@ provide({
 
     /**
      * Builds full classes for a buffer or element with modifiers
-     * @private
      * @param {String} block Block name
      * @param {String} [elem] Element name
      * @param {Object} [mods] Modifiers

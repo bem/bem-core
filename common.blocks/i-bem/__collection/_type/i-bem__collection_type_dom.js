@@ -1,7 +1,5 @@
 /**
- * Collection of BEM.DOM blocks
- * Implementation of BEM.DOM methods for array of blocks
- * @implement BEM.DOM
+ * @module i-bem__collection_type_dom
  */
 
 modules.define(
@@ -9,11 +7,18 @@ modules.define(
     ['inherit', 'i-bem__collection'],
     function(provide, inherit, Collection) {
 
-provide(inherit(Collection, null, {
+/**
+ * @class BEMDOMCollection
+ * @description Collection of BEM.DOM blocks. Implementation of BEM.DOM methods for array of blocks.
+ * @augments i-bem__collection
+ * @exports
+ */
+
+provide(inherit(Collection, null, /** @lends BEMDOMCollection */{
     /**
-     * Get methods that will be implemented in bem__collection_type_dom
+     * Get methods that will be implemented in BEMDOMCollection
      * @override
-     * @return {Array}
+     * @returns {Array}
      */
     getMethods : function() {
         return this.__base().concat(['bindTo', 'bindToDoc', 'bindToDomElem', 'bindToWin',

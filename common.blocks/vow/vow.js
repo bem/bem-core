@@ -1,12 +1,7 @@
 /**
- * Vow
- *
- * Copyright (c) 2012-2013 Filatov Dmitry (dfilatov@yandex-team.ru)
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- *
- * @version 0.3.10
+ * @module vow
+ * @description Vow is a Promises/A+ implementation. It also supports DOM Promises specification.
+ * See https://github.com/dfilatov/vow for details.
  */
 
 (function(global) {

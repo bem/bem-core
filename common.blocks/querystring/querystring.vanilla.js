@@ -1,5 +1,6 @@
 /**
  * @module querystring
+ * @description A set of helpers to work with query strings
  */
 
 modules.define('querystring', ['querystring__uri'], function(provide, uri) {
@@ -11,10 +12,9 @@ function addParam(res, name, val) {
     res.push(encodeURIComponent(name) + '=' + (val == null? '' : encodeURIComponent(val)));
 }
 
-provide({
+provide(/** @exports */{
     /**
-     * Parse a query string to an object.
-     *
+     * Parse a query string to an object
      * @param {String} str
      * @returns {Object}
      */
@@ -55,8 +55,7 @@ provide({
     },
 
     /**
-     * Serialize an object to a query string.
-     *
+     * Serialize an object to a query string
      * @param {Object} obj
      * @returns {String}
      */

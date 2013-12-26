@@ -1,7 +1,5 @@
 /**
  * @module events
- * @version 1.0.4
- * @author Filatov Dmitry <dfilatov@yandex-team.ru>
  */
 
 modules.define(
@@ -17,36 +15,78 @@ var undef,
 
     /**
      * @class Event
-     * @alias events:Event
+     * @exports events:Event
      */
     Event = inherit(/** @lends Event.prototype */{
+        /**
+         * @constructor
+         * @param {String} type
+         * @param {Object} target
+         */
         __constructor : function(type, target) {
+            /**
+             * Type
+             * @member {String} Event
+             */
             this.type = type;
+
+            /**
+             * Target
+             * @member {String} Event
+             */
             this.target = target;
+
+            /**
+             * Result
+             * @member {*}
+             */
             this.result = undef;
+
+            /**
+             * Data
+             * @member {*}
+             */
             this.data = undef;
 
             this._isDefaultPrevented = false;
             this._isPropagationStopped = false;
         },
 
+        /**
+         * Prevents default action
+         */
         preventDefault : function() {
             this._isDefaultPrevented = true;
         },
 
+        /**
+         * Returns whether is default action prevented
+         * @returns {Boolean}
+         */
         isDefaultPrevented : function() {
             return this._isDefaultPrevented;
         },
 
+        /**
+         * Stops propagation
+         */
         stopPropagation : function() {
             this._isPropagationStopped = true;
         },
 
+        /**
+         * Returns whether is propagation stopped
+         * @returns {Boolean}
+         */
         isPropagationStopped : function() {
             return this._isPropagationStopped;
         }
     }),
 
+    /**
+     * @lends Emitter
+     * @lends Emitter.prototype
+     */
     EmitterProps = {
         /**
          * Adds an event handler
@@ -165,7 +205,7 @@ var undef,
 
         /**
          * Fires event handlers
-         * @param {String|Event} e Event
+         * @param {String|events:Event} e Event
          * @param {Object} [data] Additional data
          * @returns {this}
          */
@@ -212,23 +252,39 @@ var undef,
             }
 
             return this;
+        },
+
+        /**
+         * Fires event handlers
+         * @deprecated use emit
+         * @param {String|events:Event} e Event
+         * @param {Object} [data] Additional data
+         * @returns {this}
+         */
+        trigger : function(e, data) {
+            return this.emit(e, data);
+        },
+
+        /**
+         * Adds a one time handler for the event.
+         * Handler is executed only the next time the event is fired, after which it is removed.
+         * @deprecated use once
+         * @param {String} e Event type
+         * @param {Object} [data] Additional data that the handler gets as e.data
+         * @param {Function} fn Handler
+         * @param {Object} [ctx] Handler context
+         * @returns {this}
+         */
+        onFirst : function(e, data, fn, ctx) {
+            return this.once(e, data, fn, ctx);
         }
-    };
-
-/** @deprecated use emit */
-EmitterProps.trigger = EmitterProps.emit;
-
-/** @deprecated use once */
-EmitterProps.onFirst = EmitterProps.once;
-
-/**
- * @class Emitter
- * @alias events:Emitter
- */
-var Emitter = inherit(
-        /** @lends Emitter.prototype */
+    },
+    /**
+     * @class Emitter
+     * @exports events:Emitter
+     */
+    Emitter = inherit(
         EmitterProps,
-        /** @lends Emitter */
         EmitterProps);
 
 provide({
