@@ -770,7 +770,7 @@ function doProvide() {
 	provide($);
 }
 
-document.readyState === 'complete'?
+document.readyState === 'complete' || document.readyState === 'interactive'?
 	doProvide() :
 	document.addEventListener('DOMContentLoaded', doProvide);
 
