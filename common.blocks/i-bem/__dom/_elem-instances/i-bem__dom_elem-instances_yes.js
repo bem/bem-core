@@ -1,5 +1,6 @@
-/** @requires BEM */
-/** @requires BEM.INTERNAL */
+/**
+ * @module i-bem__dom_elem-instances_yes
+ */
 
 modules.define(
     'i-bem__dom',
@@ -13,7 +14,12 @@ var buildClass = INTERNAL.buildClass,
     blocks = BEM.blocks,
     slice = Array.prototype.slice;
 
-BEM.decl('i-bem__dom', {
+/**
+ * @class BEMDOM
+ * @augments BEMDOM
+ * @exports
+ */
+BEM.decl('i-bem__dom', /** @lends BEMDOM.prototype */{
 
     /**
      * Delegates native getMod helper to element's instance
@@ -71,7 +77,7 @@ BEM.decl('i-bem__dom', {
 
     /**
      * Returns and initializes (if necessary) the own block of current element
-     * @returns {BEM}
+     * @returns {BEMDOM}
      */
     block : function() {
         return this._block || (this._block = this.findBlockOutside(this.__self._blockName));
@@ -123,7 +129,7 @@ BEM.decl('i-bem__dom', {
      * @param {String|jQuery} elem Element
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
-     * @returns {BEM}
+     * @returns {BEMDOM}
      */
     elemInstance : function() {
         return this._elemInstances(arguments, 'elem', 'findBlockOn');
@@ -134,7 +140,7 @@ BEM.decl('i-bem__dom', {
      * @param {String|jQuery} elem Element
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
-     * @returns {BEM[]}
+     * @returns {BEMDOM[]}
      */
     elemInstances : function() {
         return this._elemInstances(arguments, 'elem', 'findBlocksOn');
@@ -147,7 +153,7 @@ BEM.decl('i-bem__dom', {
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
      * @param {Boolean} [strictMode=false]
-     * @returns {BEM}
+     * @returns {BEMDOM}
      */
     findElemInstance : function() {
         return this._elemInstances(arguments, 'findElem', 'findBlockOn');
@@ -160,7 +166,7 @@ BEM.decl('i-bem__dom', {
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
      * @param {Boolean} [strictMode=false]
-     * @returns {BEM[]}
+     * @returns {BEMDOM[]}
      */
     findElemInstances : function() {
         return this._elemInstances(arguments, 'findElem', 'findBlocksOn');
@@ -198,7 +204,7 @@ BEM.decl('i-bem__dom', {
      * Finds instance of defined element outside the context or current element
      * @param {jQuery} [ctx=this.domElem] context (current element by default)
      * @param {String} elemName Element name
-     * @returns {BEM}
+     * @returns {BEMDOM}
      */
     closestElemInstance : function(ctx, elemName) {
         return this.findBlockOn(
@@ -210,7 +216,7 @@ BEM.decl('i-bem__dom', {
      * Finds instances of defined elements outside the context or current element
      * @param {jQuery} [ctx=this.domElem] context (current element by default)
      * @param {String} elemName Element name
-     * @returns {BEM}
+     * @returns {BEMDOM[]}
      */
     closestElemInstances : function(ctx, elemName) {
         return this.findBlocksOn(
@@ -218,16 +224,16 @@ BEM.decl('i-bem__dom', {
             buildClass(this.__self._blockName, elemName || ctx));
     }
 
-}, {
+}, /** @lends BEMDOM */{
 
     /**
      * Auto-declarator for elements
-     * @static
      * @protected
      * @param {Object} name Instance name
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      * @param {Object} [_autoDecl] Auto-declaration flag
+     * @returns {Function}
      */
     decl : function(name, props, staticProps, _autoDecl) {
         if(_autoDecl) {
@@ -240,10 +246,10 @@ BEM.decl('i-bem__dom', {
 
     /**
      * Helper for live initialization for an own block's event
-     * @static
      * @protected
      * @param {String} event Event name
      * @param {Function} [callback] Handler to be called after successful initialization in the new element's context
+     * @returns {this}
      */
     liveInitOnBlockEvent : function(event, callback) {
         return (typeof callback === 'string')?
@@ -266,7 +272,6 @@ BEM.decl('i-bem__dom', {
 
     /**
      * Builds a CSS class corresponding to the element's instance with extraction it's name from the specified DOM element
-     * @static
      * @private
      * @param {jQuery} elem Element
      * @returns {String}
@@ -290,7 +295,6 @@ BEM.decl('i-bem__dom', {
 
     /**
      * Builds a prefix for the CSS class of a DOM element or nested element of the block, based on modifier name
-     * @static
      * @private
      * @param {String} modName Modifier name
      * @param {jQuery|String} [elem] Element
@@ -305,7 +309,6 @@ BEM.decl('i-bem__dom', {
 
     /**
      * Builds a regular expression for extracting names of elements nested in a block
-     * @static
      * @private
      * @returns {RegExp}
      */

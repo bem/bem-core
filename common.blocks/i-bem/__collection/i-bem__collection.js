@@ -1,16 +1,21 @@
 /**
- * Base class for collections
- * Create collection of similar objects
- * @abstract
- * @inherit Array
+ * @module i-bem__collection
  */
 
 modules.define('i-bem__collection', ['inherit', 'objects'], function(provide, inherit, objects) {
 
-provide(inherit(null, {
+/**
+ * @class BEMCollection
+ * @description Base class for collections. Create collection of similar objects.
+ * @abstract
+ * @augments Array
+ * @exports
+ */
+
+provide(inherit(null, /** @lends BEMCollection */{
     /**
      * Get method names that will be implemented in collection
-     * @return {Array}
+     * @returns {Array}
      */
     getMethods : function() {
         return ['on', 'onFirst', 'un', 'trigger',
@@ -20,7 +25,7 @@ provide(inherit(null, {
 
     /**
      * Get base prototype for collection
-     * @return {Object}
+     * @returns {Object}
      */
     getBase : function() {
         return {
@@ -41,7 +46,7 @@ provide(inherit(null, {
     /**
      * Create collection instance
      * @param {Array} a list of similar objects
-     * @return {Object}
+     * @returns {Object}
      */
     create : function(a) {
         var decl = this.getBase();
@@ -56,8 +61,8 @@ provide(inherit(null, {
             });
 
         /**
-         * "Inherit" Array using direct extend
-         * @see http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/
+         * "Inherit" Array using direct extend.
+         * See http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/.
          */
         this.create = function(arr) {
             arr || (arr = []);

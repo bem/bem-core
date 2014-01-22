@@ -1,11 +1,11 @@
 /**
  * @module cookie
- * inspired from $.cookie plugin by Klaus Hartl (stilbuero.de)
+ * @description inspired from $.cookie plugin by Klaus Hartl (stilbuero.de)
  */
 
 modules.define('cookie', function(provide) {
 
-provide({
+provide(/** @exports */{
     /**
      * Returns cookie by given name
      * @param {String} name

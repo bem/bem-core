@@ -1,3 +1,7 @@
+/**
+ * @module ecma__json
+ */
+
 (function(undefined) {
 
 if(window.JSON) return;
@@ -15,7 +19,12 @@ var _toString = Object.prototype.toString,
     },
     stringify;
 
-window.JSON = {
+/**
+ * @class JSON
+ * @exports
+ */
+
+window.JSON = /** @lends JSON */{
     stringify : stringify = function(val) {
         if(val === null) {
             return 'null';

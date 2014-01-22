@@ -1,10 +1,11 @@
 /**
  * @module dom
+ * @description some DOM utils
  */
 
 modules.define('dom', ['jquery'], function(provide, $) {
 
-provide({
+provide(/** @exports */{
     /**
      * Checks whether a DOM elem is in a context
      * @param {jQuery} ctx DOM elem where check is being performed
@@ -37,7 +38,7 @@ provide({
 
     /**
      * Checks whether a DOM element contains focus
-     * @param domElem
+     * @param {jQuery} domElem
      * @returns {Boolean}
      */
     containsFocus : function(domElem) {

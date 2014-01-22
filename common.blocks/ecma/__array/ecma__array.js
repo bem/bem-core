@@ -1,8 +1,16 @@
+/**
+ * @module ecma__array
+ */
+
 (function() {
 
 var ptp = Array.prototype,
     toStr = Object.prototype.toString,
-    methods = {
+    /**
+     * @class Array
+     * @exports
+     */
+    methods = /** @lends Array.prototype */{
         /**
          * Finds the index of an element in an array
          * @param {Object} item

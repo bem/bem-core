@@ -1,10 +1,15 @@
 /**
  * @module next-tick
- * @version 1.0.1
- * @author Filatov Dmitry <dfilatov@yandex-team.ru>
  */
 
 modules.define('next-tick', function(provide) {
+
+/**
+ * Executes given function on next tick.
+ * @exports
+ * @type Function
+ * @param {Function} fn
+ */
 
 var global = this.global,
     fns = [],

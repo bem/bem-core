@@ -1,7 +1,6 @@
 /**
  * @module inherit
- * @version 2.1.0
- * @author Filatov Dmitry <dfilatov@yandex-team.ru>
+ * @description This module provides some syntax sugar for "class" declarations, constructors, mixins, "super" calls and static members.
  */
 
 modules.define('inherit', function(provide) {
@@ -97,6 +96,14 @@ function applyMixins(mixins, res) {
     return res || mixins[0];
 }
 
+/**
+ * Creates class.
+ * @exports
+ * @param {Function|Array} [baseClass|baseClassAndMixins] class (or class and mixins) for inherit from
+ * @param {Object} prototypeFields
+ * @param {Object} [staticFields]
+ * @returns {Function} class
+ */
 var inherit = function() {
     var args = arguments,
         withMixins = isArray(args[0]),
@@ -139,7 +146,7 @@ inherit.self = function() {
 
     props && override(basePtp, basePtp, props);
     staticProps && override(base, base, staticProps);
-    
+
     return base;
 };
 
