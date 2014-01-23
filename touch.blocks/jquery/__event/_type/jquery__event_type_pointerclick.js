@@ -1,18 +1,19 @@
 /**
  * FastClick to jQuery module wrapper.
  * @see https://github.com/ftlabs/fastclick
- *
- * @modules fastclick
  */
 modules.define('jquery', function(provide, $) {
 
 /**
- * @preserve FastClick: polyfill to remove click delays on browsers with touch UIs.
+ * FastClick: polyfill to remove click delays on browsers with touch UIs.
  *
  * @version 0.6.11
- * @codingstandard ftlabs-jsv2
  * @copyright The Financial Times Limited [All Rights Reserved]
  * @license MIT License (see LICENSE.txt)
+ */
+
+/**
+ * @class FastClick
  */
 
 /**

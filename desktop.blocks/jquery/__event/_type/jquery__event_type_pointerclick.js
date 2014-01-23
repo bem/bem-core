@@ -1,7 +1,5 @@
 /**
- * @modules jquery__event_type_pointerclick
- * @version 1.0.2
- * @author Filatov Dmitry <dfilatov@yandex-team.ru>
+ * @module jquery
  */
 
 modules.define('jquery', function(provide, $) {

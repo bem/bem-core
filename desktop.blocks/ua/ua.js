@@ -1,6 +1,7 @@
 /** 
  * @module ua
- * @description inspired by http://code.jquery.com/jquery-migrate-1.1.1.js
+ * @description Detect some user agent features (works like jQuery.browser in jQuery 1.8)
+ * @see http://code.jquery.com/jquery-migrate-1.1.1.js
  */
 
 modules.define('ua', function(provide) {
@@ -29,6 +30,10 @@ if(browser.chrome) {
     browser.safari = true;
 }
 
+/**
+ * @exports
+ * @type Object
+ */
 provide(browser);
 
 });
