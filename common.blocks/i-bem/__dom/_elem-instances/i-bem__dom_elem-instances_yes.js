@@ -1,5 +1,5 @@
 /**
- * @module i-bem__dom_elem-instances_yes
+ * @module i-bem__dom
  */
 
 modules.define(

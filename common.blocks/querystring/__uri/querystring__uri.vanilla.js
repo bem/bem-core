@@ -1,5 +1,6 @@
 /**
  * @module querystring__uri
+ * @description A set of helpers to work with URI
  */
 
 modules.define('querystring__uri',  function(provide) {
@@ -10,7 +11,7 @@ var map = { '%D0' : '%D0%A0', '%C0' : '%D0%90', '%C1' : '%D0%91', '%C2' : '%D0%9
 function convert(str) {
     // Symbol code in cp1251 (hex) : symbol code in utf8)
     return str.replace(
-        /%.{2}/g, 
+        /%.{2}/g,
         function($0) {
             return map[$0];
         });
@@ -31,11 +32,21 @@ function decode(fn,  str) {
     return res;
 }
 
-provide({
+provide(/** @exports */{
+    /**
+     * Decodes URI string
+     * @param {String} str
+     * @returns {String}
+     */
     decodeURI : function(str) {
         return decode(decodeURI,  str);
-    }, 
+    },
 
+    /**
+     * Decodes URI component string
+     * @param {String} str
+     * @returns {String}
+     */
     decodeURIComponent : function(str) {
         return decode(decodeURIComponent,  str);
     }

@@ -1,3 +1,8 @@
+/**
+ * @module ua
+ * @description Detect some user agent features
+ */
+
 modules.define('ua', ['jquery'], function(provide, $) {
 
 var win = window,
@@ -82,25 +87,119 @@ var lastOrient = win.innerWidth > win.innerHeight,
         }
     });
 
-provide({
+provide(/** @exports */{
+    /**
+     * User agent
+     * @type String
+     */
     ua : ua,
+
+    /**
+     * iOS version
+     * @type String|undefined
+     */
     ios : platform.ios,
+
+    /**
+     * Is iPhone
+     * @type Boolean|undefined
+     */
     iphone : device.iphone,
+
+    /**
+     * Is iPad
+     * @type Boolean|undefined
+     */
     ipad : device.ipad,
+
+    /**
+     * Android version
+     * @type String|undefined
+     */
     android : platform.android,
+
+    /**
+     * Bada version
+     * @type String|undefined
+     */
     bada : platform.bada,
+
+    /**
+     * Windows Phone version
+     * @type String|undefined
+     */
     wp : platform.wp,
+
+    /**
+     * Undetected platform
+     * @type Boolean|undefined
+     */
     other : platform.other,
+
+    /**
+     * Opera version
+     * @type String|undefined
+     */
     opera : browser.opera,
+
+    /**
+     * Chrome version
+     * @type String|undefined
+     */
     chrome : browser.chrome,
+
+    /**
+     * Screen size, one of: large, normal, small
+     * @type String
+     */
     screenSize : screen.width > 320? 'large' : screen.width < 320? 'small' : 'normal',
+
+    /**
+     * Device pixel ratio
+     * @type Number
+     */
     dpr : win.devicePixelRatio || 1,
+
+    /**
+     * Connection type, one of: wifi, 3g, 2g
+     * @type String
+     */
     connection : support.connection,
+
+    /**
+     * Flash version
+     * @type String|undefined
+     */
     flash : support.flash,
+
+    /**
+     * Is video supported?
+     * @type Boolean
+     */
     video : support.video,
+
+    /**
+     * Is SVG supported?
+     * @type Boolean
+     */
     svg : support.svg,
+
+    /**
+     * Viewport width
+     * @type Number
+     */
     width : win.innerWidth,
+
+    /**
+     * Viewport height
+     * @type Number
+     */
     height : win.innerHeight,
+
+    /**
+     * Is landscape oriented?
+     * @type Boolean
+     */
     landscape : lastOrient
 });
 

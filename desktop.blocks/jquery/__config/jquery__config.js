@@ -1,5 +1,6 @@
 /**
  * @module jquery__config
+ * @description Configuration for jQuery
  */
 
 modules.define(
