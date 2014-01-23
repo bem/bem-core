@@ -9,8 +9,6 @@
  * @see http://www.benalman.com/news/2010/03/jquery-special-events/
  * @see http://api.jquery.com/category/events/event-object/
  *
- * @modules pointerevents
- *
  * @author Kir Belevich <kir@soulshine.in>
  * @copyright Kir Belevich 2013
  * @license MIT
