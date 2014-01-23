@@ -1,127 +1,94 @@
 ﻿/**
- * Basic polyfill for "Pointer Events" W3C Candidate Recommendation
- * with addition of custom pointerpress/pointerrelease events.
- *
- * @see http://www.w3.org/TR/pointerevents/
- * @see https://dvcs.w3.org/hg/pointerevents/raw-file/tip/pointerEvents.html
- * @see https://dvcs.w3.org/hg/webevents/raw-file/default/touchevents.html
- * @see http://msdn.microsoft.com/en-US/library/ie/hh673557.aspx
- * @see http://www.benalman.com/news/2010/03/jquery-special-events/
- * @see http://api.jquery.com/category/events/event-object/
+ * Basic polyfill for Pointer Events W3C Specification.
  *
  * @modules pointerevents
  *
  * @author Kir Belevich <kir@soulshine.in>
  * @copyright Kir Belevich 2013
  * @license MIT
- * @version 0.1.0
+ * @version 0.5.2
  */
 modules.define('jquery', function(provide, $) {
 
-// nothing to do
-if(window.navigator.pointerEnabled) {
-    provide($);
-    return;
-}
+/*
+   http://www.w3.org/TR/pointerevents/
+   https://dvcs.w3.org/hg/pointerevents/raw-file/tip/pointerEvents.html
+   https://dvcs.w3.org/hg/webevents/raw-file/default/touchevents.html
+   http://msdn.microsoft.com/en-US/library/ie/hh673557.aspx
+   http://www.benalman.com/news/2010/03/jquery-special-events/
+   http://api.jquery.com/category/events/event-object/
+*/
 
-// current events type and aliases
-var current;
+var win = window,
+    doc = win.document,
+    binds = {
+        mouse: {
+            enter: 'mouseenter',
+            over: 'mouseover',
+            down: 'mousedown',
+            move: 'mousemove',
+            up: 'mouseup',
+            out: 'mouseout',
+            leave: 'mouseleave'
+        },
 
-// touch
-// https://github.com/ariya/phantomjs/issues/10375
-if('ontouchstart' in window && !('_phantom' in window)) {
-    current = {
-        type : 'touch',
-        enter : 'touchstart',
-        over : 'touchstart',
-        down : 'touchstart',
-        move : 'touchmove',
-        up : 'touchend',
-        out : 'touchend',
-        leave : 'touchend',
-        cancel : 'touchcancel'
-    };
-// msPointer
-} else if(window.navigator.msPointerEnabled) {
-    current = {
-        type : 'mspointer',
-        enter : 'mouseenter', // :(
-        over : 'MSPointerOver',
-        down : 'MSPointerDown',
-        move : 'MSPointerMove',
-        up : 'MSPointerUp',
-        out : 'MSPointerOut',
-        leave : 'mouseleave', // :(
-        cancel : 'MSPointerCancel'
-    };
-// mouse
-} else {
-    current = {
-        type : 'mouse',
-        enter : 'mouseenter',
-        over : 'mouseover',
-        down : 'mousedown',
-        move : 'mousemove',
-        up : 'mouseup',
-        out : 'mouseout',
-        leave : 'mouseleave'
-    };
-}
+        touch: {
+            enter: 'touchstart',
+            over: 'touchstart',
+            down: 'touchstart',
+            move: 'touchmove',
+            up: 'touchend',
+            out: 'touchend',
+            leave: 'touchend',
+            cancel: 'touchcancel'
+        },
 
-var isTouch = current.type === 'touch',
-    isMouse = current.type === 'mouse';
+        mspointer: {
+            over: 'MSPointerOver',
+            down: 'MSPointerDown',
+            move: 'MSPointerMove',
+            up: 'MSPointerUp',
+            out: 'MSPointerOut',
+            cancel: 'MSPointerCancel'
+        }
+    };
 
 /**
- * Mutate an argument event to PointerEvent.
- *
- * @param {Object} e current event
- * @param {String} type new pointerevent type
- */
-function PointerEvent(e, type) {
-    e.type = type;
-    // do not do anything with multiple touch-events because of gestures
-    if(!(type === 'touch' && e.originalEvent.changedTouches.length > 1)) {
-        normalizeToJQueryEvent(e);
-        extendToPointerEvent(e);
-        $.extend(this, e);
-    }
-}
-
-/**
- * Dispatch current event.
- *
- * @param {Element} target target element
- */
-PointerEvent.prototype.dispatch = function(target) {
-    this.type && ($.event.handle || $.event.dispatch).call(target, this);
-    return this;
-};
-
-/**
- * Normalize only touch-event to jQuery event interface.
+ * Normalize touch-event by keeping all the
+ * possible properties normalized by jQuery.
  *
  * @see http://api.jquery.com/category/events/event-object/
  *
- * @param {Object} e input event
+ * @param {Object} e event
  */
-function normalizeToJQueryEvent(e) {
-    if(!isTouch) return;
+function normalizeTouchEvent(e) {
 
-    var touchPoint = e.originalEvent.changedTouches[0];
+    if(e.pointerType === 'touch') {
 
-    // keep all the properties normalized by jQuery
-    e.clientX = touchPoint.clientX;
-    e.clientY = touchPoint.clientY;
-    e.pageX = touchPoint.pageX;
-    e.pageY = touchPoint.pageY;
-    e.screenX = touchPoint.screenX;
-    e.screenY = touchPoint.screenY;
-    e.layerX = e.originalEvent.layerX;
-    e.layerY = e.originalEvent.layerY;
-    e.offsetX = e.layerX - e.currentTarget.offsetLeft;
-    e.offsetY = e.layerY - e.currentTarget.offsetTop;
-    e.target = touchPoint.target;
-    e.identifier = touchPoint.identifier;
+        e.originalEvent = e.originalEvent || e;
+
+        // multitouch
+        if(e.originalEvent.touches.length > 1) {
+            e.multitouch = true;
+            return;
+        }
+
+        var touchPoint = e.originalEvent.changedTouches[0];
+
+        // keep all the properties normalized by jQuery
+        e.clientX = touchPoint.clientX;
+        e.clientY = touchPoint.clientY;
+        e.pageX = touchPoint.pageX;
+        e.pageY = touchPoint.pageY;
+        e.screenX = touchPoint.screenX;
+        e.screenY = touchPoint.screenY;
+        e.layerX = e.originalEvent.layerX;
+        e.layerY = e.originalEvent.layerY;
+        e.offsetX = e.layerX - e.target.offsetLeft;
+        e.offsetY = e.layerY - e.target.offsetTop;
+        e.identifier = touchPoint.identifier;
+    }
+
 }
 
 /**
@@ -129,230 +96,460 @@ function normalizeToJQueryEvent(e) {
  *
  * @see https://dvcs.w3.org/hg/pointerevents/raw-file/tip/pointerEvents.html#pointer-events-and-interfaces
  * @see https://dvcs.w3.org/hg/webevents/raw-file/default/touchevents.html
- * @param {Object} e input event
+ *
+ * @param {object} e event
  */
 function extendToPointerEvent(e) {
+
+    /*eslint complexity:0*/
     e.width = e.width ||
-        e.webkitRadiusX ||
-        e.radiusX ||
-        0;
+              e.webkitRadiusX ||
+              e.radiusX ||
+              0;
 
     e.height = e.width ||
-        e.webkitRadiusY ||
-        e.radiusY ||
-        0;
+               e.webkitRadiusY ||
+               e.radiusY ||
+               0;
 
     // TODO: stupid Android somehow could send "force" > 1 ;(
     e.pressure = e.pressure ||
-        e.mozPressure ||
-        e.webkitForce ||
-        e.force ||
-        e.which && 0.5 ||
-        0;
+                 e.mozPressure ||
+                 e.webkitForce ||
+                 e.force ||
+                 e.which && 0.5 ||
+                 0;
 
     e.tiltX = e.tiltX || 0;
     e.tiltY = e.tiltY || 0;
-    e.pointerType = e.pointerType || current.type;
 
-    // https://dvcs.w3.org/hg/pointerevents/raw-file/tip/pointerEvents.html#the-primary-pointer
+    switch(e.pointerType) {
+        case 2: e.pointerType = 'touch'; break;
+        case 3: e.pointerType = 'pen'; break;
+        case 4: e.pointerType = 'mouse'; break;
+        default: e.pointerType = e.pointerType;
+    }
+
     e.isPrimary = true;
 
-    // "1" is always for mouse, need to +2 for touch which can start from "0"
-    e.pointerId = e.identifier? e.identifier + 2 : 1;
+    // "1" is always for mouse, so +2 because of touch can start from 0
+    e.pointerId = e.identifier ? e.identifier + 2 : 1;
+
 }
 
-function addSpecialEvent(eventType, extend) {
-    var pointerEventType = 'pointer' + eventType,
-        handlerFn = 'handler' + (isTouch? 'Touch' : 'NonTouch'),
-        specialEvent = $.event.special[pointerEventType] = {
-            setup : function() {
-                $(this).on(current[eventType], specialEvent.handler);
+/**
+ * Mutate an event to PointerEvent.
+ *
+ * @param {object} e current event object
+ * @param {string} type future pointerevent type
+ */
+function PointerEvent(e, type) {
+
+    extendToPointerEvent(e);
+    normalizeTouchEvent(e);
+    e.type = type;
+
+    $.extend(this, e);
+
+}
+
+// export PointerEvent class
+$.PointerEvent = PointerEvent;
+
+// nothing to do in IE11 for today
+if(win.navigator.pointerEnabled) {
+    provide($);
+    return;
+}
+
+/**
+ * Simple nextTick polyfill.
+ *
+ * @see http://jsperf.com/settimeout-vs-nexttick-polyfill
+ *
+ * @return {Function}
+ */
+function nextTick(callback) {
+
+    var msgName = 'nextTick-polyfill',
+        timeouts = [];
+
+    if(win.nextTick) {
+        return win.nextTick(callback);
+    }
+
+    if(!win.postMessage || win.ActiveXObject) {
+        return setTimeout(callback, 0);
+    }
+
+    win.addEventListener('message', function(e){
+        if(e.source === win && e.data === msgName) {
+            if(e.stopPropagation) {
+                e.stopPropagation();
+            }
+
+            if(timeouts.length) {
+                timeouts.shift()();
+            }
+        }
+    }, false);
+
+    timeouts.push(callback);
+    win.postMessage(msgName, '*');
+
+}
+
+/**
+ * Create new $.event.special wrapper with some default behavior.
+ *
+ * @param {string} type event type
+ * @param {object} toExtend object to extend default wrapper
+ */
+function addPointerEvent(type, toExtend) {
+
+    var eventName = 'pointer' + type,
+        pointerevent,
+
+        eventSpecial = $.event.special[eventName] = {
+            // bind
+            setup: function() {
+                $(this)
+                    .on(binds.mouse[type], eventSpecial.mouseHandler)
+                    .on(binds.touch[type], eventSpecial.touchHandler)
+                    .on(binds.mspointer[type], eventSpecial.msHandler);
             },
 
-            teardown : function() {
-                $(this).off(current[eventType], specialEvent.handler);
+            // unbind
+            teardown: function() {
+                $(this)
+                    .off(binds.mouse[type], eventSpecial.mouseHandler)
+                    .off(binds.touch[type], eventSpecial.touchHandler)
+                    .off(binds.mspointer[type], eventSpecial.msHandler);
             },
 
-            handler : function() {
-                specialEvent[handlerFn].apply(this, arguments);
+            // mouse
+            mouseHandler: function(e) {
+                // do not duplicate PointerEvent if
+                // touch/mspointer is already processed
+                if(!eventSpecial._noMouse) {
+                    e.pointerType = 4;
+                    pointerevent = new PointerEvent(e, eventName);
+                    $(e.currentTarget).triggerHandler(pointerevent);
+                }
+
+                // clear the "processed" key right after
+                // current event and all the bubblings
+                nextTick(function() {
+                    eventSpecial._noMouse = false;
+                });
             },
 
-            handlerTouch : function(e) {
-                var pointerEvent = new PointerEvent(e, pointerEventType);
-                pointerEvent.dispatch(pointerEvent.target);
+            // touch
+            touchHandler: function(e) {
+                // stop mouse events handling
+                eventSpecial._noMouse = true;
+
+                e.pointerType = 2;
+                pointerevent = new PointerEvent(e, eventName);
+
+                $(e.currentTarget).triggerHandler(pointerevent);
             },
 
-            handlerNonTouch : function(e) {
-                new PointerEvent(e, pointerEventType).dispatch(this);
+            // mspointer
+            msHandler: function(e) {
+                // stop mouse events handling
+                eventSpecial._noMouse = true;
+
+                pointerevent = new PointerEvent(e, eventName);
+                $(e.target).trigger(pointerevent);
             }
         };
 
-    extend && $.extend(specialEvent, extend(specialEvent, pointerEventType));
+    // extend this $.event.special wrapper
+    if(toExtend) {
+        $.extend(eventSpecial, toExtend({
+            event: eventSpecial,
+            name: eventName,
+            type: type
+        }));
+    }
+
 }
 
-function extendHandlerTouchByElement(_, pointerEventType) {
+/**
+ * Object to extend $.event.special to touchmove-based events.
+ *
+ * @param {object} params
+ * @param {object} params.event event object
+ * @param {string} params.name event name
+ * @param {string} params.type event type
+ * @return {object}
+ */
+function touchmoveBased(params) {
+
+    var event = params.event,
+        type = params.type;
+
     return {
-        handlerTouch : function(e) {
-            var pointerEvent = new PointerEvent(e, pointerEventType),
-                target = document.elementFromPoint(pointerEvent.clientX, pointerEvent.clientY);
-            pointerEvent.dispatch(target);
-        }
-    };
-}
+        // bind
+        setup: function() {
+            $(this)
+                .on(binds.mouse[type], event.mouseHandler)
+                .on(binds.touch[type], event.touchHandler)
+                .on(binds.touch.down, event.touchDownHandler)
+                .on(binds.mspointer[type], event.msHandler);
 
-function pressAndReleaseHandlerStub(specialEvent, pointerEventType) {
-    var eventTypeForMouse = current[pointerEventType === 'pointerpress'? 'down' : 'up'];
-    return {
-        setup : function() {
-            isMouse?
-                $(this).on(eventTypeForMouse, specialEvent.handlerMouse) :
-                $(this)
-                    .on(current.down, specialEvent.handlerNonMouseDown)
-                    .on(current.move, specialEvent.handlerNonMouseMove)
-                    .on(current.up, specialEvent.handlerNonMouseUp);
-        },
-
-        teardown : function() {
-            isMouse?
-                $(this).off(eventTypeForMouse, specialEvent.handlerMouse) :
-                $(this)
-                    .off(current.down, specialEvent.handlerNonMouseDown)
-                    .off(current.move, specialEvent.handlerNonMouseMove)
-                    .off(current.up, specialEvent.handlerNonMouseUp);
-        },
-
-        handlerNonMouseMove : function(e) {
-            var data = specialEvent.data;
-            if(Math.abs(e.clientX - data.clientX) > 5 ||
-                Math.abs(e.clientY - data.clientY) > 5) {
-                data.move = true;
+            if(type !== 'move') {
+                $(this).on(binds.touch.move, event.touchMoveHandler);
             }
         },
 
-        handlerMouse : function(e) {
-            // only left mouse button
-            e.which === 1 && new PointerEvent(e, pointerEventType).dispatch(this);
+        // unbind
+        teardown: function() {
+            $(this)
+                .off(binds.mouse[type], event.mouseHandler)
+                .off(binds.touch[type], event.touchHandler)
+                .off(binds.touch.down, event.touchDownHandler)
+                .off(binds.mspointer[type], event.msHandler);
+
+            if(type !== 'move') {
+                $(this).off(binds.touch.move, event.touchMoveHandler);
+            }
+        },
+
+        touchDownHandler: function(e) {
+            // stop mouse events handling
+            event._noMouse = true;
+            // save initial target
+            event._target = e.target;
         }
     };
+
 }
 
-addSpecialEvent('enter');
-addSpecialEvent('over');
-addSpecialEvent('down');
-addSpecialEvent('up', extendHandlerTouchByElement);
-addSpecialEvent('out', extendHandlerTouchByElement);
-addSpecialEvent('leave', extendHandlerTouchByElement);
-addSpecialEvent('move', function(specialEvent) {
-    return {
-        setup : function() {
-            isTouch && $(this).on(current.down, specialEvent.downHandler);
-            $(this).on(current.move, specialEvent.moveHandler);
-        },
+/**
+ * Object to extend $.event.special to pointerenter.
+ *
+ * @param {object} params
+ * @param {object} params.event event object
+ * @param {string} params.name event name
+ * @param {string} params.type event type
+ * @return {object}
+ */
+function extendToEnter(params) {
 
-        teardown : function() {
-            isTouch && $(this).off(current.down, specialEvent.downHandler);
-            $(this).off(current.move, specialEvent.moveHandler);
-        },
+    return $.extend(touchmoveBased(params), {
+        touchMoveHandler: function(e) {
+            e.pointerType = 2;
 
-        downHandler : function(e) {
-            var pointerEvent = new PointerEvent(e, 'pointerdown');
-            specialEvent.target = pointerEvent.target;
-        },
+            var pointerevent = new PointerEvent(e, params.name),
+                targetFromPoint = doc.elementFromPoint(
+                    pointerevent.clientX,
+                    pointerevent.clientY
+                ),
+                target = params.event._target;
 
-        moveHandler : function(e) {
-            var pointerEvent = new PointerEvent(e, 'pointermove');
-            if(isTouch) {
-                var newTarget = document.elementFromPoint(pointerEvent.clientX, pointerEvent.clientY),
-                    currentTarget = specialEvent.target;
+            // new target
+            if(target !== targetFromPoint) {
+                // fix simulated event targets
+                pointerevent.relatedTarget = pointerevent.target;
+                pointerevent.target = pointerevent.targetFromPoint;
 
-                pointerEvent.dispatch(currentTarget);
-
-                if(currentTarget !== newTarget) {
-                    // out current target
-                    pointerEvent = new PointerEvent(e, 'pointerout');
-                    pointerEvent.dispatch(currentTarget);
-
-                    // new target is not a child of the current -> leave current target
-                    if(!currentTarget.contains(newTarget)) {
-                        pointerEvent = new PointerEvent(e, 'pointerleave');
-                        pointerEvent.dispatch(currentTarget);
-                    }
-
-                    // new target is not the parent of the current -> leave new target
-                    if(!newTarget.contains(currentTarget)) {
-                        pointerEvent = new PointerEvent(e, 'pointerenter');
-                        pointerEvent.dispatch(newTarget);
-                    }
-
-                    // over new target
-                    pointerEvent = new PointerEvent(e, 'pointerover');
-                    pointerEvent.dispatch(newTarget);
-
-                    // new target -> current target
-                    specialEvent.target = newTarget;
-                }
-            } else {
-                pointerEvent.dispatch(this);
-            }
-        }
-    };
-});
-
-addSpecialEvent('press', function(specialEvent, pointerEventType) {
-    return $.extend(
-        pressAndReleaseHandlerStub(specialEvent, pointerEventType),
-        {
-            handlerNonMouseDown : function(e) {
-                specialEvent.data = {
-                    timer : (function() {
-                        return setTimeout(function() {
-                            if(!specialEvent.data.move) {
-                                var pointerevent = new PointerEvent(e, pointerEventType);
-                                pointerevent.dispatch(pointerevent.target);
-                            }
-                        }, 80);
-                    })(),
-                    clientX : e.clientX,
-                    clientY : e.clientY
-                };
-            },
-
-            handlerNonMouseUp : function() {
-                clearTimeout(specialEvent.data.timer);
-                delete specialEvent.data;
-            }
-        });
-});
-
-addSpecialEvent('release', function(specialEvent, pointerEventType) {
-    return $.extend(
-        pressAndReleaseHandlerStub(specialEvent, pointerEventType),
-        {
-            handlerNonMouseDown : function(e) {
-                var data = specialEvent.data = {
-                    timer : (function() {
-                        return setTimeout(function() {
-                            data.move || (data.pressed = true);
-                        }, 80);
-                    })(),
-                    clientX : e.clientX,
-                    clientY : e.clientY
-                };
-            },
-
-            handlerNonMouseUp : function(e) {
-                clearTimeout(specialEvent.data.timer);
-
-                if(specialEvent.data.pressed) {
-                    var pointerEvent = new PointerEvent(e, pointerEventType),
-                        target = document.elementFromPoint(pointerEvent.clientX, pointerEvent.clientY);
-                    pointerEvent.dispatch(target);
+                // inner target
+                if(target.contains(targetFromPoint)) {
+                    $(targetFromPoint).triggerHandler(pointerevent);
+                // truly new target
+                } else if(!targetFromPoint.contains(target)) {
+                    $(targetFromPoint).trigger(pointerevent);
                 }
 
-                delete specialEvent.data;
+                // targetFromPoint -> target
+                params.event._target = targetFromPoint;
             }
-        });
-});
+        }
+    });
+
+}
+
+/**
+ * Object to extend $.event.special to pointerover.
+ *
+ * @param {object} params
+ * @param {object} params.event event object
+ * @param {string} params.name event name
+ * @param {string} params.type event type
+ * @return {object}
+ */
+function extendToOver(params) {
+
+    return $.extend(touchmoveBased(params), {
+        touchMoveHandler: function(e) {
+            e.pointerType = 2;
+
+            var pointerevent = new PointerEvent(e, params.name),
+                targetFromPoint = doc.elementFromPoint(
+                    pointerevent.clientX,
+                    pointerevent.clientY
+                ),
+                target = params.event._target;
+
+            // new target
+            if(target !== targetFromPoint) {
+                // fix simulated event targets
+                pointerevent.relatedTarget = pointerevent.target;
+                pointerevent.target = pointerevent.targetFromPoint;
+
+                $(targetFromPoint).trigger(pointerevent);
+
+                // targetFromPoint -> target
+                params.event._target = targetFromPoint;
+            }
+        }
+    });
+
+}
+
+/**
+ * Object to extend $.event.special touchHandler with "target from point".
+ *
+ * @param {object} params
+ * @param {object} params.event event object
+ * @param {string} params.name event name
+ * @param {string} params.type event type
+ * @return {object}
+ */
+function extendWithTargetFromPoint(params) {
+
+    return {
+        touchHandler: function(e) {
+            // stop mouse events handling
+            params.event._noMouse = true;
+
+            e.pointerType = 2;
+
+            var pointerevent = new PointerEvent(e, params.name),
+                targetFromPoint = doc.elementFromPoint(
+                    pointerevent.clientX,
+                    pointerevent.clientY
+                );
+
+            // fix simulated event targets
+            pointerevent.relatedTarget = pointerevent.target;
+            pointerevent.target = pointerevent.targetFromPoint;
+
+            $(targetFromPoint).triggerHandler(pointerevent);
+        }
+    };
+
+}
+
+/**
+ * Object to extend $.event.special to pointerout.
+ *
+ * @param {object} params
+ * @param {object} params.event event object
+ * @param {string} params.name event name
+ * @param {string} params.type event type
+ * @return {object}
+ */
+function extendToOut(params) {
+
+    return $.extend(
+        touchmoveBased(params),
+        extendWithTargetFromPoint(params),
+        {
+            touchMoveHandler: function(e) {
+                e.pointerType = 2;
+
+                var pointerevent = new PointerEvent(e, params.name),
+                    targetFromPoint = doc.elementFromPoint(
+                        pointerevent.clientX,
+                        pointerevent.clientY
+                    ),
+                    target = params.event._target;
+
+                // new target
+                if(target !== targetFromPoint) {
+                    $(target).trigger(pointerevent);
+
+                    // targetFromPoint -> target
+                    params.event._target = targetFromPoint;
+                }
+            }
+        }
+    );
+
+}
+
+/**
+ * Object to extend $.event.special to pointerleave.
+ *
+ * @param {object} params
+ * @param {object} params.event event object
+ * @param {string} params.name event name
+ * @param {string} params.type event type
+ * @return {object}
+ */
+function extendToLeave(params) {
+
+    return $.extend(
+        touchmoveBased(params),
+        extendWithTargetFromPoint(params),
+        {
+            touchMoveHandler: function(e) {
+                e.pointerType = 2;
+
+                var pointerevent = new PointerEvent(e, params.name),
+                    targetFromPoint = doc.elementFromPoint(
+                        pointerevent.clientX,
+                        pointerevent.clientY
+                    ),
+                    target = params.event._target;
+
+                // new target
+                if(target !== targetFromPoint) {
+                    if(targetFromPoint.contains(target)) {
+                        $(target).triggerHandler(pointerevent);
+                    } else {
+                        $(e.currentTarget).triggerHandler(pointerevent);
+                    }
+
+                    // targetFromPoint -> target
+                    params.event._target = targetFromPoint;
+                }
+            }
+        }
+    );
+
+}
+
+/**
+ * Object to extend $.event.special to pointermove.
+ *
+ * @param {object} params
+ * @param {object} params.event event object
+ * @param {string} params.name event name
+ * @param {string} params.type event type
+ * @return {object}
+ */
+function extendToMove(params) {
+
+    return $.extend(
+        touchmoveBased(params),
+        extendWithTargetFromPoint(params)
+    );
+
+}
+
+// init pointer events
+addPointerEvent('enter', extendToEnter);
+addPointerEvent('over', extendToOver);
+addPointerEvent('down');
+addPointerEvent('move', extendToMove);
+addPointerEvent('up', extendWithTargetFromPoint);
+addPointerEvent('out', extendToOut);
+addPointerEvent('leave', extendToLeave);
+addPointerEvent('cancel');
 
 provide($);
 
