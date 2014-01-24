@@ -1,7 +1,7 @@
 ﻿({
     mustDeps : {
         block : 'jquery', elems : {
-            elem : 'event', mods : { type : 'pointerpressrelease' }
+            elem : 'event', mods : { type : 'pointer' }
         }
     }
 })

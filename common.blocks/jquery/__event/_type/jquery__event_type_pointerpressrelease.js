@@ -113,7 +113,7 @@ function extendPointerPress(params) {
             // mouse – only left button
             } else if(e.which === 1) {
                 pointerevent = new $.PointerEvent(e, params.name);
-                $(target).trigger(pointerevent);
+                $(e.currentTarget).triggerHandler(pointerevent);
             }
         },
 
@@ -161,17 +161,16 @@ function extendPointerRelease(params) {
                     clientX: e.clientX,
                     clientY: e.clientY
                 };
-            // mouse – only left button
-            } else if(e.which === 1) {
-                pointerevent = new $.PointerEvent(e, params.name);
-                $(target).trigger(pointerevent);
             }
         },
 
         handlerUp: function(e) {
+            var pointerevent;
+
+            // touch
             if(e.pointerType === 'touch') {
                 if(data && data.pressed) {
-                    var pointerevent = new $.PointerEvent(e, params.name);
+                    pointerevent = new $.PointerEvent(e, params.name);
                     $(e.target).trigger(pointerevent);
                 }
 
@@ -180,6 +179,10 @@ function extendPointerRelease(params) {
                 }
 
                 data = null;
+            // mouse – only left button
+            } else if(e.which === 1) {
+                pointerevent = new $.PointerEvent(e, params.name);
+                $(e.currentTarget).triggerHandler(pointerevent);
             }
         }
     };
