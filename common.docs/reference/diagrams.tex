@@ -5,7 +5,7 @@
 \usepgfmodule{oo}
 \usetikzlibrary{positioning,backgrounds,external,chains,fit}
 
-\tikzexternalize % activate writing pictures into external files
+\tikzexternalize[prefix=reference_] % activate writing pictures into external files
 
 \tikzset{
   rounded corners=5pt,
@@ -28,7 +28,7 @@
 \pgfsetlayers{background,highlighter,main}
 
 %% default mode
-\tikzsetnextfilename{mode-default}
+\tikzsetnextfilename{mode_default}
 \begin{tikzpicture}[node distance=1.5ex and .3em]
   \begin{scope}[every node/.style={on chain}]
     % first row: opening tag
@@ -46,7 +46,7 @@
     % second row: opening tag continued
     \begin{scope}[start chain]
       \node[mode] (row2) [below right=of row1] {jsAttr} ;
-      \node[html]  {="return \{b-block:} ;
+      \node[html]  {="\{b-block:} ;
       \node[mode]  {js} ;
       \node[html]  {, b-mixed:} ;
       \node[mode]  {mix} ;
@@ -87,7 +87,7 @@
       \end{scope}
       % second row: attributes continued
       \begin{scope}[start chain]
-        \node (jsattr) [below right=of row1] {onclick};
+        \node (jsattr) [below right=of row1] {data-bem};
         \node          {="\{b-block:};
         \node (js2)    {\{p1: 'v1'\}};
         \node          {, };
@@ -120,7 +120,7 @@
 \pgfoonew\htmlback=new htmlback()
 
 % tag mode
-\tikzsetnextfilename{mode-tag}
+\tikzsetnextfilename{mode_tag}
 \begin{tikzpicture}
   \htmlback.draw()
   \htmlback.highlight(tag1,tag)
@@ -128,14 +128,14 @@
 \end{tikzpicture}
 
 % bem mode
-\tikzsetnextfilename{mode-bem}
+\tikzsetnextfilename{mode_bem}
 \begin{tikzpicture}
   \htmlback.draw()
   \htmlback.highlight(bem,bem)
 \end{tikzpicture}
 
 % mix mode
-\tikzsetnextfilename{mode-mix}
+\tikzsetnextfilename{mode_mix}
 \begin{tikzpicture}
   \htmlback.draw()
   \htmlback.highlight(mix1,mix)
@@ -143,14 +143,14 @@
 \end{tikzpicture}
 
 % cls mode
-\tikzsetnextfilename{mode-cls}
+\tikzsetnextfilename{mode_cls}
 \begin{tikzpicture}
   \htmlback.draw()
   \htmlback.highlight(cls,cls)
 \end{tikzpicture}
 
 % js mode
-\tikzsetnextfilename{mode-js}
+\tikzsetnextfilename{mode_js}
 \begin{tikzpicture}
   \htmlback.draw()
   \htmlback.highlight(js1,js)
@@ -158,21 +158,21 @@
 \end{tikzpicture}
 
 % jsattr mode
-\tikzsetnextfilename{mode-jsattr}
+\tikzsetnextfilename{mode_jsattr}
 \begin{tikzpicture}
   \htmlback.draw()
   \htmlback.highlight(jsattr,jsattr)
 \end{tikzpicture}
 
 % attrs mode
-\tikzsetnextfilename{mode-attrs}
+\tikzsetnextfilename{mode_attrs}
 \begin{tikzpicture}
   \htmlback.draw()
   \htmlback.highlight(attrs,attrs)
 \end{tikzpicture}
 
 % content mode
-\tikzsetnextfilename{mode-content}
+\tikzsetnextfilename{mode_content}
 \begin{tikzpicture}
   \htmlback.draw()
   \htmlback.highlight(content,content)
