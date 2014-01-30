@@ -1,0 +1,1 @@
+Плагин, реализующий дополнительные события pointerpress и pointerrelease на основе Pointer Events

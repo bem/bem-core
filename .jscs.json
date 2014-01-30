@@ -15,6 +15,8 @@
         ".bem/**",
         "common.blocks/vow/**",
         "common.blocks/ecma/__array/ecma__array.spec.js",
-        "touch.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js"
+        "touch.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js",
+        "common.blocks/jquery/__event/_type/jquery__event_type_pointer.js",
+        "common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.js"
     ]
 }
