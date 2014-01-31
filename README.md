@@ -130,7 +130,7 @@ about testing infrastructure of the bem-pr.
 ## Supported browsers
 Our browser support policy is based on statistics we get from [Yandex](http://company.yandex.com) services.
 
-Browsers with more then 2% users get full compliant support, more then 0.5% — partially compliant
+Browsers with more than 2% users get full compliant support, more than 0.5% — partially compliant
 (which means that data is accessible but not necessary 100% functional). New features testing
 is not provided by us for  browsers with less than 0.5% users.
 
