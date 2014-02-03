@@ -211,7 +211,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
     __constructor : function(domElem, params, initImmediately) {
         /**
          * @member {jQuery} Block's DOM elements
-         * @protected
          */
         this.domElem = domElem;
 
@@ -245,7 +244,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Finds blocks inside the current block or its elements (including context)
-     * @protected
      * @param {String|jQuery} [elem] Block element
      * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
      * @returns {BEMDOM[]}
@@ -256,7 +254,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Finds the first block inside the current block or its elements (including context)
-     * @protected
      * @param {String|jQuery} [elem] Block element
      * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
      * @returns {BEMDOM}
@@ -267,7 +264,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Finds blocks outside the current block or its elements (including context)
-     * @protected
      * @param {String|jQuery} [elem] Block element
      * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
      * @returns {BEMDOM[]}
@@ -278,7 +274,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Finds the first block outside the current block or its elements (including context)
-     * @protected
      * @param {String|jQuery} [elem] Block element
      * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
      * @returns {BEMDOM}
@@ -289,7 +284,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Finds blocks on DOM elements of the current block or its elements
-     * @protected
      * @param {String|jQuery} [elem] Block element
      * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
      * @returns {BEMDOM[]}
@@ -300,7 +294,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Finds the first block on DOM elements of the current block or its elements
-     * @protected
      * @param {String|jQuery} [elem] Block element
      * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
      * @returns {BEMDOM}
@@ -556,7 +549,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Sets a modifier for a block/nested element
-     * @protected
      * @param {jQuery} [elem] Nested element
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
@@ -665,7 +657,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Finds elements nested in a block
-     * @protected
      * @param {jQuery} [ctx=this.domElem] Element where search is being performed
      * @param {String} names Nested element name (or names separated by spaces)
      * @param {String} [modName] Modifier name
@@ -712,7 +703,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Finds elements nested in a block
-     * @protected
+     * @private
      * @param {String} name Nested element name
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
@@ -732,7 +723,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Lazy search for elements nested in a block (caches results)
-     * @protected
      * @param {String} names Nested element name (or names separated by spaces)
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
@@ -862,21 +852,18 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Scope, will be set on onDomReady to `<body>`
-     * @protected
      * @type jQuery
      */
     scope : null,
 
     /**
      * Document shortcut
-     * @protected
      * @type jQuery
      */
     doc : doc,
 
     /**
      * Window shortcut
-     * @protected
      * @type jQuery
      */
     win : win,
@@ -1218,7 +1205,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Adds a live event handler to a block, based on a specified element where the event will be listened for
-     * @protected
      * @param {jQuery} [ctx] The element in which the event will be listened for
      * @param {String} e Event name
      * @param {Object} [data] Additional information that the handler gets as e.data
@@ -1233,7 +1219,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Removes the live event handler from a block, based on a specified element where the event was being listened for
-     * @protected
      * @param {jQuery} [ctx] The element in which the event was being listened for
      * @param {String} e Event name
      * @param {Function} [fn] Handler
