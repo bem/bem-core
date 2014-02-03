@@ -25,10 +25,11 @@
     "jshint": "2.1.8",
     "jshint-groups": "0.5.1",
     "jscs": "1.0.0",
-    "git-hooks": "0.0.3"
+    "git-hooks": "0.0.3",
+    "bower-npm-install": "~0.5.4"
   },
   "scripts": {
-    "libs": "bem make libs",
+    "libs": "bower-npm-install",
     "bem-test": "npm run libs && bem make sets",
     "test": "npm run bem-test && mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.test.bemhtml/*-test.js"
   }

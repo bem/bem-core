@@ -77,7 +77,7 @@ or an alternative way to run locally-installed [bem-tools](https://github.com/be
 
 3. Install all the necessary libraries:
 ```
-$ bem make libs
+$ bower-npm-install
 ```
 
 4. Build examples and tests:

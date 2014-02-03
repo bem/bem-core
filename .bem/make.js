@@ -21,7 +21,7 @@ MAKE.decl('Arch', {
     blocksLevelsRegexp : /^.+?\.blocks$/,
     bundlesLevelsRegexp : /^.+?\.bundles$/,
 
-    libraries : [ 'bem-pr@0.5.3' ],
+    libraries : [],
 
     createCustomNodes : function(common, libs, blocks) {
         var SetsNode = MAKE.getNodeClass('SetsNode');

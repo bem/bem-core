@@ -73,9 +73,9 @@ $ npm install
 Для последующего запуска локально установленных [bem-tools](https://github.com/bem/bem-tools) нам потребуется
 `export PATH=./node_modules/.bin:$PATH` или любой альтернативный способ.
 
-3. С помощью bem-tools устанавливаем все зависимые библиотеки:
+3. Устанавливаем зависимые библиотеки:
 ```
-$ bem make libs
+$ bower-npm-install
 ```
 
 4. Собираем примеры и тесты:
