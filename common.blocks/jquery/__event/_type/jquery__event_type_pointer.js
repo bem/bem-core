@@ -165,7 +165,7 @@ if(win.navigator.pointerEnabled) {
  *
  * @see http://jsperf.com/settimeout-vs-nexttick-polyfill
  *
- * @return {Function}
+ * @returns {Function}
  */
 function nextTick(callback) {
 
@@ -281,7 +281,7 @@ function addPointerEvent(type, toExtend) {
  * @param {object} params.event event object
  * @param {string} params.name event name
  * @param {string} params.type event type
- * @return {object}
+ * @returns {object}
  */
 function touchmoveBased(params) {
 
@@ -332,7 +332,7 @@ function touchmoveBased(params) {
  * @param {object} params.event event object
  * @param {string} params.name event name
  * @param {string} params.type event type
- * @return {object}
+ * @returns {object}
  */
 function extendToEnter(params) {
 
@@ -376,7 +376,7 @@ function extendToEnter(params) {
  * @param {object} params.event event object
  * @param {string} params.name event name
  * @param {string} params.type event type
- * @return {object}
+ * @returns {object}
  */
 function extendToOver(params) {
 
@@ -414,7 +414,7 @@ function extendToOver(params) {
  * @param {object} params.event event object
  * @param {string} params.name event name
  * @param {string} params.type event type
- * @return {object}
+ * @returns {object}
  */
 function extendWithTargetFromPoint(params) {
 
@@ -448,7 +448,7 @@ function extendWithTargetFromPoint(params) {
  * @param {object} params.event event object
  * @param {string} params.name event name
  * @param {string} params.type event type
- * @return {object}
+ * @returns {object}
  */
 function extendToOut(params) {
 
@@ -486,7 +486,7 @@ function extendToOut(params) {
  * @param {object} params.event event object
  * @param {string} params.name event name
  * @param {string} params.type event type
- * @return {object}
+ * @returns {object}
  */
 function extendToLeave(params) {
 
@@ -528,7 +528,7 @@ function extendToLeave(params) {
  * @param {object} params.event event object
  * @param {string} params.name event name
  * @param {string} params.type event type
- * @return {object}
+ * @returns {object}
  */
 function extendToMove(params) {
 

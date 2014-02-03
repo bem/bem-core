@@ -4,8 +4,6 @@
  * states when you just move your finger through the element on
  * touch devices.
  *
- * @modules pointerpressrelease
- *
  * @author Kir Belevich <kir@soulshine.in>
  * @copyright Kir Belevich 2013
  * @license MIT
@@ -84,7 +82,7 @@ function addPointerEvent(type, toExtend) {
  * @param {object} params.event event object
  * @param {string} params.name event name
  * @param {string} params.type event type
- * @return {object}
+ * @returns {object}
  */
 function extendPointerPress(params) {
 
@@ -136,7 +134,7 @@ function extendPointerPress(params) {
  * @param {object} params.event event object
  * @param {string} params.name event name
  * @param {string} params.type event type
- * @return {object}
+ * @returns {object}
  */
 function extendPointerRelease(params) {
 
