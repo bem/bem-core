@@ -848,8 +848,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @private
      */
     _destruct : function() {
-        this.destruct();
-        /** @deprecated: above code has fallback, remove it in next version */
         var _this = this,
             _self = _this.__self;
 
@@ -1337,11 +1335,6 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
         var matches = elem[0].className.match(this._buildElemNameRE());
         return matches? matches[1] : undef;
     },
-
-    /**
-     * @deprecated use elemParams
-     */
-    extractParams : extractParams,
 
     /**
      * Builds a prefix for the CSS class of a DOM element or nested element of the block, based on modifier name
