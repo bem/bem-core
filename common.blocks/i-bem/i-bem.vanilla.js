@@ -148,7 +148,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         /**
          * @member {Object}
          * @description The block's parameters, taking into account the defaults
-         * @protected
          */
         this.params = objects.extend(this.getDefaultParams(), params);
 
@@ -199,7 +198,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Checks whether a block or nested element has a modifier
-     * @protected
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
      * @param {String} [modVal] Modifier value
@@ -231,7 +229,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Returns the value of the modifier of the block/nested element
-     * @protected
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
      * @returns {String} Modifier value
@@ -263,7 +260,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Returns values of modifiers of the block/nested element
-     * @protected
      * @param {Object} [elem] Nested element
      * @param {String} [...modNames] Modifier names
      * @returns {Object} Hash of modifier values
@@ -286,7 +282,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Sets the modifier for a block/nested element
-     * @protected
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
@@ -370,7 +365,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * Sets a modifier for a block/nested element, depending on conditions.
      * If the condition parameter is passed: when true, modVal1 is set; when false, modVal2 is set.
      * If the condition parameter is not passed: modVal1 is set if modVal2 was set, or vice versa.
-     * @protected
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
      * @param {String} modVal1 First modifier value
@@ -466,6 +460,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Returns a block's default parameters
+     * @protected
      * @returns {Object}
      */
     getDefaultParams : function() {
@@ -484,6 +479,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Executes given callback on next turn eventloop in block's context
+     * @protected
      * @param {Function} fn callback
      * @returns {this}
      */
@@ -500,14 +496,12 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Storage for block declarations (hash by block name)
-     * @protected
      * @type Object
      */
     blocks : blocks,
 
     /**
      * Declares blocks and creates a block class
-     * @protected
      * @param {String|Object} decl Block name (simple syntax) or description
      * @param {String} decl.block|decl.name Block name
      * @param {String} [decl.baseBlock] Name of the parent block
@@ -603,7 +597,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
 
     /**
      * Returns the name of the current block
-     * @protected
      * @returns {String}
      */
     getName : function() {
