@@ -10,15 +10,15 @@ modules.define(
 
 /* global jQuery */
 
-function doProvide() {
+function doProvide(preserveGlobal) {
     /**
      * @exports
      * @type {Function} jQuery
      */
-    provide(jQuery.noConflict(true));
+    provide(preserveGlobal? jQuery : jQuery.noConflict(true));
 }
 
 typeof jQuery !== 'undefined'?
-    doProvide() :
+    doProvide(true) :
     loader(cfg.url, doProvide);
 });
