@@ -4,8 +4,8 @@
 
 modules.define(
     'i-bem',
-    ['inherit', 'identify', 'next-tick', 'objects', 'functions', 'events', 'events__channels'],
-    function(provide, inherit, identify, nextTick, objects, functions, events, channels) {
+    ['inherit', 'identify', 'next-tick', 'objects', 'functions', 'events'],
+    function(provide, inherit, identify, nextTick, objects, functions, events) {
 
 var undef,
     /**
@@ -54,13 +54,7 @@ function modFnsToProps(prefix, modFns, props, elemName) {
             if(modFns.hasOwnProperty(modName)) {
                 modFn = modFns[modName];
                 if(functions.isFunction(modFn)) {
-                    props[buildModFnName(prefix, modName, modName === 'js'? 'inited' : '*', elemName)] = modFn;
-                    /** @deprecated: above code has fallback, replace
-                     *  modName === 'js'? 'inited': '*'
-                     *  with
-                     *  '*'
-                     *  in next version
-                     */
+                    props[buildModFnName(prefix, modName, '*', elemName)] = modFn;
                 } else {
                     for(modVal in modFn) {
                         if(modFn.hasOwnProperty(modVal)) {
@@ -187,11 +181,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
                 this.__self.emit(e, data);
 
         return this;
-    },
-
-    /** @deprecated use emit */
-    trigger : function() {
-        return this.emit.apply(this, arguments);
     },
 
     /**
@@ -504,24 +493,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             _this.hasMod('js', 'inited') && fn.call(_this);
         });
         return this;
-    },
-
-    /** @deprecated use onSetMod js '' */
-    destruct : function() {},
-
-    /** @deprecated use module "next-tick" instead */
-    afterCurrentEvent : function(fn, ctx) {
-        this.__self.afterCurrentEvent(this.changeThis(fn, ctx));
-    },
-
-    /** @deprecated use module "events__channels" instead */
-    channel : function() {
-        return this.__self.channel.apply(null, arguments);
-    },
-
-    /** @deprecated use native bind */
-    changeThis : function(fn, ctx) {
-        return fn.bind(ctx || this);
     }
 }, /** @lends BEM */{
 
@@ -662,21 +633,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
                 i += 2;
             }
         }
-    },
-
-    /** @deprecated use native bind */
-    changeThis : function(fn, ctx) {
-        return fn.bind(ctx || this);
-    },
-
-    /** @deprecated use module "events__channels" instead */
-    channel : function() {
-        return channels.apply(null, arguments);
-    },
-
-    /** @deprecated use module "next-tick" instead */
-    afterCurrentEvent : function(fn, ctx) {
-        nextTick(ctx? fn.bind(ctx) : fn);
     }
 });
 
