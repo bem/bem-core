@@ -210,18 +210,22 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      */
     __constructor : function(domElem, params, initImmediately) {
         /**
-         * @member {jQuery} Block's DOM elements
+         * DOM elements of block
+         * @member {jQuery}
+         * @readonly
          */
         this.domElem = domElem;
 
         /**
-         * @member {Object} Cache for names of events on DOM elements
+         * Cache for names of events on DOM elements
+         * @member {Object}
          * @private
          */
         this._eventNameCache = {};
 
         /**
-         * @member {Object} Cache for elements
+         * Cache for elements
+         * @member {Object}
          * @private
          */
         this._elemCache = {};

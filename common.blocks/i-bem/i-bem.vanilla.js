@@ -132,22 +132,23 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     __constructor : function(mods, params, initImmediately) {
         /**
+         * Cache of block modifiers
          * @member {Object}
-         * @description Cache of block modifiers
          * @private
          */
         this._modCache = mods || {};
 
         /**
+         * Current modifiers in the stack
          * @member {Object}
-         * @description Current modifiers in the stack
          * @private
          */
         this._processingMods = {};
 
         /**
+         * Block parameters, taking into account the defaults
          * @member {Object}
-         * @description The block's parameters, taking into account the defaults
+         * @readonly
          */
         this.params = objects.extend(this.getDefaultParams(), params);
 
