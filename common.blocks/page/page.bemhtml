@@ -14,6 +14,7 @@ block('page')(
                             { tag : 'meta', attrs : { charset : 'utf-8' } },
                             { tag : 'title', content : ctx.title },
                             { block : 'ua' },
+                            ctx.styles,
                             ctx.head,
                             ctx.favicon? { elem : 'favicon', url : ctx.favicon } : ''
                         ]
@@ -27,6 +28,12 @@ block('page')(
 
     elem('body')(
         tag()('body'),
+        content()(function() {
+            return [
+                applyNext(),
+                this.ctx.scripts
+            ];
+        }),
         def()(function() {
             // Обратно очищаем поле elem, чтобы сохранить правильный контекст
             this.ctx.elem = null;
