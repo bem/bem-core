@@ -488,7 +488,9 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @private
      */
     _destruct : function() {
-        this.delMod('js');
+        this
+            .delMod('js')
+            .emit('destruct');
     },
 
     /**
