@@ -1,43 +1,37 @@
 block('page')(
 
-    mode('doctype')(function() { return this.ctx.doctype || '<!DOCTYPE html>'}),
-
-    mode('head')(function() { return [{ block: 'ua' }, this.ctx.head] }),
-
-    def()
-        .match(function() { return !this.ctx._wrapped })(function() {
-            var ctx = this.ctx;
-
-            local({ 'ctx._wrapped': true })(
-                applyCtx([
-                    apply('doctype'),
+    def()(function() {
+        var ctx = this.ctx;
+        applyCtx([
+            ctx.doctype || '<!DOCTYPE html>',
+            {
+                tag : 'html',
+                cls : 'ua_js_no',
+                content : [
                     {
-                        elem: 'root',
-                        content: [
-                            {
-                                elem: 'head',
-                                content: [
-                                    { tag: 'meta', attrs: { charset: 'utf-8' } },
-                                    { tag: 'title', content: ctx.title },
-                                    apply('head'),
-                                    ctx.favicon? { elem: 'favicon', url: ctx.favicon } : ''
-                                ]
-                            },
-                            ctx
+                        elem : 'head',
+                        content : [
+                            { tag : 'meta', attrs : { charset : 'utf-8' } },
+                            { tag : 'title', content : ctx.title },
+                            { block : 'ua' },
+                            ctx.head,
+                            ctx.favicon? { elem : 'favicon', url : ctx.favicon } : ''
                         ]
-                    }
-                ])
-            );
-        }),
+                    },
+                    // Добавляем элемент, чтобы сработал другой шаблон и не было зацикливания
+                    this.extend(ctx, { elem : 'body' })
+                ]
+            }
+        ]);
+    }),
 
-    tag()('body'),
-
-    mix()([{ elem: 'body' }]),
-
-    elem('root')(
-        bem()(false),
-        tag()('html'),
-        cls()('ua_js_no ua_css_standard')
+    elem('body')(
+        tag()('body'),
+        def()(function() {
+            // Обратно очищаем поле elem, чтобы сохранить правильный контекст
+            this.ctx.elem = null;
+            applyNext();
+        })
     ),
 
     elem('head')(
@@ -58,8 +52,7 @@ block('page')(
     elem('favicon')(
         bem()(false),
         tag()('link'),
-        attrs()(function() { return { rel: 'shortcut icon', href: this.ctx.url } })
+        attrs()(function() { return { rel : 'shortcut icon', href : this.ctx.url }; })
     )
 
-)
-
+);
