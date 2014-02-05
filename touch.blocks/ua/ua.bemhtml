@@ -1,1 +1,1 @@
-block('ua').js()(true)
+block('ua').js()(true);
