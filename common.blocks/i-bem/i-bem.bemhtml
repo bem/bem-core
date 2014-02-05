@@ -1,9 +1,10 @@
+/*global oninit */
 oninit(function(exports) {
 
 var BEM_ = {},
     toString = Object.prototype.toString,
     isArray = Array.isArray || function(obj) {
-        return toString.call(obj) === "[object Array]";
+        return toString.call(obj) === '[object Array]';
     },
     SHORT_TAGS = { // хэш для быстрого определения, является ли тэг коротким
         area : 1, base : 1, br : 1, col : 1, command : 1, embed : 1, hr : 1, img : 1,
@@ -127,15 +128,15 @@ BEM.INTERNAL = {
                 if(!mods.hasOwnProperty(modName)) continue;
 
                 var modVal = mods[modName];
-                if (modVal == null) continue;
+                if(modVal == null) continue;
 
                 modVal = mods[modName];
                 typeof modVal !== 'boolean' && (modVal += '');
-                if (!modVal) continue;
+                if(!modVal) continue;
 
                 res.push(' ');
-                if (elem) {
-                  buildElemClass(block, elem, modName, modVal, res)
+                if(elem) {
+                  buildElemClass(block, elem, modName, modVal, res);
                 } else {
                   buildBlockClass(block, modName, modVal, res);
                 }
@@ -174,31 +175,31 @@ BEM.INTERNAL = {
 })(BEM_);
 
 var buildEscape = (function() {
-    var ts = { '"': '&quot;', '&': '&amp;', '<': '&lt;', '>': '&gt;' },
-        f = function(t) { return ts[t] || t };
+    var ts = { '"' : '&quot;', '&' : '&amp;', '<' : '&lt;', '>' : '&gt;' },
+        f = function(t) { return ts[t] || t; };
     return function(r) {
         r = new RegExp(r, 'g');
-        return function(s) { return ('' + s).replace(r, f) }
-    }
+        return function(s) { return ('' + s).replace(r, f); };
+    };
 })();
 
 function BEMContext(context, apply_) {
-  this.ctx = typeof context === null ? '' : context;
-  this.apply = apply_;
-  this._buf = [];
-  this._ = this;
+    this.ctx = typeof context === null? '' : context;
+    this.apply = apply_;
+    this._buf = [];
+    this._ = this;
 
-  // Stub out fields that will be used later
-  this._start = true;
-  this._mode = '';
-  this._listLength = 0;
-  this._notNewList = false;
-  this.position = 0;
-  this.block = undefined;
-  this.elem = undefined;
-  this.mods = undefined;
-  this.elemMods = undefined;
-};
+    // Stub out fields that will be used later
+    this._start = true;
+    this._mode = '';
+    this._listLength = 0;
+    this._notNewList = false;
+    this.position = 0;
+    this.block = undefined;
+    this.elem = undefined;
+    this.mods = undefined;
+    this.elemMods = undefined;
+}
 
 BEMContext.prototype.isArray = isArray;
 
@@ -226,8 +227,11 @@ BEMContext.prototype.identify = (function() {
         get = function() { return 'uniq' + id + ++cnt; };
     return function(obj, onlyGet) {
         if(!obj) return get();
-        if(onlyGet || obj[expando]) return obj[expando];
-        else return (obj[expando] = get());
+        if(onlyGet || obj[expando]) {
+            return obj[expando];
+        } else {
+            return (obj[expando] = get());
+        }
     };
 })();
 
@@ -270,20 +274,20 @@ match(this._mode === '')(
         this.ctx || (this.ctx = {});
 
         local('default', {
-            block: vBlock || (vElem ? block : undefined),
-            _currBlock: vBlock || vElem ? undefined : block,
-            elem: this.ctx.elem,
-            mods: (vBlock ? this.ctx.mods : this.mods) || {},
-            elemMods: this.ctx.elemMods || {}
+            block : vBlock || (vElem? block : undefined),
+            _currBlock : vBlock || vElem? undefined : block,
+            elem : this.ctx.elem,
+            mods : (vBlock? this.ctx.mods : this.mods) || {},
+            elemMods : this.ctx.elemMods || {}
         })(function() {
-            (this.block || this.elem) ?
+            (this.block || this.elem)?
                 (this.position = (this.position || 0) + 1) :
                 this._listLength--;
             apply();
         });
     }),
 
-    match(function() { return this._.isArray(this.ctx) })(function() {
+    match(function() { return this._.isArray(this.ctx); })(function() {
         var v = this.ctx,
             l = v.length,
             i = 0,
@@ -300,7 +304,7 @@ match(this._mode === '')(
         this._notNewList = true;
 
         while(i < l)
-            apply({ ctx: v[i++] });
+            apply({ ctx : v[i++] });
 
         prevNotNewList || (this.position = prevPos);
     }),
@@ -309,7 +313,7 @@ match(this._mode === '')(
         this._listLength--;
     }),
 
-    match(function() { return this._.isSimple(this.ctx) })(function() {
+    match(function() { return this._.isSimple(this.ctx); })(function() {
         this._listLength--;
 
         var ctx = this.ctx;
@@ -318,7 +322,7 @@ match(this._mode === '')(
 
     // hack-check for Vow-promise
     match(this.ctx && this.ctx.hasOwnProperty('_res'))(function() {
-        applyCtx(this.ctx._res)
+        applyCtx(this.ctx._res);
     })
 
 );
@@ -326,13 +330,14 @@ match(this._mode === '')(
 def()(function() {
     var _this = this,
         BEM_ = _this.BEM,
+        isBEM,
         v = this.ctx,
         buf = this._buf,
         tag;
 
     tag = apply('tag');
-    typeof tag != 'undefined' || (tag = v.tag);
-    typeof tag != 'undefined' || (tag = 'div');
+    typeof tag !== 'undefined' || (tag = v.tag);
+    typeof tag !== 'undefined' || (tag = 'div');
 
     if(tag) {
         var jsParams, js;
@@ -344,8 +349,8 @@ def()(function() {
 
         buf.push('<', tag);
 
-        var isBEM = apply('bem');
-        typeof isBEM != 'undefined' || (isBEM = typeof v.bem != 'undefined' ? v.bem : v.block || v.elem);
+        isBEM = apply('bem');
+        typeof isBEM !== 'undefined' || (isBEM = typeof v.bem !== 'undefined'? v.bem : v.block || v.elem);
 
         var cls = apply('cls');
         cls || (cls = v.cls);
@@ -361,17 +366,16 @@ def()(function() {
                 v.mix && (mix = mix? mix.concat(v.mix) : v.mix);
 
                 if(mix) {
-                    var visited = {};
-
-                    function visitedKey(block, elem) {
-                      return (block || '') + '__' + (elem || '');
-                    }
+                    var visited = {},
+                        visitedKey = function(block, elem) {
+                            return (block || '') + '__' + (elem || '');
+                        };
 
                     visited[visitedKey(this.block, this.elem)] = true;
 
                     // Transform mix to the single-item array if it's not array
-                    if (!this._.isArray(mix)) mix = [mix];
-                    for (var i = 0; i < mix.length; i++) {
+                    if(!this._.isArray(mix)) mix = [mix];
+                    for(var i = 0; i < mix.length; i++) {
                         var mixItem = mix[i],
                             hasItem = mixItem.block || mixItem.elem,
                             block = mixItem.block || mixItem._block || _this.block,
@@ -381,7 +385,7 @@ def()(function() {
                         BEM_.INTERNAL[hasItem? 'buildClasses' : 'buildModsClasses'](
                             block,
                             mixItem.elem || mixItem._elem ||
-                                (mixItem.block ? undefined : _this.elem),
+                                (mixItem.block? undefined : _this.elem),
                             mixItem.elemMods || mixItem.mods,
                             buf);
 
@@ -391,17 +395,17 @@ def()(function() {
                         }
 
                         // Process nested mixes
-                        if (hasItem && !visited[visitedKey(block, elem)]) {
+                        if(hasItem && !visited[visitedKey(block, elem)]) {
                             visited[visitedKey(block, elem)] = true;
                             var nestedMix = apply('mix', {
-                                block: block,
-                                elem: elem
+                                block : block,
+                                elem : elem
                             });
 
-                            if (nestedMix) {
-                                for (var j = 0; j < nestedMix.length; j++) {
+                            if(nestedMix) {
+                                for(var j = 0; j < nestedMix.length; j++) {
                                     var nestedItem = nestedMix[j];
-                                    if (!nestedItem.block &&
+                                    if(!nestedItem.block &&
                                         !nestedItem.elem ||
                                         !visited[visitedKey(
                                           nestedItem.block,
@@ -432,12 +436,12 @@ def()(function() {
         }
 
         var attrs = apply('attrs');
-        attrs = this._.extend(attrs, v.attrs); // NOTE: возможно стоит делать массив, чтобы потом быстрее сериализовывать
+        attrs = this._.extend(attrs, v.attrs); // NOTE : возможно стоит делать массив, чтобы потом быстрее сериализовывать
         if(attrs) {
             var name, attr; // TODO: разобраться с OmetaJS и YUI Compressor
             for(name in attrs) {
                 attr = attrs[name];
-                if (attr === undefined) continue;
+                if(attr === undefined) continue;
                 buf.push(
                     ' ', name, '="',
                     this._.attrEscape(this._.isSimple(attr)?
@@ -455,12 +459,12 @@ def()(function() {
 
         var content = apply('content');
         if(content || content === 0) {
-            var isBEM = this.block || this.elem;
+            isBEM = this.block || this.elem;
             apply('', {
-                _notNewList: false,
-                position: isBEM ? 1 : this.position,
-                _listLength: isBEM ? 1 : this._listLength,
-                ctx: content
+                _notNewList : false,
+                position : isBEM? 1 : this.position,
+                _listLength : isBEM? 1 : this._listLength,
+                ctx : content
             });
         }
 
@@ -474,4 +478,4 @@ cls()(undefined);
 js()(undefined);
 bem()(undefined);
 mix()(undefined);
-content()(function() { return this.ctx.content });
+content()(function() { return this.ctx.content; });

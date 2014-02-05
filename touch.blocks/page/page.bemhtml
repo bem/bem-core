@@ -1,24 +1,24 @@
 block('page')(
     mode('head')(function() {
         return [
-            { block: 'ua' },
+            { block : 'ua' },
             {
-                elem: 'meta',
-                attrs: {
-                    name: 'viewport',
-                    content: 'width=device-width,' +
-                        (this.ctx.zoom
-                             ? 'initial-scale=1'
-                             : 'maximum-scale=1,initial-scale=1,user-scalable=0')
+                elem : 'meta',
+                attrs : {
+                    name : 'viewport',
+                    content : 'width=device-width,' +
+                        (this.ctx.zoom?
+                            'initial-scale=1' :
+                            'maximum-scale=1,initial-scale=1,user-scalable=0')
                 }
             },
-            { elem: 'meta', attrs: { name: 'format-detection', content: 'telephone=no' } },
-            { elem: 'link', attrs: { name: 'apple-mobile-web-app-capable', content: 'yes' } },
+            { elem : 'meta', attrs : { name : 'format-detection', content : 'telephone=no' } },
+            { elem : 'link', attrs : { name : 'apple-mobile-web-app-capable', content : 'yes' } },
             this.ctx.head
-        ]
+        ];
     }),
 
     mix()(function() {
-        return applyNext().concat({ block: 'ua', js : true })
+        return applyNext().concat({ block : 'ua', js : true });
     })
-)
+);
