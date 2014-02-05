@@ -16,7 +16,7 @@ module.exports = {
             options : {
                 predef : ['modules']
             },
-            includes : ['**/*.vanilla.js']
+            includes : ['*.blocks/**/*.vanilla.js']
         },
 
         browserjs : {
@@ -24,13 +24,15 @@ module.exports = {
                 browser : true,
                 predef : ['modules']
             },
-            includes : ['**/*.js'],
+            includes : ['*.blocks/**/*.js'],
             excludes : [
-                '**/*.vanilla.js',
-                '**/*.spec.js',
-                '**/*.node.js',
+                '**/*.i18n*/**',
+                '**/*.bemhtml/**',
+                '**/*.bemjson.js',
                 '**/*.deps.js',
-                '**/*.bemjson.js'
+                '**/*.node.js',
+                '**/*.spec.js',
+                '**/*.vanilla.js'
             ]
         },
 
@@ -47,14 +49,39 @@ module.exports = {
                     'afterEach'
                 ]
             },
-            includes : ['**/*.spec.js']
+            includes : ['*.blocks/**/*.spec.js']
+        },
+
+        bemhtml : {
+            options : {
+                predef : [
+                    'apply',
+                    'applyCtx',
+                    'applyNext',
+                    'attrs',
+                    'bem',
+                    'block',
+                    'cls',
+                    'content',
+                    'def',
+                    'elem',
+                    'js',
+                    'local',
+                    'match',
+                    'mix',
+                    'mode',
+                    'tag'
+                ]
+            },
+            includes : ['*.blocks/**/*.bemhtml'],
+            excludes : ['**/*.test.bemhtml/**']
         },
 
         bemjsonjs : {
             options : {
                 asi : true
             },
-            includes : ['**/*.bemjson.js']
+            includes : ['*.bundles/**/*.bemjson.js']
         }
     }
 };
