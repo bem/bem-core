@@ -1,7 +1,7 @@
 block('page').elem('js')(
     bem()(false),
     tag()('script'),
-    attrs().match(function() { return this.ctx.url })(function() {
-        return { src: this.ctx.url }
+    attrs().match(function() { return this.ctx.url; })(function() {
+        return { src : this.ctx.url };
     })
-)
+);
