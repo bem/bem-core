@@ -4,6 +4,7 @@
         'identify',
         'next-tick',
         'objects',
-        'functions'
+        'functions',
+        'events'
     ]
 })
