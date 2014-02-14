@@ -758,6 +758,30 @@ describe('i-bem__dom', function() {
             delete DOM.blocks['block2'];
         });
     });
+
+    describe('modules.define patching', function() {
+        it('should provide BEMDOM block', function(done) {
+            var name = 'b' + Math.random(),
+                spy = sinon.spy();
+
+            modules.define({ block : name }, function(provide) {
+                spy();
+                provide({});
+            });
+
+            modules.define({ block : name }, function(provide, Prev) {
+                spy();
+                Prev.should.be.eql(DOM.blocks[name]);
+                provide(Prev);
+            });
+
+            modules.require([name], function(Block) {
+                spy.should.have.been.calledTwice;
+                Block.should.be.eql(DOM.blocks[name]);
+                done();
+            });
+        });
+    });
 });
 
 provide();

@@ -94,9 +94,15 @@ load._loaded = function(bundle) {
         styles.length && appendCss(styles.join(''));
     }
 
-    var fns = bundleDesc.successFns, fn;
-    while(fn = fns.shift()) fn();
-    delete bundleDesc.successFns;
+    function onSuccess() {
+        var fns = bundleDesc.successFns, fn;
+        while(fn = fns.shift()) fn();
+        delete bundleDesc.successFns;
+    }
+
+    modules.isDefined('i-bem__dom_init')?
+        modules.require(['i-bem__dom_init'], onSuccess) :
+        onSuccess();
 };
 
 provide(load);

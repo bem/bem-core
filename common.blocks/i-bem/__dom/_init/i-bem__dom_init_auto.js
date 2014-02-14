@@ -2,10 +2,8 @@
  * Auto initialization on DOM ready
  */
 
-modules.require(['i-bem__dom', 'jquery'], function(DOM, $) {
+modules.require(['i-bem__dom_init', 'jquery'], function(init, $) {
 
-$(function() {
-    DOM.init();
-});
+$(init);
 
 });
