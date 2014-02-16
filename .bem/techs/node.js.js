@@ -25,9 +25,9 @@ exports.techMixin = {
     getYmChunk : function() {
         var ymRelPath = this.__base.apply(this, arguments);
         return [
-            "if(typeof module !== 'undefined') {\n",
-            "modules = " + this.getBuildResultChunk(ymRelPath),
-            "}\n"
+            'if(typeof module !== \'undefined\') {\n',
+            'modules = ' + this.getBuildResultChunk(ymRelPath),
+            '}\n'
         ].join('');
     },
 

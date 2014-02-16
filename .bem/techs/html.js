@@ -11,6 +11,7 @@ exports.techMixin = {
         var path = this.getPath(prefix, 'bemhtml.js');
         return BEM.util.readFile(path)
             .then(function(c) {
+                /* global BEMHTML */
                 /** @name BEMHTML variable appears after runInThisContext() call */
                 VM.runInThisContext(c, path);
                 return BEMHTML;
