@@ -22,8 +22,7 @@
   "devDependencies": {
     "bem": "~0.7.2",
     "mocha": "~1.9.0",
-    "jshint": "2.1.8",
-    "jshint-groups": "0.5.1",
+    "jshint-groups": "0.6.0",
     "jscs": "1.0.0",
     "git-hooks": "0.0.3",
     "bower-npm-install": "~0.5.4"

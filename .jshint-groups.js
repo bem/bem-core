@@ -16,7 +16,7 @@ module.exports = {
             options : {
                 predef : ['modules']
             },
-            includes : ['**/*.vanilla.js']
+            includes : ['*.blocks/**/*.vanilla.js']
         },
 
         browserjs : {
@@ -24,13 +24,17 @@ module.exports = {
                 browser : true,
                 predef : ['modules']
             },
-            includes : ['**/*.js'],
+            includes : ['*.blocks/**/*.js'],
             excludes : [
-                '**/*.vanilla.js',
-                '**/*.spec.js',
-                '**/*.node.js',
+                '**/*.bem/*.js',
+                '**/*.i18n/*.js',
+                '**/*.bemjson.js',
                 '**/*.deps.js',
-                '**/*.bemjson.js'
+                '**/*.node.js',
+                '**/*.spec.js',
+                '**/*.vanilla.js',
+                'common.blocks/vow/vow.js',
+                '**/i-bem.test.bemhtml/*'
             ]
         },
 
@@ -47,14 +51,37 @@ module.exports = {
                     'afterEach'
                 ]
             },
-            includes : ['**/*.spec.js']
+            includes : ['*.blocks/**/*.spec.js']
         },
 
         bemjsonjs : {
             options : {
                 asi : true
             },
-            includes : ['**/*.bemjson.js']
+            includes : [
+                '*.bundles/**/*.bemjson.js',
+                '**/*.examples/**/*.bemjson.js',
+                '**/*.tests/**/*.bemjson.js'
+            ],
+            excudes : [
+                '**/.bem/**/*',
+                '*.tests/**/*',
+                '*.specs/**/*',
+                'libs/**/*',
+                'node_modules/**/*'
+            ]
+        },
+
+        nodejs : {
+            options : {
+                node : true
+            },
+            includes : ['**/.bem/**/*.js'],
+            excludes : [
+                '.bem/cache/**',
+                'libs/**',
+                'node_modules/**'
+            ]
         }
     }
 };
