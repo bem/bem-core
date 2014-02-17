@@ -36,10 +36,10 @@ describe('events', function() {
 
                 emitter
                     .on('event1 event2', spy)
-                    .trigger('event1');
+                    .emit('event1');
                 spy.should.have.been.calledOnce;
 
-                emitter.trigger('event2');
+                emitter.emit('event2');
                 spy.should.have.been.calledTwice;
             });
 
@@ -48,13 +48,13 @@ describe('events', function() {
 
                 emitter
                     .on('*', spy)
-                    .trigger('event1');
+                    .emit('event1');
                 spy.should.have.been.calledOnce;
 
-                emitter.trigger('event2');
+                emitter.emit('event2');
                 spy.should.have.been.calledTwice;
 
-                emitter.trigger('event3');
+                emitter.emit('event3');
                 spy.should.have.been.calledThrice;
             });
 
@@ -145,11 +145,11 @@ describe('events', function() {
                     .on('event', function() {
                         emitter.on('event', spy);
                     })
-                    .trigger('event');
+                    .emit('event');
 
                 spy.should.not.have.been.called;
 
-                emitter.trigger('event');
+                emitter.emit('event');
                 spy.should.have.been.called;
             });
         });
@@ -160,9 +160,9 @@ describe('events', function() {
 
                 emitter
                     .once('event', spy)
-                    .trigger('event')
-                    .trigger('event')
-                    .trigger('event');
+                    .emit('event')
+                    .emit('event')
+                    .emit('event');
 
                 spy.should.have.been.calledOnce;
             });
@@ -178,7 +178,7 @@ describe('events', function() {
                     .on('event2', spy1)
                     .on('event', spy2)
                     .un('event', spy1)
-                    .trigger('event');
+                    .emit('event');
 
                 spy1.should.not.have.been.called;
                 spy2.should.have.been.called;
@@ -194,8 +194,8 @@ describe('events', function() {
                     .on('event', spy)
                     .on('event2', spy)
                     .un('event event2', spy)
-                    .trigger('event')
-                    .trigger('event2');
+                    .emit('event')
+                    .emit('event2');
 
                 spy.should.not.have.been.called;
             });
@@ -210,7 +210,7 @@ describe('events', function() {
                     .on('event', spy, ctx2)
                     .on('event', spy)
                     .un('event', spy, ctx1)
-                    .trigger('event');
+                    .emit('event');
 
                 spy.should.have.been.calledTwice;
             });
@@ -224,7 +224,7 @@ describe('events', function() {
                     .on('event2', spy1)
                     .on('event', spy2)
                     .un('event')
-                    .trigger('event');
+                    .emit('event');
 
                 spy1.should.not.have.been.called;
                 spy2.should.not.have.been.called;
@@ -242,7 +242,7 @@ describe('events', function() {
                     .on('event2', spy1)
                     .on('event', spy2)
                     .un()
-                    .trigger('event');
+                    .emit('event');
 
                 spy1.should.not.have.been.called;
                 spy2.should.not.have.been.called;

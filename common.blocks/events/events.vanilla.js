@@ -252,31 +252,6 @@ var undef,
             }
 
             return this;
-        },
-
-        /**
-         * Fires event handlers
-         * @deprecated use emit
-         * @param {String|events:Event} e Event
-         * @param {Object} [data] Additional data
-         * @returns {this}
-         */
-        trigger : function(e, data) {
-            return this.emit(e, data);
-        },
-
-        /**
-         * Adds a one time handler for the event.
-         * Handler is executed only the next time the event is fired, after which it is removed.
-         * @deprecated use once
-         * @param {String} e Event type
-         * @param {Object} [data] Additional data that the handler gets as e.data
-         * @param {Function} fn Handler
-         * @param {Object} [ctx] Handler context
-         * @returns {this}
-         */
-        onFirst : function(e, data, fn, ctx) {
-            return this.once(e, data, fn, ctx);
         }
     },
     /**
