@@ -6,11 +6,6 @@
     "thumbnail": "",
     "authors": ["maslinsky-kirill", "ivanichenko-sergey"],
     "tags": ["BEMHTML"],
-    "categories": [
-        {"name": "bem-core/1.1.1/BEMHTML", "url": "bem-core/1.1.1/bemhtml", "type": "libs"},
-        {"name": "Шаблонизаторы/BEMHTML", "url": "templating-engines/bemhtml", "order": "30/10","type": "tools"}
-    ],
     "translators": [],
-    "url": "/common.docs/reference/",
     "type": ["libs", "tools"]
 }

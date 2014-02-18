@@ -7,9 +7,6 @@
     "thumbnail": "",
     "authors": ["berezhnoy-sergey"],
     "tags": ["bem-core"],
-    "categories": [{"name": "bem-core/1.0.0", "url" : "bem-core/1.0.0"}],
     "translators": ["stepanova-varvara"],
-    "url": "/common.docs/bem-core/1.0.0",
-    "type": "libs",
-    "root": "true"
+    "type": "libs"
 }
