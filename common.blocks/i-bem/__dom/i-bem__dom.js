@@ -507,22 +507,9 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
         }).join('') + uniq;
     },
 
-    /**
-     * Triggers block event handlers and live event handlers
-     * @protected
-     * @param {String} e Event name
-     * @param {Object} [data] Additional information
-     * @returns {this}
-     */
-    emit : function(e, data) {
-        this
-            .__base(e = this._buildEvent(e), data)
-            .domElem && this._ctxEmit(e, data);
-
-        return this;
-    },
-
     _ctxEmit : function(e, data) {
+        this.__base.apply(this, arguments);
+
         var _this = this,
             storage = liveEventCtxStorage[_this.__self._buildCtxEventName(e.type)],
             ctxIds = {};
@@ -657,6 +644,8 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
         elemName && this
             .dropElemCache(elemName, modName, oldModVal)
             .dropElemCache(elemName, modName, modVal);
+
+        this.__base.apply(this, arguments);
     },
 
     /**
@@ -1216,7 +1205,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {Object} [fnCtx] Handler's context
      */
     on : function(ctx, e, data, fn, fnCtx) {
-        return ctx.jquery?
+        return typeof ctx === 'object' && ctx.jquery?
             this._liveCtxBind(ctx, e, data, fn, fnCtx) :
             this.__base(ctx, e, data, fn);
     },
@@ -1229,7 +1218,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {Object} [fnCtx] Handler context
      */
     un : function(ctx, e, fn, fnCtx) {
-        return ctx.jquery?
+        return typeof ctx === 'object' && ctx.jquery?
             this._liveCtxUnbind(ctx, e, fn, fnCtx) :
             this.__base(ctx, e, fn);
     },
@@ -1242,42 +1231,48 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {Object} [data] Additional information that the handler gets as e.data
      * @param {Function} fn Handler
      * @param {Object} [fnCtx] Handler context
+     * @returns {this}
      */
     _liveCtxBind : function(ctx, e, data, fn, fnCtx) {
-        if(typeof e === 'string') {
-            if(functions.isFunction(data)) {
-                fnCtx = fn;
-                fn = data;
-                data = undef;
-            }
-
-            if(e.indexOf(' ') > -1) {
-                e.split(' ').forEach(function(e) {
-                    this._liveCtxBind(ctx, e, data, fn, fnCtx);
-                }, this);
+        if(typeof e === 'object') {
+            if(functions.isFunction(data) || functions.isFunction(fn)) { // mod change event
+                e = this._buildModEventName(e);
             } else {
-                var ctxE = this._buildCtxEventName(e),
-                    storage = liveEventCtxStorage[ctxE] ||
-                        (liveEventCtxStorage[ctxE] = { counter : 0, ctxs : {} });
-
-                ctx.each(function() {
-                    var ctxId = identify(this),
-                        ctxStorage = storage.ctxs[ctxId];
-                    if(!ctxStorage) {
-                        ctxStorage = storage.ctxs[ctxId] = {};
-                        ++storage.counter;
-                    }
-                    ctxStorage[identify(fn) + (fnCtx? identify(fnCtx) : '')] = {
-                        fn : fn,
-                        data : data,
-                        ctx : fnCtx
-                    };
-                });
+                objects.each(e, function(fn, e) {
+                    this._liveCtxBind(ctx, e, fn, data);
+                }, this);
+                return this;
             }
-        } else {
-            objects.each(e, function(fn, e) {
-                this._liveCtxBind(ctx, e, fn, data);
+        }
+
+        if(functions.isFunction(data)) {
+            fnCtx = fn;
+            fn = data;
+            data = undef;
+        }
+
+        if(e.indexOf(' ') > -1) {
+            e.split(' ').forEach(function(e) {
+                this._liveCtxBind(ctx, e, data, fn, fnCtx);
             }, this);
+        } else {
+            var ctxE = this._buildCtxEventName(e),
+                storage = liveEventCtxStorage[ctxE] ||
+                    (liveEventCtxStorage[ctxE] = { counter : 0, ctxs : {} });
+
+            ctx.each(function() {
+                var ctxId = identify(this),
+                    ctxStorage = storage.ctxs[ctxId];
+                if(!ctxStorage) {
+                    ctxStorage = storage.ctxs[ctxId] = {};
+                    ++storage.counter;
+                }
+                ctxStorage[identify(fn) + (fnCtx? identify(fnCtx) : '')] = {
+                    fn : fn,
+                    data : data,
+                    ctx : fnCtx
+                };
+            });
         }
 
         return this;
@@ -1287,11 +1282,15 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * Removes a live event handler from a block, based on a specified element where the event was being listened for
      * @private
      * @param {jQuery} ctx The element in which the event was being listened for
-     * @param {String} e Event name
+     * @param {String|Object} e Event name
      * @param {Function} [fn] Handler
      * @param {Object} [fnCtx] Handler context
      */
     _liveCtxUnbind : function(ctx, e, fn, fnCtx) {
+        if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
+            e = this._buildModEventName(e);
+        }
+
         var storage = liveEventCtxStorage[e = this._buildCtxEventName(e)];
 
         if(storage) {

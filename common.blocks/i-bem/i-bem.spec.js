@@ -610,6 +610,108 @@ describe('i-bem', function() {
             }, 0);
         });
     });
+
+    describe('mod change events', function() {
+        var block;
+        beforeEach(function() {
+            BEM.decl('block', {});
+            block = BEM.create({ block : 'block', mods : { mod1 : 'val1' } });
+        });
+        afterEach(function() {
+            delete BEM.blocks['block'];
+        });
+
+        it('should emit event on mod change with correct arguments', function() {
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                spy3 = sinon.spy();
+
+            block
+                .on({ modName : 'mod1', modVal : '*' }, spy1)
+                .on({ modName : 'mod1', modVal : 'val2' }, spy2)
+                .on({ modName : 'mod1', modVal : 'val3' }, spy3)
+                .setMod('mod1', 'val2');
+
+            spy1.should.have.been.called.once;
+            spy2.should.have.been.called.once;
+            spy3.should.not.have.been.called;
+
+            spy1.args[0][1].should.be.eql({ modName : 'mod1', modVal : 'val2', oldModVal : 'val1' });
+        });
+
+        it('should emit live event on mod change with correct arguments', function() {
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                spy3 = sinon.spy();
+
+            BEM.blocks['block']
+                .on({ modName : 'mod1', modVal : '*' }, spy1)
+                .on({ modName : 'mod1', modVal : 'val2' }, spy2)
+                .on({ modName : 'mod1', modVal : 'val3' }, spy3);
+
+            block.setMod('mod1', 'val2');
+
+            spy1.should.have.been.called.once;
+            spy2.should.have.been.called.once;
+            spy3.should.not.have.been.called;
+
+            spy1.args[0][1].should.be.eql({ modName : 'mod1', modVal : 'val2', oldModVal : 'val1' });
+        });
+
+        it('should emit events until block destruction', function() {
+            var spy1 = sinon.spy();
+
+            block
+                .on({ modName : 'mod1', modVal : 'val2' }, spy1)
+                .delMod('js')
+                .setMod('mod1', 'val2');
+
+            spy1.should.not.have.been.called;
+        });
+
+        it('should emit destruct event on block destruction', function() {
+            var spy1 = sinon.spy();
+
+            block
+                .on({ modName : 'js', modVal : '' }, spy1)
+                .delMod('js');
+
+            spy1.should.have.been.called.once;
+        });
+
+        it('should properly unbind mod event handler', function() {
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                spy3 = sinon.spy();
+
+            block
+                .on({ modName : 'mod1', modVal : '*' }, spy1)
+                .on({ modName : 'mod1', modVal : 'val2' }, spy2)
+                .un({ modName : 'mod1', modVal : '*' }, spy1)
+                .un({ modName : 'mod1', modVal : 'val2' }, spy2)
+                .setMod('mod1', 'val2');
+
+            spy1.should.not.have.been.called;
+            spy2.should.not.have.been.called;
+        });
+
+        it('should properly unbind live mod event handler', function() {
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                spy3 = sinon.spy();
+
+            BEM.blocks['block']
+                .on({ modName : 'mod1', modVal : '*' }, spy1)
+                .on({ modName : 'mod1', modVal : 'val2' }, spy2)
+                .un({ modName : 'mod1', modVal : '*' }, spy1)
+                .un({ modName : 'mod1', modVal : 'val2' }, spy2);
+
+            block.setMod('mod1', 'val2');
+
+            spy1.should.not.have.been.called;
+            spy2.should.not.have.been.called;
+        });
+    });
 });
 
 provide();

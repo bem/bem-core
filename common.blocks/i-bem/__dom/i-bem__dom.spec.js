@@ -782,6 +782,83 @@ describe('i-bem__dom', function() {
             });
         });
     });
+
+    describe('mod change events', function() {
+        var block;
+        beforeEach(function() {
+            block = $(BEMHTML.apply(
+                {
+                    block : 'block',
+                    content : [
+                        { elem : 'e1', mods : { 'mod1' : 'val1' } },
+                        { elem : 'e1', mods : { 'mod1' : 'val1' } },
+                        { elem : 'e2', mods : { 'mod1' : 'val1' } }
+                    ]
+                }))
+                .bem('block');
+        });
+
+        afterEach(function() {
+            delete DOM.blocks['block'];
+        });
+
+        describe('elems', function() {
+            it('should emit event on elem mod change with correct arguments', function() {
+                var spy1 = sinon.spy(),
+                    spy2 = sinon.spy(),
+                    spy3 = sinon.spy(),
+                    spy4 = sinon.spy(),
+                    elem = block.elem('e1');
+
+                block
+                    .on({ elem : 'e1', modName : 'mod1', modVal : '*' }, spy1)
+                    .on({ elem : 'e1', modName : 'mod1', modVal : 'val2' }, spy2)
+                    .on({ elem : 'e1', modName : 'mod1', modVal : 'val3' }, spy3)
+                    .on({ elem : 'e2', modName : 'mod1', modVal : 'val2' }, spy4)
+                    .setMod(elem, 'mod1', 'val2');
+
+                spy1.should.have.been.called.twice;
+                spy2.should.have.been.called.twice;
+                spy3.should.not.have.been.called;
+                spy4.should.not.have.been.called;
+
+                var eventData = spy1.args[0][1];
+                eventData.modName.should.be.equal('mod1');
+                eventData.modVal.should.be.equal('val2');
+                eventData.oldModVal.should.be.equal('val1');
+                eventData.elem[0].should.be.eql(elem[0]);
+                spy1.args[1][1].elem[0].should.be.eql(elem[1]);
+            });
+
+            it('should emit live event on elem mod change with correct arguments', function() {
+                var spy1 = sinon.spy(),
+                    spy2 = sinon.spy(),
+                    spy3 = sinon.spy(),
+                    spy4 = sinon.spy(),
+                    elem = block.elem('e1');
+
+                DOM.blocks['block']
+                    .on({ elem : 'e1', modName : 'mod1', modVal : '*' }, spy1)
+                    .on({ elem : 'e1', modName : 'mod1', modVal : 'val2' }, spy2)
+                    .on({ elem : 'e1', modName : 'mod1', modVal : 'val3' }, spy3)
+                    .on({ elem : 'e2', modName : 'mod1', modVal : 'val2' }, spy4);
+
+                block.setMod(elem, 'mod1', 'val2');
+
+                spy1.should.have.been.called.twice;
+                spy2.should.have.been.called.twice;
+                spy3.should.not.have.been.called;
+                spy4.should.not.have.been.called;
+
+                var eventData = spy1.args[0][1];
+                eventData.modName.should.be.equal('mod1');
+                eventData.modVal.should.be.equal('val2');
+                eventData.oldModVal.should.be.equal('val1');
+                eventData.elem[0].should.be.eql(elem[0]);
+                spy1.args[1][1].elem[0].should.be.eql(elem[1]);
+            });
+        });
+    });
 });
 
 provide();

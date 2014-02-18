@@ -1,5 +1,6 @@
 ({
     shouldDeps : [
+        { elem : 'internal' },
         'inherit',
         'identify',
         'next-tick',

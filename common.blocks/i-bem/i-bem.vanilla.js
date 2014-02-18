@@ -4,10 +4,30 @@
 
 modules.define(
     'i-bem',
-    ['inherit', 'identify', 'next-tick', 'objects', 'functions', 'events'],
-    function(provide, inherit, identify, nextTick, objects, functions, events) {
+    [
+        'i-bem__internal',
+        'inherit',
+        'identify',
+        'next-tick',
+        'objects',
+        'functions',
+        'events'
+    ],
+    function(
+        provide,
+        INTERNAL,
+        inherit,
+        identify,
+        nextTick,
+        objects,
+        functions,
+        events) {
 
 var undef,
+
+    MOD_DELIM = INTERNAL.MOD_DELIM,
+    ELEM_DELIM = INTERNAL.ELEM_DELIM,
+
     /**
      * Storage for block init functions
      * @private
@@ -162,9 +182,38 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @private
      */
     _init : function() {
-        return this
-            .setMod('js', 'inited')
-            .emit('init');
+        return this.setMod('js', 'inited');
+    },
+
+    /**
+     * Adds an event handler
+     * @param {String|Object} e Event type
+     * @param {Object} [data] Additional data that the handler gets as e.data
+     * @param {Function} fn Handler
+     * @param {Object} [ctx] Handler context
+     * @returns {this}
+     */
+    on : function(e, data, fn, ctx) {
+        if(typeof e === 'object' && (functions.isFunction(data) || functions.isFunction(fn))) { // mod change event
+            e = this.__self._buildModEventName(e);
+        }
+
+        return this.__base.apply(this, arguments);
+    },
+
+    /**
+     * Removes event handler or handlers
+     * @param {String|Object} [e] Event type
+     * @param {Function} [fn] Handler
+     * @param {Object} [ctx] Handler context
+     * @returns {this}
+     */
+    un : function(e, fn, ctx) {
+        if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
+            e = this.__self._buildModEventName(e);
+        }
+
+        return this.__base.apply(this, arguments);
     },
 
     /**
@@ -175,12 +224,22 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @returns {this}
      */
     emit : function(e, data) {
-        this
-            .__base(e = this._buildEvent(e), data)
-            .hasMod('js', 'inited') &&
-                this.__self.emit(e, data);
+        var isModJsEvent = false;
+        if(typeof e === 'object' && !(e instanceof events.Event)) {
+            isModJsEvent = e.modName === 'js';
+            e = this.__self._buildModEventName(e);
+        }
+
+        if(isModJsEvent || this.hasMod('js', 'inited')) {
+            this.__base(e = this._buildEvent(e), data);
+            this._ctxEmit(e, data);
+        }
 
         return this;
+    },
+
+    _ctxEmit : function(e, data) {
+        this.__self.emit(e, data);
     },
 
     /**
@@ -360,7 +419,13 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [elem] Nested element
      * @param {String} [elemName] Element name
      */
-    _onSetMod : function(modName, modVal, oldModVal, elem, elemName) {},
+    _onSetMod : function(modName, modVal, oldModVal, elem, elemName) {
+        var eventData = { modName : modName, modVal : modVal, oldModVal : oldModVal };
+        elem && (eventData.elem = elem);
+        this
+            .emit({ modName : modName, modVal : '*', elem : elemName }, eventData)
+            .emit({ modName : modName, modVal : modVal, elem : elemName }, eventData);
+    },
 
     /**
      * Sets a modifier for a block/nested element, depending on conditions.
@@ -473,9 +538,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @private
      */
     _destruct : function() {
-        this
-            .delMod('js')
-            .emit('destruct');
+        this.delMod('js');
     },
 
     /**
@@ -602,6 +665,43 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     getName : function() {
         return this._name;
+    },
+
+    /**
+     * Adds an event handler
+     * @param {String|Object} e Event type
+     * @param {Object} [data] Additional data that the handler gets as e.data
+     * @param {Function} fn Handler
+     * @param {Object} [ctx] Handler context
+     * @returns {this}
+     */
+    on : function(e, data, fn, ctx) {
+        if(typeof e === 'object' && (functions.isFunction(data) || functions.isFunction(fn))) { // mod change event
+            e = this._buildModEventName(e);
+        }
+
+        return this.__base.apply(this, arguments);
+    },
+
+    /**
+     * Removes event handler or handlers
+     * @param {String|Object} [e] Event type
+     * @param {Function} [fn] Handler
+     * @param {Object} [ctx] Handler context
+     * @returns {this}
+     */
+    un : function(e, fn, ctx) {
+        if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
+            e = this._buildModEventName(e);
+        }
+
+        return this.__base.apply(this, arguments);
+    },
+
+    _buildModEventName : function(modEvent) {
+        var res = MOD_DELIM + modEvent.modName + MOD_DELIM + modEvent.modVal;
+        modEvent.elem && (res = ELEM_DELIM + modEvent.elem + res);
+        return res;
     },
 
     /**
