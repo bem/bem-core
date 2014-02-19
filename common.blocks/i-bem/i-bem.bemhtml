@@ -321,8 +321,8 @@ match(this._mode === '')(
     }),
 
     // hack-check for Vow-promise
-    match(this.ctx && this.ctx.hasOwnProperty('_res'))(function() {
-        applyCtx(this.ctx._res);
+    match(this.ctx && this.ctx._vow)(function() {
+        applyCtx(this.ctx._value);
     })
 
 );
