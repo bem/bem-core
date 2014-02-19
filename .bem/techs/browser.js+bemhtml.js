@@ -38,6 +38,8 @@ exports.techMixin = {
                 if (bemhtmlTech.API_VER !== 2) return Q.reject(new Error(_this.getTechName() +
                     ' can’t use v1 bemhtml tech to concat bemhtml content. Configure level to use v2 bemhtml.'));
 
+                // ugly hack for https://github.com/bem/bem-core/issues/392
+                opts.force = true;
                 var bemhtmlResults = bemhtmlTech.getBuildResults(
                         decl,
                         context.getLevels(),
