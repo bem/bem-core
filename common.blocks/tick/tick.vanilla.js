@@ -47,7 +47,7 @@ var TICK_INTERVAL = 50,
 
         _onTick : function() {
             this
-                .trigger('tick')
+                .emit('tick')
                 ._scheduleTick();
         }
     });
