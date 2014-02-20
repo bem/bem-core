@@ -1005,7 +1005,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
             if(!storage) {
                 storage = liveClassEventStorage[e] = {};
-                DOM.scope.bind(e, this._liveClassTrigger.bind(this));
+                DOM.scope.bind(e, $.proxy(this._liveClassTrigger, this));
             }
 
             storage = storage[className] || (storage[className] = { uniqIds : {}, fns : [] });
