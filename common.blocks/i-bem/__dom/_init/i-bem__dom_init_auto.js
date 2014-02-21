@@ -4,6 +4,8 @@
 
 modules.require(['i-bem__dom_init', 'jquery'], function(init, $) {
 
-$(init);
+$(function() {
+    init();
+});
 
 });
