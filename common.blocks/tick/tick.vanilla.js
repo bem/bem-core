@@ -42,7 +42,12 @@ var TICK_INTERVAL = 50,
         },
 
         _scheduleTick : function() {
-            this._timer = global.setTimeout(this._onTick.bind(this), TICK_INTERVAL);
+            var _this = this;
+            this._timer = global.setTimeout(
+                function() {
+                    _this._onTick();
+                },
+                TICK_INTERVAL);
         },
 
         _onTick : function() {

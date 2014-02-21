@@ -61,7 +61,12 @@ var IDLE_TIMEOUT = 3000,
         },
 
         _startTimer : function() {
-            this._timer = setTimeout(this._onTimeout.bind(this), IDLE_TIMEOUT);
+            var _this = this;
+            this._timer = setTimeout(
+                function() {
+                    _this._onTimeout();
+                },
+                IDLE_TIMEOUT);
         },
 
         _stopTimer : function() {
