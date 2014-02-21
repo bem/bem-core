@@ -617,33 +617,31 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {String} [elemName] Element name
      */
     _onSetMod : function(modName, modVal, oldModVal, elem, elemName) {
-        if(!elem && modName === 'js' && modVal === '') {
-            return;
+        if(modName !== 'js' || modVal !== '') {
+            var _self = this.__self,
+                classPrefix = _self._buildModClassPrefix(modName, elemName),
+                classRE = _self._buildModValRE(modName, elemName),
+                needDel = modVal === '' || modVal === false;
+
+            (elem || this.domElem).each(function() {
+                var className = this.className,
+                    modClassName = classPrefix;
+
+                modVal !== true && (modClassName += MOD_DELIM + modVal);
+
+                (oldModVal === true?
+                    classRE.test(className) :
+                    className.indexOf(classPrefix + MOD_DELIM) > -1)?
+                        this.className = className.replace(
+                            classRE,
+                            (needDel? '' : '$1' + modClassName)) :
+                        needDel || $(this).addClass(modClassName);
+            });
+
+            elemName && this
+                .dropElemCache(elemName, modName, oldModVal)
+                .dropElemCache(elemName, modName, modVal);
         }
-
-        var _self = this.__self,
-            classPrefix = _self._buildModClassPrefix(modName, elemName),
-            classRE = _self._buildModValRE(modName, elemName),
-            needDel = modVal === '' || modVal === false;
-
-        (elem || this.domElem).each(function() {
-            var className = this.className,
-                modClassName = classPrefix;
-
-            modVal !== true && (modClassName += MOD_DELIM + modVal);
-
-            (oldModVal === true?
-                classRE.test(className) :
-                className.indexOf(classPrefix + MOD_DELIM) > -1)?
-                    this.className = className.replace(
-                        classRE,
-                        (needDel? '' : '$1' + modClassName)) :
-                    needDel || $(this).addClass(modClassName);
-        });
-
-        elemName && this
-            .dropElemCache(elemName, modName, oldModVal)
-            .dropElemCache(elemName, modName, modVal);
 
         this.__base.apply(this, arguments);
     },
