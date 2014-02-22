@@ -924,16 +924,18 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * Replaces a fragment of the DOM tree inside the context, destroying old blocks and intializing new ones
      * @param {jQuery} ctx Root DOM node
      * @param {jQuery|String} content New content
+     * @returns {jQuery} Updated root DOM node
      */
     update : function(ctx, content) {
         this.destruct(ctx, true);
-        this.init(ctx.html(content));
+        return this.init(ctx.html($(content)));
     },
 
     /**
      * Changes a fragment of the DOM tree including the context and initializes blocks.
      * @param {jQuery} ctx Root DOM node
      * @param {jQuery|String} content Content to be added
+     * @returns {jQuery} New content
      */
     replace : function(ctx, content) {
         var prev = ctx.prev(),
@@ -941,7 +943,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
         this.destruct(ctx);
 
-        this.init(prev.length?
+        return this.init(prev.length?
             $(content).insertAfter(prev) :
             $(content).prependTo(parent));
     },
@@ -950,36 +952,40 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * Adds a fragment of the DOM tree at the end of the context and initializes blocks
      * @param {jQuery} ctx Root DOM node
      * @param {jQuery|String} content Content to be added
+     * @returns {jQuery} New content
      */
     append : function(ctx, content) {
-        this.init($(content).appendTo(ctx));
+        return this.init($(content).appendTo(ctx));
     },
 
     /**
      * Adds a fragment of the DOM tree at the beginning of the context and initializes blocks
      * @param {jQuery} ctx Root DOM node
      * @param {jQuery|String} content Content to be added
+     * @returns {jQuery} New content
      */
     prepend : function(ctx, content) {
-        this.init($(content).prependTo(ctx));
+        return this.init($(content).prependTo(ctx));
     },
 
     /**
      * Adds a fragment of the DOM tree before the context and initializes blocks
      * @param {jQuery} ctx Contextual DOM node
      * @param {jQuery|String} content Content to be added
+     * @returns {jQuery} New content
      */
     before : function(ctx, content) {
-        this.init($(content).insertBefore(ctx));
+        return this.init($(content).insertBefore(ctx));
     },
 
     /**
      * Adds a fragment of the DOM tree after the context and initializes blocks
      * @param {jQuery} ctx Contextual DOM node
      * @param {jQuery|String} content Content to be added
+     * @returns {jQuery} New content
      */
     after : function(ctx, content) {
-        this.init($(content).insertAfter(ctx));
+        return this.init($(content).insertAfter(ctx));
     },
 
     /**
