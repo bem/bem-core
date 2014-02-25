@@ -73,7 +73,7 @@ $ npm install
 ```
 
 You need `export PATH=./node_modules/.bin:$PATH`
-or an alternative way to run locally-installed [bem-tools](https://github.com/bem/bem-tools).
+or an alternative way to run locally-installed [bem-tools](https://github.com/bem/bem-tools) and other npm-dependencies.
 
 3. Install all the necessary libraries:
 ```
@@ -92,20 +92,14 @@ $ bem server
 
 ### How to contribute
 
-1. [Create an issue](https://github.com/bem/bem-core/issues/new) with a proper
-description.
+1. [Create an issue](https://github.com/bem/bem-core/issues/new) with a proper description.
 2. Decide which version needs your changes.
-3. Create a feature-branch with an issue number and a version (`issues/<issue
-number>@v<version number>`) based on a version branch.
+3. Create a feature-branch with an issue number and a version (`issues/<issue_number>@v<version_number>`) based on a version branch.
 For example, for an issue #42 and a version #1: `git checkout -b issues/42@v1 v1`.
-If you need changes for several versions, each of them has to have a feature
-branch.
-4. Commit changes and `push`. Rebase your branch on a corresponding version
-branch if it's needed.
-5. Create a pull-request from your feature branch; or several pull-requests if
-you changed several versions.
-6. Link your pull request with an issue number any way you like. A comment will work
-perfectly.
+If you need changes for several versions, each of them has to have a feature branch.
+4. Commit changes and `push`. Rebase your branch on a corresponding version branch if it's needed.
+5. Create a pull-request from your feature branch; or several pull-requests if you changed several versions.
+6. Link your pull request with an issue number any way you like. A comment will work perfectly.
 7. Wait for your pull request and the issue to be closed ;-)
 
 ### Modular testing
@@ -115,19 +109,17 @@ A default test bundle for `ecma_array`:
 $ bem make desktop.specs/ecma__array
 ```
 
-You can see the results of the tests in the terminal after the building process
-finishes.
+You can see the results of the tests in the terminal after the building process finishes.
 You can also watch them in a browser loading `desktop.specs/ecma__array/spec-js+browser-js+bemhtml/spec-js+browser-js+bemhtml.html`.
 
-Run tests for other BEM entities in the same way. This will work for those which
-are equipped with `.spec.js` file.
+Run tests for other BEM entities in the same way. This will work for those which are equipped with `.spec.js` file.
 
-Test are built with a [bem-pr](https://github.com/narqo/bem-pr) library.
-Check the
-[details](https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md)
+Tests are built with a [bem-pr](https://github.com/narqo/bem-pr) library.
+Check the [details](https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md)
 about testing infrastructure of the bem-pr.
 
 ## Supported browsers
+
 Our browser support policy is based on statistics we get from [Yandex](http://company.yandex.com) services.
 
 Browsers with more than 2% users get full compliant support, more than 0.5% — partially compliant

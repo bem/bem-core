@@ -1,5 +1,18 @@
 # История изменений
 
+## 1.2.0
+
+### Крупные изменения
+
+- BEM-блоки инициируют событие `destruct` в процессе удаления ([#370](https://github.com/bem/bem-core/issues/370)).
+- Исправлены полифилы для `pointerevents` ([#354](https://github.com/bem/bem-core/pull/354)).
+
+### Также в релиз вошли следующие изменения
+
+- JSDoc блоков исправлен в соответствии с поддержкой [bem-jsd](github.com/bem/bem-jsd) ([#335](https://github.com/bem/bem-core/issues/335)).
+- Референс на BEMHTML обновлен для соответствия JavaScript-синтаксису шаблонизатора ([#355](https://github.com/bem/bem-core/pull/355)).
+- Переход на менеджер зависимостей [bower](http://bower.io) ([#367](https://github.com/bem/bem-core/issues/367)).
+
 ## 1.1.0
 
 ### Крупные изменения

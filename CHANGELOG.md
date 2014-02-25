@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.0
+
+### Major changes
+
+- BEM-blocks are emit `destruct` event on destructing ([#370](https://github.com/bem/bem-core/issues/370)).
+- Improvements of `pointerevents` polyfills ([#354](https://github.com/bem/bem-core/pull/354)).
+
+### Other changes
+
+- All JSDocs were fixed so [bem-jsd](github.com/bem/bem-jsd) could parse them ([#335](https://github.com/bem/bem-core/issues/335)).
+- Russian version of BEMHTML reference was actualized to JavaScript syntax ([#355](https://github.com/bem/bem-core/pull/355)).
+- Use [bower](http://bower.io) for dependency management ([#367](https://github.com/bem/bem-core/issues/367)).
+
 ## 1.1.0
 
 ### Major changes
