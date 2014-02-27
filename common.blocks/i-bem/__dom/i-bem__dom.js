@@ -882,11 +882,12 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
     /**
      * Initializes blocks on a fragment of the DOM tree
-     * @param {jQuery} [ctx=scope] Root DOM node
+     * @param {jQuery|String} [ctx=scope] Root DOM node
      * @returns {jQuery} ctx Initialization context
      */
     init : function(ctx) {
-        ctx || (ctx = DOM.scope);
+        if(typeof ctx === 'string') ctx = $(ctx);
+        else if(!ctx) ctx = DOM.scope;
 
         var uniqInitId = identify();
         findDomElem(ctx, BEM_SELECTOR).each(function() {

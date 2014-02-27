@@ -297,6 +297,26 @@ describe('i-bem__dom', function() {
             DOM.destruct(rootNode);
             delete DOM.blocks['block'];
         });
+
+        it('should allow to pass string', function() {
+            var spy = sinon.spy();
+            DOM.decl('block', {
+                onSetMod : {
+                    js : {
+                        inited : spy
+                    }
+                }
+            });
+
+            var rootNode = DOM.init(BEMHTML.apply({
+                    tag : 'div',
+                    content : { block : 'block', js : true } }));
+
+            spy.called.should.be.true;
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+        });
     });
 
     describe('DOM.destruct', function() {
