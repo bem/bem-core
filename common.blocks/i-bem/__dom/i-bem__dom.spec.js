@@ -380,6 +380,12 @@ describe('i-bem__dom', function() {
             delete DOM.blocks['block1'];
             delete DOM.blocks['block2'];
         });
+
+        it('should allow to pass simple string', function() {
+            var domElem = $('<div/>');
+            DOM.update(domElem, 'simple string');
+            domElem.html().should.be.equal('simple string');
+        });
     });
 
     describe('DOM.replace', function() {

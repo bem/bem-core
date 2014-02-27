@@ -928,7 +928,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      */
     update : function(ctx, content) {
         this.destruct(ctx, true);
-        return this.init(ctx.html($(content)));
+        return this.init(ctx.html(content));
     },
 
     /**
