@@ -6,6 +6,7 @@
 modules.define('loader_type_bundle', function(provide) {
 
 var LOADING_TIMEOUT = 20000,
+    global = this.global,
     doc = document,
     head,
     bundles = {},
@@ -74,7 +75,7 @@ load._loaded = function(bundle) {
 
     clearTimeout(bundleDesc.timer);
 
-    bundle.js && bundle.js();
+    bundle.js && bundle.js.call(global);
 
     bundle.css && appendCss(bundle.css);
 
