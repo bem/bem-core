@@ -399,8 +399,8 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
                 if(!needSetMod) break;
 
                 if(prefix === 'before') {
-                    this._onSetMod(modName, modVal, curModVal, elem, elemName);
                     elem || (this._modCache[modName] = modVal); // cache only block mods
+                    this._onSetMod(modName, modVal, curModVal, elem, elemName);
                 }
             }
 
