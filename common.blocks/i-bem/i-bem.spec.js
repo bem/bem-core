@@ -627,7 +627,12 @@ describe('i-bem', function() {
                 spy3 = sinon.spy();
 
             block
-                .on({ modName : 'mod1', modVal : '*' }, spy1)
+                .on(
+                    { modName : 'mod1', modVal : '*' },
+                    function(e) {
+                        e.target.getMod('mod1').should.be.equal('val2');
+                        spy1.apply(this, arguments);
+                    })
                 .on({ modName : 'mod1', modVal : 'val2' }, spy2)
                 .on({ modName : 'mod1', modVal : 'val3' }, spy3)
                 .setMod('mod1', 'val2');
@@ -645,7 +650,12 @@ describe('i-bem', function() {
                 spy3 = sinon.spy();
 
             BEM.blocks['block']
-                .on({ modName : 'mod1', modVal : '*' }, spy1)
+                .on(
+                    { modName : 'mod1', modVal : '*' },
+                    function(e) {
+                        e.target.getMod('mod1').should.be.equal('val2');
+                        spy1.apply(this, arguments);
+                    })
                 .on({ modName : 'mod1', modVal : 'val2' }, spy2)
                 .on({ modName : 'mod1', modVal : 'val3' }, spy3);
 
