@@ -1413,36 +1413,15 @@ provide(DOM);
 
 (function() {
 
-var slice = Array.prototype.slice,
-    origDefine = modules.define;
+var origDefine = modules.define;
 
 modules.define = function(name, deps, decl) {
-    if(typeof name === 'string') {
-        return origDefine.apply(modules, arguments);
-    }
+    origDefine.apply(modules, arguments);
 
-    if(!Array.isArray(deps)) {
-        decl = deps;
-        deps = [];
-    }
-
-    var origDepsLen = deps.length;
-
-    deps.unshift('i-bem__dom');
-    name.baseBlock && deps.unshift(name.baseBlock);
-    name.baseMix && (deps = name.baseMix.concat(deps));
-
-    modules.define(name.block, deps, function(provide, BEMDOM) {
-        var args = slice.call(arguments, deps.length - origDepsLen + 1);
-        args.unshift(function(props, staticProps) {
-            provide(BEMDOM.decl(name, props, staticProps));
+    name !== 'i-bem__dom_init' && arguments.length > 2 && ~deps.indexOf('i-bem__dom') &&
+        modules.define('i-bem__dom_init', [name], function(provide, _, prev) {
+            provide(prev);
         });
-        decl.apply(this, args);
-    });
-
-    modules.define('i-bem__dom_init', [name.block], function(provide, _, prev) {
-        provide(prev);
-    });
 };
 
 })();

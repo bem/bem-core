@@ -14,7 +14,7 @@ var buildClass = INTERNAL.buildClass;
  * @augments BEM
  * @exports
  */
-provide(inherit.self(BEM, {}, /** @lends BEM */{
+provide(BEM.decl(null, /** @lends BEM */{
 
     /**
      * Declares elements and creates an elements class

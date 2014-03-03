@@ -5,7 +5,7 @@
 modules.define(
     'i-bem__dom',
     ['i-bem', 'i-bem__internal', 'jquery'],
-    function(provide, BEM, INTERNAL, $, DOM) {
+    function(provide, BEM, INTERNAL, $, BEMDOM) {
 
 var buildClass = INTERNAL.buildClass,
     NAME_PATTERN = INTERNAL.NAME_PATTERN,
@@ -19,7 +19,7 @@ var buildClass = INTERNAL.buildClass,
  * @augments BEMDOM
  * @exports
  */
-BEM.decl('i-bem__dom', /** @lends BEMDOM.prototype */{
+provide(BEMDOM.decl(/** @lends BEMDOM.prototype */{
 
     /**
      * Delegates native getMod helper to element's instance
@@ -315,9 +315,6 @@ BEM.decl('i-bem__dom', /** @lends BEMDOM.prototype */{
     _buildElemNameRE : function() {
         return new RegExp(this._blockName + ELEM_DELIM + '(' + NAME_PATTERN + ')(?:\\s|$)');
     }
-
-});
-
-provide(DOM);
+}));
 
 });
