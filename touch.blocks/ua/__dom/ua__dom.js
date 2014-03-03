@@ -2,14 +2,14 @@
  * @module ua
  * @description Use ua module for provide user agent features by modifiers and update some on orient change
  */
-modules.define({ block : 'ua' }, function(provide, ua) {
+modules.define('ua', ['i-bem__dom'], function(provide, BEMDOM, ua) {
 
 /**
  * @exports ua
  * @class ua
  * @bem
  */
-provide(
+provide(BEMDOM.decl(this.name,
     {
         onSetMod : {
             'js' : {
@@ -44,5 +44,6 @@ provide(
             }
         }
     },
-    ua);
+    ua));
+
 });

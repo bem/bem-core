@@ -790,15 +790,15 @@ describe('i-bem__dom', function() {
             var name = 'b' + Math.random(),
                 spy = sinon.spy();
 
-            modules.define({ block : name }, function(provide) {
+            modules.define(name, ['i-bem__dom'], function(provide, BEMDOM) {
                 spy();
-                provide({});
+                provide(BEMDOM.decl(this.name, {}));
             });
 
-            modules.define({ block : name }, function(provide, Prev) {
+            modules.define(name, function(provide, Prev) {
                 spy();
-                Prev.should.be.eql(DOM.blocks[name]);
-                provide(Prev);
+                Prev.should.be.eql(DOM.blocks[this.name]);
+                provide(Prev.decl(this.name, {}));
             });
 
             modules.require([name], function(Block) {

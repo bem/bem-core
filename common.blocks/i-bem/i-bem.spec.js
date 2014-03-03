@@ -11,6 +11,41 @@ describe('i-bem', function() {
             block.should.be.equal(BEM.blocks['block']);
         });
 
+        it('should allow inheritance', function() {
+            var block = BEM.decl('block', {}),
+                block2 = block.decl('block2', {});
+
+            (new block2()).should.be.instanceOf(block);
+            (new block2()).should.be.instanceOf(block2);
+
+            delete BEM.blocks['block2'];
+        });
+
+        it('should allow inheritance from itself', function() {
+            var block = BEM.decl('block', {}),
+                block2 = block.decl({});
+
+            block2.should.be.equal(block);
+        });
+
+        it('should allow to define only modName and modVal', function() {
+            var block = BEM.decl('block', {}),
+                block2 = block.decl({ modName : 'm1', modVal : 'v1' }, {});
+
+            block2.should.be.equal(block);
+            block2.getName().should.be.equal('block');
+        });
+
+        it('should allow use block class as baseBlock', function() {
+            var block = BEM.decl('block', {}),
+                block2 = block.decl({ block : 'block2', baseBlock : block }, {});
+
+            (new block2()).should.be.instanceOf(block);
+            (new block2()).should.be.instanceOf(block2);
+
+            delete BEM.blocks['block2'];
+        });
+
         it('should apply method only if block has mod', function() {
             var baseMethodSpy = sinon.spy(),
                 modsMethodSpy = sinon.spy();

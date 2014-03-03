@@ -577,14 +577,30 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @returns {Function}
      */
     decl : function(decl, props, staticProps) {
+        // string as block
         typeof decl === 'string' && (decl = { block : decl });
+        // inherit from itself
+        if(arguments.length <= 2 &&
+                typeof decl === 'object' &&
+                (!decl || (typeof decl.block !== 'string' && typeof decl.modName !== 'string'))) {
+            staticProps = props;
+            props = decl;
+            decl = {};
+        }
+        typeof decl.block === 'undefined' && (decl.block = this.getName());
 
-        if(decl.baseBlock && !blocks[decl.baseBlock])
-            throw('baseBlock "' + decl.baseBlock + '" for "' + decl.block + '" is undefined');
+        var baseBlock;
+        if(typeof decl.baseBlock === 'undefined')
+            baseBlock = blocks[decl.block] || this;
+        else if(typeof decl.baseBlock === 'string') {
+            baseBlock = blocks[decl.baseBlock];
+            if(!baseBlock)
+                throw('baseBlock "' + decl.baseBlock + '" for "' + decl.block + '" is undefined');
+        } else {
+            baseBlock = decl.baseBlock;
+        }
 
         convertModHandlersToMethods(props || (props = {}));
-
-        var baseBlock = blocks[decl.baseBlock || decl.block] || this;
 
         if(decl.modName) {
             var checkMod = buildCheckMod(decl.modName, decl.modVal);
@@ -624,7 +640,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             });
         }
 
-        decl.block === baseBlock._name?
+        decl.block === baseBlock.getName()?
             // makes a new "live" if the old one was already executed
             (block = inherit.self(baseBlocks, props, staticProps))._processLive(true) :
             (block = blocks[decl.block] = inherit(baseBlocks, props, staticProps))._name = decl.block;
