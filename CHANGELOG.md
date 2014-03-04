@@ -17,7 +17,7 @@
 - `init` and `destruct` events have been removed from `i-bem.js` in favor of modifiers changes events (see "Major changes" section below).
 - `ecma` was moved to [separate repo](http://github.com/bem/es5-shims); ES5-shims should be used
   for IE < 9 ([#230](https://github.com/bem/bem-core/issues/230)).
-- `vow` module has been updated to 0.4.x ([#350](https://github.com/bem/bem-core/issues/350)).
+- `vow` module has been updated to 0.4.1 ([#350](https://github.com/bem/bem-core/issues/350)).
   See [Vow's changelog](https://github.com/dfilatov/vow/blob/0.4.1/CHANGELOG.md) for changes.
 - Support for vow@0.4 has been added to `i-bem.bemhtml` ([#385](https://github.com/bem/bem-core/issues/385)).
 
