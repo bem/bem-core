@@ -17,7 +17,7 @@
   (см. «Крупные изменения»).
 - Блок `ecma` перенесен [в отдельный репозиторий](http://github.com/bem/es5-shims); ES5-shims следует использовать
   для IE < 9 ([#230](https://github.com/bem/bem-core/issues/230)).
-- Модуль `vow` обновлен до мажорной версии 0.4 ([#350](https://github.com/bem/bem-core/issues/350)).
+- Модуль `vow` обновлен до мажорной версии 0.4.1 ([#350](https://github.com/bem/bem-core/issues/350)).
   См. [изменения в Vow](https://github.com/dfilatov/vow/blob/0.4.1/CHANGELOG.md).
 - В `i-bem.bemhtml` добавлена поддержка vow@0.4 ([#385](https://github.com/bem/bem-core/issues/385)).
 
