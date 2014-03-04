@@ -1,9 +1,9 @@
 modules.define('spec', ['i-bem', 'sinon'], function(provide, BEM, sinon) {
 
-describe('i-bem_elem-instances_yes', function() {
+describe('i-bem_elem-instances', function() {
     describe('decl', function() {
         it('should return element', function() {
-            var block = BEM.decl({ block: 'block', elem: 'elem' }, {});
+            var block = BEM.decl({ block : 'block', elem : 'elem' }, {});
             block.should.be.equal(BEM.blocks['block__elem']);
             delete BEM.blocks['block__elem'];
         });
@@ -12,14 +12,14 @@ describe('i-bem_elem-instances_yes', function() {
             var baseMethodSpy = sinon.spy(),
                 modsMethodSpy = sinon.spy();
 
-            BEM.decl({ block: 'block', elem: 'elem' }, {
+            BEM.decl({ block : 'block', elem : 'elem' }, {
                 method : baseMethodSpy
             });
-            BEM.decl({ block: 'block', elem: 'elem', modName: 'mod1', modVal: 'val1' }, {
+            BEM.decl({ block : 'block', elem : 'elem', modName : 'mod1', modVal : 'val1' }, {
                 method : modsMethodSpy
             });
 
-            var instance = BEM.create({ block : 'block', elem: 'elem', mods : { 'mod1' : 'val1' }});
+            var instance = BEM.create({ block : 'block', elem : 'elem', mods : { 'mod1' : 'val1' } });
 
             instance.method();
             baseMethodSpy.called.should.be.false;
@@ -36,8 +36,8 @@ describe('i-bem_elem-instances_yes', function() {
 
     describe('create', function() {
         it('should return instance of element', function() {
-            var elem = BEM.decl({ block: 'block', elem: 'elem' }, {}),
-                instance = BEM.create({ block: 'block', elem: 'elem' });
+            var elem = BEM.decl({ block : 'block', elem : 'elem' }, {}),
+                instance = BEM.create({ block : 'block', elem : 'elem' });
 
             instance.should.be.instanceOf(elem);
             delete BEM.blocks['block__elem'];
@@ -46,7 +46,7 @@ describe('i-bem_elem-instances_yes', function() {
 
     describe('getName', function() {
         it('should return correct full and short names of element', function() {
-            var elem = BEM.decl({ block: 'block', elem: 'elem' }, {});
+            var elem = BEM.decl({ block : 'block', elem : 'elem' }, {});
 
             elem.getName().should.be.equal('block__elem');
             elem.getName(true).should.be.equal('elem');

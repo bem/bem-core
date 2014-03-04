@@ -3,7 +3,7 @@ modules.define(
     ['i-bem__dom', 'jquery', 'sinon', 'BEMHTML'],
     function(provide, DOM, $, sinon, BEMHTML) {
 
-describe('i-bem__dom_elem-instances_yes', function() {
+describe('i-bem__dom_elem-instances', function() {
     describe('elemInstance', function() {
         it('should return the instance of element', function() {
             DOM.decl('block', {}, {});
