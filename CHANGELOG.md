@@ -1,5 +1,50 @@
 # Changelog
 
+## 2.0.0
+
+### Breaking changes
+
+- All deprecated methods have been removed from `i-bem.js` and `i-bem__dom.js` ([#318](https://github.com/bem/bem-core/issues/318)).
+  The following methods were removed:
+
+  * `destruct`, use `onSetMod js ''`;
+  * `extractParams`, use `elemParams`;
+  * `trigger`, use `emit`;
+  * `afterCurrentEvent`, use `next-tick` module;
+  * `channel`, use `events__channels` module;
+  * `changeThis`, use native `Function.prototype.bind`.
+
+- `init` and `destruct` events have been removed from `i-bem.js` in favor of modifiers changes events (see "Major changes" section below).
+- `ecma` was moved to [separate repo](http://github.com/bem/es5-shims); ES5-shims should be used
+  for IE < 9 ([#230](https://github.com/bem/bem-core/issues/230)).
+- `vow` module has been updated to 0.4.x ([#350](https://github.com/bem/bem-core/issues/350)).
+  See [Vow's changelog](https://github.com/dfilatov/vow/blob/0.4.1/CHANGELOG.md) for changes.
+- Support for vow@0.4 has been added to `i-bem.bemhtml` ([#385](https://github.com/bem/bem-core/issues/385)).
+
+### Major changes
+
+- Support for defining BEMDOM-blocks as [ym](https://github.com/ymaps/modules) modules has been added ([#382](https://github.com/bem/bem-core/issues/382)).
+- Events for modifiers changes have been added to `i-bem.js` ([#357](https://github.com/bem/bem-core/issues/357)).
+- Support for passing string values has been added to `BEMDOM.init`
+  ([#419](https://github.com/bem/bem-core/issues/419)).
+  and `BEMDOM.update` methods ([#420](https://github.com/bem/bem-core/issues/420)).
+- DOM helpers from `i-bem__dom.js` `replace`, `append`, `prepend`, `before`, `after` now return new context and `update` returns
+  updated context as a jQuery object ([#410](https://github.com/bem/bem-core/issues/410)).
+- New `loader_type_bundle` has been added ([#358](https://github.com/bem/bem-core/issues/358)).
+- Default jQuery versions were updated to 2.1.0 and to 1.11.0, for IE < 9 ([#356](https://github.com/bem/bem-core/issues/356)).
+
+### Other changes
+
+- `i-bem.bemhtml` now uses strings concatination instead of pushing to buffer in it's internals ([#401](https://github.com/bem/bem-core/issues/401)).
+- jQuery no longer removes itself from global scope if it exists ([#349](https://github.com/bem/bem-core/issues/349)).
+- `jquery__event_type_pointerclick.js` has been moved from touch level to common ([#393](https://github.com/bem/bem-core/issues/393)).
+- Modifiers `i-bem_elem-instances_yes` and `i-bem__dom_elem-instances_yes` were renamed to boolean style ([#352](https://github.com/bem/bem-core/issues/352)).
+- Runtime error in `page` template in development mode has been fixed ([#417](https://github.com/bem/bem-core/issues/417)).
+- Usage of `Function.prototype.bind` has been droped from `i-bem.js` internals in favor of support
+  for Android 2.3 ([#404](https://github.com/bem/bem-core/issues/404)).
+- Some bugs in `browser-js+bemhtml` tech have been fixed ([#392](https://github.com/bem/bem-core/issues/392)).
+- Up to [ym@0.0.15](https://github.com/ymaps/modules/releases) ([#414](https://github.com/bem/bem-core/issues/414)).
+
 ## 1.2.0
 
 ### Major changes

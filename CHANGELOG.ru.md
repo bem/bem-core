@@ -1,5 +1,48 @@
 # История изменений
 
+## 2.0.0
+
+### Изменения ломающие обратную совместимость
+
+- Из `i-bem.js` и `i-bem__dom.js` удалены все **deprecated** методы ([#318](https://github.com/bem/bem-core/issues/318)):
+
+  * `destruct`, используйте `onSetMod js ''`;
+  * `extractParams`, используйте `elemParams`;
+  * `trigger`, используйте `emit`;
+  * `afterCurrentEvent`, используйте модуль `next-tick`;
+  * `channel`, используйте модуль `events__channels`;
+  * `changeThis`, используйте нативный `Function.prototype.bind`.
+
+- Из `i-bem.js` убраны события `init` и `destruct`. Вместо них следует использовать события об изменении модификатора
+  (см. «Крупные изменения»).
+- Блок `ecma` перенесен [в отдельный репозиторий](http://github.com/bem/es5-shims); ES5-shims следует использовать
+  для IE < 9 ([#230](https://github.com/bem/bem-core/issues/230)).
+- Модуль `vow` обновлен до мажорной версии 0.4 ([#350](https://github.com/bem/bem-core/issues/350)).
+  См. [изменения в Vow](https://github.com/dfilatov/vow/blob/0.4.1/CHANGELOG.md).
+- В `i-bem.bemhtml` добавлена поддержка vow@0.4 ([#385](https://github.com/bem/bem-core/issues/385)).
+
+### Крупные изменения
+
+- Добавлена возможность декларировать BEMDOM-блоки как модули [ym](https://github.com/ymaps/modules) ([#382](https://github.com/bem/bem-core/issues/382)).
+- В `i-bem.js` добавлены события об изменения модификатора ([#357](https://github.com/bem/bem-core/issues/357)).
+- Добавлена поддержка использования строковых значений в качестве аргумента в методах `BEMDOM.init` ([#419](https://github.com/bem/bem-core/issues/419))
+  и `BEMDOM.update` ([#420](https://github.com/bem/bem-core/issues/420)).
+- Методы `i-bem__dom.js` `replace`, `append`, `prepend`, `before`, `after` теперь возвращают новый контекст,
+  а `update` – изменённый ([#410](https://github.com/bem/bem-core/issues/410)).
+- В `loader` добавлен модификатор `_type_bundle` ([#358](https://github.com/bem/bem-core/issues/358)).
+- jQuery обновлен до версии 2.1.0. Для IE < 9 — до версии 1.11.0 ([#356](https://github.com/bem/bem-core/issues/356)).
+
+### Также в релиз вошли следующие изменения
+
+- Базовые шаблоны в `i-bem.bemhtml` используют конкатенацию строк, вместо наполнения внутреннего буфера ([#401](https://github.com/bem/bem-core/issues/401)).
+- jQuery больше не удаляет себя из глобавльной области видимости, если присутствует на странице ([#349](https://github.com/bem/bem-core/issues/349)).
+- `jquery__event_type_pointerclick.js` перемещен с уровня `touch.blocks` на уровень `common.blocks` ([#393](https://github.com/bem/bem-core/issues/393)).
+- Модификаторы `i-bem_elem-instances_yes` и `i-bem__dom_elem-instances_yes` приведены к булевому стилю ([#352](https://github.com/bem/bem-core/issues/352)).
+- Исправлена ошибка в шаблоне блока `page` возникающая при использовании development-режима BEMHTML ([#417](https://github.com/bem/bem-core/issues/417)).
+- Для поддержки Android 2.3, внутри `i-bem.js` отказались от использований `Function.prototype.bind` ([#404](https://github.com/bem/bem-core/issues/404)).
+- Исправлены ошибки в модуле технологии `browser-js+bemhtml` ([#392](https://github.com/bem/bem-core/issues/392)).
+- NPM-модуль `ym` обновлен до версии [0.0.15](https://github.com/ymaps/modules/releases) ([#414](https://github.com/bem/bem-core/issues/414)).
+
 ## 1.2.0
 
 ### Крупные изменения
