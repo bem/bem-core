@@ -2,7 +2,7 @@
 
 ## 2.0.0
 
-### Изменения ломающие обратную совместимость
+### Изменения, ломающие обратную совместимость
 
 - Из `i-bem.js` и `i-bem__dom.js` удалены все **deprecated** методы ([#318](https://github.com/bem/bem-core/issues/318)):
 
@@ -34,12 +34,12 @@
 
 ### Также в релиз вошли следующие изменения
 
-- Базовые шаблоны в `i-bem.bemhtml` используют конкатенацию строк, вместо наполнения внутреннего буфера ([#401](https://github.com/bem/bem-core/issues/401)).
+- Базовые шаблоны в `i-bem.bemhtml` используют конкатенацию строк вместо наполнения внутреннего буфера ([#401](https://github.com/bem/bem-core/issues/401)).
 - jQuery больше не удаляет себя из глобавльной области видимости, если присутствует на странице ([#349](https://github.com/bem/bem-core/issues/349)).
 - `jquery__event_type_pointerclick.js` перемещен с уровня `touch.blocks` на уровень `common.blocks` ([#393](https://github.com/bem/bem-core/issues/393)).
 - Модификаторы `i-bem_elem-instances_yes` и `i-bem__dom_elem-instances_yes` приведены к булевому стилю ([#352](https://github.com/bem/bem-core/issues/352)).
-- Исправлена ошибка в шаблоне блока `page` возникающая при использовании development-режима BEMHTML ([#417](https://github.com/bem/bem-core/issues/417)).
-- Для поддержки Android 2.3, внутри `i-bem.js` отказались от использований `Function.prototype.bind` ([#404](https://github.com/bem/bem-core/issues/404)).
+- Исправлена ошибка в шаблоне блока `page`, возникающая при использовании development-режима BEMHTML ([#417](https://github.com/bem/bem-core/issues/417)).
+- Для поддержки Android 2.3 внутри `i-bem.js` отказались от использований `Function.prototype.bind` ([#404](https://github.com/bem/bem-core/issues/404)).
 - Исправлены ошибки в модуле технологии `browser-js+bemhtml` ([#392](https://github.com/bem/bem-core/issues/392)).
 - NPM-модуль `ym` обновлен до версии [0.0.15](https://github.com/ymaps/modules/releases) ([#414](https://github.com/bem/bem-core/issues/414)).
 
