@@ -197,8 +197,9 @@ function BEMContext(context, apply_) {
 BEMContext.prototype.isArray = isArray;
 
 BEMContext.prototype.isSimple = function isSimple(obj) {
+    if(!obj || obj === true) return true;
     var t = typeof obj;
-    return t === 'string' || t === 'number' || t === 'boolean';
+    return t === 'string' || t === 'number';
 };
 
 BEMContext.prototype.isShortTag = function isShortTag(t) {
