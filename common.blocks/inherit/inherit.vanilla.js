@@ -1,12 +1,15 @@
 /**
  * @module inherit
+ * @version 2.2.0
+ * @author Filatov Dmitry <dfilatov@yandex-team.ru>
  * @description This module provides some syntax sugar for "class" declarations, constructors, mixins, "super" calls and static members.
  */
 
-modules.define('inherit', function(provide) {
+(function(global) {
 
 var hasIntrospection = (function(){'_';}).toString().indexOf('_') > -1,
     emptyBase = function() {},
+    hasOwnProperty = Object.prototype.hasOwnProperty,
     objCreate = Object.create || function(ptp) {
         var inheritance = function() {};
         inheritance.prototype = ptp;
@@ -15,13 +18,13 @@ var hasIntrospection = (function(){'_';}).toString().indexOf('_') > -1,
     objKeys = Object.keys || function(obj) {
         var res = [];
         for(var i in obj) {
-            obj.hasOwnProperty(i) && res.push(i);
+            hasOwnProperty.call(obj, i) && res.push(i);
         }
         return res;
     },
     extend = function(o1, o2) {
         for(var i in o2) {
-            o2.hasOwnProperty(i) && (o1[i] = o2[i]);
+            hasOwnProperty.call(o2, i) && (o1[i] = o2[i]);
         }
 
         return o1;
@@ -67,7 +70,11 @@ function override(base, res, add) {
         if(isFunction(prop) &&
                 (!hasIntrospection || prop.toString().indexOf('.__base') > -1)) {
             res[name] = (function(name, prop) {
-                var baseMethod = base[name] || noOp;
+                var baseMethod = base[name]?
+                        base[name] :
+                        name === '__constructor'? // case of inheritance from plane function
+                            res.__self.__parent :
+                            noOp;
                 return function() {
                     var baseSaved = this.__base;
                     this.__base = baseMethod;
@@ -97,14 +104,14 @@ function applyMixins(mixins, res) {
 }
 
 /**
- * Creates class.
- * @exports
- * @param {Function|Array} [baseClass|baseClassAndMixins] class (or class and mixins) for inherit from
- * @param {Object} prototypeFields
- * @param {Object} [staticFields]
- * @returns {Function} class
- */
-var inherit = function() {
+* Creates class
+* @exports
+* @param {Function|Array} [baseClass|baseClassAndMixins] class (or class and mixins) to inherit from
+* @param {Object} prototypeFields
+* @param {Object} [staticFields]
+* @returns {Function} class
+*/
+function inherit() {
     var args = arguments,
         withMixins = isArray(args[0]),
         hasBase = withMixins || isFunction(args[0]),
@@ -125,6 +132,8 @@ var inherit = function() {
 
     extend(res, base);
 
+    res.__parent = base;
+
     var basePtp = base.prototype,
         resPtp = res.prototype = objCreate(basePtp);
 
@@ -134,7 +143,7 @@ var inherit = function() {
     staticProps && override(base, res, staticProps);
 
     return res;
-};
+}
 
 inherit.self = function() {
     var args = arguments,
@@ -150,6 +159,26 @@ inherit.self = function() {
     return base;
 };
 
-provide(inherit);
+var defineAsGlobal = true;
+if(typeof exports === 'object') {
+    module.exports = inherit;
+    defineAsGlobal = false;
+}
 
-});
+if(typeof modules === 'object') {
+    modules.define('inherit', function(provide) {
+        provide(inherit);
+    });
+    defineAsGlobal = false;
+}
+
+if(typeof define === 'function') {
+    define(function(require, exports, module) {
+        module.exports = inherit;
+    });
+    defineAsGlobal = false;
+}
+
+defineAsGlobal && (global.inherit = inherit);
+
+})(this);
