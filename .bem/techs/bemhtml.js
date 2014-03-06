@@ -1,6 +1,7 @@
 var BEM = require('bem'),
     Q = BEM.require('q'),
     PATH = require('path'),
+    Template = require('bem/lib/template'),
     compat = require('bemhtml-compat');
 
 exports.API_VER = 2;
@@ -40,18 +41,29 @@ exports.techMixin = {
 
         var BEMHTML = require('bem-xjst/lib/bemhtml'),
             exportName = this.getExportName(),
-            optimize = process.env[exportName + '_ENV'] != 'development';
+            optimize = process.env[exportName + '_ENV'] !== 'development';
 
         return BEMHTML.generate(sources, {
             wrap: true,
             exportName: exportName,
             optimize: optimize,
-            cache   : optimize && process.env[exportName + '_CACHE'] == 'on'
+            cache   : optimize && process.env[exportName + '_CACHE'] === 'on'
         });
     },
 
     getExportName: function() {
         return 'BEMHTML';
+    },
+
+    getCreateResult : function(path, suffix, vars) {
+        if (vars.opts && vars.opts.content) return vars.opts.content;
+
+        var tmpl = ['block(\'{{bemBlockName}}\')'];
+
+        vars.ElemName && tmpl.push('.elem(\'{{bemElemName}}\')');
+        vars.ModVal && tmpl.push('.' + (vars.ElemName ? 'elemMod' : 'mod') + '(\'{{bemModName}}\', \'{{bemModVal}}\')');
+
+        return Template.process(tmpl.join(''), vars);
     }
 
 };
