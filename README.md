@@ -24,7 +24,6 @@ the project.
 
 ### Blocks
   - `i-bem` — base block with helpers for JS and HTML
-  - `ecma` — some ES5 polyfils
   - `strings` — helpers for JS-strings
   - `objects` — helpers for JS-objects
   - `functions` — helpers for JS-functions
