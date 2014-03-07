@@ -23,7 +23,6 @@ This README is also available [in English](http://bem.info/libs/bem-core/).
 
 ### Блоки
   - `i-bem` — базовый блок с хелперами для JS и HTML
-  - `ecma` — некоторые ES5-полифилы
   - `strings` — хелперы для JS-строк
   - `objects` — хелперы для JS-объектов
   - `functions` — хелперы для JS-функций
