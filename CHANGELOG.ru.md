@@ -24,7 +24,7 @@
 ### Крупные изменения
 
 - Добавлена возможность декларировать BEMDOM-блоки как модули [ym](https://github.com/ymaps/modules) ([#382](https://github.com/bem/bem-core/issues/382)).
-- В `i-bem.js` добавлены события об изменения модификатора ([#357](https://github.com/bem/bem-core/issues/357)).
+- В `i-bem.js` добавлены события об изменении модификатора ([#357](https://github.com/bem/bem-core/issues/357)).
 - Добавлена поддержка использования строковых значений в качестве аргумента в методах `BEMDOM.init` ([#419](https://github.com/bem/bem-core/issues/419))
   и `BEMDOM.update` ([#420](https://github.com/bem/bem-core/issues/420)).
 - Методы `i-bem__dom.js` `replace`, `append`, `prepend`, `before`, `after` теперь возвращают новый контекст,
