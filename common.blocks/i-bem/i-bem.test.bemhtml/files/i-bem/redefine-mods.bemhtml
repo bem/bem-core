@@ -1,0 +1,6 @@
+block('b1').def()(function() {
+    this.mods.foo = 'bar';
+    applyNext();
+});
+block('b1').content()('foo bar');
+block('b1').mod('foo', 'bar').content()('foo bar');

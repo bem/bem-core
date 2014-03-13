@@ -115,7 +115,7 @@ match(this._mode === '')(
             block : vBlock || (vElem ? block : undefined),
             _currBlock : (vBlock || vElem) ? undefined : block,
             elem  : this.ctx.elem,
-            mods  : (vBlock ? this.ctx.mods : this.mods) || {},
+            mods : vBlock? this.ctx.mods || (this.ctx.mods = {}) : this.mods,
             elemMods : this.ctx.elemMods || {}
         });
     }),
