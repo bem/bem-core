@@ -13,7 +13,7 @@ provide(
         objects.extend(
             base,
             {
-                url : '//yandex.st/jquery/1.11.0/jquery.min.js'
+                url : '//yastatic.net/jquery/1.11.0/jquery.min.js'
             }) :
         base);
 
