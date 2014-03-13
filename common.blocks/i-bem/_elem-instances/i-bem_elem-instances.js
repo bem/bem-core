@@ -47,7 +47,7 @@ provide(BEM.decl(null, /** @lends BEM */{
             block._elemName = decl.elem;
         } else {
             block = this.__base.apply(this, arguments);
-            block._blockName = block._name;
+            block._elemName || (block._blockName = block._name);
         }
         return block;
     },
