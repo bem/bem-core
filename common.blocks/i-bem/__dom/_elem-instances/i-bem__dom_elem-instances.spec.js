@@ -253,7 +253,7 @@ describe('i-bem__dom_elem-instances', function() {
         });
     });
 
-    describe('auto declaration', function() {
+    describe('decl', function() {
         it('should declare element properly on initialization', function() {
             DOM.decl('block', {}, {});
 
@@ -273,6 +273,18 @@ describe('i-bem__dom_elem-instances', function() {
             DOM.destruct(rootNode);
             delete DOM.blocks['block'];
             delete DOM.blocks['block__elem'];
+        });
+
+        it('should declare element\'s modifier properly', function() {
+            var E1 = DOM.decl({ block : 'block', elem : 'e1' }, {}, {}),
+                e2Class = E1.buildClass('e2');
+
+            E1.decl({ modName : 'mod', modVal : 'val' }, {}, {});
+
+            E1.buildClass('e2').should.be.equal(e2Class);
+
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block__e1'];
         });
     });
 
