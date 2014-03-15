@@ -1,9 +1,9 @@
-modules.define('spec', ['functions__debounce'], function(provide, throttle) {
+modules.define('spec', ['functions__debounce'], function(provide, debounce) {
 
 describe('functions__debounce', function() {
     it('should properly debounce given function', function(done) {
         var res = [],
-            debouncedFn = throttle(
+            debouncedFn = debounce(
                 function(arg) {
                     res.push(arg);
                 },
@@ -28,7 +28,7 @@ describe('functions__debounce', function() {
 
     it('should properly debounce given function according "invokeAsap" param', function(done) {
         var res = [],
-            debouncedFn = throttle(
+            debouncedFn = debounce(
                 function(arg) {
                     res.push(arg);
                 },
@@ -54,7 +54,7 @@ describe('functions__debounce', function() {
 
     it('should call debounced function with given "ctx" param', function(done) {
         var ctx = {},
-            debouncedFn = throttle(
+            debouncedFn = debounce(
                 function() {
                     this.should.be.eql(ctx);
                     done();
