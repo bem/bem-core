@@ -1,6 +1,6 @@
 /**
  * @module inherit
- * @version 2.2.0
+ * @version 2.2.1
  * @author Filatov Dmitry <dfilatov@yandex-team.ru>
  * @description This module provides some syntax sugar for "class" declarations, constructors, mixins, "super" calls and static members.
  */
@@ -122,7 +122,11 @@ function inherit() {
             function() {
                 return this.__constructor.apply(this, arguments);
             } :
-            function() {};
+            hasBase?
+                function() {
+                    return base.apply(this, arguments);
+                } :
+                function() {};
 
     if(!hasBase) {
         res.prototype = props;
