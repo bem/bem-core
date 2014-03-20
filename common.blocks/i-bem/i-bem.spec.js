@@ -649,11 +649,37 @@ describe('i-bem', function() {
     describe('mod change events', function() {
         var block;
         beforeEach(function() {
-            BEM.decl('block', {});
+            BEM.decl('block', {
+                onSetMod : {
+                    'js' : {
+                        'inited' : function() {
+                            this.prop = 'val1';
+                        }
+                    },
+
+                    'mod1' : {
+                        'val2' : function() {
+                            this.prop = 'val2';
+                        }
+                    }
+                }
+            });
             block = BEM.create({ block : 'block', mods : { mod1 : 'val1' } });
         });
         afterEach(function() {
             delete BEM.blocks['block'];
+        });
+
+        it('should emit event on mod change after all onSetMod callbacks', function(done) {
+            block.prop.should.be.equal('val1');
+            block
+                .on(
+                    { modName : 'mod1', modVal : 'val2' },
+                    function() {
+                        this.prop.should.be.equal('val2');
+                        done();
+                    })
+                .setMod('mod1', 'val2');
         });
 
         it('should emit event on mod change with correct arguments', function() {

@@ -405,6 +405,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             }
 
             this._processingMods[modId] = null;
+            this._emitModChangeEvents(modName, modVal, curModVal, elem, elemName);
         }
 
         return this;
@@ -419,7 +420,9 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [elem] Nested element
      * @param {String} [elemName] Element name
      */
-    _onSetMod : function(modName, modVal, oldModVal, elem, elemName) {
+    _onSetMod : function(modName, modVal, oldModVal, elem, elemName) {},
+
+    _emitModChangeEvents : function(modName, modVal, oldModVal, elem, elemName) {
         var eventData = { modName : modName, modVal : modVal, oldModVal : oldModVal };
         elem && (eventData.elem = elem);
         this
