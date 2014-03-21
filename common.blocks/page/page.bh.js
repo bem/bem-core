@@ -20,8 +20,8 @@ module.exports = function(bh) {
                             { tag : 'meta', attrs : { charset : 'utf-8' } },
                             { tag : 'title', content : json.title },
                             { block : 'ua' },
-                            json.styles,
                             json.head,
+                            json.styles,
                             json.favicon? { elem : 'favicon', url : json.favicon } : '',
                         ]
                     },
