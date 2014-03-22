@@ -1,4 +1,4 @@
-# bem-core Library [![Build Status](https://travis-ci.org/bem/bem-core.png)](https://travis-ci.org/bem/bem-core)
+# bem-core Library [![Build Status](https://travis-ci.org/bem/bem-core.svg?branch=v2)](https://travis-ci.org/bem/bem-core)
 
 This README is also available [in Russian](http://ru.bem.info/libs/bem-core/).
 
