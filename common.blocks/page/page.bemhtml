@@ -14,8 +14,8 @@ block('page')(
                             { tag : 'meta', attrs : { charset : 'utf-8' } },
                             { tag : 'title', content : ctx.title },
                             { block : 'ua' },
-                            ctx.styles,
                             ctx.head,
+                            ctx.styles,
                             ctx.favicon? { elem : 'favicon', url : ctx.favicon } : ''
                         ]
                     },
