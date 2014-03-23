@@ -1,5 +1,25 @@
 # История изменений
 
+## 2.1.0
+
+### Крупные изменения
+
+- Исправлена ошибка в `i-bem.js`, из-за которой событие об изменении модификатора происходило до того, как будет
+  вызван обработчик реакции на изменение этого модификатора в `onSetMod` ([#454](https://github.com/bem/bem-core/issues/454)).
+- Свойства `this.mods` и `this.ctx.mods` базового шаблона `i-bem.bemhtml` теперь используют один и тот же объект ([#441](https://github.com/bem/bem-core/issues/441)).
+- Модуль [inherit](https://github.com/dfilatov/inherit) обновлен до версии 2.2.1 ([#466](https://github.com/bem/bem-core/issues/466)).
+- Исправлен порядок тегов секции `head` в шаблоне `page.bemhtml` ([#465](https://github.com/bem/bem-core/pull/465)).
+
+### Также в релиз вошли следующие изменения
+
+- В русскую документацию к `i-bem.js` добавлено описание поля `baseMix` ([#461](https://github.com/bem/bem-core/pull/461)).
+- CDN-хост внешних ресурсов изменен на `yastatic.net` ([#444](https://github.com/bem/bem-core/issues/444)).
+  Все ресурсы все так же доступны с хоста `yandex.st`. Физически `yandex.st` и `yastatic.net` находятся на
+  одних и тех же серверах. Различие только в DNS-записях.
+- Добавлен базовый BEMHTML-шаблон для команды `bem create` технологии `bemhtml` ([#277](https://github.com/bem/bem-core/issues/277)).
+- Прекращен автоматический запуск тестов под Node.js 0.8 в [Travis CI](http://travis-ci.com) ([#455](https://github.com/bem/bem-core/issues/455)).
+- Иконка статуса автосборки Travis [заменена на SVG](http://blog.travis-ci.com/2014-03-20-build-status-badges-support-svg/) :)
+
 ## 2.0.0
 
 ### Изменения, ломающие обратную совместимость
