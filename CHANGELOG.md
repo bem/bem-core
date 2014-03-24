@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.1.0
+
+### Major changes
+
+- An issue in `i-bem.js` when modifiers change event had been emitted before `onSetMod` handlers have been called was fixed ([#454](https://github.com/bem/bem-core/issues/454)).
+- An issue in `i-bem.bemhtml` was fixed. Since now `this.mods` and `this.ctx.mods` use the same object ([#441](https://github.com/bem/bem-core/issues/441)).
+- Error in modular declaration of element's modifiers was fixed in `i-bem__dom_elem-instances` ([#447](https://github.com/bem/bem-core/issues/447)).
+- [inherit](https://github.com/dfilatov/inherit) module was updated to 2.2.1 ([#466](https://github.com/bem/bem-core/issues/466)).
+- An order of tags in `head` section of `page.bemhtml` was fixed ([#465](https://github.com/bem/bem-core/pull/465)).
+
+### Other changes
+
+- `baseMix` field description of `i-bem.js` was added to russian docs ([#461](https://github.com/bem/bem-core/pull/461)).
+- CDN host was changed to `yastatic.net` ([#444](https://github.com/bem/bem-core/issues/444)).
+  Previous CDN host `yandex.st` is still accessible. Physically they both are the same web servers. DNS records is the only difference.
+- BEMHTML template for `bem create` command was added ([#277](https://github.com/bem/bem-core/issues/277)).
+- We do not support autobuilding of our tests with Node.js 0.8 in [Travis CI](http://travis-ci.com) any longer ([#455](https://github.com/bem/bem-core/issues/455)).
+- Travis's build status badge [was changed to SVG version](http://blog.travis-ci.com/2014-03-20-build-status-badges-support-svg/) :)
+
 ## 2.0.0
 
 ### Breaking changes
