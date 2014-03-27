@@ -1,6 +1,6 @@
 /**
  * @module loader_type_bundle
- * @module Load BEM bundle (JS+CSS) from external URL.
+ * @description Load BEM bundle (JS+CSS) from external URL.
  */
 
 modules.define('loader_type_bundle', function(provide) {
