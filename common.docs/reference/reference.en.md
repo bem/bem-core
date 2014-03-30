@@ -616,10 +616,10 @@ The next set of the keywords for BEM-entities is available:
     <td><pre><code>block('b-head-logo').mod('size', 'big')</code></pre></td>
 </tr>
 <tr>
-   <td><code>mods</code></td>
-   <td>the name and value of block's element</td>
+   <td><code>elemMod</code></td>
+   <td>the name and value of element's modifier</td>
    <td>identifier <code>[a-zA-Z0-9-]+ </code> or arbitrary js-expression</td>
-   <td><pre><code>block('b-head-logo').elem('text').mods('size', 'big')</code></pre></td>
+   <td><pre><code>block('b-head-logo').elem('text').elemMod('size', 'big')</code></pre></td>
 </tr>
 </table>
 
@@ -662,7 +662,7 @@ It mens that the given predicate will be evaluated to true when the correspondin
 
 For checking of the standard modes the next keywords are used:
 
-* `default` (`def`)
+* `def` (`default` mode)
 * `tag`
 * `bem`
 * `mix`
