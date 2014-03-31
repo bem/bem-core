@@ -1142,7 +1142,14 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {Function} [callback] Handler
      */
     liveUnbindFrom : function(elem, event, callback) {
-        if(elem.indexOf(' ') > 1) {
+
+        if (!event || functions.isFunction(event)) {
+            callback = event;
+            event = elem;
+            elem = undef;
+        }
+
+        if(elem && elem.indexOf(' ') > 1) {
             elem.split(' ').forEach(function(elem) {
                 this._liveClassUnbind(
                     this.buildClass(elem),
