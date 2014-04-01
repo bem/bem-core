@@ -1,17 +1,13 @@
 language: node_js
 
 node_js:
-  - 0.10
-  - 0.11
+  - 0.1
 
 env:
   global:
+    - secure: "EocST8MkGsiC8SU91QH8/Cz71ehcCHW6+VEeG6RalauYpB56O77p9d4gwhIk5J7uFyRHyEHJConjN/JM74WSY1s2jvVn2AZTeyhVgacxPFjaRZyRnDMjlyGEUfABfaKggpFvtiCzYKh/Y0jYDK27beDXdTp+nAcZQDAyFpjL6JU="
     - GH_REF: github.com/bem/bem-core.git
     - ISTANBUL_COVERAGE: yes
-
-matrix:
-  allow_failures:
-    - node_js: 0.11
 
 branches:
   only:
@@ -22,4 +18,5 @@ after_success:
   - npm install coveralls
   - ./node_modules/.bin/istanbul report lcovonly
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && echo "Coverage data was sent to coveralls!"
+  - '[ "${TRAVIS_PULL_REQUEST}" == "false" -a "${TRAVIS_BRANCH}" == "v2" ] && ./tools/update-jsdoc.sh || "false"'
 
