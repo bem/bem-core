@@ -33,6 +33,7 @@ provide(BEM.decl(null, /** @lends BEM */{
     decl : function(decl, props, staticProps) {
         var block;
         if(decl.elem) {
+            typeof decl.block === 'undefined' && (decl.block = this._blockName);
             block = this.__base(
                 {
                     block : buildClass(decl.block, decl.elem),
