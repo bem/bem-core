@@ -32,6 +32,18 @@ describe('i-bem_elem-instances', function() {
 
             delete BEM.blocks['block__elem'];
         });
+
+        it('should declare element by block properly', function() {
+            var Block = BEM.decl('block'),
+                Elem = Block.decl({ elem : 'elem' });
+
+            Elem.getName().should.be.equal('block__elem');
+
+            delete BEM.blocks['block'];
+            BEM.blocks['block__elem']?
+                delete BEM.blocks['block__elem'] :
+                delete BEM.blocks['undefined__elem'];
+        });
     });
 
     describe('create', function() {
