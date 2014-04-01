@@ -286,6 +286,17 @@ describe('i-bem__dom_elem-instances', function() {
             delete DOM.blocks['block'];
             delete DOM.blocks['block__e1'];
         });
+
+        it('should inherit from itself properly', function() {
+            var Block = DOM.decl('block'),
+                method = function() {};
+
+            Block.decl({ method : method });
+
+            method.should.be.equal(Block.prototype.method);
+
+            delete DOM.blocks['block'];
+        });
     });
 
     describe('liveInitOnBlockEvent', function() {

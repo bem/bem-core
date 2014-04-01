@@ -240,7 +240,7 @@ provide(BEMDOM.decl(/** @lends BEMDOM.prototype */{
             var names = name.split(ELEM_DELIM);
             return this.__base({ block : names[0], elem : names[1] }, props, staticProps);
         } else {
-            return this.__base(name, props, staticProps);
+            return this.__base.apply(this, arguments);
         }
     },
 
