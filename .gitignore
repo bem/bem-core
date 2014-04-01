@@ -7,6 +7,9 @@
 libs
 node_modules
 
+coverage.json
+/coverage
+
 *.bundles/*/*
 !*.bundles/.bem/*
 !*.bundles/*/blocks
