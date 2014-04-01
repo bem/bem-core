@@ -1,14 +1,25 @@
 language: node_js
 
 node_js:
-  - "0.10"
-  - "0.11"
+  - 0.10
+  - 0.11
+
+env:
+  global:
+    - GH_REF: github.com/bem/bem-core.git
+    - ISTANBUL_COVERAGE: yes
 
 matrix:
   allow_failures:
-    - node_js: "0.11"
+    - node_js: 0.11
 
 branches:
   only:
     - v1
     - v2
+
+after_success:
+  - npm install coveralls
+  - ./node_modules/.bin/istanbul report lcovonly
+  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && echo "Coverage data was sent to coveralls!"
+
