@@ -21,6 +21,7 @@
   "ignore": [
     "node_modules",
     "libs",
+    "tools",
     "*.bundles"
   ]
 }
