@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.2.0
+
+### Major changes
+
+- New `keyboard__codes` module has been added ([#431](https://github.com/bem/bem-core/issues/431)).
+- `BEMContext` class was added to oninit's export context in `i-bem.bemhtml` ([#485](https://github.com/bem/bem-core/pull/485)).
+- Ability to declare elements with block class has been added ([#481](https://github.com/bem/bem-core/issues/481)).
+- Behaviour of `isSimple` method of `BEMContext` was fixed in `i-bem.bemhtml` ([#432](https://github.com/bem/bem-core/pull/432)).
+- An issue with `liveUnbindFrom` method of `BEMDOM` was fixed in `i-bem__dom` ([#476](https://github.com/bem/bem-core/pull/476)).
+- An issue with `isFocusable` method of `dom` module was fixed for cases where `domElem` is a link with `tabindex` attribute,
+  but without `href` ([#501](https://github.com/bem/bem-core/issues/501)).
+- Short way of module declaration was fixed for `i-bem__dom_elem-instances` ([#479](https://github.com/bem/bem-core/issues/479)).
+- A workaround for rendering performance of blocks initialisation in Chrome-based browsers was added
+  to `i-bem__dom_init_auto` ([#486](https://github.com/bem/bem-core/issues/486)).
+- `vow.js` module has been moved to `vow.vanilla.js` ([#412](https://github.com/bem/bem-core/issues/412)).
+
+### Other changes
+
+- `vow` module has been updated to 0.4.3 ([#504](https://github.com/bem/bem-core/pull/504)).
+- Russian documentation about BEMTREE technology was added ([#500](https://github.com/bem/bem-core/pull/500)).
+- Russian documentation for JS-syntax of BEMHTML was updated ([#471](https://github.com/bem/bem-core/pull/471)).
+- API references for JS-modules has been added as a separate branch `v2-jsdoc` ([#478](https://github.com/bem/bem-core/pull/478)).
+
 ## 2.1.0
 
 ### Major changes
