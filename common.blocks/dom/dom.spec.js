@@ -72,6 +72,7 @@ describe('dom', function() {
 
         it('should returns true if given DOM elem has tabindex', function() {
             dom.isFocusable($('<span tabindex="4"/>')).should.be.true;
+            dom.isFocusable($('<a tabindex="5"/>')).should.be.true;
             dom.isFocusable($('<span/>')).should.be.false;
         });
 

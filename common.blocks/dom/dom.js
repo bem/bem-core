@@ -54,6 +54,7 @@ provide(/** @exports */{
         var domNode = domElem[0];
 
         if(!domNode) return false;
+        if(domNode.hasAttribute('tabindex')) return true;
 
         switch(domNode.tagName.toLowerCase()) {
             case 'iframe':
@@ -67,10 +68,9 @@ provide(/** @exports */{
 
             case 'a':
                 return !!domNode.href;
-
-            default:
-                return domNode.hasAttribute('tabindex');
         }
+
+        return false;
     },
 
     /**
