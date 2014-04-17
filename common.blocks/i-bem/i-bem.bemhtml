@@ -1,5 +1,5 @@
 /*global oninit */
-oninit(function(exports) {
+oninit(function(exports, context) {
 
 var BEM_ = {},
     toString = Object.prototype.toString,
@@ -193,6 +193,7 @@ function BEMContext(context, apply_) {
     this.mods = undefined;
     this.elemMods = undefined;
 }
+context.BEMContext = BEMContext;
 
 BEMContext.prototype.isArray = isArray;
 
