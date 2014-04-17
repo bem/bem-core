@@ -13,7 +13,7 @@ modules.define(
 function doProvide(preserveGlobal) {
     /**
      * @exports
-     * @type {Function} jQuery
+     * @type Function
      */
     provide(preserveGlobal? jQuery : jQuery.noConflict(true));
 }
