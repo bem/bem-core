@@ -1,7 +1,7 @@
 /**
  * @module vow
  * @author Filatov Dmitry <dfilatov@yandex-team.ru>
- * @version 0.4.1
+ * @version 0.4.3
  * @license
  * Dual licensed under the MIT and GPL licenses:
  *   * http://www.opensource.org/licenses/mit-license.php
@@ -416,7 +416,7 @@ Promise.prototype = /** @lends Promise.prototype */ {
             return;
         }
 
-        if(isVowPromise(val)) { // shortpath for vow.Promise
+        if(val && !!val._vow) { // shortpath for vow.Promise
             val.then(
                 this._resolve,
                 this._reject,
@@ -868,8 +868,20 @@ var vow = /** @exports vow */ {
      * ```
      */
     invoke : function(fn, args) {
+        var len = Math.max(arguments.length - 1, 0),
+            callArgs;
+        if(len) { // optimization for V8
+            callArgs = Array(len);
+            var i = 0;
+            while(i < len) {
+                callArgs[i++] = arguments[i];
+            }
+        }
+
         try {
-            return vow.resolve(fn.apply(global, slice.call(arguments, 1)));
+            return vow.resolve(callArgs?
+                fn.apply(global, callArgs) :
+                fn.call(global));
         }
         catch(e) {
             return vow.reject(e);
@@ -927,8 +939,10 @@ var vow = /** @exports vow */ {
             return defer.promise();
         }
 
-        var i = len,
-            onFulfilled = function() {
+        var i = len;
+        vow._forEach(
+            iterable,
+            function() {
                 if(!--i) {
                     var j = 0;
                     while(j < len) {
@@ -937,11 +951,10 @@ var vow = /** @exports vow */ {
                     defer.resolve(res);
                 }
             },
-            onRejected = function(reason) {
-                defer.reject(reason);
-            };
-
-        vow._forEach(iterable, onFulfilled, onRejected, keys);
+            defer.reject,
+            defer.notify,
+            defer,
+            keys);
 
         return defer.promise();
     },
@@ -982,11 +995,17 @@ var vow = /** @exports vow */ {
             return defer.promise();
         }
 
-        var onProgress = function() {
+        var onResolved = function() {
                 --i || defer.resolve(iterable);
             };
 
-        vow._forEach(iterable, onProgress, onProgress, keys);
+        vow._forEach(
+            iterable,
+            onResolved,
+            onResolved,
+            defer.notify,
+            defer,
+            keys);
 
         return defer.promise();
     },
@@ -1042,16 +1061,16 @@ var vow = /** @exports vow */ {
             return defer.promise();
         }
 
-        var i = 0, reason,
-            onFulfilled = function(val) {
-                defer.resolve(val);
-            },
-            onRejected = function(e) {
+        var i = 0, reason;
+        vow._forEach(
+            iterable,
+            defer.resolve,
+            function(e) {
                 i || (reason = e);
                 ++i === len && defer.reject(reason);
-            };
-
-        vow._forEach(iterable, onFulfilled, onRejected);
+            },
+            defer.notify,
+            defer);
 
         return defer.promise();
     },
@@ -1074,12 +1093,10 @@ var vow = /** @exports vow */ {
 
         vow._forEach(
             iterable,
-            function(val) {
-                defer.resolve(val);
-            },
-            function(reason) {
-                defer.reject(reason);
-            });
+            defer.resolve,
+            defer.reject,
+            defer.notify,
+            defer);
 
         return defer.promise();
     },
@@ -1108,11 +1125,11 @@ var vow = /** @exports vow */ {
         return vow.resolve(value).timeout(timeout);
     },
 
-    _forEach : function(promises, onFulfilled, onRejected, keys) {
+    _forEach : function(promises, onFulfilled, onRejected, onProgress, ctx, keys) {
         var len = keys? keys.length : promises.length,
             i = 0;
         while(i < len) {
-            vow.when(promises[keys? keys[i] : i], onFulfilled, onRejected);
+            vow.when(promises[keys? keys[i] : i], onFulfilled, onRejected, onProgress, ctx);
             ++i;
         }
     }
@@ -1206,10 +1223,6 @@ var undef,
     isObject = function(obj) {
         return obj !== null && typeof obj === 'object';
     },
-    isVowPromise = function(obj) {
-        return obj && !!obj._vow;
-    },
-    slice = Array.prototype.slice,
     toStr = Object.prototype.toString,
     isArray = Array.isArray || function(obj) {
         return toStr.call(obj) === '[object Array]';
