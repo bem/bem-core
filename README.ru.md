@@ -42,6 +42,7 @@ This README is also available [in English](http://bem.info/libs/bem-core/).
   - `dom` — хелперы для работы с DOM
   - `loader` — загрузчик для JS-файлов
   - `ua` — определение возможностей браузера
+  - `keyboard` — хелперы для работы с клавиатурой
   - `page` — скелет для html/head/body
 
 ### Технологии

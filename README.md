@@ -43,6 +43,7 @@ the project.
   - `dom` — helpers for work with DOM
   - `loader` — loader for JS files
   - `ua` — browser features detection
+  - `keyboard` — keyboard helpers
   - `page` — html/head/body scaffold
 
 ### Technologies
