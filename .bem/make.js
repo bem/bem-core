@@ -48,7 +48,7 @@ MAKE.decl('SetsNode', {
     },
 
     getSourceTechs : function() {
-        return ['examples', 'specs', 'jsdoc'];
+        return ['examples', 'tests', 'specs', 'jsdoc'];
     }
 
 });
