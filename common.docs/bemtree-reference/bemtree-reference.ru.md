@@ -158,7 +158,7 @@ block('header').content()([{ block: 'logo' }, { block: 'menu', content: { elem: 
 
 #### Синтаксис шаблонов
 
-BEMTREE-шаблоны создаются с помощью [BEM-XJST-синтаксиса шаблонов]((http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#unity). 
+BEMTREE-шаблоны создаются с помощью [BEM-XJST-синтаксиса шаблонов](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#unity). 
 На практике это означает, что в BEMTREE-шаблонах могут быть использованы все те же синтаксические конструкции, которые доступны в BEMHTML-шаблонах.
 
 Все синтаксические отличия от BEMHTML заключается в доступных наборах полей контекста и стандартных мод (включая хелперы для их записи).
@@ -626,7 +626,6 @@ block('box').match(!this.ctx._processed).content()(applyCtx({'ctx._processed':tr
   * [Конструкция apply](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#apply)
   * [Конструкция applyNext](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#applynext)
   * [Конструкция applyCtx](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#applyctx)
-  * [Конструкция local](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#local)
 
 
 <a name="check_predicate"></a>

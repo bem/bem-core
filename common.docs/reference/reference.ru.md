@@ -36,11 +36,11 @@
 * набор и порядок вызова [стандартных мод](#standardmoda);
 * доступные [поля контекста](#context_field)
 
-Подробнее об особенностях архитектуры BEMHTML читайте в разделе [архитектура шаблонизаторов BEMHTML и BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#uts_arch) документа по [шаблонизации данных в bem-core](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating).
+Подробнее об особенностях архитектуры BEMHTML читайте в разделе [архитектура шаблонизаторов BEMHTML и BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#bemx_arch) документа по [шаблонизации данных в bem-core](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating).
 
 <a name="uts"></a>
 ####Поддержка BEM-XJST-синтаксиса
-BEMHTML – [BEM-XJST-шаблонизатор](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#uts_intro). Иначе говоря, BEMHTML использует **BEM-XJST-синтаксис** и сохраняет все особенности BEM-XJST-шаблонизаторов, такие как:
+BEMHTML – [BEM-XJST-шаблонизатор](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#bemx_intro). Иначе говоря, BEMHTML использует **BEM-XJST-синтаксис** и сохраняет все особенности BEM-XJST-шаблонизаторов, такие как:
 * [привязка к БЭМ-предметной области](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#bem_area);
 * [декларативные шаблоны](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#decl_templatе);
 * [язык описания и исполнения шаблонов — JavaScript](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#language);
@@ -74,7 +74,7 @@ HTML-дерева не требовалось изменять набор и п�
 
 **См. также**:
 
-  * [Синтаксис BEMJSON]((http://ru.bem.info/libs/bem-core/2.2.0/templating/bemjson)
+  * [Синтаксис BEMJSON](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemjson)
 
 
 <a name="templatebemjson"></a>
@@ -92,7 +92,7 @@ HTML-дерева не требовалось изменять набор и п�
 
 **См. также**:
 
-* [Синтаксис BEMHTML](#bemhtml)
+* [Синтаксис BEM-XJST](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#unity)
 
 <a name="moda"></a>
 
