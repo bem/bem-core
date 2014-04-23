@@ -103,13 +103,6 @@ MAKE.decl('ExampleNode', {
             'bemhtml',
             'html'
         ];
-    },
-
-    getLevels : function() {
-        return this.__base()
-            .concat(this.rootLevel
-                .getTech('blocks')
-                .getPath(this.getSourceNodePrefix()));
     }
 
 });
