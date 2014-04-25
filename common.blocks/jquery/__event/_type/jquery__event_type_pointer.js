@@ -259,7 +259,7 @@ function addPointerEvent(type, toExtend) {
                 eventSpecial._noMouse = true;
 
                 pointerevent = new PointerEvent(e, eventName);
-                $(e.target).trigger(pointerevent);
+                $(e.currentTarget).trigger(pointerevent);
             }
         };
 
