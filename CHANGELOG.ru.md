@@ -1,5 +1,10 @@
 # История изменений
 
+## 2.2.1
+
+- Исправлена ошибка в модуле `jquery__event_type_pointerpressrelease`, из-за которой событие `pointerpress` генерировалось
+  дважды на каждое событие `mousedown` в IE10 ([#505](https://github.com/bem/bem-core/issues/505)).
+
 ## 2.2.0
 
 ### Крупные изменения
