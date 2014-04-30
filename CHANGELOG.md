@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.1
+
+- An issue in `jquery__event_type_pointerpressrelease` was fixed. `pointerpress` event has been triggered twice on each mousedown
+  in IE10 ([#505](https://github.com/bem/bem-core/issues/505)).
+
 ## 2.2.0
 
 ### Major changes
