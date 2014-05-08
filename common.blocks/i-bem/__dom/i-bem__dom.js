@@ -57,7 +57,9 @@ var undef,
         '(?:' + MOD_DELIM + '(' + NAME_PATTERN + '))?$'),
 
     buildModPostfix = INTERNAL.buildModPostfix,
-    buildClass = INTERNAL.buildClass;
+    buildClass = INTERNAL.buildClass,
+
+    reverse = Array.prototype.reverse;
 
 /**
  * Initializes blocks on a DOM element
@@ -905,7 +907,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {Boolean} [excludeSelf=false] Exclude the main domElem
      */
     destruct : function(ctx, excludeSelf) {
-        findDomElem(ctx, BEM_SELECTOR, excludeSelf).each(function(i, domNode) {
+        reverse.call(findDomElem(ctx, BEM_SELECTOR, excludeSelf)).each(function(i, domNode) {
             var params = getParams(domNode);
             objects.each(params, function(blockParams) {
                 if(blockParams.uniqId) {
