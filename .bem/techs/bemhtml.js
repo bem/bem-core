@@ -62,6 +62,7 @@ exports.techMixin = {
 
         vars.ElemName && tmpl.push('.elem(\'{{bemElemName}}\')');
         vars.ModVal && tmpl.push('.' + (vars.ElemName ? 'elemMod' : 'mod') + '(\'{{bemModName}}\', \'{{bemModVal}}\')');
+        tmpl.push('()');
 
         return Template.process(tmpl.join(''), vars);
     }
