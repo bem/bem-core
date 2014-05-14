@@ -26,9 +26,15 @@
     "jscs": "1.0.0",
     "git-hooks": "0.0.3",
     "bower-npm-install": "~0.5.4",
-    "istanbul": "~0.2.6"
+    "istanbul": "~0.2.6",
+    "enb-bem-docs": "git://github.com/andrewblond/enb-bem-docs.git#6b1544a8f3e516eaee3303cf84131e773868eb2b",
+    "enb": "0.10.0",
+    "enb-diverse-js": "0.1.0",
+    "enb-modules": "0.1.1",
+    "enb-bemxjst": "1.1.1"
   },
   "scripts": {
+    "build": "enb make docs -n",
     "lint": "jshint-groups && jscs .",
     "libs": "bower-npm-install",
     "bem-test": "npm run libs && bem make -w 7 desktop.specs touch.specs",
