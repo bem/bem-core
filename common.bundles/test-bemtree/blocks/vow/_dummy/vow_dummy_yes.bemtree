@@ -1,2 +1,2 @@
 typeof Vow === 'undefined' &&
-    (Vow = require('../../common.blocks/vow/vow.js'));
+    (Vow = require('../../common.blocks/vow/vow.vanilla.js'));
