@@ -3,6 +3,7 @@
 
 .bem/cache
 .bem/snapshots
+.enb/tmp
 
 libs
 node_modules
@@ -18,4 +19,5 @@ coverage.json
 /*.examples
 /*.specs
 /*.tests
+/*.sets
 
