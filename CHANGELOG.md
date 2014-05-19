@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.2
+
+- An issue with block reinitialization on the DOM node, that has been processed with destructor, was fixed
+  in `i-bem__dom` ([#518](https://github.com/bem/bem-core/issues/518)).
+- An issue in mod events subscription was fixed in `i-bem`. `false` could be used as `modVal` ([#529](https://github.com/bem/bem-core/issues/529)).
+- `jquery` was updated to the latest minor releases 2.1.1 and 1.11.1 ([#515](https://github.com/bem/bem-core/issues/515)).
+
 ## 2.2.1
 
 - An issue in `jquery__event_type_pointerpressrelease` was fixed. `pointerpress` event has been triggered twice on each mousedown
