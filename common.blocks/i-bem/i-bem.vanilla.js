@@ -718,7 +718,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
     },
 
     _buildModEventName : function(modEvent) {
-        var res = MOD_DELIM + modEvent.modName + MOD_DELIM + modEvent.modVal;
+        var res = MOD_DELIM + modEvent.modName + MOD_DELIM + (modEvent.modVal === false? '' : modEvent.modVal);
         modEvent.elem && (res = ELEM_DELIM + modEvent.elem + res);
         return res;
     },
