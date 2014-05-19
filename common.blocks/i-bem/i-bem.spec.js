@@ -664,7 +664,7 @@ describe('i-bem', function() {
                     }
                 }
             });
-            block = BEM.create({ block : 'block', mods : { mod1 : 'val1' } });
+            block = BEM.create({ block : 'block', mods : { mod1 : 'val1', mod2 : true } });
         });
         afterEach(function() {
             delete BEM.blocks['block'];
@@ -703,6 +703,22 @@ describe('i-bem', function() {
             spy3.should.not.have.been.called;
 
             spy1.args[0][1].should.be.eql({ modName : 'mod1', modVal : 'val2', oldModVal : 'val1' });
+        });
+
+        it('should be able to subscribe on deleting mod', function() {
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy();
+
+            block
+                .on({ modName : 'mod2', modVal : '' }, spy1)
+                .on({ modName : 'mod2', modVal : false }, spy2)
+                .delMod('mod2');
+
+            spy1.should.have.been.called.once;
+            spy2.should.have.been.called.once;
+
+            spy1.args[0][1].should.be.eql({ modName : 'mod2', modVal : '', oldModVal : true });
+            spy2.args[0][1].should.be.eql({ modName : 'mod2', modVal : '', oldModVal : true });
         });
 
         it('should emit live event on mod change with correct arguments', function() {
