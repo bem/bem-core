@@ -142,13 +142,12 @@ function extendToPointerEvent(e) {
  * @param {string} type future pointerevent type
  */
 function PointerEvent(e, type) {
-
-    extendToPointerEvent(e);
-    normalizeTouchEvent(e);
-    e.type = type;
-
     $.extend(this, e);
 
+    this.type = type;
+
+    extendToPointerEvent(this);
+    normalizeTouchEvent(this);
 }
 
 // export PointerEvent class

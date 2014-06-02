@@ -101,6 +101,41 @@ describe('jquery__event_type_pointer', function() {
 
         spy.callCount.should.be.equal(0);
     });
+
+    it('should not affect native "mouse*" events (#534)', function() {
+        var elem = $('<div/>'),
+            eventsMap = {
+                mouseenter : 'pointerenter',
+                mouseover : 'pointerover',
+                mousedown : 'pointerdown',
+                mousemove : 'pointermove',
+                mouseup : 'pointerup',
+                mouseleave : 'pointerleave',
+                mouseout : 'pointerout'
+            };
+
+        function assertEventType(type) {
+            return function(e) {
+                e.type.should.be.equal(type);
+            };
+        }
+
+        Object.keys(eventsMap).forEach(function(mouseEvent) {
+            var pointerEvent = eventsMap[mouseEvent],
+                spy = sinon.spy();
+
+            elem
+                .on(pointerEvent, assertEventType(pointerEvent))
+                .on(mouseEvent, function(e) {
+                    spy();
+                    assertEventType(mouseEvent)(e);
+                });
+
+            elem[mouseEvent]();
+
+            spy.should.have.been.calledOnce;
+        });
+    });
 });
 
 provide();
