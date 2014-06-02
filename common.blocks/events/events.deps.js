@@ -1,3 +1,3 @@
 ({
-   shouldDeps : ['inherit', 'identify']
+   shouldDeps : ['inherit', 'identify', 'functions']
 })
