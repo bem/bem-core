@@ -413,23 +413,29 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * Removes event handlers from any DOM element
      * @protected
      * @param {jQuery} domElem DOM element where the event was being listened for
-     * @param {String} event Event name
+     * @param {String|Object} event Event name or event object
      * @param {Function} [fn] Handler function
      * @returns {this}
      */
     unbindFromDomElem : function(domElem, event, fn) {
-        event = this._buildEventName(event);
+        if(typeof event === 'string') {
+            event = this._buildEventName(event);
+            fn?
+                domElem.unbind(event, fn) :
+                domElem.unbind(event);
+        } else {
+            objects.each(event, function(fn, event) {
+                this.unbindFromDomElem(domElem, event, fn);
+            }, this);
+        }
 
-        fn?
-            domElem.unbind(event, fn) :
-            domElem.unbind(event);
         return this;
     },
 
     /**
      * Removes event handler from document
      * @protected
-     * @param {String} event Event name
+     * @param {String|Object} event Event name or event object
      * @param {Function} [fn] Handler function
      * @returns {this}
      */
@@ -440,7 +446,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
     /**
      * Removes event handler from window
      * @protected
-     * @param {String} event Event name
+     * @param {String|Object} event Event name or event object
      * @param {Function} [fn] Handler function
      * @returns {this}
      */
@@ -452,7 +458,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * Removes event handlers from the block's main DOM elements or its nested elements
      * @protected
      * @param {jQuery|String} [elem] Nested element
-     * @param {String} event Event name
+     * @param {String|Object} event Event name or event object
      * @param {Function} [fn] Handler function
      * @returns {this}
      */
