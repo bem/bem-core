@@ -24,6 +24,12 @@ var undef,
     uniqIdToBlock = {},
 
     /**
+     * Storage for DOM element's parent nodes
+     * @type Object
+     */
+    domNodesToParents = {},
+
+    /**
      * Storage for block parameters
      * @type Object
      */
@@ -194,6 +200,16 @@ function removeDomNodeFromBlock(block, domNode) {
     block.domElem.length === 1?
         block._destruct() :
         block.domElem = block.domElem.not(domNode);
+}
+
+/**
+ * Fills DOM node's parent nodes to the storage
+ * @param {jQuery} domElem
+ */
+function storeDomNodeParents(domElem) {
+    domElem.each(function() {
+        domNodesToParents[identify(this)] = this.parentNode;
+    });
 }
 
 /**
@@ -521,9 +537,8 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
             storage = liveEventCtxStorage[_this.__self._buildCtxEventName(e.type)],
             ctxIds = {};
 
-        storage && _this.domElem.each(function() {
-            var ctx = this,
-                counter = storage.counter;
+        storage && _this.domElem.each(function(_, ctx) {
+            var counter = storage.counter;
             while(ctx && counter) {
                 var ctxId = identify(ctx, true);
                 if(ctxId) {
@@ -540,7 +555,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
                     }
                     ctxIds[ctxId] = true;
                 }
-                ctx = ctx.parentNode;
+                ctx = ctx.parentNode || domNodesToParents[ctxId];
             }
         });
     },
@@ -912,7 +927,16 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {Boolean} [excludeSelf=false] Exclude the main domElem
      */
     destruct : function(ctx, excludeSelf) {
-        reverse.call(findDomElem(ctx, BEM_SELECTOR, excludeSelf)).each(function(i, domNode) {
+        var _ctx;
+        if(excludeSelf) {
+            storeDomNodeParents(_ctx = ctx.children());
+            ctx.empty();
+        } else {
+            storeDomNodeParents(_ctx = ctx);
+            ctx.remove();
+        }
+
+        reverse.call(findDomElem(_ctx, BEM_SELECTOR)).each(function(_, domNode) {
             var params = getParams(domNode);
             objects.each(params, function(blockParams) {
                 if(blockParams.uniqId) {
@@ -925,7 +949,8 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
             delete domElemToParams[identify(domNode)];
         });
 
-        excludeSelf? ctx.empty() : ctx.remove();
+        // flush parent nodes storage that has been filled above
+        domNodesToParents = {};
     },
 
     /**
