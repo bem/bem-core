@@ -1151,7 +1151,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      */
     liveUnbindFrom : function(elem, event, callback) {
 
-        if (!event || functions.isFunction(event)) {
+        if(!event || functions.isFunction(event)) {
             callback = event;
             event = elem;
             elem = undef;
