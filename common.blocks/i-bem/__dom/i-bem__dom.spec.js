@@ -365,50 +365,6 @@ describe('i-bem__dom', function() {
 
             delete DOM.blocks['imp-block'];
         });
-
-        it('should not create new block instance during domElem destructing (#518)', function() {
-            var spyHandler = sinon.spy(),
-                block1;
-
-            DOM.decl('block1', {}, {
-                live : function() {
-                    this.liveBindTo('elem1', 'click', function() {
-                        spyHandler();
-                        this.should.be.eql(block1);
-                    });
-                }
-            });
-
-            DOM.decl('block2', {
-                onSetMod : {
-                    js : {
-                        '' : function() {
-                            this.domElem.trigger('click');
-                        }
-                    }
-                }
-            });
-
-            var domElem = $(BEMHTML.apply({
-                block : 'block1',
-                js : true,
-                content : {
-                    block : 'block2',
-                    mix : { block : 'block1', elem : 'elem1' },
-                    js : true
-                }
-            })).appendTo('body');
-
-            DOM.init(domElem);
-            block1 = domElem.bem('block1');
-
-            DOM.destruct(domElem);
-
-            spyHandler.should.have.been.called;
-
-            delete DOM.blocks['block2'];
-            delete DOM.blocks['block1'];
-        });
     });
 
     describe('DOM.update', function() {
@@ -870,6 +826,41 @@ describe('i-bem__dom', function() {
 
         afterEach(function() {
             delete DOM.blocks['block'];
+        });
+
+        it('should propagate destructing event', function() {
+            var spy = sinon.spy();
+
+            DOM.decl('block1', {
+                onSetMod : {
+                    'js' : {
+                        'inited' : function() {
+                            DOM.blocks['block2'].on(this.domElem, { modName : 'js', modVal : '' }, spy);
+                        }
+                    }
+                }
+            });
+
+            DOM.decl('block2');
+
+            var domElem = $(BEMHTML.apply({
+                block : 'block1',
+                content : {
+                    block : 'block2'
+                }
+            })).appendTo('body');
+
+            DOM.init(domElem);
+
+            var block1 = domElem.bem('block1'),
+                block2 = block1.findBlockInside('block2');
+
+            DOM.destruct(block2.domElem);
+
+            spy.should.have.been.called;
+
+            delete DOM.blocks['block2'];
+            delete DOM.blocks['block1'];
         });
 
         describe('elems', function() {
