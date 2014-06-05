@@ -1,6 +1,18 @@
 # Changelog
 
+## 2.2.3
+
+### Bug fixes
+
+- Destruction process of blocks was fixed to prevent unexpected block reinitializations ([#540](https://github.com/bem/bem-core/issues/540)).
+- An issue in `jquery__event_type_pointer` was fixed. Native mouse events were replaced with pointer events
+  in unexpected cases ([#534](https://github.com/bem/bem-core/issues/534)).
+- `unbindFrom*` methods of `i-bem__dom` now support multiple events to be passed in arguments ([#533](https://github.com/bem/bem-core/issues/533)).
+- Lost `functions` dependency in `events` module was restored ([#532](https://github.com/bem/bem-core/issues/532)).
+
 ## 2.2.2
+
+### Bug fixes
 
 - An issue with block reinitialization on the DOM node, that has been processed with destructor, was fixed
   in `i-bem__dom` ([#518](https://github.com/bem/bem-core/issues/518)).
