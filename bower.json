@@ -1,6 +1,6 @@
 {
   "name": "bem-core",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "bem-core Library",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
     "Sergey Belov <peimei@ya.ru>"
   ],
   "devDependencies": {
-    "bem-pr": "git://github.com/narqo/bem-pr.git#0.8.1-beta1"
+    "bem-pr": "git://github.com/narqo/bem-pr.git#0.8.1-beta3"
   },
   "license": "MIT",
   "private": true,
