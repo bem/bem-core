@@ -405,7 +405,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             }
 
             this._processingMods[modId] = null;
-            this._emitModChangeEvents(modName, modVal, curModVal, elem, elemName);
+            needSetMod && this._emitModChangeEvents(modName, modVal, curModVal, elem, elemName);
         }
 
         return this;

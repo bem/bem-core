@@ -650,6 +650,12 @@ describe('i-bem', function() {
         var block;
         beforeEach(function() {
             BEM.decl('block', {
+                beforeSetMod : {
+                    'mod3' : function() {
+                        return false;
+                    }
+                },
+
                 onSetMod : {
                     'js' : {
                         'inited' : function() {
@@ -764,6 +770,16 @@ describe('i-bem', function() {
                 .delMod('js');
 
             spy1.should.have.been.called.once;
+        });
+
+        it('should not emit event if beforeSetMod prevents mod changing', function() {
+            var spy = sinon.spy();
+
+            block
+                .on({ modName : 'mod3', modVal : '*' }, spy)
+                .setMod('mod3', 'val');
+
+            spy.should.not.have.been.called;
         });
 
         it('should properly unbind mod event handler', function() {
