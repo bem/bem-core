@@ -209,7 +209,7 @@ this.block().findElem('link');    // будут найдены элементы 
 onSetMod: {
     'state': {
         'current': function() {
-            // код обработичка
+            // код обработчика
         }
     }
 }
@@ -227,7 +227,7 @@ onElemSetMod: {
     'item': {
         'state': {
             'current': function() {
-                // код обработичка
+                // код обработчика
             }
         }
     }
