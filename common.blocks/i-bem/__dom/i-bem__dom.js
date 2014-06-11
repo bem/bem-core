@@ -122,7 +122,8 @@ function initBlock(blockName, domElem, params, forceLive, callback) {
     if(!(blockClass._liveInitable = !!blockClass._processLive()) || forceLive || params.live === false) {
         forceLive && domElem.addClass(BEM_CLASS); // add css class for preventing memory leaks in further destructing
 
-        block = uniqIdToBlock[uniqId] = new blockClass(uniqIdToDomElems[uniqId], params, !!forceLive);
+        block = new blockClass(uniqIdToDomElems[uniqId], params, !!forceLive);
+
         delete uniqIdToDomElems[uniqId];
         callback && callback.apply(block, Array.prototype.slice.call(arguments, 4));
         return block;
@@ -253,6 +254,8 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
          * @private
          */
         this._uniqId = params.uniqId;
+
+        uniqIdToBlock[this._uniqId] = this;
 
         /**
          * @member {Boolean} Flag for whether it's necessary to unbind from the document and window when destroying the block
