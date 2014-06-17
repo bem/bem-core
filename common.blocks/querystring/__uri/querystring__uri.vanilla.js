@@ -13,23 +13,27 @@ function convert(str) {
     return str.replace(
         /%.{2}/g,
         function($0) {
-            return map[$0];
+            return map[$0] || $0;
         });
 }
 
 function decode(fn,  str) {
-    var res = '';
-    // try/catch block for getting the encoding of the source string
-    // error is thrown if a non-UTF8 string is input
-    // if the string was not decoded,  it is returned without changes
+    var decoded = '';
+    
+    // Try/catch block for getting the encoding of the source string.
+    // Error is thrown if a non-UTF8 string is input.
+    // If the string was not decoded, it is returned without changes.
     try {
-        res = fn(str);
+        decoded = fn(str);
+    } catch (e1) {
+        try {
+            decoded = fn(convert(str));
+        } catch (e2) {
+            decoded = str;
+        }
     }
-    catch(e) {
-        res = fn(convert(str));
-    }
-
-    return res;
+    
+    return decoded;
 }
 
 provide(/** @exports */{
