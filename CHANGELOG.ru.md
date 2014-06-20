@@ -1,5 +1,14 @@
 # История изменений
 
+## 2.2.4
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена ошибка в `i-bem.js`, из-за которой событие об изменении модификатора генерировалось,
+  даже если обработчик `beforeSetMod` предотвращал изменение ([#546](https://github.com/bem/bem-core/pull/546)).
+- В случае возникновения ошибки в процессе декодирования строки, модуль `querystring__uri` теперь возвращает
+  оригинальную строку ([#554](https://github.com/bem/bem-core/pull/554)).
+
 ## 2.2.3
 
 ### В релиз вошли следующие исправления ошибок
@@ -8,7 +17,8 @@
   инициализации блока ([#540](https://github.com/bem/bem-core/issues/540)).
 - Исправлена ошибка в модуле `jquery__event_type_pointer`, из-за которой нативные события мыши ошибочно замещались
   на pointer-события ([#534](https://github.com/bem/bem-core/issues/534)).
-- `unbindFrom*`-методы в модуле `i-bem__dom` теперь поддерживают отписывание от нескольких событий за вызов ([#533](https://github.com/bem/bem-core/issues/533)).
+- `unbindFrom*`-методы в модуле `i-bem__dom` теперь поддерживают отписывание от нескольких событий
+  за вызов ([#533](https://github.com/bem/bem-core/issues/533)).
 - Добавлена недостающая зависимость от модуля `functions` в модуле `events` ([#532](https://github.com/bem/bem-core/issues/532)).
 
 ## 2.2.2
@@ -56,7 +66,8 @@
 
 - Исправлена ошибка в `i-bem.js`, из-за которой событие об изменении модификатора происходило до того, как будет
   вызван обработчик реакции на изменение этого модификатора в `onSetMod` ([#454](https://github.com/bem/bem-core/issues/454)).
-- Свойства `this.mods` и `this.ctx.mods` базового шаблона `i-bem.bemhtml` теперь используют один и тот же объект ([#441](https://github.com/bem/bem-core/issues/441)).
+- Свойства `this.mods` и `this.ctx.mods` базового шаблона `i-bem.bemhtml` теперь используют
+  один и тот же объект ([#441](https://github.com/bem/bem-core/issues/441)).
 - Модуль [inherit](https://github.com/dfilatov/inherit) обновлен до версии 2.2.1 ([#466](https://github.com/bem/bem-core/issues/466)).
 - Исправлен порядок тегов секции `head` в шаблоне `page.bemhtml` ([#465](https://github.com/bem/bem-core/pull/465)).
 
