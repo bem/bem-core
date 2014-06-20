@@ -1,10 +1,19 @@
 # Changelog
 
+## 2.2.4
+
+### Bug fixes
+
+- An issue in `i-bem.js` was fixed. Modifier change event has been emitted even if `beforeSetMod` handler
+  had prevented change ([#546](https://github.com/bem/bem-core/pull/546)).
+- String decoding process of `querystring__uri` module was fixed to return original string
+  if decode failed ([#554](https://github.com/bem/bem-core/pull/554)).
+
 ## 2.2.3
 
 ### Bug fixes
 
-- Destruction process of blocks was fixed to prevent unexpected block reinitializations ([#540](https://github.com/bem/bem-core/issues/540)).
+- Destruction process of blocks was fixed to prevent unexpected block reinitialization ([#540](https://github.com/bem/bem-core/issues/540)).
 - An issue in `jquery__event_type_pointer` was fixed. Native mouse events were replaced with pointer events
   in unexpected cases ([#534](https://github.com/bem/bem-core/issues/534)).
 - `unbindFrom*` methods of `i-bem__dom` now support multiple events to be passed in arguments ([#533](https://github.com/bem/bem-core/issues/533)).
