@@ -356,7 +356,7 @@ def()(function() {
                     this._str += BEM_INTERNAL.buildClasses(vBlock, ctx.elem, ctx.elemMods || ctx.mods);
 
                     var mix = apply('mix');
-                    ctx.mix && (mix = mix? mix.concat(ctx.mix) : ctx.mix);
+                    ctx.mix && (mix = mix? [].concat(mix, ctx.mix) : ctx.mix);
 
                     if(mix) {
                         var visited = {},
