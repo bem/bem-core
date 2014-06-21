@@ -20,7 +20,14 @@ block('page')(
                         ]
                     },
                     // Добавляем элемент, чтобы сработал другой шаблон и не было зацикливания
-                    this.extend(ctx, { elem : 'body' })
+                    this.extend(ctx, {
+                        elem : 'body',
+                        attrs : apply('attrs'),
+                        cls : apply('cls'),
+                        js : apply('js'),
+                        mix : apply('mix'),
+                        content : apply('content')
+                    })
                 ]
             }
         ]);
