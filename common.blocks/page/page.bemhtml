@@ -1,6 +1,8 @@
 block('page')(
 
-    def()(function() {
+    def().match(function() { return !this._defPageApplied; })(function() {
+        this._defPageApplied = true;
+
         var ctx = this.ctx;
         applyCtx([
             ctx.doctype || '<!DOCTYPE html>',
@@ -19,27 +21,22 @@ block('page')(
                             ctx.favicon? { elem : 'favicon', url : ctx.favicon } : ''
                         ]
                     },
-                    // Добавляем элемент, чтобы сработал другой шаблон и не было зацикливания
-                    this.extend(ctx, { elem : 'body' })
+                    ctx
                 ]
             }
         ]);
+
+        this._defPageApplied = false;
     }),
 
-    elem('body')(
-        tag()('body'),
-        content()(function() {
-            return [
-                applyNext(),
-                this.ctx.scripts
-            ];
-        }),
-        def()(function() {
-            // Обратно очищаем поле elem, чтобы сохранить правильный контекст
-            this.ctx.elem = null;
-            applyNext();
-        })
-    ),
+    tag()('body'),
+
+    content()(function() {
+        return [
+            applyNext(),
+            this.ctx.scripts
+        ];
+    }),
 
     elem('head')(
         bem()(false),
