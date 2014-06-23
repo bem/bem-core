@@ -1,7 +1,7 @@
 block('page')(
-    mode('head')(function() {
+    elem('head').content()(function() {
         return [
-            { block : 'ua' },
+            applyNext(),
             {
                 elem : 'meta',
                 attrs : {
@@ -13,12 +13,14 @@ block('page')(
                 }
             },
             { elem : 'meta', attrs : { name : 'format-detection', content : 'telephone=no' } },
-            { elem : 'link', attrs : { name : 'apple-mobile-web-app-capable', content : 'yes' } },
-            this.ctx.head
+            { elem : 'link', attrs : { name : 'apple-mobile-web-app-capable', content : 'yes' } }
         ];
     }),
 
     mix()(function() {
-        return applyNext().concat({ block : 'ua', js : true });
+        var mix = applyNext(),
+            uaMix = [{ block : 'ua', js : true }];
+
+        return mix? uaMix.concat(mix) : uaMix;
     })
 );
