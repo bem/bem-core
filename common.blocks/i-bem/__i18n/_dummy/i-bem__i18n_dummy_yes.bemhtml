@@ -2,7 +2,7 @@
 oninit(function() {
     (function(global, bem_) {
 
-        if(bem_.I18N) {
+        if(bem_.I18N || (typeof modules === 'object' && modules.isDefined('i-bem__i18n'))) {
             return;
         }
 

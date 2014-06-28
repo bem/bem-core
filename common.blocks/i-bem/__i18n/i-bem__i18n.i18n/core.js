@@ -1,12 +1,14 @@
 /* jshint browser:true, node:true */
-/* global BEM, i18n, oninit:true */
 
-if(typeof oninit === 'undefined') oninit = function(cb) { return cb() };
+if(typeof oninit === 'undefined') {
+    var oninit = function(cb) { return cb() };
+}
 
 oninit(function() {
 
-(function(global_, bem_, undefined) {
+var hasModules = typeof modules === 'object';
 
+(function(global_, bem_, undefined) {
 // Check if BEM.I18N was already initialized
 if(typeof bem_.I18N === 'function' && bem_.I18N._proto) {
     return bem_.I18N;
@@ -18,14 +20,11 @@ if(typeof bem_.I18N === 'function' && bem_.I18N._proto) {
  *  i18n['prj']['keyset']['key'](params)
  */
 if(typeof i18n === 'undefined') {
-    /* jshint -W020 */
-    i18n = {};
-    /* jshint +W020 */
+    var i18n = {};
+    hasModules || (global_.i18n = i18n);
 }
 
-/* jshint -W020 */
-BEM = bem_;
-/* jshint +W020 */
+hasModules || (global_.BEM = bem_);
 
 var MOD_DELIM = '_',
     ELEM_DELIM = '__',
@@ -268,6 +267,10 @@ bem_.I18N = (function(base) {
     return klass;
 
 }(new _i18n()));
+
+hasModules && modules.define('i-bem__i18n', function(provide) {
+    provide(bem_.I18N);
+});
 
 })(this, typeof BEM === 'undefined'? {} : BEM);
 

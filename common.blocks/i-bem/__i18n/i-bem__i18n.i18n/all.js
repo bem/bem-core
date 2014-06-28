@@ -3,6 +3,6 @@ var PATH = require('path'),
 
 module.exports = {
     'all' : {
-        '' : FS.readFileSync(PATH.resolve(__dirname, './core.js'), 'utf8')
+        '' : '(function() {' + FS.readFileSync(PATH.resolve(__dirname, './core.js'), 'utf8') + '})();'
     }
 };
