@@ -1175,7 +1175,7 @@ block('input')(
 <a name="links"></a>
 ###Смотрите также
 * [Примеры и рецепты BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemtree#examples)
-* [Мастер-класс «Динамический БЭМ-сайт на Node.js»](http://tech.yandex.ru/events/bemup/spb-bemup/talks/1413/)
+* [Мастер-класс «Динамический БЭМ-сайт на Node.js»](http://tech.yandex.ru/events/bemup/29-november-2013/talks/1413/)
 * [Шаблонизация данных в bem-core](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating/)
 ####В сообществе
 * [BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemtree/)
