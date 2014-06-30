@@ -32,7 +32,7 @@ provide(/** @exports */{
      * @param {String} name
      * @param {String} val
      * @param {Object} options
-     * @returns {this}
+     * @returns {cookie} this
      */
     set : function(name, val, options) {
         options = options || {};

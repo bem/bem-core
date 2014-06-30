@@ -370,7 +370,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {jQuery} domElem DOM element where the event will be listened for
      * @param {String|Object} event Event name or event object
      * @param {Function} fn Handler function, which will be executed in the block's context
-     * @returns {this}
+     * @returns {BEMDOM} this
      */
     bindToDomElem : function(domElem, event, fn) {
         fn?
@@ -389,7 +389,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @protected
      * @param {String} event Event name
      * @param {Function} fn Handler function, which will be executed in the block's context
-     * @returns {this}
+     * @returns {BEMDOM} this
      */
     bindToDoc : function(event, fn) {
         this._needSpecialUnbind = true;
@@ -401,7 +401,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @protected
      * @param {String} event Event name
      * @param {Function} fn Handler function, which will be executed in the block's context
-     * @returns {this}
+     * @returns {BEMDOM} this
      */
     bindToWin : function(event, fn) {
         this._needSpecialUnbind = true;
@@ -414,7 +414,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {jQuery|String} [elem] Element
      * @param {String} event Event name
      * @param {Function} fn Handler function, which will be executed in the block's context
-     * @returns {this}
+     * @returns {BEMDOM} this
      */
     bindTo : function(elem, event, fn) {
         if(!event || functions.isFunction(event)) { // if there is no element
@@ -434,7 +434,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {jQuery} domElem DOM element where the event was being listened for
      * @param {String|Object} event Event name or event object
      * @param {Function} [fn] Handler function
-     * @returns {this}
+     * @returns {BEMDOM} this
      */
     unbindFromDomElem : function(domElem, event, fn) {
         if(typeof event === 'string') {
@@ -456,7 +456,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @protected
      * @param {String|Object} event Event name or event object
      * @param {Function} [fn] Handler function
-     * @returns {this}
+     * @returns {BEMDOM} this
      */
     unbindFromDoc : function(event, fn) {
         return this.unbindFromDomElem(doc, event, fn);
@@ -467,7 +467,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @protected
      * @param {String|Object} event Event name or event object
      * @param {Function} [fn] Handler function
-     * @returns {this}
+     * @returns {BEMDOM} this
      */
     unbindFromWin : function(event, fn) {
         return this.unbindFromDomElem(win, event, fn);
@@ -479,7 +479,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {jQuery|String} [elem] Nested element
      * @param {String|Object} event Event name or event object
      * @param {Function} [fn] Handler function
-     * @returns {this}
+     * @returns {BEMDOM} this
      */
     unbindFrom : function(elem, event, fn) {
         var argLen = arguments.length;
@@ -568,7 +568,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {jQuery} [elem] Nested element
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
-     * @returns {this}
+     * @returns {BEMDOM} this
      */
     setMod : function(elem, modName, modVal) {
         if(elem && typeof modVal !== 'undefined' && elem.length > 1) {
@@ -777,7 +777,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {String} [names] Nested element name (or names separated by spaces)
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
-     * @returns {this}
+     * @returns {BEMDOM} this
      */
     dropElemCache : function(names, modName, modVal) {
         if(names) {
@@ -1279,7 +1279,7 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @param {Object} [data] Additional information that the handler gets as e.data
      * @param {Function} fn Handler
      * @param {Object} [fnCtx] Handler context
-     * @returns {this}
+     * @returns {BEMDOM} this
      */
     _liveCtxBind : function(ctx, e, data, fn, fnCtx) {
         if(typeof e === 'object') {

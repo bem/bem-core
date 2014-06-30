@@ -191,7 +191,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [data] Additional data that the handler gets as e.data
      * @param {Function} fn Handler
      * @param {Object} [ctx] Handler context
-     * @returns {this}
+     * @returns {BEM} this
      */
     on : function(e, data, fn, ctx) {
         if(typeof e === 'object' && (functions.isFunction(data) || functions.isFunction(fn))) { // mod change event
@@ -206,7 +206,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {String|Object} [e] Event type
      * @param {Function} [fn] Handler
      * @param {Object} [ctx] Handler context
-     * @returns {this}
+     * @returns {BEM} this
      */
     un : function(e, fn, ctx) {
         if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
@@ -221,7 +221,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @protected
      * @param {String} e Event name
      * @param {Object} [data] Additional information
-     * @returns {this}
+     * @returns {BEM} this
      */
     emit : function(e, data) {
         var isModJsEvent = false;
@@ -345,7 +345,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
-     * @returns {this}
+     * @returns {BEM} this
      */
     setMod : function(elem, modName, modVal) {
         if(typeof modVal === 'undefined') {
@@ -439,7 +439,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {String} modVal1 First modifier value
      * @param {String} [modVal2] Second modifier value
      * @param {Boolean} [condition] Condition
-     * @returns {this}
+     * @returns {BEM} this
      */
     toggleMod : function(elem, modName, modVal1, modVal2, condition) {
         if(typeof elem === 'string') { // if this is a block
@@ -478,7 +478,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @protected
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
-     * @returns {this}
+     * @returns {BEM} this
      */
     delMod : function(elem, modName) {
         if(!modName) {
@@ -548,7 +548,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * Executes given callback on next turn eventloop in block's context
      * @protected
      * @param {Function} fn callback
-     * @returns {this}
+     * @returns {BEM} this
      */
     nextTick : function(fn) {
         var _this = this;
@@ -692,7 +692,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [data] Additional data that the handler gets as e.data
      * @param {Function} fn Handler
      * @param {Object} [ctx] Handler context
-     * @returns {this}
+     * @returns {Function} this
      */
     on : function(e, data, fn, ctx) {
         if(typeof e === 'object' && (functions.isFunction(data) || functions.isFunction(fn))) { // mod change event
@@ -707,7 +707,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {String|Object} [e] Event type
      * @param {Function} [fn] Handler
      * @param {Object} [ctx] Handler context
-     * @returns {this}
+     * @returns {Function} this
      */
     un : function(e, fn, ctx) {
         if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
