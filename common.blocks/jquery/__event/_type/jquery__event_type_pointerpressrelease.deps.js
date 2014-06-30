@@ -1,7 +1,6 @@
-﻿({
+({
     mustDeps : {
-        block : 'jquery', elems : {
-            elem : 'event', mods : { type : 'pointer' }
-        }
+        block : 'jquery',
+        elem : 'event', mods : { type : 'pointernative' }
     }
 })

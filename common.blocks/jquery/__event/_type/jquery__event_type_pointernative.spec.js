@@ -4,9 +4,18 @@ modules.define(
     function(provide, $, sinon) {
 
 describe('jquery__event_type_pointer', function() {
+    var elem;
+
+    beforeEach(function() {
+        elem = $('<div/>').appendTo('body');
+    });
+
+    afterEach(function() {
+        elem instanceof $ && elem.remove();
+    });
+
     it('should trigger "pointerenter" event on "mouseenter"', function() {
-        var spy = sinon.spy(),
-            elem = $('<div/>');
+        var spy = sinon.spy();
 
         elem.on('pointerenter', spy).mouseenter();
 
@@ -14,8 +23,7 @@ describe('jquery__event_type_pointer', function() {
     });
 
     it('should trigger "pointerover" event on "mouseover"', function() {
-        var spy = sinon.spy(),
-            elem = $('<div/>');
+        var spy = sinon.spy();
 
         elem.on('pointerover', spy).mouseover();
 
@@ -24,11 +32,10 @@ describe('jquery__event_type_pointer', function() {
 
     it('should trigger "pointerdown" event on "mousedown"', function() {
         var spy = sinon.spy(),
-            elem = $('<div/>'),
             e = $.Event('mousedown', {
                 clientX : 100,
                 clientY : 200,
-                which : 1
+                buttons : 1
             }),
             args;
 
@@ -51,8 +58,7 @@ describe('jquery__event_type_pointer', function() {
     });
 
     it('should trigger "pointermove" event on "mousemove"', function() {
-        var spy = sinon.spy(),
-            elem = $('<div/>');
+        var spy = sinon.spy();
 
         elem.on('pointermove', spy).mousemove();
 
@@ -60,8 +66,7 @@ describe('jquery__event_type_pointer', function() {
     });
 
     it('should trigger "pointerup" event on "mouseup"', function() {
-        var spy = sinon.spy(),
-            elem = $('<div/>');
+        var spy = sinon.spy();
 
         elem.on('pointerup', spy).mouseup();
 
@@ -69,8 +74,7 @@ describe('jquery__event_type_pointer', function() {
     });
 
     it('should trigger "pointerleave" event on "mouseleave"', function() {
-        var spy = sinon.spy(),
-            elem = $('<div/>');
+        var spy = sinon.spy();
 
         elem.on('pointerleave', spy).mouseleave();
 
@@ -78,8 +82,7 @@ describe('jquery__event_type_pointer', function() {
     });
 
     it('should trigger "pointerout" event on "mouseout"', function() {
-        var spy = sinon.spy(),
-            elem = $('<div/>');
+        var spy = sinon.spy();
 
         elem.on('pointerout', spy).mouseout();
 
@@ -87,8 +90,7 @@ describe('jquery__event_type_pointer', function() {
     });
 
     it('should successfully unbind from aliased events', function() {
-        var spy = sinon.spy(),
-            elem = $('<div/>');
+        var spy = sinon.spy();
 
         elem
             .on('pointerenter', spy).off('pointerenter').mouseenter()
@@ -103,8 +105,7 @@ describe('jquery__event_type_pointer', function() {
     });
 
     it('should not affect native "mouse*" events (#534)', function() {
-        var elem = $('<div/>'),
-            eventsMap = {
+        var eventsMap = {
                 mouseenter : 'pointerenter',
                 mouseover : 'pointerover',
                 mousedown : 'pointerdown',
