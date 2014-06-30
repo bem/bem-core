@@ -249,7 +249,7 @@ provide(BEMDOM.decl(/** @lends BEMDOM.prototype */{
      * @protected
      * @param {String} event Event name
      * @param {Function} [callback] Handler to be called after successful initialization in the new element's context
-     * @returns {this}
+     * @returns {Function} this
      */
     liveInitOnBlockEvent : function(event, callback) {
         return (typeof callback === 'string')?

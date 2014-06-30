@@ -94,7 +94,7 @@ var undef,
          * @param {Object} [data] Additional data that the handler gets as e.data
          * @param {Function} fn Handler
          * @param {Object} [ctx] Handler context
-         * @returns {this}
+         * @returns {Emitter} this
          */
         on : function(e, data, fn, ctx, _special) {
             if(typeof e === 'string') {
@@ -140,7 +140,7 @@ var undef,
          * @param {Object} [data] Additional data that the handler gets as e.data
          * @param {Function} fn Handler
          * @param {Object} [ctx] Handler context
-         * @returns {this}
+         * @returns {Emitter} this
          */
         once : function(e, data, fn, ctx) {
             return this.on(e, data, fn, ctx, { once : true });
@@ -151,7 +151,7 @@ var undef,
          * @param {String} [e] Event type
          * @param {Function} [fn] Handler
          * @param {Object} [ctx] Handler context
-         * @returns {this}
+         * @returns {Emitter} this
          */
         un : function(e, fn, ctx) {
             if(typeof e === 'string' || typeof e === 'undefined') {
@@ -207,7 +207,7 @@ var undef,
          * Fires event handlers
          * @param {String|events:Event} e Event
          * @param {Object} [data] Additional data
-         * @returns {this}
+         * @returns {Emitter} this
          */
         emit : function(e, data) {
             var storage = this[storageExpando],
