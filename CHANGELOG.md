@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.3.0
+
+### Major changes
+
+- New implementation of pointer events was added. Based on pointer events polyfills from [Polymer](http://www.polymer-project.org/) ([#567](https://github.com/bem/bem-core/pull/567)).
+- Ability to specify additional data for event was added to `bindTo*` methods of `i-bem__dom.js` ([#568](https://github.com/bem/bem-core/issues/568)).
+
+### Other changes
+
+- An issue in `i-bem.bemhtml` was fixed. There was an error when mix was used as an object (not an array) in BEMJSON and BEMHTML simultaneously ([#555](https://github.com/bem/bem-core/issues/555)).
+
 ## 2.2.4
 
 ### Bug fixes
