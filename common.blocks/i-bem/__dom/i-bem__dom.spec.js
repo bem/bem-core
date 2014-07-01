@@ -570,7 +570,7 @@ describe('i-bem__dom', function() {
     });
 
     describe('DOM events', function() {
-        var block, spy1, spy2, spy3, spy4, spy5, spy6, spy7,
+        var block, spy1, spy2, spy3, spy4, spy5, spy6, spy7, spy8, spy9,
             data = { data : 'data' },
             win = DOM.win,
             doc = DOM.doc;
@@ -583,6 +583,8 @@ describe('i-bem__dom', function() {
             spy5 = sinon.spy();
             spy6 = sinon.spy();
             spy7 = sinon.spy();
+            spy8 = sinon.spy();
+            spy9 = sinon.spy();
 
             DOM.decl('block', {
                  bindToClick : function() {
@@ -594,6 +596,8 @@ describe('i-bem__dom', function() {
                         .bindTo(this.elem('elem2'), 'click', this._handler5)
                         .bindToWin('resize', this._handler6)
                         .bindToWin('resize', this._handler7)
+                        .bindToDoc('mouseup', this._handler8)
+                        .bindToDoc('mouseup', this._handler9)
                         // bind with data
                         .bindTo('dblclick', data, this._handler1)
                         .bindTo('elem', 'dblclick', data, this._handler2)
@@ -615,6 +619,8 @@ describe('i-bem__dom', function() {
                 _handler5 : spy5,
                 _handler6 : spy6,
                 _handler7 : spy7,
+                _handler8 : spy8,
+                _handler9 : spy9,
 
                 unbindAllFromDomElem : function() {
                     this.unbindFrom('click');
@@ -642,6 +648,10 @@ describe('i-bem__dom', function() {
 
                 unbindHandler6FromWin : function() {
                     this.unbindFromWin('resize', this._handler6);
+                },
+
+                unbindHandler8FromDoc : function() {
+                    this.unbindFromDoc('mouseup', this._handler8);
                 }
             });
 
@@ -730,6 +740,26 @@ describe('i-bem__dom', function() {
             win.trigger('resize');
             spy6.should.not.have.been.called;
             spy7.should.have.been.calledOnce;
+        });
+
+        it('should properly bind to document event', function() {
+            doc.trigger('mouseup');
+            spy8.should.have.been.calledOnce;
+            spy9.should.have.been.calledOnce;
+        });
+
+        it('should properly unbind from document event', function() {
+            block.unbindFromWin('resize');
+            doc.trigger('resize');
+            spy8.should.not.have.been.called;
+            spy9.should.not.have.been.called;
+        });
+
+        it('should properly unbind specified function from document event', function() {
+            block.unbindHandler8FromDoc();
+            doc.trigger('mouseup');
+            spy8.should.not.have.been.called;
+            spy9.should.have.been.calledOnce;
         });
 
         it('should properly bind with aditional event data', function() {
