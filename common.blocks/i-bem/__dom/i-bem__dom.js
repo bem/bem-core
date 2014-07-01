@@ -369,16 +369,23 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @protected
      * @param {jQuery} domElem DOM element where the event will be listened for
      * @param {String|Object} event Event name or event object
+     * @param {Object} [data] Additional event data
      * @param {Function} fn Handler function, which will be executed in the block's context
      * @returns {BEMDOM} this
      */
-    bindToDomElem : function(domElem, event, fn) {
+    bindToDomElem : function(domElem, event, data, fn) {
+        if(functions.isFunction(data)) {
+            fn = data;
+            data = undef;
+        }
+
         fn?
             domElem.bind(
                 this._buildEventName(event),
+                data,
                 $.proxy(fn, this)) :
             objects.each(event, function(fn, event) {
-                this.bindToDomElem(domElem, event, fn);
+                this.bindToDomElem(domElem, event, data, fn);
             }, this);
 
         return this;
@@ -387,45 +394,67 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
     /**
      * Adds an event handler to the document
      * @protected
-     * @param {String} event Event name
+     * @param {String|Object} event Event name or event object
+     * @param {Object} [data] Additional event data
      * @param {Function} fn Handler function, which will be executed in the block's context
      * @returns {BEMDOM} this
      */
-    bindToDoc : function(event, fn) {
+    bindToDoc : function(event, data, fn) {
         this._needSpecialUnbind = true;
-        return this.bindToDomElem(doc, event, fn);
+        return this.bindToDomElem(doc, event, data, fn);
     },
 
     /**
      * Adds an event handler to the window
      * @protected
-     * @param {String} event Event name
+     * @param {String|Object} event Event name or event object
+     * @param {Object} [data] Additional event data
      * @param {Function} fn Handler function, which will be executed in the block's context
      * @returns {BEMDOM} this
      */
-    bindToWin : function(event, fn) {
+    bindToWin : function(event, data, fn) {
         this._needSpecialUnbind = true;
-        return this.bindToDomElem(win, event, fn);
+        return this.bindToDomElem(win, event, data, fn);
     },
 
     /**
      * Adds an event handler to the block's main DOM elements or its nested elements
      * @protected
      * @param {jQuery|String} [elem] Element
-     * @param {String} event Event name
+     * @param {String|Object} event Event name or event object
+     * @param {Object} [data] Additional event data
      * @param {Function} fn Handler function, which will be executed in the block's context
      * @returns {BEMDOM} this
      */
-    bindTo : function(elem, event, fn) {
-        if(!event || functions.isFunction(event)) { // if there is no element
-            fn = event;
+    bindTo : function(elem, event, data, fn) {
+        var len = arguments.length;
+        if(len === 3) {
+            if(functions.isFunction(data)) {
+                fn = data;
+                if(typeof event === 'object') {
+                    data = event;
+                    event = elem;
+                    elem = this.domElem;
+                }
+            }
+        } else if(len === 2) {
+            if(functions.isFunction(event)) {
+                fn = event;
+                event = elem;
+                elem = this.domElem;
+            } else if(!(typeof elem === 'string' || elem instanceof $)) {
+                data = event;
+                event = elem;
+                elem = this.domElem;
+            }
+        } else if(len === 1) {
             event = elem;
             elem = this.domElem;
-        } else if(typeof elem === 'string') {
-            elem = this.elem(elem);
         }
 
-        return this.bindToDomElem(elem, event, fn);
+        typeof elem === 'string' && (elem = this.elem(elem));
+
+        return this.bindToDomElem(elem, event, data, fn);
     },
 
     /**
