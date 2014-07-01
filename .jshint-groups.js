@@ -34,6 +34,7 @@ module.exports = {
                 '**/*.spec.js',
                 '**/*.vanilla.js',
                 'common.blocks/vow/vow.js',
+                'common.blocks/jquery/__event/_type/jquery__event_type_pointer.js',
                 '**/i-bem.test.bemhtml/*'
             ]
         },

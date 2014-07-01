@@ -1,3 +1,9 @@
-﻿({
-    shouldDeps : { block : 'jquery', elems : { elem : 'event', mods : { type : ['pointerclick', 'pointerpressrelease'] } } }
+({
+    shouldDeps : {
+        block : 'jquery',
+        elem : 'event',
+        mods : {
+            type : ['pointerclick', 'pointerpressrelease']
+        }
+    }
 })
