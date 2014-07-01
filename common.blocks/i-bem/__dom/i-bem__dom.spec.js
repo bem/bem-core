@@ -571,7 +571,9 @@ describe('i-bem__dom', function() {
 
     describe('DOM events', function() {
         var block, spy1, spy2, spy3, spy4, spy5, spy6, spy7,
-            win = $(window);
+            data = { data : 'data' },
+            win = DOM.win,
+            doc = DOM.doc;
 
         beforeEach(function() {
             spy1 = sinon.spy();
@@ -591,7 +593,19 @@ describe('i-bem__dom', function() {
                         .bindTo(this.elem('elem'), 'click', this._handler4)
                         .bindTo(this.elem('elem2'), 'click', this._handler5)
                         .bindToWin('resize', this._handler6)
-                        .bindToWin('resize', this._handler7);
+                        .bindToWin('resize', this._handler7)
+                        // bind with data
+                        .bindTo('dblclick', data, this._handler1)
+                        .bindTo('elem', 'dblclick', data, this._handler2)
+                        .bindTo(this.elem('elem'), 'dblclick', data, this._handler3)
+                        .bindToWin('winevent', data, this._handler4)
+                        .bindToDoc('docevent', data, this._handler5)
+                        // bind with data and event object
+                        .bindTo({ 'mousedown' : this._handler1 }, data)
+                        .bindTo('elem', { 'mousedown' : this._handler2 }, data)
+                        .bindTo(this.elem('elem'), { 'mousedown' : this._handler3 }, data)
+                        .bindToWin({ 'winevent2' : this._handler4 }, data)
+                        .bindToDoc({ 'docevent2' : this._handler5 }, data);
                 },
 
                 _handler1 : spy1,
@@ -716,6 +730,30 @@ describe('i-bem__dom', function() {
             win.trigger('resize');
             spy6.should.not.have.been.called;
             spy7.should.have.been.calledOnce;
+        });
+
+        it('should properly bind with aditional event data', function() {
+            block.domElem.dblclick();
+            block.elem('elem').dblclick();
+            win.trigger('winevent');
+            doc.trigger('docevent');
+            spy1.args[0][0].data.should.have.been.equal(data);
+            spy2.args[0][0].data.should.have.been.equal(data);
+            spy3.args[0][0].data.should.have.been.equal(data);
+            spy4.args[0][0].data.should.have.been.equal(data);
+            spy5.args[0][0].data.should.have.been.equal(data);
+        });
+
+        it('should properly bind with aditional event data when use event object', function() {
+            block.domElem.mousedown();
+            block.elem('elem').mousedown();
+            win.trigger('winevent2');
+            doc.trigger('docevent2');
+            spy1.args[0][0].data.should.have.been.equal(data);
+            spy2.args[0][0].data.should.have.been.equal(data);
+            spy3.args[0][0].data.should.have.been.equal(data);
+            spy4.args[0][0].data.should.have.been.equal(data);
+            spy5.args[0][0].data.should.have.been.equal(data);
         });
     });
 
