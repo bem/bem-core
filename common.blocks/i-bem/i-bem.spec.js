@@ -6,89 +6,73 @@ describe('i-bem', function() {
             delete BEM.blocks['block'];
         });
 
-        it('should return block', function() {
-            var block = BEM.decl('block', {});
-            block.should.be.equal(BEM.blocks['block']);
+        it('should enable to declare block', function() {
+            var Block = BEM.declBlock('block', {});
+
+            Block.should.be.equal(BEM.blocks['block']);
+            (new Block()).should.be.instanceOf(BEM.Block);
         });
 
-        it('should allow inheritance', function() {
-            var block = BEM.decl('block', {}),
-                block2 = block.decl('block2', {});
+        it('should enable to inherit block', function() {
+            var Block = BEM.declBlock('block', {}),
+                Block2 = BEM.declBlock('block2', Block, {});
 
-            (new block2()).should.be.instanceOf(block);
-            (new block2()).should.be.instanceOf(block2);
+            (new Block2()).should.be.instanceOf(Block);
+            (new Block2()).should.be.instanceOf(Block2);
 
             delete BEM.blocks['block2'];
         });
 
-        it('should allow inheritance from itself', function() {
-            var block = BEM.decl('block', {}),
-                block2 = block.decl({});
+        it('should enable to inherit to itself', function() {
+            var Block = BEM.declBlock('block', {}),
+                Block2 = BEM.declBlock('block', {});
 
-            block2.should.be.equal(block);
+            Block2.should.be.equal(Block);
         });
 
-        it('should allow to define only modName and modVal', function() {
-            var block = BEM.decl('block', {}),
-                block2 = block.decl({ modName : 'm1', modVal : 'v1' }, {});
+        it('should enable to declare modifier', function() {
+            var Block = BEM.declBlock('block', {}),
+                Block2 = Block.declMod({ modName : 'm1', modVal : 'v1' }, {});
 
-            block2.should.be.equal(block);
-            block2.getName().should.be.equal('block');
-        });
-
-        it('should allow use block class as baseBlock', function() {
-            var block = BEM.decl('block', {}),
-                block2 = block.decl({ block : 'block2', baseBlock : block }, {});
-
-            (new block2()).should.be.instanceOf(block);
-            (new block2()).should.be.instanceOf(block2);
-
-            delete BEM.blocks['block2'];
+            Block2.should.be.equal(Block);
         });
 
         it('should apply method only if block has mod', function() {
             var baseMethodSpy = sinon.spy(),
-                modsMethodSpy = sinon.spy();
-
-            BEM.decl('block', {
-                method : baseMethodSpy
-            });
-            BEM.decl({ block : 'block', modName : 'mod1', modVal : 'val1' }, {
-                method : modsMethodSpy
-            });
-
-            var instance = BEM.create({ block : 'block', mods : { 'mod1' : 'val1' } });
+                modsMethodSpy = sinon.spy(),
+                Block = BEM
+                    .declBlock('block', { method : baseMethodSpy })
+                    .declMod({ modName : 'mod1', modVal : 'val1' }, { method : modsMethodSpy }),
+                instance = new Block({ mod1 : 'val1' });
 
             instance.method();
-            baseMethodSpy.called.should.be.false;
-            modsMethodSpy.called.should.be.true;
+
+            baseMethodSpy.should.not.have.been.called;
+            modsMethodSpy.should.have.been.calledOnce;
 
             instance.setMod('mod1', 'val2');
             instance.method();
-            baseMethodSpy.called.should.be.true;
-            modsMethodSpy.callCount.should.be.equal(1);
+
+            baseMethodSpy.should.have.been.calledOnce;
+            modsMethodSpy.should.have.been.calledOnce;
         });
 
         it('should apply method only if block has boolean mod', function() {
             var baseMethodSpy = sinon.spy(),
-                modsMethodSpy = sinon.spy();
-
-            BEM.decl('block', {
-                method : baseMethodSpy
-            });
-
-            BEM.decl({ block : 'block', modName : 'mod1', modVal : true }, {
-                method : modsMethodSpy
-            });
-
-            var instance = BEM.create({ block : 'block', mods : { 'mod1' : true } });
+                modsMethodSpy = sinon.spy(),
+                Block = BEM
+                    .declBlock('block', { method : baseMethodSpy })
+                    .declMod({ modName : 'mod1', modVal : true }, { method : modsMethodSpy }),
+                instance = new Block({ mod1 : true });
 
             instance.method();
+
             baseMethodSpy.should.not.have.been.called;
             modsMethodSpy.should.have.been.calledOnce;
 
             instance.delMod('mod1');
             instance.method();
+
             baseMethodSpy.should.have.been.calledOnce;
             modsMethodSpy.should.have.been.calledOnce;
         });
@@ -96,10 +80,10 @@ describe('i-bem', function() {
 
     describe('create', function() {
         it('should return instance of block', function() {
-            var block = BEM.decl('block', {}),
-                instance = BEM.create('block');
+            var Block = BEM.declBlock('block', {}),
+                instance = Block.create();
 
-            instance.should.be.instanceOf(block);
+            instance.should.be.instanceOf(Block);
             delete BEM.blocks['block'];
         });
     });
@@ -107,8 +91,9 @@ describe('i-bem', function() {
     describe('mods', function() {
         var block;
         beforeEach(function() {
-            BEM.decl('block', {});
-            block = BEM.create({ block : 'block', mods : { mod1 : 'val1', mod2 : true, mod3 : false } });
+            block = BEM
+                .declBlock('block', {})
+                .create({ mods : { mod1 : 'val1', mod2 : true, mod3 : false } });
         });
         afterEach(function() {
             delete BEM.blocks['block'];
@@ -140,15 +125,18 @@ describe('i-bem', function() {
             it('should update boolean mod value', function() {
                 block
                     .setMod('mod1', true)
-                    .getMod('mod1').should.be.true;
+                    .getMod('mod1')
+                        .should.be.true;
 
                 block
                     .setMod('mod1', false)
-                    .getMod('mod1').should.be.equal('');
+                    .getMod('mod1')
+                        .should.be.equal('');
 
                 block
                     .setMod('mod1')
-                    .getMod('mod1').should.be.true;
+                    .getMod('mod1')
+                        .should.be.true;
             });
         });
 
@@ -272,7 +260,7 @@ describe('i-bem', function() {
                 spyMod2Val1 = sinon.spy(),
                 spyMod2Val2 = sinon.spy();
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 beforeSetMod : {
                     'mod1' : {
                         'val1' : function() {
@@ -282,7 +270,7 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 beforeSetMod : {
                     'mod1' : function() {
                         order.push(3);
@@ -294,14 +282,14 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 beforeSetMod : function(modName) {
                     this.__base.apply(this, arguments);
                     modName === 'mod1' && order.push(2);
                 }
             });
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 beforeSetMod : {
                    'mod1' : {
                        '*' : function() {
@@ -321,7 +309,7 @@ describe('i-bem', function() {
                 }
             });
 
-            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0', mod2 : 'val0' } });
+            var block = BEM.blocks['block'].create({ mods : { mod1 : 'val0', mod2 : 'val0' } });
             block.setMod('mod1', 'val1');
 
             order.should.be.eql([1, 2, 3, 4, 5, 6]);
@@ -331,46 +319,51 @@ describe('i-bem', function() {
         });
 
         it('should call callbacks before set mod', function(done) {
-            BEM.decl('block', {
-                beforeSetMod : {
-                   'mod1' : {
-                       'val1' : function() {
-                           this.hasMod('mod1', 'val1').should.be.false;
-                           done();
+            BEM
+                .declBlock('block', {
+                    beforeSetMod : {
+                       'mod1' : {
+                           'val1' : function() {
+                               this.hasMod('mod1', 'val1').should.be.false;
+                               done();
+                           }
                        }
-                   }
-                }
-            });
-            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0' } });
-            block.setMod('mod1', 'val1');
+                    }
+                })
+                .create({ mods : { mod1 : 'val0' } })
+                .setMod('mod1', 'val1');
         });
 
         it('should set mod after callbacks', function() {
-             BEM.decl('block', {
-                beforeSetMod : {
-                   'mod1' : {
-                       'val1' : function() {}
-                   }
-                }
-            });
-            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0' } });
-            block.setMod('mod1', 'val1');
-            block.hasMod('mod1', 'val1').should.be.true;
+             BEM
+                 .declBlock('block', {
+                    beforeSetMod : {
+                       'mod1' : {
+                           'val1' : function() {}
+                       }
+                    }
+                })
+                .create({ mods : { mod1 : 'val0' } })
+                .setMod('mod1', 'val1')
+                .hasMod('mod1', 'val1')
+                    .should.be.true;
         });
 
         it('shouldn\'t set mod when callback returns false', function() {
-            BEM.decl('block', {
-                beforeSetMod : {
-                   'mod1' : {
-                       'val1' : function() {
-                           return false;
+            BEM
+                .declBlock('block', {
+                    beforeSetMod : {
+                       'mod1' : {
+                           'val1' : function() {
+                               return false;
+                           }
                        }
-                   }
-                }
-            });
-            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0' } });
-            block.setMod('mod1', 'val1');
-            block.hasMod('mod1', 'val1').should.be.false;
+                    }
+                })
+                .create({ mods : { mod1 : 'val0' } })
+                .setMod('mod1', 'val1')
+                .hasMod('mod1', 'val1')
+                    .should.be.false;
         });
     });
 
@@ -385,7 +378,7 @@ describe('i-bem', function() {
                 spyMod2Val1 = sinon.spy(),
                 spyMod2Val2 = sinon.spy();
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 onSetMod : {
                     'mod1' : {
                         'val1' : function() {
@@ -395,7 +388,7 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 onSetMod : {
                     'mod1' : function() {
                         order.push(3);
@@ -407,14 +400,14 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 onSetMod : function(modName) {
                     this.__base.apply(this, arguments);
                     modName === 'mod1' && order.push(2);
                 }
             });
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 onSetMod : {
                    'mod1' : {
                        '*' : function() {
@@ -434,8 +427,9 @@ describe('i-bem', function() {
                 }
             });
 
-            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0', mod2 : 'val0' } });
-            block.setMod('mod1', 'val1');
+            BEM.blocks['block']
+                .create({ mods : { mod1 : 'val0', mod2 : 'val0' } })
+                .setMod('mod1', 'val1');
 
             order.should.be.eql([1, 2, 3, 4, 5, 6]);
             spyMod1Val2.should.not.have.been.called;
@@ -444,39 +438,42 @@ describe('i-bem', function() {
         });
 
         it('should call callbacks after set mod', function(done) {
-            BEM.decl('block', {
-                onSetMod : {
-                   'mod1' : {
-                       'val1' : function() {
-                           this.hasMod('mod1', 'val1').should.be.true;
-                           done();
+            BEM
+                .declBlock('block', {
+                    onSetMod : {
+                       'mod1' : {
+                           'val1' : function() {
+                               this.hasMod('mod1', 'val1').should.be.true;
+                               done();
+                           }
                        }
-                   }
-                }
-            });
-            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0' } });
-            block.setMod('mod1', 'val1');
+                    }
+                })
+                .create({ mods : { mod1 : 'val0' } })
+                .setMod('mod1', 'val1');
         });
 
         it('shouldn\'t call callbacks if beforeSetMod cancel set mod', function() {
             var spy = sinon.spy();
-            BEM.decl('block', {
-                beforeSetMod : {
-                   'mod1' : {
-                       'val1' : function() {
-                           return false;
+            BEM
+                .declBlock('block', {
+                    beforeSetMod : {
+                       'mod1' : {
+                           'val1' : function() {
+                               return false;
+                           }
                        }
-                   }
-                },
+                    },
 
-                onSetMod : {
-                   'mod1' : {
-                       'val1' : spy
-                   }
-                }
-            });
-            var block = BEM.create({ block : 'block', mods : { mod1 : 'val0' } });
-            block.setMod('mod1', 'val1');
+                    onSetMod : {
+                       'mod1' : {
+                           'val1' : spy
+                       }
+                    }
+                })
+                .create({ mods : { mod1 : 'val0' } })
+                .setMod('mod1', 'val1');
+
             spy.should.not.have.been.called;
         });
     });
@@ -488,7 +485,7 @@ describe('i-bem', function() {
                 spyMod2ValFalse = sinon.spy(),
                 spyMod2Val2 = sinon.spy();
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 beforeSetMod : {
                     'mod1' : {
                         'true' : function(modName, modVal, oldModVal) {
@@ -508,7 +505,7 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 beforeSetMod : {
                     'mod1' : function() {
                         order.push(3);
@@ -530,7 +527,7 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 beforeSetMod : function(modName) {
                     this.__base.apply(this, arguments);
                     modName === 'mod1' && order.push(2);
@@ -542,7 +539,7 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.decl('block', {
+            BEM.declBlock('block', {
                 beforeSetMod : {
                     'mod1' : {
                         '*' : function(modName, modVal, oldModVal) {
@@ -595,7 +592,7 @@ describe('i-bem', function() {
                 }
             });
 
-            var block = BEM.create({ block : 'block', mods : { mod1 : false, mod2 : true } });
+            var block = BEM.blocks['block'].create({ mods : { mod1 : false, mod2 : true } });
             block.setMod('mod1', true);
 
             spyMod1Val2.should.not.have.been.called;
@@ -612,8 +609,9 @@ describe('i-bem', function() {
     describe('nextTick', function() {
         var block;
         beforeEach(function() {
-            BEM.decl('block', {});
-            block = BEM.create({ block : 'block', mods : { mod1 : 'val1' } });
+            block = BEM
+                .declBlock('block', {})
+                .create({ mods : { mod1 : 'val1' } });
         });
         afterEach(function() {
             delete BEM.blocks['block'];
@@ -649,28 +647,29 @@ describe('i-bem', function() {
     describe('mod change events', function() {
         var block;
         beforeEach(function() {
-            BEM.decl('block', {
-                beforeSetMod : {
-                    'mod3' : function() {
-                        return false;
-                    }
-                },
-
-                onSetMod : {
-                    'js' : {
-                        'inited' : function() {
-                            this.prop = 'val1';
+            block = BEM
+                .declBlock('block', {
+                    beforeSetMod : {
+                        'mod3' : function() {
+                            return false;
                         }
                     },
 
-                    'mod1' : {
-                        'val2' : function() {
-                            this.prop = 'val2';
+                    onSetMod : {
+                        'js' : {
+                            'inited' : function() {
+                                this.prop = 'val1';
+                            }
+                        },
+
+                        'mod1' : {
+                            'val2' : function() {
+                                this.prop = 'val2';
+                            }
                         }
                     }
-                }
-            });
-            block = BEM.create({ block : 'block', mods : { mod1 : 'val1', mod2 : true } });
+                })
+                .create({ mods : { mod1 : 'val1', mod2 : true } });
         });
         afterEach(function() {
             delete BEM.blocks['block'];
