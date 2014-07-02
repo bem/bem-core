@@ -23,7 +23,7 @@
     "bem": "~0.7.2",
     "mocha": "~1.9.0",
     "jshint-groups": "0.6.0",
-    "jscs": "~1.5.3",
+    "jscs": "1.5.3",
     "git-hooks": "~0.0.6",
     "bower-npm-install": "~0.5.4",
     "istanbul": "~0.2.6",
