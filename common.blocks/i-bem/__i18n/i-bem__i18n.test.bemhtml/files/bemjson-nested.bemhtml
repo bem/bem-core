@@ -1,9 +1,11 @@
+/* global oninit, BEM */
+
 oninit(function() {
     BEM.I18N.lang('all');
 
     BEM.I18N.decl('kk', {
         'k1' : function(param) {
-            return 'key-one' + param.content
+            return 'key-one' + param.content;
         }
     }, { lang : 'all' });
 });

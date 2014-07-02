@@ -45,4 +45,3 @@ exports.getTechs = function() {
 
     return techs;
 };
-

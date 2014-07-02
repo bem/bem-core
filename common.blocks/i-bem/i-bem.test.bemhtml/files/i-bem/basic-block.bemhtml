@@ -12,7 +12,7 @@ block('b-alb')(
 
 block('b-nojs')(
   tag().match(!this.elem)('table'),
-  def().match(!this.elem, function() { return !this.ctx._wrap })(function() {
+  def().match(!this.elem, function() { return !this.ctx._wrap; })(function() {
     return apply('', {
       'ctx._wrap': true,
       ctx: { elem: 'run', content: this.ctx }

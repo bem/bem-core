@@ -1,3 +1,5 @@
+/* global BEM */
+
 block('b1')(
     attrs()(function() {
         return {

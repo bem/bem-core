@@ -85,7 +85,7 @@ module.exports = function(config) {
         suffixes : ['tests']
     });
 
-    config.nodes(['desktop.examples/*/*', 'desktop.tests/*/*'], function (nodeConfig) {
+    config.nodes(['desktop.examples/*/*', 'desktop.tests/*/*'], function(nodeConfig) {
         var nodeDir = nodeConfig.getNodePath(),
             blockSublevelDir = path.join(nodeDir, '..', '.blocks'),
             sublevelDir = path.join(nodeDir, 'blocks'),
@@ -102,7 +102,7 @@ module.exports = function(config) {
         nodeConfig.addTech([levels, { levels : extendedLevels }]);
     });
 
-    config.nodes(['touch-pad.examples/*/*', 'touch-pad.tests/*/*'], function (nodeConfig) {
+    config.nodes(['touch-pad.examples/*/*', 'touch-pad.tests/*/*'], function(nodeConfig) {
         var nodeDir = nodeConfig.getNodePath(),
             blockSublevelDir = path.join(nodeDir, '..', '.blocks'),
             sublevelDir = path.join(nodeDir, 'blocks'),
@@ -119,7 +119,7 @@ module.exports = function(config) {
         nodeConfig.addTech([levels, { levels : extendedLevels }]);
     });
 
-    config.nodes(['touch-phone.examples/*/*', 'touch-phone.tests/*/*'], function (nodeConfig) {
+    config.nodes(['touch-phone.examples/*/*', 'touch-phone.tests/*/*'], function(nodeConfig) {
         var nodeDir = nodeConfig.getNodePath(),
             blockSublevelDir = path.join(nodeDir, '..', '.blocks'),
             sublevelDir = path.join(nodeDir, 'blocks'),
@@ -148,7 +148,7 @@ module.exports = function(config) {
         nodeConfig.addTech([levels, { levels : extendedLevels }]);
     });
 
-    config.nodes(['*.examples/*/*', '*.tests/*/*', '*.bundles/*'], function (nodeConfig) {
+    config.nodes(['*.examples/*/*', '*.tests/*/*', '*.bundles/*'], function(nodeConfig) {
         // Base techs
         nodeConfig.addTechs([
             deps,
@@ -209,7 +209,7 @@ module.exports = function(config) {
         ]);
     });
 
-    config.nodes(['*.examples/*/*', '*.tests/*/*', '*.bundles/index'], function (nodeConfig) {
+    config.nodes(['*.examples/*/*', '*.tests/*/*', '*.bundles/index'], function(nodeConfig) {
         var langs = config.getLanguages();
 
         // Base techs
@@ -248,8 +248,8 @@ module.exports = function(config) {
         ]);
     });
 
-    config.mode('development', function () {
-        config.nodes(['*.examples/*/*', '*.tests/*/*', '*.bundles/*'], function (nodeConfig) {
+    config.mode('development', function() {
+        config.nodes(['*.examples/*/*', '*.tests/*/*', '*.bundles/*'], function(nodeConfig) {
             nodeConfig.addTechs([
                 [copyFile, { source : '?.css', target : '_?.css' }],
                 [copyFile, { source : '?.js', target : '_?.js' }]
@@ -257,8 +257,8 @@ module.exports = function(config) {
         });
     });
 
-    config.mode('production', function () {
-        config.nodes(['*.examples/*/*', '*.tests/*/*', '*.bundles/*'], function (nodeConfig) {
+    config.mode('production', function() {
+        config.nodes(['*.examples/*/*', '*.tests/*/*', '*.bundles/*'], function(nodeConfig) {
             nodeConfig.addTechs([
                 [borschik, { source : '?.css', target : '_?.css', freeze : true }],
                 [borschik, { source : '?.js', target : '_?.js', freeze : true }]

@@ -1,6 +1,6 @@
 block('page')(
     elem('head')(
-        content()(function () {
+        content()(function() {
             return [
                 this.ctx['x-ua-compatible'] === false ?
                     false :

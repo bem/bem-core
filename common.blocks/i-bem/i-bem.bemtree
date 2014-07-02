@@ -1,3 +1,5 @@
+/* global oninit, Vow */
+
 oninit(function(exports) {
 
 var undef,
@@ -7,11 +9,11 @@ var undef,
         return toString.call(obj) === '[object Array]';
     },
     buildEscape = (function() {
-        var ts = { '"': '&quot;', '&': '&amp;', '<': '&lt;', '>': '&gt;' },
-            f = function(t) { return ts[t] || t };
+        var ts = { '"' : '&quot;', '&' : '&amp;', '<' : '&lt;', '>' : '&gt;' },
+            f = function(t) { return ts[t] || t; };
         return function(r) {
             r = new RegExp(r, 'g');
-            return function(s) { return ('' + s).replace(r, f) }
+            return function(s) { return ('' + s).replace(r, f); };
         };
     })();
 
@@ -28,7 +30,7 @@ function BEMContext(context, apply_) {
     this.elem = undef;
     this.mods = undef;
     this.elemMods = undef;
-};
+}
 
 BEMContext.prototype.isArray = isArray;
 
@@ -49,11 +51,12 @@ BEMContext.prototype.identify = (function() {
     var cnt = 0,
         id = (+new Date()),
         expando = '__' + id,
-        get = function() { return 'uniq' + id + ++cnt; };
+        get = function() { return 'uniq' + id + (++cnt); };
     return function(obj, onlyGet) {
         if(!obj) return get();
-        if(onlyGet || obj[expando]) return obj[expando];
-        else return (obj[expando] = get());
+        if(onlyGet || obj[expando]) {
+            return obj[expando];
+        } else return (obj[expando] = get());
     };
 })();
 
@@ -119,21 +122,21 @@ match(this._mode === '')(
         });
     }),
 
-    match(function() { return this.isArray(this.ctx) })(function() {
+    match(function() { return this.isArray(this.ctx); })(function() {
         var ctx = this.ctx,
             len = ctx.length,
             i = 0,
             buf = [];
 
         while(i < len)
-            buf.push(apply({ ctx: ctx[i++] }));
+            buf.push(apply({ ctx : ctx[i++] }));
 
         return buf;
     }),
 
-    match(function() { return !this.ctx })(),
+    match(function() { return !this.ctx; })(),
 
-    match(function() { return this.isSimple(this.ctx) })(function() {
+    match(function() { return this.isSimple(this.ctx); })(function() {
         var ctx = this.ctx;
         if(ctx && ctx !== true || ctx === 0) {
             return ctx;
@@ -151,5 +154,5 @@ def()(function() {
 });
 
 content()(function() {
-    return this.ctx.content
+    return this.ctx.content;
 });

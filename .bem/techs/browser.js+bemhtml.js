@@ -5,7 +5,7 @@ exports.baseTechName = 'browser.js';
 
 exports.techMixin = {
 
-    getBuildResults: function(decl, levels, output, opts) {
+    getBuildResults : function(decl, levels, output, opts) {
         var _this = this;
 
         return this.__base(decl, levels, output, opts)
@@ -19,7 +19,7 @@ exports.techMixin = {
             });
     },
 
-    concatBemhtml: function(res, output, opts) {
+    concatBemhtml : function(res, output, opts) {
         var _this = this,
             context = this.context,
             declaration = context.opts.declaration;
@@ -29,13 +29,13 @@ exports.techMixin = {
 
                 decl = decl.depsByTechs;
 
-                if (!decl || !decl.js || !decl.js.bemhtml) return;
+                if(!decl || !decl.js || !decl.js.bemhtml) return;
 
-                decl = { deps: decl.js.bemhtml };
+                decl = { deps : decl.js.bemhtml };
 
                 var bemhtmlTech = context.createTech('bemhtml');
 
-                if (bemhtmlTech.API_VER !== 2) return Q.reject(new Error(_this.getTechName() +
+                if(bemhtmlTech.API_VER !== 2) return Q.reject(new Error(_this.getTechName() +
                     ' can’t use v1 bemhtml tech to concat bemhtml content. Configure level to use v2 bemhtml.'));
 
                 // ugly hack for https://github.com/bem/bem-core/issues/392

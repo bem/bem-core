@@ -30,7 +30,7 @@ describe('querystring', function() {
             qs.parse('=&=').should.eql({ '' : ['', ''] });
         });
 
-        it('should support empty values', function (){
+        it('should support empty values', function(){
             qs.parse('').should.eql({});
             qs.parse(undefined).should.eql({});
             qs.parse(null).should.eql({});
@@ -51,7 +51,7 @@ describe('querystring', function() {
 
     describe('stringify()', function() {
         function test(cases) {
-            cases.forEach(function (testCase) {
+            cases.forEach(function(testCase) {
                 qs.stringify(testCase.obj).should.eq(testCase.str);
             });
         }
