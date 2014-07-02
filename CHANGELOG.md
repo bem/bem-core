@@ -10,6 +10,7 @@
 ### Other changes
 
 - An issue in `i-bem.bemhtml` was fixed. There was an error when mix was used as an object (not an array) in BEMJSON and BEMHTML simultaneously ([#555](https://github.com/bem/bem-core/issues/555)).
+- An issue in `page` was fixed. There was no possibility to apply standard modes to `page` in BEMHTML template and touch template was broken ([516](https://github.com/bem/bem-core/issues/516)).
 
 ## 2.2.4
 
