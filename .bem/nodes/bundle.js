@@ -26,7 +26,7 @@ registry.decl('BundleNode', {
         ];
     },
 
-    'create-html-node': function(tech, _) {
+    'create-html-node' : function(tech, _) {
         var args = [].slice.call(arguments, 1);
 
         ~this.getPath().indexOf('test-bemtree') &&
@@ -58,4 +58,3 @@ registry.decl('BundleNode', {
 });
 
 };
-

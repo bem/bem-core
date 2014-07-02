@@ -8,9 +8,9 @@ exports.API_VER = 2;
 
 exports.techMixin = {
 
-    getBuildSuffixesMap: function() {
+    getBuildSuffixesMap : function() {
         return {
-            'bemhtml.js': ['bemhtml', 'bemhtml.xjst']
+            'bemhtml.js' : ['bemhtml', 'bemhtml.xjst']
         };
     },
 
@@ -44,19 +44,19 @@ exports.techMixin = {
             optimize = process.env[exportName + '_ENV'] !== 'development';
 
         return BEMHTML.generate(sources, {
-            wrap: true,
-            exportName: exportName,
-            optimize: optimize,
-            cache   : optimize && process.env[exportName + '_CACHE'] === 'on'
+            wrap : true,
+            exportName : exportName,
+            optimize : optimize,
+            cache : optimize && process.env[exportName + '_CACHE'] === 'on'
         });
     },
 
-    getExportName: function() {
+    getExportName : function() {
         return 'BEMHTML';
     },
 
     getCreateResult : function(path, suffix, vars) {
-        if (vars.opts && vars.opts.content) return vars.opts.content;
+        if(vars.opts && vars.opts.content) return vars.opts.content;
 
         var tmpl = ['block(\'{{bemBlockName}}\')'];
 

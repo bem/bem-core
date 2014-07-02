@@ -6,7 +6,7 @@ exports.API_VER = 2;
 
 exports.techMixin = {
 
-    getBemhtml: function(prefix) {
+    getBemhtml : function(prefix) {
 
         var path = this.getPath(prefix, 'bemhtml.js');
         return BEM.util.readFile(path)
@@ -19,7 +19,7 @@ exports.techMixin = {
 
     },
 
-    getBemjson: function(prefix) {
+    getBemjson : function(prefix) {
 
         var path = this.getPath(prefix, 'bemjson.js');
         return BEM.util.readFile(path)
@@ -29,7 +29,7 @@ exports.techMixin = {
 
     },
 
-    getHtml: function(bemhtml, bemjson) {
+    getHtml : function(bemhtml, bemjson) {
 
         return Q.all([bemhtml, bemjson])
             .spread(function(bemhtml, bemjson) {
@@ -38,7 +38,7 @@ exports.techMixin = {
 
     },
 
-    getCreateResult: function(path, suffix, vars) {
+    getCreateResult : function(path, suffix, vars) {
 
         return this.getHtml(
             this.getBemhtml(vars.Prefix),
@@ -46,12 +46,12 @@ exports.techMixin = {
 
     },
 
-    storeCreateResult: function(path, suffix, res, force) {
+    storeCreateResult : function(path, suffix, res, force) {
         // always overwrite html files
         return this.__base(path, suffix, res, true);
     },
 
-    getDependencies: function() {
+    getDependencies : function() {
         return ['bemjson.js', 'bemhtml.js'];
     }
 

@@ -24,14 +24,14 @@ module.exports = require('enb/lib/build-flow').create()
     .target('destTarget', '?.html')
     .useSourceFilename('bemhtmlTarget', '?.bemhtml.js')
     .useSourceFilename('bemtreeTarget', '?.bemtree.js')
-    .builder(function (bemhtmlFilename, bemtreeFilename) {
+    .builder(function(bemhtmlFilename, bemtreeFilename) {
         dropRequireCache(require, bemtreeFilename);
 
-        return asyncRequire(bemtreeFilename).then(function (bemtree) {
+        return asyncRequire(bemtreeFilename).then(function(bemtree) {
             dropRequireCache(require, bemhtmlFilename);
 
-            return asyncRequire(bemhtmlFilename).then(function (bemhtml) {
-                return bemtree.BEMTREE.apply({}).then(function (bemjson) {
+            return asyncRequire(bemhtmlFilename).then(function(bemhtml) {
+                return bemtree.BEMTREE.apply({}).then(function(bemjson) {
                     if(!bemhtml.BEMHTML && bemhtml.lib) {
                         return bemhtml.apply(bemjson);
                     } else {

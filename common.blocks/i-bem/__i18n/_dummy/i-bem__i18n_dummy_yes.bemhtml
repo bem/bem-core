@@ -1,4 +1,5 @@
-/*global oninit */
+/*global oninit, BEM, exports */
+
 oninit(function() {
     (function(global, bem_) {
 

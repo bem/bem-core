@@ -21,7 +21,7 @@ provide(
     /**
      * @exports
      * @param {String} path resource link
-     * @param {Function} callback executes when resource is loaded
+     * @param {Function} cb executes when resource is loaded
      */
     function(path, cb) {
         if(loaded[path]) {

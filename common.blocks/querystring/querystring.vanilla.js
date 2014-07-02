@@ -18,7 +18,7 @@ provide(/** @exports */{
      * @param {String} str
      * @returns {Object}
      */
-    parse : function (str) {
+    parse : function(str) {
         if(!str) {
             return {};
         }

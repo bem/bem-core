@@ -16,7 +16,11 @@ module.exports = {
             options : {
                 predef : ['modules']
             },
-            includes : ['*.blocks/**/*.vanilla.js']
+            includes : ['*.blocks/**/*.vanilla.js'],
+            excludes : [
+                'common.blocks/vow/**',
+                'common.blocks/inherit/**',
+            ]
         },
 
         browserjs : {
@@ -33,9 +37,11 @@ module.exports = {
                 '**/*.node.js',
                 '**/*.spec.js',
                 '**/*.vanilla.js',
+                '**/*.bh.js',
+                '**/i-bem.test.bemhtml/*',
                 'common.blocks/vow/vow.js',
-                'common.blocks/jquery/__event/_type/jquery__event_type_pointer.js',
-                '**/i-bem.test.bemhtml/*'
+                'common.blocks/jquery/__event/_type/jquery__event_type_pointer*',
+                'common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.tests/**'
             ]
         },
 
@@ -83,6 +89,57 @@ module.exports = {
                 'libs/**',
                 'node_modules/**'
             ]
+        },
+
+        bemhtml : {
+            options : {
+                predef : [
+                    'apply',
+                    'applyCtx',
+                    'applyNext',
+                    'attrs',
+                    'bem',
+                    'block',
+                    'cls',
+                    'content',
+                    'def',
+                    'elem',
+                    'js',
+                    'local',
+                    'match',
+                    'mix',
+                    'mod',
+                    'mode',
+                    'tag'
+                ]
+            },
+            includes : ['*.blocks/**/*.bemhtml']
+        },
+
+        bemtree : {
+            options : {
+                predef : [
+                    'apply',
+                    'applyCtx',
+                    'applyNext',
+                    'block',
+                    'content',
+                    'def',
+                    'elem',
+                    'match',
+                    'mod',
+                    'mode',
+                    'tag'
+                ]
+            },
+            includes : ['*.blocks/**/*.bemtree']
+        },
+
+        bhjs : {
+            options : {
+                node : true
+            },
+            includes : ['*.blocks/**/*.bh.js']
         }
     }
 };

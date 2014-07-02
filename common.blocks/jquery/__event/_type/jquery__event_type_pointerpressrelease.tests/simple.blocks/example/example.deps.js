@@ -1,5 +1,5 @@
 ({
     shouldDeps : [
-        { block : 'jquery', elem : 'event', mods : { type : 'pointerpressrelease' }}
+        { block : 'jquery', elem : 'event', mods : { type : 'pointerpressrelease' } }
     ]
 })

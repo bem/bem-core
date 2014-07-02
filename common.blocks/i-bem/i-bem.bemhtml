@@ -1,3 +1,5 @@
+/* global oninit */
+
 oninit(function(exports, context) {
 
 var undef,
@@ -36,19 +38,19 @@ var MOD_DELIM = '_',
 
 function buildModPostfix(modName, modVal) {
     var res = MOD_DELIM + modName;
-    if (modVal !== true) res += MOD_DELIM + modVal;
+    if(modVal !== true) res += MOD_DELIM + modVal;
     return res;
 }
 
 function buildBlockClass(name, modName, modVal) {
     var res = name;
-    if (modVal) res += buildModPostfix(modName, modVal);
+    if(modVal) res += buildModPostfix(modName, modVal);
     return res;
 }
 
 function buildElemClass(block, name, modName, modVal) {
     var res = buildBlockClass(block) + ELEM_DELIM + name;
-    if (modVal) res += buildModPostfix(modName, modVal);
+    if(modVal) res += buildModPostfix(modName, modVal);
     return res;
 }
 
@@ -166,11 +168,11 @@ function BEMContext(context, apply_) {
     // Compatibility stuff, just in case
     var _this = this;
     this._buf = {
-        push: function() {
+        push : function() {
             var chunks = slice.call(arguments).join('');
             _this._str += chunks;
         },
-        join: function() {
+        join : function() {
             return this._str;
         }
     };
@@ -325,7 +327,7 @@ def()(function() {
         tag,
         res;
 
-    local({ _str: '' })(function() {
+    local({ _str : '' })(function() {
         var vBlock = this.block;
 
         tag = apply('tag');

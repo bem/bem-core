@@ -1,3 +1,5 @@
+/* global exports, BEM */
+
 block('i-bem').elem('i18n').def()(function() {
     if(!this.ctx) return '';
 
@@ -13,7 +15,7 @@ block('i-bem').elem('i18n').def()(function() {
      * Consider `content` is a reserved param that contains
      * valid bemjson data
      */
-    if(ctx.content != null) {
+    if(typeof ctx.content === 'undefined' || ctx.content !== null) {
         params.content = exports.apply(ctx.content);
     }
 
