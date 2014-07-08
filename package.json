@@ -31,6 +31,7 @@
     "enb": "0.13.4",
     "enb-bem-docs": "0.1.4",
     "enb-bem-examples": "0.2.6",
+    "enb-bem-specs": "0.1.4",
     "enb-diverse-js": "0.1.0",
     "enb-modules": "0.1.2",
     "enb-bemxjst": "1.2.0",
@@ -41,7 +42,7 @@
     "build": "YENV=production enb make examples && enb make tests && enb make docs && enb make",
     "lint": "jshint-groups && jscs .",
     "libs": "bower-npm-install",
-    "bem-test": "npm run libs && bem make -w 7 desktop.specs touch.specs",
+    "bem-test": "npm run libs && enb make specs",
     "bem-coverage": "ISTANBUL_COVERAGE=yes npm run bem-test",
     "bem-jsdoc": "bem make desktop.jsdoc",
     "test": "npm run bem-test && mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.test.bemhtml/*-test.js"
