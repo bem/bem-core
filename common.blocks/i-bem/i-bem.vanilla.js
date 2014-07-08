@@ -40,19 +40,17 @@ var undef,
      * @private
      * @type Object
      */
-    blocks = {};
+    entities = {};
 
 /**
  * Builds the name of the handler method for setting a modifier
  * @param {String} prefix
  * @param {String} modName Modifier name
  * @param {String} modVal Modifier value
- * @param {String} [elemName] Element name
  * @returns {String}
  */
-function buildModFnName(prefix, modName, modVal, elemName) {
+function buildModFnName(prefix, modName, modVal) {
     return '__' + prefix +
-        (elemName? '__elem_' + elemName : '') +
        '__mod' +
        (modName? '_' + modName : '') +
        (modVal? '_' + modVal : '');
@@ -63,20 +61,19 @@ function buildModFnName(prefix, modName, modVal, elemName) {
  * @param {String} prefix
  * @param {Object} modFns
  * @param {Object} props
- * @param {String} [elemName]
  */
-function modFnsToProps(prefix, modFns, props, elemName) {
+function modFnsToProps(prefix, modFns, props) {
     if(functions.isFunction(modFns)) {
-        props[buildModFnName(prefix, '*', '*', elemName)] = modFns;
+        props[buildModFnName(prefix, '*', '*')] = modFns;
     } else {
         var modName, modVal, modFn;
         for(modName in modFns) {
             modFn = modFns[modName];
             if(functions.isFunction(modFn)) {
-                props[buildModFnName(prefix, modName, '*', elemName)] = modFn;
+                props[buildModFnName(prefix, modName, '*')] = modFn;
             } else {
                 for(modVal in modFn) {
-                    props[buildModFnName(prefix, modName, modVal, elemName)] = modFn[modVal];
+                    props[buildModFnName(prefix, modName, modVal)] = modFn[modVal];
                 }
             }
         }
@@ -111,39 +108,49 @@ function convertModHandlersToMethods(props) {
         modFnsToProps('after', props.onSetMod, props);
         delete props.onSetMod;
     }
+}
 
-    var elemName;
-    if(props.beforeElemSetMod) {
-        for(elemName in props.beforeElemSetMod) {
-            modFnsToProps('before', props.beforeElemSetMod[elemName], props, elemName);
-        }
-        delete props.beforeElemSetMod;
+function declEntity(baseCls, entityName, base, props, staticProps) {
+    if(!base || (typeof base === 'object' && !Array.isArray(base))) {
+        staticProps = props;
+        props = base;
+        base = entities[entityName] || baseCls;
     }
 
-    if(props.onElemSetMod) {
-        for(elemName in props.onElemSetMod) {
-            modFnsToProps('after', props.onElemSetMod[elemName], props, elemName);
-        }
-        delete props.onElemSetMod;
+    props && convertModHandlersToMethods(props);
+
+    if(staticProps && typeof staticProps.live === 'boolean') {
+        var live = staticProps.live;
+        staticProps.live = function() { return live; };
     }
+
+    var Base = Array.isArray(base)? base[0] : base,
+        entityCls;
+
+    entityName === Base.getEntityName()?
+        // makes a new "live" if the old one was already executed
+        (entityCls = inherit.self(base, props, staticProps))._processLive(true) :
+        (entityCls = entities[entityName] = inherit(base, props, staticProps));
+
+    return entityCls;
 }
 
 /**
- * @class Block
+ * @class BemEntity
  * @description Base block for creating BEM blocks
  * @augments events:Emitter
  */
-var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
+var BemEntity = inherit(events.Emitter, /** @lends BemEntity.prototype */ {
     /**
      * @constructor
      * @private
-     * @param {Object} mods Block modifiers
-     * @param {Object} params Block parameters
+     * @param {Object} mods BemEntity modifiers
+     * @param {Object} params BemEntity parameters
      * @param {Boolean} [initImmediately=true]
      */
     __constructor : function(mods, params, initImmediately) {
         /**
-         * Cache of block modifiers
+         * Cache of modifiers
          * @member {Object}
          * @private
          */
@@ -157,7 +164,7 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
         this._processingMods = {};
 
         /**
-         * Block parameters, taking into account the defaults
+         * BemEntity parameters, taking into account the defaults
          * @member {Object}
          * @readonly
          */
@@ -169,7 +176,7 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
     },
 
     /**
-     * Initializes the block
+     * Initializes the BEM entity
      * @private
      */
     _init : function() {
@@ -182,7 +189,7 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
      * @param {Object} [data] Additional data that the handler gets as e.data
      * @param {Function} fn Handler
      * @param {Object} [ctx] Handler context
-     * @returns {Block} this
+     * @returns {BemEntity} this
      */
     on : function(e, data, fn, ctx) {
         if(typeof e === 'object' && (functions.isFunction(data) || functions.isFunction(fn))) { // mod change event
@@ -197,7 +204,7 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
      * @param {String|Object} [e] Event type
      * @param {Function} [fn] Handler
      * @param {Object} [ctx] Handler context
-     * @returns {Block} this
+     * @returns {BemEntity} this
      */
     un : function(e, fn, ctx) {
         if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
@@ -208,11 +215,11 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
     },
 
     /**
-     * Executes the block's event handlers and live event handlers
+     * Executes the BEM entity's event handlers and live event handlers
      * @protected
      * @param {String} e Event name
      * @param {Object} [data] Additional information
-     * @returns {Block} this
+     * @returns {BemEntity} this
      */
     emit : function(e, data) {
         var isModJsEvent = false;
@@ -248,202 +255,106 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
     },
 
     /**
-     * Checks whether a block or nested element has a modifier
-     * @param {Object} [elem] Nested element
+     * Checks whether a BEM entity has a modifier
      * @param {String} modName Modifier name
      * @param {String} [modVal] Modifier value
      * @returns {Boolean}
      */
-    hasMod : function(elem, modName, modVal) {
-        var len = arguments.length,
-            invert = false;
-
-        if(len === 1) {
-            modVal = '';
-            modName = elem;
-            elem = undef;
-            invert = true;
-        } else if(len === 2) {
-            if(typeof elem === 'string') {
-                modVal = modName;
-                modName = elem;
-                elem = undef;
-            } else {
-                modVal = '';
-                invert = true;
-            }
-        }
-
-        var res = this.getMod(elem, modName) === modVal;
-        return invert? !res : res;
+    hasMod : function(modName, modVal) {
+        var res = this.getMod(modName) === (modVal || '');
+        return arguments.length === 1? !res : res;
     },
 
     /**
-     * Returns the value of the modifier of the block/nested element
-     * @param {Object} [elem] Nested element
+     * Returns the value of the modifier of the BEM entity
      * @param {String} modName Modifier name
      * @returns {String} Modifier value
      */
-    getMod : function(elem, modName) {
-        var type = typeof elem;
-        if(type === 'string' || type === 'undefined') { // elem either omitted or undefined
-            modName = elem || modName;
-            var modCache = this._modCache;
-            return modName in modCache?
-                modCache[modName] || '' :
-                modCache[modName] = this._extractModVal(modName);
-        }
-
-        return this._getElemMod(modName, elem);
+    getMod : function(modName) {
+        var modCache = this._modCache;
+        return modName in modCache?
+            modCache[modName] || '' :
+            modCache[modName] = this._extractModVal(modName);
     },
 
     /**
-     * Returns the value of the modifier of the nested element
-     * @private
+     * Sets the modifier for a BEM entity
      * @param {String} modName Modifier name
-     * @param {Object} elem Nested element
-     * @param {Object} [elemName] Nested element name
-     * @returns {String} Modifier value
+     * @param {String} [modVal=true] Modifier value
+     * @returns {BemEntity} this
      */
-    _getElemMod : function(modName, elem, elemName) {
-        return this._extractModVal(modName, elem, elemName);
-    },
-
-    /**
-     * Returns values of modifiers of the block/nested element
-     * @param {Object} [elem] Nested element
-     * @param {...String} [modNames] Modifier names
-     * @returns {Object} Hash of modifier values
-     */
-    getMods : function(elem) {
-        var hasElem = elem && typeof elem !== 'string',
-            modNames = [].slice.call(arguments, hasElem? 1 : 0),
-            res = this._extractMods(modNames, hasElem? elem : undef);
-
-        if(!hasElem) { // caching
-            modNames.length?
-                modNames.forEach(function(name) {
-                    this._modCache[name] = res[name];
-                }, this) :
-                this._modCache = res;
-        }
-
-        return res;
-    },
-
-    /**
-     * Sets the modifier for a block/nested element
-     * @param {Object} [elem] Nested element
-     * @param {String} modName Modifier name
-     * @param {String} modVal Modifier value
-     * @returns {Block} this
-     */
-    setMod : function(elem, modName, modVal) {
+    setMod : function(modName, modVal) {
         if(typeof modVal === 'undefined') {
-            if(typeof elem === 'string') { // if no elem
-                modVal = typeof modName === 'undefined'?
-                    true :  // e.g. setMod('focused')
-                    modName; // e.g. setMod('js', 'inited')
-                modName = elem;
-                elem = undef;
-            } else { // if elem
-                modVal = true; // e.g. setMod(elem, 'focused')
-            }
+            modVal = true;
+        } else if(modVal === false) {
+            modVal = '';
         }
 
-        if(!elem || elem[0]) {
-            modVal === false && (modVal = '');
+        if(this._processingMods[modName]) return this;
 
-            var modId = (elem && elem[0]? identify(elem[0]) : '') + '_' + modName;
+        var curModVal = this.getMod(modName);
+        if(curModVal === modVal) return this;
 
-            if(this._processingMods[modId])
-                return this;
+        this._processingMods[modName] = true;
 
-            var elemName,
-                curModVal = elem?
-                    this._getElemMod(modName, elem, elemName = this.__self._extractElemNameFrom(elem)) :
-                    this.getMod(modName);
+        var needSetMod = true,
+            modFnParams = [modName, modVal, curModVal];
 
-            if(curModVal === modVal)
-                return this;
+        var modVars = [['*', '*'], [modName, '*'], [modName, modVal]],
+            prefixes = ['before', 'after'],
+            i = 0, prefix, j, modVar;
 
-            this._processingMods[modId] = true;
-
-            var needSetMod = true,
-                modFnParams = [modName, modVal, curModVal];
-
-            elem && modFnParams.unshift(elem);
-
-            var modVars = [['*', '*'], [modName, '*'], [modName, modVal]],
-                prefixes = ['before', 'after'],
-                i = 0, prefix, j, modVar;
-
-            while(prefix = prefixes[i++]) {
-                j = 0;
-                while(modVar = modVars[j++]) {
-                    if(this._callModFn(prefix, elemName, modVar[0], modVar[1], modFnParams) === false) {
-                        needSetMod = false;
-                        break;
-                    }
-                }
-
-                if(!needSetMod) break;
-
-                if(prefix === 'before') {
-                    elem || (this._modCache[modName] = modVal); // cache only block mods
-                    this._onSetMod(modName, modVal, curModVal, elem, elemName);
+        while(prefix = prefixes[i++]) {
+            j = 0;
+            while(modVar = modVars[j++]) {
+                if(this._callModFn(prefix, modVar[0], modVar[1], modFnParams) === false) {
+                    needSetMod = false;
+                    break;
                 }
             }
 
-            this._processingMods[modId] = null;
-            needSetMod && this._emitModChangeEvents(modName, modVal, curModVal, elem, elemName);
+            if(!needSetMod) break;
+
+            if(prefix === 'before') {
+                this._modCache[modName] = modVal;
+                this._onSetMod(modName, modVal, curModVal);
+            }
         }
+
+        this._processingMods[modName] = null;
+        needSetMod && this._emitModChangeEvents(modName, modVal, curModVal);
 
         return this;
     },
 
     /**
-     * Function after successfully changing the modifier of the block/nested element
+     * Function after successfully changing the modifier of the BEM entity
      * @protected
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
      * @param {String} oldModVal Old modifier value
-     * @param {Object} [elem] Nested element
-     * @param {String} [elemName] Element name
      */
-    _onSetMod : function(modName, modVal, oldModVal, elem, elemName) {},
+    _onSetMod : function(modName, modVal, oldModVal) {},
 
-    _emitModChangeEvents : function(modName, modVal, oldModVal, elem, elemName) {
+    _emitModChangeEvents : function(modName, modVal, oldModVal) {
         var eventData = { modName : modName, modVal : modVal, oldModVal : oldModVal };
-        elem && (eventData.elem = elem);
         this
-            .emit({ modName : modName, modVal : '*', elem : elemName }, eventData)
-            .emit({ modName : modName, modVal : modVal, elem : elemName }, eventData);
+            .emit({ modName : modName, modVal : '*' }, eventData)
+            .emit({ modName : modName, modVal : modVal }, eventData);
     },
 
     /**
-     * Sets a modifier for a block/nested element, depending on conditions.
+     * Sets a modifier for a BEM entity, depending on conditions.
      * If the condition parameter is passed: when true, modVal1 is set; when false, modVal2 is set.
      * If the condition parameter is not passed: modVal1 is set if modVal2 was set, or vice versa.
-     * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
      * @param {String} modVal1 First modifier value
      * @param {String} [modVal2] Second modifier value
      * @param {Boolean} [condition] Condition
-     * @returns {Block} this
+     * @returns {BemEntity} this
      */
-    toggleMod : function(elem, modName, modVal1, modVal2, condition) {
-        if(typeof elem === 'string') { // if this is a block
-            condition = modVal2;
-            modVal2 = modVal1;
-            modVal1 = modName;
-            modName = elem;
-            elem = undef;
-        }
-
-        if(typeof modVal1 === 'undefined') { // boolean mod
-            modVal1 = true;
-        }
+    toggleMod : function(modName, modVal1, modVal2, condition) {
+        typeof modVal1 === 'undefined' && (modVal1 = true); // boolean mod
 
         if(typeof modVal2 === 'undefined') {
             modVal2 = '';
@@ -452,74 +363,48 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
             modVal2 = '';
         }
 
-        var modVal = this.getMod(elem, modName);
+        var modVal = this.getMod(modName);
         (modVal === modVal1 || modVal === modVal2) &&
             this.setMod(
-                elem,
                 modName,
                 typeof condition === 'boolean'?
                     (condition? modVal1 : modVal2) :
-                    this.hasMod(elem, modName, modVal1)? modVal2 : modVal1);
+                    this.hasMod(modName, modVal1)? modVal2 : modVal1);
 
         return this;
     },
 
     /**
-     * Removes a modifier from a block/nested element
+     * Removes a modifier from a BEM entity
      * @protected
-     * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
-     * @returns {Block} this
+     * @returns {BemEntity} this
      */
-    delMod : function(elem, modName) {
-        if(!modName) {
-            modName = elem;
-            elem = undef;
-        }
-
-        return this.setMod(elem, modName, '');
+    delMod : function(modName) {
+        return this.setMod(modName, '');
     },
 
     /**
      * Executes handlers for setting modifiers
      * @private
      * @param {String} prefix
-     * @param {String} elemName Element name
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
      * @param {Array} modFnParams Handler parameters
      */
-    _callModFn : function(prefix, elemName, modName, modVal, modFnParams) {
-        var modFnName = buildModFnName(prefix, modName, modVal, elemName);
+    _callModFn : function(prefix, modName, modVal, modFnParams) {
+        var modFnName = buildModFnName(prefix, modName, modVal);
         return this[modFnName]?
            this[modFnName].apply(this, modFnParams) :
            undef;
     },
 
-    /**
-     * Retrieves the value of the modifier
-     * @private
-     * @param {String} modName Modifier name
-     * @param {Object} [elem] Element
-     * @returns {String} Modifier value
-     */
-    _extractModVal : function(modName, elem) {
+    _extractModVal : function(modName) {
         return '';
     },
 
     /**
-     * Retrieves name/value for a list of modifiers
-     * @private
-     * @param {Array} modNames Names of modifiers
-     * @param {Object} [elem] Element
-     * @returns {Object} Hash of modifier values by name
-     */
-    _extractMods : function(modNames, elem) {
-        return {};
-    },
-
-    /**
-     * Returns a block's default parameters
+     * Returns a BEM entity's default parameters
      * @protected
      * @returns {Object}
      */
@@ -528,7 +413,7 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
     },
 
     /**
-     * Deletes a block
+     * Deletes a BEM entity
      * @private
      */
     _destruct : function() {
@@ -536,10 +421,10 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
     },
 
     /**
-     * Executes given callback on next turn eventloop in block's context
+     * Executes given callback on next turn eventloop in BEM entity's context
      * @protected
      * @param {Function} fn callback
-     * @returns {Block} this
+     * @returns {BemEntity} this
      */
     nextTick : function(fn) {
         var _this = this;
@@ -548,17 +433,15 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
         });
         return this;
     }
-}, /** @lends Block */{
+}, /** @lends BemEntity */{
     /**
      * Factory method for creating an instance
-     * @param {Object} [desc]
-     * @param {Object} [desc.mods] modifiers
-     * @param {Object} [desc.params] params
-     * @returns {Block}
+     * @param {Object} mods modifiers
+     * @param {Object} params params
+     * @returns {BemEntity}
      */
-    create : function(desc) {
-        desc || (desc = {});
-        return new this(desc.mods, desc.params);
+    create : function(mods, params) {
+        return new this(mods, params);
     },
 
     /**
@@ -599,20 +482,28 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
     _name : 'i-bem',
 
     /**
-     * Processes a block's live properties
+     * Processes a BEM entity's live properties
      * @private
-     * @param {Boolean} [heedLive=false] Whether to take into account that the block already processed its live properties
-     * @returns {Boolean} Whether the block is a live block
+     * @param {Boolean} [heedLive=false] Whether to take into account that the BEM entity already processed its live properties
+     * @returns {Boolean} Whether the BEM entity is a live
      */
     _processLive : function(heedLive) {
         return false;
     },
 
     /**
-     * Returns the name of the current block
+     * Returns the name of the current BEM entity
      * @returns {String}
      */
     getName : function() {
+        return this._name;
+    },
+
+    /**
+     * Returns the name of the current BEM entity
+     * @returns {String}
+     */
+    getEntityName : function() {
         return this._name;
     },
 
@@ -648,73 +539,106 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
     },
 
     _buildModEventName : function(modEvent) {
-        var res = MOD_DELIM + modEvent.modName + MOD_DELIM + (modEvent.modVal === false? '' : modEvent.modVal);
-        modEvent.elem && (res = ELEM_DELIM + modEvent.elem + res);
+        return MOD_DELIM + modEvent.modName + MOD_DELIM + (modEvent.modVal === false? '' : modEvent.modVal);
+    }
+});
+
+/**
+ * @class Block
+ * @description Class for creating BEM blocks
+ * @augments BemEntity
+ */
+var Block = BemEntity;
+
+/**
+ * @class Elem
+ * @description Class for creating BEM elems
+ * @augments BemEntity
+ */
+var Elem = inherit(BemEntity, /** @lends Elem.prototype */ {
+    /**
+     * Returns the own block of current element
+     * @returns {Block}
+     */
+    block : function() {
+        return this._block;
+    }
+    // TODO: _emitModChangeEvents?
+}, /** @lends Elem */{
+    /**
+     * Factory method for creating an instance
+     * @param {Object} block block instance
+     * @param {Object} mods modifiers
+     * @param {Object} params params
+     * @returns {BemEntity}
+     */
+    create : function(block, mods, params) {
+        var res = new this(mods, params);
+        res._block = block;
         return res;
     },
 
     /**
-     * Retrieves the name of an element nested in a block
-     * @private
-     * @param {Object} elem Nested element
-     * @returns {String|undefined}
+     * Returns the name of the current BEM entity
+     * @returns {String}
      */
-    _extractElemNameFrom : function(elem) {}
+    getEntityName : function() {
+        return this._blockName + ELEM_DELIM + this._name;
+    }
 });
 
 provide(/** @exports */{
     /**
-     * Base BEM block
+     * Block class
      * @type Function
      */
     Block : Block,
 
     /**
+     * Elem class
+     * @type Function
+     */
+    Elem : Elem,
+
+    /**
      * Storage for block declarations (hash by block name)
      * @type Object
      */
-    blocks : blocks,
+    entities : entities,
 
     /**
      * Declares block and creates a block class
      * @param {String} blockName Block name
-     * @param {Function|Array[Function]} [baseBlocks] base block + mixes
+     * @param {Function|Array[Function]} [base] base block + mixes
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      * @returns {Function} Block class
      */
-    declBlock : function(blockName, baseBlocks, props, staticProps) {
-        if(!baseBlocks || (typeof baseBlocks === 'object' && !Array.isArray(baseBlocks))) {
-            staticProps === props;
-            props = baseBlocks;
-            baseBlocks = blocks[blockName] || Block;
-        }
+    declBlock : function(blockName, base, props, staticProps) {
+        var res = declEntity(Block, blockName, base, props, staticProps);
+        res._name = res._blockName = blockName;
+        return res;
+    },
 
-        props && convertModHandlersToMethods(props);
-
-        if(staticProps && typeof staticProps.live === 'boolean') {
-            var live = staticProps.live;
-            staticProps.live = function() {
-                return live;
-            };
-        }
-
-        var BaseBlock = Array.isArray(baseBlocks)?
-                baseBlocks[0] :
-                baseBlocks,
-            blockCls;
-
-        blockName === BaseBlock.getName()?
-            // makes a new "live" if the old one was already executed
-            (blockCls = inherit.self(baseBlocks, props, staticProps))._processLive(true) :
-            (blockCls = blocks[blockName] = inherit(baseBlocks, props, staticProps))._name = blockName;
-
-        return blockCls;
+    /**
+     * Declares elem and creates an elem class
+     * @param {String} blockName Block name
+     * @param {String} elemName Elem name
+     * @param {Function|Array[Function]} [base] base elem + mixes
+     * @param {Object} [props] Methods
+     * @param {Object} [staticProps] Static methods
+     * @returns {Function} Elem class
+     */
+    declElem : function(blockName, elemName, base, props, staticProps) {
+        var res = declEntity(Elem, blockName + ELEM_DELIM + elemName, base, props, staticProps);
+        res._blockName = blockName;
+        res._name = elemName;
+        return res;
     },
 
     declMix : function(blockName, props, staticProps) {
         convertModHandlersToMethods(props || (props = {}));
-        return blocks[blockName] = inherit(props, staticProps);
+        return entities[blockName] = inherit(props, staticProps);
     },
 
     /**
