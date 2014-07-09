@@ -1,8 +1,8 @@
 /**
- * @module i-bem__dom_init
+ * @module i-bem-dom__init
  */
 
-modules.define('i-bem__dom_init', ['i-bem__dom'], function(provide, BEMDOM) {
+modules.define('i-bem-dom__init', ['i-bem-dom'], function(provide, BEMDOM) {
 
 provide(
     /**

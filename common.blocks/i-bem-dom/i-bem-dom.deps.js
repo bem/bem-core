@@ -1,5 +1,6 @@
 [{
     shouldDeps : [
+        'inherit',
         'jquery',
         'objects',
         'functions',

@@ -1,3 +1,0 @@
-({
-    mustDeps : { elem : 'collection' }
-})

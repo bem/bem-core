@@ -3,7 +3,7 @@
  */
 
 modules.require(
-    ['i-bem__dom_init', 'jquery', 'next-tick'],
+    ['i-bem-dom__init', 'jquery', 'next-tick'],
     function(init, $, nextTick) {
 
 $(function() {

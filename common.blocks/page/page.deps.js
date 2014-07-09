@@ -1,8 +1,8 @@
 ({
     mustDeps : 'i-bem',
     shouldDeps : [
-        { block : 'i-bem', elem : 'dom', mods : { init : 'auto' } },
-        { block : 'ua' },
+        { block : 'i-bem-dom', elems : { elem : 'init', mods : { auto : true } } },
+        'ua',
         { elems : ['css', 'js'] }
     ]
 })

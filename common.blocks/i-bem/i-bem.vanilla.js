@@ -71,16 +71,12 @@ function modFnsToProps(prefix, modFns, props, elemName) {
     } else {
         var modName, modVal, modFn;
         for(modName in modFns) {
-            if(modFns.hasOwnProperty(modName)) {
-                modFn = modFns[modName];
-                if(functions.isFunction(modFn)) {
-                    props[buildModFnName(prefix, modName, '*', elemName)] = modFn;
-                } else {
-                    for(modVal in modFn) {
-                        if(modFn.hasOwnProperty(modVal)) {
-                            props[buildModFnName(prefix, modName, modVal, elemName)] = modFn[modVal];
-                        }
-                    }
+            modFn = modFns[modName];
+            if(functions.isFunction(modFn)) {
+                props[buildModFnName(prefix, modName, '*', elemName)] = modFn;
+            } else {
+                for(modVal in modFn) {
+                    props[buildModFnName(prefix, modName, modVal, elemName)] = modFn[modVal];
                 }
             }
         }
@@ -119,30 +115,25 @@ function convertModHandlersToMethods(props) {
     var elemName;
     if(props.beforeElemSetMod) {
         for(elemName in props.beforeElemSetMod) {
-            if(props.beforeElemSetMod.hasOwnProperty(elemName)) {
-                modFnsToProps('before', props.beforeElemSetMod[elemName], props, elemName);
-            }
+            modFnsToProps('before', props.beforeElemSetMod[elemName], props, elemName);
         }
         delete props.beforeElemSetMod;
     }
 
     if(props.onElemSetMod) {
         for(elemName in props.onElemSetMod) {
-            if(props.onElemSetMod.hasOwnProperty(elemName)) {
-                modFnsToProps('after', props.onElemSetMod[elemName], props, elemName);
-            }
+            modFnsToProps('after', props.onElemSetMod[elemName], props, elemName);
         }
         delete props.onElemSetMod;
     }
 }
 
 /**
- * @class BEM
+ * @class Block
  * @description Base block for creating BEM blocks
  * @augments events:Emitter
- * @exports
  */
-var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
+var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
     /**
      * @constructor
      * @private
@@ -191,7 +182,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [data] Additional data that the handler gets as e.data
      * @param {Function} fn Handler
      * @param {Object} [ctx] Handler context
-     * @returns {BEM} this
+     * @returns {Block} this
      */
     on : function(e, data, fn, ctx) {
         if(typeof e === 'object' && (functions.isFunction(data) || functions.isFunction(fn))) { // mod change event
@@ -206,7 +197,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {String|Object} [e] Event type
      * @param {Function} [fn] Handler
      * @param {Object} [ctx] Handler context
-     * @returns {BEM} this
+     * @returns {Block} this
      */
     un : function(e, fn, ctx) {
         if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
@@ -221,7 +212,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @protected
      * @param {String} e Event name
      * @param {Object} [data] Additional information
-     * @returns {BEM} this
+     * @returns {Block} this
      */
     emit : function(e, data) {
         var isModJsEvent = false;
@@ -345,7 +336,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
-     * @returns {BEM} this
+     * @returns {Block} this
      */
     setMod : function(elem, modName, modVal) {
         if(typeof modVal === 'undefined') {
@@ -439,7 +430,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {String} modVal1 First modifier value
      * @param {String} [modVal2] Second modifier value
      * @param {Boolean} [condition] Condition
-     * @returns {BEM} this
+     * @returns {Block} this
      */
     toggleMod : function(elem, modName, modVal1, modVal2, condition) {
         if(typeof elem === 'string') { // if this is a block
@@ -478,7 +469,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @protected
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
-     * @returns {BEM} this
+     * @returns {Block} this
      */
     delMod : function(elem, modName) {
         if(!modName) {
@@ -548,7 +539,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * Executes given callback on next turn eventloop in block's context
      * @protected
      * @param {Function} fn callback
-     * @returns {BEM} this
+     * @returns {Block} this
      */
     nextTick : function(fn) {
         var _this = this;
@@ -557,104 +548,55 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         });
         return this;
     }
-}, /** @lends BEM */{
-
-    _name : 'i-bem',
-
+}, /** @lends Block */{
     /**
-     * Storage for block declarations (hash by block name)
-     * @type Object
+     * Factory method for creating an instance
+     * @param {Object} [desc]
+     * @param {Object} [desc.mods] modifiers
+     * @param {Object} [desc.params] params
+     * @returns {Block}
      */
-    blocks : blocks,
+    create : function(desc) {
+        desc || (desc = {});
+        return new this(desc.mods, desc.params);
+    },
 
     /**
-     * Declares blocks and creates a block class
-     * @param {String|Object} decl Block name (simple syntax) or description
-     * @param {String} decl.block|decl.name Block name
-     * @param {String} [decl.baseBlock] Name of the parent block
-     * @param {Array} [decl.baseMix] Mixed block names
-     * @param {String} [decl.modName] Modifier name
-     * @param {String|Array} [decl.modVal] Modifier value
-     * @param {Object} [props] Methods
-     * @param {Object} [staticProps] Static methods
+     * Declares modifier
+     * @param {Object} mod
+     * @param {String} mod.modName
+     * @param {String|Boolean|Array} [mod.modVal]
+     * @param {Object} props
+     * @param {Object} [staticProps]
      * @returns {Function}
      */
-    decl : function(decl, props, staticProps) {
-        // string as block
-        typeof decl === 'string' && (decl = { block : decl });
-        // inherit from itself
-        if(arguments.length <= 2 &&
-                typeof decl === 'object' &&
-                (!decl || (typeof decl.block !== 'string' && typeof decl.modName !== 'string'))) {
-            staticProps = props;
-            props = decl;
-            decl = {};
-        }
-        typeof decl.block === 'undefined' && (decl.block = this.getName());
+    declMod : function(mod, props, staticProps) {
+        props && convertModHandlersToMethods(props);
 
-        var baseBlock;
-        if(typeof decl.baseBlock === 'undefined') {
-            baseBlock = blocks[decl.block] || this;
-        } else if(typeof decl.baseBlock === 'string') {
-            baseBlock = blocks[decl.baseBlock];
-            if(!baseBlock)
-                throw('baseBlock "' + decl.baseBlock + '" for "' + decl.block + '" is undefined');
-        } else {
-            baseBlock = decl.baseBlock;
-        }
+        var checkMod = buildCheckMod(mod.modName, mod.modVal),
+            basePtp = this.prototype;
 
-        convertModHandlersToMethods(props || (props = {}));
+        objects.each(props, function(prop, name) {
+            functions.isFunction(prop) &&
+                (props[name] = function() {
+                    var method;
+                    if(checkMod(this)) {
+                        method = prop;
+                    } else {
+                        var baseMethod = basePtp[name];
+                        baseMethod && baseMethod !== prop &&
+                            (method = this.__base);
+                    }
+                    return method?
+                        method.apply(this, arguments) :
+                        undef;
+                });
+        });
 
-        if(decl.modName) {
-            var checkMod = buildCheckMod(decl.modName, decl.modVal);
-            objects.each(props, function(prop, name) {
-                functions.isFunction(prop) &&
-                    (props[name] = function() {
-                        var method;
-                        if(checkMod(this)) {
-                            method = prop;
-                        } else {
-                            var baseMethod = baseBlock.prototype[name];
-                            baseMethod && baseMethod !== prop &&
-                                (method = this.__base);
-                        }
-                        return method?
-                            method.apply(this, arguments) :
-                            undef;
-                    });
-            });
-        }
-
-        if(staticProps && typeof staticProps.live === 'boolean') {
-            var live = staticProps.live;
-            staticProps.live = function() {
-                return live;
-            };
-        }
-
-        var block, baseBlocks = baseBlock;
-        if(decl.baseMix) {
-            baseBlocks = [baseBlocks];
-            decl.baseMix.forEach(function(mixedBlock) {
-                if(!blocks[mixedBlock]) {
-                    throw('mix block "' + mixedBlock + '" for "' + decl.block + '" is undefined');
-                }
-                baseBlocks.push(blocks[mixedBlock]);
-            });
-        }
-
-        decl.block === baseBlock.getName()?
-            // makes a new "live" if the old one was already executed
-            (block = inherit.self(baseBlocks, props, staticProps))._processLive(true) :
-            (block = blocks[decl.block] = inherit(baseBlocks, props, staticProps))._name = decl.block;
-
-        return block;
+        return inherit.self(this, props, staticProps);
     },
 
-    declMix : function(block, props, staticProps) {
-        convertModHandlersToMethods(props || (props = {}));
-        return blocks[block] = inherit(props, staticProps);
-    },
+    _name : 'i-bem',
 
     /**
      * Processes a block's live properties
@@ -664,18 +606,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     _processLive : function(heedLive) {
         return false;
-    },
-
-    /**
-     * Factory method for creating an instance of the block named
-     * @param {String|Object} block Block name or description
-     * @param {Object} [params] Block parameters
-     * @returns {BEM}
-     */
-    create : function(block, params) {
-        typeof block === 'string' && (block = { block : block });
-
-        return new blocks[block.block](block.mods, params);
     },
 
     /**
@@ -729,7 +659,63 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * @param {Object} elem Nested element
      * @returns {String|undefined}
      */
-    _extractElemNameFrom : function(elem) {},
+    _extractElemNameFrom : function(elem) {}
+});
+
+provide(/** @exports */{
+    /**
+     * Base BEM block
+     * @type Function
+     */
+    Block : Block,
+
+    /**
+     * Storage for block declarations (hash by block name)
+     * @type Object
+     */
+    blocks : blocks,
+
+    /**
+     * Declares block and creates a block class
+     * @param {String} blockName Block name
+     * @param {Function|Array[Function]} [baseBlocks] base block + mixes
+     * @param {Object} [props] Methods
+     * @param {Object} [staticProps] Static methods
+     * @returns {Function} Block class
+     */
+    declBlock : function(blockName, baseBlocks, props, staticProps) {
+        if(!baseBlocks || (typeof baseBlocks === 'object' && !Array.isArray(baseBlocks))) {
+            staticProps === props;
+            props = baseBlocks;
+            baseBlocks = blocks[blockName] || Block;
+        }
+
+        props && convertModHandlersToMethods(props);
+
+        if(staticProps && typeof staticProps.live === 'boolean') {
+            var live = staticProps.live;
+            staticProps.live = function() {
+                return live;
+            };
+        }
+
+        var BaseBlock = Array.isArray(baseBlocks)?
+                baseBlocks[0] :
+                baseBlocks,
+            blockCls;
+
+        blockName === BaseBlock.getName()?
+            // makes a new "live" if the old one was already executed
+            (blockCls = inherit.self(baseBlocks, props, staticProps))._processLive(true) :
+            (blockCls = blocks[blockName] = inherit(baseBlocks, props, staticProps))._name = blockName;
+
+        return blockCls;
+    },
+
+    declMix : function(blockName, props, staticProps) {
+        convertModHandlersToMethods(props || (props = {}));
+        return blocks[blockName] = inherit(props, staticProps);
+    },
 
     /**
      * Executes the block init functions
@@ -748,7 +734,5 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         }
     }
 });
-
-provide(BEM);
 
 });
