@@ -13,6 +13,7 @@ branches:
   only:
     - v1
     - v2
+    - v3
 
 after_success:
   - npm install coveralls
