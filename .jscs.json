@@ -10,6 +10,7 @@
         "*.examples/**",
         "*.tests/**",
         "*.specs/**",
+        "*.json",
         "common.blocks/vow/**",
         "common.blocks/inherit/**",
         "common.blocks/ecma/__array/ecma__array.spec.js",
