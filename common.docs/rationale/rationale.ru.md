@@ -393,7 +393,7 @@ plates.bind(html, data, map);
 ### Документация
 
   * [Вводное пошаговое руководство по BEMHTML](http://ru.bem.info/articles/bemhtml-intro/)
-  * [Справочное руководство по BEMHTML](http://ru.bem.info/articles/bemhtml-reference/)
+  * [Справочное руководство по BEMHTML](http://ru.bem.info/libs/bem-core/current/templating/reference/)
   * [Руководство по bem-tools](http://ru.bem.info/tools/bem/)
-  * [Документация библиотеки блоков bem-bl](http://bem.github.com/bem-bl/index.en.html)
+  * [Документация библиотеки блоков bem-bl](http://ru.bem.info/libs/bem-bl/)
 

@@ -84,7 +84,7 @@ to the project directory and we can use and modify its blocks.**
 To see the result browse to: (http://localhost:8080/desktop.bundles/test/test.html)
 
 ## More information:
-  * [Library bem-bl](http://bem.github.com/bem-bl/index.en.html);
+  * [Library bem-bl](http://bem.info/libs/bem-bl/);
   * [bem-tools reference](http://bem.info/tools/);
   * **Russian only:** [BEMJSON reference](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%A1%D0%B8%D0%BD%D1%82%D0%B0%D0%BA%D1%81%D0%B8%D1%81-bemjson).
 
@@ -325,8 +325,9 @@ In the following example when the block is clicked, the warning-message with the
 
 ### For more details see:
  * [JS-framework guide `i-bem.js`](http://h.yandex.net/?http%3A%2F%2Fbem.github.com%2Fbem-bl%2Fsets%2Fcommon-desktop%2Fi-bem%2Fi-bem.ru.html)(Russian only).
+ * [JavaScript for BEM: The Main Terms](http://bem.info/articles/bem-js-main-terms/)
 
 ## Further reading:
  * [BEMHTML guide book](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md)(Russian only)
- * [`bem-bl` blocks library](http://bem.github.com/bem-bl/index.en.html)
+ * [`bem-bl` blocks library](http://bem.info/libs/bem-bl/)
  * [BEM methodology](http://bem.info/method/)

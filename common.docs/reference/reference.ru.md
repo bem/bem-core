@@ -352,7 +352,7 @@ JavaScript.
 
 **См. также**:
 
-  * [JS-реализация блока i-bem](http://bem.github.com/bem-bl/sets/common-desktop/i-bem/i-bem.ru.html)
+  * [JS-реализация блока i-bem](http://ru.bem.info/libs/bem-bl/current/desktop/i-bem/)
 
 <a name="bem"></a>
 
@@ -1174,10 +1174,10 @@ block('input')(
 
 <a name="links"></a>
 ###Смотрите также
-* [Примеры и рецепты BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemtree#examples)
+* [Примеры и рецепты BEMTREE](http://ru.bem.info/libs/bem-core/current/templating/bemtree#examples)
 * [Мастер-класс «Динамический БЭМ-сайт на Node.js»](http://tech.yandex.ru/events/bemup/29-november-2013/talks/1413/)
-* [Шаблонизация данных в bem-core](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating/)
+* [Шаблонизация данных в bem-core](http://ru.bem.info/libs/bem-core/current/templating/templating/)
 ####В сообществе
-* [BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemtree/)
-* [BEMJSON](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemjson)
+* [BEMTREE](http://ru.bem.info/libs/bem-core/current/templating/bemtree/)
+* [BEMJSON](http://ru.bem.info/libs/bem-core/current/templating/bemjson)
 
