@@ -466,7 +466,7 @@ with custom blocks, and any project can be based on it.
 ### Documentation
 
   * [Step-by-step BEMHTML guide](http://bem.info/articles/bemhtml-intro/)
-  * [BEMHTML reference](http://ru.bem.info/articles/bemhtml-reference/) (Russian only)
+  * [BEMHTML reference](http://bem.info/libs/bem-core/current/templating/reference/)
   * [bem-tools reference](http://bem.info/tools/bem/)
-  * [The blocks bem-bl library documentation](http://bem.github.com/bem-bl/index.en.html)
+  * [The blocks bem-bl library documentation](http://bem.info/libs/bem-bl/)
 

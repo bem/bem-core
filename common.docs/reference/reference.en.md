@@ -1179,7 +1179,7 @@ Template's definition in the mode `js` (sub-predicate `js()`) makes sense if onl
 
 **See also**:
 
-  * [JS-implementation of the block i-bem](http://bem.github.io/bem-bl/sets/common-desktop/i-bem/i-bem.en.html)
+  * [JS-implementation of the block i-bem](http://bem.info/libs/bem-bl/current/desktop/i-bem/)
 
 <a id="bem"></a>
 
