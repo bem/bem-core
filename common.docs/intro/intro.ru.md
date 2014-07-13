@@ -78,7 +78,7 @@
 ### Подробнее:
 
  * [Справочник по BEMJSON](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%A1%D0%B8%D0%BD%D1%82%D0%B0%D0%BA%D1%81%D0%B8%D1%81-bemjson)
- * [Библиотека блоков bem-bl](http://bem.github.com/bem-bl/index.en.html)
+ * [Библиотека блоков bem-bl](http://ru.bem.info/libs/bem-bl/)
  * [Документация по bem-tools](http://ru.bem.info/tools/)
 
 ## Шаг 3. Добавить блок <a name="block"></a>
@@ -310,12 +310,12 @@ BEMHTML, однако используeтся вместе с ним в любо
 
 ### Подробнее:
 
- * [Описание JS-фреймворка `i-bem.js`](http://h.yandex.net/?http%3A%2F%2Fbem.github.com%2Fbem-bl%2Fsets%2Fcommon-desktop%2Fi-bem%2Fi-bem.ru.html)
+ * [Описание JS-фреймворка `i-bem.js`](http://ru.bem.info/libs/bem-bl/current/desktop/i-bem/docs/)
 
 
 ## Дальнейшее чтение
 
  * [BEMHTML. Справочное руководство](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md)
- * [Библиотека блоков bem-bl](http://bem.github.com/bem-bl/index.en.html)
+ * [Библиотека блоков bem-bl](http://ru.bem.info/libs/bem-bl/)
  * [БЭМ-методология](http://ru.bem.info/method/)
 
