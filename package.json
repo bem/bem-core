@@ -26,7 +26,7 @@
     "jscs": "1.5.3",
     "git-hooks": "~0.0.6",
     "bower-npm-install": "~0.5.4",
-    "istanbul": "~0.2.6",
+    "istanbul": "0.3.0",
     "vow": "0.4.4",
     "enb": "0.13.4",
     "enb-bem-docs": "0.1.4",
