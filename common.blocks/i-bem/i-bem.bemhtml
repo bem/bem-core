@@ -320,8 +320,7 @@ match(this._mode === '')(
 );
 
 def()(function() {
-    var _this = this,
-        BEM_INTERNAL = _this.BEM.INTERNAL,
+    var BEM_INTERNAL = this.BEM.INTERNAL,
         ctx = this.ctx,
         isBEM,
         tag,
@@ -373,15 +372,15 @@ def()(function() {
                         for(var i = 0; i < mix.length; i++) {
                             var mixItem = mix[i],
                                 hasItem = mixItem.block || mixItem.elem,
-                                mixBlock = mixItem.block || mixItem._block || _this.block,
-                                mixElem = mixItem.elem || mixItem._elem || _this.elem;
+                                mixBlock = mixItem.block || mixItem._block || this.block,
+                                mixElem = mixItem.elem || mixItem._elem || this.elem;
 
                             hasItem && (this._str += ' ');
 
                             this._str += BEM_INTERNAL[hasItem? 'buildClasses' : 'buildModsClasses'](
                                 mixBlock,
                                 mixItem.elem || mixItem._elem ||
-                                    (mixItem.block? undefined : _this.elem),
+                                    (mixItem.block? undefined : this.elem),
                                 mixItem.elemMods || mixItem.mods);
 
                             if(mixItem.js) {
