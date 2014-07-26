@@ -888,9 +888,17 @@ var Block = inherit(BEM.Block,/** @lends Block.prototype */{
         if('live' in this) {
             var noLive = typeof res === 'undefined';
 
-            if(noLive ^ heedLive) {
+            if(noLive ^ heedLive) { // should be opposite to each other
                 res = this.live() !== false;
-                this.live = functions.noop;
+
+                var blockName = this.getName(),
+                    origLive = this.live;
+
+                this.live = function() {
+                    return this.getName() === blockName?
+                        res :
+                        origLive.apply(this, arguments);
+                };
             }
         }
 
