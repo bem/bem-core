@@ -643,10 +643,13 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             });
         }
 
-        decl.block === baseBlock.getName()?
+        if(decl.block === baseBlock.getName()) {
             // makes a new "live" if the old one was already executed
-            (block = inherit.self(baseBlocks, props, staticProps))._processLive(true) :
+            (block = inherit.self(baseBlocks, props, staticProps))._processLive(true);
+        } else {
             (block = blocks[decl.block] = inherit(baseBlocks, props, staticProps))._name = decl.block;
+            delete block._liveInitable;
+        }
 
         return block;
     },
