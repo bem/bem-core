@@ -255,7 +255,7 @@ module.exports = function(config) {
         ]);
 
         nodeConfig.addTargets([
-            '?.css', '?.js'
+            '_?.css', '_?.js'
         ]);
     });
 
