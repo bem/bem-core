@@ -811,6 +811,88 @@ describe('i-bem__dom', function() {
         });
     });
 
+    describe('live', function() {
+        it('should properly use live of base block', function() {
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy();
+
+            DOM.decl('block1', {}, { live : spy1 });
+            DOM.decl({ block : 'block2', baseBlock : 'block1' }, {}, {
+                live : function() {
+                    this.__base.apply(this, arguments);
+                    spy2();
+                }
+            });
+
+            DOM.init(BEMHTML.apply([
+                { block : 'block1', js : true },
+                { block : 'block2', js : true }
+            ]));
+
+            spy1.should.have.been.calledTwice;
+            spy2.should.have.been.calledOnce;
+
+            delete DOM.blocks['block1'];
+            delete DOM.blocks['block2'];
+        });
+
+        it('should properly use live after adding a new block', function() {
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy();
+
+            DOM.decl('block1', {}, { live : spy1 });
+
+            DOM.init(BEMHTML.apply({ block : 'block1', js : true }));
+
+            spy1.should.have.been.calledOnce;
+
+            DOM.decl({ block : 'block2', baseBlock : 'block1' }, {}, {
+                live : function() {
+                    this.__base.apply(this, arguments);
+                    spy2();
+                }
+            });
+
+            spy2.should.not.have.been.called;
+
+            DOM.init(BEMHTML.apply({ block : 'block2', js : true }));
+
+            spy1.should.have.been.calledTwice;
+            spy2.should.have.been.calledOnce;
+
+            delete DOM.blocks['block1'];
+            delete DOM.blocks['block2'];
+        });
+
+        it('should properly use live after adding declaration', function() {
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy();
+
+            DOM.decl('block1', {}, { live : spy1 });
+
+            DOM.init(BEMHTML.apply({ block : 'block1', js : true }));
+
+            spy1.should.have.been.calledOnce;
+
+            DOM.decl('block1', {}, {
+                live : function() {
+                    this.__base.apply(this, arguments);
+                    spy2();
+                }
+            });
+
+            spy1.should.have.been.calledOnce;
+            spy2.should.have.been.calledOnce;
+
+            DOM.init(BEMHTML.apply({ block : 'block1', js : true }));
+
+            spy1.should.have.been.calledOnce;
+            spy2.should.have.been.calledOnce;
+
+            delete DOM.blocks['block1'];
+        });
+    });
+
     describe('liveInitOnBlockInsideEvent', function() {
         it('should init and call handler on live initialization', function() {
             var spyInit = sinon.spy(),
