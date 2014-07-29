@@ -7,9 +7,11 @@ $.each({
     function eventHandler(e) {
         var res, origType = e.handleObj.origType;
 
-        e.type = spec;
-        res = $.event.dispatch.apply(this, arguments);
-        e.type = origType;
+        if(!e.button) {
+            e.type = spec;
+            res = $.event.dispatch.apply(this, arguments);
+            e.type = origType;
+        }
 
         return res;
     }
