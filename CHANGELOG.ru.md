@@ -1,5 +1,23 @@
 # История изменений
 
+## 2.4.0
+
+### Major changes
+
+- npm-модуль [bem-xjst](https://github.com/bem/bem-xjst) обновлен до версии 0.7.1; [bemhtml-compat](https://github.com/bem/bemhtml-compat)
+  обновлен до 0.0.11.
+
+### Bug fixes
+
+- Исправлена ошибка в `jquery__event_type_pointerpressrelease`, из-за которой события `pointerpress` / `pointerrelease` генерировались
+  на нажатие любой кнопки мыши ([#607](https://github.com/bem/bem-core/issues/607)).
+- Исправлена ошибка в `i-bem__dom.js`, из-за которой в некоторых случаях не происходил вызов базового метода
+  `live` ([#608](https://github.com/bem/bem-core/issues/608)).
+
+### Other changes
+
+- Добавлена английская документация на JS-синтаксис BEMHTML.
+
 ## 2.3.0
 
 ### Крупные изменения
