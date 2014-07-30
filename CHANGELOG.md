@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.4.0
+
+### Major changes
+
+- [bem-xjst](https://github.com/bem/bem-xjst) was updated to 0.7.1; [bemhtml-compat](https://github.com/bem/bemhtml-compat) was updated to 0.0.11.
+
+### Bug fixes
+
+- An issue in `jquery__event_type_pointerpressrelease` was fixed. `pointerpress`/`pointerrelease` events fired for any press/release
+  of mouse button ([#607](https://github.com/bem/bem-core/issues/607)).
+- An issue in `i-bem__dom.js` was fixed. Base `live` method was not properly called in some edge cases ([#608](https://github.com/bem/bem-core/issues/608)).
+
+### Other changes
+
+- English documentation for JS-syntax of BEMHTML was added.
+
 ## 2.3.0
 
 ### Major changes
