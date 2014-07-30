@@ -4,7 +4,7 @@
 
 ### Major changes
 
-- [bem-xjst](https://github.com/bem/bem-xjst) was updated to 0.7.1; [bemhtml-compat](https://github.com/bem/bemhtml-compat) was updated to 0.0.11.
+- [bem-xjst](https://github.com/bem/bem-xjst) was updated to 0.8.0; [bemhtml-compat](https://github.com/bem/bemhtml-compat) was updated to 0.0.11.
 
 ### Bug fixes
 

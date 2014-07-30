@@ -4,7 +4,7 @@
 
 ### Major changes
 
-- npm-модуль [bem-xjst](https://github.com/bem/bem-xjst) обновлен до версии 0.7.1; [bemhtml-compat](https://github.com/bem/bemhtml-compat)
+- npm-модуль [bem-xjst](https://github.com/bem/bem-xjst) обновлен до версии 0.8.0; [bemhtml-compat](https://github.com/bem/bemhtml-compat)
   обновлен до 0.0.11.
 
 ### Bug fixes
