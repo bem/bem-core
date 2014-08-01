@@ -271,7 +271,7 @@ BEMTREE-шаблоны создаются с помощью [BEM-XJST-синта
 
 ```js
 block('page').def()(function() {
-    applyCtx({
+    return applyCtx({
         block: this.block,
         title: this.ctx.title,
         head: [{ elem: 'js', url: this.ctx.js }],
