@@ -6,8 +6,8 @@ JSDOC_BRANCH=${TRAVIS_BRANCH}-jsdoc
 JSDOC_DIR=gh-jsdoc
 CURRENT_COMMIT=`git rev-parse HEAD`
 
-if [ "$TRAVIS_REPO_SLUG" == "$GH_REF" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    echo "Updating jsdocs"
+if [ "$TRAVIS_REPO_SLUG" = "$GH_REF" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+    echo "Updating JSDocs"
 
     rm -rf $JSDOC_DIR
     npm run bem-jsdoc || exit 1
