@@ -6,7 +6,7 @@ node_js:
 env:
   global:
     - secure: "EocST8MkGsiC8SU91QH8/Cz71ehcCHW6+VEeG6RalauYpB56O77p9d4gwhIk5J7uFyRHyEHJConjN/JM74WSY1s2jvVn2AZTeyhVgacxPFjaRZyRnDMjlyGEUfABfaKggpFvtiCzYKh/Y0jYDK27beDXdTp+nAcZQDAyFpjL6JU="
-    - GH_REF: github.com/bem/bem-core.git
+    - GH_REF: bem/bem-core
     - ISTANBUL_COVERAGE: yes
 
 branches:
