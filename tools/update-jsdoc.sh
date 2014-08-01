@@ -6,6 +6,7 @@ JSDOC_BRANCH=${TRAVIS_BRANCH}-jsdoc
 JSDOC_DIR=gh-jsdoc
 CURRENT_COMMIT=`git rev-parse HEAD`
 
+echo "Check: ${TRAVIS_REPO_SLUG} = ${GH_REF} and TRAVIS_PULL_REQUEST = ${TRAVIS_PULL_REQUEST}"
 if [ "$TRAVIS_REPO_SLUG" = "$GH_REF" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
     echo "Updating JSDocs"
 
