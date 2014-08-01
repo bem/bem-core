@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - 0.1
+  - '0.10'
 
 env:
   global:
@@ -11,13 +11,11 @@ env:
 
 branches:
   only:
-    - v1
-    - v2
-    - v3
+    - /^v\d+$/
 
 after_success:
   - npm install coveralls
   - ./node_modules/.bin/istanbul report lcovonly
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && echo "Coverage data was sent to coveralls!"
-  - '[ "${TRAVIS_PULL_REQUEST}" == "false" ] && ./tools/update-jsdoc.sh || "false"'
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./tools/update-jsdoc.sh || "false"'
 
