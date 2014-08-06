@@ -289,7 +289,7 @@ module.exports = function(config) {
     config.nodes('*.bundles/test-bemtree', function(nodeConfig) {
         nodeConfig.addTechs([
             [provide, { target : '?.bemdecl.js' }],
-            [bemtree, { devMode : false }],
+            [bemtree, { devMode : false, modulesDeps : { Vow : 'vow' } }],
             [htmlFromData]
         ]);
 
