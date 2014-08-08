@@ -354,7 +354,7 @@ def()(function() {
             var cls = apply('cls');
             cls || (cls = ctx.cls);
 
-            var addJSInitClass = ctx.block && jsParams;
+            var addJSInitClass = ctx.block && jsParams && !ctx.elem;
             if(isBEM || cls) {
                 this._str += ' class="';
                 if(isBEM) {
