@@ -14,6 +14,10 @@ exports.techMixin = {
 
     getExportName : function() {
         return 'BEMTREE';
+    },
+
+    getModulesDeps : function() {
+        return { vow : 'Vow' };
     }
 
 };

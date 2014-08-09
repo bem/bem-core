@@ -47,7 +47,8 @@ exports.techMixin = {
             wrap : true,
             exportName : exportName,
             optimize : optimize,
-            cache : optimize && process.env[exportName + '_CACHE'] === 'on'
+            cache : optimize && process.env[exportName + '_CACHE'] === 'on',
+            modulesDeps : this.getModulesDeps()
         });
     },
 
@@ -64,6 +65,10 @@ exports.techMixin = {
         vars.ModVal && tmpl.push('.' + (vars.ElemName ? 'elemMod' : 'mod') + '(\'{{bemModName}}\', \'{{bemModVal}}\')');
 
         return Template.process(tmpl.join(''), vars);
+    },
+
+    getModulesDeps : function() {
+        /* stub */
     }
 
 };
