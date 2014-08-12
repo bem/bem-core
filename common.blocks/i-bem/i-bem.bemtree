@@ -1,6 +1,6 @@
 /* global oninit, Vow */
 
-oninit(function(exports) {
+oninit(function(exports, context) {
 
 var undef,
     BEM_ = {},
@@ -16,6 +16,8 @@ var undef,
             return function(s) { return ('' + s).replace(r, f); };
         };
     })();
+
+context.BEMContext = BEMContext;
 
 function BEMContext(context, apply_) {
     this.ctx = context;
