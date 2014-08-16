@@ -3,7 +3,6 @@
 oninit(function(exports) {
 
 var undef,
-    BEM_ = {},
     toString = Object.prototype.toString,
     isArray = Array.isArray || function(obj) {
         return toString.call(obj) === '[object Array]';
@@ -67,27 +66,31 @@ BEMContext.prototype.generateId = function generateId() {
     return this.identify(this.ctx);
 };
 
-BEMContext.prototype.doAsync = function doAsync(fn) {
+BEMContext.prototype.doAsync = function doAsync(fn, args) {
     var mode  = this._mode,
         ctx   = this.ctx,
         block = this.block,
         elem  = this.elem,
         mods  = this.mods,
         elemMods = this.elemMods,
-        promise = Vow.invoke(fn);
+        promise;
 
-    this.__queue.push(promise);
+    if(Vow.isPromise(fn)) {
+        promise = fn;
+    } else {
+        var callArgs = arguments.length > 1 && Array.apply(null, arguments);
+        promise = callArgs ? Vow.invoke.apply(Vow, callArgs) : Vow.invoke(fn);
+    }
 
-    promise.always(function() {
+    return promise.always(function(response) {
         this._mode = mode;
         this.ctx   = ctx;
         this.block = block;
         this.elem  = elem;
         this.mods  = mods;
         this.elemMods = elemMods;
-    }.bind(this));
-
-    return promise;
+        return response;
+    }, this);
 };
 
 // Wrap xjst's apply and export our own
@@ -96,8 +99,8 @@ exports.apply = BEMContext.applyAsync = function BEMContext_applyAsync(context) 
     var ctx = new BEMContext(context || this, oldApply);
     ctx._buf = ctx.apply();
     return Vow
-        .allResolved(ctx.__queue)
-        .always(function() {
+        .all(ctx.__queue)
+        .then(function() {
             return ctx._buf;
         });
 };
@@ -147,6 +150,9 @@ match(this._mode === '')(
 
 def()(function() {
     var content = apply('content');
+    if(Vow.isPromise(content)) {
+        this.__queue.push(content);
+    }
     if(content || content === 0) {
         this.ctx.content = apply('', { ctx : content });
     }
