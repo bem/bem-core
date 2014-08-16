@@ -13,6 +13,7 @@
   "authors": [
     "Sergey Belov <peimei@ya.ru>"
   ],
+  "main": "",
   "devDependencies": {
     "bem-pr": "git://github.com/narqo/bem-pr.git#0.9.0"
   },
