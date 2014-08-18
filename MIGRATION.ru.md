@@ -19,8 +19,8 @@ modules.define(
 // предоставление модуля
 provide({
     myModuleMethod : function() {}
-}); 
-    
+});
+
 });
 ````
 
@@ -97,7 +97,7 @@ onSetMod : {
 ```js
 onSetMod : {
     'js' : {
-        'inited' : function() { 
+        'inited' : function() {
             // код конструктора
 ```
 
@@ -153,7 +153,7 @@ BEM.DOM.decl('block', {
 
 Стало:
 ```js
-modules.define('i-bem__dom', function(provide, BEMDOM) {    
+modules.define('i-bem__dom', function(provide, BEMDOM) {
 
 BEMDOM.decl('block', {
     method : function() {
@@ -190,11 +190,11 @@ BEM.DOM.decl('block', {
 
 Стало:
 ```js
-modules.define('i-bem__dom', ['events__channels'], function(provide, channels, BEMDOM) {    
+modules.define('i-bem__dom', ['events__channels'], function(provide, channels, BEMDOM) {
 
 BEMDOM.decl('block', {
     method : function() {
-        channels('channel-name').on(....    
+        channels('channel-name').on(....
 ```
 
 #### Блок `i-system` и канал `sys` событий `tick`, `idle`, `wakeup`
@@ -210,7 +210,7 @@ BEM.DOM.decl('block', {
 
 Стало:
 ```js
-modules.define('i-bem__dom', ['tick'], function(provide, tick, BEMDOM) {    
+modules.define('i-bem__dom', ['tick'], function(provide, tick, BEMDOM) {
 
 BEMDOM.decl('block', {
     method : function() {
@@ -226,7 +226,7 @@ BEM.DOM.decl('block', {
 
 Стало:
 ```js
-modules.define('i-bem__dom', ['idle'], function(provide, idle, BEMDOM) {    
+modules.define('i-bem__dom', ['idle'], function(provide, idle, BEMDOM) {
 
 BEMDOM.decl('block', {
     method : function() {
@@ -234,7 +234,7 @@ BEMDOM.decl('block', {
 ```
 
 ### BEM-блоки
-Те BEM-блоки, которые использовались как хранилище для каких-то методов, при этом никак не использующие BEM-методологию, теперь 
+Те BEM-блоки, которые использовались как хранилище для каких-то методов, при этом никак не использующие BEM-методологию, теперь
 могут быть написаны как модули.
 
 Было:
