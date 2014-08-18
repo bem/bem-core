@@ -689,7 +689,7 @@ or
 js()(true)
 ```
 
-The `mode` keyword is used to check an arbitrary mode. It is a helper method that acts similar to the `match` construction.  
+The `mode` keyword is used to check an arbitrary mode. It is a helper method that acts similar to the `match` construction.
 The method takes in the argument a string-identifier (`[a-zA-Z0-9]+`) - the name of an arbitrary mode - and returns a function to which a templates' body shuold be passed in the  argument. Notice, that a keyword `mode('my-mode')` is a shorthand for the `match(this._mode = 'my-mode')` literal.
 
 
@@ -697,7 +697,7 @@ The method takes in the argument a string-identifier (`[a-zA-Z0-9]+`) - the name
 
 ##### Arbitrary Condition
 
-The arbitrary conditions are taking into account of the matching with data that do not belong to the BEM subject domain. 
+The arbitrary conditions are taking into account of the matching with data that do not belong to the BEM subject domain.
 Any JavaScript-expression, which can be evaluated to a boolean, can be used as an arbitrary condition.
 
 ***
@@ -719,7 +719,7 @@ For the arbitrary predicate literals a `match` keyword should be used:
 
 ```js
 match(this.ctx.url)( //an aribtrary conditin. Check if there url field is in input data.
-        tag()('a'), 
+        tag()('a'),
         attrs()({ href: this.ctx.url })
     )
 ```
@@ -759,7 +759,7 @@ If the JavaScript-code block is a simple constant literal, there is no need to a
 ***
 
 
-A template body should be passed in the argument of a function, returned by: 
+A template body should be passed in the argument of a function, returned by:
 * the `match` method;
 * the helper for the BEM-entities;
 * the helper for the mode, whether it standart or arbitrary.
@@ -779,11 +779,11 @@ match(arbitrary-predicate)(body)
 ```
 
 ***
-**NB** Be aware, that you should pass templates' body to a function returned by a helper, but not to the helper itself. 
+**NB** Be aware, that you should pass templates' body to a function returned by a helper, but not to the helper itself.
 
 Wrong:
 ```js
-block('b1').tag('span') 
+block('b1').tag('span')
 ```
 
 Right:
@@ -835,7 +835,7 @@ local(this)({hash})(function() {
 Here
 
 * `this` — object being used as a context. Can be omitted, then the current context will be used;
-* `hash` — hash of context fields. The nested constructions like `ctx.foo` are allowed in the `hash` block. The values of hash variables will be set for the context fields durring the `local` block execution. 
+* `hash` — hash of context fields. The nested constructions like `ctx.foo` are allowed in the `hash` block. The values of hash variables will be set for the context fields durring the `local` block execution.
 * `code` is a JavaScript-code, which is executed in a context with values assigned to the variables in the `expressions` bock.
 
 For example the `hash` block can be noted in the following way:
@@ -968,7 +968,7 @@ The expression `applyCtx(newctx)` is a short form of the expression `applyNext(t
 **NB** To use a `this.ctx` object as an argument of `applyCtx()` do the following:
 
 * add some protective flag to the context, to avoid an infinite recursion;
-* add to the template's predicate check for the protective flag availability. 
+* add to the template's predicate check for the protective flag availability.
 
 ***
 
@@ -1069,7 +1069,7 @@ The figure below shows in which modes the different fragments of the output HTML
 
 The figure represents the case of processing an element which has a pair (opening and closing) of tags and attached content.
 Processing of short (closed in the start tag) elements is similar to the represented in the figure above. The only difference is the absence of the closing tag and recursion.
-The context auxiliary function `this._.isShortTag` depending on the element's (tag) name decides if the current element should be processed as the short one.
+The context auxiliary function `this.isShortTag` depending on the element's (tag) name decides if the current element should be processed as the short one.
 
 Template's definition in the mode `default` (sub-predicate `def()`) is needed if you need to override the generation process of the output HTML-element, for example, to add DOCTYPE to the tag HTML:
 
@@ -1377,7 +1377,7 @@ The HTML-fragment, for generation of which the mode `attrs` is responsible, is h
 
 The value of a template's body for the given mode should be an object (hash), which keys and values are names and values of the attributes.
 A valid identifier of an HTML-attribute should be used for a key, and a string or a number should be used for the value.
-When using a special characters in attribute values, they are escaped with the auxiliary function `this._.attrEscape()`.
+When using a special characters in attribute values, they are escaped with the auxiliary function `this.attrEscape()`.
 
 ***
 **NB** If value of an attribute is set to `undefined`, this attribute won't be outputted to the HTML-element.
@@ -1704,33 +1704,33 @@ Author of templates can also use these functions in the template's body as well 
     <th>Description</th>
 </tr>
 <tr>
-    <td><code>this._.isArray(Object)</code></td>
+    <td><code>this.isArray(Object)</code></td>
     <td><code>Boolean</code></td>
     <td>It checks if the given object is an array</td>
 </tr>
 <tr>
-    <td><code>this._.isSimple(Object)</code></td>
+    <td><code>this.isSimple(Object)</code></td>
     <td><code>Boolean</code></td>
     <td>It checks if the given object is a primitive JavaScript type.</td>
 </tr>
 <tr>
-    <td><code>this._.isShortTag(String)</code></td>
+    <td><code>this.isShortTag(String)</code></td>
     <td><code>Boolean</code></td>
     <td>It checks if the specified tag name belongs to the list of short tags (tags which don't need a closing element and a recursive processing). The full list of short tags: <code>area</code>, <code>base</code>, <code>br</code>, <code>col</code>, <code>command</code>, <code>embed</code>, <code>hr</code>, <code>img</code>, <code>input</code>,
     <code>keygen</code>, <code>link</code>, <code>meta</code>, <code>param</code>, <code>source</code>, <code>wbr</code>.</td>
 </tr>
 <tr>
-    <td><code>this._.extend(Object, Object)</code></td>
+    <td><code>this.extend(Object, Object)</code></td>
     <td><code>Object</code></td>
     <td>It returns a hash which merges the content of the two passed in the arguments hashes. If the hashes contain matching keys,  in the result the value of the hash passed in the second argument will be stored.</td>
 </tr>
 <tr>
-    <td><code>this._.xmlEscape(String)</code></td>
+    <td><code>this.xmlEscape(String)</code></td>
     <td><code>String</code></td>
     <td>It returns the passed string with escaped XML control characters <code>[&<>]</code>.</td>
 </tr>
 <tr>
-    <td><code>this._.attrEscape(String)</code></td>
+    <td><code>this.attrEscape(String)</code></td>
     <td><code>String</code></td>
     <td>It escapes the control characters for the values of XML and HTML attributes (<code>"[&<>]</code>).</td>
 </tr>

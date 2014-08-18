@@ -112,7 +112,7 @@ This README is also available [in English](http://bem.info/libs/bem-core/).
 
 ### Модульное тестирование
 
-Сборка дефолтного тестового бандла для `functions__debounce`: 
+Сборка дефолтного тестового бандла для `functions__debounce`:
 ```shell
 $ bem make desktop.specs/functions__debounce
 ```
@@ -130,7 +130,7 @@ $ bem make desktop.specs/functions__debounce
 $ ISTANBUL_COVERAGE=yes bem make desktop.specs && istanbul report html
 ```
 
-Сбор статиски покрытия тестами так же работает для запуска тестов конкретной БЭМ-сущности. 
+Сбор статиски покрытия тестами так же работает для запуска тестов конкретной БЭМ-сущности.
 Пример для `functions__debounce`
 ```
 $ ISTANBUL_COVERAGE=yes bem make desktop.specs/functions__debounce && istanbul report html
