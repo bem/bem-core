@@ -3,14 +3,14 @@
 <a name="intro"></a>
 ## Introduction
 
-This article is intended for web developers who use [BEM methodology](http://bem.info/method/) and [BEMHTML template engine](http://bem.info/libs/bem-core/1.0.0/bemhtml/reference/).
+This article dedicated to web developers who use [BEM methodology](http://bem.info/method/) and [BEMHTML template engine](http://bem.info/libs/bem-core/1.0.0/bemhtml/reference/).
 
 The article describes:
 
 * [compatibility](#compat) of BEMHTML templates written in a different syntax;
 * [template runtime environment](#runmode) settings;
 * [BEMHTML templates processing](#run) flow;
-* BEMHTML template engine standard operations implementation using [JavaScript syntax](#syntax);
+* Standard operations of BEMHTML template engine implementation using [JavaScript syntax](#syntax);
 * templates [transform algorithm](#steps): from concise syntax to JS.
 
 It doesn't contain any information about setting development environment or template compilation procedure, BEHTML template engine features, or BEMJSON input data format.
@@ -19,9 +19,9 @@ It doesn't contain any information about setting development environment or temp
 <a name="general"></a>
 ## General information
 
-Starting from [bem-core](http://bem.info/libs/bem-core) library version 1.0.0 you can apply BEMHTML templates written using JavaScript syntax.
+Starting from [bem-core](http://bem.info/libs/bem-core) library version 1.0.0 you can apply BEMHTML templates written in JavaScript syntax.
 
-Since `bem-core` library introduction template concise syntax is considered deprecated our `bem-core` library supports two template syntax types: **concise** and JS syntax.
+Since `bem-core` library introduction template concise syntax is considered deprecated, our `bem-core` library supports two template syntax types: **concise** and JS syntax.
 
 JavaScript syntax of BEMHTML templates has the following advantages:
 
@@ -29,9 +29,9 @@ JavaScript syntax of BEMHTML templates has the following advantages:
   * code highlight;
   * JSHint, JSLint, etc;
 * fast [compilation](#run), especially in dev runtime environment;
-* besides, template code can run directly in [dev runtime environment](#runmode) which makes debugging simpler.
+* besides, template code runs directly in [dev runtime environment](#runmode) which makes debugging simplier.
 
-All major features of BEMHTML template engine are still relevant when using JS syntax.
+All major features of BEMHTML template engine are still relevant if using JS syntax.
 
 
 ***
@@ -40,7 +40,7 @@ All major features of BEMHTML template engine are still relevant when using JS s
 <a name="install"></a>
 ## Getting started
 
-BEMHTML templates which use JS syntax can be applied to all BEM platform components that use bem-core library.
+BEMHTML templates that use JS syntax could be applied to all BEM platform components that use `bem-core` library.
 
 To migrate to JS syntax you can:
 
@@ -55,15 +55,15 @@ We implement BEMHTML technology module with JS syntax support using `API v2` tec
 
 
 <a name="compat"></a>
-## Templates' compatibility
+## Compatibility of templates
 
 Within same project you can use different BEMHTML templates written in different syntax.
 
-While proceeding our template engine translates concise-syntax templates into JS syntax. Syntax conversion is performed by [bemhtml-compat](https://github.com/bem/bemhtml-compat) module. For more information read [template applying](#run).
+While proceeding our template engine converts concise-syntax templates into JS syntax. Syntax conversion is performed by [bemhtml-compat](https://github.com/bem/bemhtml-compat) module. For more information read [template applying](#run).
 
 Template's syntax is automatically detected by a template engine on compile time.
 
-To make it easier to distinguish template files with different syntax you can use different suffixes.:
+To make it easier to distinguish template files with different syntax you can use different suffixes:
 
 * for acronym-syntax - `.bemhtml`;
 * for JS syntax - `.bemhtml.xjst`.
@@ -77,22 +77,22 @@ To make it easier to distinguish template files with different syntax you can us
 <a name="syntax"></a>
 ## JavaScript syntax of BEMHTML templates
 
-To simplify creation of BEMHTML templates in JavaScript syntax, we use [bem-xjst](https://github.com/bem/bem-xjst) module.
+To simplify creation of BEMHTML templates in JavaScript syntax we use [bem-xjst](https://github.com/bem/bem-xjst) module.
 
-BEM-XJST is a BEM oriented helpers' kit which extends standard XJST syntax.
+BEM-XJST is a BEM-oriented helpers' kit which extends standard XJST syntax.
 
 It allows JS syntax BEMHTML templates to use:
 
 * helpers for writing subpredicates related to BEM subject domain;
-* Helpers for a subpredicate detection based on a mode;
+* helpers for a subpredicate detection based on a mode;
 * helpers for XJST constructions `apply` and `applyNext` using default mode;
 * `applyCtx` construction.
 
 BEMXJST is a superset of [XJST template language](https://github.com/veged/xjst) which in turn is Javascript superset.
 
-BEM-XJST uses canonical XJST syntax extended by rules related to BEM subject domain. This kind of implementation allows BEMHTML templates with JS syntax to be applied to dev environment without preliminarily compilation.
+BEM-XJST uses canonical XJST syntax extended by rules related to BEM subject domain. This kind of implementation allows BEMHTML templates with JS syntax to act in dev environment without preliminarily compilation.
 
-**NB:** `apply` and `applyNext` methods behavior is extended in BEM-XJST compared to XJST. Methods can take a string literal of a statement that can be cast to a string, instead of assignment statements. It means "set string as a mode".
+**NB:** `apply` and `applyNext` methods behaviour is extended in BEM-XJST compared to XJST. Methods can take a string literal of a statement that can be cast to a string instead of assignment statements. It means “set string as a mode”.
 
 For example `apply('content')` can be written like `apply({ _mode: 'content' })`.
 
@@ -109,13 +109,13 @@ Every predicate is a list of one or more subpredicates (conditions).
 
 Template's predicate is true only when all the subpredicates are true.
 
-In acronym-syntax predicate and body are divided by a colon, subpredicates are divided by commas.
+In acronym syntax predicate and body are divided by a colon, subpredicates are divided by commas.
 
 ```
 subpredicate1, subpredicate2, subpredicate3: body
 ```
 
-In JS syntax `match` keyword is introduced for a template description.
+Use `match` keyword to describe a template in JS syntax.
 
 `match` keyword is a helper method which have a subpredicate list as an argument. Method returns function which takes a template body as an argument.
 
@@ -229,7 +229,7 @@ block('b-head-logo').mod('size', 'big')
 
 ***
 
-BEM entity – Element modifier
+BEM entity – element modifier
 
 Keyword - `elemMod`
 
@@ -275,7 +275,7 @@ block('my-block')
         .tag()('span')
 ```
 
-During the processing templates without subpredicates that describe elements have a `!this.elem` subpredicate automatically added to them. It allows to avoid block template to be applied to the elements of the same block.
+While the processing templates without subpredicates that describe elements have a `!this.elem` subpredicate automatically added to them. It allows to avoid block template to be applied to the elements of the same block.
 
 As you can see the example above will not work without `elemMatch`:
 
@@ -308,7 +308,7 @@ The following keywords are used for standard mode validation:
 * `jsAttr`
 * `content`
 
-To define a subpredicate using one of the standard modes in JS syntax helper corresponding to keyword can be used.
+To define a subpredicate using one of the standard modes in JS syntax you can use a helper corresponding to keyword.
 
 For example ``tag()('span')`` is the same as ``match(this._mode === 'tag')('span')``
 
@@ -337,10 +337,10 @@ predicate statement === value
 
 where:
 
-* `predicate statement` – is any JavaScript statement, cast to boolean value;
+* `predicate statement` – any JavaScript statement, cast to boolean value;
 * `value` – any JavaScript statement.
 
-In JS syntax to write down any predicate statement `match` keyword is used. For example:
+To write down any predicate statement in JS syntax use `match` keyword. For example:
 
 ```js
 match(this.ctx.url)(
@@ -408,7 +408,7 @@ Wrong:
 block('b1').tag('span')
 ```
 
-Right:
+Correct:
 
 ```js
 block('b1').tag()('span')
@@ -419,15 +419,15 @@ block('b1').tag()('span')
 
 #### XJST expressions
 
-For templates appliance in a modified contex an [XJST expressions](http://ru.bem.info/libs/bem-core/1.0.0/bemhtml/reference/#xjst) can be used in a templates implemented using JS syntax.
+For templates appliance in a modified contex an [XJST expressions](http://ru.bem.info/libs/bem-core/1.0.0/bemhtml/reference/#xjst) can be used in templates implemented using JS syntax.
 
-They work similarly as if they were in a templates implemented in concise syntax.
+They work similarly as if they were in templates implemented in concise syntax.
 
 #### Templates' nesting
 
-If there is a few templates using the same subpredicates, they can be written down as a nested structure to reduce the code duplication.
+If there are few templates using the same subpredicates, they can be written down as a nested structure to reduce code duplication.
 
-Curly braces are used to indicate nesting in a concise syntax. They begin after the predicate's common part. Inside there is a block of code that contains different predicates parts and corresponding template bodies.
+Curly braces are used to indicate nesting in a concise syntax. They begin after predicate's common part. Inside there is a block of code that contains of different predicates parts and corresponding template bodies.
 
 ```
 subpredicate1 {
@@ -443,7 +443,7 @@ subpredicate 1, subpredicate 2: body1
 subpredicate 1, subpredicate 3: body2
 ```
 
-In JS syntax nested subpredicates are written in a template's body. In other words, subpredicates are passed as an arguments to a function, returned by a `match` method and helpers of a BEM entities and modes.
+In JS syntax nested subpredicates are written in a template's body. In other words subpredicates are passed as arguments to a function returned by a `match` method and helpers of BEM entities and modes.
 
 For example, template in a concise syntax:
 
@@ -454,7 +454,7 @@ this.block === 'link' {
 }
 ```
 
-can be written like this:
+could be written as:
 
 ```js
 match(this.block === 'link')(
@@ -472,7 +472,7 @@ match(this.block === 'link').match(this._mode === 'attrs')({ href: this.ctx.url 
 
 ***
 
-To simplify the expression you can you can use helpers for BEM entities and standard modes names.
+To simplify the expression you can use helpers for BEM entities and standard modes names.
 
 Previous example can be written as:
 
@@ -486,7 +486,7 @@ block('link')(
 
 ***
 
-BEMHTML template can contain of a template body and subtemplates at the same nesting level.
+BEMHTML template could contain of a template body and subtemplates at the same nesting level.
 
 In a concise syntax for this feature we use `true` keyword:
 
@@ -497,7 +497,7 @@ block link, tag, this.ctx.url {
 }
 ```
 
-When using JS syntax a template's body is passed as an argument to a function returned by helper. It must be the first argument and subtemplates can be passed after it:
+Using JS syntax a template's body is provided to a function as the first argument. All subtemplates could be provided after it.
 
 ```js
 block('link').tag().match(this.ctx.url)(
@@ -533,7 +533,7 @@ BEMHTML template engine can work in two different modes depending on the **runti
 
 The main difference is that in a production environment XJST translation of a template applies and returns an optimized JavaScript as a result. It increases project build time because of templates compilation, but makes it work faster at runtime.
 
-Runtime environment is chosen by a template engine depending on a `process.env.BEMHTML_ENV` environment variable value. When the value is set to `development` it uses a development environment leaving a production environment to all other cases.
+Runtime environment is chosen by a template engine depending on a `process.env.BEMHTML_ENV` environment variable value. When value is set to `development` it uses a development environment leaving a production environment to all other cases.
 
 The choice of a runtime environment affects a template applying flow regardless of a concise syntax or a JS syntax implementation.
 
@@ -558,7 +558,7 @@ Templates are compiled differently depending on runtime environment settings and
 
 Despite of a runtime environment settings the following steps are performed:
 
-* all the BEMHTML templates within a build are stored in a bundle file;
+* all BEMHTML templates within a build are stored in a bundle file;
 * templates in a bundle file are converted to XJST syntax.
 
 
@@ -567,19 +567,19 @@ Despite of a runtime environment settings the following steps are performed:
 
 Despite of a runtime environment settings the following steps are performed:
 
-* all the BEMHTML templates within a build are stored in a bundle file.
+* all BEMHTML templates within a build are stored in a bundle file.
 
 **In a production development environment** for concise and JS syntax XJST translation is performed and resulted in an optimized template JavaScript code generation.
 
 
 <a name="runmain"></a>
-### Applying templates
+### Application of templates
 
-JavaScript code we received once a template compilation is over is applied the same way to all syntax and settings variation:
+Once a template compilation is over we receive a JavaScript code and apply it the same way to all syntax and settings variation:
 
 * template engine takes a BEM-tree as an input data in [BEMJSOM](http://ru.bem.info/libs/bem-core/1.0.0/bemhtml/reference/#bemjson) format;
-* sequentially go through an input BEM-tree nodes;
-    * data structure called [context](http://ru.bem.info/libs/bem-core/1.0.0/bemhtml/reference/#context) is built during the BEMJSON tree processing;
+* sequentially go through nodes of an input BEM-tree;
+    * data structure called [context](http://ru.bem.info/libs/bem-core/1.0.0/bemhtml/reference/#context) is built during BEMJSON tree processing;
 * HTML output is generated in cycle for every BEM-entity;
     * HTML output is recursively generated for every nested BEM entity;
     * writing to HTML result fragments buffer is performed element by element.
@@ -608,16 +608,16 @@ Templates implemented in a concise syntax can be converted to a JS syntax with t
 
 <a name="steps-table"></a>
 #### Step-by-step template convertion
-Template conversion algorithm can be briefly described as a table below.
+Template conversion algorithm can be described briefly as a table below.
 
 | Step number   | Stage       | Description  | Conversion pattern |
 | ------------- |-------------|------------- |-------------|------------- |-------------|
-|  1  | BEM-oriented subpredicates conversion | Surround the BEM-entities names with a single quotation marks | `b1` → `'b1'` |
+|  1  | BEM-oriented subpredicates conversion | Surround the BEM entities names with a single quotation marks | `b1` → `'b1'` |
 |  2 |  | Replace a BEM entities abbreviations with helpers | `block 'b1'` → `block('b1')` |
 |  3 |  | Replace all commas separating subpredicates with dots | `,`  → `.` |
 |  4 | Arbitrary subpredicates conversion | Wrap an arbitrary subpredicate in `match` helper | `arbitrary-subpredicate` -> `match(arbitrary-subpredicate)` |
 |  5 | Modes' subpredicate conversion | Replace standard modes names with helpers | `tag` → `tag()` |
-|  6 |  | Wrap remaining subpredicated in a `mode` helper and add apostrophes | `some-mode` → `mode('some-mode')` |
+|  6 |  | Wrap remaining subpredicates in a `mode` helper and add apostrophes | `some-mode` → `mode('some-mode')` |
 |  7 | Template body and nested expressions conversion | Wrap a template's body in a parentheses and remove preceding colon | ` : ...`  →  `(...)` |
 |  8 |  | Divide nested templates by commas | `block('b1'){ tag()('a') elem('e1').tag('b') }` → `block('b1'){ tag()('a'), elem('e1').tag('b') }` |
 |  9 |  | Replace nesting curly braces with parentheses | `block('b1'){ tag()('a'), elem('e1').tag('b') }` → `block('b1')(tag()('a'), elem('e1').tag('b'))` |
@@ -646,7 +646,7 @@ block('logo').tag()('img')
 ***
 
 
-**Template 2.** Sets and `img` tag and corresponding attribute set for the `logo` block.
+**Template 2.** Sets and `img` tag and corresponding attribute set for `logo` block.
 
 Concise syntax:
 
@@ -670,7 +670,7 @@ block('logo')(
 ***
 
 
-**Template 3.** Sets an `html` tag for a `b-page` block and forbids class generation with the BEM entity's name.
+**Template 3.** Sets an `html` tag for a `b-page` block and forbids class generation with the BEM entities name.
 
 Concise syntax:
 
@@ -752,7 +752,7 @@ block('b-bla')(
 ***
 
 
-**Template 6.** Wraps `b-inner` block in `b-wrapper` block. Input BEMJSON fragment in a `default` mode is substituted by `b-wrapper` block, containing the original input data.
+**Template 6.** Wraps `b-inner` block in `b-wrapper` block. Input BEMJSON fragment in a `default` mode is substituted by `b-wrapper` block containing the original input data.
 
 Concise syntax:
 
@@ -764,7 +764,7 @@ block b-inner, default: applyCtx({ block: 'b-wrapper', content: this.ctx })
 JS syntax:
 
 
-While using a fragment of input BEMJSON `this.ctx` with an `applyCtx` structure in dev-environment, endless cycle is possible during the applying. To avoid it you need to add a flag, indicating that template was already processed, and subpredicate to check flag's value:
+While using a fragment of input BEMJSON `this.ctx` with an `applyCtx` structure in dev-environment, endless cycle is possible on application.. To avoid it you need to add a flag, indicating that template was already processed, and subpredicate to check flag's value:
 
 ```js
 block('b-inner')(def()
