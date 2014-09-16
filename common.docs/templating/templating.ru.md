@@ -1234,5 +1234,5 @@ BEMTREE.apply({ block: 'intitial' })
 * [Примеры и рецепты BEMHTML](http://ru.bem.info/libs/bem-core/2.2.0/templating/reference#examples)
 
 ####В сообществе
-* [Мастер-класс «Динамический БЭМ-сайт на Node.js»](http://tech.yandex.ru/events/bemup/spb-bemup/talks/1413/)
+* [Мастер-класс «Динамический БЭМ-сайт на Node.js»](https://tech.yandex.ru/events/bemup/29-november-2013/talks/1413/)
 * [BEMTREE — генерируй дерево](http://tech.yandex.ru/events/bemup/yac-bemup/talks/1354/)
