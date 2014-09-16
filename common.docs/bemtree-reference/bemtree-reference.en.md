@@ -654,7 +654,7 @@ When creating BEMTREE templates, the same techniques can be used as are applicab
 
 **See also**:
 
-* [Мастер-класс «Динамический БЭМ-сайт на Node.js»](http://tech.yandex.ru/events/bemup/spb-bemup/talks/1413/)
+* [Мастер-класс «Динамический БЭМ-сайт на Node.js»](https://tech.yandex.ru/events/bemup/29-november-2013/talks/1413/)
 * [BEMTREE — генерируй дерево](http://tech.yandex.ru/events/bemup/yac-bemup/talks/1354/)
 * [BEMHTML: Examples and recipes](http://en.bem.info/libs/bem-core/2.3.0/templating/reference#examples)
 * [Data templating in bem-core](http://bem.info/technology/bemhtml/2.3.0/templating/)
