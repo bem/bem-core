@@ -10,16 +10,16 @@ The guide describes:
 * Input data processing sequence and BEMJSON generation;
 * BEMTREE-based solutions to some typical problems.
 
-**The target audience for this guide** are web developers and HTML coders who use the [BEM methodology](http://en.bem.info/method/).
+**The target audience for this guide** are web developers and HTML coders who use the [BEM methodology](http://bem.info/method/).
 
 The reader is assumed to be familiar with:
 
 * HTML
 * JavaScript
 * CSS
-* [BEMHTML](http://bem.info/technology/bemhtml/2.3.0/reference/)
-* [BEMJSON](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemjson)
-* BEM
+* [BEMHTML](http://bem.info/technology/bemhtml/current/reference/)
+* [BEMJSON](http://bem.info/technology/bemjson/current/bemjson/)
+* [BEM](http://bem.info/method/)
 
 **This document does not cover** the setup of the development environment, the template compilation procedure or the process of receiving data from the back end.
 
@@ -31,25 +31,25 @@ The reader is assumed to be familiar with:
 <a name="arch"></a>
 ### Architecture
 
-For the processing of BEMTREE templates, the module [bem-xjst](https://github.com/bem/bem-xjst) is used, extended with logic from the BEMTREE default template – [i-bem.bemtree](https://github.com/bem/bem-core/blob/v2/common.blocks/i-bem/i-bem.bemtree).
+For the processing of BEMTREE templates, the module [bem-xjst](http://bem.info/tools/templating-engines/bemxjst/) is used, extended with logic from the BEMTREE default template – [i-bem.bemtree](https://github.com/bem/bem-core/blob/v2/common.blocks/i-bem/i-bem.bemtree).
 
 BEMTREE-specific logic is implemented at `i-bem.bemtree` template level. This default template defines:
 
 * the set and call order of standard modes;
 * available context fields.
 
-For a detailed description of BEMTREE's architecture, see section [Architecture of BEMHTML and BEMTREE templates](http://ru.bem.info/technology/bemhtml/2.3.0/templating/) of the [Data templating in bem-core](http://ru.bem.info/technology/bemhtml/2.3.0/templating/) document.
+For a detailed description of BEMTREE's architecture, see section “Architecture of BEMHTML and BEMTREE templates” of the [Data templating in bem-core](http://ru.bem.info/technology/bemhtml/current/templating/) (it is available only in Russian) document.
 
 
 <a name="uts"></a>
 ### Support of BEM-XJST templating
 
-BEMTREE is a [BEM-XJST template engine](ru.bem.info/technology/bemhtml/2.3.0/templating#bemx_intro). In other words, BEMTREE uses **BEM-XJST syntax** and retains all the features of BEM-XJST template engines, such as:
+BEMTREE is a BEM-XJST template engine. In other words, BEMTREE uses **BEM-XJST syntax** and retains all the features of BEM-XJST template engines, such as:
 
-* [binding to the BEM-domain](http://ru.bem.info/technology/bemhtml/2.3.0/templating#bem_area);
-* [declarative templates](http://ru.bem.info/technology/bemhtml/2.3.0/templating#decl_templatе);
-* [JavaScript as the template description and execution language ](ru.bem.info/technology/bemhtml/2.3.0/templating#language);
-* [restrictions at conventions level](http://ru.bem.info/technology/bemhtml/2.3.0/templating/#restrictions).
+* binding to the BEM-domain;
+* declarative templates;
+* JavaScript as the template description and execution language;
+* restrictions at conventions level.
 
 
 <a name="basic"></a>
@@ -106,7 +106,7 @@ Such an approach employs the principle of separation of the controller from data
 
 #### Receipt of data within a BEMTREE block template
 
-This approach is appropriate for a block that receives its data from a source that no other block uses. Then there is no point in having a separate controller as its functionality would be inapplicable to any other blocks. A case in point would be any type of widget: a weather forecast widget, counters, new blog posts, currency exchange rate, etc. 
+This approach is appropriate for a block that receives its data from a source that no other block uses. Then there is no point in having a separate controller as its functionality would be inapplicable to any other blocks. A case in point would be any type of widget: a weather forecast widget, counters, new blog posts, currency exchange rate, etc.
 
 The main advantage of this approach is that blocks are then essentially self-contained. They contain logic both for the receipt and representation of data.
 
@@ -152,16 +152,16 @@ Thus the BEM tree of the entire document is built element by element.
 
 You can find detailed information about them in the respective sections of the documentation about templating in bem-core:
 
-* [Template](http://ru.bem.info/technology/bemhtml/2.3.0/templating#template_ingeneral)
-* [Mode](http://ru.bem.info/technology/bemhtml/2.3.0/templating#moda)
-* [Context](http://ru.bem.info/technology/bemhtml/2.3.0/templating#context)
+* Template
+* Mode
+* Context
 
 
 <a name="syntax"></a>
 
 ### Template syntax
 
-BEMTREE templates are created using [BEM-XJST-template syntax](http://ru.bem.info/technology/bemhtml/2.3.0/templating#unity). In practice this means that all syntactic structures available in BEMHTML templates can be used in BEMTREE templates.
+BEMTREE templates are created using BEM-XJST-template syntax. In practice this means that all syntactic structures available in BEMHTML templates can be used in BEMTREE templates.
 
 Syntax-wise, BEMTREE differs from BEMHTML in what sets of context fields and standard modes (including helpers) are available.
 
@@ -234,7 +234,7 @@ What action is executed in the empty mode depends on the type of a context (curr
 
 The definition of a template in the empty mode (sub-predicate `mode(this._mode === '')`) only makes sense if it is necessary to override the processing order for the input tree.
 
-Calling templates in the empty mode (the `apply('')` construction in the template body) is necessary if one needs to deviate from the strict correspondence of "input BEM entity - output BEMJSON-element" and, for example, generate more than one element per one input entity. Specifically, such a call can be made automatically when using the [applyCtx construction](http://ru.bem.info/technology/bemhtml/2.3.0/templating#applyctx).
+Calling templates in the empty mode (the `apply('')` construction in the template body) is necessary if one needs to deviate from the strict correspondence of "input BEM entity - output BEMJSON-element" and, for example, generate more than one element per one input entity. Specifically, such a call can be made automatically when using the applyCtx construction.
 
 **See also**:
 
@@ -335,14 +335,14 @@ All context fields can be divided into two categories:
 
 **See also**:
 
-  * [Context](http://ru.bem.info/technology/bemhtml/2.3.0/templating#context)
+  * [Context](http://ru.bem.info/technology/bemhtml/current/templating/#context)
 
 
 <a name="contextdependent"></a>
 
 ### Context-dependent fields
 
-The default BEMTREE template does not add any context-dependent fields besides [those common to BEM-XJST](http://ru.bem.info/technology/bemhtml/2.3.0/templating#contextdependent).
+The default BEMTREE template does not add any context-dependent fields besides those common to BEM-XJST.
 
 
 <a name="context_independent"></a>
@@ -351,7 +351,7 @@ The default BEMTREE template does not add any context-dependent fields besides [
 
 All context-independent fields are grouped into the object `this._` and serve as auxiliary functions used when the template engine is running. The author of templates can use these functions in both template bodies and predicates.
 
-BEMTREE extends the set of [context-independent fields of BEM-XJST](http://ru.bem.info/technology/bemhtml/2.3.0/templating#context_independent) with only one method - `this._.doAsync`.
+BEMTREE extends the set of context-independent fields of BEM-XJST with only one method - `this._.doAsync`.
 
 <table>
 <tr>
@@ -447,9 +447,9 @@ Let's assume that the source data is saved in the context field `this.ctx.data`.
 
 #### Problem
 
-At different [redifinition levels](http://ru.bem.info/method/filesystem/) two different templates for the same BEM entity (`block b1`) are defined. Each of the templates defines its content in the `content` mode.
+At different [redifinition levels](http://bem.info/method/filesystem/) two different templates for the same BEM entity (`block b1`) are defined. Each of the templates defines its content in the `content` mode.
 
-The content defined at the first level of redefinition should be inherited at the second level, and also some extra content should be added. An analogue of `<xsl:apply-imports/>` is required. 
+The content defined at the first level of redefinition should be inherited at the second level, and also some extra content should be added. An analogue of `<xsl:apply-imports/>` is required.
 
 #### Solution
 
@@ -487,7 +487,7 @@ block('b1').content()([
 
 **See also**:
 
-  * [applyNext construction](http://ru.bem.info/technology/bemhtml/2.3.0/templating#applynext)
+  * [applyNext construction](http://ru.bem.info/technology/bemhtml/current/templating/#applynext)
 
 
 <a name="wrappingunit"></a>
@@ -520,7 +520,7 @@ block('b-inner').def()
 
 **See also**:
 
-  * [The `applyCtx` construction](http://ru.bem.info/technology/bemhtml/2.3.0/templating#applyctx)
+  * [The `applyCtx` construction](http://ru.bem.info/technology/bemhtml/current/templating/#applyctx)
 
 <a name="additionbem"></a>
 
@@ -584,9 +584,9 @@ block('box').match(!this.ctx._processed).content()(applyCtx({'ctx._processed':tr
 
 **See also**:
 
-  * [The `apply` construction](http://ru.bem.info/technology/bemhtml/2.3.0/templating#apply)
-  * [The `applyNext` construction](http://ru.bem.info/technology/bemhtml/2.3.0/templating#applynext)
-  * [The `applyCtx` construction](http://ru.bem.info/technology/bemhtml/2.3.0/templating#applyctx)
+  * [The `apply` construction](http://ru.bem.info/technology/bemhtml/current/templating/#apply)
+  * [The `applyNext` construction](http://ru.bem.info/technology/bemhtml/current/templating/#applynext)
+  * [The `applyCtx` construction](http://ru.bem.info/technology/bemhtml/current/templating/#applyctx)
 
 
 <a name="check_predicate"></a>
@@ -654,9 +654,6 @@ When creating BEMTREE templates, the same techniques can be used as are applicab
 
 **See also**:
 
-* [Мастер-класс «Динамический БЭМ-сайт на Node.js»](https://tech.yandex.ru/events/bemup/29-november-2013/talks/1413/)
-* [BEMTREE — генерируй дерево](http://tech.yandex.ru/events/bemup/yac-bemup/talks/1354/)
-* [BEMHTML: Examples and recipes](http://en.bem.info/libs/bem-core/2.3.0/templating/reference#examples)
-* [Data templating in bem-core](http://bem.info/technology/bemhtml/2.3.0/templating/)
-* [BEMHTML](http://bem.info/technology/bemhtml/2.3.0/reference/)
-* [BEMJSON](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemjson)
+* [BEMHTML: Examples and recipes](http://bem.info/technology/bemhtml/current/reference/)
+* [BEMHTML](http://bem.info/technology/bemhtml/current/reference/)
+* [BEMJSON](http://bem.info/technology/bemjson/current/bemjson/)
