@@ -41,7 +41,7 @@ To start it, execute the following command from the project root folder:
 
 
 The server recieves a connection at `http://localhost:8080/` and begins the build
-process for the requested page.  For example: `http://localhost:8080/desktop.bundles/index`
+process for the requested page.  For example: `http://localhost:8080/desktop.bundles/index/`
 
 **Note: During the first build process libraries `bemhtml` and `bem-bl` will be copied
 to the project directory**
@@ -62,20 +62,24 @@ Create a template for an empty page (let's call it `test`):
 Let's take a look at the source code for the page (`desktop.bundles/test/test.bemjson.js`):
 
     ({
-        block: 'b-page',
+        block: 'page',
         title: 'test',
         head: [
-            { elem: 'css', url: '_test.css', ie: false},
-            { elem: 'css', url: '_test', ie: true },
-            { block: 'i-jquery', elem: 'core'},
-            { elem: 'js', url:'_test.js'},
+            { elem: 'css', url: '_test.css' }
         ],
+        scripts: [{ elem: 'js', url: '_test.js' }],
         content: [
-            'block content'
+           {
+               block: 'content',
+               content: [
+                   'block content'
+               ]
+           }
         ]
     })
 
-Here we are using the block `b-page` form the library `bem-bl`.
+
+Here we are using the block `page` form the library `bem-bl`.
 
 **Note: The library `bem-bl` was previously linked to the project before you cloned
 the project.  After the first `build process` is complete these libraries are cloned
@@ -96,44 +100,44 @@ Let's make a very simple template. We will place a block with the text
 Edit the source BEMJSON: `desktop.bundles/test/test.bemjson.js`
 
     ({
-        block: 'b-page',
+        block: 'page',
         title: 'test',
         head: [
-            { elem: 'css', url: '_test.css', ie: false},
-            { elem: 'css', url: '_test', ie: true },
-            { block: 'i-jquery', elem: 'core'},
-            { elem: 'js', url:'_test.js'},
+            { elem: 'css', url: '_test.css' }
         ],
+        scripts: [{ elem: 'js', url: '_test.js' }],
         content: [
-                {
-                    block: 'b-hello',
-                    content: 'Hello, BEMHTML!'
-                }
+           {
+               block: 'hello',
+               content: [
+                   'Hello, BEMHTML!'
+               ]
+           }
         ]
     })
 
 Above code explained:
- * We define the `content` property of the `b-page` block as a new block `b-hello`.
- * Add the greeting `'Hello, BEMHTML!'` to the `content` property of the block `b-hello`.
+ * We define the `content` property of the `page` block as a new block `hello`.
+ * Add the greeting `'Hello, BEMHTML!'` to the `content` property of the block `hello`.
 
 **Note: If the block's template is not defined, HTML for the block is generated from
 the `bemhtml` library by default.**
 
 Let's take a look at the result. A snippet of HTML code describing our page looks like this:
 
-    <body class="b-page__body b-page">
-      <div class="b-hello">Hello, BEMHTML!</div>
+    <body class="page">
+      <div class="hello">Hello, BEMHTML!</div>
     </body>
 
 We can see that:
- * The `div` element corresponds to `b-hello` block.
+ * The `div` element corresponds to `hello` block.
  * The block's name is used for the `class` attribute.
 
 
 ## Step 4. Create a Template for a Greeting <a name="template"></a>
 
-Let's make the block `b-hello` more universal, by allowing it to generate a greeting for
-a specified name.  Therefore we could use `b-hello` with different names on various pages
+Let's make the block `hello` more universal, by allowing it to generate a greeting for
+a specified name.  Therefore we could use `hello` with different names on various pages
 or as many times as we want on the same page.
 
 **Note: BEMJSON object can contain arbitrary data-fields which templates can make use of.**
@@ -141,23 +145,27 @@ or as many times as we want on the same page.
 Add a property in our block called `'name'` which will be used to store a user's name.
 Edit `test.bemjson.js`:
 
-    { block: 'b-hello', name: 'BEMHTML' }
+    { block: 'hello', name: 'BEMHTML' }
 
-In order to generate our greeting text, we need to create files for the block `b-hello`
+In order to generate our greeting text, we need to create files for the block `hello`
 and define a BEMHTML template in the project.
 
 The blocks defined for our project are located under the `desktop.blocks` directory.
 To create a directory for the block and all other necessary files, use the command `bem create`:
 
-    $ ./node_modules/.bin/bem create -l desktop.blocks -b b-hello
+    $ ./node_modules/.bin/bem create -l desktop.blocks -b hello
 
-Create the template for the `b-hello` block in the `desktop.blocks/b-hello/b-hello.bemhtml` file:
+Create the template for the `hello` block in the `desktop.blocks/hello/hello.bemhtml` file:
 
-    block b-hello, content: ['Hello, ', this.ctx.name, '!']
+    block('hello')(
+        content()(function() {
+            return [ 'Hello, ', this.ctx.name, '!' ];
+        })
+    );
 
 The code above defines the following:
- * `block b-hello, content` - template predicate (it will be called during processing
- of `b-hello` block with the standard mode `content`)
+ * `block('hello')` - template predicate (it will be called during processing
+ of `hello` block with the standard mode `content`)
  * `['Hello, ', this.ctx.name, '!']` - template body (This array will be concatenated
  and inserted into the HTML of the block)
  * `this.ctx.name` - a context field, which corresponds to `name` field of source
@@ -168,8 +176,8 @@ the HTML generation is redefined in the custom templates.**
 
 The Resulting HTML:
 
-    <body class="b-page__body b-page">
-      <div class="b-hello">Hello, BEMHTML!</div>
+    <body class="page">
+      <div class="hello">Hello, BEMHTML!</div>
     </body>
 
 ### **Russian only** More details can be found here:
@@ -179,20 +187,20 @@ The Resulting HTML:
 
 ## Step 5. Rewrite the Template: Add Generation of a List Based on a Data Array <a name="array"></a>
 
-As the project develops we might have a need for a more complex version of the block `b-hello`.
+As the project develops we might have a need for a more complex version of the block `hello`.
 For example we might want to show at the same time a few greetings from a list of names.
 
 In this case it's more convenient to use an array of names in the place of
 the single name data-field `'name'`.  To do so, change the content of `test.bemjson.js` to:
 
-    { block: 'b-hello', names: ['BEM', 'BEMJSON', 'BEMHTML'] }
+    { block: 'hello', names: ['BEM', 'BEMJSON', 'BEMHTML'] }
 
 According to the BEM methodology each greeting should be represented as an `element` called `'item'`
-placed inside the `b-hello` block.
+placed inside the `hello` block.
 Or in other words, we want to have the following BEM-tree after the template was used:
 
     {
-        block: 'b-hello',
+        block: 'hello',
         content: [
             { elem: 'item', content: 'BEM' },
             { elem: 'item', content: 'BEMJSON' },
@@ -203,19 +211,23 @@ Or in other words, we want to have the following BEM-tree after the template was
 **Note: BEMHTML templates allow us to modify BEMJSON (BEM-tree) in runtime.**
 
 The BEMHTML template should generate one `BEM-Element` named 'item' for every element in
-the `'names'` array.  This template is in the `b-hello.bemhtml` file:
+the `'names'` array.  This template is in the `hello.bemhtml` file:
 
-    block b-hello {
-        content: this.ctx.names.map(function(user) { return { elem: 'item', content: user } })
-
-        elem item, content: ['Hello, ', applyNext(), '!']
-    }
+    block('hello')(
+        content()(function() {
+            return this.ctx.names.map(function(user) {
+                return { elem: 'item', content: user };
+            });
+        }),
+    
+        elem('item').content()(function() {
+            return ['Hello, ', applyNext(), '!'];
+        })
+    );
 
 
 Here, in the template body was used:
 
- * a predicates' shorthand notation with use of `{}`. It's equivalent to two templates
- with predicates `block b-hello, content` and `block b-hello, elem item, content`;
  * templates with mode [`content`](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#content)(Russian only);
  * construction [`applyNext`](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#applynext)(Russian only),
  which is a recursive call of templates implementation procedure;
@@ -227,10 +239,10 @@ Here, in the template body was used:
 
 As a result of the templates' application we will get an HTML page with three greetings:
 
-    <div class="b-hello">
-      <div class="b-hello__item">Hello, BEM!</div>
-      <div class="b-hello__item">Hello, BEMJSON!</div>
-      <div class="b-hello__item">Hello, BEMHTML!</div>
+    <div class="hello">
+      <div class="hello__item">Hello, BEM!</div>
+      <div class="hello__item">Hello, BEMJSON!</div>
+      <div class="hello__item">Hello, BEMHTML!</div>
     </div>
 
 ## Step 6. Edit the Template: Modify HTML Tags <a name="tags"></a>
@@ -240,87 +252,94 @@ However when we re-format 'the greeting block' in the form of a unordered-list, 
 why it is useful.
 
 In this case we need to change the BEMHTML-template just a bit.  Instead of the default `<div>` tag,
-we can define tags for the `b-hello` block and it's elements `item`(s).  The block and element's
+we can define tags for the `hello` block and it's elements `item`(s).  The block and element's
 tag can be defined using the `'tag'` property:
 
-    block b-hello {
-
-        tag: 'ul'
-
-        content: this.ctx.names.map(function(user) { return { elem: 'item', content: user } })
-
-        elem item {
-
-            tag: 'li'
-
-            content: ['Hello, ', applyNext(), '!']
-        }
-    }
+    block('hello')(
+        tag()('ul'),
+    
+        content()(function() {
+            return this.ctx.names.map(function(user) {
+                return { elem: 'item', content: user };
+            });
+        }),
+    
+        elem('item')(
+            tag()('li'),
+    
+            content()(function() {
+                return ['Hello, ', applyNext(), '!'];
+            })
+        )
+    );
 
 
 Now we have:
- * 4 templates in total: `block b-hello, tag`, `block b-hello, content`, `block b-hello,
- elem item, tag`, `block b-hello, elem item, content`.  (the nested notation is used to imitate
- similar behavior as CSS Selectors).
  * Block and elements with the `'tag'` property: **Russian Only:** [BEM Documentation: Tag](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#tag)(Russian only).
 
 The Resulting HTML:
 
-    <ul class="b-hello">
-      <li class="b-hello__item">Hello, BEM!</li>
-      <li class="b-hello__item">Hello, BEMJSON!</li>
-      <li class="b-hello__item">Hello, BEMHTML!</li>
+    <ul class="hello">
+      <li class="hello__item">Hello, BEM!</li>
+      <li class="hello__item">Hello, BEMJSON!</li>
+      <li class="hello__item">Hello, BEMHTML!</li>
     </ul>
 
 ## Step 7. Add Style and Behavior (CSS and JS) <a name="cssjs"></a>
 
 When the block-level in the `project-stub` was created, files for three technologies
 were generated by default:
- * `b-hello.bemhtml`;
- * `b-hello.css`;
- * `b-hello.js`.
+ * `hello.bemhtml`;
+ * `hello.browser.js`;
+ * `hello.styl`.
 
-The block implementation in both CSS and JS technologies  is not a part of the BEMHTML templating engine.
+The block implementation in both Stylus and JS technologies  is not a part of the BEMHTML templating engine.
 However in any real-world project CSS and JS are used together with the BEMHTML.
 
 **Note: BEMHTML places the names of BEM-Entities into the `class` attribute of HTML-elements.
 Only *class*-selectors are used for CSS.**
 
 For example: to color all blocks green, all you would have to do is add the following CSS
-to `desktop.blocks/b-hello/b-hello.css`:
+to `desktop.blocks/hello/hello.styl`:
 
-    .b-hello
-    {
+    .hello
         color: green
-    }
 
 To add special `i-bem` event handlers to any block or element you need to define the js property as `true`.
 (More information in Russian Only: [js property](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#js)
 
-    block b-hello, js: true
+    block('hello')(
+		js()(true),
+        ...
+    )
+
 
 
 If the `js` property is set to true, BEMHTML adds `i-bem` to the list of classes,
-and also an attribute to store important `i-bem` information (`onclick` by default,
+and also an attribute to store important `i-bem` information (`data-bem` by default,
 see **Russian only** [the mode `jsAttr`](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#jsattr)).
-JS framework when initializing adds HTML-class `b-hello_js_inited`:
+JS framework when initializing adds HTML-class `hello_js_inited`:
 
-    <div class="b-hello i-bem b-hello_js_inited" onclick="return {&quot;b-hello&quot;:{}}">
+    <div class="hello i-bem hello_js_inited" data-bem='{"hello":{}}'>
 
 **Note: The block `i-bem` is a part of the `bem-bl` library.  `bem-bl` is a framework
 which allows us to write a JavaScript for the client side.**
 
 In the following example when the block is clicked, the warning-message with the text `Hello` will be shown.
 
-    BEM.DOM.decl('b-hello', {
-        onSetMod: {
-        'js': {
-            'inited': function() {
-                this.bindTo('click', function() { alert('Hello') });
+    modules.define('hello', ['i-bem__dom'], function(provide, BEMDOM) {
+    
+        provide(BEMDOM.decl({ block : this.name }, {
+            onSetMod : {
+                'js' : {
+                    'inited' : function() {
+                        this.bindTo('click', function() { alert('Hello') });
+                    }
                 }
             }
-        }
-    })
+        }));
+    
+    });
 
 
 ### For more details see:
