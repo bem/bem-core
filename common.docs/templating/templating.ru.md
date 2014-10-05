@@ -29,7 +29,7 @@
 
 Под **шаблонизацией** в bem-core понимается процесс генерации HTML из некоторых входных данных.
 
-В `bem-core` реализован механизм двухэтапной шаблонизации данных. На первом этапе нормализованные данные, получаемые от бэкенда, преобразуются к view-ориентированному представлению.  Эту функцию выполняет шаблонизатор [BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemtree).
+В `bem-core` реализован механизм двухэтапной шаблонизации данных. На первом этапе нормализованные данные, получаемые от бэкенда, преобразуются к view-ориентированному представлению.  Эту функцию выполняет шаблонизатор [BEMTREE](http://ru.bem.info/technology/bemtree/). 
 
 BEMTREE формирует **БЭМ-дерево** в формате BEMJSON. БЭМ-дерево описывает:
 
@@ -38,7 +38,7 @@ BEMTREE формирует **БЭМ-дерево** в формате BEMJSON. Б
 * состояния БЭМ-сущностей – наличие логических модификаторов, значения модификаторов;
 * произвольные поля – вспомогательные данные (хеш-ключи, адреса публичных API, и т.п.).
 
-На втором этапе ранее сформированный BEMJSON поэлементно преобразуется в HTML. Эту функцию выполняет шаблонизатор [BEMHTML](http://ru.bem.info/libs/bem-core/2.2.0/templating/reference).
+На втором этапе ранее сформированный BEMJSON поэлементно преобразуется в HTML. Эту функцию выполняет шаблонизатор [BEMHTML](http://ru.bem.info/technology/bemhtml/current/reference/). 
 
 Для каждой БЭМ-сущности создаются HTML-тэги, классы и атрибуты, в соответствии с  BEMHTML-шаблонами для этой сущности.
 
@@ -123,7 +123,7 @@ BEM-XJST реализует наиболее общую схему обрабо�
 Шаблонизаторы BEMHTML и BEMTREE входят в связку технологических решений, обеспечивающих создание веб-интерфейсов в рамках
 [БЭМ-методологии](http://ru.bem.info/method/).
 
-Входные данные шаблонизатора — БЭМ-дерево в формате [BEMJSON](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemjson), описывающее веб-страницу.
+Входные данные шаблонизатора — БЭМ-дерево в формате [BEMJSON](http://ru.bem.info/technology/bemjson/), описывающее веб-страницу.
 Языки шаблонов BEMHTML и BEMTREE предлагают специальные конструкции для обработки блоков, элементов и модификаторов.
 
 
@@ -322,8 +322,8 @@ block('menu')(
 
 **См. также**:
 
-* [Стандартные моды BEMHTML](http://ru.bem.info/libs/bem-core/2.2.0/templating/reference#standardmoda)
-* [Стандартные моды BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemtree#standardmoda)
+* [Стандартные моды BEMHTML](http://ru.bem.info/technology/bemhtml/current/reference/#standardmoda)
+* [Стандартные моды BEMTREE](http://ru.bem.info/technology/bemtree/current/bemtree/#standardmoda)
 
 
 <a name="context"></a>
@@ -410,7 +410,7 @@ match(подпредикат 1).match(подпредикат 3)(тело2)
 
 **См. также**:
 
-* [Проверка подпредикатов в определенном порядке](http://ru.bem.info/libs/bem-core/2.2.0/templating/reference#check_predicate)
+* [Проверка подпредикатов в определенном порядке](http://ru.bem.info/technology/bemhtml/current/reference/#check_predicate)
 
 <a name="podpredicate"></a>
 
@@ -740,25 +740,22 @@ local()({ x: 1, 'a.b.c': 2 })(function() {
 Синтаксис:
 
 ```js
-apply(expressions)
+apply({assignObj})
 ```
 
-Где `expressions` — это список выражений, модифицирующих контекст.  Список может быть пуст.
+Где `{assignObj}` — объект, ключи которого становятся полями контекста при входе в блок `applyNext`. Объект может отсутствовать.
 
-Каждое выражение в списке `expressions` может представлять собой:
+Первым аргументом может быть передана строка, которая интерпретируется как название моды.
 
-* Хеш значений переменных, используемых для модификации контекста. Аналогичен блоку hash в [конструкции local](#local).
-* Строку или приводимое к ней выражение. Означает «выставить указанную строку в качестве моды».
-
-Например, выражение `apply('content')` эквивалентно выражению `apply(this._mode = 'content')`.
+Например, выражение `apply('content')` эквивалентно выражению `apply({ _mode : 'content' })`.
 
 При вычислении выражения `apply` выполняются следующие шаги:
 
-1. Выполнение выражений (присваиваний) в блоке `expressions`.
+1. Установка полей контекста, определенных в объекте `{assignObj}`.
 2. Вызов процедуры выбора и выполнения шаблона в контексте, полученном в результате шага 1.
-3. Восстановление значений переменных.
+3. Восстановление исходных значений полей контекста.
 
-Конструкция `apply(expressions)` представляет собой сокращенную запись выражения `local(expressions)(apply())`.
+Конструкция `apply({assignObj})` представляет собой сокращенную запись выражения `local({assignObj})(apply())`.
 
 <a name="applynext"></a>
 
@@ -766,24 +763,30 @@ apply(expressions)
 
 Конструкция `applyNext` позволяет заново запустить процедуру применения шаблонов к текущему контексту непосредственно
 в теле шаблона. Результат вычисляется так, как если бы шаблона, в котором используется данная конструкция, не было.
-Конструкция возвращает значение, вычисленное в результате применения шаблонов к текущему контексту.
+Например, если у блока существует базовая реализация шаблона, при вызове `applyNext` будет возвращен результат ее применения:
+
+```js
+block('b1').tag()('span')
+block('b1').tag()(function() { return applyNext(); }) // span
+```
 
 Синтаксис:
 
 ```js
-applyNext(expressions)
+applyNext({assignObj})
 ```
 
-Где `expressions` — список выражений, модифицирующих контекст (операций присваивания значений переменным или строка,
-означающая присвоение моды). Список может быть пуст. Аналогично блоку `expressions` в [конструкции apply](#apply).
+Где `{assignObj}` — объект, ключи которого становятся полями контекста при входе в блок `applyNext`. Объект может отсутствовать.
+
+Первым аргументом может быть передана строка, которая интерпретируется как название моды.
 
 При вызове `applyNext` выполняются следующие шаги:
 
   1. Создание в контексте флага, позволяющего избежать бесконечной рекурсии при вызове шаблонов. В качестве флага
      используется случайное число.
   2. Добавление в предикат шаблона проверки на наличие флага.
-  3. Выполнение блока `expressions` (модификация текущего контекста).
-  4. Вызов процедуры выбора и выполнения шаблона `apply()`.
+  3. Установка полей контекста, определенных в объекте `{assignObj}`.
+  4. Вызов процедуры выбора и выполнения шаблона `apply`.
   5. Возвращение значения, полученного в результате выполнения шаблона.
 
 Например, шаблон
@@ -809,8 +812,8 @@ block('b1').match(!this.ctx[_randomflag])(
 
 **См. также**:
 
-* [Наследование](http://ru.bem.info/libs/bem-core/2.2.0/templating/reference#inheritage)
-* [Добавление БЭМ-сущностей для задач верстки](http://ru.bem.info/libs/bem-core/2.2.0/templating/reference#additionbem)
+* [Наследование](http://ru.bem.info/technology/bemhtml/current/reference/#inheritage)
+* [Добавление БЭМ-сущностей для задач верстки](http://ru.bem.info/technology/bemhtml/current/reference/#additionbem)
 
 
 <a name="applyctx"></a>
@@ -833,7 +836,7 @@ applyCtx(newctx)
 
 В ходе вычисления выражения `applyCtx` выполняются следующие шаги:
 
-  1. Выставление [пустой моды](http://ru.bem.info/libs/bem-core/2.2.0/templating/reference#empty_moda) в качестве текущей.
+  1. Выставление [пустой моды](http://ru.bem.info/technology/bemhtml/current/reference/#empty_moda) в качестве текущей.
   2. Вызов процедуры выбора и выполнения шаблона `apply()`.
   3. Возвращение значения, полученного в результате выполнения шаблона.
 
@@ -850,8 +853,8 @@ applyCtx(newctx)
 
 **См. также**:
 
-  * [Оборачивание блока в другой блок](http://ru.bem.info/libs/bem-core/2.2.0/templating/reference#wrappingunit)
-  * [Добавление БЭМ-сущностей для задач верстки](http://ru.bem.info/libs/bem-core/2.2.0/templating/reference#additionbem)
+  * [Оборачивание блока в другой блок](http://ru.bem.info/technology/bemhtml/current/reference/#wrappingunit)
+  * [Добавление БЭМ-сущностей для задач верстки](http://ru.bem.info/technology/bemhtml/current/reference/#additionbem)
 
 
 
@@ -1225,14 +1228,14 @@ BEMTREE.apply({ block: 'intitial' })
 <a name="links"></a>
 ###Смотрите также
 ####Технологии
-* [BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemtree)
-* [BEMHTML](http://ru.bem.info/libs/bem-core/2.2.0/templating/reference)
-* [BEMJSON](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemjson)
+* [BEMTREE](http://ru.bem.info/technology/bemtree/current/bemtree/)
+* [BEMHTML](http://ru.bem.info/technology/bemhtml/current/reference/)
+* [BEMJSON](http://ru.bem.info/technology/bemjson/)
 
 ####Примеры
-* [Примеры и рецепты BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemtree#examples)
-* [Примеры и рецепты BEMHTML](http://ru.bem.info/libs/bem-core/2.2.0/templating/reference#examples)
+* [Примеры и рецепты BEMTREE](http://ru.bem.info/technology/bemtree/current/bemtree/#examples)
+* [Примеры и рецепты BEMHTML](http://ru.bem.info/technology/bemhtml/current/reference/#examples)
 
 ####В сообществе
-* [Мастер-класс «Динамический БЭМ-сайт на Node.js»](http://tech.yandex.ru/events/bemup/spb-bemup/talks/1413/)
+* [Мастер-класс «Динамический БЭМ-сайт на Node.js»](https://tech.yandex.ru/events/bemup/29-november-2013/talks/1413/)
 * [BEMTREE — генерируй дерево](http://tech.yandex.ru/events/bemup/yac-bemup/talks/1354/)

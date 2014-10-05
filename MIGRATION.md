@@ -205,12 +205,12 @@ modules.define('i-bem__dom', ['events__channels'], function(provide, channels, B
 
 BEMDOM.decl('block', {
     method : function() {
-        channels('channel-name').on(....    
+        channels('channel-name').on(....
 ```
 
 #### The `i-system` block, the `sys` channel and the `tick`, `idle` and `wakeup` events
 
-The is no `i-system` block any more. Instead you can use special modules: 
+The is no `i-system` block any more. Instead you can use special modules:
 `tick` with the tick event and `idle` with the events idle and wakeup.
 
 Before:
@@ -238,7 +238,7 @@ BEM.DOM.decl('block', {
 
 After:
 ```js
-modules.define('i-bem__dom', ['idle'], function(provide, idle, BEMDOM) {    
+modules.define('i-bem__dom', ['idle'], function(provide, idle, BEMDOM) {
 
 BEMDOM.decl('block', {
     method : function() {
