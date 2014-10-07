@@ -2,12 +2,12 @@ var DEFAULT_LANGS = ['ru', 'en'],
     fs = require('fs'),
     path = require('path'),
     naming = require('bem-naming'),
-    levels = require('enb-bem/techs/levels'),
+    levels = require('enb-bem-techs/techs/levels'),
     provide = require('enb/techs/file-provider'),
-    bemdeclFromDepsByTech = require('enb-bem/techs/bemdecl-from-deps-by-tech'),
-    bemdecl = require('enb-bem/techs/bemdecl-from-bemjson'),
-    deps = require('enb-bem/techs/deps-old'),
-    files = require('enb-bem/techs/files'),
+    depsByTechToBemdecl = require('enb-bem-techs/techs/deps-by-tech-to-bemdecl'),
+    bemdecl = require('enb-bem-techs/techs/bemjson-to-bemdecl'),
+    deps = require('enb-bem-techs/techs/deps-old'),
+    files = require('enb-bem-techs/techs/files'),
     css = require('enb-stylus/techs/css-stylus'),
     js = require('enb-diverse-js/techs/browser-js'),
     ym = require('enb-modules/techs/prepend-modules'),
@@ -34,17 +34,14 @@ module.exports = function(config) {
     config.includeConfig('enb-bem-examples');
     config.includeConfig('enb-bem-docs');
     config.includeConfig('enb-bem-specs');
-    config.includeConfig('enb-bem-tmpl-specs');
 
     config.setLanguages(langs? langs.split(' ') : [].concat(DEFAULT_LANGS));
 
     configurePages(platforms);
     configureSets(platforms, {
-        tests : config.module('enb-bem-examples').createConfigurator('tests'),
         examples : config.module('enb-bem-examples').createConfigurator('examples'),
         docs : config.module('enb-bem-docs').createConfigurator('docs', 'examples'),
-        specs : config.module('enb-bem-specs').createConfigurator('specs'),
-        tmplSpecs : config.module('enb-bem-tmpl-specs').createConfigurator('tmpl-specs')
+        specs : config.module('enb-bem-specs').createConfigurator('specs')
     });
 
     function configurePages(platforms) {
@@ -120,7 +117,7 @@ module.exports = function(config) {
 
             // Client BEMHTML
             nodeConfig.addTechs([
-                [bemdeclFromDepsByTech, {
+                [depsByTechToBemdecl, {
                     target : '?.bemhtml.bemdecl.js',
                     sourceTech : 'js',
                     destTech : 'bemhtml'
@@ -209,13 +206,6 @@ module.exports = function(config) {
                 processInlineBemjson : wrapInPage
             });
 
-            sets.tests.configure({
-                destPath : platform + '.tests',
-                levels : getLevels(platform),
-                techSuffixes : ['tests'],
-                fileSuffixes : ['bemjson.js', 'title.txt']
-            });
-
             sets.docs.configure({
                 destPath : platform + '.docs',
                 levels : getLevels(platform),
@@ -229,29 +219,6 @@ module.exports = function(config) {
                 levels : getLevels(platform),
                 sourceLevels : getSpecLevels(platform),
                 jsSuffixes : ['vanilla.js', 'browser.js', 'js']
-            });
-
-            sets.tmplSpecs.configure({
-                destPath : platform + '.tmpl-specs',
-                levels : getLevels(platform),
-                sourceLevels : getLevels(platform),
-                engines : {
-                    bh : {
-                        tech : 'enb-bh/techs/bh-server',
-                        options : {
-                            jsAttrName : 'data-bem',
-                            jsAttrScheme : 'json'
-                        }
-                    },
-                    'bemhtml-dev' : {
-                        tech : 'enb-bemxjst/techs/bemhtml-old',
-                        options : { devMode : true }
-                    },
-                    'bemhtml-prod' : {
-                        tech : 'enb-bemxjst/techs/bemhtml-old',
-                        options : { devMode : false }
-                    }
-                }
             });
         });
     }
@@ -277,18 +244,6 @@ function wrapInPage(bemjson, meta) {
         title : naming.stringify(meta.notation),
         head : [{ elem : 'css', url : basename + '.css' }],
         scripts : [{ elem : 'js', url : basename + '.js' }],
-        mods : { theme : getThemeFromBemjson(bemjson) },
         content : bemjson
     };
-}
-
-function getThemeFromBemjson(bemjson) {
-    if(typeof bemjson !== 'object') return;
-
-    var theme, key;
-
-    for(key in bemjson) {
-        if(theme = key === 'mods' ? bemjson.mods.theme :
-            getThemeFromBemjson(bemjson[key])) return theme;
-    }
 }
