@@ -11,7 +11,7 @@ provide(/** @exports */{
     /**
      * Extends a given target by
      * @param {Object} target object to extend
-     * @param {...Object} source
+     * @param {Object} source
      * @returns {Object}
      */
     extend : function(target, source) {
