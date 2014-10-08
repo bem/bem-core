@@ -8,50 +8,65 @@ modules.define('loader_type_js', function(provide) {
 var loading = {},
     loaded = {},
     head = document.getElementsByTagName('head')[0],
-    onLoad = function(path) {
-        loaded[path] = true;
+    runCallbacks = function(path, type) {
         var cbs = loading[path], cb, i = 0;
         delete loading[path];
         while(cb = cbs[i++]) {
-            cb();
+            cb[type] && cb[type]();
         }
+    },
+    onSuccess = function(path) {
+        loaded[path] = true;
+        runCallbacks(path, 'success');
+    },
+    onError = function(path) {
+        runCallbacks(path, 'error');
     };
 
 provide(
     /**
      * @exports
      * @param {String} path resource link
-     * @param {Function} cb executes when resource is loaded
+     * @param {Function} success to be called if the script succeeds
+     * @param {Function} error to be called if the script fails
      */
-    function(path, cb) {
+    function(path, success, error) {
         if(loaded[path]) {
-            cb();
+            success();
             return;
         }
 
         if(loading[path]) {
-            loading[path].push(cb);
+            loading[path].push({ success : success, error : error });
             return;
         }
 
-        loading[path] = [cb];
+        loading[path] = [{ success : success, error : error }];
 
         var script = document.createElement('script');
         script.type = 'text/javascript';
         script.charset = 'utf-8';
         script.src = (location.protocol === 'file:' && !path.indexOf('//')? 'http:' : '') + path;
-        script.onreadystatechange === null?
+
+        if('onload' in script) {
+            script.onload = function() {
+                script.onload = script.onerror = null;
+                onSuccess(path);
+            };
+
+            script.onerror = function() {
+                script.onload = script.onerror = null;
+                onError(path);
+            };
+        } else {
             script.onreadystatechange = function() {
                 var readyState = this.readyState;
                 if(readyState === 'loaded' || readyState === 'complete') {
                     script.onreadystatechange = null;
-                    onLoad(path);
+                    onSuccess(path);
                 }
-            } :
-            script.onload = script.onerror = function() {
-                script.onload = script.onerror = null;
-                onLoad(path);
             };
+        }
 
         head.insertBefore(script, head.lastChild);
     }
