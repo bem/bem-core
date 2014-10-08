@@ -34,6 +34,7 @@ module.exports = function(config) {
     config.includeConfig('enb-bem-examples');
     config.includeConfig('enb-bem-docs');
     config.includeConfig('enb-bem-specs');
+    config.includeConfig('enb-bem-tmpl-specs');
 
     config.setLanguages(langs? langs.split(' ') : [].concat(DEFAULT_LANGS));
 
@@ -41,7 +42,8 @@ module.exports = function(config) {
     configureSets(platforms, {
         examples : config.module('enb-bem-examples').createConfigurator('examples'),
         docs : config.module('enb-bem-docs').createConfigurator('docs', 'examples'),
-        specs : config.module('enb-bem-specs').createConfigurator('specs')
+        specs : config.module('enb-bem-specs').createConfigurator('specs'),
+        tmplSpecs : config.module('enb-bem-tmpl-specs').createConfigurator('tmpl-specs')
     });
 
     function configurePages(platforms) {
@@ -219,6 +221,29 @@ module.exports = function(config) {
                 levels : getLevels(platform),
                 sourceLevels : getSpecLevels(platform),
                 jsSuffixes : ['vanilla.js', 'browser.js', 'js']
+            });
+
+            sets.tmplSpecs.configure({
+                destPath : platform + '.tmpl-specs',
+                levels : getLevels(platform),
+                sourceLevels : getLevels(platform),
+                engines : {
+                    bh : {
+                        tech : 'enb-bh/techs/bh-server',
+                        options : {
+                            jsAttrName : 'data-bem',
+                            jsAttrScheme : 'json'
+                        }
+                    },
+                    'bemhtml-dev' : {
+                        tech : 'enb-bemxjst/techs/bemhtml-old',
+                        options : { devMode : true }
+                    },
+                    'bemhtml-prod' : {
+                        tech : 'enb-bemxjst/techs/bemhtml-old',
+                        options : { devMode : false }
+                    }
+                }
             });
         });
     }
