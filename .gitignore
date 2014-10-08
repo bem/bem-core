@@ -19,6 +19,7 @@ coverage.json
 /*.docs
 /*.examples
 /*.specs
+/*.tmpl-specs
 /*.tests
 /*.sets
 
