@@ -1,55 +1,68 @@
-Introduction
+<a id="intro"></a>
 
-This document is a guide to the format for describing input data called BEMJSON.
+### Introduction
+
+**This document** is a guide to the format for describing input data called BEMJSON.
 
 The guide describes:
 
-    основные особенности BEMJSON, отличающие его от других форматов;
-    синтаксис описания данных BEMJSON;
+* BEMJSON's main features distinguishing it from other formats;
+* BEMJSON syntax for data description.
 
-Целевая аудитория документа — веб-разработчики и HTML-верстальщики, использующие БЭМ-методологию.
 
-Предполагается, что читатель знаком с:
+**The target audience for this guide**  are web developers and HTML coders who use the
+[BEM methodology](http://bem.info/method/).
 
-    HTML;
-    JavaScript;
-    CSS;
-    БЭМ.
+The reader is assumed to be familiar with:
 
-В документе не описаны средства гененерации БЭМ-дерева в формате BEMJSON.
+* HTML
+* JavaScript
+* CSS
+* BEM
 
-Общие понятия
 
-В БЭМ-проектах для описания разметки веб-страницы в БЭМ-терминах вводится специальное понятие – БЭМ-дерево. Название выбрано по аналогии с DOM-деревом.
+The description of tools for generating a BEM tree in BEMJSON format is **beyond the scope of this document**.
 
-БЭМ-дерево – структура данных, которая описывает:
 
-    структуру страницы – порядок и вложенность блоков;
-    названия БЭМ-сущностей – имена блоков, элементов, модификаторов блока или элемента;
-    состояния БЭМ-сущностей – наличие логических модификаторов, значения модификаторов;
-    произвольные поля – вспомогательные данные (хеш-ключи, адреса публичных API и т.п.).
+<a id="common"></a>
+###Key concepts
 
-В библиотеке bem-core (и многих других БЭМ-проектах) стандартным форматом представления БЭМ-дерева является BEMJSON .
+To describe web page markup in BEM terms, BEM projects introduce the concept of a **BEM tree**, named by analogy to the DOM tree data structure.
 
-BEMJSON – структура данных (объект) JavaScript, с набором дополнительных соглашений о представлении БЭМ-сущностей.
+A BEM tree is a data structure that describes:
 
-BEMJSON и шаблонизация данных в bem-core
+* web page structure – the order and nesting of the blocks;
+* names of BEM entities – the names of the blocks, elements, block and element modifiers;
+* states of BEM entities – the occurrence of logical modifiers, the values of the modifiers;
+* arbitrary fields – custom data (hash keys, public API addresses, etc.)
 
-БЭМ-дерево в формате BEMJSON является неотъемлемой частью механизмов шаблонизации данных, реализованных в bem-core. BEMJSON используется в качестве входных данных для шаблонизаторов:
+The standard BEM tree format in the bem-core library (and many other BEM projects) is **BEMJSON**.
 
-    BEMTREE;
-    BEMHTML.
+BEMJSON is a JavaScript data structure (object) with a set of extra conventions on the representation of BEM entities.
 
-В рамках BEMTREE и BEMHTML шаблонов фрагмент входных данных, относящийся к текущему элементу BEMJSON-дерева и его потомкам, содержится в поле контекста this.ctx.
 
-NB: Шаблонизатор BEMTREE предназначен для генерации BEMJSON из произвольных данных.
+<a id="bemcore"></a>
+###BEMJSON and data templating in bem-core
 
-BEMJSON и сборка
+A BEMJSON-formatted BEM tree is an integral part of the [data templating](http://bem.info/technology/bemhtml/current/templating/) mechanisms implemented in `bem-core`. BEMJSON is used as an input data format for these template engines:
+* [BEMTREE](http://bem.info/technology/bemtree/current/bemtree/);
+* [BEMHTML](http://bem.info/technology/bemhtml/current/intro/).
 
-Некоторые системы сборки, например, bem-tools, используют файлы, содержащие литеральную запись BEMJSON, в качестве декларации сборки. В bem-tools для этих целей служат файлы с суффиксом bemjson.js. На основе БЭМ-дерева, описанного в этих файлах, система сборки определяет набор БЭМ-сущностей, реализации которых должны быть собраны из папок блоков.
+From a BEMTREE and BEMHTML templates perspective, a portion of input data corresponding to the current BEM-tree element (node) and its child elements is contained in the context field `this.ctx`.
 
-На практике это означает, что на основании декларацииbemjson.js и настроек сборки строится файл базовой декларации в формате bemdecl.js. Затем из него - файл в формате deps.js, описывающий зависимости сборки. Файл зависимостей представляет собой плоский список БЭМ-сущностей, участвующих в сборке, вида:
+***
+**NB:** The BEMTREE template engine is used for generating BEMJSON from arbitrary data (that data normally comes in the form of a web page skeleton in BEMJSON format, which gets filled with content element by element as it is processed by the template engine).
+***
 
+
+<a id="sbor"></a>
+###BEMJSON and the build process
+
+Certain build systems, such as [bem-tools](http://bem.info/tools/bem/bem-tools/), use files that contain the literal record BEMJSON as a build **declaration**. In `bem-tools`, `bemjson.js`-suffixed files serve this purpose. Based on a BEM tree defined in such files, the build system determines a set of BEM entities whose implementations are to be built from block folders.
+
+In practice, it works like this: first, based on the `bemjson.js` declaration and the build settings, the build tool creates a basic declaration file in `bemdecl.js` format. The latter is then used to build a file in `deps.js` format that describes build dependencies. The dependencies file is a flat list of BEM entities involved in the build, which looks like this:
+
+```js
 exports.deps = [
     {
         "block": "page",
@@ -73,153 +86,242 @@ exports.deps = [
         "block": "footer"
     }
 ];
+```
 
-На основании файла зависимостей производится дальнейшая сборка файлов технологий из папок блоков, элементов и модификаторов, попадающих под декларацию. Файлы собираются в бандлы технологий на основании суффиксов.
+The dependencies file serves as the basis for the subsequent building of tech files from the folders of blocks, elements and modifiers targeted by the declaration. The files are grouped into technology bundles according to their **suffixes**.
 
-Суффиксом считается часть имени файла следующая за первой точкой. Например, в имени файла index.bemjson.js суффиксом является bemjson.js.
+The part of a filename that follows the first occurrence of the period is considered a suffix. For example, in the filename `index.bemjson.js`, the suffix is `bemjson.js`.
 
-См. также:
-
-    Зависимости в bem-tools;
-    Сборка и подключение бандла технологий BEMTREE и BEMHTML
-
-Синтаксис BEMJSON
-
-Типы данных
-
-Типы данных в BEMJSON соответствуют типам данных в JavaScript.
-
-    Строки и числа:
-        Строка 'a' "a";
-
-        Число 1 0.1;
-
-        Структура данных, состоящая из строки или числа, является валидным BEMJSON.
-
-    Объект (ассоциативный массив) '{ключ: значение}' и остальные типы, кроме массива.
-
-    Массив — список, может содержать элементы различных типов (строки, числа, объекты, массивы) [ "a", 1, {ключ: значение}, [ "b", 2, ... ] ].
-
-Специальные поля BEMJSON
-
-Для представления данных предметной области БЭМ и HTML в BEMJSON используются объекты, в которых зарезервированы специальные имена полей.
-
-Представление БЭМ-сущностей
-
-БЭМ-сущности представляются в BEMJSON в виде объектов, в которых могут присутствовать следующие поля:
-Поле 	Значение 	Тип значения 	Пример
-block 	Имя блока 	Строка 	{ block: 'menu' }
-elem 	Имя элемента 	Строка 	{ elem: 'item' }
-mods 	Модификаторы блока 	Объект, содержащий имена и значения модификаторов в качестве пар ключ-значение: {имя_модификатора: 'значение_модификатора'} 	
+**See also**:
+* [Dependencies in bem-tools](http://bem.info/tools/bem/bem-tools/depsjs/);
+* [Building and connecting BEMTREE and BEMHTML technology bundles](http://ru.bem.info/technology/bemhtml/2.3.0/templating/#polymorph) (Russian version only)
 
 
+
+<a name="bemjson"></a>
+
+### BEMJSON syntax
+
+<a id="datatype"></a>
+
+#### Data types
+
+Data types in BEMJSON correspond to data types in JavaScript.
+* Strings and numbers:
+ * **String** `` 'a' `` `"a"`;
+ * **Number** `1` `0.1`;
+
+   A data structure consisting of a single string or number is valid BEMJSON.
+   
+* **Object** (associative array) '{key: value}' and other types except array.
+
+* **Array** – a list; can include elements of different types (strings, numbers, objects, arrays)
+  `[ "a", 1, {key: value}, [ "b", 2, ... ] ]`.
+
+<a id="fields_bemjson"></a>
+
+#### BEMJSON special fields
+
+For the BEM domain data and HTML data representation, BEMJSON uses objects with special reserved field names.
+
+<a name="notionbem"></a>
+
+#####Representation of BEM entities
+
+BEM entities are represented in BEMJSON as objects that can contain the following fields:
+
+<table>
+<tr>
+    <th>Field</th>
+    <th>Value</th>
+    <th>Value type</th>
+    <th>Example</th>
+</tr>
+<tr>
+    <td><code>block</code></td>
+    <td>Block name</td>
+    <td>String</td>
+    <td><code>{ block: 'menu' }</code></td>
+</tr>
+
+<tr>
+    <td><code>elem</code></td>
+    <td>Element name</td>
+    <td>String</td>
+    <td><code>{ elem: 'item' }</code></td>
+</tr>
+
+<tr>
+    <td><code>mods</code></td>
+    <td>Block modifiers</td>
+    <td>Object containing the names and values of block modifiers as key-value pairs:
+        <code>{modifier_name: 'modifier_value'}</code>
+    </td>
+    <td>
+        <pre><code>
 {
   block: 'link',
   mods: { pseudo: true, color: 'green' }
 }
-        
+        </code></pre>
+    </td>
+</tr>
 
-elemMods 	Модификаторы элемента 	Объект, содержащий имена и значения модификаторов элемента в качестве пар ключ-значение: {имя_модификатора: 'значение_модификатора'} 	
-
-
+<tr>
+    <td><code>elemMods</code></td>
+    <td>Element modifiers</td>
+    <td>Object containing the names and values of element modifiers as key-value pairs:
+        <code>{modifier_name: 'modifier_value'}</code>
+    </td>
+    <td>
+        <pre><code>
 {
   elem: 'item',
   elemMods: { selected: 'yes' }
 }
-        
+        </code></pre>
+    </td>
+</tr>
 
-mix 	Подмешанные блоки/элементы 	Массив, содержащий объекты, описывающие подмешанные блоки и элементы. В качестве значения может выступать объект, который трактуется как массив, состоящий из одного элемента. 	
-
-
+<tr>
+    <td><code>mix</code></td>
+    <td>Mixed blocks/elements</td>
+    <td>Array of objects that describe mixed blocks and elements or Object interpreted as an array consisting of a single element.</td>
+    <td>
+        <pre><code>
 {
   block: 'link',
   mix: [ { block: 'serp-item', elem: 'link' } ]
 }
-        
+        </code></pre>
+    </td>
+</tr>
+</table>
 
-См. также:
+**See also**:
 
-    Достраивание БЭМ-сущностей по контексту
+* [BEM entity completion in the context](http://ru.bem.info/technology/bemhtml/2.3.0/templating/#extensionbem) (Russian version only)
 
-Представление HTML
+<a name="notionhtml"></a>
 
-BEMJSON предоставляет возможность задавать некоторые аспекты выходного HTML непосредственно во входных данных. Этой возможностью не следует злоупотреблять, так как BEMJSON представляет собой уровень данных, а непосредственное оформление HTML должно выполняться на уровне шаблонизатора BEMHTML. Однако возможны ситуации, когда оправданно описание HTML-представления на уровне BEMJSON.
+##### HTML representation
 
-В BEMJSON предусмотрены следующие поля для непосредственного управления HTML-представлением:
-Поле 	Значение 	Тип значения 	Пример
-tag 	HTML-тег для данной сущности 	String 	
+BEMJSON supports the ability to specify certain aspects of the resulting HTML directly in the input data. Admittedly, that is not recommended as common practice, considering that BEMJSON essentially describes data, while actual HTML layout is built at the BEMHMTL template engine level. Still there may be situations that warrant the use of HTML representation at BEMJSON level.
 
-{
+
+The following fields in BEMJSON are used to control HMTL rendering:
+
+<table>
+<tr>
+    <th>Field</th>
+    <th>Value</th>
+    <th>Value type</th>
+    <th>Example</th>
+</tr>
+<tr>
+    <td><code>tag</code></td>
+    <td>HTML tag for the current entity</td>
+    <td><code>String</code></td>
+    <td>
+        <pre><code>{
   block: 'my-block',
   tag: 'img'
-}
-
-attrs 	HTML-атрибуты для данной сущности 	Object 	
-
-{
+}</code></pre>
+    </td>
+</tr>
+<tr>
+    <td><code>attrs</code></td>
+    <td>HTML attributes for the current entity</td>
+    <td><code>Object</code></td>
+    <td>
+        <pre><code>{
   block: 'my-block',
   tag: 'img',
   attrs: { src: '//yandex.ru/favicon.ico', alt: '' }
-}
-
-cls 	Строка, добавляемая к HTML-атрибуту class (помимо автоматически генерируемых классов) 	String 	
-
-{
+}</code></pre>
+    </td>
+</tr>
+<tr>
+    <td><code>cls</code></td>
+    <td>Line added to the HTML attribute <code>class</code> (besides automatically generated classes)</td>
+    <td><code>String</code></td>
+    <td>
+        <pre><code>{
   block: 'my-block',
   cls: 'some-blah-class'
-}
-
-bem 	Флаг — отменить генерацию БЭМ-классов в HTML-атрибуте class для данной сущности 	Boolean 	
-
-{
+}</code></pre>
+    </td>
+</tr>
+<tr>
+    <td><code>bem</code></td>
+    <td>Flag to cancel the generation of BEM classes in the HTML attribute <code>class</code> for the current entity</td>
+    <td><code>Boolean</code></td>
+    <td>
+        <pre><code>{
   block: 'page',
   tag: 'html',
   bem: false
-}
-
-js 	Либо флаг о наличии клиентского JavaScript у данной сущности, либо параметры JavaScript 	Boolean 	
-
-{
+}</code></pre>
+    </td>
+</tr>
+<tr>
+    <td><code>js</code></td>
+    <td>Either flag to indicate the presence of client JavaScript in the entity or JavaScript parameters</td>
+    <td><code>Boolean</code></td>
+    <td>
+        <pre><code>{
   block: 'form-input',
   mods: { autocomplete: 'yes' },
   js: {
     dataprovider: { url: 'http://suggest.yandex.ru/...' }
   }
-}
+}</code></pre>
+    </td>
+</tr>
+</table>
 
-Обратите внимание, что имена и смысл полей BEMJSON, управляющих HTML-представлением, совпадают с именами и смыслом соответствующих стандартных мод BEMHTML (тег, атрибуты, класс и т.п.). В случае, если какие-то из аспектов выходного HTML заданы и во входных данных, и в BEMHTML-шаблонах, более высокий приоритет имеют значения, заданные в BEMHTML-шаблонах.
+Note that the names and meanings of these HTML-specific BEMJSON fields are equivalent to those of the corresponding BEMHTML [standard modes](http://bem.info/technology/bemhtml/2.3.0/reference/#standardmoda) (tags, attributes, classes, etc.) If the same HTML aspects are specified **in both the input data and BEMHTML templates**, the values specified in the BEMHTML templates take priority.
 
-При генерации HTML будет выполнено одно из двух действий:
+During the HTML generation process, the BEMHTML template engine will perform one of two actions:
 
-    Объединение значений HTML-параметров, заданных в BEMJSON, cо значениями параметров, заданных в BEMHTML-шаблоне. Объединение значений производится только для тех параметров, для которых оно имеет очевидный смысл: attrs, js, mix.
-    Замещение значений HTML-параметров, заданных в BEMJSON, значениями, заданными в BEMHTML-шаблоне. Выполняется для всех прочих значений: tag, cls, bem, content.
+* **Merge** the values of the HTML parameters set in the BEMJSON with those specified in the BEMHTML template. Such merging is done only for those parameters where it makes obvious sense: `attrs`, `js`, `mix`.
+* **Override** the values of the HTML parameters set in the BEMJSON with those specified in the **BEMHTML template**. This is done for all other values: `tag`, `cls`, `bem`, `content`.
 
-NB: Приоритет BEMHTML-шаблонов позволяет автору шаблонов принимать решение, какие HTML-параметры будут приоритетнее в каждом конкретном случае: заданные в BEMHTML или в BEMJSON. Значения HTML-параметров, заданных в BEMJSON, доступны в шаблонах при обращении к фрагменту входного BEMJSON-дерева в контексте (поле this.ctx).
 
-Вложенность: content
+<a name="nesting"></a>
 
-Для представления вложенных БЭМ-сущностей (БЭМ-дерева) в BEMJSON зарезервировано поле content. В качестве значения данного поля может выступать произвольный BEMJSON:
+##### Nesting: content
 
-    Примитивный тип (строка, число). Значение используется в качестве содержимого (текста) HTML-элемента, соответствующего контекстной сущности.
-    Объект, описывающий БЭМ-дерево. Значение используется для генерации HTML-элементов, вложенных в HTML-элемент, соответствующий контекстной сущности.
+The field `content` is reserved in BEMJSON for the representation of nested BEM entities (BEM tree). The field can take arbitrary BEMJSON as its value:
 
-Уровень вложенности дерева БЭМ-сущностей, построенного с помощью поля content, не ограничен.
+* A primitive data type (string, number) - the value is used as the content (text) of the HTML element that corresponds to the context entity.
+* An object describing a BEM tree - the value is used for the generation of HTML elements nested into the HTML element that corresponds to the context entity.
 
-Произвольные поля
+There is no fixed limit on nesting depth for a tree of BEM entities that can be built from the `content` field.
 
-Помимо специальных полей, описывающих БЭМ-сущность и ее HTML-представление, в том же объекте могут присутствовать любые поля с произвольными данными, которые будут доступны для использования в шаблонах BEMHTML или BEMTREE.
 
-Примером произвольного поля может служить поле url в блоке ссылки:
 
+<a id="custom_fields"></a>
+
+##### Arbitrary fields
+
+In addition to special fields that describe the BEM entity and its HTML representation, an object can contain any fields with arbitrary data. The data will be available for use in BEMHTML and BEMTREE templates.
+
+An example of an arbitrary field is the field `url` in a link block:
+
+```js
 {
   block: 'link',
   url: '//yandex.ru'
 }
+```
 
-Пример использования данных из произвольного поля см. в разделе Выбор шаблона по условию из документации по BEMHTML.
+To see how data from an arbitrary field is used, go to [Template selection based on a condition](http://http://bem.info/technology/bemhtml/2.3.0/reference/#select_template) in the BEMHTML document.
 
-Произвольный JavaScript в BEMJSON
+<a name="customjs"></a>
 
-BEMJSON является менее ограниченным форматом, чем JSON. Произвольные JavaScript-выражения будут валидным BEMJSON.
+#### Arbitrary JavaScript in BEMJSON
 
-Специфика BEMJSON как формата данных заключается в соблюдении описанных в предшествующих разделах соглашений по именованию полей в объектах (для представления БЭМ-сущностей и HTML-представления) и правил вложения объектов.
+As a format, BEMJSON has fewer restrictions than JSON. Arbitrary JavaScript expressions are all valid BEMJSON.
+
+The specific character of BEMJSON as a data format consists in the adherence to the above listed naming conventions for fields in objects (in what concerns the representation of BEM entities and HTML) as well as the object nesting rules.
