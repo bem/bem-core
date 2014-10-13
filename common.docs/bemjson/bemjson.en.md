@@ -45,8 +45,8 @@ BEMJSON is a JavaScript data structure (object) with a set of extra conventions 
 ###BEMJSON and data templating in bem-core
 
 A BEMJSON-formatted BEM tree is an integral part of the [data templating](http://bem.info/technology/bemhtml/current/templating/) mechanisms implemented in `bem-core`. BEMJSON is used as an input data format for these template engines:
-* [BEMTREE](http://bem.info/technology/bemtree/current/bemtree/);
-* [BEMHTML](http://bem.info/technology/bemhtml/current/intro/).
+* [BEMTREE](http://bem.info/technology/bemtree/current/bemtree/)
+* [BEMHTML](http://bem.info/technology/bemhtml/current/intro/)
 
 From a BEMTREE and BEMHTML templates perspective, a portion of input data corresponding to the current BEM-tree element (node) and its child elements is contained in the context field `this.ctx`.
 
@@ -93,7 +93,7 @@ The dependencies file serves as the basis for the subsequent building of tech fi
 The part of a filename that follows the first occurrence of the period is considered a suffix. For example, in the filename `index.bemjson.js`, the suffix is `bemjson.js`.
 
 **See also**:
-* [Dependencies in bem-tools](http://bem.info/tools/bem/bem-tools/depsjs/);
+* [Dependencies in bem-tools](http://bem.info/tools/bem/bem-tools/depsjs/)
 * [Building and connecting BEMTREE and BEMHTML technology bundles](http://ru.bem.info/technology/bemhtml/2.3.0/templating/#polymorph) (Russian version only)
 
 
@@ -316,7 +316,7 @@ An example of an arbitrary field is the field `url` in a link block:
 }
 ```
 
-To see how data from an arbitrary field is used, go to [Template selection based on a condition](http://http://bem.info/technology/bemhtml/2.3.0/reference/#select_template) in the BEMHTML document.
+To see how data from an arbitrary field is used, go to section [Template selection based on a condition](http://http://bem.info/technology/bemhtml/2.3.0/reference/#select_template) of the BEMHTML document.
 
 <a name="customjs"></a>
 
