@@ -18,7 +18,7 @@
 * JavaScript;
 * CSS;
 * БЭМ;
-* [BEMJSON](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemjson).
+* [BEMJSON](http://ru.bem.info/technology/bemjson/current/bemjson/).
 
 
 **В документе не описаны** настройка среды разработки и процедуры компиляции шаблонов, синтаксис BEM-XJST-шаблонизаторов, синтаксис BEMJSON.
@@ -36,15 +36,15 @@
 * набор и порядок вызова [стандартных мод](#standardmoda);
 * доступные [поля контекста](#context_field)
 
-Подробнее об особенностях архитектуры BEMHTML читайте в разделе [архитектура шаблонизаторов BEMHTML и BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#bemx_arch) документа по [шаблонизации данных в bem-core](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating).
+Подробнее об особенностях архитектуры BEMHTML читайте в разделе [архитектура шаблонизаторов BEMHTML и BEMTREE](http://ru.bem.info/technology/bemhtml/current/templating/#bemx_arch) документа по [шаблонизации данных в bem-core](http://ru.bem.info/technology/bemhtml/current/templating/).
 
 <a name="uts"></a>
 ####Поддержка BEM-XJST-синтаксиса
-BEMHTML – [BEM-XJST-шаблонизатор](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#bemx_intro). Иначе говоря, BEMHTML использует **BEM-XJST-синтаксис** и сохраняет все особенности BEM-XJST-шаблонизаторов, такие как:
-* [привязка к БЭМ-предметной области](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#bem_area);
-* [декларативные шаблоны](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#decl_templatе);
-* [язык описания и исполнения шаблонов — JavaScript](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#language);
-* [ограничения на уровне соглашений](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#restrictions).
+BEMHTML – [BEM-XJST-шаблонизатор](http://ru.bem.info/technology/bemhtml/current/templating/#bemx_intro). Иначе говоря, BEMHTML использует **BEM-XJST-синтаксис** и сохраняет все особенности BEM-XJST-шаблонизаторов, такие как:
+* [привязка к БЭМ-предметной области](http://ru.bem.info/technology/bemhtml/current/templating/#bem_area);
+* [декларативные шаблоны](http://ru.bem.info/technology/bemhtml/current/templating/#decl_templatе);
+* [язык описания и исполнения шаблонов — JavaScript](http://ru.bem.info/technology/bemhtml/current/templating/#language);
+* [ограничения на уровне соглашений](http://ru.bem.info/technology/bemhtml/current/templating/#restrictions).
 
 
 
@@ -64,17 +64,17 @@ BEMHTML – [BEM-XJST-шаблонизатор](http://ru.bem.info/libs/bem-core
 быть максимально простыми утверждениями, сопоставляющими каждому типу БЭМ-сущности нужное HTML-оформление.
 
 Поэтому структура входного БЭМ-дерева должна быть ориентирована на **представление** (view), чтобы при генерации
-HTML-дерева не требовалось изменять набор и порядок блоков и элементов. Приведение БЭМ-дерева к такому развернутому виду должно производиться на уровне бэкенда, предшествующего шаблонизатору (например, с помощью технологии [BEMTREE](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemtree/)).
+HTML-дерева не требовалось изменять набор и порядок блоков и элементов. Приведение БЭМ-дерева к такому развернутому виду должно производиться на уровне бэкенда, предшествующего шаблонизатору (например, с помощью технологии [BEMTREE](http://ru.bem.info/technology/bemtree/current/bemtree/)).
 
 Иллюстрацией view-ориентированного формата
-данных может служить пример френдленты, разобранный в разделе [Приведение входных данных к формату, ориентированному на представление](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemtree#bringing_input) документации по BEMTREE.
+данных может служить пример френдленты, разобранный в разделе [Приведение входных данных к формату, ориентированному на представление](http://ru.bem.info/technology/bemtree/current/bemtree/#bringing_input) документации по BEMTREE.
 
 В то же время детали организации HTML-страницы, которые являются зоной ответственности верстальщика, должны определяться
 только на уровне шаблонизатора. Пример такого решения приведен в разделе [Добавление БЭМ-сущностей для задач верстки](#additionbem).
 
 **См. также**:
 
-  * [Синтаксис BEMJSON](http://ru.bem.info/libs/bem-core/2.2.0/templating/bemjson)
+  * [Синтаксис BEMJSON](http://ru.bem.info/technology/bemjson/current/bemjson/)
 
 
 <a name="templatebemjson"></a>
@@ -92,7 +92,7 @@ HTML-дерева не требовалось изменять набор и п�
 
 **См. также**:
 
-* [Синтаксис BEM-XJST](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#unity)
+* [Синтаксис BEM-XJST](http://ru.bem.info/technology/bemhtml/current/templating/#unity)
 
 <a name="moda"></a>
 
@@ -137,7 +137,7 @@ HTML-дерева не требовалось изменять набор и п�
 **См. также**:
 
 * [Поля контекста](#context_field)
-* [Достраивание БЭМ-сущностей по контексту](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#extensionbem)
+* [Достраивание БЭМ-сущностей по контексту](http://ru.bem.info/technology/bemhtml/current/templating/#extensionbem)
 
 
 
@@ -208,7 +208,7 @@ HTML-дерева не требовалось изменять набор и п�
 
 Вызов шаблонов по пустой моде (конструкция `apply('')` в теле шаблона) необходим, если требуется отклониться
 от однозначного соответствия «входная БЭМ-сущность — выходной HTML-элемент» и сгенерировать более одного элемента на одну входную сущность. В частности, такой вызов осуществляется автоматически при использовании
-[конструкции applyCtx](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#applyctx).
+[конструкции applyCtx](http://ru.bem.info/technology/bemhtml/current/templating/#applyctx).
 
 **См. также**:
 
@@ -692,7 +692,7 @@ block('b4').mix()([ { block: 'b1' } ])</code></pre>
 <a name="contextdependent"></a>
 
 #### Контекстно-зависимые поля
-BEMHTML расширяет набор [контекстно-зависимых полей BEM-XJST](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#contextdependent) следующими:
+BEMHTML расширяет набор [контекстно-зависимых полей BEM-XJST](http://ru.bem.info/technology/bemhtml/current/templating/#contextdependent) следующими:
 <table>
 <tr>
     <th>Поле</th>
@@ -794,7 +794,7 @@ BEMHTML расширяет набор [контекстно-зависимых �
 Все контекстно-независимые поля сгруппированы в объекте `this._` и представляют собой вспомогательные функции,
 используемые при работе шаблонизатора. Автор шаблонов также может пользоваться этими функциями как в теле шаблонов, так и в предикатах.
 
-BEMHTML расширяет набор [контекстно-независимых полей BEM-XJST](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#context_independent) следующими:
+BEMHTML расширяет набор [контекстно-независимых полей BEM-XJST](http://ru.bem.info/technology/bemhtml/current/templating/#context_independent) следующими:
 
 
 <table>
@@ -853,7 +853,7 @@ block('b-link').tag()(this.ctx.url ? 'a' : 'span')
 
 **См. также**:
 
-  * [Синтаксис шаблонов](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#template)
+  * [Синтаксис шаблонов](http://ru.bem.info/technology/bemhtml/current/templating/#template)
 
 <a name="inheritage"></a>
 
@@ -908,7 +908,7 @@ block('b1').content()([
 
 **См. также**:
 
-  * [Конструкция applyNext](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#applynext)
+  * [Конструкция applyNext](http://ru.bem.info/technology/bemhtml/current/templating/#applynext)
 
 
 <a name="parentblock"></a>
@@ -980,7 +980,7 @@ block('b-inner').def()
 
 **См. также**:
 
-  * [Конструкция applyCtx](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#applyctx)
+  * [Конструкция applyCtx](http://ru.bem.info/technology/bemhtml/current/templating/#applyctx)
 
 <a name="additionbem"></a>
 
@@ -1050,9 +1050,9 @@ block('box').match(!this.ctx._processed).content()(applyCtx({'ctx._processed':tr
 
 **См. также**:
 
-  * [Конструкция apply](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#apply)
-  * [Конструкция applyNext](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#applynext)
-  * [Конструкция applyCtx](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#applyctx)
+  * [Конструкция apply](http://ru.bem.info/technology/bemhtml/current/templating/#apply)
+  * [Конструкция applyNext](http://ru.bem.info/technology/bemhtml/current/templating/#applynext)
+  * [Конструкция applyCtx](http://ru.bem.info/technology/bemhtml/current/templating/#applyctx)
 
 <a name="use_bem"></a>
 
@@ -1099,7 +1099,7 @@ block('menu')(
 **См. также**:
 
   * [Мода content](#content)
-  * [Конструкция applyNext](http://ru.bem.info/libs/bem-core/2.2.0/templating/templating#applynext)
+  * [Конструкция applyNext](http://ru.bem.info/technology/bemhtml/current/templating/#applynext)
 
 <a name="check_predicate"></a>
 
@@ -1174,10 +1174,10 @@ block('input')(
 
 <a name="links"></a>
 ###Смотрите также
-* [Примеры и рецепты BEMTREE](http://ru.bem.info/libs/bem-core/current/templating/bemtree#examples)
+* [Примеры и рецепты BEMTREE](http://ru.bem.info/technology/bemtree/current/bemtree/#examples)
 * [Мастер-класс «Динамический БЭМ-сайт на Node.js»](http://tech.yandex.ru/events/bemup/29-november-2013/talks/1413/)
 * [Шаблонизация данных в bem-core](http://ru.bem.info/libs/bem-core/current/templating/templating/)
 ####В сообществе
-* [BEMTREE](http://ru.bem.info/libs/bem-core/current/templating/bemtree/)
-* [BEMJSON](http://ru.bem.info/libs/bem-core/current/templating/bemjson)
+* [BEMTREE](http://ru.bem.info/technology/bemtree/current/bemtree/)
+* [BEMJSON](http://ru.bem.info/technology/bemjson/current/bemjson/)
 
