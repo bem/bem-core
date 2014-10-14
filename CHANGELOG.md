@@ -198,7 +198,7 @@
 - Introduces new tech `bemtree` (based on [bem-xjst](https://github.com/bem/bem-xjst))
   for describing dynamic generation of BEM-tree.
 - Introduces new tech `vanilla.js` for JS-implementations that does not depend on particular JS-engine.
-- Introduces new techs `browser.js` и `node.js` for JS-implementations targeted corresponding engines.
+- Introduces new techs `browser.js` and `node.js` for JS-implementations targeted corresponding engines.
   For backward compatibility we assume that `.js`-files contains `browser.js` implementation.
 - Introduces polyfill (`jquery__event_type_pointer` and `jquery__event_type_pointerclick` as a jQuery-plugins)
   for universalize desktop and touch pointer events.
