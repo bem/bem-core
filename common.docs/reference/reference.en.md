@@ -1,30 +1,33 @@
 <a id="intro"></a>
 
-### Introduction
+## Introduction
 
-**This document** is a BEMHTML reference book.
+This document is a BEMHTML reference book.
 
-This document describes:
+It describes:
 
-* the basic features of BEMHTML;
-* a syntax of BEMJSON input data and BEMHTML templates;
-* a input data processing sequence and HTML generation;
-* the examples of typical problems solving by means of BEMHTML.
+* Basic features of BEMHTML
+* Syntax of BEMJSON input data and BEMHTML templates
+* Processing sequence of input data and HTML generation
+* Examples of typical problems solving by means of BEMHTML.
 
-**The target audience of this document** is web-developers and HTML-coders who are using the [BEM-methodology](http://bem.info/method/).
+**A target audience of the document** is web developers and HTML coders who use the [BEM methodology](http://bem.info/method/).
 
-We assume that reader is familiar with:
+This reference requires the following knowledge from the readers:
 
-* HTML;
-* JavaScript;
-* CSS;
-* BEM.
+* HTML
+* JavaScript
+* CSS
+* BEM
 
-Setup of the development environment and templates compilation procedures **are not described in this document**.
+The reference does not describe:
+
+* Setup of the development environment
+* Procedures of templates compilation.
 
 <a name="bemhtml"></a>
 
-### BEMHTML Features
+### Features of BEMHTML template engine
 
 <a id="bem_area"></a>
 
