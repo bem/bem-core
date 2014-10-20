@@ -252,6 +252,35 @@ describe('i-bem__dom', function() {
             getBlockIds(rootBlock.findBlocksInside({ block : 'b1', modName : 'm1', modVal : true }))
                 .should.be.eql(['4']);
         });
+
+        it('should force init for found blocks', function(done) {
+            DOM.decl('block', {
+                onSetMod : {
+                    'js' : {
+                        'inited' : function() {
+                            this.findBlocksInside('block2').map(function(block) {
+                                return block.hasMod('js', 'inited');
+                            }).should.be.eql([true, true]);
+                            done();
+                        }
+                    }
+                }
+            });
+
+            DOM.decl('block2');
+
+            DOM.init(BEMHTML.apply({
+                block : 'block',
+                js : true,
+                content : [
+                    { block : 'block2', js : true },
+                    { block : 'block2', js : true }
+                ]
+            }));
+
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block2'];
+        });
     });
 
     describe('DOM.init', function() {
