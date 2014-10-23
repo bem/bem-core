@@ -51,9 +51,9 @@ var TICK_INTERVAL = 50,
         },
 
         _onTick : function() {
-            this
-                .emit('tick')
-                ._scheduleTick();
+            this.emit('tick');
+
+            this._isStarted && this._scheduleTick();
         }
     });
 
