@@ -330,7 +330,7 @@ var Block = inherit(BEM.Block,/** @lends Block.prototype */{
     /**
      * Finds blocks on DOM elements of the current block or its elements
      * @param {String|jQuery} [elem] Block element
-     * @param {Function|Object} Block Block or description (block,modName,modVal) of the block to find
+     * @param {Function|Object} block Block or description (block,modName,modVal) of the block to find
      * @returns {BEMDOM[]}
      */
     findBlocksOn : function(elem, block) {
@@ -368,14 +368,14 @@ var Block = inherit(BEM.Block,/** @lends Block.prototype */{
         select && (domElems = domElems.add(ctxElem[select](selector)));
 
         if(onlyFirst) {
-            return domElems[0]? initBlock(blockName, domElems.eq(0), undef, true) : null;
+            return domElems[0]? initBlock(blockName, domElems.eq(0), undef, true)._init() : null;
         }
 
         var res = [],
             uniqIds = {};
 
         domElems.each(function(i, domElem) {
-            var block = initBlock(blockName, $(domElem), undef, true);
+            var block = initBlock(blockName, $(domElem), undef, true)._init();
             if(!uniqIds[block._uniqId]) {
                 uniqIds[block._uniqId] = true;
                 res.push(block);
@@ -1317,7 +1317,7 @@ var Block = inherit(BEM.Block,/** @lends Block.prototype */{
  * @returns {BEMDOM}
  */
 $.fn.bem = function(Block, params) {
-    return initBlock(Block.getName(), this, params, true);
+    return initBlock(Block.getName(), this, params, true)._init();
 };
 
 var BEMDOM = /** @exports */{
