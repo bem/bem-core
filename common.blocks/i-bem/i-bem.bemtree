@@ -104,6 +104,8 @@ exports.apply = BEMContext.applyAsync = function BEMContext_applyAsync(context) 
         });
 };
 
+BEMContext.prototype.reapply = BEMContext.applyAsync;
+
 });
 
 match(this._mode === '')(
