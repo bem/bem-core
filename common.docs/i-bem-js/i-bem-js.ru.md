@@ -509,6 +509,60 @@ DOM.decl({ block: 'button', modName: 'type', modVal: 'link' },
 
 -------------------------------------------------------------------------------
 
+### Описание блока с наследованием в декларации
+
+#### Наследование блока
+
+Для наследования от существующего блока необходимо в BEMDOM-декларации нового блока указать зависимость от существующего, путём присвоения ссылки на базовый блок модификатору `baseBlock`.
+
+```js
+modules.define('ablock', ['i-bem__dom'], function(provide, BEMDOM) {
+
+provide(BEMDOM.decl(this.name, {}));
+
+});
+
+modules.define('bblock', ['i-bem__dom', 'ablock'], function(provide, BEMDOM, ABlock) {
+
+provide(BEMDOM.decl({ block : this.name, baseBlock : ABlock ));
+
+});
+```
+#### Наследование от блока с другого уровня
+
+Для наследования от блока с другого уровня переопределения необходимо задекларировать блок с именем уже существующего на другом уровне блока. В ходе декларации пересекающиеся методы и модификаторы будут переопределены с новыми значениями.
+
+```js
+modules.define('ablock', ['i-bem__dom'], function(provide, BEMDOM) {
+
+provide(BEMDOM.decl(this.name, {}));
+
+});
+
+modules.define('ablock', function(provide, ABlock) {
+
+provide(ABlock.decl({}));
+
+});
+```
+
+#### Добавление модификатора в существующий блок
+
+Для доопределения блока необходимо в BEMDOM-декларации указать доопределяемые модифкаторы и их значения `modName` и `modVal`.
+
+```js
+modules.define('ablock', ['i-bem__dom'], function(provide, BEMDOM) {
+
+provide(BEMDOM.decl(this.name, {}));
+
+});
+
+modules.define('ablock', function(provide, ABlock) {
+
+provide(ABlock.decl({ modName : 'm1', modVal : 'v1' }, {}));
+
+});
+```
 
 ### Описание блока-микса в декларации
 
@@ -1021,6 +1075,63 @@ DOM.decl('my-form', {
 в процессе работы блока, следует использовать метод экземпляра блока
 `un(event, [handler], [handlerCtx])`.
 
+### События при изменении модификаторов
+
+Для подписки на BEM-события при изменении модификатора блока или элемента используется метод экземпляра блока `on`.
+
+**Пример**: В момент инициализации блока `monitor` выполнятся подписка на установку модификатора `m1` в любое значение.
+
+```js
+BEM.decl('monitor', {
+    onSetMod: {
+        'js': {
+            'inited': function() {
+            block1.on({ modName : 'm1', modVal : '*' }, function() {})
+            }
+        }
+    },
+});
+```
+**Пример**: В момент инициализации блока `monitor` выполнятся подписка на установку модификатора `m1` в значение `v1`.
+
+```js
+BEM.decl('monitor', {
+    onSetMod: {
+        'js': {
+            'inited': function() {
+            block1.on({ modName : 'm1', modVal : 'v1' }, function() {})
+            }
+        }
+    },
+});
+```
+
+**Пример**: В момент инициализации блока `monitor` выполнятся подписка на удаление модификатора `m1`. 
+
+```js
+BEM.decl('monitor', {
+    onSetMod: {
+        'js': {
+            'inited': function() {
+            block1.on({ modName : 'm1', modVal : '' }, function() {})
+            }
+        }
+    },
+});
+```
+**Пример**: В момент инициализации блока `monitor` выполнятся подписка на удаление модификатора `m1` у элемента `e1`.
+
+```js
+BEM.decl('monitor', {
+    onSetMod: {
+        'js': {
+            'inited': function() {
+            block1.on({ elem : 'e1', modName : 'm1', modVal : '' }, function() {})
+            }
+        }
+    },
+});
+```
 
 <a name="bem-events-delegated"></a>
 
