@@ -1,12 +1,9 @@
-block b-square {
-
-    default: {
+block('b-square')(
+    def()(function() {
         this.ctx.mods = { color : 'green' };
         return applyCtx(this.ctx);
-    }
-
-    mod color green, default: {
+    }),
+    mod('color', 'green').def()(function() {
         return applyNext();
-    }
-
-}
+    })
+);
