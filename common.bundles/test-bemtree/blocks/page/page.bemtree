@@ -1,67 +1,43 @@
-block page {
+block('page')(
 
-    default: {
+    def()(function() {
         var head = apply('head');
         return applyCtx({
-                block : this.block,
-                title : this.data.pageTitle,
-                mods  : this.ctx.mods,
-                head  : head,
-                content : this.ctx.content
-            });
-    }
+            block : this.block,
+            title : this.data.pageTitle,
+            mods  : this.ctx.mods,
+            head  : head,
+            content : this.ctx.content
+        });
+    }),
 
-    asset, this.elem !== '': {
-        return {
-            prefix : ['_', this.data.bundleName].join(''),
-            suffix  : this.ctx._type
-        };
-    }
-
-    head: {
+    mode('head')(function() {
         return applyCtx([
             { elem : 'css' },
             { elem : 'js' }
         ]);
-    }
+    }),
 
-    content: [
+    elem('css').def()(function() {
+        return applyCtx({
+            elem : 'css',
+            url : '_' + this.data.bundleName + '.css'
+        });
+    }),
+
+    elem('js').def()(function() {
+        return applyCtx({
+            elem : 'js',
+            url : '_' + this.data.bundleName + '.js'
+        });
+    }),
+
+    content()([
         { block : 'b-square', js : { id : 1 } },
         { block : 'some-block' },
         { block : 'b-square', js : { id : 1 } }
-    ]
+    ]),
 
-    mod error not-found, content: 'Nothing found'
+    mod('error', 'not-found').content()('Nothing found')
 
-    elem css {
-
-        default: {
-            var url = apply('asset', this.ctx._type = 'css'),
-                elem = this.elem;
-            return applyCtx([
-                {
-                    elem : elem,
-                    url : url.prefix + '.' + url.suffix,
-                    ie  : false
-                },
-                {
-                    elem : elem,
-                    url  : url.prefix + '.ie.' + url.suffix,
-                    ie : 'lte IE 9'
-                }
-            ]);
-        }
-
-    }
-
-    elem js {
-
-        default: {
-            var url = apply('asset', this.ctx._type = 'js');
-            this.ctx.url = url.prefix + '.' + url.suffix;
-            return this.ctx;
-        }
-
-    }
-
-}
+);
