@@ -1,9 +1,8 @@
 ({
     mustDeps : [
-        { block : 'vow', mods : { dummy : 'yes' } },
-        { block : 'i-bem' }
+        'i-bem'
     ],
     shouldDeps : [
-        { block : 'page' }
+        'page'
     ]
 })
