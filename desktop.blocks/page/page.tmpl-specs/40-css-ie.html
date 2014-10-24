@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html class="ua_js_no">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta charset="utf-8"/>
+    <title>Пример задания стилей для разных версий IE</title>
+    <script>
+        (function(e,c){e[c]=e[c].replace(/(ua_js_)no/g,"$1yes");})(document.documentElement,"className");
+    </script>
+    <!--[if gt IE 9]><!-->
+        <link rel="stylesheet" href="_30-css-ie.css"/>
+    <!--<![endif]-->
+    <!--[if IE 6]>
+        <link rel="stylesheet" href="_30-css-ie.ie6.css"/>
+    <![endif]-->
+    <!--[if IE 7]>
+        <link rel="stylesheet" href="_30-css-ie.ie7.css"/><![endif]-->
+    <!--[if IE 8]>
+        <link rel="stylesheet" href="_30-css-ie.ie8.css"/>
+    <![endif]-->
+    <!--[if IE 9]>
+        <link rel="stylesheet" href="_30-css-ie.ie9.css"/>
+    <![endif]-->
+</head>
+<body class="page"></body>
+</html>
