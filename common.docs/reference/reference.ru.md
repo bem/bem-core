@@ -38,7 +38,7 @@
 
 Подробнее об особенностях архитектуры BEMHTML читайте в разделе [архитектура шаблонизаторов BEMHTML и BEMTREE](http://ru.bem.info/technology/bemhtml/current/templating/#bemx_arch) документа по [шаблонизации данных в bem-core](http://ru.bem.info/technology/bemhtml/current/templating/).
 
-<a name="uts"></a>
+<a name="uts"></a>
 ####Поддержка BEM-XJST-синтаксиса
 BEMHTML – [BEM-XJST-шаблонизатор](http://ru.bem.info/technology/bemhtml/current/templating/#bemx_intro). Иначе говоря, BEMHTML использует **BEM-XJST-синтаксис** и сохраняет все особенности BEM-XJST-шаблонизаторов, такие как:
 * [привязка к БЭМ-предметной области](http://ru.bem.info/technology/bemhtml/current/templating/#bem_area);
@@ -140,7 +140,6 @@ HTML-дерева не требовалось изменять набор и п�
 * [Достраивание БЭМ-сущностей по контексту](http://ru.bem.info/technology/bemhtml/current/templating/#extensionbem)
 
 
-
 <a name="standardmoda"></a>
 
 ### Стандартные моды
@@ -163,6 +162,18 @@ HTML-дерева не требовалось изменять набор и п�
   * В результате вычисления тела шаблона должен возвращаться тот тип объекта, который ожидается в рамках данной моды.
 
 В последующих разделах моды перечислены в порядке их вызова при обработке элемента входного BEMJSON.
+
+Порядок прохождения стандартных мод (со значениями по умолчанию):
+
+1. [def](#default) (default mode);
+1. [tag](#tag): `<div>`
+1. [js](#js): `false` (атрибут `data-bem` и CSS-класс `i-bem` DOM-узла отсутствуют);
+1. [bem](#bem):  `undefined` (к DOM-узлу блока `block-name` добавляется `class="block-name"`);
+1. [cls](#cls): `undefined`  (у DOM-узла блока `block-name` нет дополнительных css-классов);
+1. [mix](#mix): `undefined` (у блока нет микса);
+1. [jsAttr](#jsAttr): `undefined` (если шаблон блока не был определен по моде `js`. C `js: true` атрибут `data-bem` будет иметь значение `data-bem="{"block-name":{}}"`);
+1. [attrs](#attrs): `undefined` (у DOM-узла блока нет пользовательских атрибутов);
+1. [content](#content): `content` блока.
 
 <a name="empty_moda"></a>
 
@@ -606,7 +617,7 @@ block('b4').mix()([ { block: 'b1' } ])</code></pre>
 )</code></pre>
     </td>
     <td><pre><code>&lt;input class="input"
-    disabled="disabled"/&gt;</code></pre></td>
+    disabled="disabled"/&gt;</code></pre></td>
 </tr>
 
 <tr>
@@ -1177,6 +1188,7 @@ block('input')(
 * [Примеры и рецепты BEMTREE](http://ru.bem.info/technology/bemtree/current/bemtree/#examples)
 * [Мастер-класс «Динамический БЭМ-сайт на Node.js»](http://tech.yandex.ru/events/bemup/29-november-2013/talks/1413/)
 * [Шаблонизация данных в bem-core](http://ru.bem.info/libs/bem-core/current/templating/templating/)
+
 ####В сообществе
 * [BEMTREE](http://ru.bem.info/technology/bemtree/current/bemtree/)
 * [BEMJSON](http://ru.bem.info/technology/bemjson/current/bemjson/)

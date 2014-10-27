@@ -1000,6 +1000,18 @@ Such approach places the following restrictions on the templates:
   * The maximum number of modes that can be specified in a predicate is one.
   * A template's body should evaluate to a value of the type which is expected for the current mode.
 
+Modes are called in the following order (and have the default values of):
+
+1. [def](#default) (default mode);
+1. [tag](#tag): `<div>`
+1. [js](#js): `false` (`data-bem` attribute and `i-bem` DOM class are absent);
+1. [bem](#bem):  `undefined` (`block-name` class is added to `block-name` DOM-node);
+1. [cls](#cls): `undefined`  (`block-name` DOM-node has no custom CSS class);
+1. [mix](#mix): `undefined` (the block has no mixes);
+1. [jsAttr](#jsAttr): `undefined` (the block has no `data-bem` attribute);
+1. [attrs](#attrs): `undefined` (the DOM-node has no custom attributes);
+1. [content](#content): the block `content`.
+
 In the following sections the modes are listed in the order of its call when an element of the input BEMJSON is being processed.
 
 <a name="empty_moda"></a>
