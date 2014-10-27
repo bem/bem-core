@@ -16,29 +16,40 @@
  * nodeConfig.addTech(require('enb/techs/html-from-bemjson'));
  * ```
  */
-var asyncRequire = require('enb/lib/fs/async-require'),
+var vm = require('vm'),
+    vow = require('vow'),
+    vfs = require('enb/lib/fs/async-fs'),
+    asyncRequire = require('enb/lib/fs/async-require'),
     dropRequireCache = require('enb/lib/fs/drop-require-cache');
 
 module.exports = require('enb/lib/build-flow').create()
     .name('html-from-bemtree')
     .target('destTarget', '?.html')
-    .useSourceFilename('bemhtmlTarget', '?.bemhtml.js')
     .useSourceFilename('bemtreeTarget', '?.bemtree.js')
-    .builder(function(bemhtmlFilename, bemtreeFilename) {
-        dropRequireCache(require, bemtreeFilename);
+    .useSourceFilename('bemhtmlTarget', '?.bemhtml.js')
+    .builder(function(bemtreeFilename, bemhtmlFilename) {
+        dropRequireCache(require, bemhtmlFilename);
 
-        return asyncRequire(bemtreeFilename).then(function(bemtree) {
-            dropRequireCache(require, bemhtmlFilename);
-
-            return asyncRequire(bemhtmlFilename).then(function(bemhtml) {
-                return bemtree.BEMTREE.apply({}).then(function(bemjson) {
-                    if(!bemhtml.BEMHTML && bemhtml.lib) {
-                        return bemhtml.apply(bemjson);
-                    } else {
-                        return bemhtml.BEMHTML.apply(bemjson);
-                    }
+        return vow.all([
+                vfs.read(bemtreeFilename, 'utf-8'),
+                asyncRequire(bemhtmlFilename)
+            ])
+            .spread(function(bemtree, bemhtml) {
+                var ctx = vm.createContext({
+                    Vow : vow,
+                    console : console,
+                    setTimeout : setTimeout
                 });
+
+                vm.runInContext(bemtree, ctx);
+
+                return [ctx.BEMTREE, bemhtml.BEMHTML];
+            })
+            .spread(function(BEMTREE, BEMHTML) {
+                return BEMTREE.apply({})
+                    .then(function(bemjson) {
+                        return BEMHTML.apply(bemjson);
+                    });
             });
-        });
     })
     .createTech();
