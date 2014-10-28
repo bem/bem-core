@@ -188,3 +188,6 @@ is not provided by us for  browsers with less than 0.5% users.
 
   - iOS 5
   - Android 2.2
+
+## License
+Code and documentation copyright 2012 YANDEX LLC. Code released under the [Mozilla Public License 2.0](LICENSE.txt).
