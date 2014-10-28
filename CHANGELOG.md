@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.5.0
+
+### Major changes
+
+- bem-core in now published under the [MPL 2.0](https://www.mozilla.org/MPL/2.0/) license ([#443](https://github.com/bem/bem-core/issues/443)).
+- An ability to specify error handler was added to `loader_type_js` ([#672](https://github.com/bem/bem-core/issues/672)).
+- `BEMContext` class was added to `oninit` export context in `i-bem.bemtree` ([#602](https://github.com/bem/bem-core/issues/602)).
+- `reapply` static method was added to BEMContext class of BEMTREE ([#706](https://github.com/bem/bem-core/pull/706)).
+- bh templates for block `page` were added to touch level ([#689](https://github.com/bem/bem-core/pull/689)).
+- [bem-xjst](https://github.com/bem/bem-xjst) was updated to 0.9.0 ([#709](https://github.com/bem/bem-core/pull/709)).
+
+### Bug fixes
+
+- An issue in `i-bem__dom` was fixed. `findBlocksInside` could return blocks which weren't inited  ([#699](https://github.com/bem/bem-core/issues/699)).
+- An issue in `tick` was fixed. Timer was not removed by `Tick#stop()` ([#694](https://github.com/bem/bem-core/issues/694)).
+- An issue in `i-bem.bemhtml` was fixed. `i-bem` CSS class was added to elements by mistake ([#633](https://github.com/bem/bem-core/issues/633)).
+- `html-from-bemtree` tech was fixed to expose `vow`, `console`, `setTimeout` inside BEMTREE template context  ([#438ebb8](https://github.com/bem/bem-core/commit/438ebb8f828e26977592e26511e8aad15176d7a4)).
+
+### Other changes
+
+- English guide to BEMJSON was added.
+- Russian documentation for `querystring` module was added.
+- Russian documentation for `i-bem.js` was fixed to satisfy current API.
+- Documentation for BEMHML/BEMTREE for both languages was updated.
+
 ## 2.4.0
 
 ### Major changes
