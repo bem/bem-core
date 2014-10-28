@@ -188,3 +188,6 @@ $ ISTANBUL_COVERAGE=yes bem make desktop.specs/functions__debounce && istanbul r
 
   - iOS 5
   - Android 2.2
+
+## Лицензия
+© 2012 YANDEX LLC. Код лицензирован [Mozilla Public License 2.0](LICENSE.txt).
