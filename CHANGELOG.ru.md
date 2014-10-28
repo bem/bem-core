@@ -1,20 +1,46 @@
 # История изменений
 
+## 2.5.0
+
+### Крупные изменения
+
+- Код библиотеки переведен на использование лицензии [MPL 2.0](https://www.mozilla.org/MPL/2.0/) ([#443](https://github.com/bem/bem-core/issues/443)).
+- В модуль `loader_type_js` добавлена возможность указывать функцию-обработчик ошибок ([#672](https://github.com/bem/bem-core/issues/672)).
+- Класс `BEMContext` добавлен в export-параметры функции `oninit` в базовых шаблонах `i-bem.bemtree` ([#602](https://github.com/bem/bem-core/issues/602)).
+- В `BEMContext` BEMTREE добавлен статический метод `reapply` по аналогии с BEMHTML ([#706](https://github.com/bem/bem-core/pull/706)).
+- Добавлены bh-шаблоны блока `page` для уровней touch ([#689](https://github.com/bem/bem-core/pull/689)).
+- npm-модуль [bem-xjst](https://github.com/bem/bem-xjst) обновлен до версии 0.9.0 ([#709](https://github.com/bem/bem-core/pull/709)).
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена ошибка в `i-bem__dom`, из-за которой метод `findBlocksInside` мог возвращать блоки, которые еще не были
+  инициализированы ([#699](https://github.com/bem/bem-core/issues/699)).
+- Исправлена ошибка в `tick`, позволявшая вызвать метод `stop` без освобождения внутреннего таймера ([#694](https://github.com/bem/bem-core/issues/694)).
+- Исправлена ошибка в `i-bem.bemhtml`, из-за которой на элементы блока добавлялся CSS-класс `i-bem` ([#633](https://github.com/bem/bem-core/issues/633)).
+- Исправлена ошибка в технологии `html-from-bemtree`, из-за которой в контексте BEMTREE-шаблонов не было глобальных объектов
+  `vow`, `console`, `setTimeout` ([#438ebb8](https://github.com/bem/bem-core/commit/438ebb8f828e26977592e26511e8aad15176d7a4)).
+
+### Также в релиз вошли следующие изменения
+
+- Добавлено английское руководство по технологии BEMJSON.
+- Обновлена русская документация для i-bem.js. Теперь документация соответсвует текущему API библиотеки.
+- Обновлена документация для технологий BEMHTML/BEMTREE.
+
 ## 2.4.0
 
-### Major changes
+### Крупные изменения
 
 - npm-модуль [bem-xjst](https://github.com/bem/bem-xjst) обновлен до версии 0.8.0; [bemhtml-compat](https://github.com/bem/bemhtml-compat)
   обновлен до 0.0.11.
 
-### Bug fixes
+### В релиз вошли следующие исправления ошибок
 
 - Исправлена ошибка в `jquery__event_type_pointerpressrelease`, из-за которой события `pointerpress` / `pointerrelease` генерировались
   на нажатие любой кнопки мыши ([#607](https://github.com/bem/bem-core/issues/607)).
 - Исправлена ошибка в `i-bem__dom.js`, из-за которой в некоторых случаях не происходил вызов базового метода
   `live` ([#608](https://github.com/bem/bem-core/issues/608)).
 
-### Other changes
+### Также в релиз вошли следующие изменения
 
 - Добавлена английская документация на JS-синтаксис BEMHTML.
 
