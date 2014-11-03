@@ -1,6 +1,7 @@
 var BEM = require('bem'),
     Q = BEM.require('q'),
-    VM = require('vm');
+    VM = require('vm'),
+    REQF = require('reqf');
 
 exports.API_VER = 2;
 
@@ -11,10 +12,12 @@ exports.techMixin = {
         var path = this.getPath(prefix, 'bemhtml.js');
         return BEM.util.readFile(path)
             .then(function(c) {
-                /* global BEMHTML */
-                /** @name BEMHTML variable appears after runInThisContext() call */
-                VM.runInThisContext(c, path);
-                return BEMHTML;
+                var ctx = VM.createContext({
+                    require : REQF(path, module),
+                    console : console
+                });
+                VM.runInContext(c, ctx, path);
+                return ctx.BEMHTML;
             });
 
     },
@@ -24,7 +27,13 @@ exports.techMixin = {
         var path = this.getPath(prefix, 'bemjson.js');
         return BEM.util.readFile(path)
             .then(function(c) {
-                return VM.runInThisContext(c, path);
+                return VM.runInNewContext(
+                    c,
+                    {
+                        require : REQF(path, module),
+                        console : console
+                    },
+                    path);
             });
 
     },
