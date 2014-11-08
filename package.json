@@ -32,7 +32,6 @@
     "bem-naming": "0.3.0",
     "enb": "0.13.8",
     "enb-bem-techs": "0.1.0-rc",
-    "enb-autoprefixer": "0.1.1",
     "enb-bem-docs": "0.6.1",
     "enb-bem-examples": "0.5.2",
     "enb-bem-specs": "0.5.0",
@@ -42,7 +41,6 @@
     "enb-borschik": "1.1.1",
     "enb-diverse-js": "0.1.0",
     "enb-modules": "0.2.0",
-    "enb-stylus": "1.1.5",
     "borschik-tech-cleancss": "1.0.3"
   },
   "scripts": {
