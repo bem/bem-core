@@ -8,8 +8,8 @@ var DEFAULT_LANGS = ['ru', 'en'],
     bemdecl = require('enb-bem-techs/techs/bemjson-to-bemdecl'),
     deps = require('enb-bem-techs/techs/deps-old'),
     files = require('enb-bem-techs/techs/files'),
-    css = require('enb-stylus/techs/css-stylus'),
-    js = require('enb-diverse-js/techs/browser-js'),
+    css = require('enb/techs/css'),
+    js = require('enb/techs/js'),
     ym = require('enb-modules/techs/prepend-modules'),
     bemhtml = require('enb-bemxjst/techs/bemhtml-old'),
     bemtree = require('enb-bemxjst/techs/bemtree-old'),
@@ -106,7 +106,10 @@ module.exports = function(config) {
             // Client techs
             nodeConfig.addTechs([
                 [css],
-                [js],
+                [js, {
+                    target : '?.browser.js',
+                    sourceSuffixes : ['vanilla.js', 'js', 'browser.js']
+                }],
                 [mergeFiles, {
                     target : '?.pre.js',
                     sources : ['?.browser.bemhtml.js', '?.browser.js']
