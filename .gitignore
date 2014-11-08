@@ -16,6 +16,7 @@ coverage.json
 !*.bundles/*/blocks
 !*.bundles/*/*.bemjson.js
 
+/dist
 /*.docs
 /*.examples
 /*.specs

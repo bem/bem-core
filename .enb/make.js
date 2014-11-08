@@ -3,6 +3,7 @@ var DEFAULT_LANGS = ['ru', 'en'],
     path = require('path'),
     naming = require('bem-naming'),
     levels = require('enb-bem-techs/techs/levels'),
+    levelsToBemdecl = require('enb-bem-techs/techs/levels-to-bemdecl'),
     provide = require('enb/techs/file-provider'),
     depsByTechToBemdecl = require('enb-bem-techs/techs/deps-by-tech-to-bemdecl'),
     bemdecl = require('enb-bem-techs/techs/bemjson-to-bemdecl'),
@@ -16,6 +17,8 @@ var DEFAULT_LANGS = ['ru', 'en'],
     html = require('enb-bemxjst/techs/html-from-bemjson'),
     htmlFromData = require('./techs/html-from-bemtree'),
     bh = require('enb-bh/techs/bh-server'),
+    bhServerInclude = require('enb-bh/techs/bh-server-include'),
+    bhYm = require('enb-bh/techs/bh-client-module'),
     bhHtml = require('enb-bh/techs/html-from-bemjson'),
     copyFile = require('enb/techs/file-copy'),
     mergeFiles = require('enb/techs/file-merge'),
@@ -38,6 +41,7 @@ module.exports = function(config) {
 
     config.setLanguages(langs? langs.split(' ') : [].concat(DEFAULT_LANGS));
 
+    configureDist(platforms);
     configurePages(platforms);
     configureSets(platforms, {
         examples : config.module('enb-bem-examples').createConfigurator('examples'),
@@ -45,6 +49,76 @@ module.exports = function(config) {
         specs : config.module('enb-bem-specs').createConfigurator('specs'),
         tmplSpecs : config.module('enb-bem-tmpl-specs').createConfigurator('tmpl-specs')
     });
+
+    function configureDist(platforms) {
+        platforms.forEach(function(platform) {
+            config.node('dist/' + platform, function(nodeConfig) {
+                nodeConfig.addTechs([
+                    [levels, { levels : getLevels(platform) }],
+                    [levelsToBemdecl],
+                    [deps],
+                    [files],
+                    [css, { target : '?.pre.css' }],
+                    [js, {
+                        target : '?.source.js',
+                        sourceSuffixes : ['vanilla.js', 'js', 'browser.js']
+                    }],
+                    [ym, {
+                        source : '?.source.js',
+                        target : '?.ym.js'
+                    }],
+                    [bemhtml, { target : '?.pre.bemhtml.js', devMode : false }],
+                    [depsByTechToBemdecl,  {
+                        target : '?.bemhtml.bemdecl.js',
+                        sourceTech : 'js',
+                        destTech : 'bemhtml'
+                    }],
+                    [deps, {
+                        target : '?.bemhtml.deps.js',
+                        bemdeclFile : '?.bemhtml.bemdecl.js'
+                    }],
+                    [files, {
+                        depsFile : '?.bemhtml.deps.js',
+                        filesTarget : '?.bemhtml.files',
+                        dirsTarget : '?.bemhtml.dirs'
+                    }],
+                    [bemhtml, {
+                        target : '?.client.bemhtml.js',
+                        filesTarget : '?.bemhtml.files',
+                        devMode : false
+                    }],
+                    [bhServerInclude, { target : '?.pre.bh.js', jsAttrName : 'data-bem', jsAttrScheme : 'json' }],
+                    [bhYm, { target : '?.client.bh.js', jsAttrName : 'data-bem', jsAttrScheme : 'json' }],
+                    [mergeFiles, {
+                        target : '?.source+bemhtml.js',
+                        sources : ['?.source.js', '?.client.bemhtml.js']
+                    }],
+                    [ym, {
+                        source : '?.source+bemhtml.js',
+                        target : '?.pre.browser+bemhtml.js'
+                    }],
+                    [mergeFiles, {
+                        target : '?.source+bh.js',
+                        sources : ['?.source.js', '?.client.bh.js']
+                    }],
+                    [ym, {
+                        source : '?.source+bh.js',
+                        target : '?.pre.browser+bh.js'
+                    }],
+                    [borschik, { source : '?.pre.css', target : '?.css' }],
+                    [borschik, { source : '?.ym.js', target : '?.browser.js' }],
+                    [borschik, { source : '?.pre.bemhtml.js', target : '?.bemhtml.js' }],
+                    [borschik, { source : '?.pre.bh.js', target : '?.bh.js' }],
+                    [borschik, { source : '?.pre.browser+bemhtml.js', target : '?.browser+bemhtml.js' }],
+                    [borschik, { source : '?.pre.browser+bh.js', target : '?.browser+bh.js' }]
+                ]);
+
+                nodeConfig.addTargets([
+                    '?.css', '?.browser.js', '?.bemhtml.js', '?.bh.js', '?.browser+bemhtml.js', '?.browser+bh.js'
+                ]);
+            });
+        });
+    }
 
     function configurePages(platforms) {
         configureLevels('common', ['common.bundles/*']);
