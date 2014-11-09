@@ -1,9 +1,7 @@
 .clearfix:after
 {
-    display: block;
+    display: table;
     clear: both;
 
-    height: 0;
-
-    content: " ";
+    content: '';
 }
