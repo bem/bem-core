@@ -37,7 +37,7 @@
 
 **NB: При первой сборке в каталог проекта копируются библиотеки `bemhtml` и `bem-bl`**
 
-### Подробнее:
+### Подробнее
 
  * [Варианты локальной и глобальной установки `bem-tools`](http://ru.bem.info/tools/bem/installation/)
 
@@ -75,7 +75,7 @@
 
 Просмотрим результат сборки страницы в браузере: (http://localhost:8080/desktop.bundles/test/test.html)
 
-### Подробнее:
+### Подробнее
 
  * [Справочник по BEMJSON](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%A1%D0%B8%D0%BD%D1%82%D0%B0%D0%BA%D1%81%D0%B8%D1%81-bemjson)
  * [Библиотека блоков bem-bl](http://ru.bem.info/libs/bem-bl/)
@@ -161,7 +161,7 @@ HTML-результат:
     </body>
 
 
-### Подробнее:
+### Подробнее
 
  * [Справочное руководство по BEMHTML. Синтаксис BEMHTML](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%A1%D0%B8%D0%BD%D1%82%D0%B0%D0%BA%D1%81%D0%B8%D1%81-bemhtml)
  * [Справочное руководство по BEMHTML. Стандартные моды](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%A1%D1%82%D0%B0%D0%BD%D0%B4%D0%B0%D1%80%D1%82%D0%BD%D1%8B%D0%B5-%D0%BC%D0%BE%D0%B4%D1%8B)
@@ -268,7 +268,7 @@ HTML-результат:
  * `b-hello.js`.
 
 Реализация блока в технологиях CSS и JS не является частью шаблонизатора
-BEMHTML, однако используeтся вместе с ним в любом реальном проекте.
+BEMHTML, однако используется вместе с ним в любом реальном проекте.
 
 **NB: BEMHTML помещает имена БЭМ-сущностей в атрибут `class` HTML-элементов. В CSS
 используются только селекторы по классу.**
@@ -308,9 +308,9 @@ BEMHTML, однако используeтся вместе с ним в любо
     })
 
 
-### Подробнее:
+### Подробнее
 
- * [Описание JS-фреймворка `i-bem.js`](http://ru.bem.info/libs/bem-bl/current/desktop/i-bem/docs/)
+ * [Описание JS-фреймворка `i-bem.js`](http://ru.bem.info/libs/bem-bl/dev/desktop/i-bem/docs/)
 
 
 ## Дальнейшее чтение
