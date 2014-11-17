@@ -101,11 +101,11 @@
 - Добавлена возможность декларировать инстанс элемента используя класс блока ([#481](https://github.com/bem/bem-core/issues/481)).
 - Исправлено поведение метода `isSimple` класса BEMContext в  в базовых шаблонах `i-bem.bemhtml` ([#432](https://github.com/bem/bem-core/pull/432)).
 - Исправлена ошибка в методе `liveUnbindFrom` модуля `BEMDOM` ([#476](https://github.com/bem/bem-core/pull/476)).
-- Исправлена ошибка в методе `isFocusable` модуля `dom`, возникающая если переданный `domElem` является сслыкой
+- Исправлена ошибка в методе `isFocusable` модуля `dom`, возникающая если переданный `domElem` является ссылкой
   с атрибутом `tabindex`, но без атрибута `href` ([#501](https://github.com/bem/bem-core/issues/501)).
 - Исправлена ошибка возникающая в процессе декларации БЭМ-блока как модуля, если был подключен
   модуль `i-bem__dom_elem-instances` ([#479](https://github.com/bem/bem-core/issues/479)).
-- В модуле `i-bem__dom_init_auto` добавлено временное решение для проблем с производительностью ренедеринга при инициализции блоков
+- В модуле `i-bem__dom_init_auto` добавлено временное решение для проблем с производительностью ренедеринга при инициализации блоков
   в Chrome-браузерах ([#486](https://github.com/bem/bem-core/issues/486)).
 - Модуль `vow.js` перенесен в `vow.vanilla.js` ([#412](https://github.com/bem/bem-core/issues/412)).
 
@@ -172,7 +172,7 @@
 ### Также в релиз вошли следующие изменения
 
 - Базовые шаблоны в `i-bem.bemhtml` используют конкатенацию строк вместо наполнения внутреннего буфера ([#401](https://github.com/bem/bem-core/issues/401)).
-- jQuery больше не удаляет себя из глобавльной области видимости, если присутствует на странице ([#349](https://github.com/bem/bem-core/issues/349)).
+- jQuery больше не удаляет себя из глобальной области видимости, если присутствует на странице ([#349](https://github.com/bem/bem-core/issues/349)).
 - `jquery__event_type_pointerclick.js` перемещен с уровня `touch.blocks` на уровень `common.blocks` ([#393](https://github.com/bem/bem-core/issues/393)).
 - Модификаторы `i-bem_elem-instances_yes` и `i-bem__dom_elem-instances_yes` приведены к булевому стилю ([#352](https://github.com/bem/bem-core/issues/352)).
 - Исправлена ошибка в шаблоне блока `page`, возникающая при использовании development-режима BEMHTML ([#417](https://github.com/bem/bem-core/issues/417)).
