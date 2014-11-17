@@ -130,7 +130,7 @@ $ bem make desktop.specs/functions__debounce
 $ ISTANBUL_COVERAGE=yes bem make desktop.specs && istanbul report html
 ```
 
-Сбор статиски покрытия тестами так же работает для запуска тестов конкретной БЭМ-сущности.
+Сбор статистики покрытия тестами так же работает для запуска тестов конкретной БЭМ-сущности.
 Пример для `functions__debounce`
 ```
 $ ISTANBUL_COVERAGE=yes bem make desktop.specs/functions__debounce && istanbul report html
