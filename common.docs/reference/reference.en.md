@@ -660,17 +660,17 @@ As a consequence, the example above will not work if we will use the constructio
 The helper constructions, similar to the names of any [standard modes](#standardmoda) can be used as a predicate.
 It mens that the given predicate will be evaluated to true when the corresponding mode is set.
 
-For checking of the standard modes the next keywords are used:
+For checking for the standard modes the following keywords are used (in apply order with default value):
 
 * `def` (`default` mode)
-* `tag`
-* `bem`
-* `mix`
-* `cls`
-* `js`
-* `jsAttr`
-* `attrs`
-* `content`
+* `tag`: `<div>`
+* `js`: `false`
+* `bem`: `undefined`
+* `cls`: `undefined`
+* `mix`: `undefined`
+* `jsAttr`: `undefined`
+* `attrs`: `undefined`
+* `content`: `content` of the block
 
 A standart mode helper's notation is following:
 
