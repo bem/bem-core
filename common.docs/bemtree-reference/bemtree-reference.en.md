@@ -7,7 +7,7 @@
 The guide describes:
 
 * BEMTREE's main features distinguishing it from other template engines;
-* Input data processing sequence and BEMJSON generation;
+* Input data processing and BEMJSON generation;
 * BEMTREE-based solutions to some typical problems.
 
 **The target audience for this guide** are web developers and HTML coders who use the [BEM methodology](http://bem.info/method/).
@@ -31,14 +31,14 @@ The reader is assumed to be familiar with:
 <a name="arch"></a>
 ### Architecture
 
-For the processing of BEMTREE templates, the module [bem-xjst](http://bem.info/tools/templating-engines/bemxjst/) is used, extended with logic from the BEMTREE default template – [i-bem.bemtree](https://github.com/bem/bem-core/blob/v2/common.blocks/i-bem/i-bem.bemtree).
+BEMTREE templates are processed using the module [bem-xjst](http://bem.info/tools/templating-engines/bemxjst/) extended with logic from the BEMTREE default template – [i-bem.bemtree](https://github.com/bem/bem-core/blob/v2/common.blocks/i-bem/i-bem.bemtree).
 
 BEMTREE-specific logic is implemented at `i-bem.bemtree` template level. This default template defines:
 
-* the set and call order of standard modes;
+* the set of standard modes and in what order to call them;
 * available context fields.
 
-For a detailed description of BEMTREE's architecture, see section “Architecture of BEMHTML and BEMTREE templates” of the [Data templating in bem-core](http://ru.bem.info/technology/bemhtml/current/templating/) (it is available only in Russian) document.
+For a detailed description of BEMTREE's architecture, see the section “Architecture of BEMHTML and BEMTREE templates” of the [Data templating in bem-core](http://ru.bem.info/technology/bemhtml/current/templating/) document (available only in Russian).
 
 
 <a name="uts"></a>
@@ -46,7 +46,7 @@ For a detailed description of BEMTREE's architecture, see section “Architectur
 
 BEMTREE is a BEM-XJST template engine. In other words, BEMTREE uses **BEM-XJST syntax** and retains all the features of BEM-XJST template engines, such as:
 
-* binding to the BEM-domain;
+* binding to the BEM domain;
 * declarative templates;
 * JavaScript as the template description and execution language;
 * restrictions at conventions level.
@@ -73,7 +73,7 @@ Transforming a BEM tree into such a format is what the BEMTREE technology is all
 
 ### Data handling
 
-The BEMTREE technology is architecture-agnostic in its interaction with the back-end.
+The BEMTREE technology is architecture-agnostic in its interaction with the back end.
 
 The following two approaches to interacting with data providers are normally used in BEM projects:
 
@@ -96,7 +96,7 @@ Thus the template itself contains no evidence of how the data was obtained, much
 Such an approach employs the principle of separation of the controller from data representation. This principle proves particularly useful when:
 
 * the structure and contents of the page are known at the time of its formatting;
-* blocks must not be dependent on how data are received (e.g., for use in external projects, libraries, etc.);
+* blocks must not be dependent on how data is received (e.g., for use in external projects, libraries, etc.);
 * data is obtained from the same few sources, e.g., a single DBMS.
 
 ***
@@ -106,9 +106,9 @@ Such an approach employs the principle of separation of the controller from data
 
 #### Receipt of data within a BEMTREE block template
 
-This approach is appropriate for a block that receives its data from a source that no other block uses. Then there is no point in having a separate controller as its functionality would be inapplicable to any other blocks. A case in point would be any type of widget: a weather forecast widget, counters, new blog posts, currency exchange rate, etc.
+This approach is appropriate for a block that receives its data from a source that no other block uses. There is no point in having a separate controller, as its functionality would not be applied to any other blocks. A case in point would be any type of widget: a weather forecast widget, counters, new blog posts, currency exchange rate, etc.
 
-The main advantage of this approach is that blocks are then essentially self-contained. They contain logic both for the receipt and representation of data.
+The main advantage of this approach is that blocks are then essentially self-contained. They contain logic for both the receipt and representation of data.
 
 
 
@@ -116,11 +116,11 @@ The main advantage of this approach is that blocks are then essentially self-con
 
 ### Input and output data: BEMJSON
 
-BEMTREE is based on JavaScript, thus BEMJSON - JavaScript data structure (object) with a set of extra conventions on the representation of BEM entities - is used as the BEM tree standard format.
+BEMTREE is based on JavaScript, so BEMJSON - a JavaScript data structure (object) with a set of extra conventions on the representation of BEM entities - is used as the BEM tree standard format.
 
 BEMJSON is used for input and output data for the BEMTREE template engine. An input BEM tree is a web page skeleton, which gets filled with data element by element when it is processed by the template engine.
 
-An input BEMSJON may consist of the description of only one BEM entity, with which the execution of BEM-templates starts - **the entry point**. Say, we call a BEMTREE template for a `page` block:
+An input BEMJSON may consist of the description of a single BEM entity called the **entry point**, which is where the execution of BEM templates starts. Say, we call a BEMTREE template for a `page` block:
 
 
 ```js
@@ -148,20 +148,20 @@ Thus the BEM tree of the entire document is built element by element.
 
 ### Template, mode and context
 
-**Template, mode and context** are the core concepts of BEM-XJST and are absolutely applicable to BEMTREE.
+**Template**, **mode** and **context** are the core concepts of BEM-XJST and fully apply to BEMTREE.
 
 You can find detailed information about them in the respective sections of the documentation about templating in bem-core:
 
-* Template
-* Mode
-* Context
+* [Template](http://ru.bem.info/technology/bemhtml/current/templating/#template_ingeneral)
+* [Mode](http://ru.bem.info/technology/bemhtml/current/templating/#moda)
+* [Context](http://ru.bem.info/technology/bemhtml/current/templating/#context)
 
 
 <a name="syntax"></a>
 
 ### Template syntax
 
-BEMTREE templates are created using BEM-XJST-template syntax. In practice this means that all syntactic structures available in BEMHTML templates can be used in BEMTREE templates.
+BEMTREE templates are created using BEM-XJST template syntax. In practice this means that all syntactic structures available in BEMHTML templates can be used in BEMTREE templates.
 
 Syntax-wise, BEMTREE differs from BEMHTML in what sets of context fields and standard modes (including helpers) are available.
 
@@ -173,10 +173,10 @@ The default BEMTREE template defines a set of standard modes which specify the d
 
 Functionality-wise, modes are divided into two classes:
 
-* The **"Empty mode"** determines the algorithm for processing the nodes of an input BEMJSON and calling other modes;
+* The **"empty mode"** determines the algorithm for processing the nodes of an input BEMJSON and calling other modes;
 * All other modes determine the order in which BEMJSON elements are sequentially generated. Each of the modes is responsible for the generation of a specific fragment of the output BEMJSON tree.
 
-To generate BEMJSON, in each mode an appropriate template (i.e. one whose predicate is evaluated to true in the given context) is chosen and executed. The result of evaluation of the chosen template's body is used in that BEMJSON tree fragment (BEM entity), for the generation of which the current mode is responsible.
+To generate BEMJSON, in each mode an appropriate template (i.e. one whose predicate is evaluated to true in the given context) is chosen and executed. The result of evaluating of the chosen template's body is used in the BEMJSON tree fragment (BEM entity) that the current mode is responsible for generating.
 
 This logic imposes the following limitations on templates:
 
@@ -188,24 +188,24 @@ In the sections that follow, modes are listed in the order in which they follow 
 
 BEMTREE modes are identical to BEMHTML modes, the only difference being that BEMTREE does not have modes responsible for the generation of HTML element fragments (classes, attributes, etc).
 
-Thus in BEM-templates, besides the empty mode, which specifies the processing algorithm used for an input BEM tree and the order of other modes, only two modes are available:
+Other than the empty mode, which specifies the algorithm for processing an input BEM tree and calling other modes, there are only two modes that are available in BEM templates:
 
-* the `default` mode, responsible for the generation of a BEM tree element as a whole. It is usually used for the replacement of a context entity (e.g., for the [wrapping of a block in another block](#wrappingunit));
+* the `default` mode, responsible for the generation of a BEM tree element as a whole. It is usually used for replacing a context entity (e.g., for [wrapping a block in another block](#wrappingunit));
 * the `content` mode, which describes the content of the current BEM tree element.
 
 
 <a name="empty_moda"></a>
 
-### The «empty» mode (`""`)
+### The "empty" mode (`""`)
 
 *Template body value type: 'not used'*
 
 The empty (undefined) mode corresponds to the moment when the value of the context field `this._mode` equals an empty string (`""`). This value is set:
 
-* before the start of the input tree processing;
-* during the recursive call of the tree processing procedure in the `default` mode.
+* before the input tree traversal begins;
+* during the recursive call of the tree traversal procedure in the `default` mode.
 
-What action is executed in the empty mode depends on the type of a context (current) element of the input BEMJSON tree.
+The action performed in the empty mode depends on the element type of the context (current) element in the input BEMJSON tree.
 
 <table>
 <tr>
@@ -214,27 +214,27 @@ What action is executed in the empty mode depends on the type of a context (curr
 </tr>
 <tr>
     <td><b>BEM entity</b> (block or element)</td>
-    <td>Setting values of context service fields (<code>block elem mods elemMods ctx position</code>)
-    and calling templates in the <code>default</code> mode.</td>
+    <td>Set values of context service fields (<code>block elem mods elemMods ctx position</code>)
+    and call templates in the <code>default</code> mode.</td>
 </tr>
 
 <tr>
     <th>string/number</th>
-    <td>Output of value, converted into a string, to BEMJSON-result buffer.</td>
+    <td>Convert the value to a string and output it to the BEMJSON result buffer.</td>
 </tr>
 <tr>
     <th>Boolean, undefined, null</th>
-    <td>Output of an empty string to BEMJSON-result buffer.</td>
+    <td>Output an empty string to the BEMJSON result buffer.</td>
 </tr>
 <tr>
     <th>array</th>
-    <td>Iteration through the array with recursive call of templates in the empty mode.</td>
+    <td>Iterate through the array and call templates recursively in the empty mode.</td>
 </tr>
 </table>
 
-The definition of a template in the empty mode (sub-predicate `mode(this._mode === '')`) only makes sense if it is necessary to override the processing order for the input tree.
+Defining a template in the empty mode (sub-predicate `mode(this._mode === '')`) only makes sense if it is necessary to override the traversal process for the input tree.
 
-Calling templates in the empty mode (the `apply('')` construction in the template body) is necessary if one needs to deviate from the strict correspondence of "input BEM entity - output BEMJSON-element" and, for example, generate more than one element per one input entity. Specifically, such a call can be made automatically when using the applyCtx construction.
+Calling templates in the empty mode (the `apply('')` construction in the template body) is necessary if the one-to-one mapping principle of "input BEM entity - output BEMJSON element" has to be broken - e.g., to generate more than one element per input entity. Such a call is performed automatically when using the [`applyCtx` construction](#applyctx).
 
 **See also**:
 
@@ -254,7 +254,7 @@ During the `default` mode execution, the following takes place:
 * the execution results of all modes called are merged into a resulting BEMJSON;
 * templates are called recursively for the result of the `content` mode execution.
 
-The definition of a template in the `default` mode (sub-predicate `def()`) is required when the procedure for the generation of the output BEMJSON fragment needs to be overridden. As an example, let's create a BEMTREE template for a [page](https://github.com/bem/bem-core/blob/v2/common.blocks/page/page.bemhtml) block from the redefinition level `common.blocks`:
+A template must be defined for the `default` mode (sub-predicate `def()`) when the procedure for generating the output BEMJSON fragment needs to be overridden. As an example, let's create a BEMTREE template for a [page](https://github.com/bem/bem-core/blob/v2/common.blocks/page/page.bemhtml) block from the redefinition level `common.blocks`:
 
 ```js
 block('page').def()(function() {
@@ -270,9 +270,9 @@ block('page').def()(function() {
 });
 ```
 
-Here, to modify the input data object `this.ctx`, the `applyCtx` construction is used. It is used to assign values to different fields of the object during a call in the `default` mode, and then the procedure `apply()` is automatically called to choose and apply a template.
+Here, the `applyCtx` construction modifies the input data object `this.ctx`. The construction is used for assigning values to different fields of the object during a call in the `default` mode, and then the procedure `apply()` is automatically called to choose and apply a template.
 
-The template generates arbitrary fields `title` and `head` in the context, and their values are then used by the BEMHTML block template.
+The template generates arbitrary `title` and `head` fields in the context, and their values are then used by the BEMHTML block template.
 
 <a name="content"></a>
 
@@ -283,16 +283,16 @@ The template generates arbitrary fields `title` and `head` in the context, and t
 
 Within the `content` mode the content of a BEMJSON element is evaluated. This can be an arbitrary BEMJSON (either a string or a number, or a tree of BEM entities). The default value is the value of the `content` field of the context BEM entity (`this.ctx.content`).
 
-The definition of a template in the `content` mode (sub-predicate `content()`) is required if:
+A template must be defined in the `content` mode (sub-predicate `content()`) if it is necessary to:
 
-* it is necessary, at template engine level, to add content for an entity that lacks `content` in the input BEMJSON;
-* it is necessary to substitute the content of an entity at template engine level.
+* add content at template engine level for an entity that lacks `content` in the input BEMJSON;
+* substitute the content of an entity at template engine level.
 
 <table>
 <tr>
     <th>Input data</th>
     <th>Template</th>
-    <th>resulting BEMJSON</th>
+    <th>Resulting BEMJSON</th>
 </tr>
 
 <tr>
@@ -322,16 +322,16 @@ The definition of a template in the `content` mode (sub-predicate `content()`) i
 
 ## Context fields
 
-As it runs, the BEMTREE template engine builds a data structure containing information about the BEMJSON node processed and the state of processing. In addition, several auxiliary functions are available in the context.
+As it runs, the BEMTREE template engine builds a data structure containing information about the BEMJSON node being processed and the state of processing. In addition, several auxiliary functions are available in the context.
 
-During the execution of a template, the context is available as an object denoted by the keyword `this`. It is available both from the predicate and the template body.
+During the execution of a template, the context is available as an object denoted by the keyword `this`. It is available from both the predicate and the template body.
 
 The author of a template can define additional fields in the context.
 
 All context fields can be divided into two categories:
 
 * **Context-dependent** fields, whose values vary depending on the node that is being processed and the processing phase.
-* **Context-independent** fields, whose values are unchanged.
+* **Context-independent** fields, whose values are constant.
 
 **See also**:
 
@@ -349,7 +349,7 @@ The default BEMTREE template does not add any context-dependent fields besides t
 
 ### Context-independent fields
 
-All context-independent fields are grouped into the object `this._` and serve as auxiliary functions used when the template engine is running. The author of templates can use these functions in both template bodies and predicates.
+All context-independent fields are grouped within the object `this._` and serve as auxiliary functions used when the template engine is running. The template author can use these functions in both template bodies and predicates.
 
 BEMTREE extends the set of context-independent fields of BEM-XJST with only one method - `this._.doAsync`.
 
@@ -361,7 +361,7 @@ BEMTREE extends the set of context-independent fields of BEM-XJST with only one 
 </tr>
     <td><code>this._.doAsync(Function)</code></td>
     <td><code>Function</code></td>
-    <td>Asynchronosly executes a function sent as the argument. Usually used for sending asynchronous requests to the back end. The fuction returns a promise, the result object of which contains fields with info about the context BEM entity.</td>
+    <td>Asynchronosly executes a function sent as the argument. Usually used for sending asynchronous requests to the back end. The function returns a promise, the resulting object of which contains fields with info about the context BEM entity.</td>
 </tr>
 </table>
 
@@ -376,7 +376,7 @@ BEMTREE extends the set of context-independent fields of BEM-XJST with only one 
 
 #### Problem
 
-An input BEM tree must be built for a news feed (a list of posts with information about the author) that is easy to process in terms in BEMHTML templates. This should be a view-oriented tree, i.e. the set and order of the BEM entities should correspond to those of the DOM nodes in the output HTML.
+An input BEM tree must be built for a news feed (a list of posts with information about the author) that is easy to process in terms of BEMHTML templates. This should be a view-oriented tree, i.e. the set and order of the BEM entities should correspond to those of the DOM nodes in the output HTML.
 
 #### Solution
 
@@ -447,7 +447,7 @@ Let's assume that the source data is saved in the context field `this.ctx.data`.
 
 #### Problem
 
-At different [redifinition levels](http://bem.info/method/filesystem/) two different templates for the same BEM entity (`block b1`) are defined. Each of the templates defines its content in the `content` mode.
+Two different templates are defined for the same BEM entity (`block b1`) at different [redifinition levels](http://bem.info/method/filesystem/). Each of the templates defines its content in the `content` mode.
 
 The content defined at the first level of redefinition should be inherited at the second level, and also some extra content should be added. An analogue of `<xsl:apply-imports/>` is required.
 
@@ -455,7 +455,7 @@ The content defined at the first level of redefinition should be inherited at th
 
 BEMTREE has an analogue of `<xsl:apply-imports/>`. Its implementation is based on the ability to restart the procedure of applying templates to the current context (`apply()`). Therefore it is possible to call the same template that was previously defined for the given context (BEM entities, modes, etc.) or was defined at another level of redefinition.
 
-When evaluating the expression `apply()`, the result obtained by the application of the previously defined template is returned. To avoid an infinite loop, the sub-predicate for the check of a flag (e.g., `_myGuard`) must be added. This flag must be set when executing `apply()`.
+When evaluating the expression `apply()`, the result obtained by the application of the previously defined template is returned. To avoid an infinite loop, the sub-predicate to check for a flag (e.g., `_myGuard`) must be added. This flag must be set when executing `apply()`.
 
 ```js
 // the template at the first level of redefinition
@@ -496,13 +496,13 @@ block('b1').content()([
 
 #### Problem
 
-One block (`b-inner`) must be be wrapped in another block (`b-wrapper`) during the execution of a template, so that one input block corresponds to two blocks nested into each other.
+One block (`b-inner`) must be wrapped in another block (`b-wrapper`) during the execution of a template, so that one input block corresponds to two blocks nested inside each other.
 
 #### Solution
 
 When processing the `b-inner` block in a template in the default mode (the entire element generation), one should modify a fragment of the input tree `this.ctx` (the block `b-wrapper` should be added). This involves the use of the `applyCtx()` construction, which assigns `this.ctx` and applies templates in the empty mode.
 
-To avoid an infinite loop, a special flag (`_wraped`) should be checked when calling `applyCtx()`. This flag must be set before executing `applyCtx()`.
+To avoid an infinite loop, a special flag (`_wrapped`) should be checked when calling `applyCtx()`. This flag must be set before executing `applyCtx()`.
 
 ```js
 block('b-inner').def()
@@ -528,9 +528,9 @@ block('b-inner').def()
 
 #### Problem
 
-A block must be made with rounded corners, which works in all browsers (without using CSS3).
+Design a block with rounded corners that will work in all browsers (without using CSS3).
 
-The input BEMJSON may have the following view:
+The input BEMJSON may look like this:
 
 ```js
 { block: 'box', content: 'text' }
@@ -559,9 +559,9 @@ The implementation of rounded corners requires adding four extra elements to the
 
 #### Solution
 
-The modification of the input BEM tree at BEMTREE level requires writing a template in the `content` mode for the `box` block. The fragment of the input BEM tree is replaced using the `applyCtx()` construction (adding the necessary elements), and the substitution for the original content is done using the `applyNext()` construction.
+The modification of the input BEM tree at BEMTREE level requires writing a template in the `content` mode for the `box` block. The fragment of the input BEM tree is replaced using the `applyCtx()` construction (adding the necessary elements), and the original content is inserted using the `applyNext()` construction.
 
-The BEMHTML template used for this conversion has the following view:
+The BEMHTML template used for this conversion looks like this:
 
 ```js
 block('box').match(!this.ctx._processed).content()(applyCtx({'ctx._processed':true}, {
@@ -591,7 +591,7 @@ block('box').match(!this.ctx._processed).content()(applyCtx({'ctx._processed':tr
 
 <a name="check_predicate"></a>
 
-### Checking predicates in a specific order
+### Checking sub-predicates in a specific order
 
 #### Problem
 
@@ -599,7 +599,7 @@ Template sub-predicates should be checked in a certain order, e.g. first the pre
 
 #### Solution
 
-Let's make use the fact that the sub-predicate of a BEMHTML template can be an arbitrary JavaScript expression and can be written in the following form:
+Let's make use of the fact that the sub-predicate of a BEMHTML template can be an arbitrary JavaScript expression and can be written in the following form:
 
 ```js
 match(this.world && this.world.answer === 42)
@@ -609,13 +609,13 @@ This solution has a disadvantage: the expression won't be optimized during compi
 
 <a name="binding_html"></a>
 
-### HTML-element binding by id
+### Binding HTML elements by ID
 
 #### Problem
 
 For every `input` input block, a pair of HMTL elements `<label>` and `<input>` must be generated, so that the value of the attribute `input@id`is generated automatically, is unique and is equal to the value of the attribute `label@for`.
 
-The input data may have this view:
+The input data may look like this:
 
 ```js
 {
