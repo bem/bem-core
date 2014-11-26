@@ -32,8 +32,8 @@ To describe web page markup in BEM terms, BEM projects introduce the concept of 
 A BEM tree is a data structure that describes:
 
 * web page structure – the order and nesting of the blocks;
-* names of BEM entities – the names of the blocks, elements, block and element modifiers;
-* states of BEM entities – the occurrence of logical modifiers, the values of the modifiers;
+* names of BEM entities – the names of the blocks, elements, and their modifiers;
+* states of BEM entities – the occurrence of logical modifiers and their values;
 * arbitrary fields – custom data (hash keys, public API addresses, etc.)
 
 The standard BEM tree format in the bem-core library (and many other BEM projects) is **BEMJSON**.
@@ -202,7 +202,7 @@ BEM entities are represented in BEMJSON as objects that can contain the followin
 
 **See also**:
 
-* [BEM entity completion in the context](http://ru.bem.info/technology/bemhtml/2.3.0/templating/#extensionbem) (Russian version only)
+* [Context-aided completion of BEM entities](http://ru.bem.info/technology/bemhtml/2.3.0/templating/#extensionbem) (Russian version only)
 
 <a name="notionhtml"></a>
 
@@ -297,7 +297,7 @@ During the HTML generation process, the BEMHTML template engine will perform one
 The field `content` is reserved in BEMJSON for the representation of nested BEM entities (BEM tree). The field can take arbitrary BEMJSON as its value:
 
 * A primitive data type (string, number) - the value is used as the content (text) of the HTML element that corresponds to the context entity.
-* An object describing a BEM tree - the value is used for the generation of HTML elements nested into the HTML element that corresponds to the context entity.
+* An object describing a BEM tree - the value is used for generating HTML elements nested inside the HTML element that corresponds to the context entity.
 
 There is no fixed limit on nesting depth for a tree of BEM entities that can be built from the `content` field.
 
@@ -305,11 +305,11 @@ There is no fixed limit on nesting depth for a tree of BEM entities that can be 
 
 <a id="custom_fields"></a>
 
-##### Arbitrary fields
+##### Custom fields
 
-In addition to special fields that describe the BEM entity and its HTML representation, an object can contain any fields with arbitrary data. The data will be available for use in BEMHTML and BEMTREE templates.
+In addition to special fields that describe the BEM entity and its HTML representation, an object can contain any fields with custom data. The data will be available for use in BEMHTML and BEMTREE templates.
 
-An example of an arbitrary field is the field `url` in a link block:
+An example of a custom field is the field `url` in a link block:
 
 ```js
 {
@@ -318,7 +318,7 @@ An example of an arbitrary field is the field `url` in a link block:
 }
 ```
 
-To see how data from an arbitrary field is used, go to section [Template selection based on a condition](http://http://bem.info/technology/bemhtml/2.3.0/reference/#select_template) of the BEMHTML document.
+To see how data from a custom field is used, refer to the section [Condition-based template selection](http://http://bem.info/technology/bemhtml/2.3.0/reference/#select_template) of the BEMHTML document.
 
 <a name="customjs"></a>
 
@@ -326,4 +326,4 @@ To see how data from an arbitrary field is used, go to section [Template selecti
 
 As a format, BEMJSON has fewer restrictions than JSON. Arbitrary JavaScript expressions are all valid BEMJSON.
 
-The specific character of BEMJSON as a data format consists in the adherence to the above listed naming conventions for fields in objects (in what concerns the representation of BEM entities and HTML) as well as the object nesting rules.
+BEMJSON differs from other data formats in its adherence to the above listed naming conventions for fields in objects (in what concerns the representation of BEM entities and HTML) as well as the object nesting rules.
