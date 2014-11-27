@@ -29,6 +29,7 @@ The reader is assumed to be familiar with:
 ## BEMTREE features
 
 <a name="arch"></a>
+
 ### Architecture
 
 BEMTREE templates are processed using the module [bem-xjst](http://bem.info/tools/templating-engines/bemxjst/) extended with logic from the BEMTREE default template – [i-bem.bemtree](https://github.com/bem/bem-core/blob/v2/common.blocks/i-bem/i-bem.bemtree).
@@ -38,7 +39,7 @@ BEMTREE-specific logic is implemented at `i-bem.bemtree` template level. This de
 * the set of standard modes and in what order to call them;
 * available context fields.
 
-For a detailed description of BEMTREE's architecture, see the section “Architecture of BEMHTML and BEMTREE templates” of the [Data templating in bem-core](http://ru.bem.info/technology/bemhtml/current/templating/) document (available only in Russian).
+For a detailed description of BEMTREE's architecture, see the section “Architecture of BEMHTML and BEMTREE templates” of the [Data templating in bem-core](http://ru.bem.info/technology/bemhtml/current/templating/) document (currently available only in Russian).
 
 
 <a name="uts"></a>
@@ -335,7 +336,7 @@ All context fields can be divided into two categories:
 
 **See also**:
 
-  * [Context](http://ru.bem.info/technology/bemhtml/current/templating/#context)
+  * [Context](http://ru.bem.info/technology/bemhtml/current/templating/#context)(Russian version only)
 
 
 <a name="contextdependent"></a>
@@ -487,7 +488,7 @@ block('b1').content()([
 
 **See also**:
 
-  * [applyNext construction](http://ru.bem.info/technology/bemhtml/current/templating/#applynext)
+  * [The applyNext construction](http://ru.bem.info/technology/bemhtml/current/templating/#applynext) (Russian version only)
 
 
 <a name="wrappingunit"></a>
@@ -520,7 +521,7 @@ block('b-inner').def()
 
 **See also**:
 
-  * [The `applyCtx` construction](http://ru.bem.info/technology/bemhtml/current/templating/#applyctx)
+  * [The applyCtx construction](http://ru.bem.info/technology/bemhtml/current/templating/#applyctx) (Russian version only)
 
 <a name="additionbem"></a>
 
@@ -584,9 +585,9 @@ block('box').match(!this.ctx._processed).content()(applyCtx({'ctx._processed':tr
 
 **See also**:
 
-  * [The `apply` construction](http://ru.bem.info/technology/bemhtml/current/templating/#apply)
-  * [The `applyNext` construction](http://ru.bem.info/technology/bemhtml/current/templating/#applynext)
-  * [The `applyCtx` construction](http://ru.bem.info/technology/bemhtml/current/templating/#applyctx)
+  * [The apply construction](http://ru.bem.info/technology/bemhtml/current/templating/#apply) (Russian version only)
+  * [The applyNext construction](http://ru.bem.info/technology/bemhtml/current/templating/#applynext) (Russian version only)
+  * [The applyCtx construction](http://ru.bem.info/technology/bemhtml/current/templating/#applyctx) (Russian version only)
 
 
 <a name="check_predicate"></a>
@@ -654,6 +655,6 @@ When creating BEMTREE templates, the same techniques can be used as are applicab
 
 **See also**:
 
-* [BEMHTML: Examples and recipes](http://bem.info/technology/bemhtml/current/reference/)
+* [BEMHTML: Examples and recipes](http://bem.info/technology/bemhtml/current/reference/#examples)
 * [BEMHTML](http://bem.info/technology/bemhtml/current/reference/)
 * [BEMJSON](http://bem.info/technology/bemjson/current/bemjson/)
