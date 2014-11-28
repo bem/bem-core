@@ -10,15 +10,14 @@ The guide describes:
 * BEMJSON syntax for data description.
 
 
-**The target audience for this guide**  are web developers and HTML coders who use the
-[BEM methodology](http://bem.info/method/).
+**The target audience for this guide**  are web developers and HTML coders who use the [BEM methodology](https://bem.info/method/).
 
 The reader is assumed to be familiar with:
 
 * HTML
 * JavaScript
 * CSS
-* BEM
+* [BEM](https://bem.info/method/)
 
 
 The description of tools for generating a BEM tree in BEMJSON format is **beyond the scope of this document**.
@@ -44,10 +43,10 @@ BEMJSON is a JavaScript data structure (object) with a set of extra conventions 
 <a id="bemcore"></a>
 ###BEMJSON and data templating in bem-core
 
-A BEMJSON-formatted BEM tree is an integral part of the [data templating](http://bem.info/technology/bemhtml/current/templating/) mechanisms implemented in `bem-core`. BEMJSON is used as an input data format for these template engines:
+A BEMJSON-formatted BEM tree is an integral part of the data templating mechanisms implemented in `bem-core`. BEMJSON is used as an input data format for these template engines:
 
-* [BEMTREE](http://bem.info/technology/bemtree/current/bemtree/)
-* [BEMHTML](http://bem.info/technology/bemhtml/current/intro/)
+* [BEMTREE](https://bem.info/technology/bemtree/current/bemtree/)
+* [BEMHTML](https://bem.info/technology/bemhtml/current/intro/)
 
 From a BEMTREE and BEMHTML templates perspective, a portion of input data corresponding to the current BEM-tree element (node) and its child elements is contained in the context field `this.ctx`.
 
@@ -59,7 +58,7 @@ From a BEMTREE and BEMHTML templates perspective, a portion of input data corres
 <a id="sbor"></a>
 ###BEMJSON and the build process
 
-Certain build systems, such as [bem-tools](http://bem.info/tools/bem/bem-tools/), use files that contain the literal record BEMJSON as a build **declaration**. In `bem-tools`, `bemjson.js`-suffixed files serve this purpose. Based on a BEM tree defined in such files, the build system determines a set of BEM entities whose implementations are to be built from block folders.
+Certain build systems, such as [bem-tools](https://bem.info/tools/bem/bem-tools/), use files that contain the literal record BEMJSON as a build **declaration**. In `bem-tools`, `bemjson.js`-suffixed files serve this purpose. Based on a BEM tree defined in such files, the build system determines a set of BEM entities whose implementations are to be built from block folders.
 
 In practice, it works like this: first, based on the `bemjson.js` declaration and the build settings, the build tool creates a basic declaration file in `bemdecl.js` format. The latter is then used to build a file in `deps.js` format that describes build dependencies. The dependencies file is a flat list of BEM entities involved in the build, which looks like this:
 
@@ -95,8 +94,8 @@ The part of a filename that follows the first occurrence of the period is consid
 
 **See also**:
 
-* [Dependencies in bem-tools](http://bem.info/tools/bem/bem-tools/depsjs/)
-* [Building and connecting BEMTREE and BEMHTML technology bundles](http://ru.bem.info/technology/bemhtml/2.3.0/templating/#polymorph) (Russian version only)
+* [Dependencies in bem-tools](https://bem.info/tools/bem/bem-tools/depsjs/)
+* [Building and connecting BEMTREE and BEMHTML technology bundles](https://ru.bem.info/technology/bemhtml/current/templating/#polymorph) (Russian version only)
 
 
 
@@ -202,7 +201,7 @@ BEM entities are represented in BEMJSON as objects that can contain the followin
 
 **See also**:
 
-* [Context-aided completion of BEM entities](http://ru.bem.info/technology/bemhtml/2.3.0/templating/#extensionbem) (Russian version only)
+* [Context-aided completion of BEM entities](https://ru.bem.info/technology/bemhtml/current/templating/#extensionbem) (Russian version only)
 
 <a name="notionhtml"></a>
 
@@ -282,7 +281,7 @@ The following fields in BEMJSON are used to control HMTL rendering:
 </tr>
 </table>
 
-Note that the names and meanings of these HTML-specific BEMJSON fields are equivalent to those of the corresponding BEMHTML [standard modes](http://bem.info/technology/bemhtml/2.3.0/reference/#standardmoda) (tags, attributes, classes, etc.) If the same HTML aspects are specified **in both the input data and BEMHTML templates**, the values specified in the BEMHTML templates take priority.
+Note that the names and meanings of these HTML-specific BEMJSON fields are equivalent to those of the corresponding BEMHTML [standard modes](https://bem.info/technology/bemhtml/current/reference/#standardmoda) (tags, attributes, classes, etc.) If the same HTML aspects are specified **in both the input data and BEMHTML templates**, the values specified in the BEMHTML templates take priority.
 
 During the HTML generation process, the BEMHTML template engine will perform one of two actions:
 
@@ -318,7 +317,7 @@ An example of a custom field is the field `url` in a link block:
 }
 ```
 
-To see how data from a custom field is used, refer to the section [Condition-based template selection](http://http://bem.info/technology/bemhtml/2.3.0/reference/#select_template) of the BEMHTML document.
+To see how data from a custom field is used, refer to the section [Condition-based template selection](https://bem.info/technology/bemhtml/current/reference/#select_template) of the BEMHTML document.
 
 <a name="customjs"></a>
 
