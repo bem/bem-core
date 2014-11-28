@@ -9,15 +9,15 @@ The guide describes:
 * BEMHTML's main features distinguishing it from other template engines;
 * BEMHTML-based solutions to some typical problems.
 
-**The target audience for this guide** are web developers and HTML coders who use the [BEM-methodology](http://bem.info/method/).
+**The target audience for this guide** are web developers and HTML coders who use the [BEM-methodology](https://bem.info/method/).
 
 The reader is assumed to be familiar with:
 
 * HTML
 * JavaScript
 * CSS
-* BEM
-* BEMJSON
+* [BEM](https://bem.info/method/)
+* [BEMJSON](https://bem.info/technology/bemjson/current/bemjson/)
 
 **This document does not cover** the setup of the development environment, the template compilation procedure, or BEMJSON syntax.
 
@@ -26,16 +26,17 @@ The reader is assumed to be familiar with:
 ### BEMHTML Features
 
 <a name="arch"></a>
+
 #### Architecture
 
-BEMHTML templates are processed using the module [bem-xjst](http://bem.info/tools/templating-engines/bemxjst/) extended with logic from the BEMHTML default template – [i-bem.bemhtml](https://github.com/bem/bem-core/blob/v1/common.blocks/i-bem/i-bem.bemhtml).
+BEMHTML templates are processed using the module [bem-xjst](https://bem.info/tools/templating-engines/bemxjst/) extended with logic from the BEMHTML default template – [i-bem.bemhtml](https://github.com/bem/bem-core/blob/v1/common.blocks/i-bem/i-bem.bemhtml).
 
 BEMHTML-specific logic is implemented at `i-bem.bemhtml` template level. This default template defines:
 
 * the set of standard modes and in what order to call them;
 * available context fields.
 
-For a detailed description of BEMHTML's architecture, see the section [Architecture of BEMHTML and BEMTREE templates](http://ru.bem.info/technology/bemhtml/current/templating/#bemx_arch) of the [Data templating in bem-core](http://ru.bem.info/technology/bemhtml/current/templating/) document (available only in Russian).
+For a detailed description of BEMHTML's architecture, see the section "Architecture of BEMHTML and BEMTREE templates" of the [Data templating in bem-core](https://ru.bem.info/technology/bemhtml/current/templating/) document (currently available only in Russian).
 
 <a name="uts"></a>
 ### Support of BEM-XJST templating
@@ -53,22 +54,22 @@ BEMHTML is a BEM-XJST template engine. In other words, BEMHTML uses **BEM-XJST s
 
 <a id="inputdata"></a>
 
-#### Input Data: BEMJSON
+#### Input data: BEMJSON
 
 BEMHTML is based on JavaScript, so BEMJSON - a JavaScript data structure (object) with a set of extra conventions on the representation of BEM entities - is used as the BEM tree standard format.
 
 The purpose of the BEMHTML template engine is to convert an input BEM tree to an HTML document. It should be noted though that complex transformations of input data at template engine level are likely to compromise the flexibility and maintainability of the template engine, so it's best to keep things simple. In terms of template writing this means creating the most basic statements that map each available type of BEM entity with an appropriate HTML presentation.
 
-Therefore the input BEM tree structure should be **view**-oriented, to preclude the need to change blocks and elements or their order during the HTML tree generation process. Transforming the BEM tree into such a format should be done at back-end level, i.e. upstream - before the data hits the BEMTHML template engine (e.g. using the BEMTREE technology).
+Therefore the input BEM tree structure should be **view**-oriented, to preclude the need to change blocks and elements or their order during the HTML tree generation process. Transforming the BEM tree into such a format should be done at back-end level, i.e. upstream - before the data hits the BEMHTML template engine (e.g. using the [BEMTREE](https://bem.info/technology/bemtree/current/bemtree/) technology).
 
 The view-oriented data format is discussed in the news feed example, under the
-[Converting input data into view-oriented format](http://bem.info/technology/bemtree/current/bemtree/#bringing_input) problem in the **Examples and Recipes** section of the [BEMTREE](http://bem.info/technology/bemtree/current/bemtree/) document.
+[Converting input data into view-oriented format](https://bem.info/technology/bemtree/current/bemtree/#bringing_input) problem in the **Examples and Recipes** section of the [BEMTREE](https://bem.info/technology/bemtree/current/bemtree/) document.
 
 Conversely, the details of the HTML page layout, which is the front-end developer's responsibility, should only be specified at template engine level. For an example of how such a solution can be implemented, see [Adding BEM entities to solve layout problems](#additionbem).
 
 **See also**:
 
-  * [BEMJSON syntax](http://bem.info/technology/bemjson/current/#bemjson)
+  * [BEMJSON syntax](https://bem.info/technology/bemjson/current/#bemjson)
 
 <a name="templatebemjson"></a>
 
@@ -83,7 +84,7 @@ A template consists of:
 
 **See also**:
 
-* [BEMHTML syntax](#bemhtml)
+* [BEM-XJST syntax](https://ru.bem.info/technology/bemhtml/current/templating/#unity) (Russian version only)
 
 <a name="moda"></a>
 
@@ -125,7 +126,7 @@ A BEM entity described by the current context is called the **context entity**.
 **See also**:
 
 * [The context fields](#context_field)
-* [Context-aided completion of BEM entities](#extensionbem)
+* [Context-aided completion of BEM entities](https://ru.bem.info/technology/bemhtml/current/templating/#extensionbem) (Russian version only)
 
 <a name="standardmoda"></a>
 
@@ -150,7 +151,7 @@ In the sections that follow, modes are listed in the order in which they follow 
 
 <a name="empty_moda"></a>
 
-#### The "empty" Mode (`""`)
+#### The "empty" mode (`""`)
 
 *Template body value type: 'not used'*
 
@@ -188,7 +189,7 @@ The action performed in the empty mode depends on the element type of the contex
 
 Defining a template in the empty mode (sub-predicate `mode(this._mode === '')`) only makes sense if it is necessary to override the traversal process for the input tree.
 
-Calling templates in the empty mode (the `apply('')` construction in the template body) is necessary if the one-to-one mapping principle of "input BEM entity - output HTML element" has to be broken to enable generation of more than one element per input entity. Such a call is performed automatically when using the [`applyCtx` construction](#applyctx).
+Calling templates in the empty mode (the `apply('')` construction in the template body) is necessary if the one-to-one mapping principle of "input BEM entity - output HTML element" has to be broken to enable generation of more than one element per input entity. Such a call is performed automatically when using the `applyCtx` construction.
 
 **See also**:
 
@@ -323,7 +324,7 @@ Defining a template in the `js` mode (sub-predicate `js()`) only makes sense for
 
 **See also**:
 
-  * [JS-implementation of the i-bem block](http://bem.info/libs/bem-bl/current/desktop/i-bem/)
+  * [JS implementation of the i-bem block](https://ru.bem.info/libs/bem-bl/current/desktop/i-bem/) (Russian version only)
 
 <a id="bem"></a>
 
@@ -623,7 +624,7 @@ A template must be defined in the `content` mode (sub-predicate `content()`) if 
 **See also**:
 
 * [Inheritance](#inheritage)
-* [Adding BEM-entities for solving layout problems](#additionbem)
+* [Adding BEM entities to meet layout requirements](#additionbem)
 
 <a name="context_field"></a>
 
@@ -646,7 +647,7 @@ All context fields can be divided into two categories:
 
 <a name="contextdependent"></a>
 
-#### Context-dependent Fields
+#### Context-dependent fields
 
 BEMHTML extends the set of context-dependent fields of BEM-XJST with the following ones:
 
@@ -721,14 +722,14 @@ The `this.isLast ()` function, which is used to identify the last BEM entity amo
   )
 ```
 
-Such behavior is due to the fact that, for BEMTHML optimization purposes, a full preliminary traversal of the BEM tree is not performed.
+Such behavior is due to the fact that, for BEMHTML optimization purposes, a full preliminary traversal of the BEM tree is not performed.
 Therefore, in the above example, when block `b3` is being processed, the length of the array is already known (`b3` is not the last element) but it is not known yet that the last element is not a BEM entity and thus won't be receiving an index number.
 
 In practice, the case of `this.isLast()` incorrect operation described above shouldn't generate any errors, because the check for the first / last BEM entity is usually applied to automatically generated lists of entities, where it doesn't make sense to include data of other types.
 
 <a name="context_independent"></a>
 
-#### Context-independent Fields
+#### Context-independent fields
 
 All context-independent fields are grouped within the object `this._` and serve as auxiliary functions used when the template engine is running. The template author can use these functions in both template bodies and predicates.
 
@@ -751,6 +752,8 @@ BEMHTML extends the set of context-independent fields of BEM-XJST with the follo
 <a name="examples"></a>
 
 ### Examples and Recipes
+
+<a name="select_template"></a>
 
 #### Condition-based template selection
 
@@ -787,7 +790,7 @@ This expression won't be optimized during compilation, and will consequently imp
 
 **See also**:
 
-  * [Syntax for Templates](#template)
+  * [Template syntax](https://ru.bem.info/technology/bemhtml/current/templating/#template) (Russian version only)
 
 <a name="inheritage"></a>
 
@@ -795,7 +798,7 @@ This expression won't be optimized during compilation, and will consequently imp
 
 ##### Problem
 
-Two different templates are defined for the same BEM entity (`block b1`) at different [redifinition levels](http://bem.info/method/filesystem/). Each of the templates defines its content in the `content` mode.
+Two different templates are defined for the same BEM entity (`block b1`) at different [redifinition levels](https://bem.info/method/filesystem/). Each of the templates defines its content in the `content` mode.
 
 The content defined at the first level of redefinition should be **inherited** at the second level, and also some extra content should be added. An analogue of `<xsl:apply-imports/>` is required.
 
@@ -835,7 +838,7 @@ block('b1').content()([
 
 **See also**:
 
-  * [The applyNext construction](#applynext)
+  * [The applyNext construction](https://ru.bem.info/technology/bemhtml/current/templating/#applynext) (Russian version only)
 
 
 <a name="parentblock"></a>
@@ -897,7 +900,7 @@ block('b-inner').def()
 
 **See also**:
 
-  * [The applyCtx construction](#applyctx)
+  * [The applyCtx construction](https://ru.bem.info/technology/bemhtml/current/templating/#applyctx) (Russian version only)
 
 <a name="additionbem"></a>
 
@@ -960,9 +963,9 @@ block('box').match(!this.ctx._processed).content()(local({'ctx._processed':true}
 
 **See also**:
 
-  * [The `apply` construction](#apply)
-  * [The `applyNext` construction](#applynext)
-  * [The `applyCtx` construction](#applyctx)
+  * [The apply construction](https://ru.bem.info/technology/bemhtml/current/templating/#apply) (Russian version only)
+  * [The applyNext construction](https://ru.bem.info/technology/bemhtml/current/templating/#applynext) (Russian version only)
+  * [The applyCtx construction](https://ru.bem.info/technology/bemhtml/current/templating/#applyctx) (Russian version only)
 
 <a name="use_bem"></a>
 
@@ -1004,8 +1007,8 @@ block('menu')(
 
 **See also**:
 
-  * [Mode content](#content)
-  * [Construction applyNext](#applynext)
+  * [The `content` mode](#content)
+  * [The applyNext construction](https://ru.bem.info/technology/bemhtml/current/templating/#applynext) (Russian version only)
 
 <a name="check_predicate"></a>
 
@@ -1069,3 +1072,15 @@ block('input')(
   ]
 ))
 ```
+
+<a name="links"></a>
+
+###See also
+
+* [BEMTREE: examples and recipes](https://bem.info/technology/bemtree/current/bemtree/#examples)
+* [Data templating in bem-core](https://ru.bem.info/libs/bem-core/current/templating/templating/) (Russian version only)
+
+####In the community
+
+* [BEMTREE](https://bem.info/technology/bemtree/current/bemtree/)
+* [BEMJSON](https://bem.info/technology/bemjson/current/bemjson/)
