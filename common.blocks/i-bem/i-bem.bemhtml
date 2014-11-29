@@ -387,11 +387,12 @@ def()(function() {
                                     (mixItem.block? undefined : this.elem),
                                 mixItem.elemMods || mixItem.mods);
 
-                            if(mixItem.js) {
-                                (jsParams ||
-                                        (jsParams = {}))[BEM_INTERNAL.buildClass(mixBlock, mixItem.elem)] = mixItem.js === true?
-                                    {} :
-                                    mixItem.js;
+                            var mixItemJs = apply('js', { block : mixBlock, elem : mixElem });
+                            mixItemJs = mixItemJs?
+                                this.extend(mixItem.js, mixItemJs === true? {} : mixItemJs) :
+                                mixItem.js === true? {} : mixItem.js;
+                            if(mixItemJs) {
+                                (jsParams || (jsParams = {}))[BEM_INTERNAL.buildClass(mixBlock, mixItem.elem)] = mixItemJs;
                                 addJSInitClass || (addJSInitClass = mixBlock && !mixItem.elem);
                             }
 
