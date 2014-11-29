@@ -110,8 +110,6 @@ BEM.INTERNAL = {
         if(mods) {
             var modName; // TODO: do something with OmetaJS and YUI Compressor
             for(modName in mods) {
-                if(!mods.hasOwnProperty(modName)) continue;
-
                 var modVal = mods[modName];
                 if(!modVal && modVal !== 0) continue;
                 typeof modVal !== 'boolean' && (modVal += '');
@@ -205,8 +203,8 @@ BEMContext.prototype.isShortTag = function isShortTag(t) {
 BEMContext.prototype.extend = function extend(o1, o2) {
     if(!o1 || !o2) return o1 || o2;
     var res = {}, n;
-    for(n in o1) o1.hasOwnProperty(n) && (res[n] = o1[n]);
-    for(n in o2) o2.hasOwnProperty(n) && (res[n] = o2[n]);
+    for(n in o1) res[n] = o1[n];
+    for(n in o2) res[n] = o2[n];
     return res;
 };
 
