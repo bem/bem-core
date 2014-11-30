@@ -11,6 +11,7 @@ var ua = navigator.userAgent.toLowerCase(),
         /(webkit)[ \/]([\w.]+)/.exec(ua) ||
         /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
         /(msie) ([\w.]+)/.exec(ua) ||
+        /(msie)(?:.*? rv:([\w.]+))/.exec(ua.replace('trident', 'msie')) ||
         ua.indexOf('compatible') < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) ||
         [],
     matched = {
