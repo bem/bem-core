@@ -1,6 +1,6 @@
 # BEMHTML: шаблонизатор для БЭМ
 
-**BEMHTML** — шаблонизатор (шаблонный движок) для тех, кто ведет веб-разработку в рамках [БЭМ-методологии](http://ru.bem.info/method).
+**BEMHTML** — шаблонизатор (шаблонный движок) для тех, кто ведет веб-разработку в рамках [БЭМ-методологии](https://ru.bem.info/method).
 BEMHTML — это:
 
   * HTML-верстка в терминах блоков, элементов, модификаторов;
@@ -9,8 +9,8 @@ BEMHTML — это:
   * декларативные и выразительные шаблоны;
   * удобство сопровождения кода в долгоживущих и развивающихся проектах.
 
-
-## BEMHTML: Картина мира <a name="worldview"></a>
+<a name="worldview"></a>
+## BEMHTML: Картина мира
 
 БЭМ-методология и BEMHTML, как ее часть, обязаны своим появлением опыту верстки и сопровождения веб-интерфейсов в компании Яндекс. Главные условия, определившие характер веб-разработки в Яндексе:
 
@@ -253,7 +253,12 @@ HTML-результат:
 
 ```Шоколад ни в чем не виноват, %username%.```
 
-В качестве примера таких шаблонизаторов можно привести [Mustache](http://mustache.github.com), [Handlebars](http://handlebarsjs.com), [Jade](https://github.com/visionmedia/jade), [DustJS](http://linkedin.github.com/dustjs/) и многие другие.
+В качестве примера таких шаблонизаторов можно привести:
+
+* [Mustache](http://mustache.github.com)
+* [Handlebars](http://handlebarsjs.com)
+* [Jade](https://github.com/visionmedia/jade)
+* [DustJS](http://linkedin.github.com/dustjs/)
 
 #### Data bind
 
@@ -267,7 +272,12 @@ var html = 'Шоколад ни в чем не виноват,' + '<span class="
 map.class('name').to('username');
 plates.bind(html, data, map);
 ```
-Примеры: [Transparency](https://github.com/leonidas/transparency), [Flatiron.js](http://flatironjs.org/#templating), [Angular.js](http://angularjs.org), [Pure](http://beebole.com/pure/)  и многие другие.
+Примеры:
+
+* [Transparency](https://github.com/leonidas/transparency)
+* [Flatiron.js](http://flatironjs.org/#templating)
+* [Angular.js](http://angularjs.org)
+* [Pure](http://beebole.com/pure/).
 
 **Live data bind** — отличается тем, что в шаблоне можно декларировать связь не со статическими, а изменяющимися данными. Пример такого шаблонизатора — [Knockout.js](http://knockoutjs.com).
 
@@ -301,7 +311,10 @@ plates.bind(html, data, map);
 </ul>
 ```
 
-Примеры: [XSLT](http://www.w3.org/TR/xslt), **BEMHTML**.
+Примеры:
+
+* [XSLT](http://www.w3.org/TR/xslt)
+* BEMHTML
 
 ### По синтаксису
 #### Текст в финальном виде со специальными вставками
@@ -314,7 +327,11 @@ plates.bind(html, data, map);
 
 Отсутствие необходимости изучать специальный синтаксис часто выдвигается в качестве преимущества данного подхода.
 
-Примеры: [Mustache](http://mustache.github.com), [Handlebars](http://handlebarsjs.com), [DustJS](http://linkedin.github.com/dustjs/) и многие другие.
+Примеры:
+
+* [Mustache](http://mustache.github.com)
+* [Handlebars](http://handlebarsjs.com)
+* [DustJS](http://linkedin.github.com/dustjs/)
 
 #### Сокращенная запись HTML
 
@@ -324,7 +341,10 @@ plates.bind(html, data, map);
 span.name #{username}
 ```
 
-Примеры: [Jade](https://github.com/visionmedia/jade), [Eco](https://github.com/sstephenson/eco).
+Примеры:
+
+* [Jade](https://github.com/visionmedia/jade)
+* [Eco](https://github.com/sstephenson/eco)
 
 #### Предметно-ориентированный синтаксис
 
@@ -339,7 +359,11 @@ map.class('name').to('username');
 plates.bind(html, data, map);
 ```
 
-Примеры: [XSLT](http://www.w3.org/TR/xslt), [Flatiron.js](http://flatironjs.org/#templating), **BEMHTML**.
+Примеры:
+
+* [XSLT](http://www.w3.org/TR/xslt)
+* [Flatiron.js](http://flatironjs.org/#templating)
+* BEMHTML
 
 ### По базовому языку
 
@@ -347,13 +371,20 @@ plates.bind(html, data, map);
 
 Шаблонизатор привязан к разработке на определенном языке. На этом языке записываются все управляющие конструкции в шаблонах.
 
-Примеры: [XSLT — XML](http://www.w3.org/TR/xslt), [ECO — CoffeeScript](https://github.com/sstephenson/eco), **BEMHTML — JavaScript**.
+Примеры:
+
+* [XSLT — XML](http://www.w3.org/TR/xslt)
+* [ECO — CoffeeScript](https://github.com/sstephenson/eco)
+* BEMHTML — JavaScript
 
 #### Компиляция в несколько разных языков
 
 В шаблонизаторе создается своя предметная область, достаточно примитивная, чтобы допускать компиляцию управляющих конструкций в широкий диапазон языков программирования.
 
-Примеры: [TT2](http://www.template-toolkit.org/), [Mustache](http://mustache.github.com).
+Примеры:
+
+* [TT2](http://www.template-toolkit.org/)
+* [Mustache](http://mustache.github.com)
 
 ### Почему BEMHTML устроен так
 
@@ -386,14 +417,14 @@ plates.bind(html, data, map);
 
 Чтобы начать использовать BEMHTML, достаточно склонировать [шаблон проекта](https://github.com/bem/project-stub).
 
-Шаблон содержит подготовленную структуру проекта с подключенной библиотекой блоков [bem-bl](http://ru.bem.info/libs/bem-bl/), настроенным окружением для сборки и просмотра результата и примером очень простой статической страницы.
+Шаблон содержит подготовленную структуру проекта с подключенной библиотекой блоков [bem-bl](https://ru.bem.info/libs/bem-bl/), настроенным окружением для сборки и просмотра результата и примером очень простой статической страницы.
 
 Фактически шаблон проекта является готовым станком HTML-верстальщика. Его можно наполнять своими блоками и делать на его основе проекты любой сложности.
 
 ### Документация
 
-  * [Вводное пошаговое руководство по BEMHTML](http://ru.bem.info/articles/bemhtml-intro/)
-  * [Справочное руководство по BEMHTML](http://ru.bem.info/libs/bem-core/current/templating/reference/)
-  * [Руководство по bem-tools](http://ru.bem.info/tools/bem/)
-  * [Документация библиотеки блоков bem-bl](http://ru.bem.info/libs/bem-bl/)
+  * [Вводное пошаговое руководство по BEMHTML](https://ru.bem.info/technology/bemhtml/current/intro/)
+  * [Справочное руководство по BEMHTML](https://ru.bem.info/technology/bemhtml/current/reference/)
+  * [Руководство по bem-tools](https://ru.bem.info/tools/bem/bem-tools/)
+  * [Документация библиотеки блоков bem-bl](https://ru.bem.info/libs/bem-bl/)
 

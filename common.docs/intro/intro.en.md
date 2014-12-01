@@ -10,7 +10,8 @@ This guide will help you try the `BEMHTML Templaiting Engine` and understand the
  * [Step 6. Edit the Template: Modify HTML Tags ](#tags).
  * [Step 7. Add Style and Behavior (CSS and JS)](#cssjs).
 
-## Step 1. Initialize Your Project <a name="init"></a>
+<a name="init"></a>
+## Step 1. Initialize Your Project
 
 To make a new BEMHTML project, we clone a repository-template, which was previously prepared by BEM developers, and then we install the `bem-tools` utilities.
 
@@ -47,9 +48,10 @@ process for the requested page.  For example: `http://localhost:8080/desktop.bun
 to the project directory**
 
 ### For more details see:
- * [The Local and Global Installation of `bem-tools`](http://bem.info/tools/bem/installation/)
+ * [The Local and Global Installation of `bem-tools`](https://bem.info/tools/bem/installation/)
 
-## Step 2. Make a Page Template <a name="page"></a>
+<a name="page"></a>
+## Step 2. Make a Page Template
 
 Templates for static HTML pages are located in the directory `desktop.bundles`.
 
@@ -87,12 +89,13 @@ to the project directory and we can use and modify its blocks.**
 
 To see the result browse to: (http://localhost:8080/desktop.bundles/test/test.html)
 
-## More information:
-  * [Library bem-bl](http://bem.info/libs/bem-bl/);
-  * [bem-tools reference](http://bem.info/tools/);
-  * **Russian only:** [BEMJSON reference](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%A1%D0%B8%D0%BD%D1%82%D0%B0%D0%BA%D1%81%D0%B8%D1%81-bemjson).
+### More information
+  * [library bem-bl](https://bem.info/libs/bem-bl/);
+  * [bem-tools reference](https://bem.info/tools/bem/bem-tools/);
+  * [BEMJSON tutorial](https://bem.info/technology/bemjson/current/bemjson/).
 
-## Step 3. Add a Block <a name="block"></a>
+<a name="block"></a>
+## Step 3. Add a Block
 
 Let's make a very simple template. We will place a block with the text
 `Hello, BEMHTML!` on the `test` page.
@@ -133,8 +136,8 @@ We can see that:
  * The `div` element corresponds to `hello` block.
  * The block's name is used for the `class` attribute.
 
-
-## Step 4. Create a Template for a Greeting <a name="template"></a>
+<a name="template"></a>
+## Step 4. Create a Template for a Greeting
 
 Let's make the block `hello` more universal, by allowing it to generate a greeting for
 a specified name.  Therefore we could use `hello` with different names on various pages
@@ -180,10 +183,10 @@ The Resulting HTML:
       <div class="hello">Hello, BEMHTML!</div>
     </body>
 
-### **Russian only** More details can be found here:
- * [BEMJSON reference-book. BEMHTML syntax](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%A1%D0%B8%D0%BD%D1%82%D0%B0%D0%BA%D1%81%D0%B8%D1%81-bemhtml)
- * [BEMJSON reference-book. The standard modes](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%A1%D1%82%D0%B0%D0%BD%D0%B4%D0%B0%D1%80%D1%82%D0%BD%D1%8B%D0%B5-%D0%BC%D0%BE%D0%B4%D1%8B)
- * [BEMJSON reference-book. The context fields](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#%D0%9F%D0%BE%D0%BB%D1%8F-%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0)
+### More information
+ * [BEMHTML syntax](https://bem.info/technology/bemhtml/current/bemhtml-js-syntax/)
+ * [The standard modes](https://bem.info/technology/bemhtml/current/reference/#standardmoda)
+ * [The context fields](https://bem.info/technology/bemhtml/current/reference/#context_field)
 
 ## Step 5. Rewrite the Template: Add Generation of a List Based on a Data Array <a name="array"></a>
 
@@ -219,7 +222,7 @@ the `'names'` array.  This template is in the `hello.bemhtml` file:
                 return { elem: 'item', content: user };
             });
         }),
-    
+
         elem('item').content()(function() {
             return ['Hello, ', applyNext(), '!'];
         })
@@ -228,8 +231,8 @@ the `'names'` array.  This template is in the `hello.bemhtml` file:
 
 Here, in the template body was used:
 
- * templates with mode [`content`](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#content)(Russian only);
- * construction [`applyNext`](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#applynext)(Russian only),
+ * templates with mode [`content`](https://bem.info/technology/bemhtml/current/reference/#content);
+ * construction [`applyNext`](https://ru.bem.info/technology/bemhtml/current/templating/#applynext) (currently available in Russian only),
  which is a recursive call of templates implementation procedure;
  * construction [`Array.prototype.map`](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/map)
  defined in EcmaScript 5.
@@ -245,7 +248,8 @@ As a result of the templates' application we will get an HTML page with three gr
       <div class="hello__item">Hello, BEMHTML!</div>
     </div>
 
-## Step 6. Edit the Template: Modify HTML Tags <a name="tags"></a>
+<a name="tags"></a>
+## Step 6. Edit the Template: Modify HTML Tags
 
 At first glance it might seem that the use of an element `item` is unnecessary.
 However when we re-format 'the greeting block' in the form of a unordered-list, you will understand
@@ -257,16 +261,16 @@ tag can be defined using the `'tag'` property:
 
     block('hello')(
         tag()('ul'),
-    
+
         content()(function() {
             return this.ctx.names.map(function(user) {
                 return { elem: 'item', content: user };
             });
         }),
-    
+
         elem('item')(
             tag()('li'),
-    
+
             content()(function() {
                 return ['Hello, ', applyNext(), '!'];
             })
@@ -275,7 +279,7 @@ tag can be defined using the `'tag'` property:
 
 
 Now we have:
- * Block and elements with the `'tag'` property: **Russian Only:** [BEM Documentation: Tag](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#tag)(Russian only).
+ * Block and elements with the [tag](https://bem.info/technology/bemhtml/current/reference/#tag) property.
 
 The Resulting HTML:
 
@@ -285,7 +289,8 @@ The Resulting HTML:
       <li class="hello__item">Hello, BEMHTML!</li>
     </ul>
 
-## Step 7. Add Style and Behavior (CSS and JS) <a name="cssjs"></a>
+<a name="cssjs"></a>
+## Step 7. Add Style and Behavior (CSS and JS)
 
 When the block-level in the `project-stub` was created, files for three technologies
 were generated by default:
@@ -305,8 +310,7 @@ to `desktop.blocks/hello/hello.styl`:
     .hello
         color: green
 
-To add special `i-bem` event handlers to any block or element you need to define the js property as `true`.
-(More information in Russian Only: [js property](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#js)
+To add special `i-bem` event handlers to any block or element you need to define the [js](https://bem.info/technology/bemhtml/current/reference/#js) property as `true`.
 
     block('hello')(
 		js()(true),
@@ -317,7 +321,7 @@ To add special `i-bem` event handlers to any block or element you need to define
 
 If the `js` property is set to true, BEMHTML adds `i-bem` to the list of classes,
 and also an attribute to store important `i-bem` information (`data-bem` by default,
-see **Russian only** [the mode `jsAttr`](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md#jsattr)).
+see [the mode `jsAttr`](https://bem.info/technology/bemhtml/current/reference/#jsAttr)).
 JS framework when initializing adds HTML-class `hello_js_inited`:
 
     <div class="hello i-bem hello_js_inited" data-bem='{"hello":{}}'>
@@ -328,7 +332,7 @@ which allows us to write a JavaScript for the client side.**
 In the following example when the block is clicked, the warning-message with the text `Hello` will be shown.
 
     modules.define('hello', ['i-bem__dom'], function(provide, BEMDOM) {
-    
+
         provide(BEMDOM.decl({ block : this.name }, {
             onSetMod : {
                 'js' : {
@@ -338,15 +342,15 @@ In the following example when the block is clicked, the warning-message with the
                 }
             }
         }));
-    
+
     });
 
 
-### For more details see:
- * [JS-framework guide `i-bem.js`](http://h.yandex.net/?http%3A%2F%2Fbem.github.com%2Fbem-bl%2Fsets%2Fcommon-desktop%2Fi-bem%2Fi-bem.ru.html)(Russian only).
- * [JavaScript for BEM: The Main Terms](http://bem.info/articles/bem-js-main-terms/)
+### More information
+ * [JS-framework guide `i-bem.js`](https://bem.info/technology/i-bem/2.3.0/i-bem-js/) (Russian only).
+ * [JavaScript for BEM: The Main Terms](https://bem.info/articles/bem-js-main-terms/)
 
-## Further reading:
- * [BEMHTML guide book](https://github.com/bem/bemhtml/blob/master/common.docs/reference/reference.ru.md)(Russian only)
- * [`bem-bl` blocks library](http://bem.info/libs/bem-bl/)
- * [BEM methodology](http://bem.info/method/)
+## Further reading
+ * [BEMHTML guide book](https://bem.info/technology/bemhtml/current/intro/)
+ * [`bem-bl` blocks library](https://bem.info/libs/bem-bl/)
+ * [BEM methodology](https://bem.info/method/)

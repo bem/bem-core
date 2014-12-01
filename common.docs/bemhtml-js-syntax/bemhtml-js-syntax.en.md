@@ -3,7 +3,7 @@
 <a name="intro"></a>
 ## Introduction
 
-This article is dedicated to web developers who use [BEM methodology](http://bem.info/method/) and [BEMHTML template engine](http://bem.info/libs/bem-core/current/bemhtml/reference/).
+This article is dedicated to web developers who use [BEM methodology](https://bem.info/method/) and [BEMHTML template engine](https://bem.info/libs/bem-core/current/bemhtml/reference/).
 
 The article describes:
 
@@ -19,7 +19,7 @@ It doesn't contain any information about setting development environment or temp
 <a name="general"></a>
 ## General information
 
-Starting from [bem-core](http://bem.info/libs/bem-core/current/) library version 1.0.0 you can apply BEMHTML templates written in JavaScript syntax.
+Starting from [bem-core](https://bem.info/libs/bem-core/) library version 1.0.0 you can apply BEMHTML templates written in JavaScript syntax.
 
 Since `bem-core` library introduction template concise syntax is considered deprecated, our `bem-core` library supports two template syntax types: **concise** and JS syntax.
 
@@ -28,7 +28,7 @@ JavaScript syntax of BEMHTML templates has the following advantages:
 * development environments and tools support (because you code in JavaScript);
   * code highlight;
   * JSHint, JSLint, and so on;
-* fast [compilation](#run), especially in dev runtime environment;
+* fast [compilation](#runpre), especially in dev runtime environment;
 * besides, template code runs directly in [dev runtime environment](#runmode) which makes debugging simplier.
 
 All major features of BEMHTML template engine are still relevant if using JS syntax.
@@ -46,7 +46,7 @@ To migrate to JS syntax you can:
 
 * use project-stub version that uses bem-core library ([bem-core](https://github.com/bem/project-stub/tree/bem-core) branch).
 
-* install all required packages: [bem-xjst](http://bem.info/tools/templating-engines/bemxjst/), [bemhtml-compat](https://github.com/bem/bemhtml-compat), [BEMHTML API v2](https://github.com/bem/bem-core/blob/v2/.bem/techs/bemhtml.js) module from bem-tools package.
+* install all required packages: [bem-xjst](https://bem.info/tools/templating-engines/bemxjst/), [bemhtml-compat](https://github.com/bem/bemhtml-compat), [BEMHTML API v2](https://github.com/bem/bem-core/blob/v2/.bem/techs/bemhtml.js) module from bem-tools package.
 
 We implement BEMHTML technology module with JS syntax support using `API v2` technology from bem-tools. To be able to use it install bem-tools package version 0.6.4 or higher.
 
@@ -59,7 +59,7 @@ We implement BEMHTML technology module with JS syntax support using `API v2` tec
 
 Within the same project you can use different BEMHTML templates written in different syntax.
 
-While proceeding our template engine converts concise syntax templates into JS syntax. Syntax conversion is performed by [bemhtml-compat](https://github.com/bem/bemhtml-compat) module. For more information read [template applying](#run).
+While proceeding our template engine converts concise syntax templates into JS syntax. Syntax conversion is performed by [bemhtml-compat](https://github.com/bem/bemhtml-compat) module. For more information read [template applying](#runmain).
 
 Template's syntax is automatically detected by a template engine on compile time.
 
@@ -77,7 +77,7 @@ To make it easier to distinguish template files with different syntax you can us
 <a name="syntax"></a>
 ## JavaScript syntax of BEMHTML templates
 
-To simplify creation of BEMHTML templates in JavaScript syntax we use [bem-xjst](http://bem.info/tools/templating-engines/bemxjst/) module.
+To simplify creation of BEMHTML templates in JavaScript syntax we use [bem-xjst](https://bem.info/tools/templating-engines/bemxjst/) module.
 
 BEM-XJST is a BEM-oriented helpers' kit which extends standard XJST syntax.
 
@@ -88,7 +88,7 @@ It allows JS syntax BEMHTML templates to use:
 * helpers for XJST constructions `apply` and `applyNext` using default mode;
 * `applyCtx` construction.
 
-BEMXJST is a superset of [XJST template language](http://bem.info/tools/templating-engines/xjst/) which in turn is Javascript superset.
+BEMXJST is a superset of [XJST template language](https://bem.info/tools/templating-engines/xjst/) which in turn is Javascript superset.
 
 BEM-XJST uses canonical XJST syntax extended by rules related to BEM subject domain. This kind of implementation allows BEMHTML templates with JS syntax to act in dev environment without preliminarily compilation.
 
@@ -294,7 +294,7 @@ During the processing `!this.elem` subpredicate will be added to it.
 <a name="moda"></a>
 ##### The mode
 
-The name of one of the [standard mode](http://bem.info/technology/bemhtml/current/reference/#standardmoda) can be used as a subpredicate. It means that the predicate will be true when a corresponding mode is set.
+The name of one of the [standard mode](https://bem.info/technology/bemhtml/current/reference/#standardmoda) can be used as a subpredicate. It means that the predicate will be true when a corresponding mode is set.
 
 The following keywords are used for standard mode validation:
 
@@ -419,7 +419,7 @@ block('b1').tag()('span')
 
 #### XJST expressions
 
-For templates appliance in a modified contex an [XJST expressions](http://bem.info/technology/bemhtml/current/reference/#xjst) can be used in templates implemented using JS syntax.
+For templates appliance in a modified contex an [XJST expressions](https://bem.info/technology/bemhtml/current/reference/#xjst) can be used in templates implemented using JS syntax.
 
 They work similarly as if they were in templates implemented in concise syntax.
 
@@ -577,9 +577,9 @@ Despite of a runtime environment settings the following steps are performed:
 
 Once a template compilation is over we receive a JavaScript code and apply it the same way to all syntax and settings variation:
 
-* template engine takes a BEM-tree as an input data in [BEMJSON](http://bem.info/technology/bemhtml/current/reference/#bemjson) format;
+* template engine takes a BEM-tree as an input data in [BEMJSON](https://bem.info/technology/bemhtml/current/reference/#bemjson) format;
 * sequentially go through nodes of an input BEM-tree;
-    * data structure called [context](http://bem.info/technology/bemhtml/current/reference/#context) is built during BEMJSON tree processing;
+    * data structure called [context](https://bem.info/technology/bemhtml/current/reference/#context) is built during BEMJSON tree processing;
 * HTML output is generated in cycle for every BEM-entity;
     * HTML output is recursively generated for every nested BEM entity;
     * writing to HTML result fragments buffer is performed element by element.
