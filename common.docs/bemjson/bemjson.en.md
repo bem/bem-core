@@ -113,7 +113,7 @@ Data types in BEMJSON correspond to data types in JavaScript.
  * **Number** `1` `0.1`;
 
    A data structure consisting of a single string or number is valid BEMJSON.
-   
+
 * **Object** (associative array) '{key: value}' and other types except array.
 
 * **Array** – a list; can include elements of different types (strings, numbers, objects, arrays)

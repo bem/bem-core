@@ -1,6 +1,6 @@
 # BEMHTML: a templating tngine for BEM
 
-**BEMHTML** is a templating engine for thous who are using [BEM metodology](http://bem.info/method)
+**BEMHTML** is a templating engine for thous who are using [BEM metodology](https://bem.info/method)
 for web development.
 
 BEMHTML is:
@@ -10,8 +10,8 @@ BEMHTML is:
  * declarative and impressive templates;
  * convenient code support for long-term developing projects.
 
-
-## BEMHTML: the World-View <a name="worldview"></a>
+<a name="worldview"></a>
+## BEMHTML: the World-View
 
 BEM methodology and BMHTML, as it's part, are the product of many-ears experience of
 web development and maintenance of web interfaces at Yandex. Web development at Yandex were
@@ -287,9 +287,11 @@ templating engines.
 
 ```%username%, don't worry, be happy!```
 
-Templaing engines of this kind: [Mustache](http://mustache.github.com),
-[Handlebars](http://handlebarsjs.com), [Jade](https://github.com/visionmedia/jade),
-[DustJS](http://linkedin.github.com/dustjs/), etc.
+Templaing engines of this kind:
+* [Mustache](http://mustache.github.com)
+* [Handlebars](http://handlebarsjs.com)
+* [Jade](https://github.com/visionmedia/jade)
+* [DustJS](http://linkedin.github.com/dustjs/)
 
 #### Data bind
 
@@ -305,9 +307,11 @@ map.class('name').to('username');
 plates.bind(html, data, map);
 ```
 
-Exaples: [Transparency](https://github.com/leonidas/transparency),
-[Flatiron.js](http://flatironjs.org/#templating), [Angular.js](http://angularjs.org),
-[Pure](http://beebole.com/pure/) and many others.
+Examples:
+* [Transparency](https://github.com/leonidas/transparency)
+* [Flatiron.js](http://flatironjs.org/#templating)
+* [Angular.js](http://angularjs.org)
+* [Pure](http://beebole.com/pure/)
 
 **Live data bind**: the connection with a changing data can also be declared. An example
 of such templating engine is [Knockout.js](http://knockoutjs.com).
@@ -347,7 +351,9 @@ Or:
 </ul>
 ```
 
-Examples: [XSLT](http://www.w3.org/TR/xslt), **BEMHTML**.
+Examples:
+* [XSLT](http://www.w3.org/TR/xslt)
+* BEMHTML
 
 ### Classification by semantics
 #### The final version of the text with special insertions
@@ -362,8 +368,10 @@ similar to the final HTML:
 There is no need of learning a special syntax, and very often it's mentioned as an
 advantage of this approach.
 
-Examples:  [Mustache](http://mustache.github.com), [Handlebars](http://handlebarsjs.com),
-[DustJS](http://linkedin.github.com/dustjs/) and many others.
+Examples:
+* [Mustache](http://mustache.github.com)
+* [Handlebars](http://handlebarsjs.com)
+* [DustJS](http://linkedin.github.com/dustjs/)
 
 #### Short HTML Notation
 
@@ -393,22 +401,29 @@ map.class('name').to('username');
 plates.bind(html, data, map);
 ```
 
-Examples: [XSLT](http://www.w3.org/TR/xslt), [Flatiron.js](http://flatironjs.org/#templating), **BEMHTML**.
+Examples:
+* [XSLT](http://www.w3.org/TR/xslt)
+* [Flatiron.js](http://flatironjs.org/#templating)
+* BEMHTML
 
 ### Classification by the base language
 #### One basic language
 The templating engine accepts only the certain programming language, and all control
 structures of the templates are written in this language.
 
-Examples: [XSLT — XML](http://www.w3.org/TR/xslt), [ECO — CoffeeScript](https://github.com/sstephenson/eco),
-**BEMHTML — JavaScript**.
+Examples:
+* [XSLT — XML](http://www.w3.org/TR/xslt)
+* [ECO — CoffeeScript](https://github.com/sstephenson/eco)
+* BEMHTML — JavaScript
 
 #### Compiling in a few different languages
 
 In the templating engine its own data scope is created. It's simple enough to allow
 compilation of control structures into a wide range of programming languages.
 
-Examples: [TT2](http://www.template-toolkit.org/), [Mustache](http://mustache.github.com).
+Examples:
+* [TT2](http://www.template-toolkit.org/)
+* [Mustache](http://mustache.github.com)
 
 ### Why BEMHTML was build this way
  * **Data driven**.
@@ -448,7 +463,7 @@ their own templating engine because of the following reasons:
     usage in the real-world applications. In the absence of active development of XSLT one cannot
     expect performance improvements or extension of functionality.
 
-  * **XSLT is not designed to work in BEM terms**
+  * **XSLT is not designed to work in BEM termss**
     In order to maximize the integration of templating engine in a set of bem-tools,
     a native support of BEM data scope is needed at the level of the template engine.
 
@@ -456,17 +471,17 @@ their own templating engine because of the following reasons:
 
 ### A Template of a project
 
-To start using BEHTML you need to clone [a project template ](https://github.com/bem/project-stub).
+To start using BEHTML you need to clone [a project template](https://github.com/bem/project-stub).
 It has already: a prepared structure for a project, the blocks library [bem-bl](https://github.com/bem/bem-bl),
-environment  customized for the building process and the result viewing, and very simple static page.
+environment customized for the building process and the result viewing, and very simple static page.
 
 In fact, the template of this project is a startup for a HTML coder. It can be extended
 with custom blocks, and any project can be based on it.
 
 ### Documentation
 
-  * [Step-by-step BEMHTML guide](http://bem.info/articles/bemhtml-intro/)
-  * [BEMHTML reference](http://bem.info/libs/bem-core/current/templating/reference/)
-  * [bem-tools reference](http://bem.info/tools/bem/)
-  * [The blocks bem-bl library documentation](http://bem.info/libs/bem-bl/)
+  * [Step-by-step BEMHTML guide](https://bem.info/technology/bemhtml/current/intro/)
+  * [BEMHTML reference](https://bem.info/technology/bemhtml/current/reference/)
+  * [bem-tools reference](https://bem.info/tools/bem/bem-tools/)
+  * [The blocks bem-bl library documentation](https://bem.info/libs/bem-bl/)
 
