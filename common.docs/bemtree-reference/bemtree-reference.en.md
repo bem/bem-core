@@ -39,7 +39,7 @@ BEMTREE-specific logic is implemented at `i-bem.bemtree` template level. This de
 * the set of standard modes and in what order to call them;
 * available context fields.
 
-For a detailed description of BEMTREE's architecture, see the section “Architecture of BEMHTML and BEMTREE templates” of the [Data templating in bem-core](https://ru.bem.info/technology/bemhtml/current/templating/) document (currently available only in Russian).
+For a detailed description of BEMTREE's architecture, see the corresponding section of [Data templating in bem-core](https://ru.bem.info/technology/bemhtml/current/templating/#bemx_arch) document (currently available in Russian only).
 
 
 <a name="uts"></a>
@@ -448,7 +448,7 @@ Let's assume that the source data is saved in the context field `this.ctx.data`.
 
 #### Problem
 
-Two different templates are defined for the same BEM entity (`block b1`) at different [redifinition levels](https://bem.info/method/filesystem/). Each of the templates defines its content in the `content` mode.
+Two different templates are defined for the same BEM entity (`block b1`) at different [redifinition levels](https://bem.info/method/filesystem/#levels). Each of the templates defines its content in the `content` mode.
 
 The content defined at the first level of redefinition should be inherited at the second level, and also some extra content should be added. An analogue of `<xsl:apply-imports/>` is required.
 
@@ -521,7 +521,7 @@ block('b-inner').def()
 
 **See also**:
 
-  * [The applyCtx construction](http://ru.bem.info/technology/bemhtml/current/templating/#applyctx) (Russian version only)
+  * [The applyCtx construction](https://ru.bem.info/technology/bemhtml/current/templating/#applyctx) (Russian version only)
 
 <a name="additionbem"></a>
 
