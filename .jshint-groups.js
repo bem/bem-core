@@ -107,6 +107,7 @@ module.exports = {
                     'js',
                     'local',
                     'match',
+                    'elemMatch',
                     'mix',
                     'mod',
                     'mode',
@@ -127,6 +128,7 @@ module.exports = {
                     'def',
                     'elem',
                     'match',
+                    'elemMatch',
                     'mod',
                     'mode',
                     'tag'

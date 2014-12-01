@@ -19,25 +19,43 @@
         "common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.js"
     ],
     "fileExtensions": [".js", ".bemtree", ".bemhtml"],
-    "requireSpaceAfterKeywords": ["do", "else"],
-    "disallowSpaceAfterKeywords": ["if", "for", "while", "switch"],
-    "disallowSpacesInFunctionExpression": {
-        "beforeOpeningRoundBrace": true
+
+    "preset": "yandex",
+    "disallowMultipleVarDecl" : null,
+    "requireCurlyBraces" : null,
+    "requireSpacesInConditionalExpression" : {
+        "beforeConsequent": true,
+        "afterConsequent": true,
+        "beforeAlternate": true
     },
-    "disallowSpacesInsideArrayBrackets": true,
-    "requireSpacesInsideObjectBrackets": "all",
-    "requireSpaceAfterObjectKeys": true,
-    "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
-    "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
-    "disallowSpaceBeforeBinaryOperators": [","],
-    "requireSpaceBeforeBinaryOperators": ["+", "-", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<=", "&&", "||"],
-    "requireSpaceAfterBinaryOperators": [",", "+", "-", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<=", "&&", "||"],
-    "disallowKeywords": ["with"],
-    "disallowKeywordsOnNewLine": ["else"],
-    "requireLineFeedAtFileEnd": true,
-    "disallowMultipleLineBreaks": true,
-    "validateJSDoc": {
+    "maximumLineLength" : null,
+    "requireSpacesInAnonymousFunctionExpression" : null,
+    "disallowSpaceAfterObjectKeys" : null,
+    "disallowSpacesInsideObjectBrackets" : null,
+    "disallowImplicitTypeConversion" : null,
+    "disallowQuotedKeysInObjects" : null,
+    "requireDotNotation" : null,
+    "disallowOperatorBeforeLineBreak" : ["."],
+    "disallowSpaceAfterKeywords" : ["if", "for", "while", "switch"],
+    "requireSpaceAfterKeywords" : ["do", "else"],
+    "disallowSpacesInCallExpression" : true,
+    "disallowSpacesInConditionalExpression" : {
+        "afterTest": true,
+        "beforeConsequent": false,
+        "afterConsequent": false,
+        "beforeAlternate": false
+    },
+    "requireSpaceAfterObjectKeys" : true,
+    "requireSpaceBeforeKeywords" : ["else", "while", "catch"],
+    "requireSpacesInsideObjectBrackets" : "all",
+
+    "plugins": [
+        "jscs-jsdoc"
+    ],
+    "jsDoc": {
         "checkParamNames": true,
-        "requireParamTypes": true
+        "requireParamTypes": true,
+        "checkRedundantAccess": "enforceLeadingUnderscore",
+        "leadingUnderscoreAccess": true
     }
 }
