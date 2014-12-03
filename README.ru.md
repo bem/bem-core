@@ -1,6 +1,6 @@
 # bem-core Library [![Build Status](https://travis-ci.org/bem/bem-core.svg?branch=v2)](https://travis-ci.org/bem/bem-core) [![GitHub Release](http://img.shields.io/github/release/bem/bem-core.svg)](https://github.com/bem/bem-core/releases)
 
-This README is also available [in English](http://bem.info/libs/bem-core/).
+This README is also available [in English](https://bem.info/libs/bem-core/).
 
 ## Что это?
 
@@ -53,18 +53,18 @@ This README is also available [in English](http://bem.info/libs/bem-core/).
 
 ## API
 
-Автосгенерированная документация на JavaScript API блоков (JSDoc) можно посмотреть в отдельной ветке [v2-jsdoc](http://github.com/bem/bem-core/tree/v2-jsdoc).
+Автосгенерированная документация на JavaScript API блоков (JSDoc) можно посмотреть в отдельной ветке [v2-jsdoc](https://github.com/bem/bem-core/tree/v2-jsdoc).
 
 Обратите внимание, содержимое ветки «v2-jsdoc» обновляется автоматически. Любые изменения необходимо отправлять
 в код соответствующих блоков в ветке «v2», как описано в разделе «Внесение изменений» ниже.
 
 ## История изменений
 
-История изменений доступна на [отдельной странице](http://ru.bem.info/libs/bem-core/changelog/).
+История изменений доступна на [отдельной странице](https://ru.bem.info/libs/bem-core/changelog/).
 
 ## Миграция
 
-Миграция описана на [отдельной странице](http://ru.bem.info/libs/bem-core/migration/).
+Миграция описана на [отдельной странице](https://ru.bem.info/libs/bem-core/migration/).
 
 ## Разработка
 
@@ -80,7 +80,7 @@ This README is also available [in English](http://bem.info/libs/bem-core/).
    ```shell
    $ npm install
    ```
-   Для последующего запуска локально установленных [bem-tools](https://github.com/bem/bem-tools) нам потребуется
+   Для последующего запуска локально установленного [bem-tools](https://ru.bem.info/tools/bem/bem-tools/) нам потребуется
    `export PATH=./node_modules/.bin:$PATH` или любой альтернативный способ.
 
 3. Устанавливаем зависимые библиотеки:
@@ -139,8 +139,7 @@ $ ISTANBUL_COVERAGE=yes bem make desktop.specs/functions__debounce && istanbul r
 После завершения выполнения тестов, можно посмотреть отчет о покрытии кода тестами, открыв в браузере страницу
 `coverage/index.html`.
 
-Полный отчет и статистику покрытия кода библиотеки тестами можно посмотреть
-[на странице профиля bem-core](https://coveralls.io/r/bem/bem-core) в проекте [Coveralls](https://coveralls.io).
+Полный отчет и статистику покрытия кода библиотеки тестами можно посмотреть на [странице профиля bem-core](https://coveralls.io/r/bem/bem-core) в проекте [Coveralls](https://coveralls.io).
 
 Для сборки и запуска тестов используется библиотека [bem-pr](https://github.com/narqo/bem-pr).
 См. [подробную информацию](https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md) про инфраструктуру
@@ -148,7 +147,7 @@ $ ISTANBUL_COVERAGE=yes bem make desktop.specs/functions__debounce && istanbul r
 
 ## Поддерживаемые браузеры
 
-Мы поддерживаем браузеры на основе статистики, получаемой на сервисах [Яндекса](http://company.yandex.ru).
+Мы поддерживаем браузеры на основе статистики, получаемой на сервисах [Яндекса](https://company.yandex.ru).
 
 Браузеры с долей более 2% пользователей попадают в полную совместимость, с более 0.5% — в частичную,
 что означает, что данные будут доступны, но возможна деградация. В браузерах с долей менее 0.5% мы прекращаем
