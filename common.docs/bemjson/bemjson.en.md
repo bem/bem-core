@@ -1,6 +1,6 @@
 <a id="intro"></a>
 
-### Introduction
+## Introduction
 
 **This document** is a guide to the format for describing input data called BEMJSON.
 
@@ -24,7 +24,7 @@ The description of tools for generating a BEM tree in BEMJSON format is **beyond
 
 
 <a id="common"></a>
-###Key concepts
+## Key concepts
 
 To describe web page markup in BEM terms, BEM projects introduce the concept of a **BEM tree**, named by analogy to the DOM tree data structure.
 
@@ -41,22 +41,22 @@ BEMJSON is a JavaScript data structure (object) with a set of extra conventions 
 
 
 <a id="bemcore"></a>
-###BEMJSON and data templating in bem-core
+## BEMJSON and data templating in bem-core
 
 A BEMJSON-formatted BEM tree is an integral part of the data templating mechanisms implemented in `bem-core`. BEMJSON is used as an input data format for these template engines:
 
 * [BEMTREE](https://bem.info/technology/bemtree/current/bemtree/)
 * [BEMHTML](https://bem.info/technology/bemhtml/current/intro/)
 
-From a BEMTREE and BEMHTML templates perspective, a portion of input data corresponding to the current BEM-tree element (node) and its child elements is contained in the context field `this.ctx`.
+From a BEMTREE and BEMHTML templates perspective, a portion of input data corresponding to the current BEM tree element (node) and its child elements is contained in the context field `this.ctx`.
 
-***
-**NB:** The BEMTREE template engine is used for generating BEMJSON from arbitrary data (the data normally comes in the form of a web page skeleton in BEMJSON format, which gets filled with content element by element as it is processed by the template engine).
-***
+
+**NB** The BEMTREE template engine is used for generating BEMJSON from arbitrary data (the data normally comes in the form of a web page skeleton in BEMJSON format, which gets filled with content element by element as it is processed by the template engine).
+
 
 
 <a id="sbor"></a>
-###BEMJSON and the build process
+## BEMJSON and the build process
 
 Certain build systems, such as [bem-tools](https://bem.info/tools/bem/bem-tools/), use files that contain the literal record BEMJSON as a build **declaration**. In `bem-tools`, `bemjson.js`-suffixed files serve this purpose. Based on a BEM tree defined in such files, the build system determines a set of BEM entities whose implementations are to be built from block folders.
 
@@ -101,11 +101,11 @@ The part of a filename that follows the first occurrence of the period is consid
 
 <a name="bemjson"></a>
 
-### BEMJSON syntax
+## BEMJSON syntax
 
 <a id="datatype"></a>
 
-#### Data types
+### Data types
 
 Data types in BEMJSON correspond to data types in JavaScript.
 * Strings and numbers:
@@ -121,13 +121,13 @@ Data types in BEMJSON correspond to data types in JavaScript.
 
 <a id="fields_bemjson"></a>
 
-#### BEMJSON special fields
+### BEMJSON special fields
 
 For the BEM domain data and HTML data representation, BEMJSON uses objects with special reserved field names.
 
 <a name="notionbem"></a>
 
-#####Representation of BEM entities
+#### Representation of BEM entities
 
 BEM entities are represented in BEMJSON as objects that can contain the following fields:
 
@@ -205,7 +205,7 @@ BEM entities are represented in BEMJSON as objects that can contain the followin
 
 <a name="notionhtml"></a>
 
-##### HTML representation
+#### HTML representation
 
 BEMJSON supports the ability to specify certain aspects of the resulting HTML directly in the input data. Admittedly, that is not recommended as common practice, considering that BEMJSON essentially describes data, while actual HTML layout is built at the BEMHMTL template engine level. Still there may be situations that warrant the use of HTML representation at BEMJSON level.
 
@@ -291,7 +291,7 @@ During the HTML generation process, the BEMHTML template engine will perform one
 
 <a name="nesting"></a>
 
-##### Nesting: content
+#### Nesting: content
 
 The field `content` is reserved in BEMJSON for the representation of nested BEM entities (BEM tree). The field can take arbitrary BEMJSON as its value:
 
@@ -304,7 +304,7 @@ There is no fixed limit on nesting depth for a tree of BEM entities that can be 
 
 <a id="custom_fields"></a>
 
-##### Custom fields
+#### Custom fields
 
 In addition to special fields that describe the BEM entity and its HTML representation, an object can contain any fields with custom data. The data will be available for use in BEMHTML and BEMTREE templates.
 
@@ -321,7 +321,7 @@ To see how data from a custom field is used, refer to the section [Condition-bas
 
 <a name="customjs"></a>
 
-#### Arbitrary JavaScript in BEMJSON
+### Arbitrary JavaScript in BEMJSON
 
 As a format, BEMJSON has fewer restrictions than JSON. Arbitrary JavaScript expressions are all valid BEMJSON.
 
