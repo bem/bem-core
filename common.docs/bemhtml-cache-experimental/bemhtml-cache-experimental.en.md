@@ -30,7 +30,7 @@ BEMHTML.call({/* BEMJSON data */}, {
 });
 ```
 
-Keys are always strings, but there're no contracts on value's schema. BEMHTML
+Keys are always strings, but there're no contracts on value schema. BEMHTML
 engine internally decides what and why should be stored, the only purpose of
 cache storage is to retrieve data that was put into it before, if it hasn't
 expired (or considered irrelevant).
@@ -109,7 +109,7 @@ in the corresponding BEMJSON entry.
 
 ## Links
 
-After this declaration BEMJSON entry's and all of it's subentries' (subtrees)
+After this declaration BEMJSON entry and all of it's subentries (subtrees)
 html contents will be stored in/fetched from cache on each render request.
 Surely this can't be good for all cases, and instead of caching specific parts
 of BEMJSON tree you can on the contrary cache only common parts, while leaving

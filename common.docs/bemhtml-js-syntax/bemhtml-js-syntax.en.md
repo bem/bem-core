@@ -1,4 +1,4 @@
-# JS syntax of BEMHTML. Migration Guide
+# JS syntax of BEMHTML. Migration guide
 
 <a name="intro"></a>
 ## Introduction
@@ -61,7 +61,7 @@ Within the same project you can use different BEMHTML templates written in diffe
 
 While proceeding our template engine converts concise syntax templates into JS syntax. Syntax conversion is performed by [bemhtml-compat](https://github.com/bem/bemhtml-compat) module. For more information read [template applying](#runmain).
 
-Template's syntax is automatically detected by a template engine on compile time.
+Template syntax is automatically detected by a template engine on compile time.
 
 To make it easier to distinguish template files with different syntax you can use different suffixes:
 
@@ -79,7 +79,7 @@ To make it easier to distinguish template files with different syntax you can us
 
 To simplify creation of BEMHTML templates in JavaScript syntax we use [bem-xjst](https://bem.info/tools/templating-engines/bemxjst/) module.
 
-BEM-XJST is a BEM-oriented helpers' kit which extends standard XJST syntax.
+BEM-XJST is a BEM-oriented helpers kit which extends standard XJST syntax.
 
 It allows JS syntax BEMHTML templates to use:
 
@@ -92,12 +92,10 @@ BEMXJST is a superset of [XJST template language](https://bem.info/tools/templat
 
 BEM-XJST uses canonical XJST syntax extended by rules related to BEM subject domain. This kind of implementation allows BEMHTML templates with JS syntax to act in dev environment without preliminarily compilation.
 
-**NB:** `apply` and `applyNext` methods behaviour is extended in BEM-XJST compared to XJST. Methods can take a string literal of a statement that can be cast to a string instead of assignment statements. It means “set string as a mode”.
+**NB** `apply` and `applyNext` methods behaviour is extended in BEM-XJST compared to XJST. Methods can take a string literal of a statement that can be cast to a string instead of assignment statements. It means “set string as a mode”.
 
 For example `apply('content')` can be written as `apply({ _mode: 'content' })`.
 
-
-***
 
 
 <a name="template"></a>
@@ -107,7 +105,7 @@ For example `apply('content')` can be written as `apply({ _mode: 'content' })`.
 Template consists of two parts - `predicate` and `body`.
 Every predicate is a list of one or more subpredicates (conditions).
 
-Template's predicate is true only when all the subpredicates are true.
+Template predicate is true only when all the subpredicates are true.
 
 In acronym syntax predicate and body are divided by a colon, subpredicates are divided by commas.
 
@@ -141,29 +139,25 @@ The examples above are identical and will look like this in acronym-syntax:
 block link, tag, this.ctx.url: 'a'
 ```
 
-----
-**NB:** if there is more than one template defined for a context, the one listed the last in BEMHTML file will have a higher priority.
+**NB** if there is more than one template defined for a context, the one listed the last in BEMHTML file will have a higher priority.
 Specific templates should be defined after those more general ones.
-
-
-***
 
 
 <a name="subpredicate"></a>
 
 #### Subpredicates
 
-Template's predicate is a condition list describing template application moment. Template's subpredicate is a simple condition.
+Template predicate is a condition list describing template application moment. Template subpredicate is a simple condition.
 
 BEMHTML has the following condition types:
 
-* input BEM-tree match;
+* input BEM tree match;
 * mode;
 * arbitrary condition.
 
-##### Input BEM-tree match
+##### Input BEM tree match
 
-Input BEM-TREE match conditions allow you to describe a template applicability using BEM related entities: blocks' and elements' names, modifiers' names and values.
+Input BEM tree match conditions allow you to describe a template applicability using BEM related entities: blocks and elements names, modifiers names and values.
 
 The following keywords are used in predicates for BEM entities:
 
@@ -252,7 +246,7 @@ block('b-head-logo')(elem('text').elemMod('size', 'big'))
 ***
 
 
-**NB:** identifiers for blocks, elements and modifiers build a string consisting of latin letters and hyphen. Any JS statement can be used as an identifier which will be cast to a string. For example `block('b-head-logo')` is the same as `block('b-' + 'head' + '-logo')`.
+**NB** Identifiers for blocks, elements and modifiers build a string consisting of latin letters and hyphen. Any JS statement can be used as an identifier which will be cast to a string. For example `block('b-head-logo')` is the same as `block('b-' + 'head' + '-logo')`.
 
 JS syntax keywords related to BEM subject domain are used for reduced subpredicate definition.
 In particular they allow to omit `match` keyword for BEM subpredicates.
@@ -312,14 +306,12 @@ To define a subpredicate using one of the standard modes in JS syntax you can us
 
 For example ``tag()('span')`` is the same as ``match(this._mode === 'tag')('span')``
 
-When using concise syntax, any subpredicate consisting only from identifier (`[a-zA-Z0-9-]+`) is interpreted as a non-standard mode's name.
+When using concise syntax, any subpredicate consisting only from identifier (`[a-zA-Z0-9-]+`) is interpreted as a non-standard mode name.
 For example, subpredicate `my-mode` is equal to ``this._mode === 'my-mode'``.
 
-To define a subpredicate using a non-standard mode in JS syntax we use `mode` keyword. It is a helper method similar to `match` construction. It takes a string as an argument and returns a function for template's body.
+To define a subpredicate using a non-standard mode in JS syntax we use `mode` keyword. It is a helper method similar to `match` construction. It takes a string as an argument and returns a function for template body.
 Considering all this `mode('my-mode')` is the same as ``this._mode === 'my-mode'``.
 
-
-***
 
 
 ##### Arbitrary conditions
@@ -329,7 +321,7 @@ Arbitrary conditions take into account not related to BEM data matches.
 Any JavaScript statement can be used as an arbitrary condition. It will be cast to boolean value.
 
 ***
-**NB:** it is preferable to write down an arbitrary conditions using a canonical XJST form:
+**NB** It is preferable to write down an arbitrary conditions using a canonical XJST form:
 
 ```js
 predicate statement === value
@@ -349,17 +341,17 @@ match(this.ctx.url)(
     )`
 ```
 
-Arbitrary subpredicate `this.ctx.url` will be true when an `url` field in a context will have a value assigned. In this case template's body will be applied.
+Arbitrary subpredicate `this.ctx.url` will be true when an `url` field in a context will have a value assigned. In this case template body will be applied.
 
 
 ***
 
 
 <a name="body"></a>
-#### Template's body
+#### Template body
 
-Template's body is an expression which result is used to generate an HTML output.
-All of the following can be a template's body:
+Template body is an expression which result is used to generate an HTML output.
+All of the following can be a template body:
 
 * JavaScript statement:
     * concise syntax:
@@ -387,7 +379,7 @@ predicate: { JS code }
 match(predicate)(function() { JS code })
 ```
 
-In JS syntax template's body is passed as an argument to a function which was returned by a `match` method and by helpers for BEM entity or mode.
+In JS syntax template body is passed as an argument to a function which was returned by a `match` method and by helpers for BEM entity or mode.
 
 Syntax:
 
@@ -396,11 +388,11 @@ standard-mode()(body)
 
 mode('non-standard-mode')(body)
 
-BEM-entity('entity-name')(body)
+BEM entity('entity-name')(body)
 
 match(arbitrary predicate)(body)
 
-**NB:** it is important to remember that we pass template's body to a function returned by helper method, not to a helper itself.
+**NB** It is important to remember that we pass template body to a function returned by helper method, not to a helper itself.
 
 Wrong:
 
@@ -414,8 +406,6 @@ Correct:
 block('b1').tag()('span')
 ```
 
-***
-
 
 #### XJST expressions
 
@@ -423,11 +413,11 @@ For templates appliance in a modified contex an [XJST expressions](https://bem.i
 
 They work similarly as if they were in templates implemented in concise syntax.
 
-#### Templates' nesting
+#### Templates nesting
 
 If there are few templates using the same subpredicates, they can be written down as a nested structure to reduce code duplication.
 
-Curly braces are used to indicate nesting in a concise syntax. They begin after predicate's common part. Inside there is a block of code that contains different predicates parts and corresponding template bodies.
+Curly braces are used to indicate nesting in a concise syntax. They begin after predicate common part. Inside there is a block of code that contains different predicates parts and corresponding template bodies.
 
 ```
 subpredicate1 {
@@ -443,7 +433,7 @@ subpredicate 1, subpredicate 2: body1
 subpredicate 1, subpredicate 3: body2
 ```
 
-In JS syntax nested subpredicates are written in a template's body. In other words subpredicates are passed as arguments to a function returned by a `match` method and helpers of BEM entities and modes.
+In JS syntax nested subpredicates are written in a template body. In other words subpredicates are passed as arguments to a function returned by a `match` method and helpers of BEM entities and modes.
 
 For example, template in a concise syntax:
 
@@ -470,8 +460,6 @@ match(this.block === 'link').match(this._mode === 'attrs')({ href: this.ctx.url 
 ```
 
 
-***
-
 To simplify the expression you can use helpers for BEM entities and standard modes names.
 
 Previous example can be written as:
@@ -484,8 +472,6 @@ block('link')(
 ```
 
 
-***
-
 BEMHTML template could contain a template body and subtemplates at the same nesting level.
 
 In a concise syntax for this feature we use `true` keyword:
@@ -497,7 +483,7 @@ block link, tag, this.ctx.url {
 }
 ```
 
-Using JS syntax a template's body is provided to a function as the first argument. All subtemplates could be provided after it.
+Using JS syntax a template body is provided to a function as the first argument. All subtemplates could be provided after it.
 
 ```js
 block('link').tag().match(this.ctx.url)(
@@ -506,9 +492,7 @@ block('link').tag().match(this.ctx.url)(
 )
 ```
 
-***
-
-Template's nesting depth is not limited:
+Template nesting depth is not limited:
 
 ```js
 block('link')(
@@ -520,7 +504,7 @@ block('link')(
 )
 ```
 
-**NB:** we do not recommend to use ternary operators or JavaScript conditional operators to write nested templates. This kind of expressions will not be optimized in production runtime environment.
+**NB** We do not recommend to use ternary operators or JavaScript conditional operators to write nested templates. This kind of expressions will not be optimized in production runtime environment.
 
 
 <a name="runmode"></a>
@@ -548,7 +532,7 @@ Template engine processes BEMHTML templates in two stages:
 
 
 <a name="runpre"></a>
-### Templates' compilation
+### Templates compilation
 
 Templates are compiled differently depending on runtime environment settings and template syntax.
 
@@ -577,15 +561,13 @@ Despite of a runtime environment settings the following steps are performed:
 
 Once a template compilation is over we receive a JavaScript code and apply it the same way to all syntax and settings variation:
 
-* template engine takes a BEM-tree as an input data in [BEMJSON](https://bem.info/technology/bemhtml/current/reference/#bemjson) format;
-* sequentially go through nodes of an input BEM-tree;
+* template engine takes a BEM tree as an input data in [BEMJSON](https://bem.info/technology/bemhtml/current/reference/#bemjson) format;
+* sequentially go through nodes of an input BEM tree;
     * data structure called [context](https://bem.info/technology/bemhtml/current/reference/#context) is built during BEMJSON tree processing;
-* HTML output is generated in cycle for every BEM-entity;
+* HTML output is generated in cycle for every BEM entity;
     * HTML output is recursively generated for every nested BEM entity;
     * writing to HTML result fragments buffer is performed element by element.
 
-
-***
 
 
 <a name="table"></a>
@@ -616,9 +598,9 @@ Template conversion algorithm can be described briefly as a table below.
 |  2 |  | Replace a BEM entities abbreviations with helpers | `block 'b1'` → `block('b1')` |
 |  3 |  | Replace all commas separating subpredicates with dots | `,`  → `.` |
 |  4 | Arbitrary subpredicates conversion | Wrap an arbitrary subpredicate in `match` helper | `arbitrary-subpredicate` -> `match(arbitrary-subpredicate)` |
-|  5 | Modes' subpredicate conversion | Replace standard modes names with helpers | `tag` → `tag()` |
+|  5 | Modes subpredicate conversion | Replace standard modes names with helpers | `tag` → `tag()` |
 |  6 |  | Wrap remaining subpredicates in a `mode` helper and add apostrophes | `some-mode` → `mode('some-mode')` |
-|  7 | Template body and nested expressions conversion | Wrap a template's body in a parentheses and remove preceding colon | ` : ...`  →  `(...)` |
+|  7 | Template body and nested expressions conversion | Wrap a template body in a parentheses and remove preceding colon | ` : ...`  →  `(...)` |
 |  8 |  | Divide nested templates by commas | `block('b1'){ tag()('a') elem('e1').tag('b') }` → `block('b1'){ tag()('a'), elem('e1').tag('b') }` |
 |  9 |  | Replace nesting curly braces with parentheses | `block('b1'){ tag()('a'), elem('e1').tag('b') }` → `block('b1')(tag()('a'), elem('e1').tag('b'))` |
 
@@ -643,8 +625,6 @@ JS syntax:
 block('logo').tag()('img')
 ```
 
-***
-
 
 **Template 2.** Sets an `img` tag and corresponding attribute set for `logo` block.
 
@@ -667,8 +647,6 @@ block('logo')(
 )
 ```
 
-***
-
 
 **Template 3.** Sets an `html` tag for a `b-page` block and forbids class generation with the BEM entities name.
 
@@ -689,8 +667,6 @@ block('b-page')(
   bem()(false)
 )
 ```
-
-***
 
 
 **Template 4.** Sets a tag for a `b-text` block elements which was defined in an input BEMJSON. If there is an `id` field defined for an element in an input data, it sets an `id` attribute as it's value.
@@ -721,9 +697,6 @@ block('b-text')(
 ```
 
 
-***
-
-
 **Template 5.** Sets a `span` tag for a `b-bla` block. If there is a `o-mode` modifier set to `v2` in an input data, changes tag to an `a`. After that the `m2` element modifier with `v2` value is added to the block, indicating that the block contains JavaScript.
 
 Concise syntax:
@@ -749,8 +722,6 @@ block('b-bla')(
 )
 ```
 
-***
-
 
 **Template 6.** Wraps `b-inner` block in `b-wrapper` block. Input BEMJSON fragment in a `default` mode is substituted by `b-wrapper` block containing the original input data.
 
@@ -764,7 +735,7 @@ block b-inner, default: applyCtx({ block: 'b-wrapper', content: this.ctx })
 JS syntax:
 
 
-While using a fragment of input BEMJSON `this.ctx` with an `applyCtx` structure in dev-environment, endless cycle may occur. To avoid it, you need to add a flag, indicating that the template was already processed, and subpredicate to check flag's value:
+While using a fragment of input BEMJSON `this.ctx` with an `applyCtx` structure in dev-environment, endless cycle may occur. To avoid it, you need to add a flag, indicating that the template was already processed, and subpredicate to check flag value:
 
 ```js
 block('b-inner')(def()
@@ -785,8 +756,6 @@ block('b-inner')(def()
             local({ 'ctx._wrapped': true })(applyCtx({ block: 'b-wrapper', content: this.ctx }))
    }))
 ```
-
-***
 
 
 **Template 7.** Sets the `span` tag by default for the element `e1` of a `b-bla` block. If there is an `url` field defined in an input data, changes the tag to `a` sets the field content as a `href` attribute value.
@@ -822,5 +791,3 @@ block('b-link').elem('e1') (
    )
 )
 ```
-
-***

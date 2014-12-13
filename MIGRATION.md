@@ -14,7 +14,7 @@ Example
 ```js
 modules.define(
     'my-module', // Module name
-    ['module-from-library', 'my-another-module'], // Module's dependencies
+    ['module-from-library', 'my-another-module'], // Module dependencies
     function(provide, moduleFromLibrary, myAnotherModule) { // Module declaration, runs when all the dependencies are resolved
 
 //Module providing
@@ -185,7 +185,7 @@ onClick : function(e) {
     $(e.currentTarget).attr(...
 ```
 
-Note: Remember that jQuery is unavailable in global scope and you must use `jquery` module for access to it.
+**NB** Remember that jQuery is unavailable in global scope and you must use `jquery` module for access to it.
 
 #### Channels
 
