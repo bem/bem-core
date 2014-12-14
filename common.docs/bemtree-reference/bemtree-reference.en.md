@@ -26,7 +26,7 @@ The reader is assumed to be familiar with:
 
 <a name="bemtree"></a>
 
-## BEMTREE Features
+## BEMTREE features
 
 <a name="arch"></a>
 
@@ -55,7 +55,7 @@ BEMTREE is a BEM-XJST template engine. In other words, BEMTREE uses **BEM-XJST s
 
 <a name="basic"></a>
 
-## Key Concepts
+## Key concepts
 
 <a name="template"></a>
 ### Templating in a nutshell
@@ -100,9 +100,7 @@ Such an approach employs the principle of separation of the controller from data
 * blocks must not be dependent on how data is received (e.g., for use in external projects, libraries, etc.);
 * data is obtained from the same few sources, e.g., a single DBMS.
 
-***
 **NB** Please note that the centralized approach to data handling assumes that a data object received from the back end is fully formed by the time a BEMTREE template is applied.
-***
 
 
 #### Receipt of data within a BEMTREE block template
@@ -168,7 +166,7 @@ Syntax-wise, BEMTREE differs from BEMHTML in what sets of context fields and sta
 
 <a name="standardmoda"></a>
 
-## Standard Modes
+## Standard modes
 
 The default BEMTREE template defines a set of standard modes which specify the default order for processing an input BEM tree (BEMJSON) and generating an output BEMJSON.
 
@@ -177,7 +175,7 @@ Functionality-wise, modes are divided into two classes:
 * The **"empty mode"** determines the algorithm for processing the nodes of an input BEMJSON and calling other modes;
 * All other modes determine the order in which BEMJSON elements are sequentially generated. Each of the modes is responsible for the generation of a specific fragment of the output BEMJSON tree.
 
-To generate BEMJSON, in each mode an appropriate template (i.e. one whose predicate is evaluated to true in the given context) is chosen and executed. The result of evaluating of the chosen template's body is used in the BEMJSON tree fragment (BEM entity) that the current mode is responsible for generating.
+To generate BEMJSON, in each mode an appropriate template (i.e. one whose predicate is evaluated to true in the given context) is chosen and executed. The result of evaluating of the chosen template body is used in the BEMJSON tree fragment (BEM entity) that the current mode is responsible for generating.
 
 This logic imposes the following limitations on templates:
 
@@ -321,7 +319,7 @@ A template must be defined in the `content` mode (sub-predicate `content()`) if 
 
 <a name="context_field"></a>
 
-## Context Fields
+## Context fields
 
 As it runs, the BEMTREE template engine builds a data structure containing information about the BEMJSON node being processed and the state of processing. In addition, several auxiliary functions are available in the context.
 
@@ -369,7 +367,7 @@ BEMTREE extends the set of context-independent fields of BEM-XJST with only one 
 
 <a name="examples"></a>
 
-## Examples and Recipes
+## Examples and recipes
 
 <a name="bringing_input"></a>
 
@@ -514,10 +512,8 @@ block('b-inner').def()
    })
 ```
 
-***
 **NB** The `applyCtx()` construction may be used to **replace** a BEM entity in the source tree, if the original content of the block (`this.ctx`) is not used in the argument of `applyCtx()`.
 
-***
 
 **See also**:
 
@@ -580,7 +576,7 @@ block('box').match(!this.ctx._processed).content()(applyCtx({'ctx._processed':tr
 }))
 ```
 
-**NB:** The hash with the variable `ctx._processed` set to `true` is passed to the method `applyCtx` as the first parameter to execute the method in the modified context.
+**NB** The hash with the variable `ctx._processed` set to `true` is passed to the method `applyCtx` as the first parameter to execute the method in the modified context.
 
 
 **See also**:
