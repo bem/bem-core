@@ -80,22 +80,22 @@ This README is also available [in English](https://bem.info/libs/bem-core/).
    ```shell
    $ npm install
    ```
-   Для последующего запуска локально установленного [bem-tools](https://ru.bem.info/tools/bem/bem-tools/) нам потребуется
+   Для последующего запуска локально установленных npm-зависимостей нам потребуется
    `export PATH=./node_modules/.bin:$PATH` или любой альтернативный способ.
 
 3. Устанавливаем зависимые библиотеки:
    ```shell
-   $ bower-npm-install
+   $ npm run deps
    ```
 
 4. Собираем примеры и тесты:
    ```shell
-   $ bem make sets
+   $ npm test
    ```
 
 5. Запускаем разработческий сервер:
    ```
-   $ bem server
+   $ npm start
    ```
 
 ### Внесение изменений
@@ -114,7 +114,7 @@ This README is also available [in English](https://bem.info/libs/bem-core/).
 
 Сборка дефолтного тестового бандла для `functions__debounce`:
 ```shell
-$ bem make desktop.specs/functions__debounce
+$ magic make desktop.specs/functions__debounce
 ```
 
 После сборки тестового бандла вы увидите результаты выполнения тестов в консоли.
@@ -127,13 +127,13 @@ $ bem make desktop.specs/functions__debounce
 Чтобы собрать статистику покрытия кода тестами, необходимо добавить переменную окружения `ISTANBUL_COVERAGE=yes`
 в сборке тестового бандла:
 ```shell
-$ ISTANBUL_COVERAGE=yes bem make desktop.specs && istanbul report html
+$ ISTANBUL_COVERAGE=yes magic make desktop.specs && istanbul report html
 ```
 
 Сбор статистики покрытия тестами так же работает для запуска тестов конкретной БЭМ-сущности.
 Пример для `functions__debounce`
 ```
-$ ISTANBUL_COVERAGE=yes bem make desktop.specs/functions__debounce && istanbul report html
+$ ISTANBUL_COVERAGE=yes magic make desktop.specs/functions__debounce && istanbul report html
 ```
 
 После завершения выполнения тестов, можно посмотреть отчет о покрытии кода тестами, открыв в браузере страницу
@@ -141,9 +141,8 @@ $ ISTANBUL_COVERAGE=yes bem make desktop.specs/functions__debounce && istanbul r
 
 Полный отчет и статистику покрытия кода библиотеки тестами можно посмотреть на [странице профиля bem-core](https://coveralls.io/r/bem/bem-core) в проекте [Coveralls](https://coveralls.io).
 
-Для сборки и запуска тестов используется библиотека [bem-pr](https://github.com/narqo/bem-pr).
-См. [подробную информацию](https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md) про инфраструктуру
-тестирования в bem-pr.
+Для сборки и запуска тестов используется библиотека [enb-bem-specs](https://github.com/enb-bem/enb-bem-specs/).
+См. [подробную информацию](https://ru.bem.info/tools/bem/enb-bem-specs/) про инфраструктуру тестирования.
 
 ## Поддерживаемые браузеры
 
