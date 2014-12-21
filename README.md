@@ -83,21 +83,21 @@ If you used BEM before, check the [migration instructions](https://bem.info/libs
    ```
 
    You need `export PATH=./node_modules/.bin:$PATH`
-   or an alternative way to run locally-installed [bem-tools](https://bem.info/tools/bem/bem-tools/) and other npm-dependencies.
+   or an alternative way to run locally-installed `npm` dependencies.
 
 3. Install all necessary libraries:
    ```shell
-   $ bower-npm-install
+   $ npm run deps
    ```
 
 4. Build and run tests (specs):
    ```shell
-   $ bem make desktop.specs touch.specs
+   $ npm test
    ```
 
 5. Run development server:
    ```shell
-   $ bem server
+   $ npm start
    ```
 
 ### How to contribute
@@ -116,7 +116,7 @@ If you used BEM before, check the [migration instructions](https://bem.info/libs
 
 A default test bundle for `functions__debounce`:
 ```shell
-$ bem make desktop.specs/functions__debounce
+$ magic make desktop.specs/functions__debounce
 ```
 
 You can see the results of the tests in the terminal after the building process finishes.
@@ -129,12 +129,12 @@ Run tests for other BEM entities in the same way. This will work for those which
 
 To build code coverage report add `ISTANBUL_COVERAGE=yes` environment variable to the tests run command:
 ```shell
-$ ISTANBUL_COVERAGE=yes bem make desktop.specs && istanbul report html
+$ ISTANBUL_COVERAGE=yes magic make desktop.specs && istanbul report html
 ```
 
 You can run modular testing with coverage as well by using more concrete build target as was described above.
 ```
-$ ISTANBUL_COVERAGE=yes bem make desktop.specs/functions__debounce && istanbul report html
+$ ISTANBUL_COVERAGE=yes magic make desktop.specs/functions__debounce && istanbul report html
 ```
 
 After tests finish, you can view coverage HTML report by opening `coverage/index.html` in your favorite
@@ -143,8 +143,8 @@ browser.
 The whole code coverage statistics can be found on the [bem-core profile page](https://coveralls.io/r/bem/bem-core) on
 [Coveralls](https://coveralls.io).
 
-Tests are built with a [bem-pr](https://github.com/narqo/bem-pr) library.
-Check the [details](https://github.com/narqo/bem-pr/blob/master/docs/tests.ru.md) (available in Russian only) about testing infrastructure of the bem-pr.
+Tests are built with a [enb-bem-specs](https://github.com/enb-bem/enb-bem-specs/) library.
+Check the [details](https://ru.bem.info/tools/bem/enb-bem-specs/) (available in Russian only).
 
 ## Supported browsers
 
