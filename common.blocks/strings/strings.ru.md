@@ -8,13 +8,13 @@
 
 Элемент предоставляет набор методов-хелперов для экранирования (эскейпинга) управляющих символов `XML`, `HTML`, а также для подготовки строк к использованию в качестве атрибутов `attrs`:
 
-* xml – эскейпинг управляющих символов `XML`. Экранируются `&`, `<`, `>`;
-* html – эскейпинг управляющих символов `HTML`. Экранируются `&`, `<`, `>`;
-* attr – эскейпинг управляющих символов `attrs`. Экранируются `"`, `\`, `'`, `&`, `<`, `>`;.
+* `xml` – экранируются `&`, `<`, `>`;
+* `html` – экранируются `&`, `<`, `>`;
+* `attr` – экранируются `"`, `\`, `'`, `&`, `<`, `>`;.
 
 Элемент `strings__escape` реализован в технологии `vanilla.js` и подходит для использования как на сервере, так и на клиенте.
 
-Например, в блоке [`common.blocks/select`](https://github.com/bem/bem-components/blob/v2/common.blocks/select/select.js#L237) библиотеки `bem-components`, `strings__escape` используется для эскейпинга управляющих символов в свойстве `value` HTML-элемента:
+Например, в блоке [`common.blocks/select`](https://github.com/bem/bem-components/blob/v2/common.blocks/select/select.js#L237) библиотеки `bem-components`, `strings__escape` используется для экранирования управляющих символов в свойстве `value` HTML-элемента:
 
 
 ```js
@@ -30,4 +30,4 @@ _createControlHTML : function(name, val) {
 
 Смотрите также:
 
-* [bem-components/common.blocks/attach/attach.js](https://github.com/bem/bem-components/blob/v2/common.blocks/attach/attach.js#L83)
+* пример использования `__escape` в блоке [attach.js](https://github.com/bem/bem-components/blob/v2/common.blocks/attach/attach.js#L83) библиотеки `bem-components`.
