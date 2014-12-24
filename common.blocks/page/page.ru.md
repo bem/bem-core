@@ -9,7 +9,7 @@
 Декларация блока в `BEMJSON` начинается объявлением блока и
 указанием свойства `title`, которое превращается в тег `<title>` в `HTML`.
 
-```bemjson
+```javascript
 ({
     block: 'page',
     title: 'Page title',
@@ -20,7 +20,7 @@
 Указание свойства `head` дополняет элемент `head`, соответствующий `HTML` тегу `<head>`,
 элементами для подключения `CSS` и `JS` файлов, а также указания `meta`:
 
-```bemjson
+```javascript
 ({
     block: 'page',
     title: 'Page title',
@@ -41,17 +41,17 @@
 
 Также есть возможность указывать свойство `content` для содержания тега `<style>`:
 
-```bemjson
+```javascript
 ({
     block: 'page',
     title: 'Page title',
     head: [
         {
             elem: 'css',
-            content: '.b-blah { color: #f00 }'
+            content: '.page { color: #f00 }'
         }
     ],
-    content: 'Страница с тэгом <style>'
+    content: 'Страница с тэгом <code>&lt;style&gt;</code>'
 })
 ```
 
@@ -64,68 +64,73 @@
 
 `BEMHTML`:
 
-```js
+```javascript
 content: [
 {
     tag: 'meta',
     attrs: { 'http-equiv': 'content-type', content: 'text/html; charset=utf-8' }
 },
-...
+// ...
+]
 ```
 
 ### Тег <meta> для использования `IE9` (и выше) в максимальном `compatibility` режиме
 
 `BEMHTML`:
 
-```js
+```javascript
 content: [
-...
+// ...
 {
     tag: 'meta',
     attrs: { 'http-equiv': 'X-UA-Compatible', content: 'IE=EmulateIE7, IE=edge' }
 },
-...
+// ...
+]
 ```
 
 ### Выставление значения тега <title> страницы из свойства
 
-```js
+```javascript
 content: [
-...
+// ...
 {
     tag: 'title',
     content: this.ctx.title
 },
-...
+// ...
+]
 ```
 
 ### Выставление фавиконки
 
-```js
+```javascript
 content: [
-...
+// ...
 this.ctx.favicon ? {
     elem: 'favicon',
     url: this.ctx.favicon
 } : '',
-...
+// ...
+]
 ```
 
 ### Декларация блока ua
 
-```js
+```javascript
 content: [
-...
+// ...
 {
     block: 'ua'
 },
-...
+// ...
+]
 ```
 
 Значением свойства `content` блока `page` может быть хеш-описание содержимого
 (если речь идёт лишь об одном блоке) или массив блоков, описанных хешами:
 
-```js
+```javascript
 ({
     block: 'page',
     title: 'Page title',
@@ -144,7 +149,7 @@ content: [
 
 ### Отмена автоматической инициализации блоков
 
-```js
+```javascript
 noDeps: [
     { block: 'i-bem', elem: 'dom', mods: { init: 'auto' } }
 ]
