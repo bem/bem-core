@@ -7,5 +7,5 @@
         { elem : 'js', url : '_10-simple.js' },
         { elem : 'meta', attrs : { name : 'keywords', content : 'BEM' } }
     ],
-    content : { block : 'bla', content : 'bla' }
+    content : { block : 'bla', content : 'Простой пример обвязки страницы' }
 })
