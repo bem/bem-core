@@ -757,7 +757,7 @@ modules.define(
     ['BEMHTML', 'strings__escape'],
     function(provide, BEMHTML, escape, BEMDOM) {
 
-BEMDOM.decl('attach', {
+provide(BEMDOM.decl('attach', {
     _updateFileElem : function() {
         var fileName = extractFileNameFromPath(this.getVal());
         this.elem('file').length && BEMDOM.destruct(this.elem('file'));
@@ -777,9 +777,7 @@ BEMDOM.decl('attach', {
             }));
         return this.dropElemCache('file');
     }
-});
-
-provide(BEMDOM);
+}));
 
 });
 ```
@@ -1313,6 +1311,33 @@ BEMDOM.decl('searchbox', {
 * фазу выполнения (до или после установки модификатора);
 * тип события (имя и устанавливаемое значение модификатора).
 
+<a name="mods-api-trigger-phase"></a>
+#### Фазы выполнения
+
+Наличие дополнительной фазы, предшествующей установке модификатора, позволяет
+произвести некоторые проверки без риска повлиять на логику, связанную с установкой модификатора. Например, если существуют взаимоисключающие модификаторы, перед установкой одного из них логично проверить не установлен ли другой. 
+
+В блоке `checkbox-group` библиотеки `bem-components` перед установкой модификатора `focused` производится проверка на наличие модификатора `disabled`:
+
+```js
+provide(BEMDOM.decl(this.name, /** @lends checkbox-group.prototype */{
+    beforeSetMod : {
+        'focused' : {
+            'true' : function() {
+                return !this.hasMod('disabled');
+            }
+        }
+    },
+
+    onSetMod : {
+        'focused' : { /* ... */}
+    }
+}));
+```
+
+Если триггер для фазы, предшествующей установке (`beforeSetMod`), возвращает `false`, установка модификатора не производится. 
+
+<a name="mods-api-trigger-decl"></a>
 #### Декларация триггеров
 
 Триггеры, выполняемые при установке модификаторов, описываются в
@@ -1331,7 +1356,7 @@ BEMDOM.decl('searchbox', {
 ```js
 modules.define('i-bem__dom', function(provide, BEMDOM) {
 
-BEMDOM.decl(/* селектор блока */,
+provide(BEMDOM.decl(/* селектор блока */,
     {
         /* методы экземпляра */
         beforeSetMod: { /* триггеры до установки модификаторов блока*/}
@@ -1342,10 +1367,7 @@ BEMDOM.decl(/* селектор блока */,
     {
         /* статические методы */
     }
-);
-
-provide(BEMDOM);
-
+));
 });
 ```
 
