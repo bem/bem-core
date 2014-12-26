@@ -745,6 +745,7 @@ var Block = inherit(BEM.Block,/** @lends Block.prototype */{
 
     /**
      * Filters results of findElem helper execution in strict mode
+     * @private
      * @param {jQuery} res DOM elements
      * @returns {jQuery} DOM elements
      */

@@ -2,7 +2,7 @@ block('page')(
     elem('head')(
         content()(function() {
             return [
-                this.ctx['x-ua-compatible'] === false ?
+                this.ctx['x-ua-compatible'] === false?
                     false :
                     {
                         tag : 'meta',
