@@ -16,22 +16,13 @@
 Функция возвращает строку с идентификатором, присвоенным для объекта. Кроме того, строка сохраняется в свойствах объекта, так что при последующих вызовах всегда будет возвращаться один и тот же идентификатор.
 
 ```js
-modules.define(
-    'id-test',
-    ['i-bem', 'identify'],
-    function(provide, BEM, identify) {
+modules.require(['identify'], function(Identify) {
+    var a = {},
+        b = {},
+        identA = identify(a);
 
-provide(BEM.decl(this.name, /** @lends id-test.prototype */{
-    testID :  function() {
-        var a = {},
-            b = {},
-            c = identify(a);
-
-        console.log(c === identify(a)); // return true because id remains the same
-
-        console.log(identify(b) === c); // return false because each id is unique
-    }
-}));
+    console.log(identA === identify(a)); // true
+    console.log(identA === identify(b)); // false
 });
 ```
 
@@ -40,18 +31,10 @@ provide(BEM.decl(this.name, /** @lends id-test.prototype */{
 При вызове без аргументов, функция будет каждый раз возвращать строку с уникальным идентификатором.
 
 ```js
-modules.define(
-    'id-test',
-    ['i-bem', 'identify'],
-    function(provide, BEM, identify) {
+modules.require(['identify'], function(Identify) {
+    var a = identify(),
+        b = identify();
 
-provide(BEM.decl(this.name, /** @lends id-test.prototype */{
-    testID :  function() {
-        var a = identify(),
-            b = identify();
-
-        console.log(a === b); // return false because each id string is unique
-    }
-}));
+    console.log(a === b); // false
 });
 ```
