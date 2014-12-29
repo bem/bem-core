@@ -15,7 +15,7 @@ module.exports = function(bh) {
                         [ie, '<!-->', '<!--'] :
                         [ie, '', ''];
                 return [
-                    '<!--[if' + hideRule[0] + ']>' + hideRule[1],
+                    '<!--[if ' + hideRule[0] + ']>' + hideRule[1],
                     json,
                     hideRule[2] + '<![endif]-->'
                 ];
