@@ -45,6 +45,7 @@ module.exports = function(config) {
     configurePages(platforms);
     configureSets(platforms, {
         examples : config.module('enb-bem-examples').createConfigurator('examples'),
+        tests : config.module('enb-bem-examples').createConfigurator('tests'),
         docs : config.module('enb-bem-docs').createConfigurator('docs', 'examples'),
         specs : config.module('enb-bem-specs').createConfigurator('specs'),
         tmplSpecs : config.module('enb-bem-tmpl-specs').createConfigurator('tmpl-specs')
@@ -283,6 +284,13 @@ module.exports = function(config) {
                 fileSuffixes : ['bemjson.js', 'title.txt'],
                 inlineBemjson : true,
                 processInlineBemjson : wrapInPage
+            });
+
+            sets.tests.configure({
+                destPath : platform + '.tests',
+                levels : getLevels(platform),
+                techSuffixes : ['tests'],
+                fileSuffixes : ['bemjson.js', 'title.txt']
             });
 
             sets.docs.configure({
