@@ -7,7 +7,7 @@ $.each({
     function eventHandler(e) {
         var res, origType = e.handleObj.origType;
 
-        if(!e.button) {
+        if(e.which === 1) {
             e.type = spec;
             res = $.event.dispatch.apply(this, arguments);
             e.type = origType;
