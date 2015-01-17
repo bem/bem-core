@@ -1,0 +1,43 @@
+.test-pointer
+{
+    background: rgba(255, 0, 0, .7);
+
+    width: 400px;
+    height: 200px;
+}
+
+.test-pointer__inner1
+{
+    background: rgba(0, 255, 0, .7);
+
+    position: relative;
+    top: 50px;
+    left: 200px;
+
+    width: 250px;
+    height: 150px;
+}
+
+.test-pointer__inner2
+{
+    background: rgba(0, 0, 255, .7);
+
+    position: relative;
+    top: 35px;
+    left: -45px;
+
+    width: 150px;
+    height: 150px;
+}
+
+.test-pointer__inner3
+{
+    background: rgba(0, 255, 255, .7);
+
+    position: relative;
+    top: 45px;
+    left: -45px;
+
+    width: 250px;
+    height: 70px;
+}

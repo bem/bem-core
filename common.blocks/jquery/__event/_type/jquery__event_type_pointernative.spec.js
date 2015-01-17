@@ -137,6 +137,56 @@ describe('jquery__event_type_pointer', function() {
             spy.should.have.been.calledOnce;
         });
     });
+
+    it('should not bubble pointerenter / pointerleave events from inner elements (#801)', function() {
+        var innerElem = $('<div/>').appendTo(elem),
+            enterSpy = sinon.spy(),
+            leaveSpy = sinon.spy();
+
+        elem
+            .on('pointerenter', enterSpy)
+            .on('pointerleave', leaveSpy)
+            .on('mouseenter', function() {
+                innerElem
+                    .trigger($.Event('mouseenter', { relatedTarget : this }))    // simulate mouseenter from elem to innerElem
+                    .trigger($.Event('mouseleave', { relatedTarget : this }));   // simulate mouseleave from innerElem to elem
+            })
+            .mouseenter();
+
+        enterSpy.should.have.been.calledOnce;   // pointerenter shouldn't bubble from innerElem to elem
+        leaveSpy.should.not.have.been.called;   // pointerleave shouldn't bubble from innerElem to elem
+    });
+
+    it('should trigger pointerenter / pointerleave on the subtree from event\'s relatedTarget to target', function() {
+        var elemSubtree = $('<div><div></div></div>').appendTo(elem),
+            innerElem1 = elemSubtree.eq(0),
+            innerElem2 = innerElem1.find('div:eq(0)'),
+            enterEvent = $.Event('mouseenter', {
+                relatedTarget : elem
+            }),
+            leaveEvent = $.Event('mouseleave', {
+                relatedTarget : elem
+            }),
+            enterSpy = sinon.spy(),
+            leaveSpy = sinon.spy(),
+            enterArgs, leaveArgs;
+
+        innerElem1
+            .on('pointerenter', enterSpy)
+            .on('pointerleave', leaveSpy);
+
+        innerElem2
+            .trigger(enterEvent)
+            .trigger(leaveEvent);
+
+        enterSpy.should.have.been.calledOnce;
+        enterArgs = enterSpy.args[0][0];
+        enterArgs.target.should.be.equal(innerElem1[0], 'pointerenter triggered with wrong target');
+
+        leaveSpy.should.have.been.calledOnce;
+        leaveArgs = leaveSpy.args[0][0];
+        leaveArgs.target.should.be.equal(innerElem1[0], 'pointerleave triggered with wrong target');
+    });
 });
 
 provide();
