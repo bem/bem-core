@@ -24,11 +24,12 @@ if(typeof modules === 'object' && modules.isDefined('jquery')) {
 var doc = document,
     USE_NATIVE_MAP = window.Map && window.Map.prototype.forEach,
     HAS_BITMAP_TYPE = window.MSPointerEvent && typeof window.MSPointerEvent.MSPOINTER_TYPE_MOUSE === 'number',
-    POINTERS_FN = function() { return this.size };
+    POINTERS_FN = function() { return this.size },
+    jqEvent = $.event;
 
 // NOTE: Remove jQuery special fixes for pointerevents – we fix them ourself
-delete $.event.special.pointerenter;
-delete $.event.special.pointerleave;
+delete jqEvent.special.pointerenter;
+delete jqEvent.special.pointerleave;
 
 /*!
  * Returns a snapshot of inEvent, with writable properties.
@@ -45,6 +46,15 @@ function cloneEvent(event) {
         };
     }
     return eventCopy;
+}
+
+/*!
+ * Dispatches the event to the target, taking event's bubbling into account.
+ */
+function dispatchEvent(event, target) {
+    return event.bubbles?
+        jqEvent.trigger(event, null, target) :
+        jqEvent.dispatch.call(target, event);
 }
 
 var MOUSE_PROPS = {
@@ -258,15 +268,25 @@ var dispatcher = {
 
     leaveOut : function(event) {
         this.out(event);
-        if(!this.contains(event.target, event.relatedTarget)) {
-            this.leave(event);
-        }
+        this.enterLeave(event, this.leave);
     },
 
     enterOver : function(event) {
         this.over(event);
-        if(!this.contains(event.target, event.relatedTarget)) {
-            this.enter(event);
+        this.enterLeave(event, this.enter);
+    },
+
+    enterLeave : function(event, fn) {
+        var target = event.target,
+            relatedTarget = event.relatedTarget;
+
+        if(!this.contains(target, relatedTarget)) {
+            while(target && target !== relatedTarget) {
+                event.target = target;
+                fn.call(this, event);
+
+                target = target.parentNode;
+            }
         }
     },
 
@@ -339,7 +359,11 @@ var dispatcher = {
     dispatchEvent : function(event) {
         var target = this.getTarget(event);
         if(target) {
-            return $(target).trigger(event);
+            if(!event.target) {
+                event.target = target;
+            }
+
+            return dispatchEvent(event, target);
         }
     },
 
