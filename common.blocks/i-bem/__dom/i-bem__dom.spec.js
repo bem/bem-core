@@ -304,6 +304,23 @@ describe('i-bem__dom', function() {
             delete DOM.blocks['block'];
         });
 
+        it('should call live function for block', function() {
+            var spy = sinon.spy();
+            DOM.decl('block', {}, {
+                live : spy
+            });
+
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    tag : 'div',
+                    content : { block : 'block', js : true } })));
+
+            DOM.init(rootNode);
+            spy.should.have.been.calledOnce;
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+        });
+
         it('shouldn\'t init live block', function() {
             var spy = sinon.spy();
             DOM.decl('block', {
