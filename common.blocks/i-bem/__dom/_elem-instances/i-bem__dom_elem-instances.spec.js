@@ -299,6 +299,117 @@ describe('i-bem__dom_elem-instances', function() {
         });
     });
 
+    describe('DOM.init', function() {
+        it('should init elem', function() {
+            var spy = sinon.spy();
+            DOM.decl('block', {}, {});
+            DOM.decl({ block : 'block', elem : 'elem' }, {
+                onSetMod : {
+                    js : {
+                        inited : spy
+                    }
+                }
+            });
+
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        js : true,
+                        mix : { block : 'i-bem' }
+                    }
+                })));
+            DOM.init(rootNode);
+
+            spy.should.have.been.calledOnce;
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block__elem'];
+        });
+
+        it('should call live function once for elem', function() {
+            var spy = sinon.spy();
+            DOM.decl('block', {}, {});
+            DOM.decl({ block : 'block', elem : 'elem' }, {}, {
+                live : spy
+            });
+
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        js : true,
+                        mix : { block : 'i-bem' }
+                    }
+                })));
+            DOM.init(rootNode);
+
+            spy.should.have.been.calledOnce;
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block__elem'];
+        });
+
+        it('should not call live function for elem without i-bem mix', function() {
+            var spy = sinon.spy();
+            DOM.decl('block', {}, {});
+            DOM.decl({ block : 'block', elem : 'elem' }, {}, {
+                live : spy
+            });
+
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        js : true
+                    }
+                })));
+            DOM.init(rootNode);
+
+            spy.called.should.be.false;
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block__elem'];
+        });
+
+        it('should not init live elem', function() {
+            var spy = sinon.spy();
+            DOM.decl('block', {}, {});
+            DOM.decl({ block : 'block', elem : 'elem' }, {
+                onSetMod : {
+                    js : {
+                        inited : spy
+                    }
+                }
+            }, {
+                live : true
+            });
+
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        js : true,
+                        mix : { block : 'i-bem' }
+                    }
+                })));
+            DOM.init(rootNode);
+
+            spy.called.should.be.false;
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block__elem'];
+        });
+    });
+
     describe('liveInitOnBlockEvent', function() {
         it('should init and call handler on live initialization', function() {
             var spyInit = sinon.spy(),
