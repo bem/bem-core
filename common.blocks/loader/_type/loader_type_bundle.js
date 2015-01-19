@@ -24,7 +24,7 @@ var LOADING_TIMEOUT = 20000,
     appendCss = function(css) {
         var style = doc.createElement('style');
         style.type = 'text/css';
-        head.insertBefore(style, head.firstChild); // ie needs to insert style before setting content
+        head.appendChild(style); // ie needs to insert style before setting content
         style.styleSheet?
             style.styleSheet.cssText = css :
             style.appendChild(doc.createTextNode(css));
