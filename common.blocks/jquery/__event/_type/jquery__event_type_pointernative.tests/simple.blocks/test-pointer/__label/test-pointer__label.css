@@ -1,0 +1,9 @@
+.test-pointer__label
+{
+    color: #fff;
+    font-size: 11px;
+
+    position: absolute;
+
+    margin: 2px 0 0 2px;
+}
