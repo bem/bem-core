@@ -125,7 +125,7 @@ function PointerEvent(type, params) {
     e.isPrimary = params.isPrimary || false;
 
     // add some common jQuery properties
-    e.which = params.which;
+    e.which = typeof params.which === 'undefined'? 1 : params.which;
 
     return e;
 }
