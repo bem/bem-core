@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.5.1
+
+### Bug fixes
+
+- An issue in `jquery__pointerpress` and `jquery__pointerrelease` was fixed. Events work now in
+  Internet Explorer 8 ([#792](https://github.com/bem/bem-core/issues/792)).
+- An issue in `jquery__pointernative` was fixed. `pointerenter` and `pointerleave` events have bubbled up
+  to the document root, while they shouldn't ([#801](https://github.com/bem/bem-core/issues/801)).
+- An issue in `loader_type_bundle` was fixed. CSS bundle has been always added to the top of the HTML `<head>`, so CSS rules
+  from the bundle might not work properly ([#808](https://github.com/bem/bem-core/issues/808)).
+- Issues in BH templates for `ua` were fixed. There was no possibility to pass the content of the block from
+  BEMJSON ([#734](https://github.com/bem/bem-core/pull/734)).
+- An issue in `page` was fixed. There was a problem with conditional comments for Internet Explorer in the BH template
+  of the block ([#781](https://github.com/bem/bem-core/pull/781)).
+
+### Other changes
+
+- `jquery` was updated to the 2.1.3 and 1.11.2 ([#778](https://github.com/bem/bem-core/pull/788)).
+- Russian documentation for modules: `clearfix`, `cookie`, `identify`, `idle`, `inherit`, `keyboard`, `loader`, `next-tick`,
+  `string` and `tick` was added.
+- Russian documentation for `i-bem.js` was updated.
+- English guides to BEMHTM and BEMJSON were updated.
+
 ## 2.5.0
 
 ### Major changes

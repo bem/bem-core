@@ -1,5 +1,28 @@
 # История изменений
 
+## 2.5.1
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена ошибка в `jquery__pointerpress` и `jquery__pointerrelease` из-за которой события не работали в браузере
+  Internet Explorer 8 ([#792](https://github.com/bem/bem-core/issues/792)).
+- Исправлена ошибка в `jquery__pointernative`. События `pointerenter` и `pointerleave` не должны всплывать
+  по DOM-дереву ([#801](https://github.com/bem/bem-core/issues/801)).
+- Исправлена ошибка в `loader_type_bundle`. После загрузки, CSS-бандл добавлялся в самый верх HTML-тега `<head>`, из-за чего
+  CSS-правила из содержимого бандла могли работать не корректно ([#808](https://github.com/bem/bem-core/issues/808)).
+- Исправлена ошибка в BH-шаблоне `ua`. Шаблон не позволял вставить содержимое блока из входного
+  BEMJSON ([#734](https://github.com/bem/bem-core/pull/734)).
+- Исправлена ошибка в `page`, приводящая к неработоспособности добавленных на страницу условных комментариев для браузера
+  Internet Explorer ([#781](https://github.com/bem/bem-core/pull/781)).
+
+### Также в релиз вошли следующие изменения
+
+- `jquery` обновлен до версий 2.1.3 и 1.11.2 ([#778](https://github.com/bem/bem-core/pull/788)).
+- Добавлена документация на русском языке для модулей: `clearfix`, `cookie`, `identify`, `idle`, `inherit`, `keyboard`,
+`loader`, `next-tick`, `string` and `tick`.
+- Исправлена документация на русском языке для `i-bem.js`.
+- Обновлено руководство на английском языке по технологиям BEMHTML и BEMJSON.
+
 ## 2.5.0
 
 ### Крупные изменения
