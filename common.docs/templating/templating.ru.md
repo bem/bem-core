@@ -165,7 +165,7 @@ BEM-XJST реализует наиболее общую схему обрабо�
         <pre><code>
 &lt;ul class="menu"&gt;
     [% foreach item in items %]
-        &lt;li class="menu__item"&gt;
+        &lt;li class="menu&#95;&#95;item"&gt;
             [% item.text %]
         &lt;/li&gt;
     [% end %]
@@ -175,8 +175,8 @@ BEM-XJST реализует наиболее общую схему обрабо�
     <td>
         <pre><code>
 &lt;ul class="menu"&gt;
-    &lt;li class="menu__item">1&lt;/li&gt;
-    &lt;li class="menu__item">2&lt;/li&gt;
+    &lt;li class="menu&#95;&#95;item">1&lt;/li&gt;
+    &lt;li class="menu&#95;&#95;item">2&lt;/li&gt;
 &lt;/ul&gt;
         </code></pre>
     </td>
@@ -223,8 +223,8 @@ block('menu')(
         <td>
         <pre><code>
 &lt;ul class="menu"&gt;
-    &lt;li class="menu__item"&gt;1&lt;/li&gt;
-    &lt;li class="menu__item"&gt;2&lt;/li&gt;
+    &lt;li class="menu&#95;&#95;item"&gt;1&lt;/li&gt;
+    &lt;li class="menu&#95;&#95;item"&gt;2&lt;/li&gt;
 &lt;/ul&gt;
         </code></pre>
         </td>
