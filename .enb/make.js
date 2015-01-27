@@ -14,12 +14,15 @@ var DEFAULT_LANGS = ['ru', 'en'],
     css = require('enb/techs/css'),
     js = require('enb-diverse-js/techs/browser-js'),
     ym = require('enb-modules/techs/prepend-modules'),
+    i18nBemdecl = require('./techs/i18n-bemdecl'),
+    i18nKeysets = require('enb-bem-i18n/techs/i18n-merge-keysets'),
+    i18nLang = require('enb-bem-i18n/techs/i18n-lang-js'),
     bemhtml = require('enb-bemxjst/techs/bemhtml-old'),
     bemtree = require('enb-bemxjst/techs/bemtree-old'),
-    html = require('enb-bemxjst/techs/html-from-bemjson'),
+    html = require('enb-bemxjst/techs/html-from-bemjson-i18n'),
     htmlFromData = require('./techs/html-from-bemtree'),
     bh = require('enb-bh/techs/bh-server'),
-    bhHtml = require('enb-bh/techs/html-from-bemjson'),
+    bhHtml = require('enb-bh/techs/html-from-bemjson-i18n'),
     copyFile = require('enb/techs/file-copy'),
     mergeFiles = require('enb/techs/file-merge'),
     borschik = require('enb-borschik/techs/borschik');
@@ -248,6 +251,14 @@ module.exports = function(config) {
             }]
         ]);
 
+        // i18n
+        nodeConfig.addTechs([
+            [i18nKeysets, { lang : 'all' }],
+            [i18nKeysets, { lang : '{lang}' }],
+            [i18nLang, { lang : 'all' }],
+            [i18nLang, { lang : '{lang}' }]
+        ]);
+
         // Template techs
         nodeConfig.addTechs([
             [bemhtml],
@@ -265,24 +276,19 @@ module.exports = function(config) {
         // Base techs
         nodeConfig.addTechs([
             [provide, { target : '?.bemjson.js' }],
-            [bemdecl]
+            [bemdecl, { destTarget : '?.base.bemdecl.js' }],
+            [i18nBemdecl],
+            [mergeBemdecl, { bemdeclSources : ['?.i18n.bemdecl.js', '?.base.bemdecl.js'] }]
         ]);
 
         // Build htmls
         nodeConfig.addTechs([
-            [html],
-            [bhHtml, { target : '?.bh.html' }]
+            [html, { lang : '{lang}' }],
+            [bhHtml, { target : '?.{lang}.bh.html', lang : '{lang}' }]
         ]);
 
-        langs.forEach(function(lang) {
-            var destTarget = '?.' + lang + '.html';
-
-            nodeConfig.addTech([copyFile, { source : '?.html', target : destTarget }]);
-            nodeConfig.addTarget(destTarget);
-        });
-
         nodeConfig.addTargets([
-            '?.html', '?.bh.html'
+            '?.{lang}.html', '?.{lang}.bh.html'
         ]);
     });
 
