@@ -355,7 +355,7 @@ modules.define('hello', ['i-bem__dom'], function(provide, BEMDOM) {
 
 ## Дальнейшее чтение
 
- * [BEMHTML. Справочное руководство](https://ru.bem.info/technology/bemhtml/current/intro/)
+ * [BEMHTML. Справочное руководство](https://ru.bem.info/technology/bemhtml/v2/reference/)
  * [Библиотека блоков bem-core](https://ru.bem.info/libs/bem-core/)
  * [БЭМ-методология](https://ru.bem.info/method/)
 
