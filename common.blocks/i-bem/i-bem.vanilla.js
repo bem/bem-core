@@ -312,7 +312,7 @@ var Block = inherit(events.Emitter, /** @lends Block.prototype */ {
     /**
      * Returns values of modifiers of the block/nested element
      * @param {Object} [elem] Nested element
-     * @param {String} [...modNames] Modifier names
+     * @param {...String} [modNames] Modifier names
      * @returns {Object} Hash of modifier values
      */
     getMods : function(elem) {

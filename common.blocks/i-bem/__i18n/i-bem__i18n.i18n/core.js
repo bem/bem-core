@@ -76,6 +76,7 @@ function _popStack() {
 
 /**
  * @constructor
+ * @protected
  */
 function _i18n() {
     this._lang = '';

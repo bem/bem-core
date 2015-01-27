@@ -20,7 +20,7 @@ exports.techMixin = {
 
     getBuildResultChunk : function(relPath, path, suffix) {
         var content = this.readContent(path, suffix);
-        return (suffix !== 'bemhtml.xjst' ?
+        return (suffix !== 'bemhtml.xjst'?
             content.then(function(source) { return compat.transpile(source); }) :
             content)
                 .then(function(source) {
@@ -61,7 +61,7 @@ exports.techMixin = {
         var tmpl = ['block(\'{{bemBlockName}}\')'];
 
         vars.ElemName && tmpl.push('.elem(\'{{bemElemName}}\')');
-        vars.ModVal && tmpl.push('.' + (vars.ElemName ? 'elemMod' : 'mod') + '(\'{{bemModName}}\', \'{{bemModVal}}\')');
+        vars.ModVal && tmpl.push('.' + (vars.ElemName? 'elemMod' : 'mod') + '(\'{{bemModName}}\', \'{{bemModVal}}\')');
 
         return Template.process(tmpl.join(''), vars);
     }
