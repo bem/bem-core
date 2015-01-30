@@ -736,12 +736,22 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
             modName = undef;
         }
 
+        names = names.split(' ');
+
         var _self = this.__self,
-            selector = '.' +
-                names.split(' ').map(function(name) {
-                    return _self.buildClass(name, modName, modVal);
-                }).join(',.'),
+            keys = names.map(function(name) {
+                return _self.buildClass(name, modName, modVal);
+            }),
+            isSingleName = keys.length === 1,
+            selector = '.' + (isSingleName? keys[0] : keys.join(',.')),
             res = findDomElem(ctx, selector);
+
+        // caching results if possible
+        (ctx.length === 1 && this.domElem.length === 1 && ctx[0] === this.domElem[0]) &&
+            keys.forEach(function(key, i) {
+                (this._elemCache[key] = isSingleName? res : res.filter('.' + key))
+                    .__bemElemName = names[i];
+            }, this);
 
         return strictMode? this._filterFindElemResults(res) : res;
     },
@@ -768,15 +778,8 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @returns {jQuery} DOM elements
      */
     _elem : function(name, modName, modVal) {
-        var key = name + buildModPostfix(modName, modVal),
-            res;
-
-        if(!(res = this._elemCache[key])) {
-            res = this._elemCache[key] = this.findElem(name, modName, modVal);
-            res.__bemElemName = name;
-        }
-
-        return res;
+        return this._elemCache[this.__self.buildClass(name, modName, modVal)] ||
+            this.findElem(name, modName, modVal);
     },
 
     /**
