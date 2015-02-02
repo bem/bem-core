@@ -12,7 +12,7 @@ describe('i-bem-dom__init', function() {
         });
 
         modules.require(['i-bem-dom__init'], function() {
-            BEM.blocks.should.have.property(name);
+            BEM.entities.should.have.property(name);
             done();
         });
     });
