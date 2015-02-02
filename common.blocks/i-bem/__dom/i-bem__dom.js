@@ -213,13 +213,17 @@ function storeDomNodeParents(domElem) {
     });
 }
 
+var DOM;
+
+$(function() {
+
 /**
  * @class BEMDOM
  * @description Base block for creating BEM blocks that have DOM representation
  * @exports
  */
 
-var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
+DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
     /**
      * @constructor
      * @private
@@ -896,10 +900,10 @@ var DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 }, /** @lends BEMDOM */{
 
     /**
-     * Scope, will be set on onDomReady to `<body>`
+     * Scope
      * @type jQuery
      */
-    scope : null,
+    scope : $('body'),
 
     /**
      * Document shortcut
@@ -1483,12 +1487,9 @@ $.fn.bem = function(blockName, params) {
     return initBlock(blockName, this, params, true)._init();
 };
 
-// Set default scope after DOM ready
-$(function() {
-    DOM.scope = $('body');
-});
-
 provide(DOM);
+
+});
 
 });
 
