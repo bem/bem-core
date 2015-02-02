@@ -7,6 +7,8 @@ modules.define(
     [
         'i-bem',
         'i-bem__internal',
+        'i-bem-dom__events_type_dom',
+        'i-bem-dom__events_type_bem',
         'inherit',
         'identify',
         'objects',
@@ -18,6 +20,8 @@ modules.define(
         provide,
         BEM,
         BEMINTERNAL,
+        domEvents,
+        bemEvents,
         inherit,
         identify,
         objects,
@@ -26,9 +30,6 @@ modules.define(
         dom) {
 
 var undef,
-    win = $(window),
-    doc = $(document),
-
     /**
      * Storage for DOM elements by unique key
      * @type Object
@@ -53,18 +54,6 @@ var undef,
      */
     domElemToParams = {},
 
-    /**
-     * Storage for liveCtx event handlers
-     * @type Object
-     */
-    liveEventCtxStorage = {},
-
-    /**
-     * Storage for liveClass event handlers
-     * @type Object
-     */
-    liveClassEventStorage = {},
-
     entities = BEM.entities,
 
     BEM_CLASS = 'i-bem',
@@ -76,15 +65,14 @@ var undef,
     MOD_DELIM = BEMINTERNAL.MOD_DELIM,
     ELEM_DELIM = BEMINTERNAL.ELEM_DELIM,
 
-    EXTRACT_MODS_RE = RegExp(
-        '[^' + MOD_DELIM + ']' + MOD_DELIM + '(' + NAME_PATTERN + ')' +
-        '(?:' + MOD_DELIM + '(' + NAME_PATTERN + '))?$'),
-
     buildModPostfix = BEMINTERNAL.buildModPostfix,
     buildClass = BEMINTERNAL.buildClass,
 
     reverse = Array.prototype.reverse,
     slice = Array.prototype.slice,
+
+    domEventManagerFactory = new domEvents.EventManagerFactory(getEntityCls),
+    bemEventManagerFactory = new bemEvents.EventManagerFactory(getEntityCls),
 
     BEMDOM;
 
@@ -311,12 +299,6 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
         uniqIdToEntity[this._uniqId] = this;
 
-        /**
-         * @member {Boolean} Flag for whether it's necessary to unbind from the document and window when destroying the entity
-         * @private
-         */
-        this._needSpecialUnbind = false;
-
         this.__base(null, params, initImmediately);
     },
 
@@ -381,6 +363,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Block}
      */
     findChildBlock : function(Block) {
+        // TODO: throw if Block passed as a string
         return this._findEntities('find', Block, true);
     },
 
@@ -506,6 +489,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
     /**
      * Filters results of findElem helper execution in strict mode
+     * @private
      * @param {Elem[]} res Elements
      * @returns {Elem[]}
      */
@@ -518,6 +502,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
     /**
      * Finds entities
+     * @private
      * @param {String} select
      * @param {Function|String|Object} entity
      * @param {Boolean} [onlyFirst=false]
@@ -564,174 +549,40 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     },
 
     /**
-     * Adds an event handler for any DOM element
+     * Returns an manager to bind and unbind DOM events for particular context
      * @protected
-     * @param {jQuery} domElem DOM element where the event will be listened for
-     * @param {String|Object} event Event name or event object
-     * @param {Object} [data] Additional event data
-     * @param {Function} fn Handler function, which will be executed in the entity's context
-     * @returns {BemDomEntity} this
+     * @param {Function|String|Object|Elem|document|window} [ctx=this.domElem] context to bind,
+     *     can be BEM-entity class, instance, element name or description (elem, modName, modVal), document or window
+     * @returns {EventManager}
      */
-    bindToDomElem : function(domElem, event, data, fn) {
-        if(functions.isFunction(data)) {
-            fn = data;
-            data = undef;
-        }
-
-        fn?
-            domElem.bind(
-                this._buildDomEventName(event),
-                data,
-                $.proxy(fn, this)) :
-            objects.each(event, function(fn, event) {
-                this.bindToDomElem(domElem, event, data, fn);
-            }, this);
-
-        return this;
+    _domEvents : function(ctx) {
+        return domEventManagerFactory.getEventManager(this, ctx, this.domElem);
     },
 
     /**
-     * Adds an event handler to the document
+     * Returns an manager to bind and unbind BEM events for particular context
      * @protected
-     * @param {String|Object} event Event name or event object
-     * @param {Object} [data] Additional event data
-     * @param {Function} fn Handler function, which will be executed in the entity's context
-     * @returns {BemDomEntity} this
+     * @param {Function|String|BemDomEntity|Object} [ctx=this.domElem] context to bind,
+     *     can be BEM-entity class, instance, element name or description (elem, modName, modVal)
+     * @returns {EventManager}
      */
-    bindToDoc : function(event, data, fn) {
-        this._needSpecialUnbind = true;
-        return this.bindToDomElem(doc, event, data, fn);
+    _events : function(ctx) {
+        return bemEventManagerFactory.getEventManager(this, ctx, this.domElem);
     },
 
     /**
-     * Adds an event handler to the window
+     * Executes the BEM entity's event handlers and live event handlers
      * @protected
-     * @param {String|Object} event Event name or event object
-     * @param {Object} [data] Additional event data
-     * @param {Function} fn Handler function, which will be executed in the entity's context
-     * @returns {BemDomEntity} this
+     * @param {String|Object|events:Event} e Event name
+     * @param {Object} [data] Additional information
+     * @returns {BemEntity} this
      */
-    bindToWin : function(event, data, fn) {
-        this._needSpecialUnbind = true;
-        return this.bindToDomElem(win, event, data, fn);
-    },
-
-    /**
-     * Adds an event handler to the main DOM elements of entity
-     * @protected
-     * @param {String|Object} event Event name or event object
-     * @param {Object} [data] Additional event data
-     * @param {Function} fn Handler function, which will be executed in the entity's context
-     * @returns {BemDomEntity} this
-     */
-    bindTo : function(event, data, fn) {
-        if(functions.isFunction(data)) {
-            fn = data;
-            data = undef;
-        }
-
-        return this.bindToDomElem(this.domElem, event, data, fn);
-    },
-
-    /**
-    * Removes event handlers from any DOM element
-    * @protected
-    * @param {jQuery} domElem DOM element where the event was being listened for
-    * @param {String|Object} event Event name or event object
-    * @param {Function} [fn] Handler function
-    * @returns {BemDomEntity} this
-    */
-    unbindFromDomElem : function(domElem, event, fn) {
-        if(typeof event === 'string') {
-            event = this._buildDomEventName(event);
-            fn?
-                domElem.unbind(event, fn) :
-                domElem.unbind(event);
-        } else {
-            objects.each(event, function(fn, event) {
-                this.unbindFromDomElem(domElem, event, fn);
-            }, this);
+    _emit : function(e, data) {
+        if((typeof e === 'object' && e.modName === 'js') || this.hasMod('js', 'inited')) {
+            bemEvents.emit(this, e, data);
         }
 
         return this;
-    },
-
-    /**
-    * Removes event handler from document
-    * @protected
-    * @param {String|Object} event Event name or event object
-    * @param {Function} [fn] Handler function
-    * @returns {BemDomEntity} this
-    */
-    unbindFromDoc : function(event, fn) {
-        return this.unbindFromDomElem(doc, event, fn);
-    },
-
-    /**
-    * Removes event handler from window
-    * @protected
-    * @param {String|Object} event Event name or event object
-    * @param {Function} [fn] Handler function
-    * @returns {BemDomEntity} this
-    */
-    unbindFromWin : function(event, fn) {
-        return this.unbindFromDomElem(win, event, fn);
-    },
-
-    /**
-    * Removes event handlers from the main DOM elements of entity
-    * @protected
-    * @param {String|Object} [event] Event name or event object
-    * @param {Function} [fn] Handler function
-    * @returns {BemDomEntity} this
-    */
-    unbindFrom : function(event, fn) {
-        return this.unbindFromDomElem(this.domElem, event, fn);
-    },
-
-    /**
-     * Builds a full name for an event
-     * @private
-     * @param {String} event Event name
-     * @returns {String}
-     */
-    _buildDomEventName : function(event) {
-        var uniq = '.' + this._uniqId;
-        return event.indexOf(' ') > 1?
-            event.split(' ').map(function(e) {
-                return e + uniq;
-            }, this).join(' ') :
-            event + uniq;
-    },
-
-    _ctxEmit : function(e, data) {
-        this.__base.apply(this, arguments);
-
-        var _this = this,
-            storage = liveEventCtxStorage[_this.__self._buildCtxEventName(e.type)],
-            ctxIds = {};
-
-        storage && _this.domElem.each(function(_, ctx) {
-            var counter = storage.counter;
-            while(ctx && counter) {
-                var ctxId = identify(ctx, true);
-                if(ctxId) {
-                    if(ctxIds[ctxId]) break;
-                    var storageCtx = storage.ctxs[ctxId];
-                    if(storageCtx) {
-                        objects.each(storageCtx, function(handler) {
-                            handler.fn.call(
-                                handler.ctx || _this,
-                                e,
-                                data);
-                        });
-                        counter--;
-                    }
-                    ctxIds[ctxId] = true;
-                }
-                ctx = ctx.parentNode || domNodesToParents[ctxId];
-            }
-        });
     },
 
     /**
@@ -753,9 +604,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         return matches? matches[2] || true : '';
     },
 
-    /**
-     * @override
-     */
+    /** @override */
     _onSetMod : function(modName, modVal, oldModVal) {
         var _self = this.__self,
             name = _self.getName();
@@ -789,6 +638,14 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         }
     },
 
+    /** @override */
+    _afterSetMod : function(modName, modVal, oldModVal) {
+        var eventData = { modName : modName, modVal : modVal, oldModVal : oldModVal };
+        this
+            ._emit({ modName : modName, modVal : '*' }, eventData)
+            ._emit({ modName : modName, modVal : modVal }, eventData);
+    },
+
     /**
      * Checks whether a DOM element is in a block
      * @protected
@@ -807,22 +664,6 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     buildSelector : function(modName, modVal) {
         return this.__self.buildSelector(modName, modVal);
-    },
-
-    /**
-     * Destructs a block
-     * @private
-     */
-    _destruct : function() {
-        if(this._needSpecialUnbind) {
-            var eventNs = '.' + this._uniqId;
-            doc.off(eventNs);
-            win.off(eventNs);
-        }
-
-        this.__base();
-
-        this.un();
     }
 
 }, /** @lends Block */{
@@ -863,330 +704,25 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     },
 
     /**
-     * Builds a full name for a live event
-     * @private
-     * @param {String} e Event name
-     * @returns {String}
-     */
-    _buildCtxEventName : function(e) {
-        return this.getEntityName() + ':' + e;
-    },
-
-    _liveClassBind : function(className, e, callback, invokeOnInit) {
-        if(e.indexOf(' ') > -1) {
-            e.split(' ').forEach(function(e) {
-                this._liveClassBind(className, e, callback, invokeOnInit);
-            }, this);
-        } else {
-            var storage = liveClassEventStorage[e],
-                uniqId = identify(callback);
-
-            if(!storage) {
-                storage = liveClassEventStorage[e] = {};
-                BEMDOM.scope.on(e, $.proxy(this._liveClassTrigger, this));
-            }
-
-            storage = storage[className] || (storage[className] = { uniqIds : {}, fns : [] });
-
-            if(!(uniqId in storage.uniqIds)) {
-                storage.fns.push({ uniqId : uniqId, fn : this._buildLiveEventFn(callback, invokeOnInit) });
-                storage.uniqIds[uniqId] = storage.fns.length - 1;
-            }
-        }
-
-        return this;
-    },
-
-    _liveClassUnbind : function(className, e, callback) {
-        var storage = liveClassEventStorage[e];
-        if(storage) {
-            if(callback) {
-                if(storage = storage[className]) {
-                    var uniqId = identify(callback);
-                    if(uniqId in storage.uniqIds) {
-                        var i = storage.uniqIds[uniqId],
-                            len = storage.fns.length - 1;
-                        storage.fns.splice(i, 1);
-                        while(i < len) storage.uniqIds[storage.fns[i++].uniqId] = i - 1;
-                        delete storage.uniqIds[uniqId];
-                    }
-                }
-            } else {
-                delete storage[className];
-            }
-        }
-
-        return this;
-    },
-
-    _liveClassTrigger : function(e) {
-        var storage = liveClassEventStorage[e.type];
-        if(storage) {
-            var node = e.target, classNames = [];
-            for(var className in storage) {
-                classNames.push(className);
-            }
-            do {
-                var nodeClassName = ' ' + node.className + ' ', i = 0;
-                while(className = classNames[i++]) {
-                    if(nodeClassName.indexOf(' ' + className + ' ') > -1) {
-                        var j = 0, fns = storage[className].fns, fn, stopPropagationAndPreventDefault = false;
-                        while(fn = fns[j++])
-                            if(fn.fn.call($(node), e) === false) stopPropagationAndPreventDefault = true;
-
-                        stopPropagationAndPreventDefault && e.preventDefault();
-                        if(stopPropagationAndPreventDefault || e.isPropagationStopped()) return;
-
-                        classNames.splice(--i, 1);
-                    }
-                }
-            } while(classNames.length && (node = node.parentNode));
-        }
-    },
-
-    _buildLiveEventFn : function(callback, invokeOnInit) {
-        var _this = this;
-        return function(e) {
-            e.currentTarget = this;
-            var args = [
-                    _this.getEntityName(),
-                    $(this).closest(_this.buildSelector()),
-                    undef,
-                    true
-                ],
-                entity = initEntity.apply(null, invokeOnInit? args.concat([callback, e]) : args);
-
-            if(entity && !invokeOnInit && callback)
-                return callback.apply(entity, arguments);
-        };
-    },
-
-    /**
-     * Helper for live initialization for an event on DOM elements of a block or its elements
+     * Returns an manager to bind and unbind events for particular context
      * @protected
-     * @param {Function|String|Object} elem Element class or name or description elem, modName, modVal
-     * @param {String} event Event name
-     * @param {Function} [callback] Handler to call after successful initialization
+     * @param {Function|String|Object} [ctx] context to bind,
+     *     can be BEM-entity class, instance, element name or description (elem, modName, modVal)
+     * @returns {EventManager}
      */
-    liveInitOnEvent : function(elem, event, callback) {
-        return this.liveBindTo(elem, event, callback, true);
+    _domEvents : function(ctx) {
+        return domEventManagerFactory.getEventManager(this, ctx, BEMDOM.scope);
     },
 
     /**
-     * Helper for subscribing to live events on DOM elements of a block or its elements
+     * Returns an manager to bind and unbind BEM events for particular context
      * @protected
-     * @param {Function|String|Object} [to] Element class or name or description elem, modName, modVal or entity description (modName, modVal)
-     * @param {String} event Event name
-     * @param {Function} [callback] Handler
-     * @returns {Function} this
+     * @param {Function|String|Object} [ctx] context to bind,
+     *     can be BEM-entity class, instance, element name or description (elem, modName, modVal)
+     * @returns {EventManager}
      */
-    liveBindTo : function(to, event, callback, invokeOnInit) {
-        if(!event || functions.isFunction(event)) {
-            callback = event;
-            event = to;
-            to = undef;
-        }
-
-        if(!to || typeof to !== 'object') {
-            to = { elem : typeof to === 'string' ? to : to.getName() };
-        }
-
-        return this._liveClassBind(
-            buildClass(this._blockName, to.elem, to.modName, to.modVal),
-            event,
-            callback,
-            invokeOnInit);
-    },
-
-    /**
-     * Helper for unsubscribing from live events on DOM elements of an entity
-     * @protected
-     * @param {Function|String|Object} [from] Element class or name or description elem, modName, modVal or entity description (modName, modVal)
-     * @param {String} event Event name
-     * @param {Function} [callback] Handler
-     * @returns {Function} this
-     */
-    liveUnbindFrom : function(from, event, callback) {
-        if(!event || functions.isFunction(event)) {
-            callback = event;
-            event = from;
-            from = undef;
-        }
-
-        if(!from || typeof from !== 'object') {
-            from = { elem : typeof from === 'string' ? from : from.getName() };
-        }
-
-        return this._liveClassUnbind(
-            buildClass(this._blockName, from.elem, from.modName, from.modVal),
-            event,
-            callback);
-    },
-
-    /**
-     * Helper for live initialization when a different entity is initialized
-     * @private
-     * @param {String} event Event name
-     * @param {Function} entityCls Class of entity that should emit a reaction when initialized
-     * @param {Function} callback Handler to be called after successful initialization in the new entity's context
-     * @param {String} findFnName Name of the method for searching
-     */
-    _liveInitOnEntityEvent : function(event, entityCls, callback, findFnName) {
-        entityCls.on(
-            event,
-            function(e) {
-                var args = arguments,
-                    entity = e.target[findFnName](this);
-
-                callback && entity.forEach(function(entity) {
-                    callback.apply(entity, args);
-                });
-            },
-            this);
-
-        return this;
-    },
-
-    /**
-     * Helper for live initialization for a different entity's event on the current entity's DOM element
-     * @protected
-     * @param {String} event Event name
-     * @param {Function} entityCls Class of entity that should emit a reaction when initialized
-     * @param {Function} callback Handler to be called after successful initialization in the new entity's context
-     * @returns {Function} this
-     */
-    liveInitOnEntityEvent : function(event, entityCls, callback) {
-        return this._liveInitOnEntityEvent(event, entityCls, callback, 'findEntitysOn');
-    },
-
-    /**
-     * Helper for live initialization for a different entity's event inside the current entity
-     * @protected
-     * @param {String} event Event name
-     * @param {Function} entityCls Class of entity that should emit a reaction when initialized
-     * @param {Function} [callback] Handler to be called after successful initialization in the new block's context
-     * @returns {Function} this
-     */
-    liveInitOnEntityInsideEvent : function(event, entityCls, callback) {
-        return this._liveInitOnEntityEvent(event, entityCls, callback, 'findEntitysOutside');
-    },
-
-    /**
-     * Adds a live event handler to an entity, based on a specified element where the event will be listened for
-     * @param {jQuery} [ctx] The element in which the event will be listened for
-     * @param {String} e Event name
-     * @param {Object} [data] Additional information that the handler gets as e.data
-     * @param {Function} fn Handler
-     * @param {Object} [fnCtx] Handler's context
-     * @returns {Function} this
-     */
-    on : function(ctx, e, data, fn, fnCtx) {
-        return typeof ctx === 'object' && ctx.jquery?
-            this._liveCtxBind(ctx, e, data, fn, fnCtx) :
-            this.__base(ctx, e, data, fn);
-    },
-
-    /**
-     * Removes the live event handler from an entity, based on a specified element where the event was being listened for
-     * @param {jQuery} [ctx] The element in which the event was being listened for
-     * @param {String} e Event name
-     * @param {Function} [fn] Handler
-     * @param {Object} [fnCtx] Handler context
-     * @returns {Function} this
-     */
-    un : function(ctx, e, fn, fnCtx) {
-        return typeof ctx === 'object' && ctx.jquery?
-            this._liveCtxUnbind(ctx, e, fn, fnCtx) :
-            this.__base(ctx, e, fn);
-    },
-
-    /**
-     * Adds a live event handler to an entity, based on a specified element where the event will be listened for
-     * @private
-     * @param {jQuery} ctx The element in which the event will be listened for
-     * @param {String} e  Event name
-     * @param {Object} [data] Additional information that the handler gets as e.data
-     * @param {Function} fn Handler
-     * @param {Object} [fnCtx] Handler context
-     * @returns {Function} this
-     */
-    _liveCtxBind : function(ctx, e, data, fn, fnCtx) {
-        if(typeof e === 'object') {
-            if(functions.isFunction(data) || functions.isFunction(fn)) { // mod change event
-                e = this._buildModEventName(e);
-            } else {
-                objects.each(e, function(fn, e) {
-                    this._liveCtxBind(ctx, e, fn, data);
-                }, this);
-                return this;
-            }
-        }
-
-        if(functions.isFunction(data)) {
-            fnCtx = fn;
-            fn = data;
-            data = undef;
-        }
-
-        if(e.indexOf(' ') > -1) {
-            e.split(' ').forEach(function(e) {
-                this._liveCtxBind(ctx, e, data, fn, fnCtx);
-            }, this);
-        } else {
-            var ctxE = this._buildCtxEventName(e),
-                storage = liveEventCtxStorage[ctxE] ||
-                    (liveEventCtxStorage[ctxE] = { counter : 0, ctxs : {} });
-
-            ctx.each(function() {
-                var ctxId = identify(this),
-                    ctxStorage = storage.ctxs[ctxId];
-                if(!ctxStorage) {
-                    ctxStorage = storage.ctxs[ctxId] = {};
-                    ++storage.counter;
-                }
-                ctxStorage[identify(fn) + (fnCtx? identify(fnCtx) : '')] = {
-                    fn : fn,
-                    data : data,
-                    ctx : fnCtx
-                };
-            });
-        }
-
-        return this;
-    },
-
-    /**
-     * Removes a live event handler from an entity, based on a specified element where the event was being listened for
-     * @private
-     * @param {jQuery} ctx The element in which the event was being listened for
-     * @param {String|Object} e Event name
-     * @param {Function} [fn] Handler
-     * @param {Object} [fnCtx] Handler context
-     * @returns {Function} this
-     */
-    _liveCtxUnbind : function(ctx, e, fn, fnCtx) {
-        if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
-            e = this._buildModEventName(e);
-        }
-
-        var storage = liveEventCtxStorage[e = this._buildCtxEventName(e)];
-
-        if(storage) {
-            ctx.each(function() {
-                var ctxId = identify(this, true),
-                    ctxStorage;
-                if(ctxId && (ctxStorage = storage.ctxs[ctxId])) {
-                    fn && delete ctxStorage[identify(fn) + (fnCtx? identify(fnCtx) : '')];
-                    if(!fn || objects.isEmpty(ctxStorage)) {
-                        storage.counter--;
-                        delete storage.ctxs[ctxId];
-                    }
-                }
-            });
-            storage.counter || delete liveEventCtxStorage[e];
-        }
-
-        return this;
+    _events : function(ctx) {
+        return bemEventManagerFactory.getEventManager(this, ctx, BEMDOM.scope);
     },
 
     /**
@@ -1245,6 +781,55 @@ var Block = inherit([BEM.Block, BemDomEntity], /** @lends Block.prototype */{
      */
     block : function() {
         return this;
+    },
+
+    /**
+     * Lazy search for elements nested in a block (caches results)
+     * @private
+     * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
+     * @returns {Elem[]}
+     */
+    elems : function(Elem) {
+        var key = buildElemKey(Elem);
+        return key in this._elemsCache?
+            this._elemsCache[key] :
+            this.findChildElems(Elem);
+    },
+
+    /**
+     * Lazy search for the first element nested in a block (caches results)
+     * @private
+     * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
+     * @returns {Elem}
+     */
+    elem : function(Elem) {
+        var key = buildElemKey(Elem);
+        // NOTE: can use this._elemsCache but it's too rare case
+        return key in this._elemCache?
+            this._elemCache[key] :
+            this.findChildElem(Elem);
+    },
+
+    /**
+     * Clearing the cache for elements
+     * @protected
+     * @param {Function|...String|Object} [elems] Nested elements names or description elem, modName, modVal
+     * @returns {BemDomEntity} this
+     */
+    dropElemCache : function(elems) {
+        if(!arguments.length) {
+            this._elemsCache = {};
+            this._elemCache = {};
+            return this;
+        }
+
+        (Array.isArray(elems)? elems : slice.call(arguments)).forEach(function(elem) {
+            var key = buildElemKey(elem);
+            delete this._elemsCache[key];
+            delete this._elemCache[key];
+        }, this);
+
+        return this;
     }
 });
 
@@ -1265,12 +850,12 @@ var Elem = inherit([BEM.Elem, BemDomEntity], /** @lends Elem.prototype */{
 
 /**
  * Returns a block on a DOM element and initializes it if necessary
- * @param {Function} Block Block
- * @param {Object} params Block parameters
- * @returns {BEMDOM}
+ * @param {Function} BemDomEntity entity
+ * @param {Object} params entity parameters
+ * @returns {BemDomEntity}
  */
-$.fn.bem = function(Block, params) {
-    return initEntity(Block.getName(), this, params, true)._init();
+$.fn.bem = function(BemDomEntity, params) {
+    return initEntity(BemDomEntity.getEntityName(), this, params, true)._init();
 };
 
 $(function() {
@@ -1287,19 +872,33 @@ BEMDOM = /** @exports */{
      * Document shortcut
      * @type jQuery
      */
-    doc : doc,
+    doc : $(document),
 
     /**
      * Window shortcut
      * @type jQuery
      */
-    win : win,
+    win : $(window),
 
     /**
      * Base BEMDOM block
      * @type Function
      */
     Block : Block,
+
+    /**
+     * Base BEMDOM element
+     * @type Function
+     */
+    Elem : Elem,
+
+    /**
+     * @param {*} entity
+     * @return {Boolean}
+     */
+    isEntity : function(entity) {
+        return entity instanceof Block || entity instanceof Elem;
+    },
 
     /**
      * Declares DOM-based block and creates block class
@@ -1367,13 +966,7 @@ BEMDOM = /** @exports */{
      */
     destruct : function(ctx, excludeSelf) {
         var _ctx;
-        if(excludeSelf) {
-            storeDomNodeParents(_ctx = ctx.children());
-            ctx.empty();
-        } else {
-            storeDomNodeParents(_ctx = ctx);
-            ctx.remove();
-        }
+        storeDomNodeParents(_ctx = excludeSelf? ctx.children() : ctx);
 
         reverse.call(findDomElem(_ctx, BEM_SELECTOR)).each(function(_, domNode) {
             var params = getParams(domNode);
@@ -1387,6 +980,11 @@ BEMDOM = /** @exports */{
             });
             delete domElemToParams[identify(domNode)];
         });
+
+        // NOTE: it was moved here as jquery events aren't triggered on detached DOM elements
+        excludeSelf?
+            ctx.empty() :
+            ctx.remove();
 
         // flush parent nodes storage that has been filled above
         domNodesToParents = {};

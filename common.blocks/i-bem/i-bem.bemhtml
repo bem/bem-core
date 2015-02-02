@@ -388,7 +388,10 @@ def()(function() {
                                 this.extend(mixItem.js, mixItemJs === true? {} : mixItemJs) :
                                 mixItem.js === true? {} : mixItem.js;
                             if(mixItemJs) {
-                                (jsParams || (jsParams = {}))[BEM_INTERNAL.buildClass(mixBlock, mixItem.elem)] = mixItemJs;
+                                (jsParams ||
+                                        (jsParams = {}))[BEM_INTERNAL.buildClass(mixBlock, mixItem.elem)] = mixItemJs === true?
+                                    {} :
+                                    mixItemJs;
                                 addJSInitClass = true;
                             }
 
