@@ -3,6 +3,7 @@
         ".bem/cache/**",
         ".enb/tmp/**",
         ".git/**",
+        ".gitignore",
         "libs/**",
         "node_modules/**",
         "**/*.test.bemhtml/**",
