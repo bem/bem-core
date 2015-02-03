@@ -4,7 +4,8 @@
 
 modules.define('jquery', ['ua'], function(provide, ua, $) {
 
-if(ua.ie) { // TODO: investigate for which version of IE we need this workaround
+// IE8 and below, https://msdn.microsoft.com/en-us/library/ie/ms536959%28v=vs.85%29.aspx
+if(ua.msie && document.documentMode < 9) {
     var win = window,
         $win = $(window),
         winWidth = $win.width(),
