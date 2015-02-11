@@ -532,7 +532,9 @@ var touchEvents = {
     removePrimaryPointer : function(pointer) {
         if(pointer.isPrimary) {
             this.firstTouch = null;
-            //this.firstXY = null;
+            // TODO(@narqo): It seems that, flushing `firstXY` flag explicitly in `touchmove` handler is enough.
+            // Original code from polymer doing `this.firstXY = null` on every `removePrimaryPointer` call, but looks
+            // like it is harmful in some of our usecases.
             this.resetClickCount();
         }
     },

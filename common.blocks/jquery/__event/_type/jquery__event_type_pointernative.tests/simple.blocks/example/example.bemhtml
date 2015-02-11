@@ -4,8 +4,8 @@ block('example').content()({
         elem : 'inner1',
         content : {
             elem : 'inner2',
-            content: {
-                elem: 'inner3'
+            content : {
+                elem : 'inner3'
             }
         }
     }
