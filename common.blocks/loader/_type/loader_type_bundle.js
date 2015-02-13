@@ -12,8 +12,12 @@ var LOADING_TIMEOUT = 20000,
     bundles = {},
 
     handleError = function(bundleId) {
-        var bundleDesc = bundles[bundleId],
-            fns = bundleDesc.errorFns, fn;
+        var bundleDesc = bundles[bundleId];
+
+        if(!bundleDesc) return;
+
+        var fns = bundleDesc.errorFns,
+            fn;
 
         clearTimeout(bundleDesc.timer);
 
@@ -72,6 +76,8 @@ var LOADING_TIMEOUT = 20000,
 
 load._loaded = function(bundle) {
     var bundleDesc = bundles[bundle.id];
+
+    if(!bundleDesc) return;
 
     clearTimeout(bundleDesc.timer);
 
