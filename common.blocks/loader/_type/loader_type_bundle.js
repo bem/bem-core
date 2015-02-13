@@ -5,7 +5,7 @@
 
 modules.define('loader_type_bundle', function(provide) {
 
-var LOADING_TIMEOUT = 20000,
+var LOADING_TIMEOUT = 30000,
     global = this.global,
     doc = document,
     head,
