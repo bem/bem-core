@@ -84,7 +84,9 @@ var undef,
     buildClass = BEMINTERNAL.buildClass,
 
     reverse = Array.prototype.reverse,
-    slice = Array.prototype.slice;
+    slice = Array.prototype.slice,
+
+    BEMDOM;
 
 /**
  * Initializes entities on a DOM element
@@ -1255,13 +1257,15 @@ $.fn.bem = function(Block, params) {
     return initEntity(Block.getName(), this, params, true)._init();
 };
 
-var BEMDOM = /** @exports */{
+$(function() {
+
+BEMDOM = /** @exports */{
 
     /**
      * Scope
      * @type jQuery
      */
-    scope : null,
+    scope : $('body'),
 
     /**
      * Document shortcut
@@ -1441,12 +1445,9 @@ var BEMDOM = /** @exports */{
     }
 };
 
-// Set default scope after DOM ready
-$(function() {
-    BEMDOM.scope = $('body');
-});
-
 provide(BEMDOM);
+
+});
 
 });
 
