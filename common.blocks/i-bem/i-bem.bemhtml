@@ -350,7 +350,7 @@ def()(function() {
             var cls = apply('cls');
             cls || (cls = ctx.cls);
 
-            var addJSInitClass = ctx.block && jsParams && !ctx.elem;
+            var addJSInitClass = (ctx.block || ctx.elem) && jsParams;
             if(isBEM || cls) {
                 this._str += ' class="';
                 if(isBEM) {
@@ -389,7 +389,7 @@ def()(function() {
                                 mixItem.js === true? {} : mixItem.js;
                             if(mixItemJs) {
                                 (jsParams || (jsParams = {}))[BEM_INTERNAL.buildClass(mixBlock, mixItem.elem)] = mixItemJs;
-                                addJSInitClass || (addJSInitClass = mixBlock && !mixItem.elem);
+                                addJSInitClass = true;
                             }
 
                             // Process nested mixes
