@@ -7,7 +7,7 @@ block('b-bla')(
 
 block('b-alb')(
   attrs()({ bbb: 1, title: 2 }),
-  js()({ bbb: 1, title: 2 })
+  js()({ bbb: 1, title: '<a b="\'&">' })
 );
 
 block('b-nojs')(
