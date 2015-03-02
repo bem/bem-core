@@ -213,6 +213,15 @@ function storeDomNodeParents(domElem) {
     });
 }
 
+/**
+ * Returns jQuery collection for provided HTML
+ * @param {jQuery|String} html
+ * @returns {jQuery}
+ */
+function getJqueryCollection(html) {
+    return $(typeof html === 'string'? $.parseHTML(html, null, true) : html);
+}
+
 var DOM;
 
 $(function() {
@@ -1019,11 +1028,13 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
         var prev = ctx.prev(),
             parent = ctx.parent();
 
+        content = getJqueryCollection(content);
+
         this.destruct(ctx);
 
         return this.init(prev.length?
-            $(content).insertAfter(prev) :
-            $(content).prependTo(parent));
+            content.insertAfter(prev) :
+            content.prependTo(parent));
     },
 
     /**
@@ -1033,7 +1044,7 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @returns {jQuery} New content
      */
     append : function(ctx, content) {
-        return this.init($(content).appendTo(ctx));
+        return this.init(getJqueryCollection(content).appendTo(ctx));
     },
 
     /**
@@ -1043,7 +1054,7 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @returns {jQuery} New content
      */
     prepend : function(ctx, content) {
-        return this.init($(content).prependTo(ctx));
+        return this.init(getJqueryCollection(content).prependTo(ctx));
     },
 
     /**
@@ -1053,7 +1064,7 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @returns {jQuery} New content
      */
     before : function(ctx, content) {
-        return this.init($(content).insertBefore(ctx));
+        return this.init(getJqueryCollection(content).insertBefore(ctx));
     },
 
     /**
@@ -1063,7 +1074,7 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @returns {jQuery} New content
      */
     after : function(ctx, content) {
-        return this.init($(content).insertAfter(ctx));
+        return this.init(getJqueryCollection(content).insertAfter(ctx));
     },
 
     /**
