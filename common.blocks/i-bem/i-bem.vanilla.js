@@ -260,7 +260,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * Checks whether a block or nested element has a modifier
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
-     * @param {String} [modVal] Modifier value
+     * @param {String|Boolean} [modVal] Modifier value. If defined and not of type String or Boolean, it is casted to String
      * @returns {Boolean}
      */
     hasMod : function(elem, modName, modVal) {
@@ -282,6 +282,11 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
                 invert = true;
             }
         }
+
+        var typeModVal = typeof modVal;
+        typeModVal === 'string' ||
+            typeModVal === 'boolean' ||
+            typeModVal === 'undefined' || (modVal = modVal.toString());
 
         var res = this.getMod(elem, modName) === modVal;
         return invert? !res : res;
@@ -344,7 +349,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * Sets the modifier for a block/nested element
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
-     * @param {String} modVal Modifier value
+     * @param {String|Boolean} [modVal=true] Modifier value. If not of type String or Boolean, it is casted to String
      * @returns {BEM} this
      */
     setMod : function(elem, modName, modVal) {
@@ -361,7 +366,11 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
         }
 
         if(!elem || elem[0]) {
-            modVal === false && (modVal = '');
+            if(modVal === false) {
+                modVal = '';
+            } else if(typeof modVal !== 'boolean') {
+                modVal = modVal.toString();
+            }
 
             var modId = (elem && elem[0]? identify(elem[0]) : '') + '_' + modName;
 

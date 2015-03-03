@@ -150,6 +150,12 @@ describe('i-bem', function() {
                     .setMod('mod1')
                     .getMod('mod1').should.be.true;
             });
+
+            it('should cast non-boolean mod value to string', function() {
+                block
+                    .setMod('mod1', 1)
+                    .getMod('mod1').should.be.equal('1');
+            });
         });
 
         describe('delMod', function() {
@@ -183,6 +189,21 @@ describe('i-bem', function() {
                     .setMod('mod1', '')
                     .hasMod('mod1')
                         .should.be.false;
+            });
+
+            it('should treat defined non-boolean mod value as a string', function() {
+                block
+                    .setMod('mod1', 1)
+                    .hasMod('mod1', 1)
+                        .should.be.true;
+
+                block.hasMod('mod1', '1')
+                    .should.be.true;
+
+                block
+                    .setMod('mod1', '2')
+                    .hasMod('mod1', 2)
+                        .should.be.true;
             });
 
             it('in short form should return true for undefined mod', function() {
