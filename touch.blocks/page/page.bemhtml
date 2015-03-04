@@ -19,7 +19,7 @@ block('page')(
 
     mix()(function() {
         var mix = applyNext(),
-            uaMix = [{ block : 'ua', js : true }];
+            uaMix = [{ block : 'ua', attrs : { nonce : this._nonceCsp }, js : true }];
 
         return mix? uaMix.concat(mix) : uaMix;
     })

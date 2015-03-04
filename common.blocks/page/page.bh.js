@@ -3,6 +3,7 @@ module.exports = function(bh) {
     bh.match('page', function(ctx, json) {
         ctx
             .tag('body')
+            .tParam('nonceCsp', json.nonce)
             .content([
                 ctx.content(),
                 json.scripts
@@ -19,7 +20,7 @@ module.exports = function(bh) {
                         content : [
                             { tag : 'meta', attrs : { charset : 'utf-8' } },
                             { tag : 'title', content : json.title },
-                            { block : 'ua' },
+                            { block : 'ua',  attrs : { nonce : json.nonce } },
                             json.head,
                             json.styles,
                             json.favicon? { elem : 'favicon', url : json.favicon } : '',
