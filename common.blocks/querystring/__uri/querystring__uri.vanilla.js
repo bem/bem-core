@@ -19,7 +19,7 @@ function convert(str) {
 
 function decode(fn,  str) {
     var decoded = '';
-    
+
     // Try/catch block for getting the encoding of the source string.
     // Error is thrown if a non-UTF8 string is input.
     // If the string was not decoded, it is returned without changes.
@@ -32,7 +32,7 @@ function decode(fn,  str) {
             decoded = str;
         }
     }
-    
+
     return decoded;
 }
 
