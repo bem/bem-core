@@ -15,7 +15,8 @@ var undef,
             r = new RegExp(r, 'g');
             return function(s) { return ('' + s).replace(r, f); };
         };
-    })();
+    })(),
+    resetApplyNext = context.resetApplyNext || function() {};
 
 context.BEMContext = BEMContext;
 
@@ -32,6 +33,7 @@ function BEMContext(context, apply_) {
     this.elem = undef;
     this.mods = undef;
     this.elemMods = undef;
+    this._resetApplyNext = resetApplyNext;
 }
 
 BEMContext.prototype.isArray = isArray;
@@ -152,6 +154,7 @@ match(this._mode === '')(
 def()(function() {
     var content = apply('content');
     if(content || content === 0) {
+        this._resetApplyNext(this);
         this.ctx.content = apply('', { ctx : content });
     }
     return this.ctx;

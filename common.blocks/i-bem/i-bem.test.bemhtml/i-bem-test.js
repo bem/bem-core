@@ -49,4 +49,5 @@ suite('i-bem block and others', function() {
   unit('mix with same block bem-core/804', 'gh-core-804');
   unit('nested mix as object bem-core/873', 'gh-core-873');
   unit('string mix', 'string-mix');
+  unit('reset apply next when entering content', 'reset-apply-next');
 });
