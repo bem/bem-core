@@ -348,6 +348,7 @@ modules.define('hello', ['i-bem__dom'], function(provide, BEMDOM) {
 });
 ```
 
+
 ### Подробнее
 
  * [Описание JS-фреймворка `i-bem.js`](https://ru.bem.info/technology/i-bem/)
