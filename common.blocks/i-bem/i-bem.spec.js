@@ -159,6 +159,12 @@ describe('i-bem', function() {
                     .getMod('mod1')
                         .should.be.true;
             });
+
+            it('should cast non-boolean mod value to string', function() {
+                block
+                    .setMod('mod1', 0)
+                    .getMod('mod1').should.be.equal('0');
+            });
         });
 
         describe('delMod', function() {
@@ -187,14 +193,14 @@ describe('i-bem', function() {
                 block.hasMod('mod1').should.be.true;
             });
 
-            it('in short form should return true for empty mod\'s value', function() {
+            it('in short form should return false for empty mod\'s value', function() {
                 block
                     .setMod('mod1', '')
                     .hasMod('mod1')
                         .should.be.false;
             });
 
-            it('in short form should return true for undefined mod', function() {
+            it('in short form should return false for undefined mod', function() {
                 block.hasMod('mod4').should.be.false;
             });
 
@@ -204,6 +210,26 @@ describe('i-bem', function() {
                     .hasMod('mod1').should.be.true;
 
                 block.hasMod('mod1', true).should.be.true;
+            });
+
+            it('should not treat passed but undefined mod value as a short form', function() {
+                var modVal;
+                block.hasMod('mod1', modVal).should.be.false;
+            });
+
+            it('should treat defined non-boolean mod value as a string', function() {
+                block
+                    .setMod('mod1', 0)
+                    .hasMod('mod1', 0)
+                        .should.be.true;
+
+                block.hasMod('mod1', '0')
+                    .should.be.true;
+
+                block
+                    .setMod('mod1', '1')
+                    .hasMod('mod1', 1)
+                        .should.be.true;
             });
         });
 
