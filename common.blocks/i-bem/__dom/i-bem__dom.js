@@ -764,7 +764,7 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @private
      * @param {String} name Nested element name
      * @param {String} [modName] Modifier name
-     * @param {String} [modVal] Modifier value
+     * @param {String|Boolean} [modVal] Modifier value
      * @returns {jQuery} DOM elements
      */
     _elem : function(name, modName, modVal) {
@@ -783,10 +783,14 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * Lazy search for elements nested in a block (caches results)
      * @param {String} names Nested element name (or names separated by spaces)
      * @param {String} [modName] Modifier name
-     * @param {String} [modVal] Modifier value
+     * @param {String|Boolean} [modVal=true] Modifier value
      * @returns {jQuery} DOM elements
      */
     elem : function(names, modName, modVal) {
+        if(arguments.length === 2) {
+            modVal = true;
+        }
+
         if(modName && typeof modName !== 'string') {
             modName.__bemElemName = names;
             return modName;

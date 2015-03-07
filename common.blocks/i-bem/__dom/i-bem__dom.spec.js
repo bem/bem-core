@@ -165,6 +165,62 @@ describe('i-bem__dom', function() {
         });
     });
 
+    describe('elem', function() {
+        var rootNode, instance, e1Elems;
+        function areElemsEqual(e1, e2) {
+            if(e1.length !== e2.length) return false;
+
+            var res = false;
+            e1.each(function(i) {
+                return res = e1[i] === e2[i];
+            });
+            return res;
+        }
+
+        beforeEach(function() {
+            DOM.decl('block', {});
+            rootNode = DOM.init($(BEMHTML.apply({
+                block : 'block',
+                js : true,
+                content : [
+                    { elem : 'e1' },
+                    { elem : 'e1', mods : { m1 : 'v1' } },
+                    { elem : 'e1', mods : { m1 : 'v2' } },
+                    { elem : 'e1', mods : { m1 : 'v1' } },
+                    { elem : 'e1', mods : { m1 : true } },
+                    { elem : 'e2' }
+                ]
+            })));
+            instance = rootNode.bem('block');
+            e1Elems = instance.domElem.find('.block__e1');
+        });
+
+        afterEach(function() {
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+        });
+
+        it('should properly find elem by given name', function() {
+            areElemsEqual(instance.elem('e1'), [e1Elems[0], e1Elems[1], e1Elems[2], e1Elems[3], e1Elems[4]])
+                .should.be.true;
+        });
+
+        it('should properly find elem by given mod', function() {
+            areElemsEqual(instance.elem('e1', 'm1', 'v1'), [e1Elems[1], e1Elems[3]])
+                .should.be.true;
+        });
+
+        it('should properly find elem by given boolean mod with modVal', function() {
+            areElemsEqual(instance.elem('e1', 'm1', true), [e1Elems[4]])
+                .should.be.true;
+        });
+
+        it('should properly find elem by given boolean mod without modVal', function() {
+            areElemsEqual(instance.elem('e1', 'm1'), [e1Elems[4]])
+                .should.be.true;
+        });
+    });
+
     describe('elemify', function() {
         var rootNode, instance;
         beforeEach(function() {
