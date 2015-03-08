@@ -454,7 +454,12 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
                     this.__self._blockName + ELEM_DELIM + entity,
             selector = '.' +
                 (typeof entity === 'object'?
-                    buildClass(entityName, entity.modName, entity.modVal) :
+                    buildClass(
+                        entityName,
+                        entity.modName,
+                        typeof entity.modVal === 'undefined'?
+                            true :
+                            entity.modVal) :
                     buildClass(entityName)) +
                 (onlyFirst? ':first' : ''),
             domElems = this.domElem[select](selector);
