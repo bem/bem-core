@@ -15,7 +15,7 @@ provide(/** @exports */{
      * @returns {Object}
      */
     extend : function(target, source) {
-        typeof target !== 'object' && (target = {});
+        (typeof target !== 'object' || target === null) && (target = {});
 
         for(var i = 1, len = arguments.length; i < len; i++) {
             var obj = arguments[i];

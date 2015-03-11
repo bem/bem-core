@@ -30,6 +30,11 @@ describe('objects', function() {
                 .should.be.eql({ p1 : 'v1' });
         });
 
+        it('should return new object if target is null', function() {
+            objects.extend(null, { p1 : 'v1' })
+                .should.be.eql({ p1 : 'v1' });
+        });
+
         it('should properly extend object with "hasOwnProperty" property', function() {
             objects.extend(
                 { hasOwnProperty : '' },
