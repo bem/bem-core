@@ -4,6 +4,8 @@ block('page')(
         this._defPageApplied = true;
 
         var ctx = this.ctx;
+        this._nonceCsp = ctx.nonce;
+
         applyCtx([
             ctx.doctype || '<!DOCTYPE html>',
             {
@@ -15,7 +17,7 @@ block('page')(
                         content : [
                             { tag : 'meta', attrs : { charset : 'utf-8' } },
                             { tag : 'title', content : ctx.title },
-                            { block : 'ua' },
+                            { block : 'ua', attrs : { nonce : ctx.nonce } },
                             ctx.head,
                             ctx.styles,
                             ctx.favicon? { elem : 'favicon', url : ctx.favicon } : ''
