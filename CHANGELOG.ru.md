@@ -1,5 +1,35 @@
 # История изменений
 
+## 2.6.0
+
+### Крупные изменения
+
+- Предоставление модуля `i-bem__dom` теперь происходит после наступления события DOM ready ([#859](https://github.com/bem/bem-core/issues/859)).
+- Методы `setMod` и `hasMod` модуля `i-bem__dom` теперь явно преобразуют параметр `modVal` к строке,
+  если переданное значение не типа string или boolean ([#890](https://github.com/bem/bem-core/is/sues/890)).
+- В блок `page` добавлена возможность прокидывать атрибут `nonce`, для корректной работы инлайн-скриптов, в соответствии
+  со спецификацией Content Security Policy ([#882](https://github.com/bem/bem-core/issues/882)).
+- Добавлены шаблоны `page__conditional-comment` ([#551](https://github.com/bem/bem-core/issues/511)).
+- Модуль `vow` обновлен до версии 0.4.8 ([#837](https://github.com/bem/bem-core/issues/837)).
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена ошибка в `i-bem.bemhtml`, из-за которой CSS-класс блока дублировался, в случае микса с этим же блоком
+  ([#792](https://github.com/bem/bem-core/issues/792)).
+- Исправлена ошибка в `loader_type_bundle`, из-за которой функция-обработчик успешного результата могла выполняться
+  после наступления таймаута ([67ff55f](https://github.com/bem/bem-core/commit/da5fdb9923e7e83e3ef9cd31aefc3967ff55fd3c)).
+- Исправлена ошибка в `i-bem__dom`, в некоторых случаях, приводящая к неправильной интерпретации строковых аргументов
+  в методах `append`, `prepend` и др. ([#852](https://github.com/bem/bem-core/issues/852)).
+- Исправлена ошибка в `jquery__event_type_winresize`, из-за которой неправильно определятся браузер MSIE ([#862](https://github.com/bem/bem-core/issues/862)).
+- Исправлена ошибка в `object`, из-за которой метод `extend` неправильно обрабатывал `null` в качестве значения
+  аргумента `target` ([#910](https://github.com/bem/bem-core/issues/910)).
+- Исправлена ошибка в `page`. Из BEMJSON было невозможно отключить добавление meta-тега `x-ua-compatible` ([#794](https://github.com/bem/bem-core/issues/794)).
+
+### Также в релиз вошли следующие изменения
+
+- Таймаут в `loader_type_bundle` увеличен до 30000 мс ([4e27422](https://github.com/bem/bem-core/commit/000c6af02bfae4506fa460168de16d4e27422393)).
+- Исправлены незначительные ошибки в русской документации блоков.
+
 ## 2.5.1
 
 ### В релиз вошли следующие исправления ошибок

@@ -1,5 +1,34 @@
 # Changelog
 
+## 2.6.0
+
+### Major changes
+
+- Since now `i-bem__dom` provides module after DOM is ready ([#859](https://github.com/bem/bem-core/issues/859)).
+- Since now `setMod` and `hasMod` methods of `i-bem__dom` convert their `modVal` argument to string in case
+  it is not of type string or boolean ([#890](https://github.com/bem/bem-core/issues/890)).
+- An ability to pass `nonce` attribute was added to `page`, to support related parts of Content Security Policy
+  specification ([#882](https://github.com/bem/bem-core/issues/882)).
+- New `page__conditional-comment` template was added ([#551](https://github.com/bem/bem-core/issues/511)).
+- `vow` was updated to 0.4.8 ([#837](https://github.com/bem/bem-core/issues/837)).
+
+### Bug fixes
+
+- An issue in `i-bem.bemhtml` was fixed. Block CSS class repeated in case of mix with the same
+  block ([#792](https://github.com/bem/bem-core/issues/792)).
+- An issue in `loader_type_bundle` was fixed. Success callback might be applied after timeout
+  error ([67ff55f](https://github.com/bem/bem-core/commit/da5fdb9923e7e83e3ef9cd31aefc3967ff55fd3c)).
+- An issue in `i-bem__dom` was fixed. `append`, `prepend` and other similar methods won't properly work with strings
+  in some cases ([#852](https://github.com/bem/bem-core/issues/852)).
+- An issue in `jquery__event_type_winresize` was fixed. MSIE wasn't detected properly ([#862](https://github.com/bem/bem-core/issues/862)).
+- An issue in `object` was fixed to proper handle `null` value as `target` argument in `extend` method ([#910](https://github.com/bem/bem-core/issues/910)).
+- An issue in `page` was fixed. There was no way to disable `x-ua-compatible` meta tag from BEMJSON ([#794](https://github.com/bem/bem-core/issues/794)).
+
+### Other changes
+
+- Timeout in `loader_type_bundle` module was increased to 30000 ms ([4e27422](https://github.com/bem/bem-core/commit/000c6af02bfae4506fa460168de16d4e27422393)).
+- Russian documentation for several blocks was fixed.
+
 ## 2.5.1
 
 ### Bug fixes
