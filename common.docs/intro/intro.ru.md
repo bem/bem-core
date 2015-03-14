@@ -26,7 +26,7 @@
  * локальная установка `npm`-зависимостей в каталог созданного проекта (симлинки на исполняемые файлы будут созданы в `./project-hello/node_modules/.bin/`);
  * установка `bower`-зависимостей (библиотеки `bem-core` и `bem-components`).
 
-**NB** Для сборки проекта необходима утилита `bem` (bem-tools) или `enb`.
+**NB** Для сборки проекта необходима утилита `enb` или `bem` (bem-tools).
 
 Организовать цикл разработки (правка—компиляция—просмотр—правка...) поможет сервер для разработки.
 Запускать его нужно в корневой папке проекта:
@@ -151,7 +151,7 @@
 Напишем шаблон для блока `hello` в файле `desktop.blocks/hello/hello.bemhtml`:
 
 ```javascript
-block('hello').content(function() {
+block('hello').content()(function() {
     return ['Hello, ', this.ctx.name, '!'];
 });
 ```
@@ -211,7 +211,7 @@ HTML-результат:
 
 ```javascript
 block('hello')(
-    content(function() {
+    content()(function() {
         return (this.ctx.names || [this.ctx.name]).map(function(user) {
             return { elem: 'item', content: user };
         });
