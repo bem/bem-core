@@ -19,6 +19,13 @@ module.exports = function(bh) {
                         elem : 'head',
                         content : [
                             { tag : 'meta', attrs : { charset : 'utf-8' } },
+                            json.uaCompatible === false? '' : {
+                                tag : 'meta',
+                                attrs: {
+                                    'http-equiv' : 'X-UA-Compatible',
+                                    content : json.uaCompatible || 'IE=edge'
+                                }
+                            },
                             { tag : 'title', content : json.title },
                             { block : 'ua',  attrs : { nonce : json.nonce } },
                             json.head,
