@@ -67,7 +67,7 @@ module.exports = function(config) {
                     }],
                     [ym, {
                         source : '.tmp.source.js',
-                        target : LIB_NAME + '.dev.browser.js'
+                        target : LIB_NAME + '.dev.js'
                     }],
                     [bemhtml, { target : LIB_NAME + '.dev.bemhtml.js', devMode : false }],
                     [bhYm, { target : '.tmp.browser.bh.js', jsAttrName : 'data-bem', jsAttrScheme : 'json' }],
@@ -78,7 +78,7 @@ module.exports = function(config) {
                     }],
                     [ym, {
                         source : '.tmp.source+bemhtml.js',
-                        target : LIB_NAME + '.dev.browser+bemhtml.js'
+                        target : LIB_NAME + '.dev.js+bemhtml.js'
                     }],
                     [mergeFiles, {
                         target : '.tmp.source+bh.js',
@@ -86,18 +86,18 @@ module.exports = function(config) {
                     }],
                     [ym, {
                         source : '.tmp.source+bh.js',
-                        target : LIB_NAME + '.dev.browser+bh.js'
+                        target : LIB_NAME + '.dev.js+bh.js'
                     }],
                     [borschik, { source : LIB_NAME + '.dev.css', target : LIB_NAME + '.css' }],
-                    [borschik, { source : LIB_NAME + '.dev.browser.js', target : LIB_NAME + '.browser.js' }],
+                    [borschik, { source : LIB_NAME + '.dev.js', target : LIB_NAME + '.js' }],
                     [borschik, { source : LIB_NAME + '.dev.bemhtml.js', target : LIB_NAME + '.bemhtml.js' }],
                     [borschik, { source : LIB_NAME + '.dev.bh.js', target : LIB_NAME + '.bh.js' }],
-                    [borschik, { source : LIB_NAME + '.dev.browser+bemhtml.js', target : LIB_NAME + '.browser+bemhtml.js' }],
-                    [borschik, { source : LIB_NAME + '.dev.browser+bh.js', target : LIB_NAME + '.browser+bh.js' }]
+                    [borschik, { source : LIB_NAME + '.dev.js+bemhtml.js', target : LIB_NAME + '.js+bemhtml.js' }],
+                    [borschik, { source : LIB_NAME + '.dev.js+bh.js', target : LIB_NAME + '.js+bh.js' }]
                 ]);
 
                 nodeConfig.addTargets([
-                    LIB_NAME + '.css', LIB_NAME + '.browser.js', LIB_NAME + '.bemhtml.js', LIB_NAME + '.bh.js', LIB_NAME + '.browser+bemhtml.js', LIB_NAME + '.browser+bh.js'
+                    LIB_NAME + '.css', LIB_NAME + '.js', LIB_NAME + '.bemhtml.js', LIB_NAME + '.bh.js', LIB_NAME + '.js+bemhtml.js', LIB_NAME + '.js+bh.js'
                 ]);
             });
         });
