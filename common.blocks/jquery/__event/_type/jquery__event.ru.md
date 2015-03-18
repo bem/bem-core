@@ -35,7 +35,7 @@
 ```js
 modules.define(
     'pointer-test',
-    ['i-bem__dom', 'jquery__event_type_pointer'],
+    ['i-bem__dom', 'jquery'],
     function(provide, BEMDOM, $) {
 
 provide(BEMDOM.decl({ block : this.name }, /** @lends pointer-test.prototype */
