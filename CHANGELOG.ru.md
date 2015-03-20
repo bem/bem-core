@@ -6,7 +6,7 @@
 
 - Предоставление модуля `i-bem__dom` теперь происходит после наступления события DOM ready ([#859](https://github.com/bem/bem-core/issues/859)).
 - Методы `setMod` и `hasMod` модуля `i-bem__dom` теперь явно преобразуют параметр `modVal` к строке,
-  если переданное значение не типа string или boolean ([#890](https://github.com/bem/bem-core/is/sues/890)).
+  если переданное значение не типа string или boolean ([#890](https://github.com/bem/bem-core/issues/890)).
 - В блок `page` добавлена возможность прокидывать атрибут `nonce`, для корректной работы инлайн-скриптов, в соответствии
   со спецификацией Content Security Policy ([#882](https://github.com/bem/bem-core/issues/882)).
 - Добавлены шаблоны `page__conditional-comment` ([#551](https://github.com/bem/bem-core/issues/511)).
