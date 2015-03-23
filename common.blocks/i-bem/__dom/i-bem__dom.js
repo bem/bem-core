@@ -771,7 +771,7 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
         var key = name + buildModPostfix(modName, modVal),
             res;
 
-        if(!(res = this._elemCache[key])) {
+        if(!(res = this._elemCache[key]) || !res.parent().length) {
             res = this._elemCache[key] = this.findElem(name, modName, modVal);
             res.__bemElemName = name;
         }
