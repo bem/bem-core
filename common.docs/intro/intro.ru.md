@@ -33,8 +33,8 @@
 
     $ npm start
 
-Сервер принимает соединения по адресу http://localhost:8080/ и выполняет сборку страницы по
-запросу от браузера, например: http://localhost:8080/desktop.bundles/index/index.html.
+Сервер принимает соединения по адресу `http://localhost:8080/` и выполняет сборку страницы по
+запросу от браузера, например: `http://localhost:8080/desktop.bundles/index/index.html`.
 
 <a name="page"></a>
 ## Шаг 2. Создать макет страницы
@@ -71,7 +71,7 @@
 
 **NB** В проекте подключены библиотеки блоков `bem-core` и `bem-components`. Мы можем использовать и модифицировать блоки оттуда.
 
-Просмотрим результат сборки страницы в браузере: (http://localhost:8080/desktop.bundles/test/test.html)
+Просмотрим результат сборки страницы в браузере: `http://localhost:8080/desktop.bundles/test/test.html`
 
 ### Подробнее
 
