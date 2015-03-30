@@ -119,11 +119,11 @@ The resulting HTML:
 </div>
 ```
 
-If the `weather` block has a JavaScript realization with usage of `i-bem.js` one needs
+If the `widgets` block has a JavaScript realization with usage of `i-bem.js` one needs
 to use the following template for passing JavaScript parameters into the block:
 
 ```js
-block weather, js: { id: Math.random() * 1e4 }
+block widgets, js: { id: Math.random() * 1e4 }
 ```
 
 The resulting HTML:
@@ -169,7 +169,7 @@ Arbitrary calculations performed in the template body:
 ```js
 block widgets, elem weather, content: {
   var oldContent = applyNext()
-  return oldContent > 0 ? '+' : '' + oldContent + ' °C'
+  return (oldContent > 0 ? '+' : '') + oldContent + ' °C'
 }
 ```
 
@@ -192,14 +192,15 @@ The resulting HTML:
 The input-data:
 
 ```js
-{ block: page,
+{ 
+  block: 'page',
   content: [
     {
-      block: header,
+      block: 'header',
       content: 'Title 1'
     },
     {
-      block: header,
+      block: 'header',
       mods: { level: 2 },
       content: 'Title 2'
     }
