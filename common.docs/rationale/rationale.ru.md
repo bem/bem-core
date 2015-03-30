@@ -91,10 +91,10 @@ HTML-результат:
 ```
 
 
-Если блок `weather` имеет JavaScript-реализацию с использованием `i-bem.js`, то для передачи JavaScript-параметров блоку можно использовать шаблон:
+Если блок `widgets` имеет JavaScript-реализацию с использованием `i-bem.js`, то для передачи JavaScript-параметров блоку можно использовать шаблон:
 
 ```js
-block weather, js: { id: Math.random() * 1e4 }
+block widgets, js: { id: Math.random() * 1e4 }
 ```
 
 
@@ -138,7 +138,7 @@ HTML-результат:
 ```js
 block widgets, elem weather, content: {
   var oldContent = applyNext()
-  return oldContent > 0 ? '+' : '' + oldContent + ' °C'
+  return (oldContent > 0 ? '+' : '') + oldContent + ' °C'
 }
 ```
 
@@ -160,14 +160,15 @@ HTML-результат:
 Входные данные:
 
 ```js
-{ block: page,
+{
+  block: 'page',
   content: [
     {
-      block: header,
+      block: 'header',
       content: 'Заголовок 1'
     },
     {
-      block: header,
+      block: 'header',
       mods: { level: 2 },
       content: 'Заголовок 2'
     }
