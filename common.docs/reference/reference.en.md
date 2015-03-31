@@ -430,8 +430,8 @@ A template must be defined in the `mix` mode (sub-predicate `mix()`) when a bloc
     </td>
     <td><pre><code>&lt;div class="b1 b2 i-bem"
     data-bem="{
-        'b1': { 'p': 1},
-        'b2': { 'p': 2}
+        'b1': { 'p': 1 },
+        'b2': { 'p': 2 }
     }"&gt;
 &lt;/div&gt;</code></pre></td>
 </tr>
