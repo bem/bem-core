@@ -243,6 +243,11 @@ describe('i-bem-dom', function() {
                 getEntityIds(rootBlock.findChildBlocks({ block : B1Block, modName : 'm1', modVal : true }))
                     .should.be.eql(['4']);
             });
+
+            it('should find all blocks by block class and boolean mod without modVal', function() {
+                getEntityIds(rootBlock.findChildBlocks({ block : B1Block, modName : 'm1' }))
+                    .should.be.eql(['4']);
+            });
         });
         
         describe('findChildBlock', function() {
@@ -271,6 +276,12 @@ describe('i-bem-dom', function() {
                     .params.id
                         .should.be.equal('4');
             });
+
+            it('should find first block by block class and boolean mod without modVal', function() {
+                rootBlock.findChildBlock({ block : B1Block, modName : 'm1' })
+                    .params.id
+                        .should.be.equal('4');
+            });
         });
         
         describe('findParentBlocks', function() {
@@ -291,6 +302,11 @@ describe('i-bem-dom', function() {
     
             it('should find all ancestor blocks by block class and boolean mod', function() {
                 getEntityIds(leafBlock.findParentBlocks({ block : B3Block, modName : 'm1', modVal : true }))
+                    .should.be.eql(['5']);
+            });
+
+            it('should find all ancestor blocks by block class and boolean mod without modVal', function() {
+                getEntityIds(leafBlock.findParentBlocks({ block : B3Block, modName : 'm1' }))
                     .should.be.eql(['5']);
             });
         });
@@ -314,6 +330,12 @@ describe('i-bem-dom', function() {
 
             it('should find first ancestor block by block class and boolean mod', function() {
                 leafBlock.findParentBlock({ block : B1Block, modName : 'm3', modVal : true })
+                    .params.id
+                        .should.be.equal('1');
+            });
+
+            it('should find first ancestor block by block class and boolean mod without modVal', function() {
+                leafBlock.findParentBlock({ block : B1Block, modName : 'm3' })
                     .params.id
                         .should.be.equal('1');
             });
@@ -346,6 +368,13 @@ describe('i-bem-dom', function() {
             it('should find mixed block by block class and boolean mod', function() {
                 rootBlock.findChildBlock({ block : B4Block })
                     .findMixedBlock({ block : B3Block, modName : 'm1', modVal : true })
+                        .params.id
+                            .should.be.equal('5');
+            });
+
+            it('should find mixed block by block class and boolean mod without modVal', function() {
+                rootBlock.findChildBlock({ block : B4Block })
+                    .findMixedBlock({ block : B3Block, modName : 'm1' })
                         .params.id
                             .should.be.equal('5');
             });
@@ -439,6 +468,12 @@ describe('i-bem-dom', function() {
                         b1Block.findChildElems({ elem : B1E1Elem, modName : 'm1', modVal : true }))
                     .should.be.eql(['4']);
             });
+
+            it('should find all elems by elem class and boolean mod without modVal', function() {
+                getEntityIds(
+                        b1Block.findChildElems({ elem : B1E1Elem, modName : 'm1' }))
+                    .should.be.eql(['4']);
+            });
         });
 
         describe('findChildElem', function() {
@@ -476,6 +511,12 @@ describe('i-bem-dom', function() {
                     .params.id
                         .should.be.equal('4');
             });
+
+            it('should find first elem by elem class and boolean mod without modVal', function() {
+                b1Block.findChildElem({ elem : B1E1Elem, modName : 'm1' })
+                    .params.id
+                        .should.be.equal('4');
+            });
         });
 
         describe('findParentElems', function() {
@@ -501,6 +542,11 @@ describe('i-bem-dom', function() {
 
             it('should find all ancestor elems by elem class and boolean mod', function() {
                 getEntityIds(leafEntity.findParentElems({ elem : B1E1Elem, modName : 'm2', modVal : true }))
+                    .should.be.eql(['3']);
+            });
+
+            it('should find all ancestor elems by elem class and boolean mod without modVal', function() {
+                getEntityIds(leafEntity.findParentElems({ elem : B1E1Elem, modName : 'm2' }))
                     .should.be.eql(['3']);
             });
         });
@@ -532,6 +578,12 @@ describe('i-bem-dom', function() {
 
             it('should find first ancestor elem by elem class and boolean mod', function() {
                 leafEntity.findParentElem({ elem : B1E1Elem, modName : 'm2', modVal : true })
+                    .params.id
+                        .should.be.equal('3');
+            });
+
+            it('should find first ancestor elem by elem class and boolean mod without modVal', function() {
+                leafEntity.findParentElem({ elem : B1E1Elem, modName : 'm2' })
                     .params.id
                         .should.be.equal('3');
             });
@@ -571,6 +623,13 @@ describe('i-bem-dom', function() {
             it('should find first mixed elem by elem class and boolean mod', function() {
                 b1Block.findChildElem(B1E3Elem)
                     .findMixedElem({ elem : B1E1Elem, modName : 'm2', modVal : true })
+                        .params.id
+                            .should.be.equal('3');
+            });
+
+            it('should find first mixed elem by elem class and boolean mod without modVal', function() {
+                b1Block.findChildElem(B1E3Elem)
+                    .findMixedElem({ elem : B1E1Elem, modName : 'm2' })
                         .params.id
                             .should.be.equal('3');
             });
