@@ -47,4 +47,5 @@ suite('i-bem block and others', function() {
   unit('boolean mods bem-core/169', 'boolean-mods');
   unit('mods redefinition bem-core/441', 'redefine-mods');
   unit('mix with same block bem-core/804', 'gh-core-804');
+  unit('nested mix as object bem-core/873', 'gh-core-873');
 });
