@@ -14,7 +14,7 @@ module.exports = function(bh) {
          * valid bemjson data
          */
         if(typeof json.content === 'undefined' || json.content !== null) {
-            params.content = ctx.apply(json.content);
+            params.content = bh.apply(json.content);
         }
 
         return bh.lib.i18n(keyset, key, params);
