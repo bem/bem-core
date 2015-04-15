@@ -150,7 +150,7 @@ BEM.INTERNAL = {
 })(BEM_);
 
 var buildEscape = (function() {
-    var ts = { '"' : '&quot;', '&' : '&amp;', '<' : '&lt;', '>' : '&gt;' },
+    var ts = { '"' : '&quot;', '&' : '&amp;', '<' : '&lt;', '>' : '&gt;', '\'' : '&#39;' },
         f = function(t) { return ts[t] || t; };
     return function(r) {
         r = new RegExp(r, 'g');
@@ -227,6 +227,7 @@ BEMContext.prototype.identify = (function() {
 
 BEMContext.prototype.xmlEscape = buildEscape('[&<>]');
 BEMContext.prototype.attrEscape = buildEscape('["&<>]');
+BEMContext.prototype.jsAttrEscape = buildEscape('[\'&]');
 
 BEMContext.prototype.BEM = BEM_;
 
@@ -425,9 +426,9 @@ def()(function() {
             }
 
             if(isBEM && jsParams) {
-                this._str += ' data-bem="' +
-                    this.attrEscape(JSON.stringify(jsParams)) +
-                    '"';
+                this._str += ' data-bem=\'' +
+                    this.jsAttrEscape(JSON.stringify(jsParams)) +
+                    '\'';
             }
 
             var attrs = apply('attrs');
