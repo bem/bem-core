@@ -226,7 +226,7 @@ BEMContext.prototype.identify = (function() {
 })();
 
 BEMContext.prototype.xmlEscape = buildEscape('[&<>]');
-BEMContext.prototype.attrEscape = buildEscape('["&<>]');
+BEMContext.prototype.attrEscape = buildEscape('["&]');
 BEMContext.prototype.jsAttrEscape = buildEscape('[\'&]');
 
 BEMContext.prototype.BEM = BEM_;
