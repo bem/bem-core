@@ -108,11 +108,14 @@ The part of a filename that follows the first occurrence of the period is consid
 ### Data types
 
 Data types in BEMJSON correspond to data types in JavaScript.
+
 * Strings and numbers:
  * **String** `` 'a' `` `"a"`;
  * **Number** `1` `0.1`;
 
    A data structure consisting of a single string or number is valid BEMJSON.
+
+* **Boolean**. Values: `true`, `false`.
 
 * **Object** (associative array) '{key: value}' and other types except array.
 
