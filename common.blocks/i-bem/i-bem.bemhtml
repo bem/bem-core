@@ -221,14 +221,10 @@ BEMContext.prototype.xmlEscape = function xmlEscape(str) {
 };
 BEMContext.prototype.attrEscape = function attrEscape(str) {
     return (str + '').replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
 };
 BEMContext.prototype.jsAttrEscape = function jsAttrEscape(str) {
     return (str + '').replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
         .replace(/'/g, '&#39;');
 };
 
