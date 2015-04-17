@@ -164,11 +164,11 @@ describe('i-bem-dom', function() {
             });
         });
     });
-    
+
     describe('find*Block(s)', function() {
         var rootBlock,
             B1Block, B3Block, B4Block, B5Block;
-        
+
         beforeEach(function() {
             var RootBlock = BEMDOM.declBlock('root');
             B1Block = BEMDOM.declBlock('b1');
@@ -222,7 +222,7 @@ describe('i-bem-dom', function() {
 
             rootBlock = rootNode.bem(RootBlock);
         });
-        
+
         describe('findChildBlocks', function() {
             it('should return instances of Block founded by class', function() {
                 rootBlock.findChildBlocks(B1Block).forEach(function(block) {
@@ -233,12 +233,12 @@ describe('i-bem-dom', function() {
             it('should find all blocks by block class', function() {
                 getEntityIds(rootBlock.findChildBlocks(B1Block)).should.be.eql(['1', '2', '3', '4']);
             });
-    
+
             it('should find all blocks by block class, modName and modVal', function() {
                 getEntityIds(rootBlock.findChildBlocks({ block : B1Block, modName : 'm1', modVal : 'v1' }))
                     .should.be.eql(['2']);
             });
-    
+
             it('should find all blocks by block class and boolean mod', function() {
                 getEntityIds(rootBlock.findChildBlocks({ block : B1Block, modName : 'm1', modVal : true }))
                     .should.be.eql(['4']);
@@ -249,7 +249,7 @@ describe('i-bem-dom', function() {
                     .should.be.eql(['4']);
             });
         });
-        
+
         describe('findChildBlock', function() {
             it('should return instance of Block found by class', function() {
                 rootBlock.findChildBlock(B1Block).should.be.instanceOf(B1Block);
@@ -283,7 +283,7 @@ describe('i-bem-dom', function() {
                         .should.be.equal('4');
             });
         });
-        
+
         describe('findParentBlocks', function() {
             var leafBlock;
 
@@ -294,12 +294,12 @@ describe('i-bem-dom', function() {
             it('should find all ancestor blocks by block class', function() {
                 getEntityIds(leafBlock.findParentBlocks(B1Block)).should.be.eql(['3', '1']);
             });
-    
+
             it('should find all ancestor blocks by block class, modName and modVal', function() {
                 getEntityIds(leafBlock.findParentBlocks({ block : B1Block, modName : 'm1', modVal : 'v2' }))
                     .should.be.eql(['3']);
             });
-    
+
             it('should find all ancestor blocks by block class and boolean mod', function() {
                 getEntityIds(leafBlock.findParentBlocks({ block : B3Block, modName : 'm1', modVal : true }))
                     .should.be.eql(['5']);
@@ -639,18 +639,47 @@ describe('i-bem-dom', function() {
     describe('elem(s)', function() {
         var b1Block,
             B1E1Elem,
+            B1E2Elem,
+            B1E3Elem,
             spy;
 
         beforeEach(function() {
             var B1Block = BEMDOM.declBlock('b1');
 
             B1E1Elem = BEMDOM.declElem('b1', 'e1');
+            B1E2Elem = BEMDOM.declElem('b1', 'e2');
+            B1E3Elem = BEMDOM.declElem('b1', 'e3');
 
             rootNode = createDomNode({
                 block : 'b1',
                 content : [
-                    { elem : 'e1', js : { id : 1 } },
-                    { elem : 'e1', elemMods : { m1 : 'v1' }, js : { id : 2 } }
+                    { elem : 'e1', js : { id : '1' } },
+                    { elem : 'e1', elemMods : { m1 : 'v1' }, js : { id : '1`' } },
+                    {
+                        elem : 'e2', js : { id : '2' },
+                        content : [
+                            {
+                                elem : 'e1', js : { id : '2-1' },
+                                elemMods : { inner : 'no' }
+                            },
+                            {
+                                elem : 'e3', js : { id : '2-3' },
+                                elemMods : { inner : 'no', bool : true }
+                            }
+                        ]
+                    },
+                    {
+                        elem : 'e3', js : { id : '3' },
+                        content : {
+                            elem : 'e2', js : { id : '3-2' },
+                            elemMods : { inner : 'yes', bool : true },
+                            content : {
+                                elem : 'e1', js : { id : '3-2-1' },
+                                elemMods : { inner : 'yes', bool : true }
+                            }
+                        }
+                    },
+                    { elem : 'e2', js : { id : '2`' }, elemMods : { bool : true } }
                 ]
             });
 
@@ -668,12 +697,12 @@ describe('i-bem-dom', function() {
 
             it('should find all elems by elem class', function() {
                 getEntityIds(b1Block.elems(B1E1Elem))
-                    .should.be.eql([1, 2]);
+                    .should.be.eql(['1', '1`', '2-1', '3-2-1']);
             });
 
             it('should find all elems by elem class modName and modVal', function() {
                 getEntityIds(b1Block.elems({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' }))
-                    .should.be.eql([2]);
+                    .should.be.eql(['1`']);
             });
 
             it('should cache found elems', function() {
@@ -713,6 +742,45 @@ describe('i-bem-dom', function() {
                 b1Block.elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledThrice;
             });
+
+            it('should cache found elems with findChildElems', function() {
+                // warm cache
+                [B1E1Elem, B1E2Elem, B1E3Elem].forEach(function (Elem) {
+                    b1Block.findChildElems({ elem : Elem });
+                    b1Block.findChildElems({ elem : Elem, modName : 'inner', modVal : 'no' });
+                    b1Block.findChildElems({ elem : Elem, modName : 'inner', modVal : 'yes' });
+                    b1Block.findChildElems({ elem : Elem, modName : 'bool', modVal : true });
+                });
+
+                // reset spy. it shouldn't be called inside `elems`
+                spy.restore();
+                spy = sinon.spy(b1Block, 'findChildElems');
+
+                getEntityIds(b1Block.elems('e1')).should.be.eql(['1', '1`', '2-1', '3-2-1']);
+                getEntityIds(b1Block.elems('e2')).should.be.eql(['2', '3-2', '2`']);
+                getEntityIds(b1Block.elems('e3')).should.be.eql(['2-3', '3']);
+                getEntityIds(b1Block.elems({ elem : 'e1', modName : 'inner', modVal : 'yes' })).should.be.eql(['3-2-1']);
+                getEntityIds(b1Block.elems({ elem : 'e2', modName : 'inner', modVal : 'yes' })).should.be.eql(['3-2']);
+                getEntityIds(b1Block.elems({ elem : 'e3', modName : 'inner', modVal : 'no' })).should.be.eql(['2-3']);
+                getEntityIds(b1Block.elems({ elem : 'e1', modName : 'bool', modVal : true })).should.be.eql(['3-2-1']);
+                getEntityIds(b1Block.elems({ elem : 'e2', modName : 'bool', modVal : true })).should.be.eql(['3-2', '2`']);
+                getEntityIds(b1Block.elems({ elem : 'e3', modName : 'bool', modVal : true })).should.be.eql(['2-3']);
+
+                b1Block.findChildElems.called.should.be.false;
+                b1Block.findChildElems.restore();
+            });
+
+            it('should update _elemsCache on findChildElem call', function() {
+                b1Block.elems('e1');
+                rootNode.html(BEMHTML.apply({
+                    block : 'b1',
+                    elem : 'e1',
+                    js : { id : '1``' }
+                }));
+                b1Block.findChildElems('e1');
+
+                getEntityIds(b1Block.elems('e1')).should.be.eql(['1``']);
+            });
         });
 
         describe('elem', function() {
@@ -723,13 +791,13 @@ describe('i-bem-dom', function() {
             it('should find first elem by elem class', function() {
                 b1Block.elem(B1E1Elem)
                     .params.id
-                        .should.be.equal(1);
+                        .should.be.equal('1');
             });
 
             it('should find first elem by elem class modName and modVal', function() {
                 b1Block.elem({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' })
                     .params.id
-                        .should.be.equal(2);
+                        .should.be.equal('1`');
             });
 
             it('should cache found elem', function() {

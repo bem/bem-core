@@ -367,7 +367,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     findChildElems : function(Elem, strictMode) {
         var res = this._findEntities('find', Elem);
-        return strictMode? this._filterFindElemResults(res) : res;
+        return strictMode? this._filterFindElemResults(res) : this._elemsCache[buildElemKey(Elem)] = res;
     },
 
     /**
@@ -379,7 +379,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     findChildElem : function(Elem, strictMode) {
         return strictMode?
             this._filterFindElemResults(this._findEntities('find', Elem))[0] :
-            this._findEntities('find', Elem, true);
+            this._elemCache[buildElemKey(Elem)] = this._findEntities('find', Elem, true);
     },
 
     /**
@@ -1182,7 +1182,7 @@ var Block = inherit([BEM.Block, BemDomEntity], /** @lends Block.prototype */{
         var key = buildElemKey(Elem);
         return key in this._elemsCache?
             this._elemsCache[key] :
-            this._elemsCache[key] = this.findChildElems(Elem);
+            this.findChildElems(Elem);
     },
 
     /**
@@ -1196,7 +1196,7 @@ var Block = inherit([BEM.Block, BemDomEntity], /** @lends Block.prototype */{
         // NOTE: can use this._elemsCache but it's too rare case
         return key in this._elemCache?
             this._elemCache[key] :
-            this._elemCache[key] = this.findChildElem(Elem);
+            this.findChildElem(Elem);
     },
 
     /**
