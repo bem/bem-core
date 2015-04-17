@@ -225,7 +225,7 @@ BEMContext.prototype.attrEscape = function attrEscape(str) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
 };
-BEMContext.prototype.jsAttrEscape = function attrEscape(str) {
+BEMContext.prototype.jsAttrEscape = function jsAttrEscape(str) {
     return (str + '').replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
