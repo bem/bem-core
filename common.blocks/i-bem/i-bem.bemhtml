@@ -149,15 +149,6 @@ BEM.INTERNAL = {
 
 })(BEM_);
 
-var buildEscape = (function() {
-    var ts = { '"' : '&quot;', '&' : '&amp;', '<' : '&lt;', '>' : '&gt;', '\'' : '&#39;' },
-        f = function(t) { return ts[t] || t; };
-    return function(r) {
-        r = new RegExp(r, 'g');
-        return function(s) { return ('' + s).replace(r, f); };
-    };
-})();
-
 context.BEMContext = BEMContext;
 
 function BEMContext(context, apply_) {
@@ -225,9 +216,19 @@ BEMContext.prototype.identify = (function() {
     };
 })();
 
-BEMContext.prototype.xmlEscape = buildEscape('[&<>]');
-BEMContext.prototype.attrEscape = buildEscape('["&]');
-BEMContext.prototype.jsAttrEscape = buildEscape('[\'&]');
+BEMContext.prototype.xmlEscape = function xmlEscape(str) {
+    return (str + '').replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+};
+BEMContext.prototype.attrEscape = function attrEscape(str) {
+    return (str + '').replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;');
+};
+BEMContext.prototype.jsAttrEscape = function jsAttrEscape(str) {
+    return (str + '').replace(/&/g, '&amp;')
+        .replace(/'/g, '&#39;');
+};
 
 BEMContext.prototype.BEM = BEM_;
 
