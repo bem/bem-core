@@ -45,30 +45,15 @@
 ### Свойства и методы объекта
 
 Блок наследуется от клсаса `Emitter` блока `events`, что позволяет вызывать методы класса.
-Например, в блоке `input` для для проверки изменения значения в нативном `<input>` производится подписка на событие `tick` с помощью унаследованного `tick.on`:
 
 ```js
-modules.define('input', ['tick', 'idle'], function(provide, tick, idle, Input) {
+modules.require('tick', function(tick) {
 
-var instances = [],
-    boundToTick,
-    bindToTick = function() {
-        boundToTick = true;
-        tick
-            .on('tick', update) // подписываемся на событие tick 
-            .start(); // запускаем генерацию события tick
-        idle
-            .on({
-                idle : function() {
-                    tick.un('tick', update); // по событию idle отписываемся от tick
-                },
-                wakeup : function() {
-                    tick.on('tick', update); // по событию wakeup подписываемся обратно
-                }
-            })
-            .start();
-    },
-    update = function() { /* ... */ };
+var update = function() { /* ... */ };
+
+tick
+    .on('tick', update) // подписываемся на событие tick 
+    .start(); // запускаем генерацию события tick
 
 });
 ```
