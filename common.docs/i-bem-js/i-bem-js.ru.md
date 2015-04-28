@@ -962,8 +962,8 @@ BEMDOM.decl('menu', {
     }
 }, {
     live : function() {
-        this.liveBindTo('item', 'click', function() {
-            this._onItemClick();
+        this.liveBindTo('item', 'click', function(e) {
+            this._onItemClick(e);
         });
         return false; // если инициализация блока не может быть отложена
     }
