@@ -1722,12 +1722,12 @@ BEMDOM.decl('my-block',
             }
         },
 
-        _onClick: function() { /* ... */ } // выполняется при каждом DOM-событии 'click'
+        _onClick: function(e) { /* ... */ } // выполняется при каждом DOM-событии 'click'
     },
     {
         live: function() {
-            this.liveBindTo('click', function() {
-                this._onClick(); // в момент клика будет создан экземпляр блока и вызван его метод _onClick
+            this.liveBindTo('click', function(e) {
+                this._onClick(e); // в момент клика будет создан экземпляр блока и вызван его метод _onClick
             });
         }
     }
