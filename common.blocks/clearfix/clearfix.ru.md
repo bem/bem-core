@@ -31,7 +31,7 @@
     block: 'footer',
     attrs: { style: 'border: 2px solid red' },
     content: 'Footer'
-});
+})
 ```
 
 
@@ -63,7 +63,7 @@
     block: 'footer',
     attrs: { style: 'border: 2px solid red' },
     content: 'Footer'
-});
+})
 ```
 
 
