@@ -1,9 +1,13 @@
+<a name="#elems-dom">
 # ua__dom
 
-Элемент служит для дополнения базовой БЭМ-сущности блока `ua` набором модификаторов на основе данных, собранных блоком `ua` на тач-уровне. Это позволяет учитывать особенности пользовательского мобильного устройства проверяя наличие и значение модификаторов элемента.
+Элемент служит для дополнения базовой БЭМ-сущности блока `ua` набором модификаторов на основе данных, собранных блоком `ua` на тач-уровне. 
+
+Это позволяет учитывать особенности мобильного устройства, проверяя наличие и значение модификаторов.
 
 ```js
 modules.define('ios-test', ['i-bem__dom'], function(provide, BEMDOM) {
+
 provide(BEMDOM.decl(this.name, {
     onSetMod: {
         js: {
@@ -17,10 +21,11 @@ provide(BEMDOM.decl(this.name, {
         }            
     }
 }));
+
 });
 ```
 
-Элемент автоматически подключается вместе с блоком `page`, поэтому нет необходимости подключать его вручную, если в проекте используется `page`.
+Элемент автоматически подключается с блоком `page`. Не требуется подключать его вручную, если в проекте используется `page`.
 
 <a name="modifiers"></a>
 ## Модификаторы элемента
@@ -38,7 +43,7 @@ provide(BEMDOM.decl(this.name, {
 
 * `ios` – iOS.
 * `android` – Android.
-* `bada` – Bada Os.
+* `bada` – Bada OS.
 * `wp` – Windows Phone.
 * `other` – все остальные мобильные платформы.
 
@@ -63,6 +68,15 @@ provide(BEMDOM.decl(this.name, {
 
 Модификатор указывает версию операционной системы для устройств iOS.
 
+<a name="modifiers-ios-subversion"></a>
+### Модификатор `ios-subversion`
+
+Допустимые значения: `'81'`, `'80'` ...
+
+Способ использования: `JS`.
+
+Модификатор указывает подверсию операционной системы для устройств iOS. Номер подверсии состоит из номера версии и первого символа после разделителя. Номер указывается без символов-разделителей `'.'`. Например, для iOS версии 8.1.3 значением модификатора будет `'81'`.
+
 <a name="modifiers-android"></a>
 ### Модификатор `android`
 
@@ -71,15 +85,6 @@ provide(BEMDOM.decl(this.name, {
 Способ использования: `JS`.
 
 Модификатор указывает версию операционной системы для устройств Android.
-
-<a name="modifiers-ios-subversion"></a>
-### Модификатор `ios-subversion`
-
-Допустимые значения: `'81'`, `'80'` ...
-
-Способ использования: `JS`.
-
-Модификатор указывает подверсию операционной системы для устройств iOS. Номер подверсии состоит из номера версии и первого символа после запятой. Номер указывается без символов-разделителей `'.'`. Например, для iOS версии 8.1.3 значением модификатора будет `'81'`.
 
 <a name="modifiers-screen-size"></a>
 ### Модификатор `screen-size`
@@ -122,25 +127,22 @@ provide(BEMDOM.decl(this.name, {
 
 ```js
 modules.define('inner', ['i-bem__dom'], function(provide, BEMDOM) {
+
 provide(BEMDOM.decl(this.name, {
     onSetMod: {
         js: {
             inited: function() {
-                // предотвращаем установку модификатора при повторной инициализации
-                !this.hasMod('orient') && 
-                    // устанавливаем начальное значение модификатора orient
-                    this.findBlockOutside('ua').hasMod('orient', 'landscape') ? 
-                         this.setMod('orient', 'landscape') :
-                            this.setMod('orient', 'portrait');
+                this._ua = this
+                    .findBlockOutside('ua')
+                    .on({ modName : 'orient', modVal : '*' }, this._onOrientChange, this);
 
-                this.findBlockOutside('ua')
-                    // подписываемся на смену значений модификатора orient блока ua
-                    .on({ modName : 'orient', modVal : '*' }, function() {
-                        // переключаемся между значениям собственного модификатора orient 
-                        this.toggleMod('orient', 'landscape', 'portrait');
-                    }, this);
-            }
+                this.setMod('orient', this._ua.getMod('orient'));
+            },
+            '': function() {
+                this._ua.un({ modName : 'orient', modVal : '*' }, this._onOrientChange, this);
+            } 
         },
+        
         'orient': {
             'portrait': function() {
                 this._reDraw('portrait');
@@ -150,12 +152,19 @@ provide(BEMDOM.decl(this.name, {
             }
         }                    
     },
+    
+    _onOrientChange: function(e, data) {
+        // переключаемся между значениям собственного модификатора orient 
+        this.setMod(data.modName, data.modVal);
+    },
+    
     _reDraw: function(orient) { 
         // обновляем содержимое контейнера inner при смене ориентации устройства
         console.log(orient);
         BEMDOM.update(this.domElem, orient);
     }
 }));
+
 });
 ```
 
