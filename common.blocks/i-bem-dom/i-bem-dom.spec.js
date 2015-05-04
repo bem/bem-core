@@ -653,33 +653,33 @@ describe('i-bem-dom', function() {
             rootNode = createDomNode({
                 block : 'b1',
                 content : [
-                    { elem : 'e1', js : { id : '1' } },
-                    { elem : 'e1', elemMods : { m1 : 'v1' }, js : { id : '1`' } },
+                    { elem : 'e1', js : { id : 1 } },
+                    { elem : 'e1', elemMods : { m1 : 'v1' }, js : { id : 2 } },
                     {
-                        elem : 'e2', js : { id : '2' },
+                        elem : 'e2', js : { id : 3 },
                         content : [
                             {
-                                elem : 'e1', js : { id : '2-1' },
+                                elem : 'e1', js : { id : 4 },
                                 elemMods : { inner : 'no' }
                             },
                             {
-                                elem : 'e3', js : { id : '2-3' },
+                                elem : 'e3', js : { id : 5 },
                                 elemMods : { inner : 'no', bool : true }
                             }
                         ]
                     },
                     {
-                        elem : 'e3', js : { id : '3' },
+                        elem : 'e3', js : { id : 6 },
                         content : {
-                            elem : 'e2', js : { id : '3-2' },
+                            elem : 'e2', js : { id : 7 },
                             elemMods : { inner : 'yes', bool : true },
                             content : {
-                                elem : 'e1', js : { id : '3-2-1' },
+                                elem : 'e1', js : { id : 8 },
                                 elemMods : { inner : 'yes', bool : true }
                             }
                         }
                     },
-                    { elem : 'e2', js : { id : '2`' }, elemMods : { bool : true } }
+                    { elem : 'e2', js : { id : 9 }, elemMods : { bool : true } }
                 ]
             });
 
@@ -697,12 +697,12 @@ describe('i-bem-dom', function() {
 
             it('should find all elems by elem class', function() {
                 getEntityIds(b1Block.elems(B1E1Elem))
-                    .should.be.eql(['1', '1`', '2-1', '3-2-1']);
+                    .should.be.eql([1, 2, 4, 8]);
             });
 
             it('should find all elems by elem class modName and modVal', function() {
                 getEntityIds(b1Block.elems({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' }))
-                    .should.be.eql(['1`']);
+                    .should.be.eql([2]);
             });
 
             it('should cache found elems', function() {
@@ -756,15 +756,15 @@ describe('i-bem-dom', function() {
                 spy.restore();
                 spy = sinon.spy(b1Block, 'findChildElems');
 
-                getEntityIds(b1Block.elems('e1')).should.be.eql(['1', '1`', '2-1', '3-2-1']);
-                getEntityIds(b1Block.elems('e2')).should.be.eql(['2', '3-2', '2`']);
-                getEntityIds(b1Block.elems('e3')).should.be.eql(['2-3', '3']);
-                getEntityIds(b1Block.elems({ elem : 'e1', modName : 'inner', modVal : 'yes' })).should.be.eql(['3-2-1']);
-                getEntityIds(b1Block.elems({ elem : 'e2', modName : 'inner', modVal : 'yes' })).should.be.eql(['3-2']);
-                getEntityIds(b1Block.elems({ elem : 'e3', modName : 'inner', modVal : 'no' })).should.be.eql(['2-3']);
-                getEntityIds(b1Block.elems({ elem : 'e1', modName : 'bool', modVal : true })).should.be.eql(['3-2-1']);
-                getEntityIds(b1Block.elems({ elem : 'e2', modName : 'bool', modVal : true })).should.be.eql(['3-2', '2`']);
-                getEntityIds(b1Block.elems({ elem : 'e3', modName : 'bool', modVal : true })).should.be.eql(['2-3']);
+                getEntityIds(b1Block.elems('e1')).should.be.eql([1, 2, 4, 8]);
+                getEntityIds(b1Block.elems('e2')).should.be.eql([3, 7, 9]);
+                getEntityIds(b1Block.elems('e3')).should.be.eql([5, 6]);
+                getEntityIds(b1Block.elems({ elem : 'e1', modName : 'inner', modVal : 'yes' })).should.be.eql([8]);
+                getEntityIds(b1Block.elems({ elem : 'e2', modName : 'inner', modVal : 'yes' })).should.be.eql([7]);
+                getEntityIds(b1Block.elems({ elem : 'e3', modName : 'inner', modVal : 'no' })).should.be.eql([5]);
+                getEntityIds(b1Block.elems({ elem : 'e1', modName : 'bool', modVal : true })).should.be.eql([8]);
+                getEntityIds(b1Block.elems({ elem : 'e2', modName : 'bool', modVal : true })).should.be.eql([7, 9]);
+                getEntityIds(b1Block.elems({ elem : 'e3', modName : 'bool', modVal : true })).should.be.eql([5]);
 
                 b1Block.findChildElems.called.should.be.false;
                 b1Block.findChildElems.restore();
@@ -775,11 +775,11 @@ describe('i-bem-dom', function() {
                 rootNode.html(BEMHTML.apply({
                     block : 'b1',
                     elem : 'e1',
-                    js : { id : '1``' }
+                    js : { id : 10 }
                 }));
                 b1Block.findChildElems('e1');
 
-                getEntityIds(b1Block.elems('e1')).should.be.eql(['1``']);
+                getEntityIds(b1Block.elems('e1')).should.be.eql([10]);
             });
         });
 
@@ -791,13 +791,13 @@ describe('i-bem-dom', function() {
             it('should find first elem by elem class', function() {
                 b1Block.elem(B1E1Elem)
                     .params.id
-                        .should.be.equal('1');
+                        .should.be.equal(1);
             });
 
             it('should find first elem by elem class modName and modVal', function() {
                 b1Block.elem({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' })
                     .params.id
-                        .should.be.equal('1`');
+                        .should.be.equal(2);
             });
 
             it('should cache found elem', function() {
