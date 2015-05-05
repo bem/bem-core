@@ -18,8 +18,8 @@ provide(/** @exports */{
     UP : 38,
     RIGHT : 39,
     DOWN : 40,
-    INSERT : 41,
-    DELETE : 42
+    INSERT : 45,
+    DELETE : 46
 });
 
 });
