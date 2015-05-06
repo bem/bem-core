@@ -257,10 +257,13 @@ var BemEntity = inherit(events.Emitter, /** @lends BemEntity.prototype */ {
     /**
      * Checks whether a BEM entity has a modifier
      * @param {String} modName Modifier name
-     * @param {String} [modVal] Modifier value
+     * @param {String|Boolean} [modVal] Modifier value. If not of type String or Boolean, it is casted to String
      * @returns {Boolean}
      */
     hasMod : function(modName, modVal) {
+        var typeModVal = typeof modVal;
+        typeModVal === 'undefined' || typeModVal === 'boolean' || (modVal = modVal.toString());
+
         var res = this.getMod(modName) === (modVal || '');
         return arguments.length === 1? !res : res;
     },
@@ -280,14 +283,17 @@ var BemEntity = inherit(events.Emitter, /** @lends BemEntity.prototype */ {
     /**
      * Sets the modifier for a BEM entity
      * @param {String} modName Modifier name
-     * @param {String} [modVal=true] Modifier value
+     * @param {String|Boolean} [modVal=true] Modifier value. If not of type String or Boolean, it is casted to String
      * @returns {BemEntity} this
      */
     setMod : function(modName, modVal) {
-        if(typeof modVal === 'undefined') {
+        var typeModVal = typeof modVal;
+        if(typeModVal === 'undefined') {
             modVal = true;
-        } else if(modVal === false) {
-            modVal = '';
+        } else if(typeModVal === 'boolean') {
+            modVal === false && (modVal = '');
+        } else {
+            modVal = modVal.toString();
         }
 
         if(this._processingMods[modName]) return this;
