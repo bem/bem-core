@@ -24,15 +24,14 @@ var LIB_NAME = 'bem-core',
     copyFile = require('enb/techs/file-copy'),
     mergeFiles = require('enb/techs/file-merge'),
     borschik = require('enb-borschik/techs/borschik'),
-    PLATFORMS = {
+    SETS = {
         'common' : ['common'],
         'desktop' : ['common', 'desktop'],
-        'touch-phone' : ['common', 'touch'],
-        'touch-pad' : ['common', 'touch']
+        'touch' : ['common', 'touch']
     };
 
 module.exports = function(config) {
-    var platforms = ['desktop', 'touch-pad', 'touch-phone'],
+    var platforms = ['desktop', 'touch'],
         langs = process.env.BEM_I18N_LANGS;
 
     config.includeConfig('enb-bem-examples');
@@ -317,7 +316,7 @@ module.exports = function(config) {
 };
 
 function getLevels(platform) {
-    return PLATFORMS[platform].map(function(level) {
+    return SETS[platform].map(function(level) {
         return level + '.blocks';
     });
 }
