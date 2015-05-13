@@ -1,103 +1,153 @@
-# `dom`
+# dom
 
-Блок реализует набор методов – утилит для работы с DOM-деревом документа. 
+Блок предоставляет объект, содержащий набор методов для работы с DOM-деревом. 
 
-## Публичные методы блока
+## Обзор
 
-### `contains`
+### Свойства и методы объекта
 
-Метод позволяет проверить содержит ли некоторый DOM-элемент `ctx` вложенный элемент `domElem`. 
+| Имя | Возвращаемое значение | Описание |
+| -------- | --- | -------- |
+| <a href="#fields-contains">contains</a>(<br><code>{jQuery} domElem</code>,<br><code>{jQuery} ctx</code>) | <code>{Boolean}</code> | Проверяет, содержит ли один DOM-элемент другой. |
+| <a href="#fields-getFocused">getFocused</a>(<br><code>{jQuery} domElem</code>) | <code>{jQuery}</code> | Служит для получения ссылки на DOM-элемент в фокусе. |
+| <a href="#fields-containsFocus">containsFocus</a>(<br><code>{jQuery} domElem</code>) | <code>{Boolean}</code> | Проверят, содержит ли DOM-элемент или его потомки фокус. |
+| <a href="#fields-isFocusable">isFocusable</a>(<br><code>{jQuery} domElem</code>) | <code>{Boolean}</code> | Проверят, может ли DOM-элемент находиться в фокусе. |
+| <a href="#fields-isEditable">isEditable</a>(<br><code>{jQuery} domElem</code>) | <code>{Boolean}</code> | Проверят, возможен ли в DOM-элементе ввод текста. |
 
- * `ctx` `{jQuery}` – DOM-элемент внутри которого производится поиск.
- * `domElem` `{jQuery}` – искомый DOM-элемент.
+### Публичные технологии блока
 
-Метод возвращает `true`, если искомый элемент найден.
+Блок реализован в технологиях:
 
-Например, в блоке `popup` с модификатором `autoclosable` из библиотеки `bem-components` метод используется функцией `_onDocPointerClick`. С его помощь проверяется, не был ли щелчок мыши, вызвавший событие, произведен по одному из дочерних элементов цели попапа:
+* `js`
+
+## Описание
+
+<a name="fields"></a>
+### Свойства и методы объекта
+
+<a name="fields-contains"></a>
+#### Метод `contains`
+
+Метод позволяет проверить содержит ли некоторый DOM-элемент `ctx` элемент `domElem`.
+
+Принимаемые аргументы: 
+
+ * `ctx` `{jQuery}` – DOM-элемент внутри которого производится поиск. Обязательный аргумент.
+ * `domElem` `{jQuery}` – искомый DOM-элемент. Обязательный аргумент.
+
+Возвращаемое значение: `{Boolean}`. Если искомый элемент найден – `true`.
 
 ```js
-    _onDocPointerClick : function(e) {
-        if(this.hasMod('target', 'anchor') && dom.contains(this._anchor, $(e.target))) return;
+modules.require(['dom', 'jquery'], function(dom, $) {
 
-    /* ... */
+/*
+<div class="block1">
+  <div class="block2"></div>
+</div>
+*/
 
-    }
+dom.contains($('.block1'), $('.block2'));  // true
+
+});
 ```
 
 
-### `getFocused`
+<a name="fields-getFocused"></a>
+#### Метод `getFocused`
 
-Метод служит для получения ссылки на DOM-элемент, находящийся в фокусе. Не принимает аргументов.
-Возвращаемое значение `{jQuery}` – объект в фокусе.
+Метод служит для получения ссылки на DOM-элемент, находящийся в фокусе. 
+
+Не принимает аргументов.
+
+Возвращаемое значение: `{jQuery}` – объект в фокусе.
 
 Например:
 
 ```js
-modules.require(['dom'], function(Dom) {
-    Dom.getFocused(); // ссылка на элемент в фокусе
+modules.require(['dom'], function(dom) {
+
+dom.getFocused(); // ссылка на элемент в фокусе
+
 });
 ```
 
 
-### containsFocus 
-Метод проверяет находится ли переданный ему аргументом DOM-элемент (`{jQuery}`) в фокусе. Если находится, метод возвращает `true`.
+<a name="fields-containsFocus"></a>
+#### Метод `containsFocus` 
 
-Например, в блоке `control` библиотеки `bem-components` с помощью метода производится проверка, не в фокусе ли элемент блока. Если в фокусе, выставляются соответствующие модификаторы:
+Метод проверяет находится ли в фокусе переданный аргументом DOM-элемент или один из его потомков.
+
+Принимаемые аргументы: 
+
+* `domElem` `{jQuery}` – проверяемый DOM-элемент. Обязательный аргумент.
+
+Возвращаемое значение: `{Boolean}`. Если искомый элемент в фокусе – `true`.
 
 ```js
-modules.define(
-    'control',
-    ['i-bem__dom', 'dom' ],
-    function(provide, BEMDOM, dom) {
-provide(BEMDOM.decl(this.name, {
-    
-    /* ... */
+modules.require(['dom', 'jquery'], function(dom, $) {
 
-    onSetMod : {
-        'js' : {
-            'inited' : function() {
-                this._focused = dom.containsFocus(this.elem('control'));
-                this._focused?
-                    // if control is already in focus, we need to set focused mod
-                    this.setMod('focused') :
-                    // if block already has focused mod, we need to focus control
-                    this.hasMod('focused') && this._focus();
-            }
-        }
-    } 
-}
+/*
+<div class="block1">
+  <input class="block1__control"></div>
+</div>
+*/
 
-    /* ... */
+$('.block1__control').focus();
+dom.containsFocus($('.block1'));  // true
 
-}));
 });
 ```
 
 
-### isFocusable
+<a name="fields-isFocusable"></a>
+#### Метод `isFocusable`
 
-Метод проверят может ли браузер пользователя установить фокус на переданный аргументом DOM-элемент (`{jQuery}`). Если браузер может, метод возвращает `true`.  
+Метод проверят может ли браузер пользователя установить фокус на переданный аргументом DOM-элемент.   
 
-В упомянутом блоке `control` библиотеки `bem-components` с помощью метода `isFocusable`проверяется возможность установки фокуса перед установкой:
+Принимаемые аргументы: 
+
+* `domElem` `{jQuery}` – проверяемый DOM-элемент. Обязательный аргумент. Если в jQuery-цепочке несколько DOM-элементов, то проверяется первый из них.
+
+Возвращаемое значение: `{Boolean}`. Если фокус может быть установлен – `true`.
 
 ```js
-    _focus : function() {
-        dom.isFocusable(this.elem('control')) && this.elem('control').focus();
-    }  
+modules.require(['dom', 'jquery'], function(dom, $) {
+
+/*
+<div class="menu">
+  <a class="menu__item" href="/">Link 1</a>
+</div>
+*/
+
+dom.isFocusable($('.menu__item')); // true
+
+/*
+<div class="menu">
+  <span class="menu__item menu__item_current">Link 1</span>
+</div>
+*/
+
+dom.isFocusable($('.menu__item')); // false
+
+}); 
 ```
 
 
-### isEditable
+<a name="fields-isEditable"></a>
+#### Метод `isEditable`
 
-Метод проверят возможен ли в переданном аргументом DOM-элементе (`{jQuery}`) ввод текста.  Если возможен, метод возвращает `true`. Другими словами, с помощью метода можно проверить является ли DOM-элемент полем ввода `<input>`, текстовой областью и т.п.
+Метод проверят возможен ли в переданном аргументом DOM-элементе ввод текста. Другими словами, с помощью метода можно проверить является ли элемент полем ввода, текстовой областью и т.п.
 
-Например, есть попап, у которого могут быть вложенные блоки. Окно попапа должно скрываться по нажатию клавиши `Esc`. Но, прежде чем скрывать окно, нужно убедиться, что нажатие `Esc` не было произведено внутри вложенного поля ввода:
+Принимаемые аргументы: 
+
+* `domElem` `{jQuery}` – проверяемый DOM-элемент. Обязательный аргумент. Если в jQuery-цепочке несколько DOM-элементов, то проверяется первый из них.
+
+Возвращаемое значение: `{Boolean}`. Если ввод текста в элементе возможен – `true`.
 
 ```js
-function onDocKeyPress(e) {
-    e.keyCode === keyCodes.ESC &&
-        // omit ESC in inputs, selects and etc.
-        !dom.isEditable($(e.target)) &&
-            this.delMod('visible');
-}
+modules.require(['dom', 'jquery'], function(dom, $) {
+
+dom.isEditable($('input, textarea')); // true
+
+});
 ```
