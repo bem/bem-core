@@ -350,7 +350,7 @@ def()(function() {
             var cls = apply('cls');
             cls || (cls = ctx.cls);
 
-            var addJSInitClass = ctx.block && jsParams;
+            var addJSInitClass = ctx.block && jsParams && !ctx.elem;
             if(isBEM || cls) {
                 this._str += ' class="';
                 if(isBEM) {
@@ -371,7 +371,7 @@ def()(function() {
                         this.isArray(mix) || (mix = [mix]);
                         for(var i = 0; i < mix.length; i++) {
                             var mixItem = mix[i],
-                                hasItem = mixItem.block || mixItem.elem,
+                                hasItem = (mixItem.block && (vBlock !== ctx.block || mixItem.block !== vBlock)) || mixItem.elem,
                                 mixBlock = mixItem.block || mixItem._block || this.block,
                                 mixElem = mixItem.elem || mixItem._elem || this.elem;
 
