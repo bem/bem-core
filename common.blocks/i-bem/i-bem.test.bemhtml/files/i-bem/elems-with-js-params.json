@@ -1,0 +1,10 @@
+{
+  "block": "b1",
+  "content": [
+    { "elem": "e1" },
+    { "elem": "e2", "js": true },
+    { "elem": "e3", "js": { "p1": "v1" } },
+    { "elem": "e4" },
+    { "elem": "e5" }
+  ]
+}

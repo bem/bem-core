@@ -48,4 +48,5 @@ suite('i-bem block and others', function() {
   unit('mods redefinition bem-core/441', 'redefine-mods');
   unit('apply mode=js for mixed items', 'mixed-items-js-mode');
   unit('mix with same block bem-core/804', 'gh-core-804');
+  unit('add i-bem classname for elems with js params #881', 'elems-with-js-params');
 });
