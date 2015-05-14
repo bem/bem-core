@@ -372,8 +372,11 @@ def()(function() {
                         // Transform mix to the single-item array if it's not array
                         this.isArray(mix) || (mix = [mix]);
                         for(var i = 0; i < mix.length; i++) {
-                            var mixItem = mix[i],
-                                hasItem = (mixItem.block && (vBlock !== ctx.block || mixItem.block !== vBlock)) || mixItem.elem,
+                            var mixItem = mix[i];
+
+                            typeof mixItem === 'string' && (mixItem = { block : mixItem });
+
+                            var hasItem = (mixItem.block && (vBlock !== ctx.block || mixItem.block !== vBlock)) || mixItem.elem,
                                 mixBlock = mixItem.block || mixItem._block || this.block,
                                 mixElem = mixItem.elem || mixItem._elem || this.elem;
 
