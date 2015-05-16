@@ -519,7 +519,7 @@ provide(BEMDOM.decl(this.name, {}));
 
 modules.define('bblock', ['i-bem__dom', 'ablock'], function(provide, BEMDOM, ABlock) {
 
-provide(BEMDOM.decl({ block : this.name, baseBlock : ABlock ));
+provide(BEMDOM.decl({ block : this.name, baseBlock : ABlock }));
 
 });
 ```
