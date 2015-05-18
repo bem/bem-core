@@ -689,9 +689,10 @@ JS syntax:
 ```js
 block('b-text')(
 
-    elemMatch(this.elem).tag()(this.ctx.elem),
+    elemMatch(this.elem).tag()(function() { return this.ctx.elem; }),
 
-    elemMatch(this.elem).match(this.ctx.id).attrs()({ id: this.ctx.id  })
+    elemMatch(this.elem).match(function() { return this.ctx.id; })
+        .attrs()(function() { return { id: this.ctx.id  }; })
 
 )
 ```
@@ -734,29 +735,11 @@ block b-inner, default: applyCtx({ block: 'b-wrapper', content: this.ctx })
 
 JS syntax:
 
-
-While using a fragment of input BEMJSON `this.ctx` with an `applyCtx` structure in dev-environment, endless cycle may occur. To avoid it, you need to add a flag, indicating that the template was already processed, and subpredicate to check flag value:
-
 ```js
-block('b-inner')(def()
-    .match(!this.ctx._wrapped)(function() {
-            var ctx = this.ctx;
-            ctx._wrapped=true;
-            applyCtx({ block: 'b-wrapper', content: ctx })
-   })
-)
+block('b-inner').def()(function() {
+    return applyCtx({ block: 'b-wrapper', content: this.ctx });
+});
 ```
-
-
-To avoid declaring a local variable, XJST expression `local` can be used to add the flag preventing endless cycle. It allows to apply template to a modified context:
-
-```js
-block('b-inner')(def()
-    .match(!this.ctx._wrapped)(function() {
-            local({ 'ctx._wrapped': true })(applyCtx({ block: 'b-wrapper', content: this.ctx }))
-   }))
-```
-
 
 **Template 7.** Sets the `span` tag by default for the element `e1` of a `b-bla` block. If there is an `url` field defined in an input data, changes the tag to `a` sets the field content as a `href` attribute value.
 In case of a match with a non-standard mode `reset`, a `href` attribute value is set to `undefined`.
@@ -782,12 +765,12 @@ JS syntax:
 ```js
 block('b-link').elem('e1') (
   tag()('span'),
-  match(this.ctx.url)(
+  match(function() { return this.ctx.url; })(
      tag()('a'),
-     attrs()({ href: this.ctx.url }),
+     attrs()(function(){ return { href: this.ctx.url }; }),
      mode('reset')(
          attrs()({ href: undefined })
       )
    )
-)
+);
 ```
