@@ -732,34 +732,14 @@ block b-inner, default: applyCtx({ block: 'b-wrapper', content: this.ctx })
 
 JS-синтаксис:
 
-
-При использовании фрагмента входного BEMJSON `this.ctx` с конструкцией `applyCtx` в dev-среде, может произойти зацикливание в ходе выполнения шаблона. Во избежание подобного необходимо добавить флаг, указывающий, что шаблон уже обрабатывался, и подпредикат, проверяющий значение флага:
-
 ```js
-block('b-inner')(def()
-    .match(!this.ctx._wrapped)(function() {
-            var ctx = this.ctx;
-            ctx._wrapped=true;
-            applyCtx({ block: 'b-wrapper', content: ctx })
-   })
-)
+block('b-inner').def()(function() {
+    return applyCtx({ block: 'b-wrapper', content: this.ctx });
+});
 ```
 
 
-Чтобы не объявлять локальные переменные, можно воспользоваться XJST-конструкцией `local` для добавления флага, препятствующего зацикливанию. Она позволяет выполнять шаблон в модифицированном контексте:
-
- ```js
- block('b-inner')(def()
-    .match(!this.ctx._wrapped)(function() {
-            local({ 'ctx._wrapped': true })(applyCtx({ block: 'b-wrapper', content: this.ctx }))
-   }))
-
-  ```
-
-
-
 **Шаблон 7.** Для элемента `e1` блока `b-bla` по умолчанию задает тэг `span`. Если во входных данных определено поле `url`, меняет тэг на `a` и задает содержимое поля в качестве значения атрибута `href`. При совпадении с нестандартной модой `reset` значение атрибута `href` устанавливается равным `undefined`.
-
 
 Сокращенный синтаксис:
 
@@ -782,9 +762,9 @@ JS-синтаксис:
 ```js
 block('b-link').elem('e1') (
   tag()('span'),
-  match(this.ctx.url)(
+  match(function() { return this.ctx.url; })(
      tag()('a'),
-     attrs()({ href: this.ctx.url }),
+     attrs()(function() { return { href: this.ctx.url }; }),
      mode('reset')(
          attrs()({ href: undefined })
       )

@@ -453,13 +453,15 @@ BEMTREE расширяет набор [контекстно-независимы
 
 ```js
 // шаблон на первом уровне переопределения
-block('b1').content()('text1')
+block('b1').content()('text1');
 
 // шаблон на втором уровне переопределения
-block('b1').match(!this._myGuard).content()([
-    apply({_myGuard:true}),  // получаем предыдущее значение content
-    'text2'
-])
+block('b1').match(!this._myGuard).content()(function() {
+    return [
+        apply({ _myGuard: true }),  // получаем предыдущее значение content
+        'text2'
+    ];
+});
 ```
 
 В результате применения шаблонов к блоку `b1` будет получен BEMJSON:
@@ -471,12 +473,14 @@ block('b1').match(!this._myGuard).content()([
 В качестве более простого решения можно использовать конструкцию `applyNext`, которая автоматически генерирует уникальное имя флага против зацикливания.
 
 ```js
-block('b1').content()('text1')
+block('b1').content()('text1');
 
-block('b1').content()([
-    applyNext(), // получаем предыдущее значение content
-    'text2'
-])
+block('b1').content()(function() {
+    return [
+        applyNext(), // получаем предыдущее значение content
+        'text2'
+    ];
+});
 ```
 
 **См. также**:
@@ -497,16 +501,10 @@ block('b1').content()([
 При обработке блока `b-inner` в шаблоне по моде `default` (генерация целого элемента) следует модифицировать фрагмент входного дерева `this.ctx` (добавить блок `b-wrapper`).  Для этого используется конструкция `applyCtx()`, которая присваивает `this.ctx` и применяет шаблоны по пустой моде.
 
 ```js
-block('b-inner').def()
-    .match(!this.ctx._wrapped)(function() {
-        var ctx = this.ctx;
-        ctx._wrapped = true;
-        applyCtx({ block: 'b-wrapper', content: ctx })
-   })
+block('b-inner').def()(function() {
+    return applyCtx({ block: 'b-wrapper', content: this.ctx });
+});
 ```
-
-Во избежание бесконечного цикла необходимо при вызове выражения `applyCtx()` проверять наличие в контексте специального флага (`_wrapped`), который будет выставлен при выполнении `applyCtx()`.
-
 
 **NB** Конструкцию `applyCtx()` можно применять для **замены** БЭМ-сущности в исходном дереве, если не использовать исходное содержимое блока (`this.ctx`) в аргументе `applyCtx()`.
 
@@ -559,19 +557,21 @@ block('b-inner').def()
 BEMTREE-шаблон, выполняющий это преобразование:
 
 ```js
-block('box').match(!this.ctx._processed).content()(applyCtx({'ctx._processed':true}, {
-    elem: 'left-top',
-    content: {
-        elem: 'right-top',
+block('box').content()(function() {
+    return applyCtx({
+        elem: 'left-top',
         content: {
-            elem: 'right-bottom',
+            elem: 'right-top',
             content: {
-                elem: 'left-bottom',
-                content: applyNext()
+                elem: 'right-bottom',
+                content: {
+                    elem: 'left-bottom',
+                    content: applyNext()
+                }
             }
         }
-    }
-}))
+    });
+});
 ```
 
 **NB** Хеш с переменной `ctx._processed` в значении `true` передается методу `applyCtx` первым параметром, чтобы выполнить метод в модифицированном контексте.
@@ -597,7 +597,7 @@ block('box').match(!this.ctx._processed).content()(applyCtx({'ctx._processed':tr
 Воспользуемся тем, что подпредикат шаблона BEMTREE может быть произвольным JavaScript-выражением и запишем его в следующей форме:
 
 ```js
-match(this.world && this.world.answer === 42)
+match(function() { return this.world && this.world.answer === 42 })
 ```
 
 Недостаток этого решения в том, что при компиляции это выражение не будет оптимизировано, что отрицательно скажется на скорости работы шаблона. В большинстве случаев можно и нужно избегать необходимости в строгом порядке проверки подпредикатов.
@@ -626,21 +626,23 @@ match(this.world && this.world.answer === 42)
 
 ```js
 block('input')(
-  content()([
-    {
-      tag: 'label',
-      attrs: { 'for': this.generateId() },
-      content: this.ctx.label
-    },
-    {
-      tag: 'input',
-      attrs: {
-        id: this.generateId(),
-        value: applyNext()
-      }
-    }
-  ]
-))
+  content()(function() {
+    return [
+        {
+          tag: 'label',
+          attrs: { 'for': this.generateId() },
+          content: this.ctx.label
+        },
+        {
+          tag: 'input',
+          attrs: {
+            id: this.generateId(),
+            value: applyNext()
+          }
+        }
+      ];
+  })
+);
 ```
 
 #### Послесловие

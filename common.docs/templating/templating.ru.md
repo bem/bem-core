@@ -788,17 +788,17 @@ applyNext({assignObj})
 Например, шаблон
 
 ```js
-block('b1')(
+block('b1')(function() {
     statements
-    applyNext()
-)
+    return applyNext();
+})
 ```
 
 эквивалентен следующему шаблону:
 
 ```js
 var _randomflag = ~~(Math.random() * 1e9)
-block('b1').match(!this.ctx[_randomflag])(
+block('b1').match(function() { return !this.ctx[_randomflag]; })(
     statements
     local(this.ctx[_randomflag] = true) apply()
 )

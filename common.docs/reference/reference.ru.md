@@ -233,10 +233,10 @@ HTML-дерева не требовалось изменять набор и п�
 
 ```js
 block ('b-page')(
-  def()(
+  def()(function() {
     this._buf.push('<!DOCTYPE html>');
-    applyNext();
-  ),
+    return applyNext();
+  }),
   tag()('html')
 )
 ```
@@ -589,7 +589,7 @@ block('b4').mix()([ { block: 'b1' } ])</code></pre>
 )</code></pre>
     </td>
     <td><pre><code>&lt;input class="input"
-    disabled="disabled"/&gt;</code></pre></td>
+    disabled="disabled"/&gt;</code></pre></td>
 </tr>
 
 <tr>
@@ -812,9 +812,9 @@ BEMHTML расширяет набор [контекстно-независимы
 ```js
 block('b-link')(
   tag()('span'),
-  match(this.ctx.url)(
+  match(function() { return this.ctx.url; })(
     tag()('a'),
-    attrs()({ href: this.ctx.url })
+    attrs()(function() { return { href: this.ctx.url }; })
   )
 )
 ```
@@ -822,7 +822,7 @@ block('b-link')(
 **Неправильно** использовать для решения этой задачи условные конструкции JavaScript в теле шаблона:
 
 ```js
-block('b-link').tag()(this.ctx.url ? 'a' : 'span')
+block('b-link').tag()(function() { return this.ctx.url ? 'a' : 'span'; })
 ```
 
 При компиляции это выражение не будет оптимизировано, что отрицательно скажется на скорости работы шаблона.
@@ -857,10 +857,12 @@ block('b-link').tag()(this.ctx.url ? 'a' : 'span')
 block('b1').content()('text1')
 
 // шаблон на втором уровне переопределения
-block('b1').match(!this._myGuard).content()([
-    apply({_myGuard:true}),  // получаем предыдущее значение content
+block('b1').match(function() { return !this._myGuard; }).content()(function() {
+  return [
+    apply({ _myGuard: true }),  // получаем предыдущее значение content
     'text2'
-])
+  ];
+})
 ```
 
 В результате применения шаблонов к блоку `b1` будет получен HTML:
@@ -873,12 +875,14 @@ block('b1').match(!this._myGuard).content()([
 зацикливания.
 
 ```js
-block('b1').content()('text1')
+block('b1').content()('text1');
 
-block('b1').content()([
-    applyNext(), // получаем предыдущее значение content
-    'text2'
-])
+block('b1').content()(function() {
+  return [
+      applyNext(), // получаем предыдущее значение content
+      'text2'
+  ];
+});
 ```
 
 **См. также**:
@@ -902,7 +906,7 @@ block('b1').content()([
 Сохранение информации о контексте нужно реализовать в шаблоне для блока `listitem`. Используем флаг `inListItem`:
 
 ```js
-block('listitem').match(!this.inListItem)(apply({inListItem:true}))
+block('listitem').match(function() { return !this.inListItem; })(function() { return apply({ inListItem: true }); });
 ```
 
 Обратите внимание, на подпредикат `!this.inListItem`, позволяющий избежать зацикливания при рекурсивном вызове процедуры применения шаблонов в модифицированном контексте (`apply({inListItem:true})`).
@@ -910,7 +914,7 @@ block('listitem').match(!this.inListItem)(apply({inListItem:true}))
 Для обработки `para`, вложенного в `listitem`, достаточно проверить наличие в контексте флага `inListItem`.
 
 ```js
-block('para').match(this.inListItem).tag()('')
+block('para').match(function() { return this.inListItem; }).tag()('');
 ```
 
 Пустая строка в качестве значения шаблона по моде `tag` означает — не генерировать HTML-элемента для этого блока.
@@ -932,14 +936,9 @@ block('para').match(this.inListItem).tag()('')
 
 
 ```js
-block('b-inner').def()
-    .match(!this.ctx._wrapped)(function() {
-        var ctx = this.ctx;
-        ctx._wrapped = true;
-        applyCtx({ block: 'b-wrapper', content: ctx })
-   })
-
-
+block('b-inner').def()(function() {
+    return applyCtx({ block: 'b-wrapper', content: this.ctx });
+});
 ```
 
 Для избежания бесконечного цикла необходимо при вызове выражения `applyCtx()` проверять наличие в контексте специального флага (`_wrapped`), который будет выставлен при выполнении `applyCtx()`.
@@ -999,19 +998,21 @@ BEMHTML-шаблона. Финальное БЭМ-дерево должно вы
 BEMHTML-шаблон, выполняющий это преобразование:
 
 ```js
-block('box').match(!this.ctx._processed).content()(applyCtx({'ctx._processed':true}, {
+block('box').content()(function() {
+  return applyCtx({
     elem: 'left-top',
-    content: {
-        elem: 'right-top',
-        content: {
-            elem: 'right-bottom',
-            content: {
-                elem: 'left-bottom',
-                content: applyNext()
-            }
-        }
-    }
-}))
+      content: {
+          elem: 'right-top',
+          content: {
+              elem: 'right-bottom',
+              content: {
+                  elem: 'left-bottom',
+                  content: applyNext()
+              }
+          }
+      }
+  });
+});
 ```
 
 **NB** Хеш с переменной `ctx._processed` в значении `true` передается методу `applyCtx` первым параметром, чтобы выполнить метод в модифицированном контексте.
@@ -1057,12 +1058,13 @@ block('menu')(
   tag()('ul'),
   elemMatch('item')(
     tag()('li'),
-    content()([
-      this.position, '. ',
-      applyNext()
-    ]
-  )
-))
+    content()(function() {
+      return [
+        this.position, '. ',
+        applyNext()
+      ];
+    })
+));
 ```
 
 **См. также**:
@@ -1084,7 +1086,7 @@ block('menu')(
 в следующей форме:
 
 ```js
-match(this.world && this.world.answer === 42)
+match(function() { return this.world && this.world.answer === 42; })
 ```
 
 Недостаток этого решения в том, что при компиляции это выражение не будет оптимизировано, что отрицательно скажется
@@ -1121,21 +1123,23 @@ match(this.world && this.world.answer === 42)
 ```js
 block('input')(
   tag()(''),
-  content()([
-    {
-      tag: 'label',
-      attrs: { 'for': this.generateId() },
-      content: this.ctx.label
-    },
-    {
-      tag: 'input',
-      attrs: {
-        id: this.generateId(),
-        value: this.ctx.content
+  content()(function() {
+    return [
+      {
+        tag: 'label',
+        attrs: { 'for': this.generateId() },
+        content: this.ctx.label
+      },
+      {
+        tag: 'input',
+        attrs: {
+          id: this.generateId(),
+          value: this.ctx.content
+        }
       }
-    }
-  ]
-))
+    ];
+  })
+);
 ```
 
 
