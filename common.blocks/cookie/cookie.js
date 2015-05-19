@@ -1,6 +1,6 @@
 /**
  * @module cookie
- * inspired from $.cookie plugin by Klaus Hartl (stilbuero.de)
+ * @description Inspired from $.cookie plugin by Klaus Hartl (stilbuero.de)
  */
 
 modules.define('cookie', function(provide) {
