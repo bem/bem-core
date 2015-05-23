@@ -4,7 +4,7 @@ block('page')(
         var ctx = this.ctx;
         this._nonceCsp = ctx.nonce;
 
-        applyCtx([
+        return applyCtx([
             ctx.doctype || '<!DOCTYPE html>',
             {
                 tag : 'html',
