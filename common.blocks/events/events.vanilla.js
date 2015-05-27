@@ -26,13 +26,13 @@ var undef,
         __constructor : function(type, target) {
             /**
              * Type
-             * @member {String} Event
+             * @member {String}
              */
             this.type = type;
 
             /**
              * Target
-             * @member {String} Event
+             * @member {Object}
              */
             this.target = target;
 
