@@ -1,5 +1,69 @@
 # Changelog
 
+## 2.5.1
+
+### Bug fixes
+
+- An issue in `jquery__pointerpress` and `jquery__pointerrelease` was fixed. Events work now in
+  Internet Explorer 8 ([#792](https://github.com/bem/bem-core/issues/792)).
+- An issue in `jquery__pointernative` was fixed. `pointerenter` and `pointerleave` events have bubbled up
+  to the document root, while they shouldn't ([#801](https://github.com/bem/bem-core/issues/801)).
+- An issue in `loader_type_bundle` was fixed. CSS bundle has been always added to the top of the HTML `<head>`, so CSS rules
+  from the bundle might not work properly ([#808](https://github.com/bem/bem-core/issues/808)).
+- Issues in BH templates for `ua` were fixed. There was no possibility to pass the content of the block from
+  BEMJSON ([#734](https://github.com/bem/bem-core/pull/734)).
+- An issue in `page` was fixed. There was a problem with conditional comments for Internet Explorer in the BH template
+  of the block ([#781](https://github.com/bem/bem-core/pull/781)).
+
+### Other changes
+
+- `jquery` was updated to the 2.1.3 and 1.11.2 ([#778](https://github.com/bem/bem-core/pull/788)).
+- Russian documentation for modules: `clearfix`, `cookie`, `identify`, `idle`, `inherit`, `keyboard`, `loader`, `next-tick`,
+  `string` and `tick` was added.
+- Russian documentation for `i-bem.js` was updated.
+- English guides to BEMHTM and BEMJSON were updated.
+
+## 2.5.0
+
+### Major changes
+
+- bem-core in now published under the [MPL 2.0](https://www.mozilla.org/MPL/2.0/) license ([#443](https://github.com/bem/bem-core/issues/443)).
+- An ability to specify error handler was added to `loader_type_js` ([#672](https://github.com/bem/bem-core/issues/672)).
+- `BEMContext` class was added to `oninit` export context in `i-bem.bemtree` ([#602](https://github.com/bem/bem-core/issues/602)).
+- `reapply` static method was added to BEMContext class of BEMTREE ([#706](https://github.com/bem/bem-core/pull/706)).
+- bh templates for block `page` were added to touch level ([#689](https://github.com/bem/bem-core/pull/689)).
+- [bem-xjst](https://github.com/bem/bem-xjst) was updated to 0.9.0 ([#709](https://github.com/bem/bem-core/pull/709)).
+
+### Bug fixes
+
+- An issue in `i-bem__dom` was fixed. `findBlocksInside` could return blocks which weren't inited  ([#699](https://github.com/bem/bem-core/issues/699)).
+- An issue in `tick` was fixed. Timer was not removed by `Tick#stop()` ([#694](https://github.com/bem/bem-core/issues/694)).
+- An issue in `i-bem.bemhtml` was fixed. `i-bem` CSS class was added to elements by mistake ([#633](https://github.com/bem/bem-core/issues/633)).
+- `html-from-bemtree` tech was fixed to expose `vow`, `console`, `setTimeout` inside BEMTREE template context  ([#438ebb8](https://github.com/bem/bem-core/commit/438ebb8f828e26977592e26511e8aad15176d7a4)).
+
+### Other changes
+
+- English guide to BEMJSON was added.
+- Russian documentation for `querystring` module was added.
+- Russian documentation for `i-bem.js` was fixed to satisfy current API.
+- Documentation for BEMHML/BEMTREE for both languages was updated.
+
+## 2.4.0
+
+### Major changes
+
+- [bem-xjst](https://github.com/bem/bem-xjst) was updated to 0.8.0; [bemhtml-compat](https://github.com/bem/bemhtml-compat) was updated to 0.0.11.
+
+### Bug fixes
+
+- An issue in `jquery__event_type_pointerpressrelease` was fixed. `pointerpress`/`pointerrelease` events fired for any press/release
+  of mouse button ([#607](https://github.com/bem/bem-core/issues/607)).
+- An issue in `i-bem__dom.js` was fixed. Base `live` method was not properly called in some edge cases ([#608](https://github.com/bem/bem-core/issues/608)).
+
+### Other changes
+
+- English documentation for JS-syntax of BEMHTML was added.
+
 ## 2.3.0
 
 ### Major changes
@@ -50,7 +114,7 @@
 ### Major changes
 
 - New `keyboard__codes` module has been added ([#431](https://github.com/bem/bem-core/issues/431)).
-- `BEMContext` class was added to oninit's export context in `i-bem.bemhtml` ([#485](https://github.com/bem/bem-core/pull/485)).
+- `BEMContext` class was added to oninit export context in `i-bem.bemhtml` ([#485](https://github.com/bem/bem-core/pull/485)).
 - Ability to declare elements with block class has been added ([#481](https://github.com/bem/bem-core/issues/481)).
 - Behaviour of `isSimple` method of `BEMContext` was fixed in `i-bem.bemhtml` ([#432](https://github.com/bem/bem-core/pull/432)).
 - An issue with `liveUnbindFrom` method of `BEMDOM` was fixed in `i-bem__dom` ([#476](https://github.com/bem/bem-core/pull/476)).
@@ -74,7 +138,7 @@
 
 - An issue in `i-bem.js` when modifiers change event had been emitted before `onSetMod` handlers have been called was fixed ([#454](https://github.com/bem/bem-core/issues/454)).
 - An issue in `i-bem.bemhtml` was fixed. Since now `this.mods` and `this.ctx.mods` use the same object ([#441](https://github.com/bem/bem-core/issues/441)).
-- Error in modular declaration of element's modifiers was fixed in `i-bem__dom_elem-instances` ([#447](https://github.com/bem/bem-core/issues/447)).
+- Error in modular declaration of element modifiers was fixed in `i-bem__dom_elem-instances` ([#447](https://github.com/bem/bem-core/issues/447)).
 - [inherit](https://github.com/dfilatov/inherit) module was updated to 2.2.1 ([#466](https://github.com/bem/bem-core/issues/466)).
 - An order of tags in `head` section of `page.bemhtml` was fixed ([#465](https://github.com/bem/bem-core/pull/465)).
 
@@ -152,7 +216,7 @@
 - `jquery__config` uses jQuery 2.x by default for modern browsers ([#319](https://github.com/bem/bem-core/issues/319)).
 - Add ability to use any BEMJSON as value of attributes in BEMHTML templates ([#290](https://github.com/bem/bem-core/issues/290)).
 - Fix dependencies in `i-bem__collection` ([#292](https://github.com/bem/bem-core/issues/292)).
-- Remove `page` block's touch styles ([#306](https://github.com/bem/bem-core/issues/306)).
+- Remove `page` block touch styles ([#306](https://github.com/bem/bem-core/issues/306)).
 - Fix `page` BEMHTML wrapping in production mode ([#309](https://github.com/bem/bem-core/issues/309)).
 - Fix possible JavaScript error in script injection in IE<9 in `next-tick` ([#324](https://github.com/bem/bem-core/issues/324)).
 - Fix `FastClick` initialisation in `jquery__event_type_pointerclick` of `touch.blocks` ([#332](https://github.com/bem/bem-core/issues/332)).
@@ -169,7 +233,7 @@
   [bem-pr@v0.5.x](https://github.com/narqo/bem-pr/blob/0.5.3/HISTORY.md) ([#323](https://github.com/bem/bem-core/issues/323)).
 - Russian documentation for `i-bem.js` was updated.
 - [List of supported browsers](https://github.com/bem/bem-core/blob/v1/README.md#supported-browsers)
-  was specified in project's README.
+  was specified in project README.
 
 ## 1.0.0
 
@@ -182,7 +246,7 @@
 - Introduces new tech `bemtree` (based on [bem-xjst](https://github.com/bem/bem-xjst))
   for describing dynamic generation of BEM-tree.
 - Introduces new tech `vanilla.js` for JS-implementations that does not depend on particular JS-engine.
-- Introduces new techs `browser.js` и `node.js` for JS-implementations targeted corresponding engines.
+- Introduces new techs `browser.js` and `node.js` for JS-implementations targeted corresponding engines.
   For backward compatibility we assume that `.js`-files contains `browser.js` implementation.
 - Introduces polyfill (`jquery__event_type_pointer` and `jquery__event_type_pointerclick` as a jQuery-plugins)
   for universalize desktop and touch pointer events.

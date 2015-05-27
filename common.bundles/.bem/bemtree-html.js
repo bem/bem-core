@@ -1,5 +1,8 @@
-var BEM = require('bem'),
-    Q = BEM.require('q');
+var FS = require('fs'),
+    VM = require('vm'),
+    BEM = require('bem'),
+    Q = BEM.require('q'),
+    Vow = require('vow');
 
 exports.baseTechName = 'html';
 
@@ -15,8 +18,17 @@ exports.techMixin = {
     },
 
     getBemjson : function(prefix) {
-        var path = this.getPath(prefix, 'bemtree.js');
-        return require(path).BEMTREE;
+        var path = this.getPath(prefix, 'bemtree.js'),
+            bemtree = FS.readFileSync(path),
+            ctx = VM.createContext({
+                Vow: Vow,
+                console: console,
+                setTimeout: setTimeout
+            });
+
+        VM.runInContext(bemtree, ctx);
+
+        return ctx.BEMTREE;
     },
 
     getHtml : function(bemhtml, bemjson) {

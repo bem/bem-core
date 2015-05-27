@@ -1,4 +1,4 @@
-/**
+/*!
  * Basic pointer events polyfill
  */
 ;(function(global, factory) {
@@ -31,7 +31,7 @@ var doc = document,
 delete jqEvent.special.pointerenter;
 delete jqEvent.special.pointerleave;
 
-/**
+/*!
  * Returns a snapshot of inEvent, with writable properties.
  *
  * @param {Event} event An event that contains properties to copy.
@@ -79,7 +79,7 @@ var MOUSE_PROPS = {
     mousePropsLen = mouseProps.length,
     mouseDefaults = mouseProps.map(function(prop) { return MOUSE_PROPS[prop] });
 
-/**
+/*!
  * Pointer event constructor
  *
  * @param {String} type
@@ -130,7 +130,7 @@ function PointerEvent(type, params) {
     return e;
 }
 
-/**
+/*!
  * Implements a map of pointer states
  * @returns {PointerMap}
  * @constructor
@@ -197,7 +197,7 @@ var dispatcher = {
     eventMap : {},
     eventSourceList : [],
 
-    /**
+    /*!
      * Add a new event source that will generate pointer events
      */
     registerSource : function(name, source) {
@@ -309,7 +309,7 @@ var dispatcher = {
         e._handledByPE = true;
     },
 
-    /**
+    /*!
      * Sets up event listeners
      */
     listen : function(target, events) {
@@ -318,7 +318,7 @@ var dispatcher = {
         }, this);
     },
 
-    /**
+    /*!
      * Removes event listeners
      */
     unlisten : function(target, events) {
@@ -339,7 +339,7 @@ var dispatcher = {
         return event._target;
     },
 
-    /**
+    /*!
      * Creates a new Event of type `type`, based on the information in `event`
      */
     makeEvent : function(type, event) {
@@ -353,7 +353,7 @@ var dispatcher = {
         return e;
     },
 
-    /**
+    /*!
      * Dispatches the event to its target
      */
     dispatchEvent : function(event) {
@@ -367,7 +367,7 @@ var dispatcher = {
         }
     },
 
-    /**
+    /*!
      * Makes and dispatch an event in one call
      */
     fireEvent : function(type, event) {
@@ -515,7 +515,7 @@ var touchEvents = {
         return this.firstTouch === touch.identifier;
     },
 
-    /**
+    /*!
      * Sets primary touch if there no pointers, or the only pointer is the mouse
      */
     setPrimaryTouch : function(touch) {
@@ -611,7 +611,7 @@ var touchEvents = {
         }
     },
 
-    /**
+    /*!
      * In some instances, a touchstart can happen without a touchend.
      * This leaves the pointermap in a broken state.
      * Therefore, on every touchstart, we remove the touches
@@ -639,7 +639,7 @@ var touchEvents = {
         }
     },
 
-    /**
+    /*!
      * Prevents synth mouse events from creating pointer events
      */
     dedupSynthMouse : function(touchEvent) {

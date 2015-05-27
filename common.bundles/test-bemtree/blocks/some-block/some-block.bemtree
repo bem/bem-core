@@ -1,27 +1,21 @@
-block some-block {
-    
-    content: {
-        var data = this.data;
-        return this.doAsync(function() {
-//                return Vow.reject('blah');
-                return Vow.timeout('asd', 10);
-            })
-            .then(
-                function(c) {
-                    return apply(
-                        this._mode = '',
-                        this.data = data,
-                        this.ctx = { elem : 'some-elem', content : c }
-                    );
-                },
-                function(err) {
-                    this._buf = apply(
-                        this._mode = '',
-                        this.ctx = { err : 404, data : err }
-                    );
-                },
-                this
-            );
-    }
-    
-}
+block('some-block').content()(function() {
+    var data = this.data;
+    return this.doAsync(function() {
+            // return Vow.reject('blah');
+            return Vow.timeout('asd', 10);
+        })
+        .then(
+            function(c) {
+                return apply('', {
+                    data : data,
+                    ctx : { elem : 'some-elem', content : c }
+                });
+            },
+            function(err) {
+                this._buf = apply('', {
+                    ctx : { err : 404, data : err }
+                });
+            },
+            this
+        );
+});

@@ -1,6 +1,6 @@
-# BEMHTML: a templating tngine for BEM
+# BEMHTML: a templating engine for BEM
 
-**BEMHTML** is a templating engine for thous who are using [BEM metodology](http://bem.info/method)
+**BEMHTML** is a templating engine for thous who are using [BEM metodology](https://bem.info/method)
 for web development.
 
 BEMHTML is:
@@ -10,8 +10,8 @@ BEMHTML is:
  * declarative and impressive templates;
  * convenient code support for long-term developing projects.
 
-
-## BEMHTML: the World-View <a name="worldview"></a>
+<a name="worldview"></a>
+## BEMHTML: the world view
 
 BEM methodology and BMHTML, as it's part, are the product of many-ears experience of
 web development and maintenance of web interfaces at Yandex. Web development at Yandex were
@@ -48,13 +48,13 @@ the browser (HTML + CSS) reminds a compilation *assembler for the web*.
 
    * Templates and the organization of interface (a set of element and layout for the page)
    should be described separately.
-     BEM structure of interface is described by **BEM-tree**. It's a hierarchical structure of blocks, elements and modifiers.
+     BEM structure of interface is described by **BEM tree**. It's a hierarchical structure of blocks, elements and modifiers.
    * Templates define only the rules of HTML-decoration for the certain parts of
    the interface.
      According to BEM methodology, for each part of interface there is a corresponding
      ***BEM entity* (block or element with modifiers).
 
-### Say 'No' to 'Copy-Paste' of code
+### Say 'no' to 'copy-paste' of code
 
 This principle is not unique for the web developing, and it's unlikely to cause objections. However
 technological features of many templating engines are often forcing to code duplication. This problem
@@ -66,7 +66,7 @@ to be replaced by the function call.
 
 **A templating engine should provide the ability of creation of flexible libraries of templates**
 Flexibility for a library means the following,
- for the project's developer it's:
+ for the project developer it's:
   * ability to use any template as a bock for the page building;
   * ability to modify easily any template in the project without making
   any changes in the library source code;
@@ -89,8 +89,8 @@ these terms are Blocks, Elements, Modifiers). BEMHTML allows HTML coders to join
 
 ### Web-page in terms of BEM (Blocks, Elements, Modifiers)
 
- - Page structure is described in BEMJSON format, it's a JavaScript representation of the BEM-tree;
- - The templating engine converts the BEM-tree into a HTML code;
+ - Page structure is described in BEMJSON format, it's a JavaScript representation of the BEM tree;
+ - The templating engine converts the BEM tree into a HTML code;
  - CSS integration within the BEM style
  - JS integration within the BEM style
 
@@ -136,12 +136,12 @@ The resulting HTML:
 
 ### Syntax for data and templates description is based on JavaScript.
  - Declarative templates: the template consists of condition for usage (predicate)
- and data structure, that describes the resulting HTML (the template's body).
+ and data structure, that describes the resulting HTML (the template body).
  - JavaScript syntax is extend with a key-words (`block`, `elem`, `mods`, `elemMods`)
  for working with BEM entities.
  - For the templates an arbitrary JavaScript code can be used. There is no technical
  limitations placed by BEMHTML on operations in predicates or template. An efficiency
- and consistency of templates' work is provided by developers' agreements.
+ and consistency of templates work is provided by developers agreements.
  - All BEMHTML templates are compiled in JavaScript, therefore it can be executed at
  the server side as well, as at the client side.
 
@@ -164,7 +164,7 @@ The resulting HTML:
 </ul>
 ```
 
-Arbitrary calculations performed in the template's body:
+Arbitrary calculations performed in the template body:
 
 ```js
 block widgets, elem weather, content: {
@@ -236,9 +236,9 @@ The result:
 
 ### Multi-time implementation
  - During runtime BEMHTML can generate additional elements, that are needed for solving
- layout problems (different kinds of wrappings). The initial data (BEM-tree) can
- be modified during the templates' implementation. Moreover, the same templates can
- be applied again to modified data. Therefore all layout's wrappings can be implemented
+ layout problems (different kinds of wrappings). The initial data (BEM tree) can
+ be modified during the templates implementation. Moreover, the same templates can
+ be applied again to modified data. Therefore all layout wrappings can be implemented
  without messing-up the input data with extra elements.
 
 #### Examples
@@ -278,8 +278,8 @@ approaches for text generation from data by using a template can be distinguishe
 By its approaches BEMHTML can be classified as "exotic". Let's take a look at several
 classification principles of templating engines and the place of BEMHTML among them.
 
-### Classification by semantics (What does the templating engine)
-#### Strings' interpolation
+### Classification by semantics (what does the templating engine)
+#### Strings interpolation
 
 The templating engine places a corresponding to needed data string into the text of template.
 In addition different conditions, variables and loops can be used. It's the largest class of
@@ -287,9 +287,11 @@ templating engines.
 
 ```%username%, don't worry, be happy!```
 
-Templaing engines of this kind: [Mustache](http://mustache.github.com),
-[Handlebars](http://handlebarsjs.com), [Jade](https://github.com/visionmedia/jade),
-[DustJS](http://linkedin.github.com/dustjs/), etc.
+Templaing engines of this kind:
+* [Mustache](http://mustache.github.com)
+* [Handlebars](http://handlebarsjs.com)
+* [Jade](https://github.com/visionmedia/jade)
+* [DustJS](http://linkedin.github.com/dustjs/)
 
 #### Data bind
 
@@ -305,15 +307,17 @@ map.class('name').to('username');
 plates.bind(html, data, map);
 ```
 
-Exaples: [Transparency](https://github.com/leonidas/transparency),
-[Flatiron.js](http://flatironjs.org/#templating), [Angular.js](http://angularjs.org),
-[Pure](http://beebole.com/pure/) and many others.
+Examples:
+* [Transparency](https://github.com/leonidas/transparency)
+* [Flatiron.js](http://flatironjs.org/#templating)
+* [Angular.js](http://angularjs.org)
+* [Pure](http://beebole.com/pure/)
 
 **Live data bind**: the connection with a changing data can also be declared. An example
 of such templating engine is [Knockout.js](http://knockoutjs.com).
 
 
-#### Data Driven
+#### Data driven
 
 A templating engine connects a data key-word with a fragment of input HTML. In this case
 at the begging we have the data structure, and later with help of templates it's converted
@@ -347,12 +351,14 @@ Or:
 </ul>
 ```
 
-Examples: [XSLT](http://www.w3.org/TR/xslt), **BEMHTML**.
+Examples:
+* [XSLT](http://www.w3.org/TR/xslt)
+* BEMHTML
 
 ### Classification by semantics
 #### The final version of the text with special insertions
 
-This model is correlated with Strings' Interpolation approach. A template looks very
+This model is correlated with strings interpolation approach. A template looks very
 similar to the final HTML:
 
 ```xml
@@ -362,10 +368,12 @@ similar to the final HTML:
 There is no need of learning a special syntax, and very often it's mentioned as an
 advantage of this approach.
 
-Examples:  [Mustache](http://mustache.github.com), [Handlebars](http://handlebarsjs.com),
-[DustJS](http://linkedin.github.com/dustjs/) and many others.
+Examples:
+* [Mustache](http://mustache.github.com)
+* [Handlebars](http://handlebarsjs.com)
+* [DustJS](http://linkedin.github.com/dustjs/)
 
-#### Short HTML Notation
+#### Short HTML notation
 
 HTML language has a peculiar syntactic redundancy. Almost all tags have to be in pairs
 (one opening and one closing tag). For example if we want to declare 'there is a table',
@@ -393,22 +401,29 @@ map.class('name').to('username');
 plates.bind(html, data, map);
 ```
 
-Examples: [XSLT](http://www.w3.org/TR/xslt), [Flatiron.js](http://flatironjs.org/#templating), **BEMHTML**.
+Examples:
+* [XSLT](http://www.w3.org/TR/xslt)
+* [Flatiron.js](http://flatironjs.org/#templating)
+* BEMHTML
 
 ### Classification by the base language
 #### One basic language
 The templating engine accepts only the certain programming language, and all control
 structures of the templates are written in this language.
 
-Examples: [XSLT — XML](http://www.w3.org/TR/xslt), [ECO — CoffeeScript](https://github.com/sstephenson/eco),
-**BEMHTML — JavaScript**.
+Examples:
+* [XSLT — XML](http://www.w3.org/TR/xslt)
+* [ECO — CoffeeScript](https://github.com/sstephenson/eco)
+* BEMHTML — JavaScript
 
 #### Compiling in a few different languages
 
 In the templating engine its own data scope is created. It's simple enough to allow
 compilation of control structures into a wide range of programming languages.
 
-Examples: [TT2](http://www.template-toolkit.org/), [Mustache](http://mustache.github.com).
+Examples:
+* [TT2](http://www.template-toolkit.org/)
+* [Mustache](http://mustache.github.com)
 
 ### Why BEMHTML was build this way
  * **Data driven**.
@@ -448,25 +463,25 @@ their own templating engine because of the following reasons:
     usage in the real-world applications. In the absence of active development of XSLT one cannot
     expect performance improvements or extension of functionality.
 
-  * **XSLT is not designed to work in BEM terms**
+  * **XSLT is not designed to work in BEM termss**
     In order to maximize the integration of templating engine in a set of bem-tools,
     a native support of BEM data scope is needed at the level of the template engine.
 
 ## How to try?
 
-### A Template of a project
+### A template of a project
 
-To start using BEHTML you need to clone [a project template ](https://github.com/bem/project-stub).
+To start using BEHTML you need to clone [a project template](https://github.com/bem/project-stub).
 It has already: a prepared structure for a project, the blocks library [bem-bl](https://github.com/bem/bem-bl),
-environment  customized for the building process and the result viewing, and very simple static page.
+environment customized for the building process and the result viewing, and very simple static page.
 
 In fact, the template of this project is a startup for a HTML coder. It can be extended
 with custom blocks, and any project can be based on it.
 
 ### Documentation
 
-  * [Step-by-step BEMHTML guide](http://bem.info/articles/bemhtml-intro/)
-  * [BEMHTML reference](http://ru.bem.info/articles/bemhtml-reference/) (Russian only)
-  * [bem-tools reference](http://bem.info/tools/bem/)
-  * [The blocks bem-bl library documentation](http://bem.github.com/bem-bl/index.en.html)
+  * [Step-by-step BEMHTML guide](https://bem.info/technology/bemhtml/current/intro/)
+  * [BEMHTML reference](https://bem.info/technology/bemhtml/current/reference/)
+  * [bem-tools reference](https://bem.info/tools/bem/bem-tools/)
+  * [The blocks bem-bl library documentation](https://bem.info/libs/bem-bl/)
 
