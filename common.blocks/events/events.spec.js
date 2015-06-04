@@ -28,7 +28,7 @@ describe('events', function() {
 
                 emitter.emit('event1');
                 spy1.should.have.been.calledTwice;
-                spy1_1.should.have.been.calledTwice;
+                spy1_1.should.not.have.been.calledTwice;
             });
 
             it('should call callbacks according to all types of event', function() {
