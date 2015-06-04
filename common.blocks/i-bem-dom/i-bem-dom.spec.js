@@ -383,21 +383,29 @@ describe('i-bem-dom', function() {
 
     describe('find*Elem(s)', function() {
         var b1Block,
-            B1E1Elem, B1E3Elem, B1E4Elem;
+            B1E1Elem, B1E2Elem, B1E3Elem, B1E4Elem, B1E5Elem;
 
         beforeEach(function() {
             var B1Block = BEMDOM.declBlock('b1');
 
             B1E1Elem = BEMDOM.declElem('b1', 'e1');
+            B1E2Elem = BEMDOM.declElem('b1', 'e2');
             B1E3Elem = BEMDOM.declElem('b1', 'e3');
             B1E4Elem = BEMDOM.declElem('b1', 'e4');
+            B1E5Elem = BEMDOM.declElem('b1', 'e5');
 
             rootNode = createDomNode(
                 {
                     block : 'b1',
                     content : [
-                        { block : 'b2', content : { elem : 'e1' } },
-                        { elem : 'e2' },
+                        {
+                            block : 'b2',
+                            content : { elem : 'e1' }
+                        },
+                        {
+                            elem : 'e2',
+                            content : { elem : 'e5', js : { id : '9' } }
+                        },
                         {
                             elem : 'e1',
                             elemMods : { m2 : 'v1' },
@@ -516,6 +524,14 @@ describe('i-bem-dom', function() {
                 b1Block.findChildElem({ elem : B1E1Elem, modName : 'm1' })
                     .params.id
                         .should.be.equal('4');
+            });
+
+            it('should find first elem inside elem', function() {
+                b1Block
+                    .findChildElem({ elem : B1E2Elem })
+                    .findChildElem({ elem : B1E5Elem })
+                    .params.id
+                        .should.be.equal('9');
             });
         });
 
