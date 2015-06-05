@@ -78,10 +78,10 @@ var undef,
     }),
 
     /**
-     * @lends Emitter
-     * @lends Emitter.prototype
+     * @class Emitter
+     * @exports events:Emitter
      */
-    EmitterProps = {
+    Emitter = inherit(/** @lends Emitter.prototype */{
         /**
          * Adds an event handler
          * @param {String} e Event type
@@ -244,14 +244,7 @@ var undef,
 
             return this;
         }
-    },
-    /**
-     * @class Emitter
-     * @exports events:Emitter
-     */
-    Emitter = inherit(
-        EmitterProps,
-        EmitterProps);
+    });
 
 provide({
     Emitter : Emitter,
