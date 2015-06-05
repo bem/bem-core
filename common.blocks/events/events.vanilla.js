@@ -37,12 +37,6 @@ var undef,
             this.target = target;
 
             /**
-             * Result
-             * @member {*}
-             */
-            this.result = undef;
-
-            /**
              * Data
              * @member {*}
              */
@@ -230,12 +224,9 @@ var undef,
 
                             e.data = item.data;
                             res = item.fn.apply(item.ctx || this, arguments);
-                            if(typeof res !== 'undefined') {
-                                e.result = res;
-                                if(res === false) {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                }
+                            if(res === false) {
+                                e.preventDefault();
+                                e.stopPropagation();
                             }
 
                             item.special && item.special.once &&
