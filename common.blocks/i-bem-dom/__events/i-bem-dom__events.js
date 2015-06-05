@@ -26,10 +26,7 @@ var undef,
     winId = identify(winNode),
     docId = identify(docNode),
     eventStorage = {},
-    // TODO: move it to `identify` (https://github.com/bem/bem-core/issues/1028)
-    identifyFn = function(fn, fnCtx) {
-        return identify(fn) + (fnCtx? identify(fnCtx) : '');
-    },
+
     /**
      * @class EventManager
      */
@@ -67,7 +64,7 @@ var undef,
             }
 
             var fnStorage = this._storage[e] || (this._storage[e] = {}),
-                fnId = identifyFn(fn, _fnCtx);
+                fnId = identify(fn, _fnCtx);
 
             fnStorage[fnId] || params.bindDomElem[_isOnce? 'one' : 'on'](
                 e,
@@ -115,7 +112,7 @@ var undef,
                 } else {
                     var wrappedFn;
                     if(params.bindEntityCls) {
-                        var fnId = identifyFn(fn, _fnCtx),
+                        var fnId = identify(fn, _fnCtx),
                             fnStorage = this._storage[e];
                         if(wrappedFn = fnStorage && fnStorage[fnId])
                             delete fnStorage[fnId];

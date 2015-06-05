@@ -21,17 +21,6 @@ describe('identify', function() {
         identify(obj).should.be.equal('id007');
     });
 
-    it('should not return value if not been assigned before if "onlyGet" param passed', function() {
-        should.not.exist(identify({}, true));
-    });
-
-    it('should return value if been assigned before if "onlyGet" param passed', function() {
-        var obj = {},
-            id = identify(obj);
-        should.exist(identify(obj, true));
-        identify(obj, true).should.be.equal(id);
-    });
-
     it('should generate unique values for each calls if no params passed', function() {
         var id1 = identify(),
             id2 = identify(),
@@ -44,6 +33,26 @@ describe('identify', function() {
         id1.should.not.be.equal(id2);
         id1.should.not.be.equal(id3);
         id2.should.not.be.equal(id3);
+    });
+
+    it('should accept several arguments', function() {
+        var obj1 = {},
+            obj2 = {};
+        identify(obj1, obj2).should.be.equal(identify(obj1) + identify(obj2));
+    });
+
+    it('should properly process arguments', function() {
+        var obj1 = {},
+            obj2,
+            obj3 = '123',
+            obj4 = null,
+            obj5 = function() {};
+
+        [obj2, obj3, obj4].forEach(function(obj) {
+            identify(obj).should.be.equal('');
+        });
+
+        identify(obj1, obj2, obj3, obj4, obj5).should.be.equal(identify(obj1, obj5));
     });
 });
 
