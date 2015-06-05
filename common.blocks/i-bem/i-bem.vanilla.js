@@ -10,8 +10,7 @@ modules.define(
         'identify',
         'next-tick',
         'objects',
-        'functions',
-        'events'
+        'functions'
     ],
     function(
         provide,
@@ -20,12 +19,10 @@ modules.define(
         identify,
         nextTick,
         objects,
-        functions,
-        events) {
+        functions) {
 
 var undef,
 
-    MOD_DELIM = INTERNAL.MOD_DELIM,
     ELEM_DELIM = INTERNAL.ELEM_DELIM,
 
     /**
@@ -138,9 +135,8 @@ function declEntity(baseCls, entityName, base, props, staticProps) {
 /**
  * @class BemEntity
  * @description Base block for creating BEM blocks
- * @augments events:Emitter
  */
-var BemEntity = inherit(events.Emitter, /** @lends BemEntity.prototype */ {
+var BemEntity = inherit(/** @lends BemEntity.prototype */ {
     /**
      * @constructor
      * @private
@@ -181,77 +177,6 @@ var BemEntity = inherit(events.Emitter, /** @lends BemEntity.prototype */ {
      */
     _init : function() {
         return this.setMod('js', 'inited');
-    },
-
-    /**
-     * Adds an event handler
-     * @param {String|Object} e Event type
-     * @param {Object} [data] Additional data that the handler gets as e.data
-     * @param {Function} fn Handler
-     * @param {Object} [ctx] Handler context
-     * @returns {BemEntity} this
-     */
-    on : function(e, data, fn, ctx) {
-        if(typeof e === 'object' && (functions.isFunction(data) || functions.isFunction(fn))) { // mod change event
-            e = this.__self._buildModEventName(e);
-        }
-
-        return this.__base.apply(this, arguments);
-    },
-
-    /**
-     * Removes event handler or handlers
-     * @param {String|Object} [e] Event type
-     * @param {Function} [fn] Handler
-     * @param {Object} [ctx] Handler context
-     * @returns {BemEntity} this
-     */
-    un : function(e, fn, ctx) {
-        if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
-            e = this.__self._buildModEventName(e);
-        }
-
-        return this.__base.apply(this, arguments);
-    },
-
-    /**
-     * Executes the BEM entity's event handlers and live event handlers
-     * @protected
-     * @param {String} e Event name
-     * @param {Object} [data] Additional information
-     * @returns {BemEntity} this
-     */
-    emit : function(e, data) {
-        var isModJsEvent = false;
-        if(typeof e === 'object' && !(e instanceof events.Event)) {
-            isModJsEvent = e.modName === 'js';
-            e = this.__self._buildModEventName(e);
-        }
-
-        if(isModJsEvent || this.hasMod('js', 'inited')) {
-            this.__base(e = this._buildEvent(e), data);
-            this._ctxEmit(e, data);
-        }
-
-        return this;
-    },
-
-    _ctxEmit : function(e, data) {
-        this.__self.emit(e, data);
-    },
-
-    /**
-     * Builds event
-     * @private
-     * @param {String|events:Event} e
-     * @returns {events:Event}
-     */
-    _buildEvent : function(e) {
-        typeof e === 'string'?
-            e = new events.Event(e, this) :
-            e.target || (e.target = this);
-
-        return e;
     },
 
     /**
@@ -328,13 +253,12 @@ var BemEntity = inherit(events.Emitter, /** @lends BemEntity.prototype */ {
         }
 
         this._processingMods[modName] = null;
-        needSetMod && this._emitModChangeEvents(modName, modVal, curModVal);
+        needSetMod && this._afterSetMod(modName, modVal, curModVal);
 
         return this;
     },
 
     /**
-     * Function after successfully changing the modifier of the BEM entity
      * @protected
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
@@ -342,12 +266,13 @@ var BemEntity = inherit(events.Emitter, /** @lends BemEntity.prototype */ {
      */
     _onSetMod : function(modName, modVal, oldModVal) {},
 
-    _emitModChangeEvents : function(modName, modVal, oldModVal) {
-        var eventData = { modName : modName, modVal : modVal, oldModVal : oldModVal };
-        this
-            .emit({ modName : modName, modVal : '*' }, eventData)
-            .emit({ modName : modName, modVal : modVal }, eventData);
-    },
+    /**
+     * @protected
+     * @param {String} modName Modifier name
+     * @param {String} modVal Modifier value
+     * @param {String} oldModVal Old modifier value
+     */
+    _afterSetMod : function(modName, modVal, oldModVal) {},
 
     /**
      * Sets a modifier for a BEM entity, depending on conditions.
@@ -511,41 +436,6 @@ var BemEntity = inherit(events.Emitter, /** @lends BemEntity.prototype */ {
      */
     getEntityName : function() {
         return this._name;
-    },
-
-    /**
-     * Adds an event handler
-     * @param {String|Object} e Event type
-     * @param {Object} [data] Additional data that the handler gets as e.data
-     * @param {Function} fn Handler
-     * @param {Object} [ctx] Handler context
-     * @returns {Function} this
-     */
-    on : function(e, data, fn, ctx) {
-        if(typeof e === 'object' && (functions.isFunction(data) || functions.isFunction(fn))) { // mod change event
-            e = this._buildModEventName(e);
-        }
-
-        return this.__base.apply(this, arguments);
-    },
-
-    /**
-     * Removes event handler or handlers
-     * @param {String|Object} [e] Event type
-     * @param {Function} [fn] Handler
-     * @param {Object} [ctx] Handler context
-     * @returns {Function} this
-     */
-    un : function(e, fn, ctx) {
-        if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
-            e = this._buildModEventName(e);
-        }
-
-        return this.__base.apply(this, arguments);
-    },
-
-    _buildModEventName : function(modEvent) {
-        return MOD_DELIM + modEvent.modName + MOD_DELIM + (modEvent.modVal === false? '' : modEvent.modVal);
     }
 });
 
@@ -569,7 +459,6 @@ var Elem = inherit(BemEntity, /** @lends Elem.prototype */ {
     block : function() {
         return this._block;
     }
-    // TODO: _emitModChangeEvents?
 }, /** @lends Elem */{
     /**
      * Factory method for creating an instance
