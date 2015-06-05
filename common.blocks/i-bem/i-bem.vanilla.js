@@ -7,7 +7,6 @@ modules.define(
     [
         'i-bem__internal',
         'inherit',
-        'identify',
         'next-tick',
         'objects',
         'functions'
@@ -16,7 +15,6 @@ modules.define(
         provide,
         INTERNAL,
         inherit,
-        identify,
         nextTick,
         objects,
         functions) {

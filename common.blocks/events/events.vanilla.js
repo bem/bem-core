@@ -9,9 +9,6 @@ modules.define(
 
 var undef,
     storageExpando = '__' + (+new Date) + 'storage',
-    getFnId = function(fn, ctx) {
-        return identify(fn) + (ctx? identify(ctx) : '');
-    },
 
     /**
      * @class Event
@@ -104,7 +101,7 @@ var undef,
                     data = undef;
                 }
 
-                var id = getFnId(fn, ctx),
+                var id = identify(fn, ctx),
                     storage = this[storageExpando] || (this[storageExpando] = {}),
                     eventTypes = e.split(' '), eventType,
                     i = 0, list, item,
@@ -163,7 +160,7 @@ var undef,
                         while(e = eventTypes[i++]) {
                             if(eventStorage = storage[e]) {
                                 if(fn) {  // if specific handler was passed
-                                    var id = getFnId(fn, ctx),
+                                    var id = identify(fn, ctx),
                                         ids = eventStorage.ids;
                                     if(id in ids) {
                                         var list = eventStorage.list,
