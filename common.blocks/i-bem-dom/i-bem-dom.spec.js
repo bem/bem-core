@@ -759,6 +759,13 @@ describe('i-bem-dom', function() {
                 spy.should.be.calledThrice;
             });
 
+            it('should drop elems cache via dropElemCache', function() {
+                b1Block.elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block.dropElemCache({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block.elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                spy.should.be.calledTwice;
+            });
+
             it('should cache found elems with findChildElems', function() {
                 // warm cache
                 [B1E1Elem, B1E2Elem, B1E3Elem].forEach(function (Elem) {
@@ -853,6 +860,13 @@ describe('i-bem-dom', function() {
                 elem.delMod('m2');
                 b1Block.elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledThrice;
+            });
+
+            it('should drop elem cache via dropElemCache', function() {
+                b1Block.elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block.dropElemCache({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block.elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                spy.should.be.calledTwice;
             });
         });
     });
