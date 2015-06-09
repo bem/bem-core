@@ -463,7 +463,7 @@ describe('i-bem__dom', function() {
         });
 
         it('should update _elemCache only if ctx is the same', function() {
-            rootBlock.findElem($(rootNode), 'e1');
+            rootBlock.findElem(rootBlock.domElem, 'e1');
             rootNode.html(BEMHTML.apply({
                     block : 'root',
                     elem : 'e1',
@@ -473,8 +473,30 @@ describe('i-bem__dom', function() {
             rootBlock.findElem($('.something-else'), 'e1');
             getElemIds(rootBlock.elem('e1')).should.be.eql(['1', '2-1', '3-2-1']);
 
-            rootBlock.findElem($(rootNode), 'e1');
+            rootBlock.findElem(rootBlock.domElem, 'e1');
             getElemIds(rootBlock.elem('e1')).should.be.eql(['1.']);
+        });
+    });
+
+    describe('drop elem cache', function() {
+        var block;
+        beforeEach(function() {
+            block = $(BEMHTML.apply({ block : 'b1', content : { elem : 'e1', mods : { m1 : 'v1' } } })).bem('b1');
+        });
+
+        afterEach(function() {
+            DOM.destruct(block.domElem);
+            delete DOM.blocks['b1'];
+        });
+
+        it('should properly drop elem cache', function() {
+            sinon.spy(block, 'findElem');
+
+            block.elem('e1', 'm1', 'v1');
+            block.dropElemCache('e1', 'm1', 'v1');
+            block.elem('e1', 'm1', 'v1');
+
+            block.findElem.should.have.been.calledTwice;
         });
     });
 
