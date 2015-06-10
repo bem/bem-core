@@ -310,11 +310,11 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
     /**
      * Lazy search for elements nested in a block (caches results)
-     * @private
+     * @protected
      * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
      * @returns {Elem[]}
      */
-    elems : function(Elem) {
+    _elems : function(Elem) {
         var key = buildElemKey(Elem);
         return key in this._elemsCache?
             this._elemsCache[key] :
@@ -323,11 +323,11 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
     /**
      * Lazy search for the first element nested in a block (caches results)
-     * @private
+     * @protected
      * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
      * @returns {Elem}
      */
-    elem : function(Elem) {
+    _elem : function(Elem) {
         var key = buildElemKey(Elem);
         // NOTE: can use this._elemsCache but it's too rare case
         return key in this._elemCache?
@@ -341,7 +341,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @param {Function|String|Object} [...elems] Nested elements names or description elem, modName, modVal
      * @returns {BemDomEntity} this
      */
-    dropElemCache : function(elems) {
+    _dropElemCache : function(elems) {
         if(!arguments.length) {
             this._elemsCache = {};
             this._elemCache = {};
@@ -610,8 +610,8 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
             name = _self.getName();
 
         this._findBackRefs.forEach(function(ref) {
-            oldModVal === '' || ref.dropElemCache({ elem : name, modName : modName, modVal : oldModVal });
-            modVal === '' || ref.dropElemCache({ elem : name, modName : modName, modVal : modVal });
+            oldModVal === '' || ref._dropElemCache({ elem : name, modName : modName, modVal : oldModVal });
+            modVal === '' || ref._dropElemCache({ elem : name, modName : modName, modVal : modVal });
         });
 
         this.__base.apply(this, arguments);
@@ -648,22 +648,11 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
     /**
      * Checks whether a DOM element is in a block
-     * @protected
      * @param {jQuery} domElem DOM element
      * @returns {Boolean}
      */
     containsDomElem : function(domElem) {
         return dom.contains(this.domElem, domElem);
-    },
-
-    /**
-     * Builds a CSS selector corresponding to an entity and modifier
-     * @param {String} [modName] Modifier name
-     * @param {String} [modVal] Modifier value
-     * @returns {String}
-     */
-    buildSelector : function(modName, modVal) {
-        return this.__self.buildSelector(modName, modVal);
     }
 
 }, /** @lends Block */{
@@ -750,22 +739,24 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
     /**
      * Builds a CSS class corresponding to the entity and modifier
+     * @protected
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
      * @returns {String}
      */
-    buildClass : function(modName, modVal) {
+    _buildClass : function(modName, modVal) {
         return buildClass(this.getEntityName(), modName, modVal);
     },
 
     /**
      * Builds a CSS selector corresponding to an entity and modifier
+     * @protected
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
      * @returns {String}
      */
-    buildSelector : function(modName, modVal) {
-        return '.' + this.buildClass(modName, modVal);
+    _buildSelector : function(modName, modVal) {
+        return '.' + this._buildClass(modName, modVal);
     }
 });
 
@@ -780,55 +771,6 @@ var Block = inherit([BEM.Block, BemDomEntity], /** @lends Block.prototype */{
      * @override
      */
     block : function() {
-        return this;
-    },
-
-    /**
-     * Lazy search for elements nested in a block (caches results)
-     * @private
-     * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
-     * @returns {Elem[]}
-     */
-    elems : function(Elem) {
-        var key = buildElemKey(Elem);
-        return key in this._elemsCache?
-            this._elemsCache[key] :
-            this.findChildElems(Elem);
-    },
-
-    /**
-     * Lazy search for the first element nested in a block (caches results)
-     * @private
-     * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
-     * @returns {Elem}
-     */
-    elem : function(Elem) {
-        var key = buildElemKey(Elem);
-        // NOTE: can use this._elemsCache but it's too rare case
-        return key in this._elemCache?
-            this._elemCache[key] :
-            this.findChildElem(Elem);
-    },
-
-    /**
-     * Clearing the cache for elements
-     * @protected
-     * @param {Function|...String|Object} [elems] Nested elements names or description elem, modName, modVal
-     * @returns {BemDomEntity} this
-     */
-    dropElemCache : function(elems) {
-        if(!arguments.length) {
-            this._elemsCache = {};
-            this._elemCache = {};
-            return this;
-        }
-
-        (Array.isArray(elems)? elems : slice.call(arguments)).forEach(function(elem) {
-            var key = buildElemKey(elem);
-            delete this._elemsCache[key];
-            delete this._elemCache[key];
-        }, this);
-
         return this;
     }
 });

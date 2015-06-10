@@ -162,7 +162,7 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
          * @member {Object}
          * @readonly
          */
-        this.params = objects.extend(this.getDefaultParams(), params);
+        this.params = objects.extend(this._getDefaultParams(), params);
 
         initImmediately !== false?
             this._init() :
@@ -305,7 +305,6 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
 
     /**
      * Removes a modifier from a BEM entity
-     * @protected
      * @param {String} modName Modifier name
      * @returns {BemEntity} this
      */
@@ -337,7 +336,7 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
      * @protected
      * @returns {Object}
      */
-    getDefaultParams : function() {
+    _getDefaultParams : function() {
         return {};
     },
 
@@ -355,7 +354,7 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
      * @param {Function} fn callback
      * @returns {BemEntity} this
      */
-    nextTick : function(fn) {
+    _nextTick : function(fn) {
         var _this = this;
         nextTick(function() {
             _this.hasMod('js', 'inited') && fn.call(_this);
@@ -517,7 +516,7 @@ provide(/** @exports */{
      * Declares elem and creates an elem class
      * @param {String} blockName Block name
      * @param {String} elemName Elem name
-     * @param {Function|Array[Function]} [base] base elem + mixes
+     * @param {Function|Function[]} [base] base elem + mixes
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      * @returns {Function} Elem class
@@ -529,9 +528,15 @@ provide(/** @exports */{
         return res;
     },
 
-    declMix : function(blockName, props, staticProps) {
+    /**
+     * Declares mix
+     * @param {Object} [props] Methods
+     * @param {Object} [staticProps] Static methods
+     * @returns {Function} mix
+     */
+    declMix : function(props, staticProps) {
         convertModHandlersToMethods(props || (props = {}));
-        return entities[blockName] = inherit(props, staticProps);
+        return inherit(props, staticProps);
     },
 
     /**

@@ -175,7 +175,7 @@ var undef,
                 ctxCls = ctx.__self;
             } else {
                 ctxCls = ctx;
-                selector = ctx.buildSelector();
+                selector = ctx._buildSelector();
             }
 
             var params = this._buildEventManagerParams(bindCtx, bindScope, selector, ctxCls),

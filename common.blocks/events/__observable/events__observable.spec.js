@@ -11,7 +11,7 @@ modules.define(
         sinon,
         events) {
 
-describe('events__observable_type_bem-dom', function() {
+describe('events__observable', function() {
     var spy1, spy2, spy3, emitter;
 
     beforeEach(function() {

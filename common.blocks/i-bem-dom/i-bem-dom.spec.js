@@ -87,7 +87,7 @@ describe('i-bem-dom', function() {
                         elemMods : data.elemMods,
                         mix : data.mix
                     }
-                })).bem(Block).elem('elem').getMod('m1')
+                })).bem(Block)._elem('elem').getMod('m1')
                     .should.be.equal(data.val);
 
                 BEMDOM.destruct(rootNode);
@@ -150,7 +150,7 @@ describe('i-bem-dom', function() {
                             elem : 'elem',
                             mods : data.elemMods
                         }
-                    })).bem(Block).elem('elem');
+                    })).bem(Block)._elem('elem');
 
                 objects.each(data.mods, function(modVal, modName) {
                     modName === 'm3'?
@@ -712,57 +712,57 @@ describe('i-bem-dom', function() {
             });
 
             it('should find all elems by elem class', function() {
-                getEntityIds(b1Block.elems(B1E1Elem))
+                getEntityIds(b1Block._elems(B1E1Elem))
                     .should.be.eql([1, 2, 4, 8]);
             });
 
             it('should find all elems by elem class modName and modVal', function() {
-                getEntityIds(b1Block.elems({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' }))
+                getEntityIds(b1Block._elems({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' }))
                     .should.be.eql([2]);
             });
 
             it('should cache found elems', function() {
-                b1Block.elems(B1E1Elem).should.be.equal(b1Block.elems(B1E1Elem));
+                b1Block._elems(B1E1Elem).should.be.equal(b1Block._elems(B1E1Elem));
                 spy.should.be.calledOnce;
             });
 
             it('should cache found elems with respect to mods', function() {
-                b1Block.elems({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' });
+                b1Block._elems({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' });
                 spy.should.be.calledOnce;
 
-                b1Block.elems(B1E1Elem);
+                b1Block._elems(B1E1Elem);
                 spy.should.be.calledTwice;
             });
 
             it('should not drop elems cache in case elem mods change', function() {
-                var elem = b1Block.elems(B1E1Elem)[0];
+                var elem = b1Block._elems(B1E1Elem)[0];
                 spy.should.be.calledOnce;
 
                 elem.setMod('m2', 'v1');
 
-                b1Block.elems(B1E1Elem);
+                b1Block._elems(B1E1Elem);
                 spy.should.be.calledOnce;
             });
 
             it('should drop elems cache in case mods change', function() {
                 var elem = b1Block.findChildElem(B1E1Elem);
 
-                b1Block.elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledOnce;
 
                 elem.setMod('m2', 'v1');
-                b1Block.elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledTwice;
 
                 elem.delMod('m2');
-                b1Block.elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledThrice;
             });
 
             it('should drop elems cache via dropElemCache', function() {
-                b1Block.elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                b1Block.dropElemCache({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                b1Block.elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._dropElemCache({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledTwice;
             });
 
@@ -779,22 +779,22 @@ describe('i-bem-dom', function() {
                 spy.restore();
                 spy = sinon.spy(b1Block, 'findChildElems');
 
-                getEntityIds(b1Block.elems('e1')).should.be.eql([1, 2, 4, 8]);
-                getEntityIds(b1Block.elems('e2')).should.be.eql([3, 7, 9]);
-                getEntityIds(b1Block.elems('e3')).should.be.eql([5, 6]);
-                getEntityIds(b1Block.elems({ elem : 'e1', modName : 'inner', modVal : 'yes' })).should.be.eql([8]);
-                getEntityIds(b1Block.elems({ elem : 'e2', modName : 'inner', modVal : 'yes' })).should.be.eql([7]);
-                getEntityIds(b1Block.elems({ elem : 'e3', modName : 'inner', modVal : 'no' })).should.be.eql([5]);
-                getEntityIds(b1Block.elems({ elem : 'e1', modName : 'bool', modVal : true })).should.be.eql([8]);
-                getEntityIds(b1Block.elems({ elem : 'e2', modName : 'bool', modVal : true })).should.be.eql([7, 9]);
-                getEntityIds(b1Block.elems({ elem : 'e3', modName : 'bool', modVal : true })).should.be.eql([5]);
+                getEntityIds(b1Block._elems('e1')).should.be.eql([1, 2, 4, 8]);
+                getEntityIds(b1Block._elems('e2')).should.be.eql([3, 7, 9]);
+                getEntityIds(b1Block._elems('e3')).should.be.eql([5, 6]);
+                getEntityIds(b1Block._elems({ elem : 'e1', modName : 'inner', modVal : 'yes' })).should.be.eql([8]);
+                getEntityIds(b1Block._elems({ elem : 'e2', modName : 'inner', modVal : 'yes' })).should.be.eql([7]);
+                getEntityIds(b1Block._elems({ elem : 'e3', modName : 'inner', modVal : 'no' })).should.be.eql([5]);
+                getEntityIds(b1Block._elems({ elem : 'e1', modName : 'bool', modVal : true })).should.be.eql([8]);
+                getEntityIds(b1Block._elems({ elem : 'e2', modName : 'bool', modVal : true })).should.be.eql([7, 9]);
+                getEntityIds(b1Block._elems({ elem : 'e3', modName : 'bool', modVal : true })).should.be.eql([5]);
 
                 b1Block.findChildElems.called.should.be.false;
                 b1Block.findChildElems.restore();
             });
 
             it('should update _elemsCache on findChildElem call', function() {
-                b1Block.elems('e1');
+                b1Block._elems('e1');
                 rootNode.html(BEMHTML.apply({
                     block : 'b1',
                     elem : 'e1',
@@ -802,7 +802,7 @@ describe('i-bem-dom', function() {
                 }));
                 b1Block.findChildElems('e1');
 
-                getEntityIds(b1Block.elems('e1')).should.be.eql([10]);
+                getEntityIds(b1Block._elems('e1')).should.be.eql([10]);
             });
         });
 
@@ -812,60 +812,60 @@ describe('i-bem-dom', function() {
             });
 
             it('should find first elem by elem class', function() {
-                b1Block.elem(B1E1Elem)
+                b1Block._elem(B1E1Elem)
                     .params.id
                         .should.be.equal(1);
             });
 
             it('should find first elem by elem class modName and modVal', function() {
-                b1Block.elem({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' })
+                b1Block._elem({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' })
                     .params.id
                         .should.be.equal(2);
             });
 
             it('should cache found elem', function() {
-                b1Block.elem(B1E1Elem);
-                b1Block.elem(B1E1Elem);
+                b1Block._elem(B1E1Elem);
+                b1Block._elem(B1E1Elem);
                 spy.should.be.calledOnce;
             });
 
             it('should cache found elem with respect to mods', function() {
-                b1Block.elem({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' });
+                b1Block._elem({ elem : B1E1Elem, modName : 'm1', modVal : 'v1' });
                 spy.should.be.calledOnce;
 
-                b1Block.elem(B1E1Elem);
+                b1Block._elem(B1E1Elem);
                 spy.should.be.calledTwice;
             });
 
             it('should not drop elem cache in case elem mods change', function() {
-                var elem = b1Block.elem(B1E1Elem);
+                var elem = b1Block._elem(B1E1Elem);
                 spy.should.be.calledOnce;
 
                 elem.setMod('m2', 'v1');
 
-                b1Block.elem(B1E1Elem);
+                b1Block._elem(B1E1Elem);
                 spy.should.be.calledOnce;
             });
 
             it('should drop elem cache in case mods change', function() {
                 var elem = b1Block.findChildElems(B1E1Elem)[0];
 
-                b1Block.elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledOnce;
 
                 elem.setMod('m2', 'v1');
-                b1Block.elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledTwice;
 
                 elem.delMod('m2');
-                b1Block.elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledThrice;
             });
 
             it('should drop elem cache via dropElemCache', function() {
-                b1Block.elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                b1Block.dropElemCache({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                b1Block.elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._dropElemCache({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledTwice;
             });
         });
@@ -1116,7 +1116,7 @@ describe('i-bem-dom', function() {
     describe('params', function() {
         it('should properly join params', function(done) {
             var Block = BEMDOM.declBlock('block', {
-                    getDefaultParams : function() {
+                    _getDefaultParams : function() {
                         return { p1 : 1 };
                     }
                 });
@@ -1180,7 +1180,7 @@ describe('i-bem-dom', function() {
         });
 
         it('should properly checks for nested dom elem', function() {
-            block.containsDomElem(block.elem('e2-1').domElem).should.be.true;
+            block.containsDomElem(block._elem('e2-1').domElem).should.be.true;
             block.containsDomElem(block2.domElem).should.be.false;
         });
     });
@@ -1244,7 +1244,7 @@ describe('i-bem-dom', function() {
                         }
                     }))
                     .appendTo('body')
-                    .find(Block2.buildSelector())
+                    .find(Block2._buildSelector())
                     .bem(Block2);
             });
 

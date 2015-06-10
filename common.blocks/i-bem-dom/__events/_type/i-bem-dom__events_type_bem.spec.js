@@ -352,14 +352,14 @@ describe('BEM events', function() {
                             ]
                         }).bem(Block1);
 
-                        elem2 = block1.elem('e2');
+                        elem2 = block1._elem('e2');
                     });
 
                     describe('block', function() {
                         it('should properly handle events on elems with multiple DOM nodes', function() {
                             block1._events('e4').on('click', spy8);
 
-                            block1.elem('e4')._emit('click');
+                            block1._elem('e4')._emit('click');
 
                             spy8.should.have.been.calledOnce;
                         });
@@ -376,13 +376,13 @@ describe('BEM events', function() {
                         });
 
                         it('should properly bind handlers', function() {
-                            block1.elem('e3')._emit('click');
+                            block1._elem('e3')._emit('click');
                             spy1.should.not.have.been.called;
                         });
 
                         it('should properly unbind all handlers', function() {
                             block1._events(elem1).un('click');
-                            block1.elem(elem1)._emit('click');
+                            block1._elem(elem1)._emit('click');
 
                             spy1.should.not.have.been.called;
                             spy2.should.not.have.been.called;
@@ -395,7 +395,7 @@ describe('BEM events', function() {
 
                         it('should properly unbind specified handler', function() {
                             block1._events(elem1).un('click', spy2);
-                            block1.elem(elem1)._emit('click');
+                            block1._elem(elem1)._emit('click');
 
                             spy1.should.have.been.called;
                             spy2.should.not.have.been.called;
@@ -465,12 +465,12 @@ describe('BEM events', function() {
                     });
 
                     it('should properly bind handlers', function() {
-                        block1.elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
+                        block1._elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
 
                         spy1.should.have.been.called;
                         spy2.should.have.been.called;
 
-                        block1.elem('e1')._emit('click');
+                        block1._elem('e1')._emit('click');
 
                         spy1.should.have.been.calledTwice;
                         spy2.should.have.been.calledOnce;
@@ -479,7 +479,7 @@ describe('BEM events', function() {
                     it('should properly unbind all handlers', function() {
                         block1._events({ elem : elem1, modName : 'm1', modVal : 'v1' }).un('click');
 
-                        block1.elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
+                        block1._elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
 
                         spy1.should.have.been.called;
                         spy2.should.not.have.been.called;
@@ -488,7 +488,7 @@ describe('BEM events', function() {
                     it('should properly unbind specified handler', function() {
                         block1._events({ elem : elem1, modName : 'm1', modVal : 'v1' }).un('click', spy2);
 
-                        block1.elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
+                        block1._elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
 
                         spy1.should.have.been.called;
                         spy2.should.not.have.been.called;
@@ -703,12 +703,12 @@ describe('BEM events', function() {
                             ]
                         }).bem(Block1);
 
-                        elem2 = block1.elem('e2');
+                        elem2 = block1._elem('e2');
                     });
 
                     describe('block', function() {
                         it('should properly bind handlers', function() {
-                            block1.elem('e1')._emit('click');
+                            block1._elem('e1')._emit('click');
 
                             spy1.should.have.been.called;
                             spy1.should.have.been.calledOn(block1);
@@ -719,14 +719,14 @@ describe('BEM events', function() {
                             spy3.args[0][0].data.should.have.been.equal(data);
                             spy3.args[0][1].should.be.instanceOf(Elem1);
                             spy3.args[0][1].domElem[0]
-                                .should.be.equal(block1.elem(elem1).domElem[0]);
+                                .should.be.equal(block1._elem(elem1).domElem[0]);
 
                             spy5.should.not.have.been.called;
                         });
 
                         it('should properly unbind all handlers', function() {
                             Block1._events(elem1).un('click');
-                            block1.elem(elem1)._emit('click');
+                            block1._elem(elem1)._emit('click');
 
                             spy1.should.not.have.been.called;
                             spy2.should.not.have.been.called;
@@ -735,7 +735,7 @@ describe('BEM events', function() {
 
                         it('should properly unbind specified handler', function() {
                             Block1._events(elem1).un('click', spy2);
-                            block1.elem(elem1)._emit('click');
+                            block1._elem(elem1)._emit('click');
 
                             spy1.should.have.been.called;
                             spy2.should.not.have.been.called;
@@ -801,12 +801,12 @@ describe('BEM events', function() {
                     });
 
                     it('should properly bind handlers', function() {
-                        block1.elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
+                        block1._elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
 
                         spy1.should.have.been.called;
                         spy2.should.have.been.called;
 
-                        block1.elem('e1')._emit('click');
+                        block1._elem('e1')._emit('click');
 
                         spy1.should.have.been.calledTwice;
                         spy2.should.have.been.calledOnce;
@@ -815,7 +815,7 @@ describe('BEM events', function() {
                     it('should properly unbind all handlers', function() {
                         Block1._events({ elem : elem1, modName : 'm1', modVal : 'v1' }).un('click');
 
-                        block1.elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
+                        block1._elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
 
                         spy1.should.have.been.called;
                         spy2.should.not.have.been.called;
@@ -824,7 +824,7 @@ describe('BEM events', function() {
                     it('should properly unbind specified handler', function() {
                         Block1._events({ elem : elem1, modName : 'm1', modVal : 'v1' }).un('click', spy2);
 
-                        block1.elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
+                        block1._elem({ elem : 'e1', modName : 'm1', modVal : 'v1' })._emit('click');
 
                         spy1.should.have.been.called;
                         spy2.should.not.have.been.called;

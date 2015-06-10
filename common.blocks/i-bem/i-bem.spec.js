@@ -653,7 +653,7 @@ describe('i-bem', function() {
         });
     });
 
-    describe('nextTick', function() {
+    describe('_nextTick', function() {
         var block;
         beforeEach(function() {
             block = BEM
@@ -666,7 +666,7 @@ describe('i-bem', function() {
 
         it('should call callback asynchronously', function(done) {
             var isAsync = false;
-            block.nextTick(function() {
+            block._nextTick(function() {
                 isAsync.should.be.true;
                 done();
             });
@@ -674,7 +674,7 @@ describe('i-bem', function() {
         });
 
         it('should call callback with block\'s context', function(done) {
-            block.nextTick(function() {
+            block._nextTick(function() {
                 this.should.be.equal(block);
                 done();
             });
@@ -682,7 +682,7 @@ describe('i-bem', function() {
 
         it('should not call callback if block destructed', function(done) {
             var spy = sinon.spy();
-            block.nextTick(spy);
+            block._nextTick(spy);
             block._destruct();
             setTimeout(function() {
                 spy.called.should.be.false;
