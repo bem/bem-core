@@ -404,6 +404,7 @@ def()(function() {
                                 });
 
                                 if(nestedMix) {
+                                    Array.isArray(nestedMix) || (nestedMix = [nestedMix]);
                                     for(var j = 0; j < nestedMix.length; j++) {
                                         var nestedItem = nestedMix[j];
                                         if(!nestedItem.block &&
