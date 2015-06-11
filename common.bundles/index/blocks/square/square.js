@@ -5,21 +5,19 @@
  *
  * You can find various declarations on the i-bem block's wiki page, blocks/i-bem/i-bem.wiki
  */
-modules.define('i-bem__dom', ['BEMHTML'], function(provide, BEMHTML, DOM) {
-
-DOM.decl('b-square', {
+modules.define('square', ['i-bem-dom', 'BEMHTML'], function(provide, BEMDOM, BEMHTML) {
+provide(BEMDOM.declBlock(this.name, {
     _onSquareClick : function() {
         this.toggleMod('color', '', 'green');
-        DOM.update(this.domElem, BEMHTML.apply({ block: 'test', content: 'client BEMHTML test' }));
+        BEMDOM.update(this.domElem, BEMHTML.apply({
+            block : 'test',
+            content : 'client BEMHTML test'
+        }));
     }
 }, {
     live : function() {
-        this.liveBindTo('click', function() {
-           this._onSquareClick();
-        });
+        this._domEvents().on('click', this.prototype._onSquareClick);
     }
-});
-
-provide(DOM);
+}));
 
 });
