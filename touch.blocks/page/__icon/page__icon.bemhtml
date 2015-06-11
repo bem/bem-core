@@ -1,6 +1,6 @@
 block('page').elem('icon').def()(function() {
     var ctx = this.ctx;
-    applyCtx([
+    return applyCtx([
         ctx.src16 && {
             elem : 'link',
             attrs : { rel : 'shortcut icon', href : ctx.src16 }

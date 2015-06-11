@@ -4,7 +4,7 @@ block('page')(
         var ctx = this.ctx;
         this._nonceCsp = ctx.nonce;
 
-        applyCtx([
+        return applyCtx([
             ctx.doctype || '<!DOCTYPE html>',
             {
                 tag : 'html',
@@ -16,7 +16,7 @@ block('page')(
                             { tag : 'meta', attrs : { charset : 'utf-8' } },
                             ctx.uaCompatible === false? '' : {
                                 tag : 'meta',
-                                attrs: {
+                                attrs : {
                                     'http-equiv' : 'X-UA-Compatible',
                                     content : ctx.uaCompatible || 'IE=edge'
                                 }
