@@ -3,6 +3,10 @@ language: node_js
 node_js:
   - '0.10'
 
+# sudo=false to run builds inside container infrastructure
+# see https://github.com/bem/bem-components/issues/1528
+sudo: false
+
 env:
   global:
     - secure: "EocST8MkGsiC8SU91QH8/Cz71ehcCHW6+VEeG6RalauYpB56O77p9d4gwhIk5J7uFyRHyEHJConjN/JM74WSY1s2jvVn2AZTeyhVgacxPFjaRZyRnDMjlyGEUfABfaKggpFvtiCzYKh/Y0jYDK27beDXdTp+nAcZQDAyFpjL6JU="
