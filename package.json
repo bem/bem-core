@@ -54,6 +54,6 @@
     "bem-test": "npm run deps && magic run specs && magic run tmpl-specs",
     "bem-coverage": "ISTANBUL_COVERAGE=yes npm run bem-test",
     "bem-jsdoc": "bem make desktop.jsdoc",
-    "test": "npm run bem-test && mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.test.bemhtml/*-test.js"
+    "test": "npm run lint && npm run bem-test && mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.test.bemhtml/*-test.js"
   }
 }
