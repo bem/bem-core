@@ -1,13 +1,12 @@
 var PATH = require('path'),
     environ = require('bem-environ'),
     BEMPR_TECHS = environ.getLibPath('bem-pr', 'bem/techs'),
-    PRJ_TECHS = PATH.resolve(__dirname, '../techs');
-
-var resolveTechs = exports.resolveTechs = function(registry, prefix) {
-    return function(name) {
-        registry[name] = PATH.join(prefix, name + '.js');
+    PRJ_TECHS = PATH.resolve(__dirname, '../techs'),
+    resolveTechs = exports.resolveTechs = function(registry, prefix) {
+        return function(name) {
+            registry[name] = PATH.join(prefix, name + '.js');
+        };
     };
-};
 
 exports.getTechs = function() {
     var techs = {

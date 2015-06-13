@@ -191,6 +191,7 @@ PointerMap.prototype = {
     }
 };
 
+// jscs:disable requireMultipleVarDecl
 var pointermap = new PointerMap();
 
 var dispatcher = {
