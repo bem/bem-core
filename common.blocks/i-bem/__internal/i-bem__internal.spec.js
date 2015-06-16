@@ -1,4 +1,4 @@
-modules.define('spec', ['i-bem__internal'], function(provide, internal) {
+modules.define('spec', ['i-bem__internal'], function(provide, bemInternal) {
 
 describe('i-bem__internal', function() {
     describe('buildClass', function() {
@@ -70,7 +70,7 @@ describe('i-bem__internal', function() {
             }
         ].forEach(function(spec) {
             it(spec.title, function() {
-                internal.buildClass.apply(internal, spec.input).should.to.equal(spec.output);
+                bemInternal.buildClass.apply(bemInternal, spec.input).should.to.equal(spec.output);
             });
         });
     });
@@ -104,7 +104,7 @@ describe('i-bem__internal', function() {
             }
         ].forEach(function(spec) {
             it(spec.title, function() {
-                internal.buildClasses.apply(internal, spec.input).should.to.equal(spec.output);
+                bemInternal.buildClasses.apply(bemInternal, spec.input).should.to.equal(spec.output);
             });
         });
     });

@@ -1,7 +1,7 @@
 modules.define(
     'spec',
     ['i-bem', 'i-bem-dom', 'objects', 'functions', 'jquery', 'chai', 'sinon', 'BEMHTML'],
-    function(provide, BEM, BEMDOM, objects, functions, $, chai, sinon, BEMHTML) {
+    function(provide, bem, bemDom, objects, functions, $, chai, sinon, BEMHTML) {
 
 var undef,
     expect = chai.expect;
@@ -11,18 +11,18 @@ describe('i-bem-dom', function() {
 
     afterEach(function() {
         if(rootNode) {
-            BEMDOM.destruct(rootNode);
+            bemDom.destruct(rootNode);
             rootNode = null;
         }
 
-        objects.each(BEM.entities, function(_, entityName) {
-            delete BEM.entities[entityName];
+        objects.each(bem.entities, function(_, entityName) {
+            delete bem.entities[entityName];
         });
     });
 
     describe('getMod', function() {
         it('should return properly extracted mod from html', function() {
-            var Block = BEMDOM.declBlock('block');
+            var Block = bemDom.declBlock('block');
 
             [
                 {
@@ -50,12 +50,12 @@ describe('i-bem-dom', function() {
                 })).bem(Block).getMod('m1')
                     .should.be.eql(data.val);
 
-                BEMDOM.destruct(rootNode);
+                bemDom.destruct(rootNode);
             });
         });
 
         it('should return properly extracted elem mod from html', function() {
-            var Block = BEMDOM.declBlock('block');
+            var Block = bemDom.declBlock('block');
 
             [
                 {
@@ -90,14 +90,14 @@ describe('i-bem-dom', function() {
                 })).bem(Block)._elem('elem').getMod('m1')
                     .should.be.equal(data.val);
 
-                BEMDOM.destruct(rootNode);
+                bemDom.destruct(rootNode);
             });
         });
     });
 
     describe('setMod', function() {
         it('should properly set CSS classes', function() {
-            var Block = BEMDOM.declBlock('block');
+            var Block = bemDom.declBlock('block');
 
             [
                 {
@@ -124,12 +124,12 @@ describe('i-bem-dom', function() {
 
                 block.domElem[0].className.should.be.equal(data.afterCls);
 
-                BEMDOM.destruct(rootNode);
+                bemDom.destruct(rootNode);
             });
         });
 
         it('should properly set elem CSS classes', function() {
-            var Block = BEMDOM.declBlock('block'),
+            var Block = bemDom.declBlock('block'),
                 rootNode;
 
             [
@@ -160,7 +160,7 @@ describe('i-bem-dom', function() {
 
                 elem.domElem[0].className.should.be.equal(data.afterCls);
 
-                BEMDOM.destruct(rootNode);
+                bemDom.destruct(rootNode);
             });
         });
     });
@@ -170,11 +170,11 @@ describe('i-bem-dom', function() {
             B1Block, B3Block, B4Block, B5Block;
 
         beforeEach(function() {
-            var RootBlock = BEMDOM.declBlock('root');
-            B1Block = BEMDOM.declBlock('b1');
-            B3Block = BEMDOM.declBlock('b3');
-            B4Block = BEMDOM.declBlock('b4');
-            B5Block = BEMDOM.declBlock('b5');
+            var RootBlock = bemDom.declBlock('root');
+            B1Block = bemDom.declBlock('b1');
+            B3Block = bemDom.declBlock('b3');
+            B4Block = bemDom.declBlock('b4');
+            B5Block = bemDom.declBlock('b5');
 
             rootNode = createDomNode({
                 block : 'root',
@@ -256,7 +256,7 @@ describe('i-bem-dom', function() {
             });
 
             it('should return null if nothing found', function() {
-                var B99Block = BEMDOM.declBlock('b99');
+                var B99Block = bemDom.declBlock('b99');
                 expect(rootBlock.findChildBlock(B99Block)).to.be.null;
             });
 
@@ -386,13 +386,13 @@ describe('i-bem-dom', function() {
             B1E1Elem, B1E2Elem, B1E3Elem, B1E4Elem, B1E5Elem;
 
         beforeEach(function() {
-            var B1Block = BEMDOM.declBlock('b1');
+            var B1Block = bemDom.declBlock('b1');
 
-            B1E1Elem = BEMDOM.declElem('b1', 'e1');
-            B1E2Elem = BEMDOM.declElem('b1', 'e2');
-            B1E3Elem = BEMDOM.declElem('b1', 'e3');
-            B1E4Elem = BEMDOM.declElem('b1', 'e4');
-            B1E5Elem = BEMDOM.declElem('b1', 'e5');
+            B1E1Elem = bemDom.declElem('b1', 'e1');
+            B1E2Elem = bemDom.declElem('b1', 'e2');
+            B1E3Elem = bemDom.declElem('b1', 'e3');
+            B1E4Elem = bemDom.declElem('b1', 'e4');
+            B1E5Elem = bemDom.declElem('b1', 'e5');
 
             rootNode = createDomNode(
                 {
@@ -490,7 +490,7 @@ describe('i-bem-dom', function() {
             });
 
             it('should return null if nothing found', function() {
-                var B99Elem = BEMDOM.declElem('b1', 'e99');
+                var B99Elem = bemDom.declElem('b1', 'e99');
                 expect(b1Block.findChildElem(B99Elem)).to.be.null;
             });
 
@@ -660,11 +660,11 @@ describe('i-bem-dom', function() {
             spy;
 
         beforeEach(function() {
-            var B1Block = BEMDOM.declBlock('b1');
+            var B1Block = bemDom.declBlock('b1');
 
-            B1E1Elem = BEMDOM.declElem('b1', 'e1');
-            B1E2Elem = BEMDOM.declElem('b1', 'e2');
-            B1E3Elem = BEMDOM.declElem('b1', 'e3');
+            B1E1Elem = bemDom.declElem('b1', 'e1');
+            B1E2Elem = bemDom.declElem('b1', 'e2');
+            B1E3Elem = bemDom.declElem('b1', 'e3');
 
             rootNode = createDomNode({
                 block : 'b1',
@@ -871,14 +871,14 @@ describe('i-bem-dom', function() {
         });
     });
 
-    describe('BEMDOM.init', function() {
+    describe('bemDom.init', function() {
         var spy;
         beforeEach(function() {
             spy = sinon.spy();
         });
 
         it('should init block', function() {
-            BEMDOM.declBlock('block', {
+            bemDom.declBlock('block', {
                 onSetMod : {
                     js : {
                         inited : spy
@@ -895,7 +895,7 @@ describe('i-bem-dom', function() {
         });
 
         it('should properly init block with multiple DOM nodes', function(done) {
-            BEMDOM.declBlock('block', {
+            bemDom.declBlock('block', {
                 onSetMod : {
                     js : {
                         inited : function() {
@@ -916,9 +916,9 @@ describe('i-bem-dom', function() {
         });
 
         it('should properly init elem with multiple DOM nodes', function(done) {
-            BEMDOM.declBlock('block');
+            bemDom.declBlock('block');
 
-            BEMDOM.declElem('block', 'e1', {
+            bemDom.declElem('block', 'e1', {
                 onSetMod : {
                     js : {
                         inited : function() {
@@ -939,7 +939,7 @@ describe('i-bem-dom', function() {
         });
 
         it('shouldn\'t init live block', function() {
-            BEMDOM.declBlock('block', {
+            bemDom.declBlock('block', {
                 onSetMod : {
                     js : {
                         inited : spy
@@ -949,17 +949,17 @@ describe('i-bem-dom', function() {
                 live : true
             });
 
-            rootNode = BEMDOM.init(BEMHTML.apply({
+            rootNode = bemDom.init(BEMHTML.apply({
                 tag : 'div',
                 content : { block : 'block', js : true }
             }));
 
-            BEMDOM.init(rootNode);
+            bemDom.init(rootNode);
             spy.should.not.have.been.called;
         });
 
         it('should allow to pass string', function() {
-            BEMDOM.declBlock('block', {
+            bemDom.declBlock('block', {
                 onSetMod : {
                     js : {
                         inited : spy
@@ -967,7 +967,7 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = BEMDOM.init(BEMHTML.apply({
+            rootNode = bemDom.init(BEMHTML.apply({
                 tag : 'div',
                 content : { block : 'block', js : true }
             }));
@@ -976,14 +976,14 @@ describe('i-bem-dom', function() {
         });
     });
 
-    describe('BEMDOM.destruct', function() {
+    describe('bemDom.destruct', function() {
         var spy;
         beforeEach(function() {
             spy = sinon.spy();
         });
 
         it('should destruct block only if it has no dom nodes', function() {
-            BEMDOM.declBlock('block', {
+            bemDom.declBlock('block', {
                 onSetMod : {
                     js : {
                         '' : spy
@@ -999,15 +999,15 @@ describe('i-bem-dom', function() {
                 ]
             });
 
-            BEMDOM.destruct(rootNode.find('.block :eq(0)'));
+            bemDom.destruct(rootNode.find('.block :eq(0)'));
             spy.should.not.have.been.called;
 
-            BEMDOM.destruct(rootNode.find('.block'));
+            bemDom.destruct(rootNode.find('.block'));
             spy.should.have.been.called;
         });
 
         it('should destruct implicitly inited block', function() {
-            var Block = BEMDOM.declBlock('block', {
+            var Block = bemDom.declBlock('block', {
                     onSetMod : {
                         js : {
                             '' : spy
@@ -1022,24 +1022,24 @@ describe('i-bem-dom', function() {
 
             var blockNode = rootNode.find('.block');
             blockNode.bem(Block);
-            BEMDOM.destruct(blockNode);
+            bemDom.destruct(blockNode);
             spy.should.have.been.called;
         });
     });
 
-    describe('BEMDOM.update', function() {
+    describe('bemDom.update', function() {
         it('should properly update tree', function() {
             var spyBlock1Destructed = sinon.spy(),
                 spyBlock2Inited = sinon.spy();
 
-            BEMDOM.declBlock('block1', {
+            bemDom.declBlock('block1', {
                 onSetMod : {
                     js : {
                         '' : spyBlock1Destructed
                     }
                 }
             });
-            BEMDOM.declBlock('block2', {
+            bemDom.declBlock('block2', {
                 onSetMod : {
                     js : {
                         inited : spyBlock2Inited
@@ -1052,7 +1052,7 @@ describe('i-bem-dom', function() {
                 content : { block : 'block1', js : true }
             });
 
-            BEMDOM.update(rootNode, BEMHTML.apply({ block : 'block2', js : true }));
+            bemDom.update(rootNode, BEMHTML.apply({ block : 'block2', js : true }));
 
             spyBlock1Destructed.called.should.be.true;
             spyBlock2Inited.called.should.be.true;
@@ -1060,24 +1060,24 @@ describe('i-bem-dom', function() {
 
         it('should allow to pass simple string', function() {
             var domElem = $('<div/>');
-            BEMDOM.update(domElem, 'simple string');
+            bemDom.update(domElem, 'simple string');
             domElem.html().should.be.equal('simple string');
         });
     });
 
-    describe('BEMDOM.replace', function() {
+    describe('bemDom.replace', function() {
         it('should properly replace tree', function() {
             var spyBlock1Destructed = sinon.spy(),
                 spyBlock2Inited = sinon.spy();
 
-            BEMDOM.declBlock('block1', {
+            bemDom.declBlock('block1', {
                 onSetMod : {
                     js : {
                         '' : spyBlock1Destructed
                     }
                 }
             });
-            BEMDOM.declBlock('block2', {
+            bemDom.declBlock('block2', {
                 onSetMod : {
                     js : {
                         inited : spyBlock2Inited
@@ -1085,26 +1085,26 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = BEMDOM.init(BEMHTML.apply({
+            rootNode = bemDom.init(BEMHTML.apply({
                 tag : 'div',
                 content : { block : 'block1', js : true }
             }));
 
-            BEMDOM.replace(rootNode.find('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
+            bemDom.replace(rootNode.find('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
 
             spyBlock1Destructed.should.have.been.calledOnce;
             spyBlock2Inited.should.have.been.calledOnce;
 
             rootNode.html().should.be.equal('<div class="block2 i-bem block2_js_inited" data-bem="{&quot;block2&quot;:{}}"></div>');
 
-            BEMDOM.destruct(rootNode);
+            bemDom.destruct(rootNode);
 
             rootNode = createDomNode({
                     tag : 'div',
                     content : [{ tag : 'p' }, { block : 'block1', js : true }, { tag : 'p' }]
                 });
 
-            BEMDOM.replace(rootNode.find('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
+            bemDom.replace(rootNode.find('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
 
             spyBlock1Destructed.should.have.been.calledTwice;
             spyBlock2Inited.should.have.been.calledTwice;
@@ -1115,13 +1115,13 @@ describe('i-bem-dom', function() {
 
     describe('params', function() {
         it('should properly join params', function(done) {
-            var Block = BEMDOM.declBlock('block', {
+            var Block = bemDom.declBlock('block', {
                     _getDefaultParams : function() {
                         return { p1 : 1 };
                     }
                 });
 
-            BEMDOM.declBlock('block2', {
+            bemDom.declBlock('block2', {
                 onSetMod : {
                     'js' : {
                         'inited' : function() {
@@ -1149,8 +1149,8 @@ describe('i-bem-dom', function() {
     describe('containsDomElem', function() {
         var domElem, block, block2;
         beforeEach(function() {
-            var Block = BEMDOM.declBlock('block'),
-                Block2 = BEMDOM.declBlock('block2');
+            var Block = bemDom.declBlock('block'),
+                Block2 = bemDom.declBlock('block2');
 
             domElem = $(BEMHTML.apply([
                 {
@@ -1174,7 +1174,7 @@ describe('i-bem-dom', function() {
                 }
             ]));
 
-            BEMDOM.init(domElem);
+            bemDom.init(domElem);
             block = domElem.filter('.block').bem(Block);
             block2 = domElem.filter('.block2').bem(Block2);
         });
@@ -1191,7 +1191,7 @@ describe('i-bem-dom', function() {
             beforeEach(function() {
                 spy = sinon.spy();
 
-                BEMDOM.declBlock('block', {
+                bemDom.declBlock('block', {
                     onSetMod : {
                         'js' : {
                             'inited' : spy
@@ -1203,7 +1203,7 @@ describe('i-bem-dom', function() {
                     }
                 });
 
-                rootNode = BEMDOM.init(BEMHTML.apply({
+                rootNode = bemDom.init(BEMHTML.apply({
                         block : 'block',
                         js : true
                     })).appendTo('body');
@@ -1221,7 +1221,7 @@ describe('i-bem-dom', function() {
             beforeEach(function() {
                 spy = sinon.spy();
 
-                BEMDOM.declBlock('block', {
+                bemDom.declBlock('block', {
                     onSetMod : {
                         'js' : {
                             'inited' : spy
@@ -1233,9 +1233,9 @@ describe('i-bem-dom', function() {
                     }
                 });
 
-                var Block2 = BEMDOM.declBlock('block2');
+                var Block2 = bemDom.declBlock('block2');
 
-                block2 = BEMDOM.init(BEMHTML.apply({
+                block2 = bemDom.init(BEMHTML.apply({
                         block : 'block',
                         js : true,
                         content : {
@@ -1257,24 +1257,24 @@ describe('i-bem-dom', function() {
     });
 
     describe('modules.define patching', function() {
-        it('should provide BEMDOM block', function(done) {
+        it('should provide bemDom block', function(done) {
             var name = 'b' + Math.random(),
                 spy = sinon.spy();
 
-            modules.define(name, ['i-bem-dom'], function(provide, BEMDOM) {
+            modules.define(name, ['i-bem-dom'], function(provide, bemDom) {
                 spy();
-                provide(BEMDOM.declBlock(this.name, {}));
+                provide(bemDom.declBlock(this.name, {}));
             });
 
             modules.define(name, function(provide, Prev) {
                 spy();
-                Prev.should.be.eql(BEM.entities[this.name]);
-                provide(BEMDOM.declBlock(this.name, {}));
+                Prev.should.be.eql(bem.entities[this.name]);
+                provide(bemDom.declBlock(this.name, {}));
             });
 
             modules.require([name], function(Block) {
                 spy.should.have.been.calledTwice;
-                Block.should.be.eql(BEM.entities[name]);
+                Block.should.be.eql(bem.entities[name]);
                 done();
             });
         });
@@ -1284,7 +1284,7 @@ describe('i-bem-dom', function() {
 provide();
 
 function createDomNode(bemjson) {
-    return BEMDOM.init(BEMHTML.apply(bemjson));
+    return bemDom.init(BEMHTML.apply(bemjson));
 }
 
 function getEntityIds(entities) {

@@ -1,7 +1,7 @@
 modules.define(
     'spec',
     ['i-bem', 'i-bem-dom', 'objects', 'events', 'jquery', 'chai', 'sinon', 'BEMHTML'],
-    function(provide, BEM, BEMDOM, objects, events, $, chai, sinon, BEMHTML) {
+    function(provide, bem, bemDom, objects, events, $, chai, sinon, BEMHTML) {
 
 describe('BEM events', function() {
     var Block1, Block2, Block3, block1, spy1, spy2, spy3, spy4, spy5, spy6, spy7, spy8,
@@ -26,21 +26,21 @@ describe('BEM events', function() {
     });
 
     afterEach(function() {
-        BEMDOM.destruct(BEMDOM.scope, true);
+        bemDom.destruct(bemDom.scope, true);
 
-        objects.each(BEM.entities, function(_, entityName) {
-            delete BEM.entities[entityName];
+        objects.each(bem.entities, function(_, entityName) {
+            delete bem.entities[entityName];
         });
     });
 
     function initDom(bemjson) {
-        return createDomNode(bemjson).appendTo(BEMDOM.scope);
+        return createDomNode(bemjson).appendTo(bemDom.scope);
     }
 
     describe('on instance events', function() {
         describe('block BEM events', function() {
             beforeEach(function() {
-                Block1 = BEMDOM.declBlock('block1', {
+                Block1 = bemDom.declBlock('block1', {
                     onSetMod : {
                         'js' : {
                             'inited' : function() {
@@ -57,7 +57,7 @@ describe('BEM events', function() {
                     }
                 });
 
-                Block2 = BEMDOM.declBlock('block2', {
+                Block2 = bemDom.declBlock('block2', {
                     onSetMod : {
                         'js' : {
                             'inited' : function() {
@@ -186,7 +186,7 @@ describe('BEM events', function() {
             it('should emit only destructing event after destruction', function() {
                 block1._events().on({ modName : 'js', modVal : '' }, spy8);
 
-                BEMDOM.destruct(block1.domElem);
+                bemDom.destruct(block1.domElem);
                 block1.setMod('m1', 'v1');
 
                 spy8.should.have.been.called;
@@ -199,7 +199,7 @@ describe('BEM events', function() {
         describe('block instance events', function() {
             var block2_1, block2_2;
             beforeEach(function() {
-                Block1 = BEMDOM.declBlock('block1', {
+                Block1 = bemDom.declBlock('block1', {
                     onSetMod : {
                         'js' : {
                             'inited' : function() {
@@ -215,7 +215,7 @@ describe('BEM events', function() {
                     }
                 });
 
-                Block2 = BEMDOM.declBlock('block2');
+                Block2 = bemDom.declBlock('block2');
 
                 block1 = initDom({
                     block : 'block1',
@@ -265,7 +265,7 @@ describe('BEM events', function() {
 
         describe('nested blocks events', function() {
             beforeEach(function() {
-                Block1 = BEMDOM.declBlock('block', {
+                Block1 = bemDom.declBlock('block', {
                     onSetMod : {
                         'js' : {
                             'inited' : function() {
@@ -275,7 +275,7 @@ describe('BEM events', function() {
                     }
                 });
 
-                Block2 = BEMDOM.declBlock('block2');
+                Block2 = bemDom.declBlock('block2');
 
                 block1 = initDom({
                     block : 'block',
@@ -307,9 +307,9 @@ describe('BEM events', function() {
                     beforeEach(function() {
                         elem1 = elemType === 'string'?
                             'e1' :
-                            BEMDOM.declElem('block', 'e1');
+                            bemDom.declElem('block', 'e1');
 
-                        Block1 = BEMDOM.declBlock('block', {
+                        Block1 = bemDom.declBlock('block', {
                             onSetMod : {
                                 'js' : {
                                     'inited' : function() {
@@ -324,12 +324,12 @@ describe('BEM events', function() {
                             }
                         });
 
-                        Block2 = BEMDOM.declBlock('block2');
+                        Block2 = bemDom.declBlock('block2');
 
                         Elem1 = elemType === 'string'?
-                            BEMDOM.declElem('block', 'e1') :
+                            bemDom.declElem('block', 'e1') :
                             elem1;
-                        Elem2 = BEMDOM.declElem('block', 'e2', {
+                        Elem2 = bemDom.declElem('block', 'e2', {
                             onSetMod : {
                                 'js' : {
                                     'inited' : function() {
@@ -441,7 +441,7 @@ describe('BEM events', function() {
 
                 describe('elem as ' + elemType + ', modName, modVal', function() {
                     beforeEach(function() {
-                        Block1 = BEMDOM.declBlock('block', {
+                        Block1 = bemDom.declBlock('block', {
                             onSetMod : {
                                 'js' : {
                                     'inited' : function() {
@@ -500,7 +500,7 @@ describe('BEM events', function() {
 
         describe('stop propagation', function() {
             beforeEach(function() {
-                Block1 = BEMDOM.declBlock('block', {
+                Block1 = bemDom.declBlock('block', {
                     onSetMod : {
                         'js' : {
                             'inited' : function() {
@@ -510,7 +510,7 @@ describe('BEM events', function() {
                     }
                 });
 
-                Block2 = BEMDOM.declBlock('block2', {
+                Block2 = bemDom.declBlock('block2', {
                     onSetMod : {
                         'js' : {
                             'inited' : function() {
@@ -523,7 +523,7 @@ describe('BEM events', function() {
                     }
                 });
 
-                Block3 = BEMDOM.declBlock('block3');
+                Block3 = bemDom.declBlock('block3');
 
                 block1 = initDom({
                     block : 'block',
@@ -549,12 +549,12 @@ describe('BEM events', function() {
 
     describe('live events', function() {
         function initDom(bemjson) {
-            return createDomNode(bemjson).appendTo(BEMDOM.scope);
+            return createDomNode(bemjson).appendTo(bemDom.scope);
         }
 
         describe('block events', function() {
             beforeEach(function() {
-                Block1 = BEMDOM.declBlock('block1', {}, {
+                Block1 = bemDom.declBlock('block1', {}, {
                     live : function() {
                         this._events()
                             .on('click', spy1)
@@ -567,7 +567,7 @@ describe('BEM events', function() {
                     }
                 });
 
-                Block2 = BEMDOM.declBlock('block2', {}, {
+                Block2 = bemDom.declBlock('block2', {}, {
                     live : function() {
                         this._events()
                             .on('click', spy5);
@@ -671,9 +671,9 @@ describe('BEM events', function() {
                     beforeEach(function() {
                         elem1 = elemType === 'string'?
                             'e1' :
-                            BEMDOM.declElem('block', 'e1');
+                            bemDom.declElem('block', 'e1');
 
-                        Block1 = BEMDOM.declBlock('block', {}, {
+                        Block1 = bemDom.declBlock('block', {}, {
                             live : function() {
                                 this._events(elem1)
                                     .on('click', spy1)
@@ -685,9 +685,9 @@ describe('BEM events', function() {
                         });
 
                         Elem1 = elemType === 'string'?
-                            BEMDOM.declElem('block', 'e1') :
+                            bemDom.declElem('block', 'e1') :
                             elem1;
-                        Elem2 = BEMDOM.declElem('block', 'e2', {}, {
+                        Elem2 = bemDom.declElem('block', 'e2', {}, {
                             live : function() {
                                 this._events(elem1)
                                     .on('click', wrapSpy(spy6))
@@ -781,7 +781,7 @@ describe('BEM events', function() {
 
                 describe('elem as ' + elemType + ', modName, modVal', function() {
                     beforeEach(function() {
-                        Block1 = BEMDOM.declBlock('block', {}, {
+                        Block1 = bemDom.declBlock('block', {}, {
                             live : function() {
                                 this._events({ elem : elem1 })
                                     .on('click', spy1);
@@ -839,7 +839,7 @@ describe('BEM events', function() {
 provide();
 
 function createDomNode(bemjson) {
-    return BEMDOM.init(BEMHTML.apply(bemjson));
+    return bemDom.init(BEMHTML.apply(bemjson));
 }
 
 });

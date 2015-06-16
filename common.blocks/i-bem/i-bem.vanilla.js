@@ -13,7 +13,7 @@ modules.define(
     ],
     function(
         provide,
-        INTERNAL,
+        bemInternal,
         inherit,
         nextTick,
         objects,
@@ -21,7 +21,7 @@ modules.define(
 
 var undef,
 
-    ELEM_DELIM = INTERNAL.ELEM_DELIM,
+    ELEM_DELIM = bemInternal.ELEM_DELIM,
 
     /**
      * Storage for block init functions

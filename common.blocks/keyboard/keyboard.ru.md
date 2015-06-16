@@ -14,9 +14,9 @@
 modules.define(
     'test1',
     ['i-bem__dom', 'keyboard__codes'],
-    function(provide, BEMDOM, keyCodes) {
+    function(provide, bemDom, keyCodes) {
 
-provide(BEMDOM.decl(this.name, /** @lends test1.prototype */{
+provide(bemDom.decl(this.name, /** @lends test1.prototype */{
     onSetMod : {
         'js': {
             inited: function() {

@@ -2,7 +2,7 @@
  * @module i-bem-dom__init
  */
 
-modules.define('i-bem-dom__init', ['i-bem-dom'], function(provide, BEMDOM) {
+modules.define('i-bem-dom__init', ['i-bem-dom'], function(provide, bemDom) {
 
 provide(
     /**
@@ -12,6 +12,6 @@ provide(
      * @returns {jQuery} ctx Initialization context
      */
     function(ctx) {
-        return BEMDOM.init(ctx);
+        return bemDom.init(ctx);
     });
 });

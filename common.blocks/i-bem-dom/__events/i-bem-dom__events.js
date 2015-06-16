@@ -13,7 +13,7 @@ modules.define(
     ],
     function(
         provide,
-        BEMINTERNAL,
+        bemInternal,
         inherit,
         identify,
         objects,
@@ -230,9 +230,9 @@ var undef,
                         elemName = bindCtx.getName();
                     }
 
-                    var entityName = BEMINTERNAL.buildClass(blockName, elemName);
+                    var entityName = bemInternal.buildClass(blockName, elemName);
                     res.bindEntityCls = this._getEntityCls(entityName);
-                    res.bindSelector = '.' + (res.key = entityName + BEMINTERNAL.buildModPostfix(modName, modVal));
+                    res.bindSelector = '.' + (res.key = entityName + bemInternal.buildModPostfix(modName, modVal));
                 }
             } else {
                 res.bindEntityCls = ctxCls;
