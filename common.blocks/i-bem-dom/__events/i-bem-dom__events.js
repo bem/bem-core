@@ -35,12 +35,12 @@ var undef,
          * @constructor
          * @param {Object} params EventManager parameters
          * @param {Function} fnWrapper Wrapper function to build event handler
-         * @param {Function} eventNameBuilder Function to build event name
+         * @param {Function} eventBuilder Function to build event
          */
-        __constructor : function(params, fnWrapper, eventNameBuilder) {
+        __constructor : function(params, fnWrapper, eventBuilder) {
             this._params = params;
             this._fnWrapper = fnWrapper;
-            this._eventNameBuilder = eventNameBuilder;
+            this._eventBuilder = eventBuilder;
             this._storage = {};
         },
 
@@ -54,7 +54,7 @@ var undef,
         on : function(e, data, fn, _fnCtx, _isOnce) {
             var params = this._params;
 
-            e = this._eventNameBuilder(e, params);
+            e = this._eventBuilder(e, params);
 
             if(functions.isFunction(data)) {
                 _isOnce = _fnCtx;
@@ -105,7 +105,7 @@ var undef,
             if(argsLen) {
                 var params = this._params;
 
-                e = this._eventNameBuilder(e, params);
+                e = this._eventBuilder(e, params);
 
                 if(argsLen === 1) {
                     this._unbindByEvent(this._storage[e], e);
@@ -246,6 +246,8 @@ var undef,
         }
     });
 
-provide({ EventManagerFactory : EventManagerFactory });
+provide({
+    EventManagerFactory : EventManagerFactory
+});
 
 });

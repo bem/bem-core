@@ -7,7 +7,9 @@ modules.define(
         'i-bem-dom__events',
         'i-bem__internal',
         'inherit',
+        'functions',
         'jquery',
+        'identify',
         'events'
     ],
     function(
@@ -15,19 +17,38 @@ modules.define(
         bemDomEvents,
         bemInternal,
         inherit,
+        functions,
         $,
+        identify,
         events) {
 
 var EVENT_PREFIX = '__bem__',
     MOD_CHANGE_EVENT = 'modchange',
 
-    eventNameBuilder = function(e, params) {
-        return EVENT_PREFIX + params.bindEntityCls.getEntityName() +
+    specialEvents = $.event.special,
+    specialEventsStorage = {},
+
+    createSpecialEvent = function(event) {
+        return {
+            setup : function() {
+                specialEventsStorage[event] || (specialEventsStorage[event] = true);
+            },
+            teardown : functions.noop
+        };
+    },
+
+    eventBuilder = function(e, params) {
+        var event = EVENT_PREFIX + params.bindEntityCls.getEntityName() +
             (typeof e === 'object'?
                 e instanceof events.Event?
                     e.type :
                     bemInternal.buildModPostfix(e.modName, e.modVal) :
                 e);
+
+        specialEvents[event] ||
+            (specialEvents[event] = createSpecialEvent(event));
+
+        return event;
     },
 
     /**
@@ -63,7 +84,7 @@ var EVENT_PREFIX = '__bem__',
                 };
             }
 
-            return new this._eventManagerCls(params, wrapperFn, eventNameBuilder);
+            return new this._eventManagerCls(params, wrapperFn, eventBuilder);
         }
     });
 
@@ -84,9 +105,10 @@ provide({
             originalEvent = e;
         }
 
-        ctx.domElem.trigger(
-            eventNameBuilder(e, { bindEntityCls : ctx.__self }),
-            [data, {}, originalEvent]);
+        var event = eventBuilder(e, { bindEntityCls : ctx.__self });
+
+        specialEventsStorage[event] &&
+            ctx.domElem.trigger(event, [data, {}, originalEvent]);
     },
 
     EventManagerFactory : EventManagerFactory
