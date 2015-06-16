@@ -296,7 +296,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * Returns the value of the modifier of the block/nested element
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
-     * @returns {String} Modifier value
+     * @returns {String|Boolean} Modifier value
      */
     getMod : function(elem, modName) {
         var type = typeof elem;
