@@ -1,0 +1,4 @@
+({
+    block : 'page',
+    zoom : true
+})

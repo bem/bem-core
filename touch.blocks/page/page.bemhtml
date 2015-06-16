@@ -1,4 +1,9 @@
 block('page')(
+
+    def()(function() {
+        return applyNext({ _zoom : this.ctx.zoom });
+    }),
+
     elem('head').content()(function() {
         return [
             applyNext(),
@@ -7,7 +12,7 @@ block('page')(
                 attrs : {
                     name : 'viewport',
                     content : 'width=device-width,' +
-                        (this.ctx.zoom?
+                        (this._zoom?
                             'initial-scale=1' :
                             'maximum-scale=1,initial-scale=1,user-scalable=0')
                 }
