@@ -1146,7 +1146,7 @@ describe('i-bem-dom', function() {
         });
     });
 
-    describe('containsDomElem', function() {
+    describe('containsEntity', function() {
         var domElem, block, block2;
         beforeEach(function() {
             var Block = bemDom.declBlock('block'),
@@ -1179,9 +1179,9 @@ describe('i-bem-dom', function() {
             block2 = domElem.filter('.block2').bem(Block2);
         });
 
-        it('should properly checks for nested dom elem', function() {
-            block.containsDomElem(block._elem('e2-1').domElem).should.be.true;
-            block.containsDomElem(block2.domElem).should.be.false;
+        it('should properly checks for nested entities', function() {
+            block.containsEntity(block._elem('e2-1')).should.be.true;
+            block.containsEntity(block2).should.be.false;
         });
     });
 
