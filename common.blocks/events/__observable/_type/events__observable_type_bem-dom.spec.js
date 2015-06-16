@@ -10,7 +10,7 @@ modules.define(
         provide,
         observable,
         sinon,
-        BEMDOM,
+        bemDom,
         BEMHTML) {
 
 describe('events__observable_type_bem-dom', function() {
@@ -20,13 +20,13 @@ describe('events__observable_type_bem-dom', function() {
         spy1 = sinon.spy();
         spy2 = sinon.spy();
         spy3 = sinon.spy();
-        block = BEMDOM.init(BEMHTML.apply({
+        block = bemDom.init(BEMHTML.apply({
             block : 'block'
-        })).appendTo('body').bem(BEMDOM.declBlock('block'));
+        })).appendTo('body').bem(bemDom.declBlock('block'));
     });
 
     afterEach(function() {
-        BEMDOM.destruct(block.domElem);
+        bemDom.destruct(block.domElem);
     });
 
     describe('on', function() {

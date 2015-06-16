@@ -22,9 +22,9 @@
 ```js
 modules.define('tick-emmiter',
     ['i-bem__dom', 'tick'],
-    function(provide, BEMDOM, tick) {
+    function(provide, bemDom, tick) {
         
-provide(BEMDOM.decl(this.name, {
+provide(bemDom.decl(this.name, {
     onSetMod : {
         'js' : {
             'inited' : function() { 

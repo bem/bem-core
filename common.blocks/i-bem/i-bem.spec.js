@@ -1,46 +1,46 @@
-modules.define('spec', ['i-bem', 'sinon'], function(provide, BEM, sinon) {
+modules.define('spec', ['i-bem', 'sinon'], function(provide, bem, sinon) {
 
 describe('i-bem', function() {
     describe('decl', function() {
         afterEach(function() {
-            delete BEM.entities['block'];
+            delete bem.entities['block'];
         });
 
         it('should enable to declare block', function() {
-            var Block = BEM.declBlock('block', {});
+            var Block = bem.declBlock('block', {});
 
-            Block.should.be.equal(BEM.entities['block']);
+            Block.should.be.equal(bem.entities['block']);
             Block.getEntityName().should.be.equal('block');
-            (new Block()).should.be.instanceOf(BEM.Block);
+            (new Block()).should.be.instanceOf(bem.Block);
         });
 
         it('should enable to declare element', function() {
-            var Elem = BEM.declElem('block', 'elem', {});
+            var Elem = bem.declElem('block', 'elem', {});
 
-            Elem.should.be.equal(BEM.entities['block__elem']);
+            Elem.should.be.equal(bem.entities['block__elem']);
             Elem.getEntityName().should.be.equal('block__elem');
-            (new Elem()).should.be.instanceOf(BEM.Elem);
+            (new Elem()).should.be.instanceOf(bem.Elem);
         });
 
         it('should enable to inherit block', function() {
-            var Block = BEM.declBlock('block', {}),
-                Block2 = BEM.declBlock('block2', Block, {});
+            var Block = bem.declBlock('block', {}),
+                Block2 = bem.declBlock('block2', Block, {});
 
             (new Block2()).should.be.instanceOf(Block);
             (new Block2()).should.be.instanceOf(Block2);
 
-            delete BEM.entities['block2'];
+            delete bem.entities['block2'];
         });
 
         it('should enable to inherit to itself', function() {
-            var Block = BEM.declBlock('block', {}),
-                Block2 = BEM.declBlock('block', {});
+            var Block = bem.declBlock('block', {}),
+                Block2 = bem.declBlock('block', {});
 
             Block2.should.be.equal(Block);
         });
 
         it('should enable to declare modifier', function() {
-            var Block = BEM.declBlock('block', {}),
+            var Block = bem.declBlock('block', {}),
                 Block2 = Block.declMod({ modName : 'm1', modVal : 'v1' }, {});
 
             Block2.should.be.equal(Block);
@@ -49,7 +49,7 @@ describe('i-bem', function() {
         it('should apply method only if block has mod', function() {
             var baseMethodSpy = sinon.spy(),
                 modsMethodSpy = sinon.spy(),
-                Block = BEM
+                Block = bem
                     .declBlock('block', { method : baseMethodSpy })
                     .declMod({ modName : 'mod1', modVal : 'val1' }, { method : modsMethodSpy }),
                 instance = new Block({ mod1 : 'val1' });
@@ -69,7 +69,7 @@ describe('i-bem', function() {
         it('should apply method only if block has boolean mod', function() {
             var baseMethodSpy = sinon.spy(),
                 modsMethodSpy = sinon.spy(),
-                Block = BEM
+                Block = bem
                     .declBlock('block', { method : baseMethodSpy })
                     .declMod({ modName : 'mod1', modVal : true }, { method : modsMethodSpy }),
                 instance = new Block({ mod1 : true });
@@ -89,35 +89,35 @@ describe('i-bem', function() {
 
     describe('create', function() {
         it('should return instance of block', function() {
-            var Block = BEM.declBlock('block', {}),
+            var Block = bem.declBlock('block', {}),
                 instance = Block.create();
 
             instance.should.be.instanceOf(Block);
-            delete BEM.entities['block'];
+            delete bem.entities['block'];
         });
 
         it('should return instance of element with proper block', function() {
-            var Block = BEM.declBlock('block', {}),
+            var Block = bem.declBlock('block', {}),
                 block = Block.create(),
-                Elem = BEM.declElem('block', 'elem', {}),
+                Elem = bem.declElem('block', 'elem', {}),
                 elem = Elem.create(block);
 
             elem.should.be.instanceOf(Elem);
             elem.block().should.be.instanceOf(Block);
-            delete BEM.entities['block'];
-            delete BEM.entities['block__elem'];
+            delete bem.entities['block'];
+            delete bem.entities['block__elem'];
         });
     });
 
     describe('mods', function() {
         var block;
         beforeEach(function() {
-            block = BEM
+            block = bem
                 .declBlock('block', {})
                 .create({ mod1 : 'val1', mod2 : true, mod3 : false });
         });
         afterEach(function() {
-            delete BEM.entities['block'];
+            delete bem.entities['block'];
         });
 
         describe('getMod', function() {
@@ -298,7 +298,7 @@ describe('i-bem', function() {
 
     describe('beforeSetMod', function() {
         afterEach(function() {
-            delete BEM.entities['block'];
+            delete bem.entities['block'];
         });
 
         it('should call properly matched callbacks by order', function() {
@@ -307,7 +307,7 @@ describe('i-bem', function() {
                 spyMod2Val1 = sinon.spy(),
                 spyMod2Val2 = sinon.spy();
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 beforeSetMod : {
                     'mod1' : {
                         'val1' : function() {
@@ -317,7 +317,7 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 beforeSetMod : {
                     'mod1' : function() {
                         order.push(3);
@@ -329,14 +329,14 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 beforeSetMod : function(modName) {
                     this.__base.apply(this, arguments);
                     modName === 'mod1' && order.push(2);
                 }
             });
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 beforeSetMod : {
                    'mod1' : {
                        '*' : function() {
@@ -356,7 +356,7 @@ describe('i-bem', function() {
                 }
             });
 
-            var block = BEM.entities['block'].create({ mod1 : 'val0', mod2 : 'val0' });
+            var block = bem.entities['block'].create({ mod1 : 'val0', mod2 : 'val0' });
             block.setMod('mod1', 'val1');
 
             order.should.be.eql([1, 2, 3, 4, 5, 6]);
@@ -366,7 +366,7 @@ describe('i-bem', function() {
         });
 
         it('should call callbacks before set mod', function(done) {
-            BEM
+            bem
                 .declBlock('block', {
                     beforeSetMod : {
                        'mod1' : {
@@ -382,7 +382,7 @@ describe('i-bem', function() {
         });
 
         it('should set mod after callbacks', function() {
-             BEM
+             bem
                  .declBlock('block', {
                     beforeSetMod : {
                        'mod1' : {
@@ -397,7 +397,7 @@ describe('i-bem', function() {
         });
 
         it('shouldn\'t set mod when callback returns false', function() {
-            BEM
+            bem
                 .declBlock('block', {
                     beforeSetMod : {
                        'mod1' : {
@@ -416,7 +416,7 @@ describe('i-bem', function() {
 
     describe('onSetMod', function() {
         afterEach(function() {
-            delete BEM.entities['block'];
+            delete bem.entities['block'];
         });
 
         it('should call properly matched callbacks by order', function() {
@@ -425,7 +425,7 @@ describe('i-bem', function() {
                 spyMod2Val1 = sinon.spy(),
                 spyMod2Val2 = sinon.spy();
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 onSetMod : {
                     'mod1' : {
                         'val1' : function() {
@@ -435,7 +435,7 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 onSetMod : {
                     'mod1' : function() {
                         order.push(3);
@@ -447,14 +447,14 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 onSetMod : function(modName) {
                     this.__base.apply(this, arguments);
                     modName === 'mod1' && order.push(2);
                 }
             });
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 onSetMod : {
                    'mod1' : {
                        '*' : function() {
@@ -474,7 +474,7 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.entities['block']
+            bem.entities['block']
                 .create({ mod1 : 'val0', mod2 : 'val0' })
                 .setMod('mod1', 'val1');
 
@@ -485,7 +485,7 @@ describe('i-bem', function() {
         });
 
         it('should call callbacks after set mod', function(done) {
-            BEM
+            bem
                 .declBlock('block', {
                     onSetMod : {
                        'mod1' : {
@@ -502,7 +502,7 @@ describe('i-bem', function() {
 
         it('shouldn\'t call callbacks if beforeSetMod cancel set mod', function() {
             var spy = sinon.spy();
-            BEM
+            bem
                 .declBlock('block', {
                     beforeSetMod : {
                        'mod1' : {
@@ -532,7 +532,7 @@ describe('i-bem', function() {
                 spyMod2ValFalse = sinon.spy(),
                 spyMod2Val2 = sinon.spy();
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 beforeSetMod : {
                     'mod1' : {
                         'true' : function(modName, modVal, oldModVal) {
@@ -552,7 +552,7 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 beforeSetMod : {
                     'mod1' : function() {
                         order.push(3);
@@ -574,7 +574,7 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 beforeSetMod : function(modName) {
                     this.__base.apply(this, arguments);
                     modName === 'mod1' && order.push(2);
@@ -586,7 +586,7 @@ describe('i-bem', function() {
                 }
             });
 
-            BEM.declBlock('block', {
+            bem.declBlock('block', {
                 beforeSetMod : {
                     'mod1' : {
                         '*' : function(modName, modVal, oldModVal) {
@@ -639,7 +639,7 @@ describe('i-bem', function() {
                 }
             });
 
-            var block = BEM.entities['block'].create({ mod1 : false, mod2 : true });
+            var block = bem.entities['block'].create({ mod1 : false, mod2 : true });
             block.setMod('mod1', true);
 
             spyMod1Val2.should.not.have.been.called;
@@ -656,12 +656,12 @@ describe('i-bem', function() {
     describe('_nextTick', function() {
         var block;
         beforeEach(function() {
-            block = BEM
+            block = bem
                 .declBlock('block', {})
                 .create({ mod1 : 'val1' });
         });
         afterEach(function() {
-            delete BEM.entities['block'];
+            delete bem.entities['block'];
         });
 
         it('should call callback asynchronously', function(done) {

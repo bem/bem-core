@@ -1,7 +1,7 @@
 modules.define(
     'spec',
     ['i-bem', 'i-bem-dom', 'objects', 'jquery', 'chai', 'sinon', 'BEMHTML'],
-    function(provide, BEM, BEMDOM, objects, $, chai, sinon, BEMHTML) {
+    function(provide, bem, bemDom, objects, $, chai, sinon, BEMHTML) {
 
 var undef,
     expect = chai.expect;
@@ -28,17 +28,17 @@ describe('DOM events', function() {
     });
 
     afterEach(function() {
-        BEMDOM.destruct(BEMDOM.scope, true);
+        bemDom.destruct(bemDom.scope, true);
 
-        objects.each(BEM.entities, function(_, entityName) {
-            delete BEM.entities[entityName];
+        objects.each(bem.entities, function(_, entityName) {
+            delete bem.entities[entityName];
         });
     });
 
     describe('on instance events', function() {
         describe('block domElem events', function() {
             beforeEach(function() {
-                Block1 = BEMDOM.declBlock('block1', {
+                Block1 = bemDom.declBlock('block1', {
                     onSetMod : {
                         'js' : {
                             'inited' : function() {
@@ -52,7 +52,7 @@ describe('DOM events', function() {
                     }
                 });
 
-                Block2 = BEMDOM.declBlock('block2', {
+                Block2 = bemDom.declBlock('block2', {
                     onSetMod : {
                         'js' : {
                             'inited' : function() {
@@ -144,9 +144,9 @@ describe('DOM events', function() {
                     beforeEach(function() {
                         elem1 = elemType === 'string'?
                             'e1' :
-                            BEMDOM.declElem('block', 'e1');
+                            bemDom.declElem('block', 'e1');
 
-                        Block1 = BEMDOM.declBlock('block', {
+                        Block1 = bemDom.declBlock('block', {
                             onSetMod : {
                                 'js' : {
                                     'inited' : function() {
@@ -162,9 +162,9 @@ describe('DOM events', function() {
                         });
 
                         Elem1 = elemType === 'string'?
-                            BEMDOM.declElem('block', 'e1') :
+                            bemDom.declElem('block', 'e1') :
                             elem1;
-                        Elem2 = BEMDOM.declElem('block', 'e2', {
+                        Elem2 = bemDom.declElem('block', 'e2', {
                             onSetMod : {
                                 'js' : {
                                     'inited' : function() {
@@ -266,7 +266,7 @@ describe('DOM events', function() {
 
                 describe('elem as ' + elemType + ', modName, modVal', function() {
                     beforeEach(function() {
-                        Block1 = BEMDOM.declBlock('block', {
+                        Block1 = bemDom.declBlock('block', {
                             onSetMod : {
                                 'js' : {
                                     'inited' : function() {
@@ -326,7 +326,7 @@ describe('DOM events', function() {
                 var elem1, elem2;
 
                 beforeEach(function() {
-                    Block1 = BEMDOM.declBlock('block', {
+                    Block1 = bemDom.declBlock('block', {
                         onSetMod : {
                             'js' : {
                                 'inited' : function() {
@@ -405,7 +405,7 @@ describe('DOM events', function() {
 
         describe('document events', function() {
             beforeEach(function() {
-                Block1 = BEMDOM.declBlock('block', {
+                Block1 = bemDom.declBlock('block', {
                     onSetMod : {
                         'js' : {
                             'inited' : function() {
@@ -413,18 +413,18 @@ describe('DOM events', function() {
                                     .on('click', spy1)
                                     .on('click', spy2);
 
-                                this._domEvents(BEMDOM.doc)
+                                this._domEvents(bemDom.doc)
                                     .on('click', data, wrapSpy(spy3))
                                     .once('click', spy4);
                             }
                         }
                     }
                 });
-                block1 = BEMDOM.init(BEMHTML.apply({ block : 'block' })).bem(Block1);
+                block1 = bemDom.init(BEMHTML.apply({ block : 'block' })).bem(Block1);
             });
 
             it('should properly bind handlers', function() {
-                BEMDOM.doc.trigger('click');
+                bemDom.doc.trigger('click');
 
                 spy1.should.have.been.called;
                 spy2.should.have.been.called;
@@ -433,16 +433,16 @@ describe('DOM events', function() {
             });
 
             it('should properly bind once handler', function() {
-                BEMDOM.doc.trigger('click');
+                bemDom.doc.trigger('click');
                 spy4.should.have.been.called;
 
-                BEMDOM.doc.trigger('click');
+                bemDom.doc.trigger('click');
                 spy4.should.have.been.calledOnce;
             });
 
             it('should properly unbind all handlers', function() {
                 block1._domEvents(document).un('click');
-                BEMDOM.doc.trigger('click');
+                bemDom.doc.trigger('click');
 
                 spy1.should.not.have.been.called;
                 spy2.should.not.have.been.called;
@@ -450,7 +450,7 @@ describe('DOM events', function() {
 
             it('should properly unbind specified handler', function() {
                 block1._domEvents($(document)).un('click', spy1);
-                BEMDOM.doc.trigger('click');
+                bemDom.doc.trigger('click');
 
                 spy1.should.not.have.been.called;
                 spy2.should.have.been.called;
@@ -458,13 +458,13 @@ describe('DOM events', function() {
 
             it('should properly unbind once handler', function() {
                 block1._domEvents($(document)).un('click', spy4);
-                BEMDOM.doc.trigger('click');
+                bemDom.doc.trigger('click');
                 spy4.should.not.have.been.called;
             });
 
             it('should properly unbind all handlers on block destruct', function() {
-                BEMDOM.destruct(block1.domElem);
-                BEMDOM.doc.trigger('click');
+                bemDom.destruct(block1.domElem);
+                bemDom.doc.trigger('click');
 
                 spy1.should.not.have.been.called;
                 spy2.should.not.have.been.called;
@@ -474,7 +474,7 @@ describe('DOM events', function() {
 
         describe('window events', function() {
             beforeEach(function() {
-                Block1 = BEMDOM.declBlock('block', {
+                Block1 = bemDom.declBlock('block', {
                     onSetMod : {
                         'js' : {
                             'inited' : function() {
@@ -493,7 +493,7 @@ describe('DOM events', function() {
             });
 
             it('should properly bind handlers', function() {
-                BEMDOM.win.trigger('resize');
+                bemDom.win.trigger('resize');
 
                 spy1.should.have.been.called;
                 spy2.should.have.been.called;
@@ -502,16 +502,16 @@ describe('DOM events', function() {
             });
 
             it('should properly bind once handler', function() {
-                BEMDOM.win.trigger('resize');
+                bemDom.win.trigger('resize');
                 spy4.should.have.been.called;
 
-                BEMDOM.win.trigger('resize');
+                bemDom.win.trigger('resize');
                 spy4.should.have.been.calledOnce;
             });
 
             it('should properly unbind all handlers', function() {
                 block1._domEvents(window).un('resize');
-                BEMDOM.win.trigger('resize');
+                bemDom.win.trigger('resize');
 
                 spy1.should.not.have.been.called;
                 spy2.should.not.have.been.called;
@@ -519,7 +519,7 @@ describe('DOM events', function() {
 
             it('should properly unbind specified handler', function() {
                 block1._domEvents($(window)).un('resize', spy1);
-                BEMDOM.win.trigger('resize');
+                bemDom.win.trigger('resize');
 
                 spy1.should.not.have.been.called;
                 spy2.should.have.been.called;
@@ -527,13 +527,13 @@ describe('DOM events', function() {
 
             it('should properly unbind once handler', function() {
                 block1._domEvents($(window)).un('resize', spy4);
-                BEMDOM.win.trigger('resize');
+                bemDom.win.trigger('resize');
                 spy4.should.not.have.been.called;
             });
 
             it('should properly unbind all handlers on block destruct', function() {
-                BEMDOM.destruct(block1.domElem);
-                BEMDOM.win.trigger('resize');
+                bemDom.destruct(block1.domElem);
+                bemDom.win.trigger('resize');
 
                 spy1.should.not.have.been.called;
                 spy2.should.not.have.been.called;
@@ -544,12 +544,12 @@ describe('DOM events', function() {
 
     describe('live events', function() {
         function initDom(bemjson) {
-            return createDomNode(bemjson).appendTo(BEMDOM.scope);
+            return createDomNode(bemjson).appendTo(bemDom.scope);
         }
 
         describe('block domElem events', function() {
             beforeEach(function() {
-                Block1 = BEMDOM.declBlock('block1', {}, {
+                Block1 = bemDom.declBlock('block1', {}, {
                     live : function() {
                         this._domEvents()
                             .on('click', spy1)
@@ -559,7 +559,7 @@ describe('DOM events', function() {
                     }
                 });
 
-                Block2 = BEMDOM.declBlock('block2', {}, {
+                Block2 = bemDom.declBlock('block2', {}, {
                     live : function() {
                         this._domEvents()
                             .on('click', spy5);
@@ -634,9 +634,9 @@ describe('DOM events', function() {
                     beforeEach(function() {
                         elem1 = elemType === 'string'?
                             'e1' :
-                            BEMDOM.declElem('block', 'e1');
+                            bemDom.declElem('block', 'e1');
 
-                        Block1 = BEMDOM.declBlock('block', {}, {
+                        Block1 = bemDom.declBlock('block', {}, {
                             live : function() {
                                 this._domEvents(elem1)
                                     .on('click', spy1)
@@ -648,9 +648,9 @@ describe('DOM events', function() {
                         });
 
                         Elem1 = elemType === 'string'?
-                            BEMDOM.declElem('block', 'e1') :
+                            bemDom.declElem('block', 'e1') :
                             elem1;
-                        Elem2 = BEMDOM.declElem('block', 'e2', {}, {
+                        Elem2 = bemDom.declElem('block', 'e2', {}, {
                             live : function() {
                                 this._domEvents(elem1)
                                     .on('click', wrapSpy(spy6))
@@ -744,7 +744,7 @@ describe('DOM events', function() {
 
                 describe('elem as ' + elemType + ', modName, modVal', function() {
                     beforeEach(function() {
-                        Block1 = BEMDOM.declBlock('block', {}, {
+                        Block1 = bemDom.declBlock('block', {}, {
                             live : function() {
                                 this._domEvents({ elem : elem1 })
                                     .on('click', spy1);
@@ -802,7 +802,7 @@ describe('DOM events', function() {
 provide();
 
 function createDomNode(bemjson) {
-    return BEMDOM.init(BEMHTML.apply(bemjson));
+    return bemDom.init(BEMHTML.apply(bemjson));
 }
 
 });

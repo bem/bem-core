@@ -13,7 +13,7 @@ modules.define(
     function(
         provide,
         bemDomEvents,
-        BEMINTERNAL,
+        bemInternal,
         inherit,
         $,
         events) {
@@ -26,7 +26,7 @@ var EVENT_PREFIX = '__bem__',
             (typeof e === 'object'?
                 e instanceof events.Event?
                     e.type :
-                    BEMINTERNAL.buildModPostfix(e.modName, e.modVal) :
+                    bemInternal.buildModPostfix(e.modName, e.modVal) :
                 e);
     },
 

@@ -38,9 +38,9 @@ provide(Popup.decl({ modName : 'autoclosable', modVal : true }, /** @lends popup
 В рамках событийного цикла работы блок формирует очередь, добавляя каждую следующую callback функцию в ее конец. Порядок вызова callback сохраняется. Например:
 
 ```js
-modules.define('test', ['next-tick'], function(provide, nextTick) {
+modules.define('test', ['next-tick', 'i-bem-dom'], function(provide, nextTick, bemDom) {
 
-provide(BEMDOM.decl({ block : this.name }, /** @lends test.prototype */
+provide(bemDom.decl({ block : this.name }, /** @lends test.prototype */
 { 
     onSetMod : {
         'js' : {

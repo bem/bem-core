@@ -5,7 +5,7 @@
 modules.define(
     'events__observable',
     ['i-bem-dom'],
-    function(provide, BEMDOM, observable) {
+    function(provide, bemDom, observable) {
 
 provide(
     /**
@@ -15,7 +15,7 @@ provide(
      * @returns {Observable}
      */
     function(bemEntity) {
-        return observable(BEMDOM.isEntity(bemEntity)?
+        return observable(bemDom.isEntity(bemEntity)?
             bemEntity._events() :
             bemEntity);
     }

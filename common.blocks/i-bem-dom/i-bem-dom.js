@@ -18,8 +18,8 @@ modules.define(
     ],
     function(
         provide,
-        BEM,
-        BEMINTERNAL,
+        bem,
+        bemInternal,
         domEvents,
         bemEvents,
         inherit,
@@ -54,19 +54,19 @@ var undef,
      */
     domElemToParams = {},
 
-    entities = BEM.entities,
+    entities = bem.entities,
 
     BEM_CLASS = 'i-bem',
     BEM_SELECTOR = '.' + BEM_CLASS,
     BEM_PARAMS_ATTR = 'data-bem',
 
-    NAME_PATTERN = BEMINTERNAL.NAME_PATTERN,
+    NAME_PATTERN = bemInternal.NAME_PATTERN,
 
-    MOD_DELIM = BEMINTERNAL.MOD_DELIM,
-    ELEM_DELIM = BEMINTERNAL.ELEM_DELIM,
+    MOD_DELIM = bemInternal.MOD_DELIM,
+    ELEM_DELIM = bemInternal.ELEM_DELIM,
 
-    buildModPostfix = BEMINTERNAL.buildModPostfix,
-    buildClass = BEMINTERNAL.buildClass,
+    buildModPostfix = bemInternal.buildModPostfix,
+    buildClass = bemInternal.buildClass,
 
     reverse = Array.prototype.reverse,
     slice = Array.prototype.slice,
@@ -74,7 +74,7 @@ var undef,
     domEventManagerFactory = new domEvents.EventManagerFactory(getEntityCls),
     bemEventManagerFactory = new bemEvents.EventManagerFactory(getEntityCls),
 
-    BEMDOM;
+    bemDom;
 
 /**
  * Initializes entities on a DOM element
@@ -143,8 +143,8 @@ function getEntityCls(entityName) {
 
     var splitted = entityName.split(ELEM_DELIM);
     return splitted[1]?
-        BEMDOM.declElem(splitted[0], splitted[1], {}, { live : true }, true) :
-        BEMDOM.declBlock(entityName, {}, { live : true }, true);
+        bemDom.declElem(splitted[0], splitted[1], {}, { live : true }, true) :
+        bemDom.declBlock(entityName, {}, { live : true }, true);
 }
 
 /**
@@ -660,7 +660,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @override
      */
     create : function() {
-        throw Error('BEMDOM blocks can not be created otherwise than from DOM');
+        throw Error('bemDom blocks can not be created otherwise than from DOM');
     },
 
     /**
@@ -700,7 +700,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {EventManager}
      */
     _domEvents : function(ctx) {
-        return domEventManagerFactory.getEventManager(this, ctx, BEMDOM.scope);
+        return domEventManagerFactory.getEventManager(this, ctx, bemDom.scope);
     },
 
     /**
@@ -711,7 +711,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {EventManager}
      */
     _events : function(ctx) {
-        return bemEventManagerFactory.getEventManager(this, ctx, BEMDOM.scope);
+        return bemEventManagerFactory.getEventManager(this, ctx, bemDom.scope);
     },
 
     /**
@@ -766,7 +766,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
  * @augments i-bem:Block
  * @exports
  */
-var Block = inherit([BEM.Block, BemDomEntity], /** @lends Block.prototype */{
+var Block = inherit([bem.Block, BemDomEntity], /** @lends Block.prototype */{
     /**
      * @override
      */
@@ -781,7 +781,7 @@ var Block = inherit([BEM.Block, BemDomEntity], /** @lends Block.prototype */{
  * @augments i-bem:Elem
  * @exports
  */
-var Elem = inherit([BEM.Elem, BemDomEntity], /** @lends Elem.prototype */{
+var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
     /**
      * @override
      */
@@ -802,7 +802,7 @@ $.fn.bem = function(BemDomEntity, params) {
 
 $(function() {
 
-BEMDOM = /** @exports */{
+bemDom = /** @exports */{
 
     /**
      * Scope
@@ -823,13 +823,13 @@ BEMDOM = /** @exports */{
     win : $(window),
 
     /**
-     * Base BEMDOM block
+     * Base bemDom block
      * @type Function
      */
     Block : Block,
 
     /**
-     * Base BEMDOM element
+     * Base bemDom element
      * @type Function
      */
     Elem : Elem,
@@ -857,7 +857,7 @@ BEMDOM = /** @exports */{
             baseBlocks = Block;
         }
 
-        return BEM.declBlock(blockName, baseBlocks, props, staticProps);
+        return bem.declBlock(blockName, baseBlocks, props, staticProps);
     },
 
     /**
@@ -876,10 +876,10 @@ BEMDOM = /** @exports */{
             baseElems = Elem;
         }
 
-        return BEM.declElem(blockName, elemName, baseElems, props, staticProps);
+        return bem.declElem(blockName, elemName, baseElems, props, staticProps);
     },
 
-    declMix : BEM.declMix,
+    declMix : bem.declMix,
 
     /**
      * Initializes blocks on a fragment of the DOM tree
@@ -889,14 +889,14 @@ BEMDOM = /** @exports */{
     init : function(ctx) {
         ctx = typeof ctx === 'string'?
             $(ctx) :
-            ctx || BEMDOM.scope;
+            ctx || bemDom.scope;
 
         var uniqInitId = identify();
         findDomElem(ctx, BEM_SELECTOR).each(function() {
             initEntities($(this), uniqInitId);
         });
 
-        BEM._runInitFns();
+        bem._runInitFns();
 
         return ctx;
     },
@@ -1001,7 +1001,7 @@ BEMDOM = /** @exports */{
     }
 };
 
-provide(BEMDOM);
+provide(bemDom);
 
 });
 
