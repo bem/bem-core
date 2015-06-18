@@ -647,12 +647,12 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     },
 
     /**
-     * Checks whether a DOM element is in a block
-     * @param {jQuery} domElem DOM element
+     * Checks whether an entity is in the entity
+     * @param {BemDomEntity} entity entity
      * @returns {Boolean}
      */
-    containsDomElem : function(domElem) {
-        return dom.contains(this.domElem, domElem);
+    containsEntity : function(entity) {
+        return dom.contains(this.domElem, entity.domElem);
     }
 
 }, /** @lends Block */{
