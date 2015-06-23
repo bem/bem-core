@@ -216,7 +216,7 @@ function extractParams(domNode) {
  */
 function removeDomNodeFromEntity(entity, domNode) {
     if(entity.domElem.length === 1) {
-        entity._destruct();
+        entity._delInitedMod();
         delete uniqIdToEntity[entity._uniqId];
     } else {
         entity.domElem = entity.domElem.not(domNode);
@@ -531,14 +531,14 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
             domElems = this.domElem[select](selector);
 
         if(onlyFirst) return domElems[0]?
-            initEntity(entityName, domElems.eq(0), undef, true)._init() :
+            initEntity(entityName, domElems.eq(0), undef, true)._setInitedMod() :
             null;
 
         var res = [],
             uniqIds = {};
 
         domElems.each(function(i, domElem) {
-            var block = initEntity(entityName, $(domElem), undef, true)._init();
+            var block = initEntity(entityName, $(domElem), undef, true)._setInitedMod();
             if(!uniqIds[block._uniqId]) {
                 uniqIds[block._uniqId] = true;
                 res.push(block);
@@ -585,14 +585,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         return this;
     },
 
-    /**
-     * Retrieves modifier value from the DOM node's CSS class
-     * @private
-     * @param {String} modName Modifier name
-     * @param {jQuery} [elem] Nested element
-     * @param {String} [elemName] Name of the nested element
-     * @returns {String} Modifier value
-     */
+    /** @override */
     _extractModVal : function(modName) {
         var domNode = this.domElem[0],
             matches;
@@ -655,20 +648,13 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         return dom.contains(this.domElem, entity.domElem);
     }
 
-}, /** @lends Block */{
-    /**
-     * @override
-     */
+}, /** @lends BemDomEntity */{
+    /** @override */
     create : function() {
-        throw Error('bemDom blocks can not be created otherwise than from DOM');
+        throw Error('bemDom entities can not be created otherwise than from DOM');
     },
 
-    /**
-     * Processes live properties of entity
-     * @private
-     * @param {Boolean} [heedLive=false] Whether to take into account that the entity already processed its live properties
-     * @returns {Boolean} Whether the entity is a live
-     */
+    /** @override */
     _processLive : function(heedLive) {
         var res = this._liveInitable;
 
@@ -678,11 +664,11 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
             if(noLive ^ heedLive) { // should be opposite to each other
                 res = this.live() !== false;
 
-                var blockName = this.getName(),
+                var name = this.getName(),
                     origLive = this.live;
 
                 this.live = function() {
-                    return this.getName() === blockName?
+                    return this.getName() === name?
                         res :
                         origLive.apply(this, arguments);
                 };
@@ -707,7 +693,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * Returns an manager to bind and unbind BEM events for particular context
      * @protected
      * @param {Function|String|Object} [ctx] context to bind,
-     *     can be BEM-entity class, instance, element name or description (elem, modName, modVal)
+     *     can be BEM-entity class, instance, element name or description (block or elem, modName, modVal)
      * @returns {EventManager}
      */
     _events : function(ctx) {
@@ -767,9 +753,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
  * @exports
  */
 var Block = inherit([bem.Block, BemDomEntity], /** @lends Block.prototype */{
-    /**
-     * @override
-     */
+    /** @override */
     block : function() {
         return this;
     }
@@ -782,9 +766,7 @@ var Block = inherit([bem.Block, BemDomEntity], /** @lends Block.prototype */{
  * @exports
  */
 var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
-    /**
-     * @override
-     */
+    /** @override */
     block : function() {
         return this._block || (this._block = this.findParentBlock(getEntityCls(this.__self._blockName)));
     }
@@ -797,13 +779,12 @@ var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
  * @returns {BemDomEntity}
  */
 $.fn.bem = function(BemDomEntity, params) {
-    return initEntity(BemDomEntity.getEntityName(), this, params, true)._init();
+    return initEntity(BemDomEntity.getEntityName(), this, params, true)._setInitedMod();
 };
 
 $(function() {
 
 bemDom = /** @exports */{
-
     /**
      * Scope
      * @type jQuery

@@ -165,16 +165,24 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
         this.params = objects.extend(this._getDefaultParams(), params);
 
         initImmediately !== false?
-            this._init() :
-            initFns.push(this._init, this);
+            this._setInitedMod() :
+            initFns.push(this._setInitedMod, this);
     },
 
     /**
-     * Initializes the BEM entity
+     * Initializes a BEM entity
      * @private
      */
-    _init : function() {
+    _setInitedMod : function() {
         return this.setMod('js', 'inited');
+    },
+
+    /**
+     * Deletes a BEM entity
+     * @private
+     */
+    _delInitedMod : function() {
+        this.delMod('js');
     },
 
     /**
@@ -341,14 +349,6 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
     },
 
     /**
-     * Deletes a BEM entity
-     * @private
-     */
-    _destruct : function() {
-        this.delMod('js');
-    },
-
-    /**
      * Executes given callback on next turn eventloop in BEM entity's context
      * @protected
      * @param {Function} fn callback
@@ -407,7 +407,7 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
         return inherit.self(this, props, staticProps);
     },
 
-    _name : 'i-bem',
+    _name : null,
 
     /**
      * Processes a BEM entity's live properties
