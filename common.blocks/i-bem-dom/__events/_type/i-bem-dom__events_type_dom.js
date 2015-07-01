@@ -14,7 +14,7 @@ modules.define(
         inherit,
         $) {
 
-var eventNameBuilder = function(e) {
+var eventBuilder = function(e) {
         return e;
     },
     /**
@@ -44,7 +44,7 @@ var eventNameBuilder = function(e) {
                 };
             }
 
-            return new this._eventManagerCls(params, wrapperFn, eventNameBuilder);
+            return new this._eventManagerCls(params, wrapperFn, eventBuilder);
         }
     });
 
