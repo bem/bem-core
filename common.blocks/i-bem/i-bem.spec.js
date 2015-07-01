@@ -523,6 +523,60 @@ describe('i-bem', function() {
 
             spy.should.not.have.been.called;
         });
+
+        it('should properly call callbacks for declaration with mod', function() {
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                spy3 = sinon.spy(),
+                spy4 = sinon.spy(),
+                Block = bem.declBlock();
+
+            Block.declMod({ modName : 'm1', modVal : 'v1' }, {
+                onSetMod : {
+                    'm1' : {
+                        'v1' : spy1,
+                        'v2' : spy2
+                    }
+                }
+            });
+            Block.declMod({ modName : 'm1', modVal : 'v2' }, {
+                onSetMod : {
+                    'm1' : {
+                        'v1' : function() {
+                            this.__base.apply(this, arguments);
+                            spy3.apply(this, arguments);
+                        },
+
+                        'v2' : function() {
+                            this.__base.apply(this, arguments);
+                            spy4.apply(this, arguments);
+                        }
+                    }
+                }
+            });
+
+            var block = Block.create();
+
+            block.setMod('m1', 'v1');
+            spy1.should.have.been.called;
+            spy2.should.not.have.been.called;
+            spy3.should.not.have.been.called;
+            spy4.should.not.have.been.called;
+
+            block.setMod('m1', 'v2');
+            spy1.should.have.been.calledOnce;
+            spy2.should.have.been.called;
+            spy3.should.not.have.been.called;
+            spy4.should.have.been.called;
+
+            block
+                .setMod('m1', 'v3')
+                .setMod('m1', 'v2');
+            spy1.should.have.been.calledOnce;
+            spy2.should.have.been.calledOnce;
+            spy3.should.not.have.been.called;
+            spy4.should.have.been.calledTwice;
+        });
     });
 
     describe('beforeSetMod/onSetMod for boolean mods', function() {

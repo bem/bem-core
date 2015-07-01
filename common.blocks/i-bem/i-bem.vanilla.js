@@ -81,16 +81,21 @@ function buildCheckMod(modName, modVal) {
             function(block) {
                 var i = 0, len = modVal.length;
                 while(i < len)
-                    if(block.hasMod(modName, modVal[i++]))
+                    if(checkMod(block, modName, modVal[i++]))
                         return true;
                 return false;
             } :
             function(block) {
-                return block.hasMod(modName, modVal);
+                return checkMod(block, modName, modVal);
             } :
         function(block) {
-            return block.hasMod(modName);
+            return checkMod(block, modName, true);
         };
+}
+
+function checkMod(block, modName, modVal) {
+    // check if a block has either current or previous modifier value equal to passed modVal
+    return block.hasMod(modName, modVal) || block._processingMods[modName] === modVal;
 }
 
 function convertModHandlersToMethods(props) {
@@ -227,12 +232,13 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
             modVal = modVal.toString();
         }
 
-        if(this._processingMods[modName]) return this;
+        /* jshint eqnull: true */
+        if(this._processingMods[modName] != null) return this;
 
         var curModVal = this.getMod(modName);
         if(curModVal === modVal) return this;
 
-        this._processingMods[modName] = true;
+        this._processingMods[modName] = curModVal;
 
         var needSetMod = true,
             modFnParams = [modName, modVal, curModVal];
