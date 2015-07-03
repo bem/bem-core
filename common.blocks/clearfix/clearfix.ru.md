@@ -7,14 +7,14 @@
 Пример использования в качестве контейнера:
 
 ```bemjson
-({
+[{
     block: 'header',
     attrs: { style: 'border: 2px solid blue;' },
     content: 'Top element'
 },
 {
     block: 'clearfix',
-    attrs: { style: 'border: 2px dotted yellow;' },   
+    attrs: { style: 'border: 2px dotted yellow;' },
     content: [
     {
         block: 'float',
@@ -31,14 +31,14 @@
     block: 'footer',
     attrs: { style: 'border: 2px solid red' },
     content: 'Footer'
-})
+}]
 ```
 
 
 Примешивание к блоку-контейнеру:
 
 ```bemjson
-({
+[{
     block: 'header',
     attrs: { style: 'border: 2px solid blue;' },
     content: 'Top element'
@@ -63,7 +63,7 @@
     block: 'footer',
     attrs: { style: 'border: 2px solid red' },
     content: 'Footer'
-})
+}]
 ```
 
 
