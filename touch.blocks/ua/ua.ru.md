@@ -8,24 +8,24 @@
 
 | Имя | Тип | Описание |
 | --- | --- | -------- |
-| <a href="#fields-ua">ua</a> | `{String}` | Значение HTTP-заголовка юзер-агента. |
-| <a href="#fields-ios">ios</a> | `{String|undefined}` | Версия мобильной платформы iOS. |
-| <a href="#fields-android">android</a> | `{String|undefined}` | Версия мобильной платформы Android. |
-| <a href="#fields-bada">bada</a> | `{String|undefined}` | Версия мобильной платформы Bada OS. |
-| <a href="#fields-wp">wp</a> | `{String|undefined}` | Версия мобильной платформы Windows Phone. |
-| <a href="#fields-other">other</a> | `{Boolean}` | Мобильная платформа неопределена. |
-| <a href="#fields-opera">opera</a> | `{String}` | Версия браузера Opera. |
-| <a href="#fields-chrome">chrome</a> | `{String}` | Версия браузера Chrome. |
-| <a href="#fields-iphone">iphone</a> | `{Boolean}` | Устройство – iPhone. |
-| <a href="#fields-ipad">ipad</a> | `{Boolean}` | Устройство – iPad. |
-| <a href="#fields-screenSize">screenSize</a> | `{String}` | Размер экрана устройства. |
-| <a href="#fields-connection">connection</a> | `{String}` | Тип активного соединения. |
-| <a href="#fields-dpr">dpr</a> | `{Number}` | Относительная плотность пикселей. |
-| <a href="#fields-flash">flash</a> | `{String|undefined}` | Версия Adobe Flash. |
-| <a href="#fields-video">video</a> | `{Boolean}` | Поддержка видео. |
-| <a href="#fields-width">width</a> | `{Number}` | Ширина рабочей области экрана в px. |
-| <a href="#fields-height">height</a> | `{Number}` | Высота рабочей области экрана в px. |
-| <a href="#fields-landscape">landscape</a> | `{Boolean}` | Ориентация устройства. |
+| <a href="#fields-ua">ua</a> | <code>{String}</code> | Значение HTTP-заголовка юзер-агента. |
+| <a href="#fields-ios">ios</a> | <code>{String}</code>&#124;<code>{undefined}</code> | Версия мобильной платформы iOS. |
+| <a href="#fields-android">android</a> | <code>{String}</code>&#124;<code>{undefined}</code> | Версия мобильной платформы Android. |
+| <a href="#fields-bada">bada</a> | <code>{String}</code>&#124;<code>{undefined}</code> | Версия мобильной платформы Bada OS. |
+| <a href="#fields-wp">wp</a> | <code>{String}</code>&#124;<code>{undefined}</code> | Версия мобильной платформы Windows Phone. |
+| <a href="#fields-other">other</a> | <code>{Boolean}</code> | Мобильная платформа неопределена. |
+| <a href="#fields-opera">opera</a> | <code>{String}</code> | Версия браузера Opera. |
+| <a href="#fields-chrome">chrome</a> | <code>{String}</code> | Версия браузера Chrome. |
+| <a href="#fields-iphone">iphone</a> | <code>{Boolean}</code> | Устройство – iPhone. |
+| <a href="#fields-ipad">ipad</a> | <code>{Boolean}</code> | Устройство – iPad. |
+| <a href="#fields-screenSize">screenSize</a> | <code>{String}</code> | Размер экрана устройства. |
+| <a href="#fields-connection">connection</a> | <code>{String}</code> | Тип активного соединения. |
+| <a href="#fields-dpr">dpr</a> | <code>{Number}</code> | Относительная плотность пикселей. |
+| <a href="#fields-flash">flash</a> | <code>{String}</code>&#124;<code>{undefined}</code> | Версия Adobe Flash. |
+| <a href="#fields-video">video</a> | <code>{Boolean}</code> | Поддержка видео. |
+| <a href="#fields-width">width</a> | <code>{Number}</code> | Ширина рабочей области экрана в px. |
+| <a href="#fields-height">height</a> | <code>{Number}</code> | Высота рабочей области экрана в px. |
+| <a href="#fields-landscape">landscape</a> | <code>{Boolean}</code> | Ориентация устройства. |
 
 ### Элементы блока
 
@@ -183,7 +183,7 @@ console.dir(ua);
 
 Коэффициент относительной плотности пикселей. Характеризует отношение физических пикселей устройства к аппаратно независимым (dppx). Позволяет определить использует ли устройство дисплей с повышенной плотностью пикселей (например, Retina). По умолчанию `1`.
 
-Например, можно проверить, что устройство использует Retina и отдавать браузеру изображения с высоким разрешением: 
+Например, можно проверить, что устройство использует Retina и отдавать браузеру изображения с высоким разрешением:
 
 ```js
 modules.require('ua', function(ua) {
