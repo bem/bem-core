@@ -16,8 +16,15 @@ block('page')(
                             elem : 'head',
                             content : [
                                 { tag : 'meta', attrs : { charset : 'utf-8' } },
+                                ctx.uaCompatible === false? '' : {
+                                    tag : 'meta',
+                                    attrs : {
+                                        'http-equiv' : 'X-UA-Compatible',
+                                        content : ctx.uaCompatible || 'IE=edge'
+                                    }
+                                },
                                 { tag : 'title', content : ctx.title },
-                                { block : 'ua' },
+                                { block : 'ua', attrs : { nonce : ctx.nonce } },
                                 ctx.head,
                                 ctx.styles,
                                 ctx.favicon? { elem : 'favicon', url : ctx.favicon } : ''
