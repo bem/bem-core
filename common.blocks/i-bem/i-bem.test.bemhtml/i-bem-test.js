@@ -50,4 +50,5 @@ suite('i-bem block and others', function() {
   unit('mix with same block bem-core/804', 'gh-core-804');
   unit('add i-bem classname for elems with js params #881', 'elems-with-js-params');
   unit('nested mix as object bem-core/873', 'gh-core-873');
+  unit('reset apply next when entering content', 'reset-apply-next');
 });
