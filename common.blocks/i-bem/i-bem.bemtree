@@ -92,16 +92,25 @@ BEMContext.prototype.doAsync = function doAsync(fn) {
     return promise;
 };
 
+/**
+ * waits for all, even nested, promises inside bemtree
+ * @param ctx
+ * @returns {Promise}
+ */
+function waitForPromises(ctx) {
+    var promise = Vow.allResolved(ctx.__queue);
+    ctx.__queue = [];
+    return promise.always(function () {
+        return ctx.__queue.length? waitForPromises(ctx) : ctx._buf;
+    });
+}
+
 // Wrap xjst's apply and export our own
 var oldApply = exports.apply;
 exports.apply = BEMContext.applyAsync = function BEMContext_applyAsync(context) {
     var ctx = new BEMContext(context || this, oldApply);
     ctx._buf = ctx.apply();
-    return Vow
-        .allResolved(ctx.__queue)
-        .always(function() {
-            return ctx._buf;
-        });
+    return waitForPromises(ctx);
 };
 
 BEMContext.prototype.reapply = BEMContext.applyAsync;
