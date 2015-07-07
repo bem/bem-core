@@ -52,6 +52,38 @@ function buildModFnName(prefix, modName, modVal) {
 }
 
 /**
+ * Builds the function for the handler method for setting a modifier
+ * for special syntax
+ * @param {String} modVal Declared modifier value
+ * @param {Function} curModFn Declared modifier handler
+ * @param {Function} [prevModFn] Previous handler
+ * @param {Function} [condition] Condition function
+ * (called with declared, set and previous modifier values)
+ * @returns {Function}
+ */
+function buildSpecialModFn(modVal, curModFn, prevModFn, condition) {
+    return prevModFn || condition?
+        function(_modName, _modVal, _prevModVal) {
+            var res1, res2;
+            prevModFn &&
+                (res1 = prevModFn.apply(this, arguments) === false);
+            (condition? condition(modVal, _modVal, _prevModVal) : true) &&
+                (res2 = curModFn.apply(this, arguments) === false);
+            if(res1 || res2) return false;
+        } :
+        curModFn;
+}
+
+var specialModConditions = {
+    '!' : function(modVal, _modVal, _prevModVal) {
+        return _modVal !== modVal;
+    },
+    '~' : function(modVal, _modVal, _prevModVal) {
+        return _prevModVal === modVal;
+    }
+};
+
+/**
  * Transforms a hash of modifier handlers to methods
  * @param {String} prefix
  * @param {Object} modFns
@@ -67,8 +99,21 @@ function modFnsToProps(prefix, modFns, props) {
             if(functions.isFunction(modFn)) {
                 props[buildModFnName(prefix, modName, '*')] = modFn;
             } else {
+                var starModFnName = buildModFnName(prefix, modName, '*');
                 for(modVal in modFn) {
-                    props[buildModFnName(prefix, modName, modVal)] = modFn[modVal];
+                    var curModFn = modFn[modVal],
+                        modValPrefix = modVal[0];
+
+                    if(modValPrefix === '!' || modValPrefix === '~' || modVal === '*') {
+                        modVal === '*' || (modVal = modVal.substr(1));
+                        props[starModFnName] = buildSpecialModFn(
+                            modVal,
+                            curModFn,
+                            props[starModFnName],
+                            specialModConditions[modValPrefix]);
+                    } else {
+                        props[buildModFnName(prefix, modName, modVal)] = curModFn;
+                    }
                 }
             }
         }
