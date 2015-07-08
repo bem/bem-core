@@ -365,6 +365,56 @@ describe('i-bem', function() {
             spyMod2Val2.should.not.have.been.called;
         });
 
+        it('should properly call callbacks for special modifier value `!`-syntax', function() {
+            var spyMod1ValStar = sinon.spy(),
+                spyMod1NotVal1 = sinon.spy(),
+                spyMod1NotVal2 = sinon.spy(),
+                Block = bem.declBlock('block', {
+                    beforeSetMod : {
+                        'mod1' : {
+                            '*' : spyMod1ValStar,
+                            '!val1' : spyMod1NotVal1,
+                            '!val2' : spyMod1NotVal2
+                        }
+                    }
+                }),
+                block = Block.create();
+
+            block.setMod('mod1', 'val1');
+
+            spyMod1ValStar.should.have.been.called;
+            spyMod1NotVal1.should.not.have.been.called;
+            spyMod1NotVal2.should.have.been.called;
+        });
+
+        it('should properly call callbacks for special modifier value `~`-syntax', function() {
+            var spyMod1ValStar = sinon.spy(),
+                spyMod1DelVal1 = sinon.spy(),
+                spyMod1DelVal2 = sinon.spy(),
+                Block = bem.declBlock('block', {
+                    beforeSetMod : {
+                        'mod1' : {
+                            '*' : spyMod1ValStar,
+                            '~val1' : spyMod1DelVal1,
+                            '~val2' : spyMod1DelVal2
+                        }
+                    }
+                }),
+                block = Block.create();
+
+            block.setMod('mod1', 'val1');
+
+            spyMod1ValStar.should.have.been.called;
+            spyMod1DelVal1.should.not.have.been.called;
+            spyMod1DelVal2.should.not.have.been.called;
+
+            block.setMod('mod1', 'val2');
+
+            spyMod1ValStar.should.have.been.calledTwice;
+            spyMod1DelVal1.should.have.been.called;
+            spyMod1DelVal2.should.not.have.been.called;
+        });
+
         it('should call callbacks before set mod', function(done) {
             bem
                 .declBlock('block', {
@@ -411,6 +461,81 @@ describe('i-bem', function() {
                 .setMod('mod1', 'val1')
                 .hasMod('mod1', 'val1')
                     .should.be.false;
+        });
+
+        it('shouldn\'t set mod when callback for special `!`-syntax value returns false', function() {
+            var block = bem.declBlock('block', {
+                    beforeSetMod : {
+                       'mod1' : {
+                           '*' : function() {
+                               return false;
+                           },
+                           '!val1' : function() {
+                               return false;
+                           }
+                       },
+                       'mod2' : {
+                           '*' : function() {
+                               return false;
+                           },
+                           '!val1' : function() {}
+                       },
+                       'mod3' : {
+                           '*' : function() {},
+                           '!val1' : function() {
+                               return false;
+                           }
+                       }
+                    }
+                }).create();
+
+            block.setMod('mod1', 'val2').hasMod('mod1', 'val2')
+                .should.be.false;
+
+            block.setMod('mod2', 'val2').hasMod('mod2', 'val2')
+                .should.be.false;
+
+            block.setMod('mod3', 'val2').hasMod('mod3', 'val2')
+                .should.be.false;
+
+            block.setMod('mod3', 'val1').hasMod('mod3', 'val1')
+                .should.be.true;
+        });
+
+        it('shouldn\'t set mod when callback for special `~`-syntax value returns false', function() {
+            var block = bem.declBlock('block', {
+                    beforeSetMod : {
+                       'mod1' : {
+                           '*' : function() {
+                               return false;
+                           },
+                           '~val1' : function() {
+                               return false;
+                           }
+                       },
+                       'mod2' : {
+                           '*' : function() {
+                               return false;
+                           },
+                           '~val1' : function() {}
+                       },
+                       'mod3' : {
+                           '*' : function() {},
+                           '~val1' : function() {
+                               return false;
+                           }
+                       }
+                    }
+                }).create({ mod1 : 'val1', mod2 : 'val1', mod3 : 'val1' });
+
+            block.setMod('mod1', 'val2').hasMod('mod1', 'val2')
+                .should.be.false;
+
+            block.setMod('mod2', 'val2').hasMod('mod2', 'val2')
+                .should.be.false;
+
+            block.setMod('mod3', 'val2').hasMod('mod3', 'val2')
+                .should.be.false;
         });
     });
 
@@ -482,6 +607,56 @@ describe('i-bem', function() {
             spyMod1Val2.should.not.have.been.called;
             spyMod2Val1.should.not.have.been.called;
             spyMod2Val2.should.not.have.been.called;
+        });
+
+        it('should properly call callbacks for special modifier value `!`-syntax', function() {
+            var spyMod1ValStar = sinon.spy(),
+                spyMod1NotVal1 = sinon.spy(),
+                spyMod1NotVal2 = sinon.spy(),
+                Block = bem.declBlock('block', {
+                    onSetMod : {
+                        'mod1' : {
+                            '*' : spyMod1ValStar,
+                            '!val1' : spyMod1NotVal1,
+                            '!val2' : spyMod1NotVal2
+                        }
+                    }
+                }),
+                block = Block.create();
+
+            block.setMod('mod1', 'val1');
+
+            spyMod1ValStar.should.have.been.called;
+            spyMod1NotVal1.should.not.have.been.called;
+            spyMod1NotVal2.should.have.been.called;
+        });
+
+        it('should properly call callbacks for special modifier value `~`-syntax', function() {
+            var spyMod1ValStar = sinon.spy(),
+                spyMod1DelVal1 = sinon.spy(),
+                spyMod1DelVal2 = sinon.spy(),
+                Block = bem.declBlock('block', {
+                    onSetMod : {
+                        'mod1' : {
+                            '*' : spyMod1ValStar,
+                            '~val1' : spyMod1DelVal1,
+                            '~val2' : spyMod1DelVal2
+                        }
+                    }
+                }),
+                block = Block.create();
+
+            block.setMod('mod1', 'val1');
+
+            spyMod1ValStar.should.have.been.called;
+            spyMod1DelVal1.should.not.have.been.called;
+            spyMod1DelVal2.should.not.have.been.called;
+
+            block.setMod('mod1', 'val2');
+
+            spyMod1ValStar.should.have.been.calledTwice;
+            spyMod1DelVal1.should.have.been.called;
+            spyMod1DelVal2.should.not.have.been.called;
         });
 
         it('should call callbacks after set mod', function(done) {
