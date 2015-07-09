@@ -1,0 +1,5 @@
+block('b1').def()(function() {
+  return local({ 'ctx.tag': 'span' })(function() {
+    return applyNext();
+  });
+});
