@@ -239,7 +239,7 @@
     block : 'page',
     title : 'Page title',
     styles : { elem : 'css', url : '_index.css' },
-    content : 'Страница с тэгом <style>'
+    content : 'Страница с тэгом style'
 }
 ```
 
