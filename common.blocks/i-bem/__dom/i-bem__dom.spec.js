@@ -113,6 +113,11 @@ describe('i-bem__dom', function() {
                     beforeCls : 'block i-bem block_m6 block_m7_v7',
                     afterCls : 'block i-bem block_js_inited block_m1_v1 block_m2_v2 block_m3 block_m4_v4 block_m5',
                     mods : { m1 : 'v1', m2 : 'v2', m3 : true, m4 : 'v4', m5 : true, m6 : false, m7 : '' }
+                },
+                {
+                    beforeCls : 'bla-block bla-block_m1_v1 bla-block_m3 block i-bem block_m6 block_m7_v7',
+                    afterCls : 'bla-block bla-block_m1_v1 bla-block_m3 block i-bem block_js_inited block_m1_v1 block_m2_v2 block_m3 block_m4_v4 block_m5',
+                    mods : { m1 : 'v1', m2 : 'v2', m3 : true, m4 : 'v4', m5 : true, m6 : false, m7 : '' }
                 }
             ].forEach(function(data) {
                 var block = (rootNode = $('<div class="' + data.beforeCls + '"/>')).bem('block');
