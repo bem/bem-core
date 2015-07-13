@@ -109,11 +109,18 @@ describe('i-bem-dom', function() {
                     beforeMods : { m6 : true, m7 : 'v7' },
                     afterCls : 'block i-bem block_js_inited block_m1_v1 block_m2_v2 block_m3 block_m4_v4 block_m5',
                     mods : { m1 : 'v1', m2 : 'v2', m3 : true, m4 : 'v4', m5 : true, m6 : false, m7 : '' }
+                },
+                {
+                    beforeMods : { m6 : true, m7 : 'v7' },
+                    afterCls : 'block bla-block bla-block_m3 bla-block_m1_v1 i-bem block_js_inited block_m1_v1 block_m2_v2 block_m3 block_m4_v4 block_m5',
+                    mods : { m1 : 'v1', m2 : 'v2', m3 : true, m4 : 'v4', m5 : true, m6 : false, m7 : '' },
+                    mix : { block : 'bla-block', mods : { m3 : true, m1 : 'v1' } }
                 }
             ].forEach(function(data) {
                 var block = (rootNode = createDomNode({
                         block : 'block',
-                        mods : data.beforeMods
+                        mods : data.beforeMods,
+                        mix : data.mix
                     })).bem(Block);
 
                 objects.each(data.mods, function(modVal, modName) {

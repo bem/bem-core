@@ -622,7 +622,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
                 (oldModVal === true?
                     classRE.test(className) :
-                    className.indexOf(classPrefix + MOD_DELIM) > -1)?
+                    (' ' + className).indexOf(' ' + classPrefix + MOD_DELIM) > -1)?
                         this.className = className.replace(
                             classRE,
                             (needDel? '' : '$1' + modClassName)) :
