@@ -1,5 +1,6 @@
-<a id="intro"></a>
+# Tutorial for BEMJSON template engine
 
+<a id="intro"></a>
 ## Introduction
 
 **This document** is a guide to the format for describing input data called BEMJSON.
