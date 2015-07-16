@@ -1,7 +1,7 @@
 <a name="#elems-dom">
-# ua__dom
+# Элемент `dom` блока `ua`
 
-Элемент служит для дополнения базовой БЭМ-сущности блока `ua` набором модификаторов на основе данных, собранных блоком `ua` на тач-уровне. 
+Элемент служит для дополнения базовой БЭМ-сущности блока `ua` набором модификаторов на основе данных, собранных блоком `ua` на touch-уровне.
 
 Это позволяет учитывать особенности мобильного устройства, проверяя наличие и значение модификаторов.
 
@@ -12,13 +12,13 @@ provide(BEMDOM.decl(this.name, {
     onSetMod: {
         js: {
             inited: function() {
-                this.findBlockOutside('ua').hasMod('platform', 'ios') && 
+                this.findBlockOutside('ua').hasMod('platform', 'ios') &&
                     this.setMod('ios');
             }
         },
         'ios': function() {
             console.log('You are iOS user');
-        }            
+        }
     }
 }));
 
@@ -140,9 +140,9 @@ provide(BEMDOM.decl(this.name, {
             },
             '': function() {
                 this._ua.un({ modName : 'orient', modVal : '*' }, this._onOrientChange, this);
-            } 
+            }
         },
-        
+
         'orient': {
             'portrait': function() {
                 this._reDraw('portrait');
@@ -150,16 +150,16 @@ provide(BEMDOM.decl(this.name, {
             'landscape': function() {
                 this._reDraw('landscape');
             }
-        }                    
+        }
     },
-    
+
     _onOrientChange: function(e, data) {
-        // переключаемся между значениям собственного модификатора orient 
+        // переключаемся между значениям собственного модификатора `orient`
         this.setMod(data.modName, data.modVal);
     },
-    
-    _reDraw: function(orient) { 
-        // обновляем содержимое контейнера inner при смене ориентации устройства
+
+    _reDraw: function(orient) {
+        // обновляем содержимое контейнера `inner` при смене ориентации устройства
         console.log(orient);
         BEMDOM.update(this.domElem, orient);
     }
@@ -168,4 +168,4 @@ provide(BEMDOM.decl(this.name, {
 });
 ```
 
-В примере блок-контейнер `inner`, вложенный в `page`, подменяет свое содержимое при смене ориентации устройства. 
+В примере блок-контейнер `inner`, вложенный в `page`, подменяет свое содержимое при смене ориентации устройства.
