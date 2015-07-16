@@ -1,3 +1,6 @@
+# Элемент `conditional-comments` блока `page`
+
+
 ```javascript
 ({
     block : 'page',
