@@ -1,4 +1,4 @@
-# Hello, BEMHTML!
+# BEMHTML quick start
 
 This guide will help you try the BEMHTML templaiting engine and understand the basics of working with it in 7 easy steps:
 
