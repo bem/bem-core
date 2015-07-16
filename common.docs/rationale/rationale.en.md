@@ -1,4 +1,4 @@
-# BEMHTML: a templating engine for BEM
+# BEMHTML templating engine description and its benefits
 
 **BEMHTML** is a templating engine for thous who are using [BEM metodology](https://bem.info/method)
 for web development.
