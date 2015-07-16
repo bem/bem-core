@@ -1,4 +1,4 @@
-# JS syntax of BEMHTML. Migration guide
+# BEMHTML JS-syntax. Migration tutorial
 
 <a name="intro"></a>
 ## Introduction
