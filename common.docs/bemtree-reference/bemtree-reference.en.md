@@ -1,5 +1,6 @@
-<a name="intro"></a>
+# Tutorial for BEMTREE template engine
 
+<a name="intro"></a>
 ## Introduction
 
 **This document** is a guide to the BEMTREE template engine.
