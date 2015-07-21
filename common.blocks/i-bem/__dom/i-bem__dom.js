@@ -985,18 +985,19 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
     },
 
     /**
-     * Destroys blocks on a fragment of the DOM tree
      * @param {jQuery} ctx Root DOM node
      * @param {Boolean} [excludeSelf=false] Exclude the main domElem
+     * @param {Boolean} [destructDom=false] Remove DOM node during destruction
+     * @private
      */
-    destruct : function(ctx, excludeSelf) {
+    _destruct : function(ctx, excludeSelf, destructDom) {
         var _ctx;
         if(excludeSelf) {
             storeDomNodeParents(_ctx = ctx.children());
-            ctx.empty();
+            destructDom && ctx.empty();
         } else {
             storeDomNodeParents(_ctx = ctx);
-            ctx.remove();
+            destructDom && ctx.remove();
         }
 
         reverse.call(findDomElem(_ctx, BEM_SELECTOR)).each(function(_, domNode) {
@@ -1011,9 +1012,24 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
             });
             delete domElemToParams[identify(domNode)];
         });
+    },
 
-        // flush parent nodes storage that has been filled above
-        domNodesToParents = {};
+    /**
+     * Destroys blocks on a fragment of the DOM tree
+     * @param {jQuery} ctx Root DOM node
+     * @param {Boolean} [excludeSelf=false] Exclude the main domElem
+     */
+    destruct : function(ctx, excludeSelf) {
+        this._destruct(ctx, excludeSelf, true);
+    },
+
+    /**
+     * Detaches blocks on a fragment of the DOM tree without destructing DOM tree
+     * @param {jQuery} ctx Root DOM node
+     * @param {Boolean} [excludeSelf=false] Exclude the main domElem
+     */
+    detach : function(ctx, excludeSelf) {
+        this._destruct(ctx, excludeSelf);
     },
 
     /**

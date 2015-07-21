@@ -635,6 +635,35 @@ describe('i-bem__dom', function() {
         });
     });
 
+    describe('DOM.detach', function() {
+        it('should detach block and leave DOM node', function() {
+            var spy = sinon.spy();
+            DOM.decl('block2', {
+                onSetMod : {
+                    js : {
+                        '' : spy
+                    }
+                }
+            });
+
+            var rootNode = DOM.init($(BEMHTML.apply({
+                    block : 'block1',
+                    content : {
+                        block : 'block2',
+                        js : true
+                    }
+                })));
+
+            DOM.detach(rootNode.bem('block1').findBlockInside('block2').domElem);
+
+            spy.should.have.been.calledOnce;
+            rootNode.find('.block2').length.should.be.equal(1);
+
+            delete DOM.blocks['block1'];
+            delete DOM.blocks['block2'];
+        });
+    });
+
     describe('DOM.update', function() {
         it('should update tree', function() {
             var spyBlock1Destructed = sinon.spy(),
