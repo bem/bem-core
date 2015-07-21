@@ -983,6 +983,29 @@ describe('i-bem-dom', function() {
         });
     });
 
+    describe('bemDom.detach', function() {
+        it('should detach block but leave DOM node', function() {
+            var spy = sinon.spy();
+            bemDom.declBlock('block1', {
+                onSetMod : {
+                    js : {
+                        '' : spy
+                    }
+                }
+            });
+
+            rootNode = createDomNode({
+                tag : 'div',
+                content : { block : 'block1', js : true }
+            });
+
+            bemDom.detach(rootNode.find('.block1'));
+
+            spy.should.have.been.calledOnce;
+            rootNode.find('.block1').length.should.be.equal(1);
+        });
+    });
+
     describe('bemDom.destruct', function() {
         var spy;
         beforeEach(function() {
