@@ -883,11 +883,12 @@ bemDom = /** @exports */{
     },
 
     /**
-     * Destroys blocks on a fragment of the DOM tree
      * @param {jQuery} ctx Root DOM node
      * @param {Boolean} [excludeSelf=false] Exclude the main domElem
+     * @param {Boolean} [destructDom=false] Remove DOM node during destruction
+     * @private
      */
-    destruct : function(ctx, excludeSelf) {
+    _destruct : function(ctx, excludeSelf, destructDom) {
         var _ctx;
         storeDomNodeParents(_ctx = excludeSelf? ctx.children() : ctx);
 
@@ -905,12 +906,29 @@ bemDom = /** @exports */{
         });
 
         // NOTE: it was moved here as jquery events aren't triggered on detached DOM elements
-        excludeSelf?
-            ctx.empty() :
-            ctx.remove();
+        destructDom &&
+            (excludeSelf? ctx.empty() : ctx.remove());
 
         // flush parent nodes storage that has been filled above
         domNodesToParents = {};
+    },
+
+    /**
+     * Destroys blocks on a fragment of the DOM tree
+     * @param {jQuery} ctx Root DOM node
+     * @param {Boolean} [excludeSelf=false] Exclude the main domElem
+     */
+    destruct : function(ctx, excludeSelf) {
+        this._destruct(ctx, excludeSelf, true);
+    },
+
+    /**
+     * Detaches blocks on a fragment of the DOM tree without DOM tree destruction
+     * @param {jQuery} ctx Root DOM node
+     * @param {Boolean} [excludeSelf=false] Exclude the main domElem
+     */
+    detach : function(ctx, excludeSelf) {
+        this._destruct(ctx, excludeSelf);
     },
 
     /**
