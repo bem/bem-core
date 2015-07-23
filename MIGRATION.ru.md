@@ -160,6 +160,25 @@ BEMDOM.decl('block', {
         this.nextTick(function() { ...
 ```
 
+#### Метод `findElem`
+
+Контекст для поиска элемента больше не задается строкой, вместо нее следует передавать jQuery-объект.
+
+Было:
+```js
+var nestedElem = this.findElem('parent-elem', 'nested-elem');
+```
+
+Стало:
+```js
+var nestedElem = this.findElem(this.findElem('parent-elem'), 'nested-elem'),
+    oneMoreElem = this.findElem(this.elem('another-elem'), 'nested-elem');
+```
+
+#### Метод `liveBindTo`
+
+Метод `liveBindTo` больше не поддерживает поле `elemName` для передачи имени элемента. Вместо него следует использовать поле `elem`.
+
 #### Доступ до DOM-элемента в обработчике события
 
 DOM-элемент, к которому был подвешен обработчик события теперь доступен
