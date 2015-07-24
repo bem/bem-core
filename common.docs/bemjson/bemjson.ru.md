@@ -273,7 +273,7 @@ BEMJSON предоставляет возможность задавать не�
 <tr>
     <td><code>js</code></td>
     <td>Либо флаг о наличии клиентского JavaScript у данной сущности, либо параметры JavaScript</td>
-    <td><code>Boolean</code></td>
+    <td><code>Boolean|Object</code></td>
     <td>
         <pre><code>{
   block: 'form-input',
