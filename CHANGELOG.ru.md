@@ -1,5 +1,36 @@
 # История изменений
 
+## 2.7.0
+
+### Крупные изменения
+
+- В `i-bem__dom` добавлен новый метод `detach` ([#1102](https://github.com/bem/bem-core/issues/1102)).
+- В `i-bem.bemhtml` добавлена поддержка вложенных миксов ([873](https://github.com/bem/bem-core/issues/873)).
+- В `i-bem.bemhtml` добавлены незначительные оптимизации, связанные с эскейпингом аттрибутов ([#961](https://github.com/bem/bem-core/issues/961)), ([#980](https://github.com/bem/bem-core/issues/980)) и ([#982](https://github.com/bem/bem-core/issues/982)).
+- В BEMHTML-шаблоны добавлена поддержка [bem-xjst](https://github.com/bem/bem-xjst) 2.x ([#1021](https://github.com/bem/bem-core/issues/1021)).
+- `clearfix` оптимизирован для работы в поддерживаемых библиотекой браузерах IE ([#722](https://github.com/bem/bem-core/issues/722)).
+- `jquery` обновлен до версий 2.1.4 и 1.11.3 ([#999](https://github.com/bem/bem-core/issues/999)).
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена ошибка в `i-bem__dom`, из-за которой метод `findElem` не обновлял кэш ранее найденных
+  элементов ([#583](https://github.com/bem/bem-core/issues/583)).
+- Исправлена ошибка в `i-bem__dom`, приводящая к неправильной работе метода `dropElemCache` в некоторых граничных
+  случаях ([#1037](https://github.com/bem/bem-core/issues/1037)).
+- Исправлена ошибка в `i-bem__dom`, из-за которой вызов метода `setMod` не выставлял CSS-классы блоку в случае, если
+  на DOM-узеле был подмешан блок с пересекающимся окончанием в имени ([#1090](https://github.com/bem/bem-core/issues/1090)).
+- Исправлена ошибка в `page`, из-за которой на touch-уровнях не работало специализированное поле `zoom` ([#1020](https://github.com/bem/bem-core/issues/1020)).
+- Исправлена ошибка в `keyboard__codes`. Клавиши `insert` и `delete` были описаны неправильными
+  кодами ([#1002](https://github.com/bem/bem-core/issues/1002)).
+- Исправлена ошибка в `i-bem.bemhtml`, из-за которой неверно интерпретировались вложенные вызовы `applyNext` ([b1dc50c](https://github.com/bem/bem-core/commit/b1dc50c621b5659cff33daa4dd3f210b67cf25e1)).
+- Исправлена ошибка в `jquery__events_type_pointernative`, из-за которой события работали некорректно
+  в браузерах IE 11 и Edge ([#1066](https://github.com/bem/bem-core/issues/1066)).
+
+### Также в релиз вошли следующие изменения
+
+- Обновлена русская докуметация для всех блоков библиотеки. Документация доступна по адресу https://ru.bem.info/libs/bem-core/.
+- Прочие улучшения в документации к библиотеке.
+
 ## 2.6.0
 
 ### Крупные изменения
