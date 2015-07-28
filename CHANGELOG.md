@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.7.0
+
+### Major changes
+
+- New `detach` method was added to `i-bem__dom` ([#1102](https://github.com/bem/bem-core/issues/1102)).
+- `i-bem.bemhtml` now supports nested mixes as objects ([873](https://github.com/bem/bem-core/issues/873)).
+- Some minor attribute escaping optimizations were added to `i-bem.bemhtml` ([#961](https://github.com/bem/bem-core/issues/961)), ([#980](https://github.com/bem/bem-core/issues/980)) and ([#982](https://github.com/bem/bem-core/issues/982)).
+- Support for [bem-xjst](https://github.com/bem/bem-xjst) 2.x was added to BEMHTML templates ([#1021](https://github.com/bem/bem-core/issues/1021)).
+- `clearfix` was optimized to work properly in supported IE browsers ([#722](https://github.com/bem/bem-core/issues/722)).
+- `jquery` was updated to 2.1.4 and 1.11.3 ([#999](https://github.com/bem/bem-core/issues/999)).
+
+### Bug fixes
+
+- An issue in `i-bem__dom` was fixed. `findElem` didn't update cache of elements that
+  had been found previously ([#583](https://github.com/bem/bem-core/issues/583)).
+- An issue in `i-bem__dom` was fixed. `dropElemCache` worked incorrectly in some edge cases ([#1037](https://github.com/bem/bem-core/issues/1037)).
+- An issue in `i-bem__dom` was fixed. `setMod` didn't add CSS classes if blocks on the same DOM node had
+  overlapping end parts in their names ([#1090](https://github.com/bem/bem-core/issues/1090)).
+- An issue in `page` was fixed. `zoom` attribute of the block didn't work for touch levels ([#1020](https://github.com/bem/bem-core/issues/1020)).
+- An issue in `keyboard__codes` was fixed. `insert` and `delete` keys had wrong key codes ([#1002](https://github.com/bem/bem-core/issues/1002)).
+- An issue in `i-bem.bemhtml` was fixed. `applyNext` calls were skipped in nested templates ([b1dc50c](https://github.com/bem/bem-core/commit/b1dc50c621b5659cff33daa4dd3f210b67cf25e1)).
+- An issue in `jquery__events_type_pointernative` was fixed to work properly in IE 11/Edge ([#1066](https://github.com/bem/bem-core/issues/1066)).
+
+### Other changes
+
+- Russian documentation for every blocks was reworked. Please visit https://ru.bem.info/libs/bem-core/ for new documentation.
+- Other minor improvements of the documentation.
+
 ## 2.6.0
 
 ### Major changes
