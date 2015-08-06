@@ -5,7 +5,7 @@ block('page')(
         this._nonceCsp = ctx.nonce;
 
         // TODO(indunty): remove local after bem/bem-xjst#50
-        return local({ _pageInit: true })(function() {
+        return local({ _pageInit : true })(function() {
             return applyCtx([
                 ctx.doctype || '<!DOCTYPE html>',
                 {

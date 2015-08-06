@@ -66,7 +66,6 @@ BEM.INTERNAL = {
 
     /**
      * Builds the class for a block or element with a modifier
-     * @private
      * @param {String} block Block name
      * @param {String} [elem] Element name
      * @param {String} [modName] Modifier name
@@ -99,7 +98,6 @@ BEM.INTERNAL = {
 
     /**
      * Builds modifier classes
-     * @private
      * @param {String} block Block name
      * @param {String} [elem] Element name
      * @param {Object} [mods] Modifier name
@@ -126,7 +124,6 @@ BEM.INTERNAL = {
 
     /**
      * Builds full classes for a block or element with modifiers
-     * @private
      * @param {String} block Block name
      * @param {String} [elem] Element name
      * @param {Object} [mods] Modifier name

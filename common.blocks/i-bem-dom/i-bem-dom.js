@@ -252,6 +252,8 @@ function buildElemKey(elem) {
     return elem.elem + buildModPostfix(elem.modName, elem.modVal);
 }
 
+// jscs:disable requireMultipleVarDecl
+
 /**
  * Returns jQuery collection for provided HTML
  * @param {jQuery|String} html
@@ -343,7 +345,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * Clearing the cache for elements
      * @protected
-     * @param {Function|String|Object} [...elems] Nested elements names or description elem, modName, modVal
+     * @param {?...(Function|String|Object)} elems Nested elements names or description elem, modName, modVal
      * @returns {BemDomEntity} this
      */
     _dropElemCache : function(elems) {

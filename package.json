@@ -23,7 +23,8 @@
     "bem": "~0.9.0",
     "mocha": "~1.9.0",
     "jshint-groups": "0.6.0",
-    "jscs": "1.11.3",
+    "jscs": "^1.11.3",
+    "jscs-bem": "^0.2.0",
     "jscs-jsdoc": "0.4.5",
     "git-hooks": "~0.0.6",
     "bower-npm-install": "~0.5.4",
@@ -54,6 +55,6 @@
     "bem-test": "npm run deps && magic run specs && magic run tmpl-specs",
     "bem-coverage": "ISTANBUL_COVERAGE=yes npm run bem-test",
     "bem-jsdoc": "bem make desktop.jsdoc",
-    "test": "npm run bem-test && mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.test.bemhtml/*-test.js"
+    "test": "npm run lint && npm run bem-test && mocha --ui tdd --reporter spec common.blocks/i-bem/i-bem.test.bemhtml/*-test.js common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.test.bemhtml/*-test.js"
   }
 }

@@ -27,7 +27,7 @@ provide(
     /**
      * Makes unique ID
      * @exports
-     * @param {Object} [obj...] Object that needs to be identified
+     * @param {?...Object} obj Object that needs to be identified
      * @returns {String} ID
      */
     function(obj) {
