@@ -180,6 +180,8 @@ function declEntity(baseCls, entityName, base, props, staticProps) {
     return entityCls;
 }
 
+// jscs:disable requireMultipleVarDecl
+
 /**
  * @class BemEntity
  * @description Base block for creating BEM blocks
@@ -286,9 +288,8 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
         this._processingMods[modName] = curModVal;
 
         var needSetMod = true,
-            modFnParams = [modName, modVal, curModVal];
-
-        var modVars = [['*', '*'], [modName, '*'], [modName, modVal]],
+            modFnParams = [modName, modVal, curModVal],
+            modVars = [['*', '*'], [modName, '*'], [modName, modVal]],
             prefixes = ['before', 'after'],
             i = 0, prefix, j, modVar;
 

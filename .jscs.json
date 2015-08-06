@@ -1,9 +1,11 @@
 {
+    "plugins": ["jscs-bem"],
+    "preset": "bem",
+
     "excludeFiles": [
         ".bem/cache/**",
         ".enb/tmp/**",
         ".git/**",
-        ".gitignore",
         "libs/**",
         "node_modules/**",
         "**/*.test.bemhtml/**",
@@ -11,52 +13,12 @@
         "*.examples/**",
         "*.tests/**",
         "*.specs/**",
-        "*.json",
+        "*.tmpl-specs/**",
         "common.blocks/vow/**",
         "common.blocks/inherit/**",
         "common.blocks/ecma/__array/ecma__array.spec.js",
         "common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js",
-        "common.blocks/jquery/__event/_type/jquery__event_type_pointer.js",
-        "common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.js"
+        "*.docs/**/*.bemdecl.js"
     ],
-    "fileExtensions": [".js", ".bemtree", ".bemhtml"],
-
-    "preset": "yandex",
-    "disallowMultipleVarDecl" : null,
-    "requireCurlyBraces" : null,
-    "requireSpacesInConditionalExpression" : {
-        "beforeConsequent": true,
-        "afterConsequent": true,
-        "beforeAlternate": true
-    },
-    "maximumLineLength" : null,
-    "requireSpacesInAnonymousFunctionExpression" : null,
-    "disallowSpaceAfterObjectKeys" : null,
-    "disallowSpacesInsideObjectBrackets" : null,
-    "disallowImplicitTypeConversion" : null,
-    "disallowQuotedKeysInObjects" : null,
-    "requireDotNotation" : null,
-    "disallowOperatorBeforeLineBreak" : ["."],
-    "disallowSpaceAfterKeywords" : ["if", "for", "while", "switch"],
-    "requireSpaceAfterKeywords" : ["do", "else"],
-    "disallowSpacesInCallExpression" : true,
-    "disallowSpacesInConditionalExpression" : {
-        "afterTest": true,
-        "beforeConsequent": false,
-        "afterConsequent": false,
-        "beforeAlternate": false
-    },
-    "requireSpaceAfterObjectKeys" : true,
-    "requireSpaceBeforeKeywords" : ["else", "while", "catch"],
-    "requireSpacesInsideObjectBrackets" : "all",
-
-    "plugins": [
-        "jscs-jsdoc"
-    ],
-    "jsDoc": {
-        "checkParamNames": true,
-        "requireParamTypes": true,
-        "checkRedundantAccess": "enforceLeadingUnderscore",
-        "leadingUnderscoreAccess": true
-    }
+    "fileExtensions": [".js", ".bemtree", ".bemhtml"]
 }

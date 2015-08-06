@@ -250,6 +250,8 @@ function buildElemKey(elem) {
     return elem.elem + buildModPostfix(elem.modName, elem.modVal);
 }
 
+// jscs:disable requireMultipleVarDecl
+
 /**
  * @class BemDomEntity
  * @description Base mix for BEM entities that have DOM representation

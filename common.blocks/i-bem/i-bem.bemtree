@@ -106,10 +106,10 @@ BEMContext.prototype.doAsync = function doAsync(fn, onFulfilled, onRejected, con
             _this.elemMods = elemMods;
             return response;
         },
-        promise = isFunction(fn) ? Vow.invoke(fn, context) : fn;
+        promise = isFunction(fn)? Vow.invoke(fn, context) : fn;
 
     if(onFulfilled) {
-        promise = onRejected ? promise
+        promise = onRejected? promise
             .then(function(response) {
                 return onFulfilled.call(this, restore(response));
             }, function(response) {
