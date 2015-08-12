@@ -115,3 +115,7 @@ Node.js).
 [i-bem]: https://ru.bem.info/libs/bem-core/current/desktop/i-bem/jsdoc/
 
 [i-bem__dom]: https://ru.bem.info/libs/bem-core/current/desktop/i-bem/jsdoc/
+
+[html]: ./i-bem-js-html-binding.ru.md
+
+[params]: ./i-bem-js-params.ru.md
