@@ -29,7 +29,69 @@ var DEFAULT_LANGS = ['ru', 'en'],
         'desktop' : ['common', 'desktop'],
         'touch-phone' : ['common', 'touch'],
         'touch-pad' : ['common', 'touch']
-    };
+    },
+    bemBabel = require('enb/lib/build-flow').create()
+        .name('bem-babel')
+        .target('target', '?.browser.js')
+        .useFileList(['vanilla.js', 'js', 'browser.js'])
+        .builder(function (files) {
+            var res = require('vow').defer(),
+                node = this.node,
+                target = this._target,
+                targetDir = node.getDir(),
+                preWebpackPath = node.resolvePath('.pre-webpack.' + target),
+                resultPath = node.resolvePath(target);
+
+            fs.writeFile(
+                preWebpackPath,
+                files.map(function(file) {
+                    return 'import \'bem-source:' + file.fullname + '\';';
+                }).join('\n'),
+                function(err) {
+                    if(err) res.reject(err);
+                    require('webpack')(
+                        {
+                            entry : preWebpackPath,
+                            output : {
+                                path : targetDir,
+                                filename : target
+                            },
+                            module : {
+                                loaders : [
+                                    {
+                                        test : /\.js$/,
+                                        loader : 'babel-loader',
+                                        query : {
+                                            optional : ['runtime'],
+                                            plugins : 'bem',
+                                            loose : ['es6.modules']
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        function(err, stats) {
+                            // TODO: remove preWebpackPath
+                            if(err) {
+                                res.reject('Fatal error in webpack');
+                            } else {
+                                stats = stats.toJson();
+                                if(stats.errors.length) {
+                                    res.reject(stats.errors);
+                                } else if(stats.warnings.length) {
+                                    node.getLogger().logWarningAction(
+                                        'bem-babel',
+                                        path.join(node.getPath(), target),
+                                        stats.warnings);
+                                }
+                                res.resolve(resultPath);
+                            }
+                        });
+                });
+            return res.promise();
+        })
+        .saver(function() {})
+        .createTech();
 
 module.exports = function(config) {
     var platforms = ['desktop', 'touch-pad', 'touch-phone'],
@@ -79,10 +141,9 @@ module.exports = function(config) {
                         filesTarget : '?.js.files',
                         dirsTarget : '?.js.dirs'
                     }],
-                    [js, {
+                    [bemBabel, {
                         filesTarget : '?.js.files',
                         target : '?.source.js',
-                        sourceSuffixes : ['vanilla.js', 'js', 'browser.js']
                     }],
                     [ym, {
                         source : '?.source.js',
