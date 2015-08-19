@@ -291,13 +291,15 @@ module.exports = function(config) {
                 destPath : platform + '.specs',
                 levels : getLevels(platform),
                 sourceLevels : getSpecLevels(platform),
-                jsSuffixes : ['vanilla.js', 'browser.js', 'js']
+                jsSuffixes : ['vanilla.js', 'browser.js', 'js'],
+                depsTech : deps
             });
 
             sets.tmplSpecs.configure({
                 destPath : platform + '.tmpl-specs',
                 levels : getLevels(platform),
                 sourceLevels : getLevels(platform),
+                depsTech : deps,
                 engines : {
                     bh : {
                         tech : 'enb-bh/techs/bh-commonjs',
