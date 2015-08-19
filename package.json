@@ -32,7 +32,7 @@
     "vow": "0.4.9",
     "reqf": "^1.0.0",
     "bem-naming": "0.5.1",
-    "enb": "0.15.0",
+    "enb": "^0.17.2",
     "enb-bem-techs": "^1.0.4",
     "enb-bem-docs": "0.8.0",
     "enb-bem-examples": "0.5.9",
