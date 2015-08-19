@@ -13,9 +13,9 @@ var LIB_NAME = 'bem-core',
     css = require('enb/techs/css'),
     js = require('enb/techs/js'),
     ym = require('enb-modules/techs/prepend-modules'),
-    bemhtml = require('enb-bemxjst/techs/bemhtml-old'),
-    bemtree = require('enb-bemxjst/techs/bemtree-old'),
-    html = require('enb-bemxjst/techs/html-from-bemjson'),
+    bemhtml = require('enb-bemxjst/techs/bemhtml'),
+    bemtree = require('enb-bemxjst/techs/bemtree'),
+    html = require('enb-bemxjst/techs/bemjson-to-html'),
     htmlFromData = require('./techs/html-from-bemtree'),
     bh = require('enb-bh/techs/bh-server'),
     bhServerInclude = require('enb-bh/techs/bh-server-include'),
@@ -302,11 +302,11 @@ module.exports = function(config) {
                         }
                     },
                     'bemhtml-dev' : {
-                        tech : 'enb-bemxjst/techs/bemhtml-old',
+                        tech : 'enb-bemxjst/techs/bemhtml',
                         options : { devMode : true }
                     },
                     'bemhtml-prod' : {
-                        tech : 'enb-bemxjst/techs/bemhtml-old',
+                        tech : 'enb-bemxjst/techs/bemhtml',
                         options : { devMode : false }
                     }
                 }
