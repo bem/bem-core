@@ -13,14 +13,17 @@ var LIB_NAME = 'bem-core',
     css = require('enb/techs/css'),
     js = require('enb/techs/js'),
     ym = require('enb-modules/techs/prepend-modules'),
-    bemhtml = require('enb-bemxjst/techs/bemhtml-old'),
-    bemtree = require('enb-bemxjst/techs/bemtree-old'),
-    html = require('enb-bemxjst/techs/html-from-bemjson'),
+    bemhtml = require('enb-bemxjst/techs/bemhtml'),
+    bemtree = require('enb-bemxjst/techs/bemtree'),
+    html = require('enb-bemxjst/techs/bemjson-to-html'),
     htmlFromData = require('./techs/html-from-bemtree'),
-    bh = require('enb-bh/techs/bh-server'),
-    bhServerInclude = require('enb-bh/techs/bh-server-include'),
-    bhYm = require('enb-bh/techs/bh-client-module'),
-    bhHtml = require('enb-bh/techs/html-from-bemjson'),
+    bhCommonJS = require('enb-bh/techs/bh-commonjs'),
+    bhBundle = require('enb-bh/techs/bh-bundle'),
+    bhHtml = require('enb-bh/techs/bemjson-to-html'),
+    bhOptions = {
+        jsAttrName : 'data-bem',
+        jsAttrScheme : 'json'
+    },
     copyFile = require('enb/techs/file-copy'),
     mergeFiles = require('enb/techs/file-merge'),
     borschik = require('enb-borschik/techs/borschik'),
@@ -69,8 +72,10 @@ module.exports = function(config) {
                         target : LIB_NAME + '.dev.js'
                     }],
                     [bemhtml, { target : LIB_NAME + '.dev.bemhtml.js', devMode : false }],
-                    [bhYm, { target : '.tmp.browser.bh.js', jsAttrName : 'data-bem', jsAttrScheme : 'json' }],
-                    [bhServerInclude, { target : LIB_NAME + '.dev.bh.js', jsAttrName : 'data-bem', jsAttrScheme : 'json' }],
+                    [bhBundle, {
+                        target : LIB_NAME + '.dev.bh.js',
+                        bhOptions : bhOptions
+                    }],
                     [mergeFiles, {
                         target : '.tmp.source+bemhtml.js',
                         sources : ['.tmp.source.js', LIB_NAME + '.dev.bemhtml.js']
@@ -81,7 +86,7 @@ module.exports = function(config) {
                     }],
                     [mergeFiles, {
                         target : '.tmp.source+bh.js',
-                        sources : ['.tmp.source.js', '.tmp.browser.bh.js']
+                        sources : ['.tmp.source.js', LIB_NAME + '.dev.bh.js']
                     }],
                     [ym, {
                         source : '.tmp.source+bh.js',
@@ -202,7 +207,7 @@ module.exports = function(config) {
             // Template techs
             nodeConfig.addTechs([
                 [bemhtml],
-                [bh, { jsAttrName : 'data-bem', jsAttrScheme : 'json' }]
+                [bhCommonJS, { devMode : false, bhOptions : bhOptions }]
             ]);
 
             nodeConfig.addTargets([
@@ -286,27 +291,29 @@ module.exports = function(config) {
                 destPath : platform + '.specs',
                 levels : getLevels(platform),
                 sourceLevels : getSpecLevels(platform),
-                jsSuffixes : ['vanilla.js', 'browser.js', 'js']
+                jsSuffixes : ['vanilla.js', 'browser.js', 'js'],
+                depsTech : deps
             });
 
             sets.tmplSpecs.configure({
                 destPath : platform + '.tmpl-specs',
                 levels : getLevels(platform),
                 sourceLevels : getLevels(platform),
+                depsTech : deps,
                 engines : {
                     bh : {
-                        tech : 'enb-bh/techs/bh-server',
+                        tech : 'enb-bh/techs/bh-commonjs',
                         options : {
-                            jsAttrName : 'data-bem',
-                            jsAttrScheme : 'json'
+                            devMode : false,
+                            bhOptions : bhOptions
                         }
                     },
                     'bemhtml-dev' : {
-                        tech : 'enb-bemxjst/techs/bemhtml-old',
+                        tech : 'enb-bemxjst/techs/bemhtml',
                         options : { devMode : true }
                     },
                     'bemhtml-prod' : {
-                        tech : 'enb-bemxjst/techs/bemhtml-old',
+                        tech : 'enb-bemxjst/techs/bemhtml',
                         options : { devMode : false }
                     }
                 }

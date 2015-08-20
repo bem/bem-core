@@ -4,7 +4,7 @@
         'objects',
         'functions',
         'dom',
-        { elem : 'dom', mod : 'init' }, // TODO: remove elem field after enb-bem/enb-bem-techs#158
+        { mod : 'init' },
         { block : 'i-bem', elems : ['internal'] }
     ]
 },
