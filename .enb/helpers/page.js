@@ -79,40 +79,15 @@ module.exports = function(node, opts) {
         // build CSS
         [techs.css],
 
-        // build BEMHTML for browsers
-        [techs.bem.depsByTechToBemdecl, {
-            target : '?.bemhtml.bemdecl.js',
-            sourceTech : 'js',
-            destTech : 'bemhtml'
-        }],
-        [techs.bem.deps, {
-            target : '?.bemhtml.deps.js',
-            sourceDepsFile : '?.bemhtml.bemdecl.js'
-        }],
-        [techs.bem.files, {
-            target : '?.bemhtml.deps.js',
-            filesTarget : '?.bemhtml.files',
-            dirsTarget : '?.bemhtml.dirs'
-        }],
-        [techs.engines.bemhtml, {
-            target : '?.browser.bemhtml.js',
-            filesTarget : '?.bemhtml.files',
-            devMode : false
-        }],
-
         // build JavaScript for browsers
         [techs.js, {
-            target : '?.browser.js',
-            sourceSuffixes : ['vanilla.js', 'js', 'browser.js']
-        }],
-        [techs.files.merge, {
             target : '?.pre.js',
-            sources : ['?.browser.bemhtml.js', '?.browser.js']
+            sourceSuffixes : ['vanilla.js', 'js', 'browser.js']
         }],
         [techs.ym, {
             source : '?.pre.js',
             target : '?.js'
-        }],
+        }]
     ].filter(function (tech) {
         return tech;
     }));
