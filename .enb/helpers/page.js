@@ -1,7 +1,8 @@
 var fs = require('fs'),
     path = require('path'),
     config = require('../config'),
-    techs = require('../techs');
+    techs = require('../techs'),
+    BEM_TEMPLATE_ENGINE = process.env.BEM_TEMPLATE_ENGINE || 'BH';
 
 /**
  * Configures dir to build page.
@@ -92,30 +93,33 @@ module.exports = function(node, opts) {
         return tech;
     }));
 
-    node.addTech(techs.engines.bemhtml);
     if(needBEMTREE) {
-        // build HTML using BEMTREE
+        // build HTML using BEMTREE + BEMHTML
         node.addTechs([
+            [techs.engines.bemhtml],
             [techs.engines.bemtree],
             [techs.html.bemtree]
         ]);
     } else {
-        node.addTechs([
-            // build HTML using BEMHTML
-            [techs.html.bemhtml],
-
-            // build HTML using BH
-            [techs.engines.bhCommonJS, {
-                devMode : false,
-                bhOptions : {
-                    jsAttrName : 'data-bem',
-                    jsAttrScheme : 'json'
-                }
-            }],
-            [techs.html.bh, { target : '?.bh.html' }]
-        ]);
-
-        node.addTarget('?.bh.html');
+        if(BEM_TEMPLATE_ENGINE === 'BEMHTML') {
+            // build HTML using BEMJSON + BEMHTML
+            node.addTechs([
+                [techs.engines.bemhtml],
+                [techs.html.bemhtml]
+            ]);
+        } else {
+            // build HTML using BEMJSON + BH
+            node.addTechs([
+                [techs.engines.bhCommonJS, {
+                    devMode : false,
+                    bhOptions : {
+                        jsAttrName : 'data-bem',
+                        jsAttrScheme : 'json'
+                    }
+                }],
+                [techs.html.bh]
+            ]);
+        }
     }
 
     node.addTargets([
