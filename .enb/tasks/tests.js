@@ -21,8 +21,7 @@ module.exports = function (project) {
     var plugin = project.module('enb-bem-examples'),
         // create task with `tests` name
         // and get helper to configure it
-        helper = plugin.createConfigurator('tests'),
-        langs = project.getLanguages();
+        helper = plugin.createConfigurator('tests');
 
     PLATFORMS.forEach(function (platform) {
         var dirPattern = platform + '.tests/*/*';
@@ -33,8 +32,7 @@ module.exports = function (project) {
         // configure of build pages by BEMJSON files
         project.nodes(dirPattern, function (node) {
             page(node, {
-                platform : platform,
-                langs : langs
+                platform : platform
             });
         });
     });

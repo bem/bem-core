@@ -7,9 +7,7 @@ var path = require('path'),
     LANGS = env.BEM_I18N_LANGS && env.BEM_I18N_LANGS.split(' ');
 
 module.exports = function(project) {
-    var langs = LANGS || DEFAULT_LANGS;
-
-    project.setLanguages(langs);
+    project.setLanguages(LANGS || DEFAULT_LANGS);
 
     // load task configs
     [
@@ -29,8 +27,7 @@ module.exports = function(project) {
         node.addTech([techs.files.provide, { target : '?.bemjson.js' }]);
 
         configurePage(node, {
-            platform : 'common',
-            langs : langs
+            platform : 'common'
         });
     });
 
@@ -41,8 +38,7 @@ module.exports = function(project) {
 
         configurePage(node, {
             bemtree : true,
-            platform : 'common',
-            langs : langs
+            platform : 'common'
         });
     });
 };
