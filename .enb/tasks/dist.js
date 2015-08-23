@@ -43,7 +43,7 @@ function configure(node, platform) {
         // get FileList
         [techs.bem.levels, { levels : config.levels(platform) }],
         [techs.bem.levelsToBemdecl, { target : '.tmp.bemdecl.js' }],
-        [techs.bem.depsOld, { bemdeclFile : '.tmp.bemdecl.js', target : '.tmp.deps.js' }],
+        [techs.bem.deps, { bemdeclFile : '.tmp.bemdecl.js', target : '.tmp.deps.js' }],
         [techs.bem.files, { depsFile : '.tmp.deps.js' }],
 
         // build CSS

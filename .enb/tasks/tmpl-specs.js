@@ -40,7 +40,7 @@ function configure(helper, platform) {
         destPath : platform + '.tmpl-specs',
         levels : levels,
         sourceLevels : levels,
-        depsTech : techs.bem.depsOld,
+        depsTech : techs.bem.deps,
         engines : {
             bh : {
                 tech : 'enb-bh/techs/bh-commonjs',
