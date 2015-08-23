@@ -41,6 +41,6 @@ function configure(helper, platform) {
         sourceLevels : config.levels(platform, { specs : true }),
         jsSuffixes   : ['vanilla.js', 'browser.js', 'js'],
         specSuffixes : ['spec.js'],
-        depsTech     : techs.bem.depsOld
+        depsTech     : techs.bem.deps
     });
 }

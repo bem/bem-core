@@ -73,7 +73,7 @@ module.exports = function(node, opts) {
         // get FileList
         [techs.bem.levels, { levels : levels }],
         !needBEMTREE && [techs.bem.bemjsonToBemdecl],
-        [techs.bem.depsOld],
+        [techs.bem.deps],
         [techs.bem.files],
 
         // build CSS
@@ -85,7 +85,7 @@ module.exports = function(node, opts) {
             sourceTech : 'js',
             destTech : 'bemhtml'
         }],
-        [techs.bem.depsOld, {
+        [techs.bem.deps, {
             target : '?.bemhtml.deps.js',
             sourceDepsFile : '?.bemhtml.bemdecl.js'
         }],
