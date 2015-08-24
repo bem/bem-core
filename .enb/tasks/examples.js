@@ -60,7 +60,7 @@ function configure(helper, platform) {
 }
 
 function wrapInPage(bemjson, meta) {
-    var basename = '_' + path.basename(meta.filename, '.bemjson.js');
+    var basename = path.basename(meta.filename, '.bemjson.js');
     return {
         block : 'page',
         title : naming.stringify(meta.notation),
