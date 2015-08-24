@@ -25,7 +25,6 @@ var fs = require('fs'),
  * @param {NodeConfig} node — instance for configure dir
  * @param {Object}   opts
  * @param {Object}   opts.platform  — platform name (desktop or touch).
- * @param {String[]} [opts.langs]   — languages.
  * @param {Boolean}  [opts.bemtree] — build HTML using BEMTREE.
  * @example
  * var configurePage = require('./helpers/page'),
@@ -38,8 +37,7 @@ var fs = require('fs'),
  *
  *         // build page
  *         configurePage(node, {
- *             platform: 'desktop',
- *             langs: ['en', 'ru']
+ *             platform: 'desktop'
  *         });
  *     });
  * };
@@ -56,8 +54,7 @@ module.exports = function(node, opts) {
         throw error;
     }
 
-    var langs = opts.langs || [],
-        nodeDirname = node.getNodePath(),
+    var nodeDirname = node.getNodePath(),
         sublevels = [
             path.join(nodeDirname, '..', '.blocks'),
             path.join(nodeDirname, 'blocks')
@@ -155,12 +152,5 @@ module.exports = function(node, opts) {
             [techs.borschik, { source : '.tmp.css', target : '_?.css', tech : 'cleancss' }],
             [techs.borschik, { source : '.tmp.js', target : '_?.js' }]
         ]);
-    });
-
-    langs.forEach(function(lang) {
-        var destTarget = '?.' + lang + '.html';
-
-        node.addTech([techs.files.copy, { source : '?.html', target : destTarget }]);
-        node.addTarget(destTarget);
     });
 };
