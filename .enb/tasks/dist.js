@@ -52,11 +52,11 @@ function configure(node, platform) {
 
         // build JavaScript for browsers
         [techs.js, {
-            target : '.tmp.source.js',
+            target : '.tmp.js',
             sourceSuffixes : ['vanilla.js', 'browser.js', 'js']
         }],
         [techs.ym, {
-            source : '.tmp.source.js',
+            source : '.tmp.js',
             target : LIB_NAME + '.dev.js'
         }],
         [techs.borschik, { source : LIB_NAME + '.dev.js', target : LIB_NAME + '.js' }],
@@ -77,22 +77,22 @@ function configure(node, platform) {
 
         // merge JavaScript with BEMHTML
         [techs.files.merge, {
-            target : '.tmp.source+bemhtml.js',
-            sources : ['.tmp.source.js', LIB_NAME + '.dev.bemhtml.js']
+            target : '.tmp.js+bemhtml.js',
+            sources : ['.tmp.js', LIB_NAME + '.dev.bemhtml.js']
         }],
         [techs.ym, {
-            source : '.tmp.source+bemhtml.js',
+            source : '.tmp.js+bemhtml.js',
             target : LIB_NAME + '.dev.js+bemhtml.js'
         }],
         [techs.borschik, { source : LIB_NAME + '.dev.js+bemhtml.js', target : LIB_NAME + '.js+bemhtml.js' }],
 
         // merge JavaScript with BH
         [techs.files.merge, {
-            target : '.tmp.source+bh.js',
-            sources : ['.tmp.source.js', LIB_NAME + '.dev.bh.js']
+            target : '.tmp.js+bh.js',
+            sources : ['.tmp.js', LIB_NAME + '.dev.bh.js']
         }],
         [techs.ym, {
-            source : '.tmp.source+bh.js',
+            source : '.tmp.js+bh.js',
             target : LIB_NAME + '.dev.js+bh.js'
         }],
         [techs.borschik, { source : LIB_NAME + '.dev.js+bh.js', target : LIB_NAME + '.js+bh.js' }]
