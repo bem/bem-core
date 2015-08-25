@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - '0.10'
+  - '0.12'
 
 # sudo=false to run builds inside container infrastructure
 # see https://github.com/bem/bem-components/issues/1528
@@ -22,4 +22,3 @@ after_success:
   - ./node_modules/.bin/istanbul report lcovonly
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && echo "Coverage data was sent to coveralls!"
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./tools/update-jsdoc.sh || "false"'
-
