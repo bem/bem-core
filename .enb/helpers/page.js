@@ -98,8 +98,14 @@ module.exports = function(node, opts) {
     if(needBEMTREE) {
         // build HTML using BEMTREE + BEMHTML
         node.addTechs([
-            [techs.engines.bemhtml, { target : '.tmp.bemhtml.js' }],
-            [techs.engines.bemtree, { target : '.tmp.bemtree.js' }],
+            [techs.engines.bemhtml, {
+                target : '.tmp.bemhtml.js',
+                devMode : false
+            }],
+            [techs.engines.bemtree, {
+                target : '.tmp.bemtree.js',
+                devMode : false
+            }],
             [techs.html.bemtree, {
                 target : '?.html',
                 bemhtmlFile : '.tmp.bemhtml.js',
@@ -110,7 +116,10 @@ module.exports = function(node, opts) {
         if(BEM_TEMPLATE_ENGINE === 'BEMHTML') {
             // build HTML using BEMJSON + BEMHTML
             node.addTechs([
-                [techs.engines.bemhtml, { target : '.tmp.bemhtml.js' }],
+                [techs.engines.bemhtml, {
+                    target : '.tmp.bemhtml.js',
+                    devMode : false
+                }],
                 [techs.html.bemhtml, {
                     target : '?.html',
                     bemhtmlFile : '.tmp.bemhtml.js'
