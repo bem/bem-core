@@ -27,12 +27,12 @@ provide(
     /**
      * @exports
      * @param {String} path resource link
-     * @param {Function} success to be called if the script succeeds
-     * @param {Function} error to be called if the script fails
+     * @param {Function} [success] to be called if the script succeeds
+     * @param {Function} [error] to be called if the script fails
      */
     function(path, success, error) {
         if(loaded[path]) {
-            success();
+            success && success();
             return;
         }
 
