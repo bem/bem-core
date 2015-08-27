@@ -136,21 +136,21 @@ module.exports = function(node, opts) {
     }
 
     node.addTargets([
-        '_?.css', '_?.js',
+        '?.css', '?.js',
         '?.html'
     ]);
 
     node.mode('development', function() {
         node.addTechs([
-            [techs.files.copy, { source : '.tmp.css', target : '_?.css' }],
-            [techs.files.copy, { source : '.tmp.js', target : '_?.js' }]
+            [techs.files.copy, { source : '.tmp.css', target : '?.css' }],
+            [techs.files.copy, { source : '.tmp.js', target : '?.js' }]
         ]);
     });
 
     node.mode('production', function() {
         node.addTechs([
-            [techs.borschik, { source : '.tmp.css', target : '_?.css', tech : 'cleancss' }],
-            [techs.borschik, { source : '.tmp.js', target : '_?.js' }]
+            [techs.borschik, { source : '.tmp.css', target : '?.css', tech : 'cleancss' }],
+            [techs.borschik, { source : '.tmp.js', target : '?.js' }]
         ]);
     });
 };

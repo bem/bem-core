@@ -21,14 +21,14 @@ block('page')(
     elem('css').def()(function() {
         return applyCtx({
             elem : 'css',
-            url : '_' + this.data.bundleName + '.css'
+            url : this.data.bundleName + '.css'
         });
     }),
 
     elem('js').def()(function() {
         return applyCtx({
             elem : 'js',
-            url : '_' + this.data.bundleName + '.js'
+            url : this.data.bundleName + '.js'
         });
     }),
 
