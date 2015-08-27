@@ -62,7 +62,7 @@ function configure(node, platform) {
         [techs.borschik, { source : LIB_NAME + '.dev.js', target : LIB_NAME + '.js' }],
 
         // build BEMHTML
-        [techs.engines.bemhtml, { target : LIB_NAME + '.dev.bemhtml.js', devMode : false }],
+        [techs.engines.bemhtml, { target : LIB_NAME + '.dev.bemhtml.js' }],
         [techs.borschik, { source : LIB_NAME + '.dev.bemhtml.js', target : LIB_NAME + '.bemhtml.js' }],
 
         // build BH
