@@ -39,6 +39,7 @@ module.exports = {
                 '**/*.vanilla.js',
                 '**/*.bh.js',
                 '**/i-bem.test.bemhtml/*',
+                '**/i-bem.test.bemtree/**',
                 'common.blocks/vow/vow.js',
                 'common.blocks/jquery/__event/_type/jquery__event_type_pointer*',
                 'common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.tests/**'
