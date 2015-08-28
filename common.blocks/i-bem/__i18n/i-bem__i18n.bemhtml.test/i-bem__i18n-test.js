@@ -17,7 +17,7 @@ var ASSERT = require('assert'),
 suite('Tests for BEM.I18N API for BEMHTML', function() {
 
     function readFile(src) {
-        return FS.readFileSync(resolve('files', src), 'utf8').toString();
+        return FS.readFileSync(resolve('fixtures', src), 'utf8').toString();
     }
 
     function unit(name, file, options) {
