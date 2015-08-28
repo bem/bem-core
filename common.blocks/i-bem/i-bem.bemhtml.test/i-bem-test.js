@@ -9,15 +9,15 @@ var assert = require('assert'),
 
 suite('i-bem block and others', function() {
   function readFile(file) {
-    return fs.readFileSync(path.resolve(__dirname, 'files', file)).toString();
+    return fs.readFileSync(path.resolve(__dirname, 'fixtures', file)).toString();
   }
 
   function unit(name, file, raw) {
     test(name, function() {
       var contents = {
-        src : readFile('i-bem/' + file + '.bemhtml'),
-        data : JSON.parse(readFile('i-bem/' + file + '.json')),
-        dst : readFile('i-bem/' + file + '.html')
+        src : readFile(file + '.bemhtml'),
+        data : JSON.parse(readFile(file + '.json')),
+        dst : readFile(file + '.html')
       };
 
       assert.equal(
