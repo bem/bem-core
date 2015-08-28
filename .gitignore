@@ -19,6 +19,7 @@ coverage.json
 /dist
 /*desktop.docs
 /*touch.docs
+/*.doc-examples
 /*.examples
 /*.specs
 /*.tmpl-specs

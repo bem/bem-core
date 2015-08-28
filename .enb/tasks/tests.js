@@ -5,7 +5,7 @@ var config = require('../config'),
 /**
  * Creates `tests` task.
  *
- * This task allows you to build pages for gemini test.
+ * This task allows to build pages for gemini test.
  *
  * @param {ProjectConfig} project - main ENB config for this project
  * @example Build all pages

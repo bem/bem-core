@@ -1,19 +1,19 @@
 var path = require('path'),
     naming = require('bem-naming'),
-    config = require('../config'),
-    configurePage = require('../helpers/page'),
+    config = require('../../config'),
+    configurePage = require('../../helpers/page'),
     PLATFORMS = config.platforms;
 
 /**
- * Creates `examples` task.
+ * Creates service `__doc-examples__` task.
  *
- * This task allows to build examples.
+ * This task allows to build examples from md files.
  *
  * @param {ProjectConfig} project - main ENB config for this project
- * @example Build all examples
+ * @example Build all __doc-examples__
  * $ magic run examples
  * @example Build examples for desktop platform
- * $ magic make desktop.examples
+ * $ magic make desktop.docs/examples
  */
 module.exports = function (project) {
     // load plugin
@@ -23,10 +23,10 @@ module.exports = function (project) {
     var plugin = project.module('enb-bem-examples'),
         // create task with `examples` name
         // and get helper to configure it
-        helper = plugin.createConfigurator('examples');
+        helper = plugin.createConfigurator('__doc-examples__');
 
     PLATFORMS.forEach(function (platform) {
-        var dirPattern = platform + '.examples/*/*';
+        var dirPattern = platform + '.doc-examples/*/*';
 
         // configure BEMJSON files building
         configure(helper, platform);
@@ -47,12 +47,25 @@ module.exports = function (project) {
  * @param {String} platform - platform name
  */
 function configure(helper, platform) {
-    var dir = platform + '.examples';
+    var dirname = path.join(platform + '.doc-examples');
 
     helper.configure({
-        destPath : dir,
+        destPath : dirname,
         levels : config.levels(platform),
-        techSuffixes : ['examples'],
-        fileSuffixes : ['bemjson.js', 'title.txt']
+        techSuffixes : [],
+        fileSuffixes : [],
+        inlineBemjson : true,
+        processInlineBemjson : wrapInPage
     });
+}
+
+function wrapInPage(bemjson, meta) {
+    var basename = path.basename(meta.filename, '.bemjson.js');
+    return {
+        block : 'page',
+        title : naming.stringify(meta.notation),
+        head : [{ elem : 'css', url : basename + '.css' }],
+        scripts : [{ elem : 'js', url : basename + '.js' }],
+        content : bemjson
+    };
 }

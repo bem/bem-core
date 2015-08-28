@@ -56,6 +56,8 @@
     "test-bemtree": "mocha -R spec common.blocks/i-bem/i-bem.bemtree.test/test.js",
     "test-i18n": "mocha --ui tdd -R spec common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.bemhtml.test/*-test.js",
     "dist": "magic make dist/desktop dist/touch",
-    "build": "magic make desktop.examples desktop.tests desktop.docs touch.examples touch.tests touch.docs *.bundles/*"
+    "docs": "magic run docs",
+    "fixtures": "magic run tests",
+    "bundles": "magic make *.bundles/*"
   }
 }

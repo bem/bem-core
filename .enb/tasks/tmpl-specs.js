@@ -5,7 +5,7 @@ var techs = require('../techs'),
 /**
  * Creates `tmpl-specs` task.
  *
- * This task allows you to run test for templates code (BEMHTML and BH).
+ * This task allows to run test for templates code (BEMHTML and BH).
  *
  * @param {ProjectConfig} project - main ENB config for this project
  * @example Run all tests

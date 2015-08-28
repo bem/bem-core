@@ -1,45 +1,38 @@
-var config = require('../config'),
-    PLATFORMS = config.platforms;
+var path = require('path'),
+    vow = require('vow');
 
 /**
- * Creates `docs` task.
+ * Creates `docs` meta task.
  *
- * This task allows you to build docs.
+ * This task allows to build docs with examples.
  *
  * @param {ProjectConfig} project - main ENB config for this project
  * @example Build all docs
- * $ magic run specs
+ * $ magic run docs
  * @example Build docs for desktop platform
- * $ magic make desktop
+ * $ magic make desktop.docs
  */
 module.exports = function (project) {
-    // load plugin
-    project.includeConfig('enb-bem-docs');
-    var plugin = project.module('enb-bem-docs'),
-        // create task with `docs` name
-        // and get helper to configure it
-        helper = plugin.createConfigurator('docs'),
-        langs = project.getLanguages();
+    // load service task configs
+    ['__docs__', '__doc-examples__'].forEach(function (name) {
+        var filename = path.join(__dirname, 'docs', name + '.js');
 
-    PLATFORMS.forEach(function (platform) {
-        configure(helper, platform, langs);
+        project.includeConfig(filename);
+    });
+
+    project.task('docs', function (task) {
+        var platform = task.getMakePlatform(),
+            args = [].slice.call(arguments, 1),
+            exampleArgs = args.filter(function (arg) {
+                return arg.indexOf('examples') !== -1;
+            }),
+            docsArgs = args.filter(function (arg) {
+                return arg.indexOf('examples') === -1;
+            });
+
+        return vow.all([
+            platform.buildTask('__docs__', docsArgs),
+            platform.buildTask('__doc-examples__', exampleArgs),
+        ]);
     });
 };
-
-/**
- * Configures task for specified platform.
- *
- * @param {MagicHelper} helper - helper to configure task
- * @param {String} platform - platform name
- */
-function configure(helper, platform, langs) {
-    var dir = platform + '.docs';
-
-    helper.configure({
-        destPath : dir,
-        levels : config.levels(platform),
-        exampleSets : [platform + '.examples'],
-        langs : langs,
-        jsdoc : { suffixes : ['vanilla.js', 'browser.js', 'js'] }
-    });
-}

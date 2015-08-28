@@ -5,7 +5,7 @@ var techs = require('../techs'),
 /**
  * Creates `specs` task.
  *
- * This task allows you to run test for browser JavaScript code.
+ * This task allows to run test for browser JavaScript code.
  *
  * @param {ProjectConfig} project - main ENB config for this project
  * @example Run all tests
