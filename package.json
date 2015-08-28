@@ -42,7 +42,7 @@
     "jscs-bem": "^0.2.0",
     "jshint-groups": "0.6.0",
     "mocha": "~2.2.5",
-    "vow": "0.4.9"
+    "vow": "0.4.10"
   },
   "scripts": {
     "start": "magic server",
