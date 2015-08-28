@@ -64,16 +64,15 @@ module.exports = function(node, opts) {
         levels = [].concat(
             config.levels(opts.platform),
             sublevels
-        ),
-        needBEMTREE = opts.bemtree;
+        );
 
     node.addTechs([
         // get FileList
         [techs.bem.levels, { levels : levels }],
-        !needBEMTREE && [techs.bem.bemjsonToBemdecl, { target : '.tmp.bemdecl.js' }],
+        [techs.bem.bemjsonToBemdecl, { target : '.tmp.bemdecl.js' }],
         [techs.bem.deps, {
             target : '.tmp.deps.js',
-            bemdeclFile : needBEMTREE? '?.bemdecl.js' : '.tmp.bemdecl.js'
+            bemdeclFile : '.tmp.bemdecl.js'
         }],
         [techs.bem.files, {
             depsFile : '.tmp.deps.js'
@@ -91,48 +90,33 @@ module.exports = function(node, opts) {
             source : '.tmp.pre.js',
             target : '.tmp.js'
         }]
-    ].filter(function (tech) {
-        return tech;
-    }));
+    ]);
 
-    if(needBEMTREE) {
-        // build HTML using BEMTREE + BEMHTML
+    if(BEM_TEMPLATE_ENGINE === 'BEMHTML') {
+        // build HTML using BEMJSON + BEMHTML
         node.addTechs([
             [techs.engines.bemhtml, { target : '.tmp.bemhtml.js' }],
-            [techs.engines.bemtree, { target : '.tmp.bemtree.js' }],
-            [techs.html.bemtree, {
+            [techs.html.bemhtml, {
                 target : '?.html',
-                bemhtmlFile : '.tmp.bemhtml.js',
-                bemtreeFile : '.tmp.bemtree.js'
+                bemhtmlFile : '.tmp.bemhtml.js'
             }]
         ]);
     } else {
-        if(BEM_TEMPLATE_ENGINE === 'BEMHTML') {
-            // build HTML using BEMJSON + BEMHTML
-            node.addTechs([
-                [techs.engines.bemhtml, { target : '.tmp.bemhtml.js' }],
-                [techs.html.bemhtml, {
-                    target : '?.html',
-                    bemhtmlFile : '.tmp.bemhtml.js'
-                }]
-            ]);
-        } else {
-            // build HTML using BEMJSON + BH
-            node.addTechs([
-                [techs.engines.bhCommonJS, {
-                    target : '.tmp.bh.js',
-                    devMode : false,
-                    bhOptions : {
-                        jsAttrName : 'data-bem',
-                        jsAttrScheme : 'json'
-                    }
-                }],
-                [techs.html.bh, {
-                    target : '?.html',
-                    bhFile : '.tmp.bh.js'
-                }]
-            ]);
-        }
+        // build HTML using BEMJSON + BH
+        node.addTechs([
+            [techs.engines.bhCommonJS, {
+                target : '.tmp.bh.js',
+                devMode : false,
+                bhOptions : {
+                    jsAttrName : 'data-bem',
+                    jsAttrScheme : 'json'
+                }
+            }],
+            [techs.html.bh, {
+                target : '?.html',
+                bhFile : '.tmp.bh.js'
+            }]
+        ]);
     }
 
     node.addTargets([

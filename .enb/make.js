@@ -30,15 +30,4 @@ module.exports = function(project) {
             platform : 'common'
         });
     });
-
-    // build `common.bundles/test-bemtree` page
-    project.node('common.bundles/test-bemtree', function (node) {
-        // provide BEMDECL file
-        node.addTech([techs.files.provide, { target : '?.bemdecl.js' }]);
-
-        configurePage(node, {
-            bemtree : true,
-            platform : 'common'
-        });
-    });
 };
