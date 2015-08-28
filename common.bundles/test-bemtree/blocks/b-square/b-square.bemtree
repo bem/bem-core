@@ -1,9 +1,0 @@
-block('b-square')(
-    def()(function() {
-        this.ctx.mods = { color : 'green' };
-        return applyCtx(this.ctx);
-    }),
-    mod('color', 'green').def()(function() {
-        return applyNext();
-    })
-);
