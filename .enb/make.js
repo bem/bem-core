@@ -13,8 +13,8 @@ module.exports = function(project) {
     [
         'dist',
         'specs', 'tmpl-specs',
-        'tests',
-        'docs', 'examples',
+        'examples', 'tests',
+        'docs'
     ].forEach(function (name) {
         var filename = path.join(__dirname, 'tasks', name + '.js');
 

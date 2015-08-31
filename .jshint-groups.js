@@ -69,6 +69,7 @@ module.exports = {
             includes : [
                 '*.bundles/**/*.bemjson.js',
                 '**/*.examples/**/*.bemjson.js',
+                '**/*.doc-examples/**/*.bemjson.js',
                 '**/*.tests/**/*.bemjson.js'
             ],
             excudes : [

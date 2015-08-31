@@ -6,7 +6,7 @@ var techs = require('../techs'),
 /**
  * Creates `dist` task.
  *
- * This task allows you to build distribution of this project.
+ * This task allows to build distribution of this project.
  *
  * @param {ProjectConfig} project - main ENB config for this project
  * @example Build dist for all platforms

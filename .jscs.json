@@ -11,6 +11,7 @@
         "**/*.bemhtml.test/fixtures/**",
         "*.bundles/**",
         "*.examples/**",
+        "*.doc-examples/**",
         "*.tests/**",
         "*.specs/**",
         "*.tmpl-specs/**",
