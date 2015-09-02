@@ -1,6 +1,6 @@
 # BEMHTML quick start
 
-This guide will help you try the BEMHTML templaiting engine and understand the basics of working with it in 7 easy steps:
+This guide will help you try the BEMHTML templating engine and understand the basics of working with it in 7 easy steps:
 
  * [Step 1. Initialize your project](#init).
  * [Step 2. Make a page template](#page).
