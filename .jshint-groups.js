@@ -32,6 +32,8 @@ module.exports = {
             excludes : [
                 '**/*.bem/*.js',
                 '**/*.i18n/*.js',
+                '**/*.i18n.js',
+                '**/i18n.test.js',
                 '**/*.bemjson.js',
                 '**/*.deps.js',
                 '**/*.node.js',
