@@ -31,7 +31,10 @@ module.exports = function (project) {
 
         // configure of build pages by BEMJSON files
         project.nodes(dirPattern, function (node) {
+            var dirname = node.getPath();
+
             page(node, {
+                i18n : dirname.indexOf('i18n') !== -1,
                 platform : platform
             });
         });

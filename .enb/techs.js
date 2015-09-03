@@ -8,11 +8,18 @@ module.exports = {
     css : require('enb/techs/css'),
     js : require('enb/techs/js'),
     ym : require('enb-modules/techs/prepend-modules'),
+    i18n : {
+        keysets : require('enb-bem-i18n/techs/keysets'),
+        js : require('enb-bem-i18n/techs/i18n')
+    },
     engines : {
         bemhtml : require('enb-bemxjst/techs/bemhtml'),
         bemtree : require('enb-bemxjst/techs/bemtree'),
         bhCommonJS : require('enb-bh/techs/bh-commonjs'),
-        bhBundle : require('enb-bh/techs/bh-bundle')
+        bhBundle : require('enb-bh/techs/bh-bundle'),
+
+        bemhtmlI18N : require('enb-bemxjst-i18n/techs/bemhtml-i18n'),
+        bhCommonJSI18N : require('enb-bh-i18n/techs/bh-commonjs-i18n')
     },
     html : {
         bemhtml : require('enb-bemxjst/techs/bemjson-to-html'),
