@@ -92,43 +92,108 @@ module.exports = function(node, opts) {
         }]
     ]);
 
-    if(BEM_TEMPLATE_ENGINE === 'BEMHTML') {
-        // build HTML using BEMJSON + BEMHTML
-        node.addTechs([
-            [techs.engines.bemhtml, { target : '.tmp.bemhtml.js' }],
-            [techs.html.bemhtml, {
-                target : '?.html',
-                bemhtmlFile : '.tmp.bemhtml.js'
-            }]
-        ]);
-    } else {
-        // build HTML using BEMJSON + BH
-        node.addTechs([
-            [techs.engines.bhCommonJS, {
-                target : '.tmp.bh.js',
-                devMode : false,
-                bhOptions : {
-                    jsAttrName : 'data-bem',
-                    jsAttrScheme : 'json'
-                }
-            }],
-            [techs.html.bh, {
-                target : '?.html',
-                bhFile : '.tmp.bh.js'
-            }]
-        ]);
-    }
-
     node.addTargets([
         '?.css', '?.js',
-        '?.html'
     ]);
+
+    if(opts.i18n) {
+        // build browser JavaScript with i18n
+        node.addTechs([
+            [techs.i18n.keysets, {
+                target : '.tmp.keysets.{lang}.js',
+                lang : '{lang}'
+            }],
+            [techs.i18n.js, {
+                target : '.tmp.lang.{lang}.js',
+                keysetsFile : '.tmp.keysets.{lang}.js',
+                lang : '{lang}'
+            }],
+            [techs.files.merge, {
+                target : '.tmp.pre.{lang}.js',
+                lang : '{lang}',
+                sources : ['.tmp.lang.{lang}.js', '.tmp.pre.js']
+            }],
+            [techs.ym, {
+                source : '.tmp.pre.{lang}.js',
+                target : '.tmp.{lang}.js'
+            }]
+        ]);
+        node.addTarget('?.{lang}.js');
+
+        if(BEM_TEMPLATE_ENGINE === 'BEMHTML') {
+            // build lang HTMLs using BEMJSON + BEMHTML
+            node.addTechs([
+                [techs.engines.bemhtmlI18N, {
+                    target : '.tmp.bemhtml.{lang}.js',
+                    lang : '{lang}',
+                    keysetsFile : '.tmp.keysets.{lang}.js'
+                }],
+                [techs.html.bemhtml, {
+                    target : '?.{lang}.html',
+                    bemhtmlFile : '.tmp.bemhtml.{lang}.js'
+                }]
+            ]);
+        } else {
+            // build lang HTMLs using BEMJSON + BH
+            node.addTechs([
+                [techs.engines.bhCommonJSI18N, {
+                    target : '.tmp.bh.{lang}.js',
+                    lang : '{lang}',
+                    keysetsFile : '.tmp.keysets.{lang}.js',
+                    devMode : false,
+                    bhOptions : {
+                        jsAttrName : 'data-bem',
+                        jsAttrScheme : 'json'
+                    }
+                }],
+                [techs.html.bh, {
+                    target : '?.{lang}.html',
+                    bhFile : '.tmp.bh.{lang}.js'
+                }]
+            ]);
+        }
+
+        node.addTarget('?.{lang}.html');
+    } else {
+        if(BEM_TEMPLATE_ENGINE === 'BEMHTML') {
+            // build HTML using BEMJSON + BEMHTML
+            node.addTechs([
+                [techs.engines.bemhtml, { target : '.tmp.bemhtml.js' }],
+                [techs.html.bemhtml, {
+                    target : '?.html',
+                    bemhtmlFile : '.tmp.bemhtml.js'
+                }]
+            ]);
+        } else {
+            // build HTML using BEMJSON + BH
+            node.addTechs([
+                [techs.engines.bhCommonJS, {
+                    target : '.tmp.bh.js',
+                    devMode : false,
+                    bhOptions : {
+                        jsAttrName : 'data-bem',
+                        jsAttrScheme : 'json'
+                    }
+                }],
+                [techs.html.bh, {
+                    target : '?.html',
+                    bhFile : '.tmp.bh.js'
+                }]
+            ]);
+        }
+
+        node.addTarget('?.html');
+    }
 
     node.mode('development', function() {
         node.addTechs([
             [techs.files.copy, { source : '.tmp.css', target : '?.css' }],
             [techs.files.copy, { source : '.tmp.js', target : '?.js' }]
         ]);
+
+        if(opts.i18n) {
+            node.addTech([techs.files.copy, { source : '.tmp.{lang}.js', target : '?.{lang}.js' }]);
+        }
     });
 
     node.mode('production', function() {
@@ -136,5 +201,9 @@ module.exports = function(node, opts) {
             [techs.borschik, { source : '.tmp.css', target : '?.css', tech : 'cleancss' }],
             [techs.borschik, { source : '.tmp.js', target : '?.js' }]
         ]);
+
+        if(opts.i18n) {
+            node.addTech([techs.borschik, { source : '.tmp.{lang}.js', target : '?.{lang}.js' }]);
+        }
     });
 };
