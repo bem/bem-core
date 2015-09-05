@@ -9,6 +9,7 @@
         "libs/**",
         "node_modules/**",
         "**/*.bemhtml.test/fixtures/**",
+        "dist/**",
         "*.bundles/**",
         "*.examples/**",
         "*.doc-examples/**",
