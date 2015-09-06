@@ -21,8 +21,8 @@ module.exports = function(project) {
         project.includeConfig(filename);
     });
 
-    // build `common.bundles/index` page
-    project.node('common.bundles/index', function (node) {
+    // build bundles
+    project.nodes('*.bundles/*', function (node) {
         // provide BEMJSON file
         node.addTech([techs.files.provide, { target : '?.bemjson.js' }]);
 

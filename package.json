@@ -26,7 +26,7 @@
     "chai": "^3.2.0",
     "chai-as-promised": "^5.1.0",
     "enb": "^0.17.2",
-    "enb-bem-docs": "0.8.1",
+    "enb-bem-docs": "0.10.0",
     "enb-bem-examples": "0.5.10",
     "enb-bem-i18n": "1.0.0-beta7",
     "enb-bem-specs": "0.6.0",
@@ -59,9 +59,10 @@
     "test-bemhtml": "mocha --ui tdd -R spec common.blocks/i-bem/i-bem.bemhtml.test/*-test.js",
     "test-bemtree": "mocha -R spec common.blocks/i-bem/i-bem.bemtree.test/test.js",
     "test-old-i18n": "mocha --ui tdd -R spec common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.bemhtml.test/*-test.js",
-    "dist": "magic make dist/desktop dist/touch",
-    "docs": "magic run docs",
+    "bundles": "magic make *.bundles/*",
     "fixtures": "magic run tests",
-    "bundles": "magic make *.bundles/*"
+    "examples": "magic run examples",
+    "docs": "magic run docs",
+    "dist": "magic make dist/desktop dist/touch"
   }
 }

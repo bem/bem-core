@@ -21,7 +21,7 @@ module.exports = function (project) {
        project.includeConfig('enb-bem-examples');
     }
     var plugin = project.module('enb-bem-examples'),
-        // create task with `examples` name
+        // create task with `__doc-examples__` name
         // and get helper to configure it
         helper = plugin.createConfigurator('__doc-examples__');
 
