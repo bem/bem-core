@@ -16,9 +16,9 @@ module.exports = function (project) {
     // load plugin
     project.includeConfig('enb-bem-docs');
     var plugin = project.module('enb-bem-docs'),
-        // create task with `docs` name
+        // create task with `__docs__` name
         // and get helper to configure it
-        helper = plugin.createConfigurator('__docs__'),
+        helper = plugin.createConfigurator('__docs__', ['examples', '__doc-examples__']),
         langs = project.getLanguages();
 
     PLATFORMS.forEach(function (platform) {

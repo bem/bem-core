@@ -14,7 +14,7 @@ var path = require('path'),
  */
 module.exports = function (project) {
     // load service task configs
-    ['__docs__', '__doc-examples__'].forEach(function (name) {
+    ['__doc-examples__', '__docs__'].forEach(function (name) {
         var filename = path.join(__dirname, 'docs', name + '.js');
 
         project.includeConfig(filename);
@@ -31,8 +31,9 @@ module.exports = function (project) {
             });
 
         return vow.all([
-            platform.buildTask('__docs__', docsArgs),
+            platform.buildTask('examples', exampleArgs),
             platform.buildTask('__doc-examples__', exampleArgs),
+            platform.buildTask('__docs__', docsArgs)
         ]);
     });
 };
