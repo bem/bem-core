@@ -40,12 +40,14 @@
     "enb-magic-platform": "0.5.0",
     "enb-modules": "0.2.0",
     "git-hooks": "~0.0.6",
+    "glob": "^5.0.14",
     "istanbul": "~0.3.2",
     "jscs": "^1.11.3",
     "jscs-bem": "^0.2.0",
     "jshint-groups": "0.6.0",
     "mocha": "~2.2.5",
-    "vow": "0.4.10"
+    "vow": "0.4.10",
+    "vow-node": "^0.3.0"
   },
   "scripts": {
     "start": "magic server",
@@ -59,7 +61,7 @@
     "test-bemhtml": "mocha --ui tdd -R spec common.blocks/i-bem/i-bem.bemhtml.test/*-test.js",
     "test-bemtree": "mocha -R spec common.blocks/i-bem/i-bem.bemtree.test/test.js",
     "test-old-i18n": "mocha --ui tdd -R spec common.blocks/i-bem/__i18n/test/*-test.js common.blocks/i-bem/__i18n/i-bem__i18n.bemhtml.test/*-test.js",
-    "bundles": "magic make *.bundles/*",
+    "bundles": "magic run bundles",
     "fixtures": "magic run tests",
     "examples": "magic run examples",
     "docs": "magic run docs",
