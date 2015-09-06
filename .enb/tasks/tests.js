@@ -1,5 +1,5 @@
 var config = require('../config'),
-    page = require('../helpers/page'),
+    configurePage = require('../helpers/page'),
     PLATFORMS = config.platforms;
 
 /**
@@ -18,24 +18,34 @@ module.exports = function (project) {
     if(!project._modules['enb-bem-examples']) {
        project.includeConfig('enb-bem-examples');
     }
-    var plugin = project.module('enb-bem-examples'),
+    var magic = project.module('enb-magic-factory'),
+        plugin = project.module('enb-bem-examples'),
         // create task with `tests` name
         // and get helper to configure it
-        helper = plugin.createConfigurator('tests');
+        configurator = plugin.createConfigurator('tests'),
+        helper = magic.getHelper('tests');
 
     PLATFORMS.forEach(function (platform) {
         var dirPattern = platform + '.tests/*/*';
 
-        // configure of build BEMJSON files
-        configure(helper, platform);
+        // configure BEMJSON files building
+        configure(configurator, platform);
+    });
 
-        // configure of build pages by BEMJSON files
-        project.nodes(dirPattern, function (node) {
-            var dirname = node.getPath();
+    // configure pages building by BEMJSON files
+    helper.configure(function (project, nodes) {
+        PLATFORMS.forEach(function (platform) {
+            var platformNodes = nodes.filter(function (node) {
+                var dir = platform + '.examples';
 
-            page(node, {
-                i18n : dirname.indexOf('i18n') !== -1,
-                platform : platform
+                return node.indexOf(dir) === 0;
+            });
+
+            project.nodes(platformNodes, function (node) {
+                configurePage(node, {
+                    i18n : dirname.indexOf('i18n') !== -1,
+                    platform : platform
+                });
             });
         });
     });

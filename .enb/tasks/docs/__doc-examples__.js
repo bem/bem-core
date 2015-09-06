@@ -20,21 +20,33 @@ module.exports = function (project) {
     if(!project._modules['enb-bem-examples']) {
        project.includeConfig('enb-bem-examples');
     }
-    var plugin = project.module('enb-bem-examples'),
+    var magic = project.module('enb-magic-factory'),
+        plugin = project.module('enb-bem-examples'),
         // create task with `__doc-examples__` name
         // and get helper to configure it
-        helper = plugin.createConfigurator('__doc-examples__');
+        configurator = plugin.createConfigurator('__doc-examples__'),
+        helper = magic.getHelper('__doc-examples__');
 
     PLATFORMS.forEach(function (platform) {
         var dirPattern = platform + '.doc-examples/*/*';
 
         // configure BEMJSON files building
-        configure(helper, platform);
+        configure(configurator, platform);
+    });
 
-        // configure pages building by BEMJSON files
-        project.nodes(dirPattern, function (node) {
-            configurePage(node, {
-                platform : platform
+    // configure pages building by BEMJSON files
+    helper.configure(function (project, nodes) {
+        PLATFORMS.forEach(function (platform) {
+            var platformNodes = nodes.filter(function (node) {
+                var dir = platform + '.examples';
+
+                return node.indexOf(dir) === 0;
+            });
+
+            project.nodes(platformNodes, function (node) {
+                configurePage(node, {
+                    platform : platform
+                });
             });
         });
     });
