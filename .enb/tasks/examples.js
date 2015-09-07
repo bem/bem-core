@@ -1,8 +1,4 @@
-var path = require('path'),
-    naming = require('bem-naming'),
-    config = require('../config'),
-    configurePage = require('../helpers/page'),
-    PLATFORMS = config.platforms;
+var configureExamples = require('../helpers/examples');
 
 /**
  * Creates `examples` task.
@@ -16,43 +12,9 @@ var path = require('path'),
  * $ magic make desktop.examples
  */
 module.exports = function (project) {
-    // load plugin
-    if(!project._modules['enb-bem-examples']) {
-       project.includeConfig('enb-bem-examples');
-    }
-    var plugin = project.module('enb-bem-examples'),
-        // create task with `examples` name
-        // and get helper to configure it
-        helper = plugin.createConfigurator('examples');
-
-    PLATFORMS.forEach(function (platform) {
-        var dirPattern = platform + '.examples/*/*';
-
-        // configure BEMJSON files building
-        configure(helper, platform);
-
-        // configure pages building by BEMJSON files
-        project.nodes(dirPattern, function (node) {
-            configurePage(node, {
-                platform : platform
-            });
-        });
+    configureExamples(project, {
+        taskName : 'examples',
+        destExt : '.examples',
+        techSuffixes : ['examples']
     });
 };
-
-/**
- * Configures BEMJSON files building.
- *
- * @param {MagicHelper} helper - helper to configure task
- * @param {String} platform - platform name
- */
-function configure(helper, platform) {
-    var dir = platform + '.examples';
-
-    helper.configure({
-        destPath : dir,
-        levels : config.levels(platform),
-        techSuffixes : ['examples'],
-        fileSuffixes : ['bemjson.js', 'title.txt']
-    });
-}
