@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "bem-naming": "0.5.1",
+    "bem-walk": "1.0.0-alpha1",
     "borschik-tech-cleancss": "2.0.1",
     "bower": "^1.5.2",
     "chai": "^3.2.0",
@@ -51,8 +52,9 @@
     "start": "magic server",
     "lint": "jshint-groups && jscs .",
     "test": "npm run lint && npm run test-all",
-    "test-all": "npm run test-i18n && npm run test-i-bem && npm run test-tmpl && npm run test-js",
+    "test-all": "npm run test-i18n && npm run test-i-bem && npm run test-tmpl && npm run test-js && npm run test-dist",
     "test-js": "bower i && magic run specs",
+    "test-dist": "npm run build-dist-fixtures && node_modules/enb-bem-specs/node_modules/.bin/mocha-phantomjs test/dist/fixtures/*.html",
     "test-tmpl": "magic run tmpl-specs",
     "test-i18n": "mocha -R spec common.blocks/i18n/*.test.js",
     "test-i-bem": "npm run test-bemhtml && npm run test-bemtree && npm run test-old-i18n",
@@ -63,6 +65,7 @@
     "fixtures": "magic run tests",
     "examples": "magic run examples",
     "docs": "magic run docs",
-    "dist": "magic make dist/desktop dist/touch"
+    "dist": "magic make dist/desktop dist/touch",
+    "build-dist-fixtures": "npm run dist && node test/dist/build-fixtures.js"
   }
 }

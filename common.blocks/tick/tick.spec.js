@@ -6,6 +6,7 @@ describe('tick', function() {
             clock;
 
         beforeEach(function() {
+            tick.stop();
             clock = sinon.useFakeTimers();
         });
 
