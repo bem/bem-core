@@ -2,6 +2,8 @@
 
 This README is also available [in English](https://en.bem.info/libs/bem-core/).
 
+Информация о библиотеке в более информативном виде доступна на [bem.info](https://ru.bem.info/libs/bem-core/).
+
 ## Что это?
 
 Базовая библиотека блоков для разработки веб-интерфейсов.

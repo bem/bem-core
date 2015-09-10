@@ -1,6 +1,6 @@
 # bem-core library [![Build Status](https://travis-ci.org/bem/bem-core.svg?branch=v2)](https://travis-ci.org/bem/bem-core) [![GitHub Release](https://img.shields.io/github/release/bem/bem-core.svg)](https://github.com/bem/bem-core/releases)
 
-This README is also available [in Russian](https://ru.bem.info/libs/bem-core/).
+Documentation on `bem-core` in a much more informative way is also available at [bem.info](https://en.bem.info/libs/bem-core/). It is also available [in Russian](https://ru.bem.info/libs/bem-core/).
 
 ## What is this?
 
