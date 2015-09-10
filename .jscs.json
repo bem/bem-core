@@ -10,6 +10,7 @@
         "node_modules/**",
         "**/*.bemhtml.test/fixtures/**",
         "dist/**",
+        "test/dist/fixtures/**",
         "*.bundles/**",
         "*.examples/**",
         "*.doc-examples/**",
