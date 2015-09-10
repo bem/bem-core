@@ -5,7 +5,7 @@
         {
             elem : 'conditional-comment',
             condition : '<= IE 8',
-            content : { elem : 'css', url : '_60-conditional-comment.ie.css' }
+            content : { elem : 'css', url : '60-conditional-comment.ie.css' }
         },
         {
             elem : 'conditional-comment',
