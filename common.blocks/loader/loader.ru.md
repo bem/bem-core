@@ -1,3 +1,4 @@
+
 # loader
 
 Блок `loader` служит для загрузки и подключения скриптов по URL.
@@ -62,7 +63,7 @@
 modules.define('jquery', ['loader_type_js'], function(provide, loader) {
 
     loader(
-        ‘//yastatic.net/jquery/2.1.4/jquery.min.js',
+        'https://yastatic.net/jquery/2.1.4/jquery.min.js',
         function() { provide(jQuery) });
 
 });
