@@ -10,7 +10,7 @@ provide(/** @exports */{
      * URL for loading jQuery if it does not exist
      * @type {String}
      */
-    url : '//yastatic.net/jquery/2.1.4/jquery.min.js'
+    url : 'https://yastatic.net/jquery/2.1.4/jquery.min.js'
 });
 
 });
