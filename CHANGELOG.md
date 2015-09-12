@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.8.0
+
+### Major changes
+
+- New [i18n](https://github.com/bem/bem-core/tree/v2/common.blocks/i18n) block was introduced, providing support for internationalization ([#1074](https://github.com/bem/bem-core/issues/1074)).
+- Now jQuery is included via `https` by default ([#1202](https://github.com/bem/bem-core/issues/1202)).
+- Dependency on `bemhtml-compat` was dropped ([#1186](https://github.com/bem/bem-core/issues/1186)). Users of `bem-tools` need to run `npm i bemhtml-compat --save` to install it on their projects.
+
+### Bug fixes
+
+- Bug with undefined handler call in `loader_type_js` was fixed ([#1159](https://github.com/bem/bem-core/pull/1159)).
+
+### Other changes
+
+- BH bundles in `dist` now mimic to BEMHTML ([#1210](https://github.com/bem/bem-core/issues/1210)).
+- `bem create` templates for `bemhtml`, `bemtree`, `vanilla.js` and `browser.js` were improved ([#1183](https://github.com/bem/bem-core/issues/1183)).
+- `vow` was updated to `0.4.10` ([#1056](https://github.com/bem/bem-core/issues/1056)).
+
 ## 2.7.0
 
 ### Major changes

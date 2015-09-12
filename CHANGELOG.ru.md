@@ -1,5 +1,23 @@
 # История изменений
 
+## 2.8.0
+
+### Крупные изменения
+
+- Реализован новый блок [i18n](https://github.com/bem/bem-core/tree/v2/common.blocks/i18n), реализующий интернационализацию проектов на bem-core ([#1074](https://github.com/bem/bem-core/issues/1074)).
+- Теперь `jQuery` по умолчанию подключается через `https` ([#1202](https://github.com/bem/bem-core/issues/1202)).
+- Удалена зависимость от `bemhtml-compat` ([#1186](https://github.com/bem/bem-core/issues/1186)). Пользователям `bem-tools` необходимо выполнить `npm i bemhtml-compat --save` для установки пакета на уровне проекта.
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена ошибка в `loader_type_js`, допускавшая вызовы неопределенного обработчика ([#1159](https://github.com/bem/bem-core/pull/1159)).
+
+### Также в релиз вошли следующие изменения
+
+- BH-бандлы в `dist` теперь мимикрируют под BEMHTML ([#1210](https://github.com/bem/bem-core/issues/1210)).
+- Улучшены шаблоны `bem create` для `bemhtml`, `bemtree`, `vanilla.js` и `browser.js` ([#1183](https://github.com/bem/bem-core/issues/1183)).
+- `vow` обновлена до `0.4.10` ([#1056](https://github.com/bem/bem-core/issues/1056)).
+
 ## 2.7.0
 
 ### Крупные изменения
