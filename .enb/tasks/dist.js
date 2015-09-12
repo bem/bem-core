@@ -68,6 +68,7 @@ function configure(node, platform) {
         // build BH
         [techs.engines.bhBundle, {
             target : LIB_NAME + '.dev.bh.js',
+            mimic : ['bh', 'BEMHTML'],
             bhOptions : {
                 jsAttrName : 'data-bem',
                 jsAttrScheme : 'json'
