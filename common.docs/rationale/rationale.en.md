@@ -1,6 +1,6 @@
 # BEMHTML templating engine description and its benefits
 
-**BEMHTML** is a templating engine for thous who are using [BEM metodology](https://bem.info/method)
+**BEMHTML** is a templating engine for thous who are using [BEM metodology](https://en.bem.info/method)
 for web development.
 
 BEMHTML is:
@@ -123,13 +123,15 @@ If the `widgets` block has a JavaScript realization with usage of `i-bem.js` one
 to use the following template for passing JavaScript parameters into the block:
 
 ```js
-block widgets, js: { id: Math.random() * 1e4 }
+block('widgets').js()(function() {
+    return { id: Math.random() * 1e4 };
+});
 ```
 
 The resulting HTML:
 
 ```xml
-<div class="widgets i-bem" onclick="return { 'weather': { 'id': 4321 } }">
+<div class="widgets i-bem" data-bem='{ "weather": { "id": 4321 } }'>
   <div class="widgets__weather">4</div>
 </div>
 ```
@@ -137,8 +139,6 @@ The resulting HTML:
 ### Syntax for data and templates description is based on JavaScript.
  - Declarative templates: the template consists of condition for usage (predicate)
  and data structure, that describes the resulting HTML (the template body).
- - JavaScript syntax is extend with a key-words (`block`, `elem`, `mods`, `elemMods`)
- for working with BEM entities.
  - For the templates an arbitrary JavaScript code can be used. There is no technical
  limitations placed by BEMHTML on operations in predicates or template. An efficiency
  and consistency of templates work is provided by developers agreements.
@@ -150,10 +150,10 @@ The resulting HTML:
 Definition of HTML tags in a declarative style:
 
 ```js
-block widgets {
-  tag: 'ul'
-  elem weather, tag: 'li'
-}
+block('widgets')(
+    tag()('ul'),
+    elem('weather').tag()('li')
+);
 ```
 
 The resulting HTML:
@@ -167,10 +167,10 @@ The resulting HTML:
 Arbitrary calculations performed in the template body:
 
 ```js
-block widgets, elem weather, content: {
-  var oldContent = applyNext()
-  return (oldContent > 0 ? '+' : '') + oldContent + ' °C'
-}
+block('widgets').elem('weather').content()(function() {
+    var oldContent = applyNext();
+    return (oldContent > 0 ? '+' : '') + oldContent + ' °C';
+});
 ```
 
 The resulting HTML:
@@ -211,15 +211,15 @@ The input-data:
 Templates defined in the library:
 
 ```js
-block header, tag: 'h1'
-block header, mod level 2, tag: 'h2'
+block('header').tag()('h1');
+block('header').mod('level', 2).tag()('h2');
 ```
 
 Templates defined in the project:
 
 ```js
-block header, tag: 'h2'
-block header, mod level 2, tag: 'h3'
+block('header').tag()('h2');
+block('header').mod('level', 2).tag()('h3');
 ```
 
 The result:
@@ -255,13 +255,13 @@ The input data is a name of Yandex user:
 The template selects the first letter of the name and wraps it into instantly generated element:
 
 ```js
-block ya-user, content: {
-  var oldContent = applyNext();
-  return [
-    { elem: 'first-letter', content: oldContent[0] },
-    oldContent.substring(1)
-  ]
-}
+block('ya-user').content()(function() {
+    var oldContent = applyNext();
+    return [
+        { elem: 'first-letter', content: oldContent[0] },
+        oldContent.substring(1)
+    ];
+});
 ```
 
 The resulting HTML:
@@ -473,7 +473,7 @@ their own templating engine because of the following reasons:
 ### A template of a project
 
 To start using BEHTML you need to clone [a project template](https://github.com/bem/project-stub).
-It has already: a prepared structure for a project, the blocks library [bem-bl](https://github.com/bem/bem-bl),
+It has already: a prepared structure for a project, the blocks library [bem-core](https://github.com/bem/bem-core),
 environment customized for the building process and the result viewing, and very simple static page.
 
 In fact, the template of this project is a startup for a HTML coder. It can be extended
@@ -483,6 +483,5 @@ with custom blocks, and any project can be based on it.
 
   * [Step-by-step BEMHTML guide](https://bem.info/technology/bemhtml/current/intro/)
   * [BEMHTML reference](https://bem.info/technology/bemhtml/current/reference/)
-  * [bem-tools reference](https://bem.info/tools/bem/bem-tools/)
-  * [The blocks bem-bl library documentation](https://bem.info/libs/bem-bl/)
+  * [The blocks bem-core library documentation](https://bem.info/libs/bem-core/)
 

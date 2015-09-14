@@ -55,10 +55,7 @@ This README is also available [in English](https://en.bem.info/libs/bem-core/).
 
 ## API
 
-Автосгенерированная документация на JavaScript API блоков (JSDoc) можно посмотреть в отдельной ветке [v2-jsdoc](https://github.com/bem/bem-core/tree/v2-jsdoc).
-
-Обратите внимание, содержимое ветки «v2-jsdoc» обновляется автоматически. Любые изменения необходимо отправлять
-в код соответствующих блоков в ветке «v2», как описано в [Руководстве по внесению изменений](/CONTRIBUTING.ru.md).
+Автосгенерированную документацию на JavaScript API блоков (JSDoc) можно посмотреть на bem.info. Например, для блока `i-bem` она доступна по ссылке https://ru.bem.info/libs/bem-core/current/desktop/i-bem/jsdoc/.
 
 ## История изменений
 
@@ -72,9 +69,9 @@ This README is also available [in English](https://en.bem.info/libs/bem-core/).
 
 ### Рабочая копия
 
-1. Получаем исходники нужной версии (например, `v1`):
+1. Получаем исходники нужной версии (например, `v2`):
    ```shell
-   $ git clone -b v1 git://github.com/bem/bem-core.git
+   $ git clone -b v2 git://github.com/bem/bem-core.git
    $ cd bem-core
    ```
 
