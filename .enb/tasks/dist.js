@@ -50,10 +50,29 @@ function configure(node, platform) {
         [techs.css, { target : LIB_NAME + '.dev.css' }],
         [techs.borschik, { source : LIB_NAME + '.dev.css', target : LIB_NAME + '.css' }],
 
+        // build core of i18n
+        [techs.i18n.keysets, {
+            target : '.tmp.keysets.js',
+            lang : 'none'
+        }],
+        [techs.i18n.js, {
+            target : '.tmp.i18n.js',
+            keysetsFile : '.tmp.keysets.js',
+            exports : {
+                globals : true,
+                ym : true
+            },
+            lang : 'none'
+        }],
+
         // build JavaScript for browsers
         [techs.js, {
-            target : '.tmp.js',
+            target : '.tmp.without-i18n.js',
             sourceSuffixes : ['vanilla.js', 'browser.js', 'js']
+        }],
+        [techs.files.merge, {
+            sources : ['.tmp.without-i18n.js', '.tmp.i18n.js'],
+            target : '.tmp.js'
         }],
         [techs.ym, {
             source : '.tmp.js',
