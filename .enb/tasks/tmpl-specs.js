@@ -40,12 +40,16 @@ function configure(helper, platform) {
         destPath : platform + '.tmpl-specs',
         levels : levels,
         sourceLevels : levels,
+        langs : true,
         depsTech : techs.bem.deps,
         engines : {
             bh : {
-                tech : 'enb-bh/techs/bh-commonjs',
+                tech : 'enb-bh/techs/bh-bundle',
                 options : {
                     devMode : false,
+                    requires : {
+                        i18n : { globals : 'BEM.I18N' }
+                    },
                     bhOptions : {
                         jsAttrName : 'data-bem',
                         jsAttrScheme : 'json'
@@ -54,11 +58,21 @@ function configure(helper, platform) {
             },
             'bemhtml-dev' : {
                 tech : 'enb-bemxjst/techs/bemhtml',
-                options : { devMode : true }
+                options : {
+                    devMode : true,
+                    requires : {
+                        i18n : { globals : 'BEM.I18N' }
+                    }
+                }
             },
             'bemhtml-prod' : {
                 tech : 'enb-bemxjst/techs/bemhtml',
-                options : { devMode : false }
+                options : {
+                    devMode : false,
+                    requires : {
+                        i18n : { globals : 'BEM.I18N' }
+                    }
+                }
             }
         }
     });

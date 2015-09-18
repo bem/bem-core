@@ -1,0 +1,3 @@
+({
+    block : 'greeting-card'
+})
