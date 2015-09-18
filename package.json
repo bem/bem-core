@@ -14,9 +14,9 @@
   "author": "Sergey Belov <peimei@ya.ru>",
   "license": "MPL-2.0",
   "dependencies": {
-    "ym": "0.1.0",
+    "bem-environ": "~1.4.0",
     "bem-xjst": "0.9.0",
-    "bem-environ": "~1.4.0"
+    "ym": "0.1.0"
   },
   "devDependencies": {
     "bem-naming": "0.5.1",
@@ -29,7 +29,7 @@
     "enb-bem-docs": "0.10.0",
     "enb-bem-examples": "0.5.10",
     "enb-bem-i18n": "^1.0.1",
-    "enb-bem-specs": "0.7.1",
+    "enb-bem-specs": "0.7.2",
     "enb-bem-techs": "^2.0.0",
     "enb-bem-tmpl-specs": "0.15.1",
     "enb-bemxjst": "^2.0.0",
@@ -37,8 +37,8 @@
     "enb-bh": "^1.0.0",
     "enb-bh-i18n": "1.0.0-beta1",
     "enb-borschik": "^2.0.0",
+    "enb-js": "^1.0.0",
     "enb-magic-platform": "0.5.0",
-    "enb-modules": "0.2.0",
     "git-hooks": "~0.0.6",
     "istanbul": "~0.3.2",
     "jscs": "^1.11.3",

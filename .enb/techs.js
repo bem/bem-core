@@ -6,8 +6,7 @@ module.exports = {
     },
     bem : require('enb-bem-techs'),
     css : require('enb/techs/css'),
-    js : require('enb/techs/js'),
-    ym : require('enb-modules/techs/prepend-modules'),
+    browserJS : require('enb-js/techs/browser-js'),
     i18n : {
         keysets : require('enb-bem-i18n/techs/keysets'),
         js : require('enb-bem-i18n/techs/i18n')
