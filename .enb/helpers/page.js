@@ -82,13 +82,9 @@ module.exports = function(node, opts) {
         [techs.css, { target : '.tmp.css' }],
 
         // build JavaScript for browsers
-        [techs.js, {
-            target : '.tmp.pre.js',
-            sourceSuffixes : ['vanilla.js', 'js', 'browser.js']
-        }],
-        [techs.ym, {
-            source : '.tmp.pre.js',
-            target : '.tmp.js'
+        [techs.browserJS, {
+            target : '.tmp.js',
+            includeYM : true
         }]
     ]);
 
@@ -109,13 +105,9 @@ module.exports = function(node, opts) {
                 lang : '{lang}'
             }],
             [techs.files.merge, {
-                target : '.tmp.pre.{lang}.js',
+                target : '.tmp.{lang}.js',
                 lang : '{lang}',
-                sources : ['.tmp.lang.{lang}.js', '.tmp.pre.js']
-            }],
-            [techs.ym, {
-                source : '.tmp.pre.{lang}.js',
-                target : '.tmp.{lang}.js'
+                sources : ['.tmp.js', '.tmp.lang.{lang}.js']
             }]
         ]);
         node.addTarget('?.{lang}.js');
