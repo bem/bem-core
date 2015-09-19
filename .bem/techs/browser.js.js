@@ -11,7 +11,7 @@ exports.techMixin = {
     },
 
     getCreateSuffixes : function() {
-        return ['browser.js'];
+        return ['js'];
     },
 
     getBuildSuffixes : function() {
