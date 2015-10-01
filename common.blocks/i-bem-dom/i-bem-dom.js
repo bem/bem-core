@@ -784,7 +784,7 @@ var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
 /**
  * Returns a block on a DOM element and initializes it if necessary
  * @param {Function} BemDomEntity entity
- * @param {Object} params entity parameters
+ * @param {Object} [params] entity parameters
  * @returns {BemDomEntity}
  */
 $.fn.bem = function(BemDomEntity, params) {
