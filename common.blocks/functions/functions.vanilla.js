@@ -11,12 +11,12 @@ export default {
      * @param {*} obj
      * @returns {Boolean}
      */
-    isFunction : function(obj) {
+    isFunction(obj) {
         return toStr.call(obj) === '[object Function]';
     },
 
     /**
      * Empty function
      */
-    noop : function() {}
+    noop() {}
 };
