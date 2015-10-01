@@ -1516,7 +1516,7 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 /**
  * Returns a block on a DOM element and initializes it if necessary
  * @param {String} blockName Block name
- * @param {Object} params Block parameters
+ * @param {Object} [params] Block parameters
  * @returns {BEMDOM}
  */
 $.fn.bem = function(blockName, params) {
