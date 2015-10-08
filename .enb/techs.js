@@ -5,7 +5,7 @@ module.exports = {
         merge : require('enb/techs/file-merge')
     },
     bem : require('enb-bem-techs'),
-    css : require('enb/techs/css'),
+    css : require('enb-css/techs/css'),
     browserJS : require('enb-js/techs/browser-js'),
     i18n : {
         keysets : require('enb-bem-i18n/techs/keysets'),
