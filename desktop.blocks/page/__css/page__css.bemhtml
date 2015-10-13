@@ -1,7 +1,7 @@
-block('page').elem('css').def().match(function() {
+block('page').elem('css').match(function() {
     return this.ctx.hasOwnProperty('ie');
 })(
-    function() {
+    wrap()(function() {
         var ie = this.ctx.ie,
             hideRule = !ie?
                 ['gt IE 9', '<!-->', '<!--'] :
@@ -9,13 +9,13 @@ block('page').elem('css').def().match(function() {
                     [ie, '<!-->', '<!--'] :
                     [ie, '', ''];
 
-        return applyCtx([
+        return [
             '<!--[if ' + hideRule[0] + ']>' + hideRule[1],
             this.ctx,
             hideRule[2] + '<![endif]-->'
-        ]);
-    },
-    match(function() { return this.ctx.ie === true; })(function() {
+        ];
+    }),
+    def().match(function() { return this.ctx.ie === true; })(function() {
         var url = this.ctx.url;
         return applyCtx([6, 7, 8, 9].map(function(v) {
             return { elem : 'css', url : url + '.ie' + v + '.css', ie : 'IE ' + v };
