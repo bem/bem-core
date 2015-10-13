@@ -112,7 +112,11 @@ module.exports = {
                     'mix',
                     'mod',
                     'mode',
-                    'tag'
+                    'tag',
+                    'wrap',
+                    'once',
+                    'replace',
+                    'extend'
                 ]
             },
             includes : ['*.blocks/**/*.bemhtml']
@@ -132,7 +136,11 @@ module.exports = {
                     'elemMatch',
                     'mod',
                     'mode',
-                    'tag'
+                    'tag',
+                    'wrap',
+                    'once',
+                    'replace',
+                    'extend'
                 ]
             },
             includes : ['*.blocks/**/*.bemtree']
