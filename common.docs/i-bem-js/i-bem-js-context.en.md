@@ -58,7 +58,7 @@ BEMDOM.decl({ block : 'my-button', baseBlock : 'button' }, {
 });
 ```
 
-Helper properties are provided by the [inherit](../../common.blocks/inherit/inherit.en.md) module, which implements the inheritance mechanism in `bem-core`.
+Helper properties are provided by the [inherit](../../common.blocks/inherit) module, which implements the inheritance mechanism in `bem-core`.
 
 ### Static block properties
 
