@@ -138,7 +138,7 @@ To enable automatic initialization, specify the `i-bem` block with the `init` mo
 })
 ```
 
-The [page](../../common.blocks/page/page.en.md) block already contains `i-bem__dom_init_auto` in dependencies, so if it is used in the project, nothing else needs to be enabled.
+The [page](../../common.blocks/page/) block already contains `i-bem__dom_init_auto` in dependencies, so if it is used in the project, nothing else needs to be enabled.
 
 ------------------------------------------------------------------------
 
