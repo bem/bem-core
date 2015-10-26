@@ -385,4 +385,4 @@ When invoked, a handler function gets an argument with an object describing the 
 -   `result` — The last value returned by this event handler. The same as [jQuery.Event.result](https://api.jquery.com/event.result/).
 -   `type` — The type of event. The same as [jQuery.Event.type](https://api.jquery.com/event.type/).
 
-For more information about properties and methods of a BEM event object, see the [documentation for the 'events' block](../../common.blocks/events/events.en.md).
+For more information about properties and methods of a BEM event object, see the [documentation for the 'events' block](../../common.blocks/events).
