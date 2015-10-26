@@ -12,7 +12,7 @@ Block interaction can be implemented in the following ways:
 -   By directly calling methods of other block instances
      or static methods of another block class.
 -   By checking the states of one of the blocks.
--   Through *event channels* (for example, using the [channels](../../common.blocks/events/__channels/events__channels.en.md) element in the `events` block).
+-   Through *event channels* (for example, using the [channels](../../common.blocks/events/__channels) element in the `events` block).
 
 ------------------------------------------------------------------------
 
