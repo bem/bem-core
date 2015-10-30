@@ -2,8 +2,6 @@
  * @module i-bem__internal
  */
 
-modules.define('i-bem__internal', function(provide) {
-
 var undef,
     /**
      * Separator for modifiers and their values
@@ -51,7 +49,7 @@ function buildElemClass(block, name, modName, modVal) {
         buildModPostfix(modName, modVal);
 }
 
-provide(/** @exports */{
+export default /** @exports */{
     NAME_PATTERN : NAME_PATTERN,
 
     MOD_DELIM : MOD_DELIM,
@@ -118,6 +116,4 @@ provide(/** @exports */{
 
         return res;
     }
-});
-
-});
+};

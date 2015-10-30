@@ -3,9 +3,9 @@
  * @description some DOM utils
  */
 
-modules.define('dom', ['jquery'], function(provide, $) {
+import $ from 'bem:jquery';
 
-provide(/** @exports */{
+export default (/** @exports */{
     /**
      * Checks whether a DOM elem is in a context
      * @param {jQuery} ctx DOM elem where check is being performed
@@ -95,6 +95,4 @@ provide(/** @exports */{
                 return domNode.contentEditable === 'true';
         }
     }
-});
-
 });

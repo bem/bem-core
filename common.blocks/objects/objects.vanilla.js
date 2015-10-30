@@ -3,11 +3,9 @@
  * @description A set of helpers to work with JavaScript objects
  */
 
-modules.define('objects', function(provide) {
-
 var hasOwnProp = Object.prototype.hasOwnProperty;
 
-provide(/** @exports */{
+export default /** @exports */{
     /**
      * Extends a given target by
      * @param {Object} target object to extend
@@ -57,6 +55,4 @@ provide(/** @exports */{
             }
         }
     }
-});
-
-});
+};

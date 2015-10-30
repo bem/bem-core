@@ -2,32 +2,17 @@
  * @module i-bem-dom
  */
 
-modules.define(
-    'i-bem-dom',
-    [
-        'i-bem',
-        'i-bem__internal',
-        'i-bem-dom__events_type_dom',
-        'i-bem-dom__events_type_bem',
-        'inherit',
-        'identify',
-        'objects',
-        'functions',
-        'jquery',
-        'dom'
-    ],
-    function(
-        provide,
-        bem,
-        bemInternal,
-        domEvents,
-        bemEvents,
-        inherit,
-        identify,
-        objects,
-        functions,
-        $,
-        dom) {
+import bem from 'bem:i-bem';
+import bemInternal from 'bem:i-bem__internal';
+import domEvents from 'bem:i-bem-dom__events_type_dom';
+import bemEvents from 'bem:i-bem-dom__events_type_bem';
+import inherit from 'bem:inherit';
+import identify from 'bem:identify';
+import objects from 'bem:objects';
+import functions from 'bem:functions';
+import $ from 'bem:jquery';
+import dom from 'bem:dom'
+import provide from 'ym:provide'
 
 var undef,
     /**
@@ -1004,19 +989,14 @@ provide(bemDom);
 
 });
 
-});
+import ym from 'ym';
+var origDefine = ym.define;
 
-(function() {
-
-var origDefine = modules.define;
-
-modules.define = function(name, deps, decl) {
-    origDefine.apply(modules, arguments);
+ym.define = function(name, deps, decl) {
+    origDefine.apply(ym, arguments);
 
     name !== 'i-bem-dom__init' && arguments.length > 2 && ~deps.indexOf('i-bem-dom') &&
-        modules.define('i-bem-dom__init', [name], function(provide, _, prev) {
+        ym.define('i-bem-dom__init', [name], function(provide, _, prev) {
             provide(prev);
         });
 };
-
-})();

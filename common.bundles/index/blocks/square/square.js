@@ -5,8 +5,10 @@
  *
  * You can find various declarations on the i-bem block's wiki page, blocks/i-bem/i-bem.wiki
  */
-modules.define('square', ['i-bem-dom', 'BEMHTML'], function(provide, bemDom, BEMHTML) {
-provide(bemDom.declBlock(this.name, {
+import bemDom from 'bem:i-bem-dom';
+import BEMHTML from 'BEMHTML';
+
+export default bemDom.declBlock(this.name, {
     _onSquareClick : function() {
         this.toggleMod('color', '', 'green');
         bemDom.update(this.domElem, BEMHTML.apply({
@@ -18,6 +20,4 @@ provide(bemDom.declBlock(this.name, {
     live : function() {
         this._domEvents().on('click', this.prototype._onSquareClick);
     }
-}));
-
 });

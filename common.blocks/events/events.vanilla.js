@@ -2,10 +2,9 @@
  * @module events
  */
 
-modules.define(
-    'events',
-    ['identify', 'inherit', 'functions'],
-    function(provide, identify, inherit, functions) {
+import identify from 'bem:identify';
+import inherit from 'bem:inherit';
+import functions from 'bem:functions';
 
 var undef,
     storageExpando = '__' + (+new Date) + 'storage',
@@ -243,9 +242,7 @@ var undef,
         }
     });
 
-provide({
+export default {
     Emitter : Emitter,
     Event : Event
-});
-
-});
+};

@@ -1,10 +1,9 @@
 /**
  * @module i-bem-dom__init
  */
+import bemDom from 'bem:i-bem-dom';
 
-modules.define('i-bem-dom__init', ['i-bem-dom'], function(provide, bemDom) {
-
-provide(
+export default (
     /**
      * Initializes blocks on a fragment of the DOM tree
      * @exports
@@ -14,4 +13,3 @@ provide(
     function(ctx) {
         return bemDom.init(ctx);
     });
-});

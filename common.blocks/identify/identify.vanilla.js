@@ -2,8 +2,6 @@
  * @module identify
  */
 
-modules.define('identify', function(provide) {
-
 var counter = 0,
     expando = '__' + (+new Date),
     get = function() {
@@ -23,7 +21,7 @@ var counter = 0,
         return '';
     };
 
-provide(
+export default (
     /**
      * Makes unique ID
      * @exports
@@ -46,5 +44,3 @@ provide(
         return get();
     }
 );
-
-});
