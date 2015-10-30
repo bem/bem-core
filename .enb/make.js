@@ -219,17 +219,9 @@ module.exports = function(config) {
                     filesTarget : '?.js.files',
                     dirsTarget : '?.js.dirs'
                 }],
-                [js, {
+                [bemBabel, {
+                    bemhtmlFile : '?.browser.bemhtml.js',
                     filesTarget : '?.js.files',
-                    target : '?.browser.js',
-                    sourceSuffixes : ['vanilla.js', 'js', 'browser.js']
-                }],
-                [mergeFiles, {
-                    target : '?.pre.js',
-                    sources : ['?.browser.bemhtml.js', '?.browser.js']
-                }],
-                [ym, {
-                    source : '?.pre.js',
                     target : '?.js'
                 }]
             ]);
