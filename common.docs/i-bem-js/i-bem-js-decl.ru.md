@@ -221,7 +221,7 @@ modules.define('my-block', ['i-bem__dom', 'foo', 'bar'], function(provide, BEMDO
 provide(BEMDOM.decl({ block : this.name, baseMix : ['foo', 'bar']},
     { /* методы экземпляра */ },
     { /* статические методы */ }
-}));
+));
 
 });
 ```
@@ -239,7 +239,7 @@ modules.define('mymix', ['i-bem__dom'], function(provide, BEMDOM) {
 provide(BEMDOM.declMix('mymix', // только строка с именем
     { /* методы экземпляра */ },
     { /* статические методы */ }
-}));
+));
 
 });
 ```
@@ -267,9 +267,9 @@ modules.define('block-name', function(provide, BEMDOM) {
 provide(BEMDOM.decl(this.name,
     {
         /* методы экземпляра */
-        beforeSetMod: { /* триггеры до установки модификаторов блока*/}
-        beforeElemSetMod: { /* триггеры до установки модификаторов элементов*/}
-        onSetMod: { /* триггеры после установки модификаторов блока */ }
+        beforeSetMod: { /* триггеры до установки модификаторов блока*/},
+        beforeElemSetMod: { /* триггеры до установки модификаторов элементов*/},
+        onSetMod: { /* триггеры после установки модификаторов блока */ },
         onElemSetMod: { /* триггеры после установки модификаторов элементов */ }
     },
     {
@@ -288,18 +288,21 @@ provide(BEMDOM.decl(this.name,
 * `prevModVal` – предыдущее значение модификатора. Для `beforeSetMod` это текущее значение модификатора, которое будет заменено на `modVal`, если триггер не вернет `false`.
 
 ```js
-{
-    'mod1': function(modName, modVal, prevModVal) { /* ... */ }, // установка mod1 в любое значение
-    'mod2': {
-        'val1': function(modName, modVal, prevModVal) { /* ... */ }, // триггер на установку mod2 в значение val1
-        'val2': function(modName, modVal, prevModVal) { /* ... */ }, // триггер на установку mod2 в значение val2
-        '': function(modName, modVal, prevModVal) { /* ... */ } // триггер на удаление модификатора mod2
-    'mod3': {
-        'true': function(modName, modVal, prevModVal) { /* ... */ }, // триггер на установку простого модификатора mod3
-        '': function(modName, modVal, prevModVal) { /* ... */ }, // триггер на удаление простого модификатора mod3
-    },
-    '*': function(modName, modVal, prevModVal) { /* ... */ } // триггер на установку любого модификатора в любое значение
-}
+BEMDOM.decl(this.name, {
+    onSetMod: {
+        'mod1': function(modName, modVal, prevModVal) { /* ... */ }, // установка mod1 в любое значение
+        'mod2': {
+            'val1': function(modName, modVal, prevModVal) { /* ... */ }, // триггер на установку mod2 в значение val1
+            'val2': function(modName, modVal, prevModVal) { /* ... */ }, // триггер на установку mod2 в значение val2
+            '': function(modName, modVal, prevModVal) { /* ... */ } // триггер на удаление модификатора mod2
+        },
+        'mod3': {
+            'true': function(modName, modVal, prevModVal) { /* ... */ }, // триггер на установку простого модификатора mod3
+            '': function(modName, modVal, prevModVal) { /* ... */ } // триггер на удаление простого модификатора mod3
+        },
+        '*': function(modName, modVal, prevModVal) { /* ... */ } // триггер на установку любого модификатора в любое значение
+    }
+})
 ```
 
 
@@ -321,16 +324,18 @@ onSetMod: function(modName, modVal, prevModVal) { /* ... */ }
 * `prevModVal` – предыдущее значение модификатора. Для `beforeSetMod` это текущее значение модификатора, которое будет заменено на `modVal`, если триггер не вернет `false`.
 
 ```js
-{
-    'elem1': {
-        'mod1': function(elem, modName, modVal, prevModVal) { /* ... */ }, // триггер на установку mod1 элемента elem 1 в любое значение
-        'mod2': {
-            'val1': function(elem, modName, modVal, prevModVal) { /* ... */ }, // триггер на установку mod2 элемента elem1 в значение val1
-            'val2': function(elem, modName, modVal, prevModVal) { /* ... */ } // триггер на установку mod2 элемента elem1 в значение val2
+BEMDOM.decl(this.name, {
+    onElemSetMod: {
+        'elem1': {
+            'mod1': function(elem, modName, modVal, prevModVal) { /* ... */ }, // триггер на установку mod1 элемента elem 1 в любое значение
+            'mod2': {
+                'val1': function(elem, modName, modVal, prevModVal) { /* ... */ }, // триггер на установку mod2 элемента elem1 в значение val1
+                'val2': function(elem, modName, modVal, prevModVal) { /* ... */ } // триггер на установку mod2 элемента elem1 в значение val2
             }
         },
-    'elem2': function(elem, modName, modVal, prevModVal) { /* ... */ } // триггер на установку любого модификатора элемента elem2 в любое значение
-}
+        'elem2': function(elem, modName, modVal, prevModVal) { /* ... */ } // триггер на установку любого модификатора элемента elem2 в любое значение
+    }
+})
 ```
 
 
@@ -340,7 +345,6 @@ onSetMod: function(modName, modVal, prevModVal) { /* ... */ }
 beforeElemSetMod: { 'elem1': function(elem, modName, modVal, prevModVal) { /* ... */ } }
 onElemSetMod: { 'elem1': function(elem, modName, modVal, prevModVal) { /* ... */ } }
 ```
-
 
 
 [ym]: https://github.com/ymaps/modules
@@ -354,4 +358,3 @@ onElemSetMod: { 'elem1': function(elem, modName, modVal, prevModVal) { /* ... */
 [context]: ./i-bem-js-context.ru.md
 
 [states]: ./i-bem-js-states.ru.md
-
