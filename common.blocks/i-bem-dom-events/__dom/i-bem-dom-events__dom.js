@@ -10,8 +10,8 @@ var eventBuilder = function(e) {
     },
     /**
      * @class EventManagerFactory
-     * @augments i-bem-dom__events:EventManagerFactory
-     * @exports i-bem-dom__events_type_dom:EventManagerFactory
+     * @augments i-bem-dom-events:EventManagerFactory
+     * @exports i-bem-dom-events__dom:EventManagerFactory
      */
     EventManagerFactory = inherit(bemDomEvents.EventManagerFactory,/** @lends EventManagerFactory.prototype */{
         /** @override */

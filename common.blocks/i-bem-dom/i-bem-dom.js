@@ -4,15 +4,15 @@
 
 import bem from 'bem:i-bem';
 import bemInternal from 'bem:i-bem__internal';
-import domEvents from 'bem:i-bem-dom__events_type_dom';
-import bemEvents from 'bem:i-bem-dom__events_type_bem';
+import domEvents from 'bem:i-bem-dom-events__dom';
+import bemEvents from 'bem:i-bem-dom-events__bem';
 import inherit from 'bem:inherit';
 import identify from 'bem:identify';
 import objects from 'bem:objects';
 import functions from 'bem:functions';
 import $ from 'bem:jquery';
-import dom from 'bem:dom'
-import provide from 'ym:provide'
+import dom from 'bem:dom';
+import provide from 'ym:provide';
 
 var undef,
     /**

@@ -125,7 +125,7 @@ var undef,
     }),
     /**
      * @class EventManagerFactory
-     * @exports i-bem-dom__events:EventManagerFactory
+     * @exports i-bem-dom-events:EventManagerFactory
      */
     EventManagerFactory = inherit(/** @lends EventManagerFactory.prototype */{
         __constructor : function(getEntityCls) {

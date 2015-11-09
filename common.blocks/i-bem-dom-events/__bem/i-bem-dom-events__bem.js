@@ -40,8 +40,8 @@ var EVENT_PREFIX = '__bem__',
 
     /**
      * @class EventManagerFactory
-     * @augments i-bem-dom__events:EventManagerFactory
-     * @exports i-bem-dom__events_type_bem:EventManagerFactory
+     * @augments i-bem-dom-events:EventManagerFactory
+     * @exports i-bem-dom-events__bem:EventManagerFactory
      */
     EventManagerFactory = inherit(bemDomEvents.EventManagerFactory,/** @lends EventManagerFactory.prototype */{
         /** @override */
