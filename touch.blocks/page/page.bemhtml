@@ -4,6 +4,8 @@ block('page')(
         return applyNext({ _zoom : this.ctx.zoom });
     }),
 
+    js()(true),
+
     elem('head').content()(function() {
         return [
             applyNext(),
@@ -20,12 +22,6 @@ block('page')(
             { elem : 'meta', attrs : { name : 'format-detection', content : 'telephone=no' } },
             { elem : 'link', attrs : { name : 'apple-mobile-web-app-capable', content : 'yes' } }
         ];
-    }),
-
-    mix()(function() {
-        var mix = applyNext(),
-            uaMix = [{ block : 'ua', attrs : { nonce : this._nonceCsp }, js : true }];
-
-        return mix? uaMix.concat(mix) : uaMix;
     })
+
 );

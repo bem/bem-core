@@ -1,7 +1,7 @@
 module.exports = function(bh) {
     bh.match('page', function(ctx, json) {
         ctx
-            .mix({ block : 'ua', js : true })
+            .js(true)
             .tParam('zoom', json.zoom);
     });
 
