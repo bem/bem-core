@@ -8,7 +8,8 @@ module.exports = {
         supernew : true,
         loopfunc : true,
         onecase : true,
-        quotmark : 'single'
+        quotmark : 'single',
+        esnext : true
     },
 
     groups : {
