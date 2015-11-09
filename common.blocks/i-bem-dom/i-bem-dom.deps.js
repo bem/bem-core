@@ -7,15 +7,10 @@
         'dom',
         { mod : 'init' },
         { block : 'i-bem', elems : ['internal'] },
-        { elem : 'events', mods : { type : ['dom', 'bem'] } }
+        { block : 'i-bem-dom-events', elems : ['dom', 'bem'] }
     ]
 },
 {
     tech : 'spec.js',
-    mustDeps : [
-        {
-            block : 'i-bem',
-            tech : 'bemhtml'
-        }
-    ]
+    mustDeps : { block : 'i-bem', tech : 'bemhtml' }
 }]

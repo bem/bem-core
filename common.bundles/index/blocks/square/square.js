@@ -6,7 +6,7 @@
  * You can find various declarations on the i-bem block's wiki page, blocks/i-bem/i-bem.wiki
  */
 import bemDom from 'bem:i-bem-dom';
-import BEMHTML from 'BEMHTML';
+import BEMHTML from 'bem:BEMHTML';
 
 export default bemDom.declBlock(this.name, {
     _onSquareClick : function() {

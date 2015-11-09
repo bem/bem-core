@@ -2,9 +2,9 @@
  * Auto initialization on DOM ready
  */
 
-import init form 'bem:i-bem-dom__init';
-import $ form 'bem:jquery';
-import nextTick form 'bem:next-tick';
+import init from 'bem:i-bem-dom__init';
+import $ from 'bem:jquery';
+import nextTick from 'bem:next-tick';
 
 $(function() {
     nextTick(init);
