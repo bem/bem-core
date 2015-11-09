@@ -1,5 +1,5 @@
 /**
- * @module i-bem-dom__events
+ * @module i-bem-dom-events
  */
 
 import bemInternal from 'bem:i-bem__internal';

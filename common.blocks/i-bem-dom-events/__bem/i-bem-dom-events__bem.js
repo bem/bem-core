@@ -1,26 +1,13 @@
 /**
  * @module i-bem-dom-events__bem
  */
-modules.define(
-    'i-bem-dom-events__bem',
-    [
-        'i-bem-dom-events',
-        'i-bem__internal',
-        'inherit',
-        'functions',
-        'jquery',
-        'identify',
-        'events'
-    ],
-    function(
-        provide,
-        bemDomEvents,
-        bemInternal,
-        inherit,
-        functions,
-        $,
-        identify,
-        events) {
+import bemDomEvents from 'bem:i-bem-dom-events';
+import bemInternal from 'bem:i-bem__internal';
+import inherit from 'bem:inherit';
+import functions from 'bem:functions';
+import $ from 'bem:jquery';
+import identify from 'bem:identify';
+import events from 'bem:events';
 
 var EVENT_PREFIX = '__bem__',
     MOD_CHANGE_EVENT = 'modchange',
@@ -88,7 +75,7 @@ var EVENT_PREFIX = '__bem__',
         }
     });
 
-provide({
+export default {
     /**
      * @param {BemDomEntity} ctx
      * @param {String|Object|events:Event} e Event name
@@ -112,6 +99,4 @@ provide({
     },
 
     EventManagerFactory : EventManagerFactory
-});
-
-});
+};
