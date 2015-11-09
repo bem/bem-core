@@ -1,10 +1,10 @@
 /**
- * @module i-bem-dom__events_type_bem
+ * @module i-bem-dom-events__bem
  */
 modules.define(
-    'i-bem-dom__events_type_bem',
+    'i-bem-dom-events__bem',
     [
-        'i-bem-dom__events',
+        'i-bem-dom-events',
         'i-bem__internal',
         'inherit',
         'functions',

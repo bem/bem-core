@@ -1,10 +1,10 @@
 /**
- * @module i-bem-dom__events_type_dom
+ * @module i-bem-dom-events__dom
  */
 modules.define(
-    'i-bem-dom__events_type_dom',
+    'i-bem-dom-events__dom',
     [
-        'i-bem-dom__events',
+        'i-bem-dom-events',
         'inherit',
         'jquery'
     ],
