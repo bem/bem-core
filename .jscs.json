@@ -8,6 +8,7 @@
         ".git/**",
         "libs/**",
         "node_modules/**",
+        "*.json",
         "**/*.test.bemhtml/**",
         "*.bundles/**",
         "*.examples/**",
