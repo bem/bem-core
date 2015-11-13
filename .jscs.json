@@ -11,6 +11,7 @@
         "**/*.bemhtml.test/fixtures/**",
         "dist/**",
         "test/dist/fixtures/**",
+        "*.json",
         "*.bundles/**",
         "*.examples/**",
         "*.doc-examples/**",

@@ -42,9 +42,9 @@
     "enb-magic-platform": "0.6.0",
     "git-hooks": "~0.0.6",
     "istanbul": "~0.3.2",
-    "jscs": "^1.11.3",
+    "jscs": "^2.5.1",
     "jscs-bem": "^0.2.0",
-    "jshint-groups": "0.6.0",
+    "jshint-groups": "0.8.0",
     "mocha": "~2.2.5",
     "vow": "0.4.10"
   },
