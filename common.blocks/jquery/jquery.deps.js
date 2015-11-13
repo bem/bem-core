@@ -1,6 +1,6 @@
 ({
     shouldDeps : [
-        { block : 'loader', mods : { type : 'js' } },
+        { block : 'loader', elem : 'js' },
         { elem : 'config' }
     ]
 })

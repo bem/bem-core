@@ -18,6 +18,8 @@ export default bemDom.declBlock(this.name, {
     }
 }, {
     live : function() {
+        console.log('??????');
         this._domEvents().on('click', this.prototype._onSquareClick);
+        return false;
     }
 });

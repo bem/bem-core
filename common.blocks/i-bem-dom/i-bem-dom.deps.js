@@ -5,7 +5,6 @@
         'objects',
         'functions',
         'dom',
-        { mod : 'init' },
         { block : 'i-bem', elems : ['internal'] },
         { block : 'i-bem-dom-events', elems : ['dom', 'bem'] }
     ]

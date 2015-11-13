@@ -3,10 +3,9 @@
  * @description Provide jQuery (load if it does not exist).
  */
 
-modules.define(
-    'jquery',
-    ['loader_type_js', 'jquery__config'],
-    function(provide, loader, cfg) {
+import provide from 'ym:provide'
+import loader from 'bem:loader__js';
+import cfg from 'bem:jquery__config';
 
 /* global jQuery */
 
@@ -21,4 +20,3 @@ function doProvide(preserveGlobal) {
 typeof jQuery !== 'undefined'?
     doProvide(true) :
     loader(cfg.url, doProvide);
-});
