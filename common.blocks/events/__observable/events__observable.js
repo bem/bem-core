@@ -2,10 +2,7 @@
  * @module events__observable
  */
 
-modules.define(
-    'events__observable',
-    ['inherit'],
-    function(provide, inherit) {
+import inherit from 'bem:inherit';
 
 /**
  * @class Observable
@@ -58,16 +55,11 @@ var Observable = inherit(/** @lends Observable.prototype */{
     }
 });
 
-provide(
-    /**
-     * Creates new observable
-     * @exports
-     * @param {events:Emitter} emitter
-     * @returns {Observable}
-     */
-    function(emitter) {
-        return new Observable(emitter);
-    }
-);
-
-});
+/**
+ * Creates new observable
+ * @param {events:Emitter} emitter
+ * @returns {Observable}
+ */
+export default function(emitter) {
+    return new Observable(emitter);
+};

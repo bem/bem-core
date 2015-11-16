@@ -5,7 +5,7 @@
 
 import $ from 'bem:jquery';
 
-export default (/** @exports */{
+export default {
     /**
      * Checks whether a DOM elem is in a context
      * @param {jQuery} ctx DOM elem where check is being performed
@@ -95,4 +95,4 @@ export default (/** @exports */{
                 return domNode.contentEditable === 'true';
         }
     }
-});
+};

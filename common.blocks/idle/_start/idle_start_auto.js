@@ -2,8 +2,6 @@
  * Automatically starts idle module
  */
 
-modules.require(['idle'], function(idle) {
+import idle from 'bem:idle';
 
 idle.start();
-
-});

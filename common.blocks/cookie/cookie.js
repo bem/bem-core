@@ -3,9 +3,7 @@
  * inspired from $.cookie plugin by Klaus Hartl (stilbuero.de)
  */
 
-modules.define('cookie', function(provide) {
-
-provide(/** @exports */{
+export default {
     /**
      * Returns cookie by given name
      * @param {String} name
@@ -61,6 +59,4 @@ provide(/** @exports */{
 
         return this;
     }
-});
-
-});
+};

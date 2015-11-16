@@ -2,7 +2,9 @@
  * @module idle
  */
 
-modules.define('idle', ['inherit', 'events', 'jquery'], function(provide, inherit, events, $) {
+import inherit from 'bem:inherit';
+import events from 'bem:events';
+import $ from 'bem:jquery';
 
 var IDLE_TIMEOUT = 3000,
     USER_EVENTS = 'mousemove keydown click',
@@ -79,11 +81,8 @@ var IDLE_TIMEOUT = 3000,
         }
     });
 
-provide(
-    /**
-     * @exports
-     * @type Idle
-     */
-    new Idle());
-
-});
+/**
+ * @exports
+ * @type Idle
+ */
+export default new Idle();
