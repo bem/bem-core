@@ -2,7 +2,9 @@
  * FastClick to jQuery module wrapper.
  * @see https://github.com/ftlabs/fastclick
  */
-modules.define('jquery', function(provide, $) {
+
+import $ from 'bem:jquery';
+import provide from 'ym:provide';
 
 /**
  * FastClick: polyfill to remove click delays on browsers with touch UIs.
@@ -784,9 +786,9 @@ var event = $.event.special.pointerclick = {
         }
     };
 
+export const __bemName = 'jquery';
+
 $(function() {
     FastClick.attach(document.body);
     provide($);
-});
-
 });
