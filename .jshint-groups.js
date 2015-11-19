@@ -8,7 +8,14 @@ module.exports = {
         supernew : true,
         loopfunc : true,
         onecase : true,
-        quotmark : 'single'
+        quotmark : 'single',
+        globals : {
+          '$$mode' : true,
+          '$$block' : true,
+          '$$elem' : true,
+          '$$elemMods' : true,
+          '$$mods' : true
+        }
     },
 
     groups : {

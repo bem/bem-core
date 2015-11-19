@@ -250,11 +250,41 @@ BEMContext.prototype.generateId = function generateId() {
 var oldApply = exports.apply;
 exports.apply = BEMContext.apply = function BEMContext_apply(context) {
     var ctx = new BEMContext(context || this, oldApply);
+
     ctx.apply();
+
     return ctx._str;
 };
 
-BEMContext.prototype.reapply = BEMContext.apply;
+BEMContext.prototype.reapply = function reapply() {
+    var mode = typeof $$mode !== 'undefined' && $$mode,
+        block = typeof $$block !== 'undefined' && $$block,
+        elem = typeof $$elem !== 'undefined' && $$elem,
+        elemMods = typeof $$elemMods !== 'undefined' && $$elemMods,
+        mods = typeof $$mods !== 'undefined' && $$mods,
+
+        classicMode = this._mode,
+        classicBlock = this.block,
+        classicElem = this.elem,
+        classicElemMods = this.elemMods,
+        classicMods = this.mods,
+
+        res = BEMContext.apply.apply(this, arguments);
+
+    if(mode) $$mode = mode;
+    if(block) $$block = block;
+    if(elem) $$elem = elem;
+    if(elemMods) $$elemMods = elemMods;
+    if(mods) $$mods = mods;
+
+    this._mode = classicMode;
+    this.block = classicBlock;
+    this.elem = classicElem;
+    this.elemMods = classicElemMods;
+    this.mods = classicMods;
+
+    return res;
+};
 
 }); // oninit
 
