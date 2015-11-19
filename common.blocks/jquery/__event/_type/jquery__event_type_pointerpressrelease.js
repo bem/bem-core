@@ -1,4 +1,4 @@
-modules.define('jquery', function(provide, $) {
+import $ from 'bem:jquery';
 
 $.each({
     pointerpress : 'pointerdown',
@@ -28,6 +28,5 @@ $.each({
     };
 });
 
-provide($);
-
-});
+export const __bemName = 'jquery';
+export default $;

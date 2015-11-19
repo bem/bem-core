@@ -1,15 +1,4 @@
-;(function(global, factory) {
-
-if(typeof modules === 'object' && modules.isDefined('jquery')) {
-    modules.define('jquery', function(provide, $) {
-        factory(this.global, $);
-        provide($);
-    });
-} else if(typeof jQuery === 'function') {
-    factory(global, jQuery);
-}
-
-}(this, function(window, $) {
+import $ from 'bem:jquery';
 
 var jqEvent = $.event;
 
@@ -842,4 +831,5 @@ if(navigator.msPointerEnabled) {
 
 dispatcher.register(doc);
 
-}));
+export const __bemName = 'jquery';
+export default $;

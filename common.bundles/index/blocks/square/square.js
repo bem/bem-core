@@ -19,7 +19,7 @@ export default bemDom.declBlock(this.name, {
 }, {
     live : function() {
         console.log('??????');
-        this._domEvents().on('pointerclick', this.prototype._onSquareClick);
+        this._domEvents().on('pointerdown', this.prototype._onSquareClick);
         return false;
     }
 });

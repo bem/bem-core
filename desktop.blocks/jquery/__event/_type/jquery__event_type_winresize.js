@@ -2,7 +2,8 @@
  * @module jquery
  */
 
-modules.define('jquery', ['ua'], function(provide, ua, $) {
+import ua from 'bem:ua';
+import $ from 'bem:jquery';
 
 // IE8 and below, https://msdn.microsoft.com/en-us/library/ie/ms536959%28v=vs.85%29.aspx
 if(ua.msie && document.documentMode < 9) {
@@ -26,6 +27,5 @@ if(ua.msie && document.documentMode < 9) {
     };
 }
 
-provide($);
-
-});
+export const __bemName = 'jquery';
+export default $;

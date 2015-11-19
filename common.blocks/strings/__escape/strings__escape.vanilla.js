@@ -3,8 +3,6 @@
  * @description A set of string escaping functions
  */
 
-modules.define('strings__escape', function(provide) {
-
 var symbols = {
         '"' : '&quot;',
         '\'' : '&apos;',
@@ -22,7 +20,7 @@ var symbols = {
         };
     };
 
-provide(/** @exports */{
+export default {
     /**
      * Escape string to use in XML
      * @type Function
@@ -46,6 +44,4 @@ provide(/** @exports */{
      * @returns {String}
      */
     attr : buildEscape('["\'&<>]')
-});
-
-});
+};

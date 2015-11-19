@@ -3,7 +3,8 @@
  * @description Helpers for polling anything
  */
 
-modules.define('tick', ['inherit', 'events'], function(provide, inherit, events) {
+import inherit from 'bem:inherit';
+import events from 'bem:events';
 
 var TICK_INTERVAL = 50,
     global = this.global,
@@ -57,11 +58,7 @@ var TICK_INTERVAL = 50,
         }
     });
 
-provide(
-    /**
-     * @exports
-     * @type Tick
-     */
-    new Tick());
-
-});
+/**
+ * @type Tick
+ */
+export default new Tick();

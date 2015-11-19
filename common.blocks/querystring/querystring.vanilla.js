@@ -3,16 +3,16 @@
  * @description A set of helpers to work with query strings
  */
 
-modules.define('querystring', ['querystring__uri'], function(provide, uri) {
+import uri from 'bem:querystring__uri';
 
-var hasOwnProperty = Object.prototype.hasOwnProperty;
+var hasOwnProp = Object.prototype.hasOwnProperty;
 
 function addParam(res, name, val) {
     /* jshint eqnull: true */
     res.push(encodeURIComponent(name) + '=' + (val == null? '' : encodeURIComponent(val)));
 }
 
-provide(/** @exports */{
+export default {
     /**
      * Parse a query string to an object
      * @param {String} str
@@ -43,7 +43,7 @@ provide(/** @exports */{
                 name = uri.decodeURIComponent(name);
                 val = uri.decodeURIComponent(val);
 
-                hasOwnProperty.call(res, name)?
+                hasOwnProp.call(res, name)?
                     Array.isArray(res[name])?
                         res[name].push(val) :
                         res[name] = [res[name], val] :
@@ -74,6 +74,4 @@ provide(/** @exports */{
                 [])
             .join('&');
     }
-});
-
-});
+};

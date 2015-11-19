@@ -3,18 +3,12 @@
  * @description Configuration for jQuery
  */
 
-modules.define(
-    'jquery__config',
-    ['ua', 'objects'],
-    function(provide, ua, objects, base) {
+import base from 'bem:jquery__config';
+import ua from 'bem:ua';
+import objects from 'bem:objects';
 
-provide(
-    ua.msie && parseInt(ua.version, 10) < 9?
-        objects.extend(
-            base,
-            {
-                url : '//yastatic.net/jquery/1.11.3/jquery.min.js'
-            }) :
-        base);
-
-});
+export default ua.msie && parseInt(ua.version, 10) < 9?
+    objects.extend(
+      base,
+      { url : '//yastatic.net/jquery/1.11.3/jquery.min.js' }) :
+    base;

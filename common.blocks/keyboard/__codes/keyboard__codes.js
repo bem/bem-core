@@ -1,9 +1,8 @@
 /**
  * @module keyboard__codes
  */
-modules.define('keyboard__codes', function(provide) {
 
-provide(/** @exports */{
+export default {
     BACKSPACE : 8,
     TAB : 9,
     ENTER : 13,
@@ -20,6 +19,4 @@ provide(/** @exports */{
     DOWN : 40,
     INSERT : 45,
     DELETE : 46
-});
-
-});
+};
