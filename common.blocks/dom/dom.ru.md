@@ -8,7 +8,7 @@
 
 | Имя | Возвращаемое значение | Описание |
 | -------- | --- | -------- |
-| <a href="#fields-contains">contains</a>(<br><code>{jQuery} domElem</code>,<br><code>{jQuery} ctx</code>) | <code>{Boolean}</code> | Проверяет, содержит ли один DOM-элемент другой. |
+| <a href="#fields-contains">contains</a>(<br><code>{jQuery} ctx</code>,<br><code>{jQuery} domElem</code>) | <code>{Boolean}</code> | Проверяет, содержит ли один DOM-элемент другой. |
 | <a href="#fields-getFocused">getFocused</a>(<br><code>{jQuery} domElem</code>) | <code>{jQuery}</code> | Служит для получения ссылки на DOM-элемент в фокусе. |
 | <a href="#fields-containsFocus">containsFocus</a>(<br><code>{jQuery} domElem</code>) | <code>{Boolean}</code> | Проверят, содержит ли DOM-элемент или его потомки фокус. |
 | <a href="#fields-isFocusable">isFocusable</a>(<br><code>{jQuery} domElem</code>) | <code>{Boolean}</code> | Проверят, может ли DOM-элемент находиться в фокусе. |
