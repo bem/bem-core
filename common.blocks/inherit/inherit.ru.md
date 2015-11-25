@@ -138,16 +138,15 @@ aInst.getProperty(); // Property of instanceA
 modules.require(['inherit'], function(inherit) {
 
 var A = inherit({
-        getType : function() {
-            return 'A';
-        }
+    getType : function() {
+        return 'A';
     }
 });
 
 // класс, производный от A
 var B = inherit(A, {
-    getAll : function() { // переопределение + 'super' call
-        return this.getType() + 'B';
+    getType : function() { // переопределение + 'super' call
+        return this.__base() + 'B';
     }
 });
 
