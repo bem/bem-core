@@ -609,7 +609,7 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * Sets a modifier for a block/nested element
      * @param {jQuery} [elem] Nested element
      * @param {String} modName Modifier name
-     * @param {String} modVal Modifier value
+     * @param {String|Boolean} [modVal=true] Modifier value
      * @returns {BEMDOM} this
      */
     setMod : function(elem, modName, modVal) {
