@@ -1058,7 +1058,7 @@ block('box').content()(function() {
 ```js
 block('menu')(
   tag()('ul'),
-  elemMatch('item')(
+  elem('item')(
     tag()('li'),
     content()(function() {
       return [
@@ -1152,4 +1152,3 @@ block('input')(
 * [Шаблонизация данных в bem-core](https://ru.bem.info/technology/bemhtml/current/templating/)
 * [BEMTREE](https://ru.bem.info/technology/bemtree/current/bemtree/)
 * [BEMJSON](https://ru.bem.info/technology/bemjson/current/bemjson/)
-

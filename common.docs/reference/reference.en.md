@@ -974,7 +974,7 @@ To do the numbering, write a template in the `content` mode for the menu item, w
 ```js
 block('menu')(
   tag()('ul'),
-  elemMatch('item')(
+  elem('item')(
     tag()('li'),
     content()(function() {
       return [
