@@ -3,20 +3,17 @@ modules.define('jquery', function(provide, $) {
 $.each({
     pointerpress : 'pointerdown',
     pointerrelease : 'pointerup pointercancel'
-}, function(spec, origEvent) {
+}, function(fix, origEvent) {
     function eventHandler(e) {
-        var res, origType = e.handleObj.origType;
-
         if(e.which === 1) {
-            e.type = spec;
-            res = $.event.dispatch.apply(this, arguments);
-            e.type = origType;
+            var fixedEvent = cloneEvent(e);
+            fixedEvent.type = fix;
+            fixedEvent.originalEvent = e;
+            return $.event.dispatch.call(this, fixedEvent);
         }
-
-        return res;
     }
 
-    $.event.special[spec] = {
+    $.event.special[fix] = {
         setup : function() {
             $(this).on(origEvent, eventHandler);
             return false;
@@ -27,6 +24,16 @@ $.each({
         }
     };
 });
+
+function cloneEvent(event) {
+    var eventCopy = $.extend(new $.Event(), event);
+    if(event.preventDefault) {
+        eventCopy.preventDefault = function() {
+            event.preventDefault();
+        };
+    }
+    return eventCopy;
+}
 
 provide($);
 
