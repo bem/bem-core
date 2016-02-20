@@ -1,7 +1,7 @@
 modules.define(
     'spec',
-    ['i-bem', 'i-bem-dom', 'objects', 'functions', 'jquery', 'chai', 'sinon', 'BEMHTML'],
-    function(provide, bem, bemDom, objects, functions, $, chai, sinon, BEMHTML) {
+    ['i-bem', 'i-bem-dom', 'i-bem-dom__collection', 'objects', 'functions', 'jquery', 'chai', 'sinon', 'BEMHTML'],
+    function(provide, bem, bemDom, BemDomCollection, objects, functions, $, chai, sinon, BEMHTML) {
 
 var undef,
     expect = chai.expect;
@@ -231,6 +231,10 @@ describe('i-bem-dom', function() {
         });
 
         describe('findChildBlocks', function() {
+            it('should return BEM-collection', function() {
+                rootBlock.findChildBlocks(B1Block).should.be.instanceOf(BemDomCollection);
+            });
+
             it('should return instances of Block founded by class', function() {
                 rootBlock.findChildBlocks(B1Block).forEach(function(block) {
                     block.should.be.instanceOf(B1Block);
@@ -298,6 +302,10 @@ describe('i-bem-dom', function() {
                 leafBlock = rootBlock.findChildBlock({ block : B1Block, modName : 'm1', modVal : true });
             });
 
+            it('should return BEM-collection', function() {
+                leafBlock.findParentBlocks(B1Block).should.be.instanceOf(BemDomCollection);
+            });
+
             it('should find all ancestor blocks by block class', function() {
                 getEntityIds(leafBlock.findParentBlocks(B1Block)).should.be.eql(['3', '1']);
             });
@@ -349,11 +357,15 @@ describe('i-bem-dom', function() {
         });
 
         describe('findMixedBlocks', function() {
+            it('should return BEM-collection', function() {
+                rootBlock.findChildBlock({ block : B3Block }).findMixedBlocks(B4Block)
+                    .should.be.instanceOf(BemDomCollection);
+            });
+
             it('should find all mixed blocks by block class', function() {
                 getEntityIds(
-                    rootBlock.findChildBlock({ block : B3Block })
-                        .findMixedBlocks(B4Block)
-                ).should.be.eql(['6', '8']);
+                    rootBlock.findChildBlock({ block : B3Block }).findMixedBlocks(B4Block))
+                        .should.be.eql(['6', '8']);
             });
         });
 
@@ -458,6 +470,10 @@ describe('i-bem-dom', function() {
         });
 
         describe('findChildElems', function() {
+            it('should return BEM-collection', function() {
+                b1Block.findChildElems(B1E1Elem).should.be.instanceOf(BemDomCollection);
+            });
+
             it('should return instances of Elem founded by class', function() {
                 b1Block.findChildElems(B1E1Elem).forEach(function(elem) {
                     elem.should.be.instanceOf(B1E1Elem);
@@ -549,6 +565,10 @@ describe('i-bem-dom', function() {
                 leafEntity = b1Block.findChildElem({ elem : B1E1Elem, modName : 'm1', modVal : true });
             });
 
+            it('should return BEM-collection', function() {
+                leafEntity.findParentElems(B1E1Elem).should.be.instanceOf(BemDomCollection);
+            });
+
             it('should find all ancestor elems by elem class', function() {
                 getEntityIds(leafEntity.findParentElems(B1E1Elem)).should.be.eql(['3', '1']);
             });
@@ -613,11 +633,15 @@ describe('i-bem-dom', function() {
         });
 
         describe('findMixedElems', function() {
+            it('should return BEM-collection', function() {
+                b1Block.findChildElem(B1E3Elem).findMixedElems(B1E4Elem)
+                    .should.be.instanceOf(BemDomCollection);
+            });
+
             it('should find all mixed elems by elem class', function() {
                 getEntityIds(
-                    b1Block.findChildElem(B1E3Elem)
-                        .findMixedElems(B1E4Elem)
-                ).should.be.eql(['6', '8']);
+                    b1Block.findChildElem(B1E3Elem).findMixedElems(B1E4Elem))
+                        .should.be.eql(['6', '8']);
             });
         });
 
@@ -742,7 +766,7 @@ describe('i-bem-dom', function() {
             });
 
             it('should not drop elems cache in case elem mods change', function() {
-                var elem = b1Block._elems(B1E1Elem)[0];
+                var elem = b1Block._elems(B1E1Elem).get(0);
                 spy.should.be.calledOnce;
 
                 elem.setMod('m2', 'v1');
@@ -855,7 +879,7 @@ describe('i-bem-dom', function() {
             });
 
             it('should drop elem cache in case mods change', function() {
-                var elem = b1Block.findChildElems(B1E1Elem)[0];
+                var elem = b1Block.findChildElems(B1E1Elem).get(0);
 
                 b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledOnce;

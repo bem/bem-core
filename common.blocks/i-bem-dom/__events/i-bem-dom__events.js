@@ -5,6 +5,7 @@ modules.define(
     'i-bem-dom__events',
     [
         'i-bem__internal',
+        'i-bem-dom__collection',
         'inherit',
         'identify',
         'objects',
@@ -14,6 +15,7 @@ modules.define(
     function(
         provide,
         bemInternal,
+        BemDomCollection,
         inherit,
         identify,
         objects,
@@ -134,6 +136,55 @@ var undef,
             this._storage[e] = null;
         }
     }),
+    buildForEachEventManagerProxyFn = function(methodName) {
+        return function() {
+            var args = arguments;
+
+            this._eventManagers.forEach(function(eventManager) {
+                eventManager[methodName].apply(eventManager, args);
+            });
+
+            return this;
+        };
+    },
+    /**
+     * @class CollectionEventManager
+     */
+    CollectionEventManager = inherit(/** @lends CollectionEventManager.prototype */{
+        /**
+         * @constructor
+         * @param {Array} eventManagers Array of event managers
+         */
+        __constructor : function(eventManagers) {
+            this._eventManagers = eventManagers;
+        },
+
+        /**
+         * Adds an event handler
+         * @param {String|Object|events:Event} e Event type
+         * @param {Object} [data] Additional data that the handler gets as e.data
+         * @param {Function} fn Handler
+         * @returns {CollectionEventManager} this
+         */
+        on : buildForEachEventManagerProxyFn('on'),
+
+        /**
+         * Adds an event handler
+         * @param {String} e Event type
+         * @param {Object} [data] Additional data that the handler gets as e.data
+         * @param {Function} fn Handler
+         * @returns {CollectionEventManager} this
+         */
+        once : buildForEachEventManagerProxyFn('once'),
+
+        /**
+         * Removes event handler or handlers
+         * @param {String|Object|events:Event} [e] Event type
+         * @param {Function} [fn] Handler
+         * @returns {CollectionEventManager} this
+         */
+        un : buildForEachEventManagerProxyFn('un')
+    }),
     /**
      * @class EventManagerFactory
      * @exports i-bem-dom__events:EventManagerFactory
@@ -153,6 +204,12 @@ var undef,
          * @returns {EventManager}
          */
         getEventManager : function(ctx, bindCtx, bindScope) {
+            if(bindCtx instanceof BemDomCollection) {
+                return new CollectionEventManager(bindCtx.map(function(entity) {
+                    return this.getEventManager(ctx, entity, bindScope);
+                }, this));
+            }
+
             var ctxId = identify(ctx),
                 ctxStorage = eventStorage[ctxId],
                 storageSuffix = this._storageSuffix,

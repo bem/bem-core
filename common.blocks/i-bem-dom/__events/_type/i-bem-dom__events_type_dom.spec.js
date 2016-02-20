@@ -337,7 +337,7 @@ describe('DOM events', function() {
 
                                     this._domEvents(this._elem('e2')).on('click', spy5);
 
-                                    this._domEvents(this._elems('e1')[1]).on('click', spy6);
+                                    this._domEvents(this._elems('e1').get(1)).on('click', spy6);
                                 }
                             }
                         }
@@ -400,6 +400,87 @@ describe('DOM events', function() {
                         spy3.should.have.been.called;
                     });
                 });
+            });
+        });
+
+        describe('collection events', function() {
+            var Elem1, collection;
+
+            beforeEach(function() {
+                Block1 = bemDom.declBlock('block1', {
+                    onSetMod : {
+                        'js' : {
+                            'inited' : function() {
+                                this._domEvents(collection = this.findChildElems(Elem1))
+                                    .on('click', spy1)
+                                    .on('click', spy2)
+                                    .on('click', data, wrapSpy(spy3))
+                                    .once('click', spy4);
+                            }
+                        }
+                    }
+                });
+
+                Elem1 = bemDom.declElem('block1', 'elem1');
+
+                block1 = createDomNode({
+                    block : 'block1',
+                    content : { elem : 'elem1' }
+                }).bem(Block1);
+            });
+
+            it('should properly bind handlers', function() {
+                block1._elem('elem1').domElem.trigger('click');
+
+                spy1.should.have.been.called;
+                spy2.should.have.been.called;
+
+                spy3.should.have.been.calledOn(block1);
+                spy3.args[0][1].should.be.instanceOf(Elem1);
+                spy3.args[0][2].should.have.been.equal(data);
+            });
+
+            it('should properly bind once handler', function() {
+                block1._elem('elem1').domElem.trigger('click');
+                spy4.should.have.been.called;
+
+                block1._elem('elem1').domElem.trigger('click');
+                spy4.should.have.been.calledOnce;
+            });
+
+            it('should properly bind the same handler', function() {
+                block1._domEvents(collection)
+                    .on('click', spy6)
+                    .on('click', spy6);
+
+                block1._elem('elem1').domElem.trigger('click');
+                spy6.should.have.been.calledOnce;
+
+                block1._domEvents(collection).un('click', spy6);
+                block1._elem('elem1').domElem.trigger('click');
+                spy6.should.have.been.calledOnce;
+            });
+
+            it('should properly unbind all handlers', function() {
+                block1._domEvents(collection).un('click');
+                block1._elem('elem1').domElem.trigger('click');
+
+                spy1.should.not.have.been.called;
+                spy2.should.not.have.been.called;
+            });
+
+            it('should properly unbind specified handler', function() {
+                block1._domEvents(collection).un('click', spy1);
+                block1._elem('elem1').domElem.trigger('click');
+
+                spy1.should.not.have.been.called;
+                spy3.should.have.been.called;
+            });
+
+            it('should properly unbind once handler', function() {
+                block1._domEvents(collection).un('click', spy4);
+                block1._elem('elem1').domElem.trigger('click');
+                spy4.should.not.have.been.called;
             });
         });
 
