@@ -1,5 +1,21 @@
 # История изменений
 
+## 2.9.0
+
+### Крупные изменения
+
+- `jQuery` была обновлена до 2.2.0 и 1.12.0 ([#1249](https://github.com/bem/bem-core/issues/1249)).
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена ошибка в `BEMHTML 1.x`, которая приводила к потере `this.mods` в `reapply()` ([#97](https://github.com/bem/bem-xjst/issues/97)).
+
+### Также в релиз вошли следующие изменения
+
+- Теперь `jquery__event_type_pointerpressrelease` предоставляет `originalEvent` ([#1254](https://github.com/bem/bem-core/issues/1254)).
+- dist: Поддержка `i18n` добавлена в dist ([#1212](https://github.com/bem/bem-core/issues/1212)).
+- Шаблон `page__css.bemhtml` был обновлен для поддержки новых версий `bem-xjst` ([#1228](https://github.com/bem/bem-core/issues/1228)).
+
 ## 2.8.0
 
 ### Крупные изменения
