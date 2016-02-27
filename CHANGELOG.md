@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.9.0
+
+### Notable changes
+
+- `jQuery` was updated to 2.2.0 and 1.12.0 ([#1249](https://github.com/bem/bem-core/issues/1249)).
+
+### Bug fixes
+
+- Fixed bug in BEMHTML 1.x which leads to drop of `this.mods` in `reapply()` ([#97](https://github.com/bem/bem-xjst/issues/97)).
+
+### Other changes
+
+- `jquery__event_type_pointerpressrelease` now exposes `originalEvent` ([#1254](https://github.com/bem/bem-core/issues/1254)).
+- dist: Support for `i18n` was added to dist ([#1212](https://github.com/bem/bem-core/issues/1212)).
+- `page__css.bemhtml` template was updated to support new `bem-xjst` versions ([#1228](https://github.com/bem/bem-core/issues/1228)).
+
 ## 2.8.0
 
 ### Notable changes
