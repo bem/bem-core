@@ -56,7 +56,6 @@
     "jsDoc": {
         "checkParamNames": true,
         "requireParamTypes": true,
-        "checkRedundantAccess": "enforceLeadingUnderscore",
         "leadingUnderscoreAccess": true
     }
 }
