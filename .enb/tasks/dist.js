@@ -44,7 +44,22 @@ function configure(node, platform) {
         [techs.bem.levels, { levels : config.levels(platform) }],
         [techs.bem.levelsToBemdecl, { target : '.tmp.bemdecl.js' }],
         [techs.bem.deps, { bemdeclFile : '.tmp.bemdecl.js', target : '.tmp.deps.js' }],
+        [techs.files.write, {
+            target : '.tmp.i-bem-dom-init-auto.deps.js',
+            content : 'module.exports = ' + JSON.stringify({ deps : [{
+                block : 'i-bem',
+                elem : 'dom',
+                mod : 'init',
+                val : 'auto'
+            }] })
+        }],
+        [techs.bem.subtractDeps, { from : '.tmp.deps.js', target : '.tmp.no-autoinit.deps.js', what : '.tmp.i-bem-dom-init-auto.deps.js' }],
         [techs.bem.files, { depsFile : '.tmp.deps.js' }],
+        [techs.bem.files, {
+            depsFile : '.tmp.no-autoinit.deps.js',
+            filesTarget : '.tmp.no-autoinit-files.files',
+            dirsTarget : '.tmp.no-autoinit-files.dirs'
+        }],
 
         // build CSS
         [techs.css, { target : LIB_NAME + '.dev.css' }],
@@ -70,11 +85,22 @@ function configure(node, platform) {
             target : '.tmp.without-i18n.js',
             includeYM : true
         }],
+        [techs.browserJS, {
+            target : '.tmp.no-autoinit-without-i18n.js',
+            filesTarget : '.tmp.no-autoinit-files.files',
+            includeYM : true
+        }],
+
         [techs.files.merge, {
             sources : ['.tmp.without-i18n.js', '.tmp.i18n.js'],
             target : LIB_NAME + '.dev.js'
         }],
+        [techs.files.merge, {
+            sources : ['.tmp.no-autoinit-without-i18n.js', '.tmp.i18n.js'],
+            target : LIB_NAME + '.dev.no-autoinit.js'
+        }],
         [techs.borschik, { source : LIB_NAME + '.dev.js', target : LIB_NAME + '.js' }],
+        [techs.borschik, { source : LIB_NAME + '.dev.no-autoinit.js', target : LIB_NAME + '.no-autoinit.js' }],
 
         // build BEMHTML
         [techs.engines.bemhtml, { target : LIB_NAME + '.dev.bemhtml.js' }],
@@ -98,28 +124,46 @@ function configure(node, platform) {
         }],
         [techs.borschik, { source : LIB_NAME + '.dev.js+bemhtml.js', target : LIB_NAME + '.js+bemhtml.js' }],
 
+        [techs.files.merge, {
+            target : LIB_NAME + '.dev.no-autoinit.js+bemhtml.js',
+            sources : [LIB_NAME + '.dev.no-autoinit.js', LIB_NAME + '.dev.bemhtml.js']
+        }],
+        [techs.borschik, { source : LIB_NAME + '.dev.no-autoinit.js+bemhtml.js', target : LIB_NAME + '.no-autoinit.js+bemhtml.js' }],
+
         // merge JavaScript with BH
         [techs.files.merge, {
             target : LIB_NAME + '.dev.js+bh.js',
             sources : [LIB_NAME + '.dev.js', LIB_NAME + '.dev.bh.js']
         }],
-        [techs.borschik, { source : LIB_NAME + '.dev.js+bh.js', target : LIB_NAME + '.js+bh.js' }]
+        [techs.borschik, { source : LIB_NAME + '.dev.js+bh.js', target : LIB_NAME + '.js+bh.js' }],
+
+        [techs.files.merge, {
+            target : LIB_NAME + '.dev.no-autoinit.js+bh.js',
+            sources : [LIB_NAME + '.dev.no-autoinit.js', LIB_NAME + '.dev.bh.js']
+        }],
+        [techs.borschik, { source : LIB_NAME + '.dev.no-autoinit.js+bh.js', target : LIB_NAME + '.no-autoinit.js+bh.js' }]
     ]);
 
     node.addTargets([
         '.dev.css',
         '.dev.js',
+        '.dev.no-autoinit.js',
         '.dev.bemhtml.js',
         '.dev.bh.js',
         '.dev.js+bemhtml.js',
+        '.dev.no-autoinit.js+bemhtml.js',
         '.dev.js+bh.js',
+        '.dev.no-autoinit.js+bh.js',
 
         '.css',
         '.js',
+        '.no-autoinit.js',
         '.bemhtml.js',
         '.bh.js',
         '.js+bemhtml.js',
-        '.js+bh.js'
+        '.no-autoinit.js+bemhtml.js',
+        '.js+bh.js',
+        '.no-autoinit.js+bh.js'
     ].map(function (ext) {
         return LIB_NAME + ext;
     }));
