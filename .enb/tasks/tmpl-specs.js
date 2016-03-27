@@ -56,19 +56,10 @@ function configure(helper, platform) {
                     }
                 }
             },
-            'bemhtml-dev' : {
+            bemhtml : {
                 tech : 'enb-bemxjst/techs/bemhtml',
                 options : {
-                    devMode : true,
-                    requires : {
-                        i18n : { globals : 'BEM.I18N' }
-                    }
-                }
-            },
-            'bemhtml-prod' : {
-                tech : 'enb-bemxjst/techs/bemhtml',
-                options : {
-                    devMode : false,
+                    sourceSuffixes : ['bemhtml', 'bemhtml.js'],
                     requires : {
                         i18n : { globals : 'BEM.I18N' }
                     }
