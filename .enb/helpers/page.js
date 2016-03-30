@@ -55,12 +55,13 @@ module.exports = function(node, opts) {
     }
 
     var nodeDirname = node.getNodePath(),
+        blockName = path.basename(path.dirname(nodeDirname)),
+        exampleName = path.basename(nodeDirname),
         sublevels = [
-            path.join(nodeDirname, '..', '.blocks'),
+            path.join(nodeDirname, blockName + '.blocks'),
+            path.join(nodeDirname, exampleName + '.blocks'),
             path.join(nodeDirname, 'blocks')
-        ].filter(function (level) {
-            return fs.existsSync(level);
-        }),
+        ].filter(fs.existsSync),
         levels = [].concat(
             config.levels(opts.platform),
             sublevels
