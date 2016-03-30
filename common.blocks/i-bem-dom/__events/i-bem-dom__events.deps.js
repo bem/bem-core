@@ -5,6 +5,7 @@
         'objects',
         'jquery',
         'functions',
-        { block : 'i-bem', elem : 'internal' }
+        { block : 'i-bem', elem : 'internal' },
+        { elem : 'collection' }
     ]
 })

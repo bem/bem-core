@@ -7,6 +7,7 @@ modules.define(
     [
         'i-bem__internal',
         'inherit',
+        'identify',
         'next-tick',
         'objects',
         'functions'
@@ -15,6 +16,7 @@ modules.define(
         provide,
         bemInternal,
         inherit,
+        identify,
         nextTick,
         objects,
         functions) {
@@ -213,6 +215,12 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
          * @readonly
          */
         this.params = objects.extend(this._getDefaultParams(), params);
+
+        /**
+         * @member {String} Unique entity ID
+         * @private
+         */
+        this._uniqId = this.params.uniqId || identify(this);
 
         initImmediately !== false?
             this._setInitedMod() :

@@ -203,12 +203,12 @@ describe('BEM events', function() {
                     onSetMod : {
                         'js' : {
                             'inited' : function() {
-                                this._events(block2_1 = this.findChildBlocks(Block2)[0])
+                                this._events(block2_1 = this.findChildBlocks(Block2).get(0))
                                     .on('click', spy1)
                                     .on('click', spy2)
                                     .on('click', data, wrapSpy(spy3));
 
-                                this._events(block2_2 = this.findChildBlocks(Block2)[1])
+                                this._events(block2_2 = this.findChildBlocks(Block2).get(1))
                                     .on('click', spy5);
                             }
                         }
@@ -289,7 +289,7 @@ describe('BEM events', function() {
             });
 
             it('should properly handle events (bound in class context) from nested block', function() {
-                var block2 = block1.findChildBlocks(Block2)[1];
+                var block2 = block1.findChildBlocks(Block2).get(1);
                 block2._emit('click');
 
                 spy1.should.have.been.calledOnce;
@@ -367,7 +367,7 @@ describe('BEM events', function() {
                         it('should properly handle events (bound in class context) from nested elems', function() {
                             block1._events('e5').on('click', wrapSpy(spy8));
 
-                            var nestedE5 = block1.findChildElems('e5')[1];
+                            var nestedE5 = block1.findChildElems('e5').get(1);
                             nestedE5._emit('click');
 
                             spy8.should.have.been.calledOnce;
@@ -495,6 +495,62 @@ describe('BEM events', function() {
                         spy3.should.have.been.called;
                     });
                 });
+            });
+        });
+
+        describe('collection events', function() {
+            var collection, block2;
+
+            beforeEach(function() {
+                Block1 = bemDom.declBlock('block1', {
+                    onSetMod : {
+                        'js' : {
+                            'inited' : function() {
+                                collection = this.findChildBlocks(Block2);
+                                block2 = collection.get(0);
+                                this._events(collection)
+                                    .on('click', spy1)
+                                    .on('click', spy2)
+                                    .on('click', data, wrapSpy(spy3));
+                            }
+                        }
+                    }
+                });
+
+                Block2 = bemDom.declBlock('block2');
+
+                block1 = initDom({
+                    block : 'block1',
+                    content : { block : 'block2' }
+                }).bem(Block1);
+            });
+
+            it('should properly bind handlers', function() {
+                block2._emit('click');
+
+                spy1.should.have.been.called;
+                spy2.should.have.been.called;
+
+                spy3.should.have.been.calledOn(block1);
+                spy3.args[0][0].should.be.instanceOf(events.Event);
+                spy3.args[0][1].should.be.equal(block2);
+                spy3.args[0][2].should.be.equal(data);
+            });
+
+            it('should properly unbind all handlers', function() {
+                block1._events(collection).un('click');
+                block2._emit('click');
+
+                spy1.should.not.have.been.called;
+                spy2.should.not.have.been.called;
+            });
+
+            it('should properly unbind specified handler', function() {
+                block1._events(collection).un('click', spy1);
+                block2._emit('click');
+
+                spy1.should.not.have.been.called;
+                spy3.should.have.been.called;
             });
         });
 

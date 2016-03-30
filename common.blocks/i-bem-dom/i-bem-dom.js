@@ -7,6 +7,7 @@ modules.define(
     [
         'i-bem',
         'i-bem__internal',
+        'i-bem-dom__collection',
         'i-bem-dom__events_type_dom',
         'i-bem-dom__events_type_bem',
         'inherit',
@@ -20,6 +21,7 @@ modules.define(
         provide,
         bem,
         bemInternal,
+        BemDomCollection,
         domEvents,
         bemEvents,
         inherit,
@@ -291,15 +293,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
          */
         this._findBackRefs = [];
 
-        /**
-         * @member {String} Unique entity ID
-         * @private
-         */
-        this._uniqId = params.uniqId;
+        this.__base(null, params, initImmediately);
 
         uniqIdToEntity[this._uniqId] = this;
-
-        this.__base(null, params, initImmediately);
     },
 
     /**
@@ -370,7 +366,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * Finds child blocks
      * @param {Function|Object} Block Block class or description (block, modName, modVal) of the block to find
-     * @returns {Block[]}
+     * @returns {BemDomCollection}
      */
     findChildBlocks : function(Block) {
         return this._findEntities('find', Block);
@@ -388,7 +384,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * Finds parent blocks
      * @param {Function|Object} Block Block class or description (block, modName, modVal) of the block to find
-     * @returns {Block[]}
+     * @returns {BemDomCollection}
      */
     findParentBlocks : function(Block) {
         return this._findEntities('parents', Block);
@@ -406,28 +402,10 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * Finds mixed blocks
      * @param {Function|Object} Block Block class or description (block, modName, modVal) of the block to find
-     * @returns {Block[]}
+     * @returns {BemDomCollection}
      */
     findMixedBlocks : function(Block) {
         return this._findEntities('filter', Block);
-    },
-
-    /**
-     * Finds child elements
-     * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
-     * @param {Boolean} [strictMode=false]
-     * @returns {Elem[]}
-     */
-    findChildElems : function(Elem, strictMode) {
-        var res = this._findEntities('find', Elem);
-        if(strictMode)
-            return this._filterFindElemResults(res);
-
-        res.forEach(function(entity) {
-            entity._findBackRefs.push(this);
-        }, this);
-
-        return this._elemsCache[buildElemKey(Elem)] = res;
     },
 
     /**
@@ -447,14 +425,21 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     },
 
     /**
-     * Finds parent elements
+     * Finds child elements
      * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
      * @param {Boolean} [strictMode=false]
-     * @returns {Elem[]}
+     * @returns {BemDomCollection}
      */
-    findParentElems : function(Elem, strictMode) {
-        var res = this._findEntities('parents', Elem);
-        return strictMode? this._filterFindElemResults(res) : res;
+    findChildElems : function(Elem, strictMode) {
+        var res = this._findEntities('find', Elem);
+        if(strictMode)
+            return this._filterFindElemResults(res);
+
+        res.forEach(function(entity) {
+            entity._findBackRefs.push(this);
+        }, this);
+
+        return this._elemsCache[buildElemKey(Elem)] = res;
     },
 
     /**
@@ -470,12 +455,14 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     },
 
     /**
-     * Finds mixed elements
+     * Finds parent elements
      * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
-     * @returns {Elem[]}
+     * @param {Boolean} [strictMode=false]
+     * @returns {BemDomCollection}
      */
-    findMixedElems : function(Elem) {
-        return this._findEntities('filter', Elem);
+    findParentElems : function(Elem, strictMode) {
+        var res = this._findEntities('parents', Elem);
+        return strictMode? this._filterFindElemResults(res) : res;
     },
 
     /**
@@ -485,6 +472,15 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     findMixedElem : function(Elem) {
         return this._findEntities('filter', Elem, true);
+    },
+
+    /**
+     * Finds mixed elements
+     * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
+     * @returns {BemDomCollection}
+     */
+    findMixedElems : function(Elem) {
+        return this._findEntities('filter', Elem);
     },
 
     /**
@@ -545,14 +541,15 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
             }
         });
 
-        return res;
+        return new BemDomCollection(res);
     },
 
     /**
      * Returns an manager to bind and unbind DOM events for particular context
      * @protected
-     * @param {Function|String|Object|Elem|document|window} [ctx=this.domElem] context to bind,
-     *     can be BEM-entity class, instance, element name or description (elem, modName, modVal), document or window
+     * @param {Function|String|Object|Elem|BemDomCollection|document|window} [ctx=this.domElem] context to bind,
+     *     can be BEM-entity class, instance, collection of BEM-entities,
+     *     element name or description (elem, modName, modVal), document or window
      * @returns {EventManager}
      */
     _domEvents : function(ctx) {
@@ -562,8 +559,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * Returns an manager to bind and unbind BEM events for particular context
      * @protected
-     * @param {Function|String|BemDomEntity|Object} [ctx=this.domElem] context to bind,
-     *     can be BEM-entity class, instance, element name or description (elem, modName, modVal)
+     * @param {Function|String|BemDomEntity|BemDomCollection|Object} [ctx=this.domElem] context to bind,
+     *     can be BEM-entity class, instance, collection of BEM-entities,
+     *     element name or description (elem, modName, modVal)
      * @returns {EventManager}
      */
     _events : function(ctx) {
