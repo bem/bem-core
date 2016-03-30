@@ -16,18 +16,18 @@
   "dependencies": {
     "bem-environ": "~1.4.0",
     "bem-xjst": "0.9.0",
-    "ym": "0.1.0"
+    "ym": "0.1.2"
   },
   "devDependencies": {
     "bem-naming": "0.5.1",
     "bem-walk": "1.0.0-alpha1",
-    "borschik-tech-cleancss": "2.0.1",
+    "borschik-tech-cleancss": "2.1.0",
     "bower": "^1.5.2",
     "chai": "^3.2.0",
     "chai-as-promised": "^5.1.0",
     "enb": "^1.0.1",
     "enb-bem-docs": "0.11.0",
-    "enb-bem-examples": "0.6.0",
+    "enb-bem-examples": "1.0.0",
     "enb-bem-i18n": "^1.1.0",
     "enb-bem-specs": "0.8.0",
     "enb-bem-techs": "^2.1.0",
@@ -40,13 +40,13 @@
     "enb-css": "^1.0.2",
     "enb-js": "^1.1.0",
     "enb-magic-platform": "0.6.0",
-    "git-hooks": "~0.0.6",
-    "istanbul": "~0.3.2",
+    "git-hooks": "~1.0.2",
+    "istanbul": "~0.4.2",
     "jscs": "^2.5.1",
     "jscs-bem": "^0.2.0",
     "jshint-groups": "0.8.0",
-    "mocha": "~2.2.5",
-    "vow": "0.4.10"
+    "mocha": "~2.4.5",
+    "vow": "0.4.12"
   },
   "scripts": {
     "start": "magic server",
