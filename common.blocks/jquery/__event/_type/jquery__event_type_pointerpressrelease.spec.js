@@ -3,29 +3,62 @@ modules.define(
     ['jquery', 'sinon'],
     function(provide, $, sinon) {
 
-describe('jquery__event_type_pointerpressrelease', function() {
-    it('should trigger "pointerpress" event on "mousedown"', function() {
-        var spy = sinon.spy(),
-            e = $.Event('mousedown', { which : 1 }),
-            elem = $('<div/>').appendTo('body');
+describe.only('jquery__event_type_pointerpressrelease', function() {
+    var elem;
 
-        elem.on('pointerpress', spy).trigger(e);
+    beforeEach(function() {
+        elem = $('<div/>').appendTo('body');
+    });
 
-        spy.should.have.been.calledOnce;
-
+    afterEach(function() {
         elem.remove();
     });
 
-    it('should trigger "pointerrelease" event on "mouseup"', function() {
-        var spy = sinon.spy(),
-            e = $.Event('mouseup', { which : 1 }),
-            elem = $('<div/>').appendTo('body');
-
-        elem.on('pointerrelease', spy).trigger(e);
+    it('should trigger "pointerpress" event on "mousedown"', function() {
+        var spy = sinon.spy();
+        elem.on('pointerpress', spy)
+            .trigger($.Event('mousedown', { which : 1 }))
+            .trigger('mouseup');
 
         spy.should.have.been.calledOnce;
+    });
 
-        elem.remove();
+    it('should trigger "pointerrelease" event on "mouseup"', function() {
+        var spy = sinon.spy();
+        elem.on('pointerrelease', spy)
+            .trigger('mousedown')
+            .trigger($.Event('mouseup', { which : 1 }));
+
+        spy.should.have.been.calledOnce;
+    });
+
+    it('"pointerpress" should have "pointerdown" original event', function(done) {
+        elem
+            .on('pointerpress', function(e) {
+                e.originalEvent.type.should.be.equal('pointerdown');
+                done();
+            })
+            .trigger($.Event('mousedown', { which : 1 }))
+            .trigger('mouseup');
+    });
+
+    it('"pointerrelease" should have "pointerup" original event', function(done) {
+        elem
+            .on('pointerrelease', function(e) {
+                e.originalEvent.type.should.be.equal('pointerup');
+                done();
+            })
+            .trigger('mousedown')
+            .trigger($.Event('mouseup', { which : 1 }));
+    });
+
+    it('"pointerrelease" should have "pointercancel" original event', function(done) {
+        elem
+            .on('pointerrelease', function(e) {
+                e.originalEvent.type.should.be.equal('pointercancel');
+                done();
+            })
+            .trigger($.Event('pointercancel', { which : 1 }));
     });
 });
 
