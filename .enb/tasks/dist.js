@@ -103,7 +103,7 @@ function configure(node, platform) {
         [techs.borschik, { source : LIB_NAME + '.dev.no-autoinit.js', target : LIB_NAME + '.no-autoinit.js' }],
 
         // build BEMHTML
-        [techs.engines.bemhtml, { target : LIB_NAME + '.dev.bemhtml.js' }],
+        [techs.engines.bemhtml, { target : LIB_NAME + '.dev.bemhtml.js', sourceSuffixes : ['bemhtml', 'bemhtml.js'] }],
         [techs.borschik, { source : LIB_NAME + '.dev.bemhtml.js', target : LIB_NAME + '.bemhtml.js' }],
 
         // build BH
