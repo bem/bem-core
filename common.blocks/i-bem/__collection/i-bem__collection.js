@@ -164,7 +164,7 @@ var BemCollection = inherit(/** @lends BemCollection.prototype */{
     /**
      * Returns a new collection comprised of collection on which it is called joined with
      * the collection(s) and/or array(s) and/or entity(es) provided as arguments.
-     * @param {Collection|Array|BemEntity} [args...]
+     * @param {?...(Collection|Array|BemEntity)} args
      * @returns {Collection}
      */
     concat : function() {
@@ -199,8 +199,6 @@ var BemCollection = inherit(/** @lends BemCollection.prototype */{
     }
 });
 
-var arrayConcat = Array.prototype.concat;
-
 function buildForEachEntityMethodProxyFn(methodName) {
     return function() {
         var args = arguments;
@@ -226,6 +224,8 @@ function buildComplexProxyFn(arrayMethodName, entityMethodName) {
         });
     };
 }
+
+var arrayConcat = Array.prototype.concat;
 
 provide(BemCollection);
 
