@@ -253,6 +253,15 @@ function buildElemKey(elem) {
 }
 
 /**
+ * Returns jQuery collection for provided HTML
+ * @param {jQuery|String} html
+ * @returns {jQuery}
+ */
+function getJqueryCollection(html) {
+    return $(typeof html === 'string'? $.parseHTML(html, null, true) : html);
+}
+
+/**
  * @class BemDomEntity
  * @description Base mix for BEM entities that have DOM representation
  */
@@ -950,11 +959,13 @@ bemDom = /** @exports */{
         var prev = ctx.prev(),
             parent = ctx.parent();
 
+        content = getJqueryCollection(content);
+
         this.destruct(ctx);
 
         return this.init(prev.length?
-            $(content).insertAfter(prev) :
-            $(content).prependTo(parent));
+            content.insertAfter(prev) :
+            content.prependTo(parent));
     },
 
     /**
@@ -964,7 +975,7 @@ bemDom = /** @exports */{
      * @returns {jQuery} New content
      */
     append : function(ctx, content) {
-        return this.init($(content).appendTo(ctx));
+        return this.init(getJqueryCollection(content).appendTo(ctx));
     },
 
     /**
@@ -974,7 +985,7 @@ bemDom = /** @exports */{
      * @returns {jQuery} New content
      */
     prepend : function(ctx, content) {
-        return this.init($(content).prependTo(ctx));
+        return this.init(getJqueryCollection(content).prependTo(ctx));
     },
 
     /**
@@ -984,7 +995,7 @@ bemDom = /** @exports */{
      * @returns {jQuery} New content
      */
     before : function(ctx, content) {
-        return this.init($(content).insertBefore(ctx));
+        return this.init(getJqueryCollection(content).insertBefore(ctx));
     },
 
     /**
@@ -994,7 +1005,7 @@ bemDom = /** @exports */{
      * @returns {jQuery} New content
      */
     after : function(ctx, content) {
-        return this.init($(content).insertAfter(ctx));
+        return this.init(getJqueryCollection(content).insertAfter(ctx));
     }
 };
 
