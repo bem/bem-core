@@ -43,7 +43,7 @@
     "enb-magic-platform": "0.6.0",
     "git-hooks": "~1.0.2",
     "istanbul": "~0.4.2",
-    "jscs": "^2.5.1",
+    "jscs": "^2.11.0",
     "jscs-bem": "^0.2.0",
     "jshint": "^2.9.1",
     "jshint-groups": "0.8.0",
