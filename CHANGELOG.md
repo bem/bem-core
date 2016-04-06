@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.9.1
+
+### Bug fixes
+
+- An issue in `page` was fixed. `<meta name=viewport>` had wrong `user-scalable` value on the touch level ([#1294](https://github.com/bem/bem-core/issues/1294)).
+
+### Other changes
+
+- dist: Autoinitialization of blocks is optional now ([#1271](https://github.com/bem/bem-core/issues/1271)).
+
 ## 2.9.0
 
 ### Notable changes
