@@ -104,6 +104,7 @@ module.exports = {
                     'content',
                     'def',
                     'elem',
+                    'elemMatch',
                     'js',
                     'local',
                     'match',

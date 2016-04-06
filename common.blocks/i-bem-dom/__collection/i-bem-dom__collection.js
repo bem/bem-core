@@ -96,8 +96,6 @@ var BemDomCollection = inherit(BemCollection, /** @lends BemDomCollection.protot
     findMixedElems : buildProxyMethodForMany('findMixedElems')
 });
 
-var arrayConcat = Array.prototype.concat;
-
 function collectionMapMethod(collection, methodName, args) {
     return collection.map(function(entity) {
         return entity[methodName].apply(entity, args);

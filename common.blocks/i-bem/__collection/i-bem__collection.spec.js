@@ -239,13 +239,14 @@ describe('BEM collections', function() {
                 var b1 = Block.create(),
                     b2 = Block.create({ m : 'v1' }),
                     b3 = Block.create(),
-                    collection = new BemCollection([b1, b2, b3]);
+                    collection = new BemCollection([b1, b2, b3]),
+                    res;
 
-                var res = collection.filter(function(entity) {
+                res = collection.filter(function(entity) {
                     return entity.hasMod('m');
                 });
 
-                res.get(0).should.be.equal(b2)
+                res.get(0).should.be.equal(b2);
             });
         });
 
