@@ -1,4 +1,0 @@
-block('b1')(
-  tag()('a'),
-  attrs()({ invisible: undefined, x: '1' })
-);

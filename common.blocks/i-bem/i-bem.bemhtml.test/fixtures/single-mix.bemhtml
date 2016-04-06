@@ -1,5 +1,0 @@
-block('b1')(
-  mix()({ block: 'b2' }),
-  tag()('a')
-);
-block('b2').tag()('b');

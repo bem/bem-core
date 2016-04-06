@@ -1,5 +1,0 @@
-block('b1')(
-  mix()(['clearfix', { block: 'layout', elem: 'cell' }, 'b4'])
-);
-
-block('b7').mix()('clearfix');
