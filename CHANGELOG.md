@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.0.0
+
+### Breaking changes
+
+- `jquery__events_type_pointerclick` is not using [FastClick](https://github.com/ftlabs/fastclick) anymore ([#1088](https://github.com/bem/bem-core/issues/1088)).
+
+### Bug fixes
+
+- An issue in `page` was fixed. `<meta name=viewport>` had wrong `user-scalable` value on the touch level ([#1294](https://github.com/bem/bem-core/issues/1294)).
+
+### Other changes
+
+- dist: Autoinitialisation of blocks is optional now ([#1271](https://github.com/bem/bem-core/issues/1271)).
+
 ## 2.9.0
 
 ### Notable changes

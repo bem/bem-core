@@ -1,5 +1,19 @@
 # История изменений
 
+## 3.0.0
+
+### Изменения, ломающие обратную совместимость
+
+- `jquery__events_type_pointerclick` больше не использует библиотеку [FastClick](https://github.com/ftlabs/fastclick) ([#1088](https://github.com/bem/bem-core/issues/1088)).
+
+### В релиз вошли следующие исправления ошибок
+
+- В блоке `page` на уровне `blocks.touch` исправлена ошибка с невалидным значением `user-scalable=0` для `<meta name=viewport>` ([#1294](https://github.com/bem/bem-core/issues/1294)).
+
+### Также в релиз вошли следующие изменения
+
+- dist: Автоматическая инициализация блоков теперь опциональна ([#1271](https://github.com/bem/bem-core/issues/1271)).
+
 ## 2.9.0
 
 ### Крупные изменения
