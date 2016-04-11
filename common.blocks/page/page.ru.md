@@ -1,146 +1,265 @@
-﻿Блок `page` создаёт теги верхнего уровня страницы:
-* `<html>`
-* `<head>`
-* `<body>`
+# page
 
-Именно он отвечает за то, какие подключить `CSS` и `JS` файлы к странице,
-выставление `meta` тегов, заголовка и так далее.
+Блок предоставляет шаблоны, создающие набор HTML-элементов верхнего уровня страницы: `<html>`, `<head>`, `<body>`.
 
-Декларация блока в `BEMJSON` начинается объявлением блока и
-указанием свойства `title`, которое превращается в тег `<title>` в `HTML`.
 
-```javascript
+## Обзор
+
+### Специализированные поля блока
+
+| Поле | Тип | Описание |
+| ---- | --- | -------- |
+| <a href="#declfields-doctype">doctype</a> | `{String}` | Позволяет переопределить строку DTD текущего документа. |
+| <a href="#declfields-title">title</a> | `{String}` | Позволяет указать содержимое `<title>`. |
+| <a href="#declfields-favicon">favicon</a> | `{String}` | Позволяет указать URL значка страницы (фавиконки). |
+| <a href="#declfields-head">head</a> | `{BEMJSON}` | Позволяет дополнить содержимое `<head>`. |
+| <a href="#declfields-styles">styles</a> | `{BEMJSON}` | Позволяет подключать таблицы стилей CSS. |
+| <a href="#declfields-scripts">scripts</a> | `{BEMJSON}` | Позволяет подключать скрипты в тело документа. |
+| <a href="#declfields-content">content</a> | `{BEMJSON}` | Позволяет указать содержимое страницы. |
+
+### Элементы блока
+
+| Элемент | Способы использования | Описание |
+| ------- | --------------------- | -------- |
+| <a href="#elems-css">css</a> | `BEMJSON` | Служит для подключения CSS по ссылке или в виде строки. |
+| <a href="#elems-js">js</a> | `BEMJSON` | Служит для подключения JS по ссылке или в виде строки. |
+| <a href="#elems-meta">meta</a> | `BEMJSON` | Служит для создания HTML-элементов `<meta>`. |
+
+### Специализированные поля элементов блока
+
+| Элемент | Поле | Тип | Описание |
+| ------- | ---- | --- | -------- |
+| <a href="#elems-css">css</a> | <a href="#elems-css-declfields-url">url</a> | `{String}`  | Позволяет задать URL для загрузки стилей. |
+|  | <a href="#elems-css-declfields-content">content</a> | `{String}`  | Служит для задания стилей в виде строки |
+| <a href="#elems-js">js</a> | <a href="#elems-css-declfields-url">url</a> | `{String}`  | Позволяет задать URL для загрузки скрипта. |
+|  | <a href="#elems-css-declfields-content">content</a> | `{String}`  | Служит для задания скриптов в виде строки |
+
+### Публичные технологии блока
+
+Блок реализован в технологиях:
+
+* `bh.js`
+* `bemhtml`
+
+## Подробности
+
+Блок отвечает за создание HTML-элементов верхнего уровня, подключение к странице CSS, JS, элементов `<meta>` и указание заголовка. Для этого в BEMJSON-декларации блока и элементов блока зарезервированы специализированные поля.
+
+<a name="declfields"></a>
+### Специализированные поля блока
+
+<a name="declfields-doctype"></a>
+#### Поле  `doctype`
+
+Тип: `{String}`.
+
+Позволяет явно указать строку с DTD (Document Type Definition) текущего документа. Если свойство не задано, по умолчанию будет использоваться `<!DOCTYPE html>`.
+
+<a name="declfields-title"></a>
+#### Поле `title`
+
+Тип: `{String}`.
+
+Название страницы. Становится HTML-элементом `<title>`.
+
+```js
 {
-    block: 'page',
-    title: 'Page title',
-    content: 'Блок page'
+    block : 'page',
+    title : 'Заголовок страницы',
+    content : 'Блок page'
 }
 ```
 
-Указание свойства `head` дополняет элемент `head`, соответствующий `HTML` тегу `<head>`,
-элементами для подключения `CSS` и `JS` файлов, а также указания `meta`:
 
-```javascript
+<a name="declfields-favicon"></a>
+#### Поле `favicon`
+
+Тип: `{String}`.
+
+Позволяет указать URL значка страницы (фавиконки):
+
+```js
 {
-    block: 'page',
-    title: 'Page title',
+    block : 'page',
+    title : 'Заголовок страницы',
+    favicon : 'favicon.ico',
+    content : 'Страница с пользовательской фавиконкой'
+}
+```
+
+
+<a name="declfields-head"></a>
+#### Поле `head`
+
+Тип: `{BEMJSON}`.
+
+Позволяет дополнить содержимое `HTML`-элемента `<head>`, определенное в шаблоне блока:
+
+```js
+{
+    block : 'page',
+    title : 'Заголовок страницы',
     head: [
-        { elem: 'css', url: 'example.css', ie: false },
-        { elem: 'css', url: 'example.ie.css', ie: 'lt IE 8' },
-        { elem: 'js', url: 'example.js' },
-        { elem: 'meta', attrs: { name: 'keywords', content: 'js, css, html' } },
-        { elem: 'meta', attrs: { name: 'description', content: 'Yet another webdev blog' } }
+        { elem : 'js', url : 'jquery-min.js' },
+        { elem : 'meta', attrs : { name : 'description', content : 'Yet another webdev blog' } }
     ],
-    content: 'Страница с подключенными CSS, JS и meta-данными'
+    content : 'Страница с подключенным JS и meta-данными'
 }
 ```
 
-Элемент `css` превращается в `HTML` в тег `<link>`, подключающий как `CSS` стиль тот файл,
-что указан в свойстве `url` этого элемента. Также у такого элемента может быть свойство `ie`.
-Если это свойство `false`, то будут использоваться такие `conditional comments`, которые предотвратят использование этих стилей в `IE`. При строчном значении этого свойства тег `<link>` , будет обёрнут в соответствующий `conditional comment`, и этот стиль будет грузиться и использоваться указанных браузерах.
+<a name="declfields-styles"></a>
+#### Поле `styles`
 
-Также есть возможность указывать свойство `content` для содержания тега `<style>`:
+Тип: `{BEMJSON}`.
 
-```javascript
+Позволяет подключить `CSS`:
+
+```js
 {
-    block: 'page',
-    title: 'Page title',
-    head: [
-        {
-            elem: 'css',
-            content: '.page { color: #f00 }'
-        }
-    ],
-    content: 'Страница с тэгом <style>'
+    block : 'page',
+    title : 'Заголовок страницы',
+    styles : { elem : 'css', url : '_index.css' },
+    content : 'Страница с подключенным CSS'
 }
 ```
 
-Элемент `js` действует аналогично, подключая к странице `JS` файлы при помощи тега `<script>`.
 
-Свойство `head` не описывает содержание `HTML`-тега `<head>` полностью, а лишь
-дополняет дефолтное, которое блок сам создаёт в своём `BEMHTML` шаблоне.
+<a name="declfields-scripts"></a>
+#### Поле `scripts`
 
-### Тег `<meta>` с указанием кодировки
+Тип: `{BEMJSON}`.
 
-`BEMHTML`:
+Позволяет подключать JS в тело страницы в конец HTML-элемента `<body>`:
 
-```javascript
-content: [
-    {
-        tag: 'meta',
-        attrs: { 'http-equiv': 'content-type', content: 'text/html; charset=utf-8' }
-    },
-    // ...
-]
-```
-
-### Тег `<meta>` для использования `IE9` (и выше) в максимальном `compatibility` режиме
-
-`BEMHTML`:
-
-```javascript
-content: [
-    // ...
-    {
-        tag: 'meta',
-        attrs: { 'http-equiv': 'X-UA-Compatible', content: 'IE=EmulateIE7, IE=edge' }
-    },
-    // ...
-]
-```
-
-### Выставление значения тега `<title>` страницы из свойства
-
-```javascript
-content: [
-    // ...
-    {
-        tag: 'title',
-        content: this.ctx.title
-    },
-    // ...
-]
-```
-
-### Выставление фавиконки
-
-```javascript
-content: [
-    // ...
-    this.ctx.favicon ? {
-        elem: 'favicon',
-        url: this.ctx.favicon
-    } : '',
-    // ...
-]
-```
-
-### Декларация блоков
-
-Значением свойства `content` блока `page` может быть хеш-описание содержимого
-(если речь идёт лишь об одном блоке) или массив блоков, описанных хешами:
-
-```javascript
+```js
 {
-    block: 'page',
-    title: 'Page title',
-    content: {
-        block: 'b-link',
-        mods: { pseudo: 'yes', togcolor: 'yes', color: 'green' },
-        url: '#',
-        target: '_blank',
-        title: 'Кликни меня',
-        content: 'Псевдоссылка, меняющая цвет по клику'
+    block : 'page',
+    title : 'Заголовок страницы',
+    scripts : { elem : 'js', url : '_index.js' },
+    content : 'Страница со скриптом подключенным в body'
+}
+```
+
+
+<a name="declfields-content"></a>
+#### Поле `content`
+
+Тип: `{BEMJSON}`.
+
+Позволяет указать содержимое страницы.
+
+```js
+{
+    block : 'page',
+    title : 'Заголовок страницы',
+    content : {
+        block : 'link',
+        mods : { pseudo : 'yes', togcolor : 'yes', color : 'green' },
+        url : '#',
+        target : '_blank',
+        title : 'Кликни меня',
+        content : 'Псевдоссылка, меняющая цвет по клику'
     }
 }
 ```
 
-На блоки, содержащиеся в `content`, действуют их `BEMHTML` шаблоны.
 
-### Отмена автоматической инициализации блоков
+<a name="elems"></a>
+### Элементы блока
 
-```javascript
-noDeps: [
-    { block: 'i-bem', elem: 'dom', mods: { init: 'auto' } }
-]
+<a name="elems-css"></a>
+#### Элемент `css`
+
+Служит для подключения CSS по ссылке или в виде строки. В зависимости от того, указано ли в декларации элемента поле `url`, создается HTML-элемент с тегом:
+
+* `<link>` и свойством `stylesheet`, если `url` есть.
+* `<style>`, если поле `url` неуказано. В этом случае предполагается, что содержимое элемента передается с помощью свойства `content` BEMJSON-декларации элемента.
+
+
+<a name="elems-css-declfields-content"></a>
+##### Специализированное поле `content`
+
+Тип: `String`.
+
+Служит для явной передачи содержимого HTML-элементу `<style>`:
+
+```js
+{
+    block : 'page',
+    title : 'Page title',
+    styles : {
+        elem : 'css',
+        content : '.page { color: #f00 }'
+    },
+    content : 'Страница с тэгом <style>'
+ }
 ```
+
+
+<a name="elems-css-declfields-url"></a>
+##### Специализированное поле `url`
+
+Тип: `String`.
+
+Позволяет задать URL для загрузки таблицы CSS. Значение поля `url` BEMJSON-декларации передается свойству `href` создаваемого HTML-элемента.
+
+<a name="elems-js"></a>
+#### Элемент `js` 
+
+Служит для подключения JS по ссылке или в виде строки. Создает HTML-элемент `<script>`.
+
+<a name="elems-js-declfields-content"></a>
+##### Специализированное поле `content`
+
+Тип: `String`.
+
+Служит для явной передачи содержимого HTML-элементу `<script>`:
+
+```js
+{
+    block : 'page',
+    title : 'Page title',
+    scripts : {
+        elem : 'js',
+        content : 'console.log(document.title)'
+    },
+    content : 'Страница с тэгом <script>'
+}
+```
+
+<a name="elems-js-declfields-url"></a>
+##### Специализированное поле `url`
+
+Тип: `String`.
+
+Позволяет задать URL для загрузки скрипта. Значение поля `url` BEMJSON-декларации передается свойству `src` создаваемого HTML-элемента.
+
+```js
+{
+    block : 'page',
+    title : 'Page title',
+    styles : { elem : 'css', url : '_index.css' },
+    content : 'Страница с тэгом style'
+}
+```
+
+
+<a name="elems-meta"></a>
+#### Элемент `meta`
+
+Служит для создания HTML-элементов `<meta>` и указания для них пользовательских метаданных. Метаданные передаются как ключи и значения хеша атрибутов – свойства `attrs` BEMJSON-декларации элемента:
+
+```js
+{
+    block : 'page',
+    title : 'Заголовок страницы',
+    head : [
+        { elem : 'css', url : 'example.css' },
+        { elem : 'meta', attrs : { name : 'keywords', content : 'js, css, html' } }
+    ],
+    content : 'Страница с подключенным CSS и meta-данными'
+}
+```
+
+
+Подробнее смотрите в документации к `<meta>` [на MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta).

@@ -17,10 +17,10 @@ coverage.json
 !*.bundles/*/*.bemjson.js
 
 /dist
-/*.docs
+/*desktop.docs
+/*touch.docs
 /*.examples
 /*.specs
 /*.tmpl-specs
 /*.tests
 /*.sets
-

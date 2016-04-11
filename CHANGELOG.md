@@ -1,5 +1,96 @@
 # Changelog
 
+## 2.9.0
+
+### Notable changes
+
+- `jQuery` was updated to 2.2.0 and 1.12.0 ([#1249](https://github.com/bem/bem-core/issues/1249)).
+
+### Bug fixes
+
+- Fixed bug in BEMHTML 1.x which leads to drop of `this.mods` in `reapply()` ([#97](https://github.com/bem/bem-xjst/issues/97)).
+
+### Other changes
+
+- `jquery__event_type_pointerpressrelease` now exposes `originalEvent` ([#1254](https://github.com/bem/bem-core/issues/1254)).
+- dist: Support for `i18n` was added to dist ([#1212](https://github.com/bem/bem-core/issues/1212)).
+- `page__css.bemhtml` template was updated to support new `bem-xjst` versions ([#1228](https://github.com/bem/bem-core/issues/1228)).
+
+## 2.8.0
+
+### Notable changes
+
+- New [i18n](https://github.com/bem/bem-core/tree/v2/common.blocks/i18n) block was introduced, providing support for internationalization ([#1074](https://github.com/bem/bem-core/issues/1074)).
+- Now jQuery is included via `https` by default ([#1202](https://github.com/bem/bem-core/issues/1202)).
+- Dependency on `bemhtml-compat` was dropped ([#1186](https://github.com/bem/bem-core/issues/1186)). Users of `bem-tools` need to run `npm i bemhtml-compat --save` to install it on their projects.
+
+### Bug fixes
+
+- Bug with undefined handler call in `loader_type_js` was fixed ([#1159](https://github.com/bem/bem-core/pull/1159)).
+
+### Other changes
+
+- BH bundles in `dist` now mimic to BEMHTML ([#1210](https://github.com/bem/bem-core/issues/1210)).
+- `bem create` templates for `bemhtml`, `bemtree`, `vanilla.js` and `browser.js` were improved ([#1183](https://github.com/bem/bem-core/issues/1183)).
+- `vow` was updated to `0.4.10` ([#1056](https://github.com/bem/bem-core/issues/1056)).
+
+## 2.7.0
+
+### Notable changes
+
+- New `detach` method was added to `i-bem__dom` ([#1102](https://github.com/bem/bem-core/issues/1102)).
+- `i-bem.bemhtml` now supports nested mixes as objects ([873](https://github.com/bem/bem-core/issues/873)).
+- Some minor attribute escaping optimizations were added to `i-bem.bemhtml` ([#961](https://github.com/bem/bem-core/issues/961)), ([#980](https://github.com/bem/bem-core/issues/980)) and ([#982](https://github.com/bem/bem-core/issues/982)).
+- Support for [bem-xjst](https://github.com/bem/bem-xjst) 2.x was added to BEMHTML templates ([#1021](https://github.com/bem/bem-core/issues/1021)).
+- `clearfix` was optimized to work properly in supported IE browsers ([#722](https://github.com/bem/bem-core/issues/722)).
+- `jquery` was updated to 2.1.4 and 1.11.3 ([#999](https://github.com/bem/bem-core/issues/999)).
+
+### Bug fixes
+
+- An issue in `i-bem__dom` was fixed. `findElem` didn't update cache of elements that
+  had been found previously ([#583](https://github.com/bem/bem-core/issues/583)).
+- An issue in `i-bem__dom` was fixed. `dropElemCache` worked incorrectly in some edge cases ([#1037](https://github.com/bem/bem-core/issues/1037)).
+- An issue in `i-bem__dom` was fixed. `setMod` didn't add CSS classes if blocks on the same DOM node had
+  overlapping end parts in their names ([#1090](https://github.com/bem/bem-core/issues/1090)).
+- An issue in `page` was fixed. `zoom` attribute of the block didn't work for touch levels ([#1020](https://github.com/bem/bem-core/issues/1020)).
+- An issue in `keyboard__codes` was fixed. `insert` and `delete` keys had wrong key codes ([#1002](https://github.com/bem/bem-core/issues/1002)).
+- An issue in `i-bem.bemhtml` was fixed. `applyNext` calls were skipped in nested templates ([b1dc50c](https://github.com/bem/bem-core/commit/b1dc50c621b5659cff33daa4dd3f210b67cf25e1)).
+- An issue in `jquery__events_type_pointernative` was fixed to work properly in IE 11/Edge ([#1066](https://github.com/bem/bem-core/issues/1066)).
+
+### Other changes
+
+- Russian documentation for every blocks was reworked. Please visit https://ru.bem.info/libs/bem-core/ for new documentation.
+- Other minor improvements of the documentation.
+
+## 2.6.0
+
+### Notable changes
+
+- Since now `i-bem__dom` provides module after DOM is ready ([#859](https://github.com/bem/bem-core/issues/859)).
+- Since now `setMod` and `hasMod` methods of `i-bem__dom` convert their `modVal` argument to string in case
+  it is not of type string or boolean ([#890](https://github.com/bem/bem-core/issues/890)).
+- An ability to pass `nonce` attribute was added to `page`, to support related parts of Content Security Policy
+  specification ([#882](https://github.com/bem/bem-core/issues/882)).
+- New `page__conditional-comment` template was added ([#551](https://github.com/bem/bem-core/issues/511)).
+- `vow` was updated to 0.4.8 ([#837](https://github.com/bem/bem-core/issues/837)).
+
+### Bug fixes
+
+- An issue in `i-bem.bemhtml` was fixed. Block CSS class repeated in case of mix with the same
+  block ([#792](https://github.com/bem/bem-core/issues/792)).
+- An issue in `loader_type_bundle` was fixed. Success callback might be applied after timeout
+  error ([67ff55f](https://github.com/bem/bem-core/commit/da5fdb9923e7e83e3ef9cd31aefc3967ff55fd3c)).
+- An issue in `i-bem__dom` was fixed. `append`, `prepend` and other similar methods won't properly work with strings
+  in some cases ([#852](https://github.com/bem/bem-core/issues/852)).
+- An issue in `jquery__event_type_winresize` was fixed. MSIE wasn't detected properly ([#862](https://github.com/bem/bem-core/issues/862)).
+- An issue in `object` was fixed to proper handle `null` value as `target` argument in `extend` method ([#910](https://github.com/bem/bem-core/issues/910)).
+- An issue in `page` was fixed. There was no way to disable `x-ua-compatible` meta tag from BEMJSON ([#794](https://github.com/bem/bem-core/issues/794)).
+
+### Other changes
+
+- Timeout in `loader_type_bundle` module was increased to 30000 ms ([4e27422](https://github.com/bem/bem-core/commit/000c6af02bfae4506fa460168de16d4e27422393)).
+- Russian documentation for several blocks was fixed.
+
 ## 2.5.1
 
 ### Bug fixes
@@ -25,7 +116,7 @@
 
 ## 2.5.0
 
-### Major changes
+### Notable changes
 
 - bem-core in now published under the [MPL 2.0](https://www.mozilla.org/MPL/2.0/) license ([#443](https://github.com/bem/bem-core/issues/443)).
 - An ability to specify error handler was added to `loader_type_js` ([#672](https://github.com/bem/bem-core/issues/672)).
@@ -50,7 +141,7 @@
 
 ## 2.4.0
 
-### Major changes
+### Notable changes
 
 - [bem-xjst](https://github.com/bem/bem-xjst) was updated to 0.8.0; [bemhtml-compat](https://github.com/bem/bemhtml-compat) was updated to 0.0.11.
 
@@ -66,7 +157,7 @@
 
 ## 2.3.0
 
-### Major changes
+### Notable changes
 
 - New implementation of pointer events was added. Based on pointer events polyfills from [Polymer](http://www.polymer-project.org/) ([#567](https://github.com/bem/bem-core/pull/567)).
 - Ability to specify additional data for event was added to `bindTo*` methods of `i-bem__dom.js` ([#568](https://github.com/bem/bem-core/issues/568)).
@@ -111,7 +202,7 @@
 
 ## 2.2.0
 
-### Major changes
+### Notable changes
 
 - New `keyboard__codes` module has been added ([#431](https://github.com/bem/bem-core/issues/431)).
 - `BEMContext` class was added to oninit export context in `i-bem.bemhtml` ([#485](https://github.com/bem/bem-core/pull/485)).
@@ -134,7 +225,7 @@
 
 ## 2.1.0
 
-### Major changes
+### Notable changes
 
 - An issue in `i-bem.js` when modifiers change event had been emitted before `onSetMod` handlers have been called was fixed ([#454](https://github.com/bem/bem-core/issues/454)).
 - An issue in `i-bem.bemhtml` was fixed. Since now `this.mods` and `this.ctx.mods` use the same object ([#441](https://github.com/bem/bem-core/issues/441)).
@@ -165,14 +256,14 @@
   * `channel`, use `events__channels` module;
   * `changeThis`, use native `Function.prototype.bind`.
 
-- `init` and `destruct` events have been removed from `i-bem.js` in favor of modifiers changes events (see "Major changes" section below).
+- `init` and `destruct` events have been removed from `i-bem.js` in favor of modifiers changes events (see "Notable changes" section below).
 - `ecma` was moved to [separate repo](http://github.com/bem/es5-shims); ES5-shims should be used
   for IE < 9 ([#230](https://github.com/bem/bem-core/issues/230)).
 - `vow` module has been updated to 0.4.1 ([#350](https://github.com/bem/bem-core/issues/350)).
   See [Vow's changelog](https://github.com/dfilatov/vow/blob/0.4.1/CHANGELOG.md) for changes.
 - Support for vow@0.4 has been added to `i-bem.bemhtml` ([#385](https://github.com/bem/bem-core/issues/385)).
 
-### Major changes
+### Notable changes
 
 - Support for defining BEMDOM-blocks as [ym](https://github.com/ymaps/modules) modules has been added ([#382](https://github.com/bem/bem-core/issues/382)).
 - Events for modifiers changes have been added to `i-bem.js` ([#357](https://github.com/bem/bem-core/issues/357)).
@@ -198,7 +289,7 @@
 
 ## 1.2.0
 
-### Major changes
+### Notable changes
 
 - BEM-blocks are emit `destruct` event on destructing ([#370](https://github.com/bem/bem-core/issues/370)).
 - Improvements of `pointerevents` polyfills ([#354](https://github.com/bem/bem-core/pull/354)).
@@ -211,7 +302,7 @@
 
 ## 1.1.0
 
-### Major changes
+### Notable changes
 
 - `jquery__config` uses jQuery 2.x by default for modern browsers ([#319](https://github.com/bem/bem-core/issues/319)).
 - Add ability to use any BEMJSON as value of attributes in BEMHTML templates ([#290](https://github.com/bem/bem-core/issues/290)).
@@ -237,7 +328,7 @@
 
 ## 1.0.0
 
-### Major changes
+### Breaking changes
 
 - Starts using modular system [ym](https://github.com/ymaps/modules).
 - Removes all deprecated methods from `i-bem` and `i-bem__dom`.

@@ -1,5 +1,100 @@
 # История изменений
 
+## 2.9.0
+
+### Крупные изменения
+
+- `jQuery` была обновлена до 2.2.0 и 1.12.0 ([#1249](https://github.com/bem/bem-core/issues/1249)).
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена ошибка в `BEMHTML 1.x`, которая приводила к потере `this.mods` в `reapply()` ([#97](https://github.com/bem/bem-xjst/issues/97)).
+
+### Также в релиз вошли следующие изменения
+
+- Теперь `jquery__event_type_pointerpressrelease` предоставляет `originalEvent` ([#1254](https://github.com/bem/bem-core/issues/1254)).
+- dist: Поддержка `i18n` добавлена в dist ([#1212](https://github.com/bem/bem-core/issues/1212)).
+- Шаблон `page__css.bemhtml` был обновлен для поддержки новых версий `bem-xjst` ([#1228](https://github.com/bem/bem-core/issues/1228)).
+
+## 2.8.0
+
+### Крупные изменения
+
+- Реализован новый блок [i18n](https://github.com/bem/bem-core/tree/v2/common.blocks/i18n), реализующий интернационализацию проектов на bem-core ([#1074](https://github.com/bem/bem-core/issues/1074)).
+- Теперь `jQuery` по умолчанию подключается через `https` ([#1202](https://github.com/bem/bem-core/issues/1202)).
+- Удалена зависимость от `bemhtml-compat` ([#1186](https://github.com/bem/bem-core/issues/1186)). Пользователям `bem-tools` необходимо выполнить `npm i bemhtml-compat --save` для установки пакета на уровне проекта.
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена ошибка в `loader_type_js`, допускавшая вызовы неопределенного обработчика ([#1159](https://github.com/bem/bem-core/pull/1159)).
+
+### Также в релиз вошли следующие изменения
+
+- BH-бандлы в `dist` теперь мимикрируют под BEMHTML ([#1210](https://github.com/bem/bem-core/issues/1210)).
+- Улучшены шаблоны `bem create` для `bemhtml`, `bemtree`, `vanilla.js` и `browser.js` ([#1183](https://github.com/bem/bem-core/issues/1183)).
+- `vow` обновлена до `0.4.10` ([#1056](https://github.com/bem/bem-core/issues/1056)).
+
+## 2.7.0
+
+### Крупные изменения
+
+- В `i-bem__dom` добавлен новый метод `detach` ([#1102](https://github.com/bem/bem-core/issues/1102)).
+- В `i-bem.bemhtml` добавлена поддержка вложенных миксов ([873](https://github.com/bem/bem-core/issues/873)).
+- В `i-bem.bemhtml` добавлены незначительные оптимизации, связанные с эскейпингом аттрибутов ([#961](https://github.com/bem/bem-core/issues/961)), ([#980](https://github.com/bem/bem-core/issues/980)) и ([#982](https://github.com/bem/bem-core/issues/982)).
+- В BEMHTML-шаблоны добавлена поддержка [bem-xjst](https://github.com/bem/bem-xjst) 2.x ([#1021](https://github.com/bem/bem-core/issues/1021)).
+- `clearfix` оптимизирован для работы в поддерживаемых библиотекой браузерах IE ([#722](https://github.com/bem/bem-core/issues/722)).
+- `jquery` обновлен до версий 2.1.4 и 1.11.3 ([#999](https://github.com/bem/bem-core/issues/999)).
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена ошибка в `i-bem__dom`, из-за которой метод `findElem` не обновлял кэш ранее найденных
+  элементов ([#583](https://github.com/bem/bem-core/issues/583)).
+- Исправлена ошибка в `i-bem__dom`, приводящая к неправильной работе метода `dropElemCache` в некоторых граничных
+  случаях ([#1037](https://github.com/bem/bem-core/issues/1037)).
+- Исправлена ошибка в `i-bem__dom`, из-за которой вызов метода `setMod` не выставлял CSS-классы блоку в случае, если
+  на DOM-узеле был подмешан блок с пересекающимся окончанием в имени ([#1090](https://github.com/bem/bem-core/issues/1090)).
+- Исправлена ошибка в `page`, из-за которой на touch-уровнях не работало специализированное поле `zoom` ([#1020](https://github.com/bem/bem-core/issues/1020)).
+- Исправлена ошибка в `keyboard__codes`. Клавиши `insert` и `delete` были описаны неправильными
+  кодами ([#1002](https://github.com/bem/bem-core/issues/1002)).
+- Исправлена ошибка в `i-bem.bemhtml`, из-за которой неверно интерпретировались вложенные вызовы `applyNext` ([b1dc50c](https://github.com/bem/bem-core/commit/b1dc50c621b5659cff33daa4dd3f210b67cf25e1)).
+- Исправлена ошибка в `jquery__events_type_pointernative`, из-за которой события работали некорректно
+  в браузерах IE 11 и Edge ([#1066](https://github.com/bem/bem-core/issues/1066)).
+
+### Также в релиз вошли следующие изменения
+
+- Обновлена русская докуметация для всех блоков библиотеки. Документация доступна по адресу https://ru.bem.info/libs/bem-core/.
+- Прочие улучшения в документации к библиотеке.
+
+## 2.6.0
+
+### Крупные изменения
+
+- Предоставление модуля `i-bem__dom` теперь происходит после наступления события DOM ready ([#859](https://github.com/bem/bem-core/issues/859)).
+- Методы `setMod` и `hasMod` модуля `i-bem__dom` теперь явно преобразуют параметр `modVal` к строке,
+  если переданное значение не типа string или boolean ([#890](https://github.com/bem/bem-core/issues/890)).
+- В блок `page` добавлена возможность прокидывать атрибут `nonce`, для корректной работы инлайн-скриптов, в соответствии
+  со спецификацией Content Security Policy ([#882](https://github.com/bem/bem-core/issues/882)).
+- Добавлены шаблоны `page__conditional-comment` ([#551](https://github.com/bem/bem-core/issues/511)).
+- Модуль `vow` обновлен до версии 0.4.8 ([#837](https://github.com/bem/bem-core/issues/837)).
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена ошибка в `i-bem.bemhtml`, из-за которой CSS-класс блока дублировался, в случае микса с этим же блоком
+  ([#792](https://github.com/bem/bem-core/issues/792)).
+- Исправлена ошибка в `loader_type_bundle`, из-за которой функция-обработчик успешного результата могла выполняться
+  после наступления таймаута ([67ff55f](https://github.com/bem/bem-core/commit/da5fdb9923e7e83e3ef9cd31aefc3967ff55fd3c)).
+- Исправлена ошибка в `i-bem__dom`, в некоторых случаях, приводящая к неправильной интерпретации строковых аргументов
+  в методах `append`, `prepend` и др. ([#852](https://github.com/bem/bem-core/issues/852)).
+- Исправлена ошибка в `jquery__event_type_winresize`, из-за которой неправильно определятся браузер MSIE ([#862](https://github.com/bem/bem-core/issues/862)).
+- Исправлена ошибка в `object`, из-за которой метод `extend` неправильно обрабатывал `null` в качестве значения
+  аргумента `target` ([#910](https://github.com/bem/bem-core/issues/910)).
+- Исправлена ошибка в `page`. Из BEMJSON было невозможно отключить добавление meta-тега `x-ua-compatible` ([#794](https://github.com/bem/bem-core/issues/794)).
+
+### Также в релиз вошли следующие изменения
+
+- Таймаут в `loader_type_bundle` увеличен до 30000 мс ([4e27422](https://github.com/bem/bem-core/commit/000c6af02bfae4506fa460168de16d4e27422393)).
+- Исправлены незначительные ошибки в русской документации блоков.
+
 ## 2.5.1
 
 ### В релиз вошли следующие исправления ошибок

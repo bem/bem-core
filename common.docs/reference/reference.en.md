@@ -1,3 +1,5 @@
+# Tutorial on BEMHTML
+
 <a id="intro"></a>
 ## Introduction
 
@@ -210,10 +212,10 @@ A template must be defined in the `default` mode (sub-predicate `def()`) when it
 
 ```js
 block('b-page')(
-  def(
+  def(function() {
     this._buf.push('<!DOCTYPE html>');
-    applyNext();
-  ),
+    return applyNext();
+  }),
   tag()('html')
 )
 ```
@@ -430,8 +432,8 @@ A template must be defined in the `mix` mode (sub-predicate `mix()`) when a bloc
     </td>
     <td><pre><code>&lt;div class="b1 b2 i-bem"
     data-bem="{
-        'b1': { 'p': 1},
-        'b2': { 'p': 2}
+        'b1': { 'p': 1 },
+        'b2': { 'p': 2 }
     }"&gt;
 &lt;/div&gt;</code></pre></td>
 </tr>
@@ -749,9 +751,9 @@ A check for existence of the `url` field should be made in the template sub-pred
 ```js
 block('b-link')(
   tag()('span'),
-  match(this.ctx.url)(
+  match(function() { return this.ctx.url; })(
     tag()('a'),
-    attrs()({ href: this.ctx.url })
+    attrs()(function() { return { href: this.ctx.url }; })
   )
 )
 ```
@@ -759,7 +761,7 @@ block('b-link')(
 It is **wrong** to use a JavaScript conditional statement in the template body as a solution to this problem:
 
 ```js
-block('b-link').tag()(this.ctx.url ? 'a' : 'span')
+block('b-link').tag()(function() { return this.ctx.url ? 'a' : 'span'; })
 ```
 
 This expression won't be optimized during compilation, and will consequently impact the template processing speed.
@@ -785,13 +787,16 @@ When evaluating the expression `apply()`, the result obtained by the application
 
 ```js
 // the template at the first level of redefinition
-block('b1').content()('text1')
+block('b1').content()('text1');
 
 // the template at the second level of redefinition
-block('b1').match(!this._myGuard).content()([
-    apply({_myGuard:true}),  // get the previous value of content
-    'text2'
-])
+block('b1').match(function() { return !this._myGuard; })
+  .content()(function() {
+    return [
+      apply({_myGuard:true}),  // get the previous value of content
+      'text2'
+    ];
+});
 ```
 
 Applying the templates to block `b1` will result in the following HTML:
@@ -804,11 +809,13 @@ As a simpler alternative, you can use the `applyNext` construction. It automatic
 
 
 ```js
-block('b1').content()('text1')
-block('b1').content()([
-    applyNext(), // gets the previous value of content
-    'text2'
-])
+block('b1').content()('text1');
+block('b1').content()(function() {
+  return [
+      applyNext(), // gets the previous value of content
+      'text2'
+  ];
+});
 ```
 
 **See also**:
@@ -832,7 +839,9 @@ To implement context dependence in BEMHTML, context information required for the
 The storing of context information should be implemented in the `listitem` block template. Let's use a flag called `inListItem`:
 
 ```js
-block('listitem').match(!this.inListItem)(apply({inListItem:true}))
+block('listitem').match(function() { return !this.inListItem; })(function() {
+  return apply({ inListItem: true });
+});
 ```
 
 Note the use of the sub-predicate `!this.inListItem`, which helps avoid an infinite loop during a recursive call of the templates application procedure in a modified context (`apply({inListItem:true})`).
@@ -840,7 +849,7 @@ Note the use of the sub-predicate `!this.inListItem`, which helps avoid an infin
 To process a `listitem`-nested `para` block, we just need to check if the `inListItem` flag exists in the context.
 
 ```js
-block('para').match(this.inListItem).tag()('')
+block('para').match(function() { return this.inListItem; }).tag()('');
 ```
 
 An empty string in the template body value in the mode `tag` indicates that an HTML element mustn't be generated  for this block.
@@ -856,15 +865,10 @@ One block (`b-inner`) must be wrapped in another block (`b-wrapper`) during the 
 
 When processing the `b-inner` block in a template in the default mode (the entire element generation), one should modify the fragment `this.ctx` of the input tree (the block `b-wrapper` should be added). This involves the use of the `applyCtx()` construction, which assigns `this.ctx` and applies templates in the empty mode.
 
-To avoid an infinite loop, a special flag (`_wrapped`) should be checked when calling `applyCtx()`. This flag must be set before executing `applyCtx()`.
-
 ```js
-block('b-inner').def()
-    .match(!this.ctx._wrapped)(function() {
-        var ctx = this.ctx;
-        ctx._wrapped=true;
-        applyCtx({ block: 'b-wrapper', content: ctx })
-   })
+block('b-inner').def()(function() {
+    return applyCtx({ block: 'b-wrapper', content: this.ctx });
+});
 ```
 
 
@@ -917,19 +921,21 @@ The modification of the input BEM tree at BEMHTML level requires writing a templ
 The BEMHTML template used for this conversion looks like this:
 
 ```js
-block('box').match(!this.ctx._processed).content()(local({'ctx._processed':true})(applyCtx({
-    elem: 'left-top',
-    content: {
-        elem: 'right-top',
-        content: {
-            elem: 'right-bottom',
-            content: {
-                elem: 'left-bottom',
-                content: applyNext()
-            }
-        }
-    }
-})))
+block('box').content()(function() {
+  return {
+      elem: 'left-top',
+      content: {
+          elem: 'right-top',
+          content: {
+              elem: 'right-bottom',
+              content: {
+                  elem: 'left-bottom',
+                  content: applyNext()
+              }
+          }
+      }
+  };
+}))
 ```
 
 **NB** The hash with the variable `ctx._processed` set to `true` is passed to the method `applyCtx` as the first parameter to execute the method in the modified context.
@@ -968,14 +974,16 @@ To do the numbering, write a template in the `content` mode for the menu item, w
 ```js
 block('menu')(
   tag()('ul'),
-  elemMatch('item')(
+  elem('item')(
     tag()('li'),
-    content()([
-      this.position, '. ',
-      applyNext()
-    ]
+    content()(function() {
+      return [
+        this.position, '. ',
+        applyNext()
+      ];
+    })
   )
-))
+);
 ```
 
 **See also**:
@@ -995,7 +1003,7 @@ Template sub-predicates should be checked in a certain order, e.g. first the pre
 Let's make use of the fact that the sub-predicate of a BEMHTML template can be an arbitrary JavaScript expression and can be written in the following form:
 
 ```js
-match(this.world && this.world.answer === 42)
+match(function() { return this.world && this.world.answer === 42; })
 ```
 
 This solution has a disadvantage: the expression won't be optimized during compilation, which will have a negative effect on the template processing speed. In the majority of cases, it is possible and necessary to avoid the need for checking sub-predicates in a strictly specific order.
@@ -1027,21 +1035,23 @@ To generate a unique ID that can serve as the value of the attribute `id`, let's
 ```js
 block('input')(
   tag()(''),
-  content()([
-    {
-      tag: 'label',
-      attrs: { 'for': this.generateId() },
-      content: this.ctx.label
-    },
-    {
-      tag: 'input',
-      attrs: {
-        id: this.generateId(),
-        value: this.ctx.content
+  content()(function() {
+    return [
+      {
+        tag: 'label',
+        attrs: { 'for': this.generateId() },
+        content: this.ctx.label
+      },
+      {
+        tag: 'input',
+        attrs: {
+          id: this.generateId(),
+          value: this.ctx.content
+        }
       }
-    }
-  ]
-))
+    ];
+  })
+);
 ```
 
 <a name="links"></a>

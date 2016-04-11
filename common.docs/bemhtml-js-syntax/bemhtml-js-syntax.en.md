@@ -1,9 +1,9 @@
-# JS syntax of BEMHTML. Migration guide
+# BEMHTML JS-syntax. Migration tutorial
 
 <a name="intro"></a>
 ## Introduction
 
-This article is dedicated to web developers who use [BEM methodology](https://bem.info/method/) and [BEMHTML template engine](https://bem.info/libs/bem-core/current/bemhtml/reference/).
+This article is dedicated to web developers who use [BEM methodology](https://en.bem.info/method/) and [BEMHTML template engine](https://en.bem.info/libs/bem-core/current/bemhtml/reference/).
 
 The article describes:
 
@@ -19,7 +19,7 @@ It doesn't contain any information about setting development environment or temp
 <a name="general"></a>
 ## General information
 
-Starting from [bem-core](https://bem.info/libs/bem-core/) library version 1.0.0 you can apply BEMHTML templates written in JavaScript syntax.
+Starting from [bem-core](https://en.bem.info/libs/bem-core/) library version 1.0.0 you can apply BEMHTML templates written in JavaScript syntax.
 
 Since `bem-core` library introduction template concise syntax is considered deprecated, our `bem-core` library supports two template syntax types: **concise** and JS syntax.
 
@@ -46,9 +46,7 @@ To migrate to JS syntax you can:
 
 * use project-stub version that uses bem-core library ([bem-core](https://github.com/bem/project-stub/tree/bem-core) branch).
 
-* install all required packages: [bem-xjst](https://bem.info/tools/templating-engines/bemxjst/), [bemhtml-compat](https://github.com/bem/bemhtml-compat), [BEMHTML API v2](https://github.com/bem/bem-core/blob/v2/.bem/techs/bemhtml.js) module from bem-tools package.
-
-We implement BEMHTML technology module with JS syntax support using `API v2` technology from bem-tools. To be able to use it install bem-tools package version 0.6.4 or higher.
+* install all required packages: [bem-xjst](https://en.bem.info/tools/templating-engines/bemxjst/) and [enb-bemxjst](https://github.com/enb-bem/enb-bemxjst/) tech module.
 
 
 ***
@@ -77,7 +75,7 @@ To make it easier to distinguish template files with different syntax you can us
 <a name="syntax"></a>
 ## JavaScript syntax of BEMHTML templates
 
-To simplify creation of BEMHTML templates in JavaScript syntax we use [bem-xjst](https://bem.info/tools/templating-engines/bemxjst/) module.
+To simplify creation of BEMHTML templates in JavaScript syntax we use [bem-xjst](https://en.bem.info/tools/templating-engines/bemxjst/) module.
 
 BEM-XJST is a BEM-oriented helpers kit which extends standard XJST syntax.
 
@@ -88,7 +86,7 @@ It allows JS syntax BEMHTML templates to use:
 * helpers for XJST constructions `apply` and `applyNext` using default mode;
 * `applyCtx` construction.
 
-BEMXJST is a superset of [XJST template language](https://bem.info/tools/templating-engines/xjst/) which in turn is Javascript superset.
+BEMXJST is a superset of [XJST template language](https://en.bem.info/tools/templating-engines/xjst/) which in turn is Javascript superset.
 
 BEM-XJST uses canonical XJST syntax extended by rules related to BEM subject domain. This kind of implementation allows BEMHTML templates with JS syntax to act in dev environment without preliminarily compilation.
 
@@ -124,13 +122,15 @@ match(subpredicate1, subpredicate2, subpredicate3)(body);
 For example:
 
 ```js
-match(this.block === 'link', this._mode === 'tag', this.ctx.url)('a');
+match(function() { return this.block === 'link'; }, function() { return this._mode === 'tag'; }, function() { return this.ctx.url; })('a');
 ```
 
 The same subpredicate list can be chained:
 
 ```js
-match(this.block === 'link').match(this._mode === 'tag').match(this.ctx.url)('a');
+match(function() { return this.block === 'link'; })
+.match(function() { return this._mode === 'tag'; })
+.match(function() { return this.ctx.url; })('a');
 ```
 
 The examples above are identical and will look like this in acronym-syntax:
@@ -254,7 +254,7 @@ In particular they allow to omit `match` keyword for BEM subpredicates.
 The following predicates are equal:
 
 ```js
-match(this.block === 'foo').match(this.elem === 'bar')
+match(function() { return this.block === 'foo'; }).match(function() { return this.elem === 'bar'; })
 ```
 
 ```js
@@ -265,7 +265,7 @@ To run templates without compilation an `elemMatch` keyword was added. It is use
 
 ```js
 block('my-block')
-    .elemMatch(function() { return this.elem === 'e1' || this.elem === 'e2'  })
+    .elemMatch(function() { return this.elem === 'e1' || this.elem === 'e2'; })
         .tag()('span')
 ```
 
@@ -275,7 +275,7 @@ As you can see the example above will not work without `elemMatch`:
 
 ```js
 block('my-block')
-    .match(function() { return this.elem === 'e1' || this.elem === 'e2'  })
+    .match(function() { return this.elem === 'e1' || this.elem === 'e2'; })
         .tag()('span')
 ```
 
@@ -288,7 +288,7 @@ During the processing `!this.elem` subpredicate will be added to it.
 <a name="moda"></a>
 ##### The mode
 
-The name of one of the [standard mode](https://bem.info/technology/bemhtml/current/reference/#standardmoda) can be used as a subpredicate. It means that the predicate will be true when a corresponding mode is set.
+The name of one of the [standard mode](https://en.bem.info/technology/bemhtml/current/reference/#standardmoda) can be used as a subpredicate. It means that the predicate will be true when a corresponding mode is set.
 
 The following keywords are used for standard mode validation:
 
@@ -304,7 +304,7 @@ The following keywords are used for standard mode validation:
 
 To define a subpredicate using one of the standard modes in JS syntax you can use a helper corresponding to keyword.
 
-For example ``tag()('span')`` is the same as ``match(this._mode === 'tag')('span')``
+For example ``tag()('span')`` is the same as ``match(function() { return this._mode === 'tag'; })('span')``
 
 When using concise syntax, any subpredicate consisting only from identifier (`[a-zA-Z0-9-]+`) is interpreted as a non-standard mode name.
 For example, subpredicate `my-mode` is equal to ``this._mode === 'my-mode'``.
@@ -337,7 +337,7 @@ To write down any predicate statement in JS syntax use `match` keyword. For exam
 ```js
 match(this.ctx.url)(
         tag()('a'), // Passes a string with a tag 'a' as an argument to a "tag" mode.
-        attrs()({ href: this.ctx.url }) // Passes a hash with attributes as an argument to an "attrs" mode
+        attrs()(function() { return { href: this.ctx.url }; }) // Passes a hash with attributes as an argument to an "attrs" mode
     )`
 ```
 
@@ -409,7 +409,7 @@ block('b1').tag()('span')
 
 #### XJST expressions
 
-For templates appliance in a modified contex an [XJST expressions](https://bem.info/technology/bemhtml/current/reference/#xjst) can be used in templates implemented using JS syntax.
+For templates appliance in a modified contex an [XJST expressions](https://en.bem.info/technology/bemhtml/current/reference/#xjst) can be used in templates implemented using JS syntax.
 
 They work similarly as if they were in templates implemented in concise syntax.
 
@@ -447,16 +447,16 @@ this.block === 'link' {
 could be written as:
 
 ```js
-match(this.block === 'link')(
-   match(this._mode === 'tag')('a'),
-   match(this._mode === 'attrs')({ href: this.ctx.url })
+match(function() { return this.block === 'link'; })(
+   match(function() { return this._mode === 'tag'; })('a'),
+   match(function() { return this._mode === 'attrs'; })(function() { return { href: this.ctx.url }; })
 )
 ```
 It is equal to the following expression:
 
 ```js
-match(this.block === 'link').match(this._mode === 'tag')('a');
-match(this.block === 'link').match(this._mode === 'attrs')({ href: this.ctx.url });
+match(function() { return this.block === 'link'; }).match(function() { return this._mode === 'tag'; })('a');
+match(function() { return this.block === 'link'; }).match(function() { return this._mode === 'attrs'; })(function() { return { href: this.ctx.url }; });
 ```
 
 
@@ -467,7 +467,7 @@ Previous example can be written as:
 ```js
 block('link')(
     tag()('a'),
-    attrs()({ href: this.ctx.url })
+    attrs()(function() { return { href: this.ctx.url }; })
 )
 ```
 
@@ -486,7 +486,7 @@ block link, tag, this.ctx.url {
 Using JS syntax a template body is provided to a function as the first argument. All subtemplates could be provided after it.
 
 ```js
-block('link').tag().match(this.ctx.url)(
+block('link').tag().match(function() { return this.ctx.url; })(
     'a',
     mod('not-link', 'yes')('span')
 )
@@ -497,9 +497,9 @@ Template nesting depth is not limited:
 ```js
 block('link')(
     tag()('span'),
-    match(this.ctx.url)(
+    match(function() { return this.ctx.url; })(
         tag()('a'),
-        attrs()({ href: this.ctx.url })
+        attrs()(function() { return { href: this.ctx.url }; })
     )
 )
 ```
@@ -561,9 +561,9 @@ Despite of a runtime environment settings the following steps are performed:
 
 Once a template compilation is over we receive a JavaScript code and apply it the same way to all syntax and settings variation:
 
-* template engine takes a BEM tree as an input data in [BEMJSON](https://bem.info/technology/bemhtml/current/reference/#bemjson) format;
+* template engine takes a BEM tree as an input data in [BEMJSON](https://en.bem.info/technology/bemhtml/current/reference/#bemjson) format;
 * sequentially go through nodes of an input BEM tree;
-    * data structure called [context](https://bem.info/technology/bemhtml/current/reference/#context) is built during BEMJSON tree processing;
+    * data structure called [context](https://en.bem.info/technology/bemhtml/current/reference/#context) is built during BEMJSON tree processing;
 * HTML output is generated in cycle for every BEM entity;
     * HTML output is recursively generated for every nested BEM entity;
     * writing to HTML result fragments buffer is performed element by element.
@@ -579,7 +579,7 @@ Once a template compilation is over we receive a JavaScript code and apply it th
 | BEM entity match | `block b-my-block : body` | `block('b-my-block')(body)` |
 | Standard mode match | `tag : 'a'`  | `tag()('a')` |
 | Non-standard modifier match |  `custom-mode : body` | `mode('custom-mode')(body)`  |
-| Arbitrary condition match | `block link, this.ctx.url, tag: 'a'` | `block('link').match(this.ctx.url).tag()('a')`  |
+| Arbitrary condition match | `block link, this.ctx.url, tag: 'a'` | `block('link').match(function() { return this.ctx.url; }).tag()('a')`  |
 
 
 <a name="steps"></a>
@@ -689,9 +689,10 @@ JS syntax:
 ```js
 block('b-text')(
 
-    elemMatch(this.elem).tag()(this.ctx.elem),
+    elemMatch(function() { return this.elem; }).tag()(function() { return this.ctx.elem; }),
 
-    elemMatch(this.elem).match(this.ctx.id).attrs()({ id: this.ctx.id  })
+    elemMatch(function() { return this.elem; }).match(function() { return this.ctx.id; })
+        .attrs()(function() { return { id: this.ctx.id  }; })
 
 )
 ```
@@ -734,29 +735,11 @@ block b-inner, default: applyCtx({ block: 'b-wrapper', content: this.ctx })
 
 JS syntax:
 
-
-While using a fragment of input BEMJSON `this.ctx` with an `applyCtx` structure in dev-environment, endless cycle may occur. To avoid it, you need to add a flag, indicating that the template was already processed, and subpredicate to check flag value:
-
 ```js
-block('b-inner')(def()
-    .match(!this.ctx._wrapped)(function() {
-            var ctx = this.ctx;
-            ctx._wrapped=true;
-            applyCtx({ block: 'b-wrapper', content: ctx })
-   })
-)
+block('b-inner').def()(function() {
+    return applyCtx({ block: 'b-wrapper', content: this.ctx });
+});
 ```
-
-
-To avoid declaring a local variable, XJST expression `local` can be used to add the flag preventing endless cycle. It allows to apply template to a modified context:
-
-```js
-block('b-inner')(def()
-    .match(!this.ctx._wrapped)(function() {
-            local({ 'ctx._wrapped': true })(applyCtx({ block: 'b-wrapper', content: this.ctx }))
-   }))
-```
-
 
 **Template 7.** Sets the `span` tag by default for the element `e1` of a `b-bla` block. If there is an `url` field defined in an input data, changes the tag to `a` sets the field content as a `href` attribute value.
 In case of a match with a non-standard mode `reset`, a `href` attribute value is set to `undefined`.
@@ -782,12 +765,12 @@ JS syntax:
 ```js
 block('b-link').elem('e1') (
   tag()('span'),
-  match(this.ctx.url)(
+  match(function() { return this.ctx.url; })(
      tag()('a'),
-     attrs()({ href: this.ctx.url }),
+     attrs()(function(){ return { href: this.ctx.url }; }),
      mode('reset')(
          attrs()({ href: undefined })
       )
    )
-)
+);
 ```

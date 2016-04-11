@@ -42,9 +42,7 @@ JavaScript-синтаксис BEMHTML-шаблонов имеет следующ
 Для перехода на JS-синтаксис можно:
 
 * воспользоваться версией project-stub, использующей библиотеку bem-core (ветка [bem-core](https://github.com/bem/project-stub/tree/bem-core));
-* самостоятельно установить необходимые пакеты — [bem-xjst](https://ru.bem.info/tools/templating-engines/bemxjst/), [bemhtml-compat](https://github.com/bem/bemhtml-compat), модуль технологии пакета bem-tools [BEMHTML API v2](https://github.com/bem/bem-core/blob/v2/.bem/techs/bemhtml.js).
-
-Модуль технологии BEMHTML, поддерживающий JS-синтаксис, реализован с [API v2 технологии](https://ru.bem.info/tools/bem/bem-tools/tech-modules/#api-v2) bem-tools. Для использования его в проекте требуется пакет bem-tools версии не ниже 0.6.4.
+* самостоятельно установить необходимые пакеты — [bem-xjst](https://ru.bem.info/tools/templating-engines/bemxjst/), модуль технологии пакета [enb-bemxjst](https://ru.bem.info/tools/bem/enb-bemxjst/).
 
 
 <a name="compat"></a>
@@ -115,13 +113,15 @@ match(подпредикат1, подпредикат2, подпредикат3)
 Например:
 
 ```js
-match(this.block === 'link', this._mode === 'tag', this.ctx.url)('a');
+match(function() { return this.block === 'link'; }, function() { return this._mode === 'tag'; }, function() { return this.ctx.url; })('a');
 ```
 
 Тот же набор подпредикатов может быть записан цепочкой:
 
 ```js
-match(this.block === 'link').match(this._mode === 'tag').match(this.ctx.url)('a');
+match(function() { return this.block === 'link'; })
+.match(function() { return this._mode === 'tag'; })
+.match(function() { return this.ctx.url; })('a');
 ```
 
 Приведенные выше примеры тождественны и соответствуют следующей записи в сокращенном синтаксисе:
@@ -247,7 +247,7 @@ block('b-head-logo')(elem('text').elemMod('size', 'big'))
 Следующие предикаты тождественны:
 
 ```js
-match(this.block === 'foo').match(this.elem === 'bar')
+match(function() { return this.block === 'foo'; }).match(function() { this.elem === 'bar'; })
 ```
 
 ```js
@@ -299,7 +299,7 @@ block('my-block')
 
 В JS-синтаксисе, чтобы определить подпредикат по одной из стандартных мод, можно воспользоваться хелпером, соответствующим ключевому слову.
 
-Например, выражение ``tag()('span')`` эквивалентно выражению ``match(this._mode === 'tag')('span')``.
+Например, выражение ``tag()('span')`` эквивалентно выражению ``match(function() { return this._mode === 'tag'; })('span')``.
 
 В сокращенном синтаксисе любой подпредикат, состоящий только из идентификатора (`[a-zA-Z0-9-]+`), интерпретируется как название нестандартной моды. Например, подпредикат `my-mode` эквивалентен подпредикату ``this._mode === 'my-mode'``.
 
@@ -438,9 +438,9 @@ this.block === 'link' {
 может быть записан в виде:
 
 ```js
-match(this.block === 'link')(
-   match(this._mode === 'tag')('a'),
-   match(this._mode === 'attrs')({ href: this.ctx.url })
+match(function() { return this.block === 'link'; })(
+   match(function() { return this._mode === 'tag'; })('a'),
+   match(function() { return this._mode === 'attrs'; })(function() { return { href: this.ctx.url }; })
 )
 ```
 
@@ -448,8 +448,8 @@ match(this.block === 'link')(
 Это эквивалентно следующей записи:
 
 ```js
-match(this.block === 'link').match(this._mode === 'tag')('a');
-match(this.block === 'link').match(this._mode === 'attrs')({ href: this.ctx.url });
+match(function() { return this.block === 'link'; }).match(function() { return this._mode === 'tag'; })('a');
+match(function() { return this.block === 'link'; }).match(function() { return this._mode === 'attrs'; })(function() { return { href: this.ctx.url }; });
 ```
 
 
@@ -461,7 +461,7 @@ match(this.block === 'link').match(this._mode === 'attrs')({ href: this.ctx.url 
 ```js
 block('link')(
     tag()('a'),
-    attrs()({ href: this.ctx.url })
+    attrs()(function() { return { href: this.ctx.url }; })
 )
 ```
 
@@ -480,7 +480,7 @@ block link, tag, this.ctx.url {
 В JS-синтаксисе тело шаблона передается функции, возвращаемой хелпером, первым аргументом, а подшаблоны — следующими:
 
 ```js
-block('link').tag().match(this.ctx.url)(
+block('link').tag().match(function() { return this.ctx.url; })(
     'a',
     mod('not-link', 'yes')('span')
 )
@@ -491,9 +491,9 @@ block('link').tag().match(this.ctx.url)(
 ```js
 block('link')(
     tag()('span'),
-    match(this.ctx.url)(
+    match(function() { return this.ctx.url; })(
         tag()('a'),
-        attrs()({ href: this.ctx.url })
+        attrs()(function() { return { href: this.ctx.url }; })
     )
 )
 ```
@@ -556,7 +556,7 @@ block('link')(
 
 Ход выполнения JavaScript-кода, полученного на этапе компиляции шаблонов, одинаков для всех синтаксисов и настроек среды исполнения:
 
-* шаблонизатор принимает на вход БЭМ-дерево в формате [BEMJSON](https://ru.bem.info/technology/bemjson/current/bemjson/);
+* шаблонизатор принимает на вход БЭМ-дерево в формате [BEMJSON](https://ru.bem.info/technology/bemjson/);
 * последовательно обходит узлы входного БЭМ-дерева;
   * в процессе обхода входного BEMJSON-дерева строится структура данных — [контекст](https://ru.bem.info/libs/bem-core/current/bemhtml/reference/#context);
 * выполняется цикл генерации выходного HTML-элемента для каждой БЭМ-сущности;
@@ -573,7 +573,7 @@ block('link')(
 | Совпадение с БЭМ-сущностью | `block b-my-block : тело` | `block('b-my-block')(тело)` |
 | Совпадение со стандартной модой  | `tag : 'a'`  | `tag()('a')` |
 | Совпадение с нестандартной модой   |  `custom-mode : тело` | `mode('custom-mode')(тело)`  |
-| Совпадение с произвольным условием | `block link, this.ctx.url, tag: 'a'` | `block('link').match(this.ctx.url).tag()('a')`  |
+| Совпадение с произвольным условием | `block link, this.ctx.url, tag: 'a'` | `block('link').match(function() { return this.ctx.url; }).tag()('a')`  |
 
 
 
@@ -686,9 +686,9 @@ JS-синтаксис:
 ```js
 block('b-text')(
 
-    elemMatch(this.elem).tag()(this.ctx.elem),
+    elemMatch(function() { return this.elem; }).tag()(function() { return this.ctx.elem; }),
 
-    elemMatch(this.elem).match(this.ctx.id).attrs()({ id: this.ctx.id  })
+    elemMatch(function() { return this.elem; }).match(function() { return this.ctx.id; }).attrs()(function() { return { id: this.ctx.id  }; })
 
 )
 ```
@@ -732,34 +732,14 @@ block b-inner, default: applyCtx({ block: 'b-wrapper', content: this.ctx })
 
 JS-синтаксис:
 
-
-При использовании фрагмента входного BEMJSON `this.ctx` с конструкцией `applyCtx` в dev-среде, может произойти зацикливание в ходе выполнения шаблона. Во избежание подобного необходимо добавить флаг, указывающий, что шаблон уже обрабатывался, и подпредикат, проверяющий значение флага:
-
 ```js
-block('b-inner')(def()
-    .match(!this.ctx._wrapped)(function() {
-            var ctx = this.ctx;
-            ctx._wrapped=true;
-            applyCtx({ block: 'b-wrapper', content: ctx })
-   })
-)
+block('b-inner').def()(function() {
+    return applyCtx({ block: 'b-wrapper', content: this.ctx });
+});
 ```
 
 
-Чтобы не объявлять локальные переменные, можно воспользоваться XJST-конструкцией `local` для добавления флага, препятствующего зацикливанию. Она позволяет выполнять шаблон в модифицированном контексте:
-
- ```js
- block('b-inner')(def()
-    .match(!this.ctx._wrapped)(function() {
-            local({ 'ctx._wrapped': true })(applyCtx({ block: 'b-wrapper', content: this.ctx }))
-   }))
-
-  ```
-
-
-
 **Шаблон 7.** Для элемента `e1` блока `b-bla` по умолчанию задает тэг `span`. Если во входных данных определено поле `url`, меняет тэг на `a` и задает содержимое поля в качестве значения атрибута `href`. При совпадении с нестандартной модой `reset` значение атрибута `href` устанавливается равным `undefined`.
-
 
 Сокращенный синтаксис:
 
@@ -782,9 +762,9 @@ JS-синтаксис:
 ```js
 block('b-link').elem('e1') (
   tag()('span'),
-  match(this.ctx.url)(
+  match(function() { return this.ctx.url; })(
      tag()('a'),
-     attrs()({ href: this.ctx.url }),
+     attrs()(function() { return { href: this.ctx.url }; }),
      mode('reset')(
          attrs()({ href: undefined })
       )

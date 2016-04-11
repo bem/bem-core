@@ -345,7 +345,7 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
      * If the condition parameter is passed: when true, modVal1 is set; when false, modVal2 is set.
      * If the condition parameter is not passed: modVal1 is set if modVal2 was set, or vice versa.
      * @param {String} modName Modifier name
-     * @param {String} modVal1 First modifier value
+     * @param {String} [modVal1=true] First modifier value, optional for boolean modifiers
      * @param {String} [modVal2] Second modifier value
      * @param {Boolean} [condition] Condition
      * @returns {BemEntity} this

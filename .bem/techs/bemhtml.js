@@ -1,8 +1,7 @@
 var BEM = require('bem'),
     Q = BEM.require('q'),
     PATH = require('path'),
-    Template = require('bem/lib/template'),
-    compat = require('bemhtml-compat');
+    Template = require('bem/lib/template');
 
 exports.API_VER = 2;
 
@@ -21,7 +20,7 @@ exports.techMixin = {
     getBuildResultChunk : function(relPath, path, suffix) {
         var content = this.readContent(path, suffix);
         return (suffix !== 'bemhtml.xjst'?
-            content.then(function(source) { return compat.transpile(source); }) :
+            content.then(function(source) { return require('bemhtml-compat').transpile(source); }) :
             content)
                 .then(function(source) {
                     return '\n/* begin: ' + relPath + ' */\n' +
@@ -64,7 +63,7 @@ exports.techMixin = {
         vars.ElemName && tmpl.push('.elem(\'{{bemElemName}}\')');
         vars.ModVal && tmpl.push('.' + (vars.ElemName? 'elemMod' : 'mod') + '(\'{{bemModName}}\', \'{{bemModVal}}\')');
 
-        return Template.process(tmpl.join(''), vars);
+        return Template.process(tmpl.join('') + '();', vars);
     },
 
     getModulesDeps : function() {

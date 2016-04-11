@@ -1,4 +1,4 @@
-# BEMHTML: шаблонизатор для БЭМ
+# BEMHTML: описание шаблонизатора и его преимуществ
 
 **BEMHTML** — шаблонизатор (шаблонный движок) для тех, кто ведет веб-разработку в рамках [БЭМ-методологии](https://ru.bem.info/method).
 BEMHTML — это:
@@ -91,17 +91,19 @@ HTML-результат:
 ```
 
 
-Если блок `weather` имеет JavaScript-реализацию с использованием `i-bem.js`, то для передачи JavaScript-параметров блоку можно использовать шаблон:
+Если блок `widgets` имеет JavaScript-реализацию с использованием `i-bem.js`, то для передачи JavaScript-параметров блоку можно использовать шаблон:
 
 ```js
-block weather, js: { id: Math.random() * 1e4 }
+block('widgets').js()(function() {
+    return { id: Math.random() * 1e4 };
+});
 ```
 
 
 HTML-результат:
 
 ```xml
-<div class="widgets i-bem" onclick="return { 'weather': { 'id': 4321 } }">
+<div class="widgets i-bem" data-bem='{ "weather": { "id": 4321 } }'>
   <div class="widgets__weather">4</div>
 </div>
 ```
@@ -109,7 +111,6 @@ HTML-результат:
 
 ### Синтаксис описания данных и шаблонов основан на JavaScript
   - Декларативные шаблоны. Шаблон состоит из условий применения (предикат) и структуры данных, описывающей HTML-результат (тело шаблона).
-  - Для работы с БЭМ-сущностями синтаксис JavaScript расширен ключевыми словами (`block, elem, mods, elemMods`).
   - Возможность использовать произвольный JavaScript-код в шаблонах. BEMHTML не ставит технических ограничений на выполнение операций в предикате и теле шаблона. Эффективность и корректность работы шаблонов обеспечивается соглашениями, которым следуют разработчики.
   - Все BEMHTML-шаблоны компилируются в переносимый JavaScript, что позволяет выполнять шаблоны как на сервере, так и на клиенте.
 
@@ -117,10 +118,10 @@ HTML-результат:
 Объявление HTML-тегов для блоков в декларативном стиле:
 
 ```js
-block widgets {
-  tag: 'ul'
-  elem weather, tag: 'li'
-}
+block('widgets')(
+    tag()('ul'),
+    elem('weather').tag()('li')
+);
 ```
 
 
@@ -136,10 +137,10 @@ HTML-результат:
 Произвольные вычисления в теле шаблона:
 
 ```js
-block widgets, elem weather, content: {
-  var oldContent = applyNext()
-  return oldContent > 0 ? '+' : '' + oldContent + ' °C'
-}
+block('widgets').elem('weather').content()(function() {
+    var oldContent = applyNext();
+    return (oldContent > 0 ? '+' : '') + oldContent + ' °C';
+});
 ```
 
 
@@ -160,14 +161,15 @@ HTML-результат:
 Входные данные:
 
 ```js
-{ block: page,
+{
+  block: 'page',
   content: [
     {
-      block: header,
+      block: 'header',
       content: 'Заголовок 1'
     },
     {
-      block: header,
+      block: 'header',
       mods: { level: 2 },
       content: 'Заголовок 2'
     }
@@ -179,16 +181,16 @@ HTML-результат:
 Шаблоны, определенные в библиотеке:
 
 ```js
-block header, tag: 'h1'
-block header, mod level 2, tag: 'h2'
+block('header').tag()('h1');
+block('header').mod('level', 2).tag()('h2');
 ```
 
 
 Шаблоны, определенные в проекте:
 
 ```js
-block header, tag: 'h2'
-block header, mod level 2, tag: 'h3'
+block('header').tag()('h2');
+block('header').mod('level', 2).tag()('h3');
 ```
 
 
@@ -224,13 +226,13 @@ block header, mod level 2, tag: 'h3'
 Шаблон — выделяет первую букву в имени пользователя и оборачивает ее в тут же сгенерированный элемент:
 
 ```js
-block ya-user, content: {
-  var oldContent = applyNext();
-  return [
-    { elem: 'first-letter', content: oldContent[0] },
-    oldContent.substring(1)
-  ]
-}
+block('ya-user').content()(function() {
+    var oldContent = applyNext();
+    return [
+        { elem: 'first-letter', content: oldContent[0] },
+        oldContent.substring(1)
+    ];
+});
 ```
 
 
@@ -417,7 +419,7 @@ plates.bind(html, data, map);
 
 Чтобы начать использовать BEMHTML, достаточно склонировать [шаблон проекта](https://github.com/bem/project-stub).
 
-Шаблон содержит подготовленную структуру проекта с подключенной библиотекой блоков [bem-bl](https://ru.bem.info/libs/bem-bl/), настроенным окружением для сборки и просмотра результата и примером очень простой статической страницы.
+Шаблон содержит подготовленную структуру проекта с подключенной библиотекой блоков [bem-core](https://ru.bem.info/libs/bem-core/), настроенным окружением для сборки и просмотра результата и примером простой статической страницы.
 
 Фактически шаблон проекта является готовым станком HTML-верстальщика. Его можно наполнять своими блоками и делать на его основе проекты любой сложности.
 
@@ -425,6 +427,4 @@ plates.bind(html, data, map);
 
   * [Вводное пошаговое руководство по BEMHTML](https://ru.bem.info/technology/bemhtml/current/intro/)
   * [Справочное руководство по BEMHTML](https://ru.bem.info/technology/bemhtml/current/reference/)
-  * [Руководство по bem-tools](https://ru.bem.info/tools/bem/bem-tools/)
-  * [Документация библиотеки блоков bem-bl](https://ru.bem.info/libs/bem-bl/)
-
+  * [Документация библиотеки блоков bem-core](https://ru.bem.info/libs/bem-core/)

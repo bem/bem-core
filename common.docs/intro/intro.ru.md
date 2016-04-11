@@ -1,4 +1,4 @@
-# Hello, BEMHTML!
+# Быстрый старт по BEMHTML
 
 Данное руководство поможет попробовать шаблонизатор BEMHTML и
 понять основные принципы работы с ним, пройдя семь простых шагов:
@@ -26,15 +26,15 @@
  * локальная установка `npm`-зависимостей в каталог созданного проекта (симлинки на исполняемые файлы будут созданы в `./project-hello/node_modules/.bin/`);
  * установка `bower`-зависимостей (библиотеки `bem-core` и `bem-components`).
 
-**NB** Для сборки проекта необходима утилита `bem` (bem-tools) или `enb`.
+**NB** Для сборки проекта необходима утилита `enb` или `bem` (bem-tools).
 
 Организовать цикл разработки (правка—компиляция—просмотр—правка...) поможет сервер для разработки.
 Запускать его нужно в корневой папке проекта:
 
     $ npm start
 
-Сервер принимает соединения по адресу http://localhost:8080/ и выполняет сборку страницы по
-запросу от браузера, например: http://localhost:8080/desktop.bundles/index/index.html.
+Сервер принимает соединения по адресу `http://localhost:8080/` и выполняет сборку страницы по
+запросу от браузера, например: `http://localhost:8080/desktop.bundles/index/index.html`.
 
 <a name="page"></a>
 ## Шаг 2. Создать макет страницы
@@ -71,7 +71,7 @@
 
 **NB** В проекте подключены библиотеки блоков `bem-core` и `bem-components`. Мы можем использовать и модифицировать блоки оттуда.
 
-Просмотрим результат сборки страницы в браузере: (http://localhost:8080/desktop.bundles/test/test.html)
+Просмотрим результат сборки страницы в браузере: `http://localhost:8080/desktop.bundles/test/test.html`
 
 ### Подробнее
 
@@ -151,7 +151,7 @@
 Напишем шаблон для блока `hello` в файле `desktop.blocks/hello/hello.bemhtml`:
 
 ```javascript
-block('hello').content(function() {
+block('hello').content()(function() {
     return ['Hello, ', this.ctx.name, '!'];
 });
 ```
@@ -211,7 +211,7 @@ HTML-результат:
 
 ```javascript
 block('hello')(
-    content(function() {
+    content()(function() {
         return (this.ctx.names || [this.ctx.name]).map(function(user) {
             return { elem: 'item', content: user };
         });

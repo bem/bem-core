@@ -1,6 +1,8 @@
-# bem-core library [![Build Status](https://travis-ci.org/bem/bem-core.svg?branch=v2)](https://travis-ci.org/bem/bem-core) [![GitHub Release](http://img.shields.io/github/release/bem/bem-core.svg)](https://github.com/bem/bem-core/releases)
+# bem-core library [![Build Status](https://travis-ci.org/bem/bem-core.svg?branch=v2)](https://travis-ci.org/bem/bem-core) [![GitHub Release](https://img.shields.io/github/release/bem/bem-core.svg)](https://github.com/bem/bem-core/releases)
 
-This README is also available [in English](https://bem.info/libs/bem-core/).
+This README is also available [in English](https://en.bem.info/libs/bem-core/).
+
+Информация о библиотеке в более информативном виде доступна на [bem.info](https://ru.bem.info/libs/bem-core/).
 
 ## Что это?
 
@@ -53,10 +55,7 @@ This README is also available [in English](https://bem.info/libs/bem-core/).
 
 ## API
 
-Автосгенерированная документация на JavaScript API блоков (JSDoc) можно посмотреть в отдельной ветке [v2-jsdoc](https://github.com/bem/bem-core/tree/v2-jsdoc).
-
-Обратите внимание, содержимое ветки «v2-jsdoc» обновляется автоматически. Любые изменения необходимо отправлять
-в код соответствующих блоков в ветке «v2», как описано в разделе «Внесение изменений» ниже.
+Автосгенерированную документацию на JavaScript API блоков (JSDoc) можно посмотреть на bem.info. Например, для блока `i-bem` она доступна по ссылке https://ru.bem.info/libs/bem-core/current/desktop/i-bem/jsdoc/.
 
 ## История изменений
 
@@ -70,9 +69,9 @@ This README is also available [in English](https://bem.info/libs/bem-core/).
 
 ### Рабочая копия
 
-1. Получаем исходники нужной версии (например, `v1`):
+1. Получаем исходники нужной версии (например, `v2`):
    ```shell
-   $ git clone -b v1 git://github.com/bem/bem-core.git
+   $ git clone -b v2 git://github.com/bem/bem-core.git
    $ cd bem-core
    ```
 
@@ -100,15 +99,7 @@ This README is also available [in English](https://bem.info/libs/bem-core/).
 
 ### Внесение изменений
 
-1. [Создать issue](https://github.com/bem/bem-core/issues/new) с описанием сути изменений.
-2. Определить в какую версию необходимо внести изменения.
-3. Сделать feature-branch с указанием номера issue и версии (`issues/<номер_issue>@v<номер_версии>`) на основе ветки версии.
-   Например, для issue с номером 42 и версией 1: `git checkout -b issues/42@v1 v1`. Если изменения нужно внести в несколько версий,
-   то для каждой из версий создаётся отдельная ветка.
-4. Сделать изменения, закоммитить и сделать push. Если это необходимо, то нужно сделать rebase от базовой ветки версии.
-5. Создать pull-request на основе созданной ветки (или несколько pull-request-ов для случая изменений в нескольких версиях).
-6. Любым способом связать pull-request и issue (например, c помощью комментария).
-7. Ждать закрытия pull-request и issue ;-)
+См. [руководство по внесению изменений](/CONTRIBUTING.ru.md).
 
 ### Модульное тестирование
 

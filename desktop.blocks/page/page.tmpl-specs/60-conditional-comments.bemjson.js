@@ -5,7 +5,7 @@
         {
             elem : 'conditional-comment',
             condition : '<= IE 8',
-            content : { elem : 'css', url : '_60-conditional-comment.ie.css' }
+            content : { elem : 'css', url : '60-conditional-comment.ie.css' }
         },
         {
             elem : 'conditional-comment',
@@ -23,7 +23,7 @@
         {
             elem : 'conditional-comment',
             condition : 'lte IE 8',
-            content : { elem : 'js', url : '//yastatic.net/es5-shims/0.0.1/es5-shims.min.js' }
+            content : { elem : 'js', url : 'https://yastatic.net/es5-shims/0.0.1/es5-shims.min.js' }
         }
     ]
 })

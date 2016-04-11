@@ -1,5 +1,6 @@
-<a name="intro"></a>
+# Tutorial for BEMTREE template engine
 
+<a name="intro"></a>
 ## Introduction
 
 **This document** is a guide to the BEMTREE template engine.
@@ -458,13 +459,15 @@ When evaluating the expression `apply()`, the result obtained by the application
 
 ```js
 // the template at the first level of redefinition
-block('b1').content()('text1')
+block('b1').content()('text1');
 
 // the template at the second level of redefinition
-block('b1').match(!this._myGuard).content()([
-    apply({_myGuard:true}),  // get the previous value of content
-    'text2'
-])
+block('b1').match(function() { return !this._myGuard; }).content()(function() {
+    return [
+        apply({ _myGuard: true }), // get the previous value of content
+        'text2'
+    ];
+});
 ```
 
 Applying the templates to block `b1` will result in the following BEMJSON:
@@ -476,12 +479,14 @@ Applying the templates to block `b1` will result in the following BEMJSON:
 As a simpler alternative, you can use the `applyNext` construction. It automatically generates a unique name for the flag to prevent an infinite loop.
 
 ```js
-block('b1').content()('text1')
+block('b1').content()('text1');
 
-block('b1').content()([
-    applyNext(), // get the previous value of content
-    'text2'
-])
+block('b1').content()(function() {
+    return [
+        applyNext(), // get the previous value of content
+        'text2'
+    ];
+});
 ```
 
 **See also**:
@@ -501,15 +506,10 @@ One block (`b-inner`) must be wrapped in another block (`b-wrapper`) during the 
 
 When processing the `b-inner` block in a template in the default mode (the entire element generation), one should modify a fragment of the input tree `this.ctx` (the block `b-wrapper` should be added). This involves the use of the `applyCtx()` construction, which assigns `this.ctx` and applies templates in the empty mode.
 
-To avoid an infinite loop, a special flag (`_wrapped`) should be checked when calling `applyCtx()`. This flag must be set before executing `applyCtx()`.
-
 ```js
-block('b-inner').def()
-    .match(!this.ctx._wrapped)(function() {
-        var ctx = this.ctx;
-        ctx._wrapped = true;
-        applyCtx({ block: 'b-wrapper', content: ctx })
-   })
+block('b-inner').def()(function() {
+    return applyCtx({ block: 'b-wrapper', content: this.ctx });
+});
 ```
 
 **NB** The `applyCtx()` construction may be used to **replace** a BEM entity in the source tree, if the original content of the block (`this.ctx`) is not used in the argument of `applyCtx()`.
@@ -561,19 +561,21 @@ The modification of the input BEM tree at BEMTREE level requires writing a templ
 The BEMHTML template used for this conversion looks like this:
 
 ```js
-block('box').match(!this.ctx._processed).content()(applyCtx({'ctx._processed':true}, {
-    elem: 'left-top',
-    content: {
-        elem: 'right-top',
+block('box').content()(function() {
+    return applyCtx({
+        elem: 'left-top',
         content: {
-            elem: 'right-bottom',
+            elem: 'right-top',
             content: {
-                elem: 'left-bottom',
-                content: applyNext()
+                elem: 'right-bottom',
+                content: {
+                    elem: 'left-bottom',
+                    content: applyNext()
+                }
             }
         }
-    }
-}))
+    });
+});
 ```
 
 **NB** The hash with the variable `ctx._processed` set to `true` is passed to the method `applyCtx` as the first parameter to execute the method in the modified context.
@@ -599,7 +601,7 @@ Template sub-predicates should be checked in a certain order, e.g. first the pre
 Let's make use of the fact that the sub-predicate of a BEMHTML template can be an arbitrary JavaScript expression and can be written in the following form:
 
 ```js
-match(this.world && this.world.answer === 42)
+match(function() { return this.world && this.world.answer === 42; })
 ```
 
 This solution has a disadvantage: the expression won't be optimized during compilation, which will have a negative effect on the template processing speed. In the majority of cases, it is possible and necessary to avoid the need for checking sub-predicates in a strictly specific order.
@@ -628,21 +630,23 @@ To generate a unique ID that can serve as the value of the attribute `id`, let's
 
 ```js
 block('input')(
-  content()([
-    {
-      tag: 'label',
-      attrs: { 'for': this.generateId() },
-      content: this.ctx.label
-    },
-    {
-      tag: 'input',
-      attrs: {
-        id: this.generateId(),
-        value: applyNext()
-      }
-    }
-  ]
-))
+  content()(function() {
+    return [
+        {
+          tag: 'label',
+          attrs: { 'for': this.generateId() },
+          content: this.ctx.label
+        },
+        {
+          tag: 'input',
+          attrs: {
+            id: this.generateId(),
+            value: applyNext()
+          }
+        }
+      ];
+  })
+);
 ```
 
 #### Conclusion

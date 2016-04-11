@@ -34,8 +34,6 @@ exports.techMixin = {
         vars.ModuleName = moduleName;
 
         return BEM.template.process([
-            '/* global modules:false */',
-            '',
             'modules.define(\'{{bemModuleName}}\', function(provide) {',
             '',
             'provide();',
