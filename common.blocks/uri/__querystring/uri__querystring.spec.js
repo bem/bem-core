@@ -1,4 +1,4 @@
-modules.define('spec', ['querystring'], function(provide, qs) {
+modules.define('spec', ['uri__querystring'], function(provide, qs) {
 
 describe('querystring', function() {
     describe('parse()', function() {
