@@ -32,11 +32,18 @@ describe('i-bem', function() {
             delete bem.entities['block2'];
         });
 
-        it('should enable to inherit to itself', function() {
+        it('should enable to inherit block to itself', function() {
             var Block = bem.declBlock('block', {}),
                 Block2 = bem.declBlock('block', {});
 
             Block2.should.be.equal(Block);
+        });
+
+        it('should enable to inherit elem to itself', function() {
+            var Elem = bem.declElem('block', 'elem', {}),
+                Elem2 = bem.declElem('block', 'elem', {});
+
+            Elem2.should.be.equal(Elem);
         });
 
         it('should enable to declare modifier', function() {

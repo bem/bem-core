@@ -623,7 +623,7 @@ describe('DOM events', function() {
         });
     });
 
-    describe('live events', function() {
+    describe('delegated events', function() {
         function initDom(bemjson) {
             return createDomNode(bemjson).appendTo(bemDom.scope);
         }
@@ -631,7 +631,7 @@ describe('DOM events', function() {
         describe('block domElem events', function() {
             beforeEach(function() {
                 Block1 = bemDom.declBlock('block1', {}, {
-                    live : function() {
+                    onInit : function() {
                         this._domEvents()
                             .on('click', spy1)
                             .on('click', spy2)
@@ -641,7 +641,7 @@ describe('DOM events', function() {
                 });
 
                 Block2 = bemDom.declBlock('block2', {}, {
-                    live : function() {
+                    onInit : function() {
                         this._domEvents()
                             .on('click', spy5);
                     }
@@ -718,7 +718,7 @@ describe('DOM events', function() {
                             bemDom.declElem('block', 'e1');
 
                         Block1 = bemDom.declBlock('block', {}, {
-                            live : function() {
+                            onInit : function() {
                                 this._domEvents(elem1)
                                     .on('click', spy1)
                                     .on('click', spy2)
@@ -732,7 +732,7 @@ describe('DOM events', function() {
                             bemDom.declElem('block', 'e1') :
                             elem1;
                         Elem2 = bemDom.declElem('block', 'e2', {}, {
-                            live : function() {
+                            onInit : function() {
                                 this._domEvents(elem1)
                                     .on('click', wrapSpy(spy6))
                                     .on('click', spy7);
@@ -826,7 +826,7 @@ describe('DOM events', function() {
                 describe('elem as ' + elemType + ', modName, modVal', function() {
                     beforeEach(function() {
                         Block1 = bemDom.declBlock('block', {}, {
-                            live : function() {
+                            onInit : function() {
                                 this._domEvents({ elem : elem1 })
                                     .on('click', spy1);
                                 this._domEvents({ elem : elem1, modName : 'm1', modVal : 'v1' })

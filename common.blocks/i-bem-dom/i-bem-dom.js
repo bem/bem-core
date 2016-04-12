@@ -100,10 +100,10 @@ function initEntities(domElem, uniqInitId) {
  * @param {String} entityName Entity name
  * @param {jQuery} domElem DOM element
  * @param {Object} [params] Initialization parameters
- * @param {Boolean} [forceLive=false] Force live initialization
+ * @param {Boolean} [ignoreLazyInit=false] Ignore lazy initialization
  * @param {Function} [callback] Handler to call after complete initialization
  */
-function initEntity(entityName, domElem, params, forceLive, callback) {
+function initEntity(entityName, domElem, params, ignoreLazyInit, callback) {
     var domNode = domElem[0];
 
     params || (params = processParams(getEntityParams(domNode, entityName), entityName));
@@ -130,10 +130,13 @@ function initEntity(entityName, domElem, params, forceLive, callback) {
     }
 
     var entityCls = getEntityCls(entityName);
-    if(!(entityCls._liveInitable = !!entityCls._processLive()) || forceLive || params.live === false) {
-        forceLive && domElem.addClass(BEM_CLASS); // add css class for preventing memory leaks in further destructing
 
-        entity = new entityCls(uniqIdToDomElems[uniqId], params, !!forceLive);
+    entityCls._processInit();
+
+    if(!entityCls.lazyInit || ignoreLazyInit || params.lazyInit === false) {
+        ignoreLazyInit && domElem.addClass(BEM_CLASS); // add css class for preventing memory leaks in further destructing
+
+        entity = new entityCls(uniqIdToDomElems[uniqId], params, !!ignoreLazyInit);
         delete uniqIdToDomElems[uniqId];
         callback && callback.apply(entity, slice.call(arguments, 4));
         return entity;
@@ -145,8 +148,8 @@ function getEntityCls(entityName) {
 
     var splitted = entityName.split(ELEM_DELIM);
     return splitted[1]?
-        bemDom.declElem(splitted[0], splitted[1], {}, { live : true }, true) :
-        bemDom.declBlock(entityName, {}, { live : true }, true);
+        bemDom.declElem(splitted[0], splitted[1], {}, { lazyInit : true }, true) :
+        bemDom.declBlock(entityName, {}, { lazyInit : true }, true);
 }
 
 /**
@@ -580,7 +583,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     },
 
     /**
-     * Executes the BEM entity's event handlers and live event handlers
+     * Executes the BEM entity's event handlers and delegated handlers
      * @protected
      * @param {String|Object|events:Event} e Event name
      * @param {Object} [data] Additional information
@@ -664,27 +667,21 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     },
 
     /** @override */
-    _processLive : function(heedLive) {
-        var res = this._liveInitable;
+    _processInit : function(heedInit) {
+        /* jshint eqeqeq: false */
+        if(this.onInit && this._inited == heedInit) {
+            this.__base(heedInit);
 
-        if('live' in this) {
-            var noLive = typeof res === 'undefined';
+            this.onInit();
 
-            if(noLive ^ heedLive) { // should be opposite to each other
-                res = this.live() !== false;
+            var name = this.getName(),
+                origOnInit = this.onInit;
 
-                var name = this.getName(),
-                    origLive = this.live;
-
-                this.live = function() {
-                    return this.getName() === name?
-                        res :
-                        origLive.apply(this, arguments);
-                };
-            }
+            // allow future calls of init only in case of inheritance in other block
+            this.init = function() {
+                this.getName() === name && origOnInit.apply(this, arguments);
+            };
         }
-
-        return res;
     },
 
     /**
@@ -844,7 +841,7 @@ bemDom = /** @exports */{
         if(!baseBlocks || (typeof baseBlocks === 'object' && !Array.isArray(baseBlocks))) {
             staticProps = props;
             props = baseBlocks;
-            baseBlocks = Block;
+            baseBlocks = entities[blockName] || Block;
         }
 
         return bem.declBlock(blockName, baseBlocks, props, staticProps);
@@ -863,7 +860,7 @@ bemDom = /** @exports */{
         if(!baseElems || (typeof baseElems === 'object' && !Array.isArray(baseElems))) {
             staticProps = props;
             props = baseElems;
-            baseElems = Elem;
+            baseElems = entities[blockName + ELEM_DELIM + elemName] || Elem;
         }
 
         return bem.declElem(blockName, elemName, baseElems, props, staticProps);
