@@ -36,12 +36,20 @@ function configure(helper, platform) {
     var dir = platform + '.specs';
 
     helper.configure({
-        destPath     : dir,
-        levels       : config.levels(platform),
-        sourceLevels : config.levels(platform, { specs : true }),
-        jsSuffixes   : ['vanilla.js', 'browser.js', 'js'],
-        specSuffixes : ['spec.js'],
-        langs        : true,
-        depsTech     : techs.bem.deps
+        destPath       : dir,
+        levels         : config.levels(platform),
+        sourceLevels   : config.levels(platform, { specs : true }),
+        jsSuffixes     : ['vanilla.js', 'browser.js', 'js'],
+        specSuffixes   : ['spec.js'],
+        langs          : true,
+        depsTech       : techs.bem.deps,
+        scripts        : ['https://yastatic.net/es5-shims/0.0.2/es5-shims.min.js'],
+        templateEngine : {
+            bemtreeTemplateTech : require('enb-bemxjst/techs/bemtree'),
+            templateTech : require('enb-bemxjst/techs/bemhtml'),
+            templateOptions : { sourceSuffixes : ['bemhtml', 'bemhtml.js'] },
+            htmlTech : require('enb-bemxjst/techs/bemjson-to-html'),
+            htmlTechOptionNames : { bemjsonFile : 'bemjsonFile', templateFile : 'bemhtmlFile' }
+        }
     });
 }

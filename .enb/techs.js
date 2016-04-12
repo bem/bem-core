@@ -14,7 +14,6 @@ module.exports = {
     },
     engines : {
         bemhtml : require('enb-bemxjst/techs/bemhtml'),
-        bemtree : require('enb-bemxjst/techs/bemtree'),
         bhCommonJS : require('enb-bh/techs/bh-commonjs'),
         bhBundle : require('enb-bh/techs/bh-bundle'),
 

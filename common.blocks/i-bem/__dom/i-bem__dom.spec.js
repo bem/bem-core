@@ -189,10 +189,10 @@ describe('i-bem__dom', function() {
                 js : true,
                 content : [
                     { elem : 'e1' },
-                    { elem : 'e1', mods : { m1 : 'v1' } },
-                    { elem : 'e1', mods : { m1 : 'v2' } },
-                    { elem : 'e1', mods : { m1 : 'v1' } },
-                    { elem : 'e1', mods : { m1 : true } },
+                    { elem : 'e1', elemMods : { m1 : 'v1' } },
+                    { elem : 'e1', elemMods : { m1 : 'v2' } },
+                    { elem : 'e1', elemMods : { m1 : 'v1' } },
+                    { elem : 'e1', elemMods : { m1 : true } },
                     { elem : 'e2' }
                 ]
             })));
@@ -363,11 +363,11 @@ describe('i-bem__dom', function() {
                             content : [
                                 {
                                     elem : 'e1', attrs : { id : '2-1' },
-                                    mods : { inner : 'no' }
+                                    elemMods : { inner : 'no' }
                                 },
                                 {
                                     elem : 'e3', attrs : { id : '2-3' },
-                                    mods : { inner : 'no', bool : true }
+                                    elemMods : { inner : 'no', bool : true }
                                 }
                             ]
                         },
@@ -375,14 +375,14 @@ describe('i-bem__dom', function() {
                             elem : 'e3', attrs : { id : '3' },
                             content : {
                                 elem : 'e2', attrs : { id : '3-2' },
-                                mods : { inner : 'yes', bool : true },
+                                elemMods : { inner : 'yes', bool : true },
                                 content : {
                                     elem : 'e1', attrs : { id : '3-2-1' },
-                                    mods : { inner : 'yes', bool : true }
+                                    elemMods : { inner : 'yes', bool : true }
                                 }
                             }
                         },
-                        { elem : 'e2', attrs : { id : '2.' }, mods : { bool : true } }
+                        { elem : 'e2', attrs : { id : '2.' }, elemMods : { bool : true } }
                     ]
                 }));
             rootBlock = DOM.init(rootNode).bem('root');
@@ -486,7 +486,7 @@ describe('i-bem__dom', function() {
     describe('drop elem cache', function() {
         var block;
         beforeEach(function() {
-            block = $(BEMHTML.apply({ block : 'b1', content : { elem : 'e1', mods : { m1 : 'v1' } } })).bem('b1');
+            block = $(BEMHTML.apply({ block : 'b1', content : { elem : 'e1', elemMods : { m1 : 'v1' } } })).bem('b1');
         });
 
         afterEach(function() {
@@ -1263,9 +1263,9 @@ describe('i-bem__dom', function() {
                 {
                     block : 'block',
                     content : [
-                        { elem : 'e1', mods : { 'mod1' : 'val1' } },
-                        { elem : 'e1', mods : { 'mod1' : 'val1' } },
-                        { elem : 'e2', mods : { 'mod1' : 'val1' } }
+                        { elem : 'e1', elemMods : { 'mod1' : 'val1' } },
+                        { elem : 'e1', elemMods : { 'mod1' : 'val1' } },
+                        { elem : 'e2', elemMods : { 'mod1' : 'val1' } }
                     ]
                 }))
                 .bem('block');
