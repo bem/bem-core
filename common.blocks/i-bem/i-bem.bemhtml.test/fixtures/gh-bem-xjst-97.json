@@ -1,5 +1,0 @@
-{
-  "block": "test",
-  "mods": { "hello": "world" },
-  "customField": "custom value"
-}
