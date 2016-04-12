@@ -1,4 +1,4 @@
-[{
+({
     shouldDeps : [
         'inherit',
         'jquery',
@@ -10,10 +10,4 @@
         { elem : 'events', mods : { type : ['dom', 'bem'] } },
         { elem : 'collection' }
     ]
-},
-{
-    tech : 'spec.js',
-    mustDeps : [
-        { block : 'i-bem', tech : 'bemhtml' }
-    ]
-}]
+})

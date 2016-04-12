@@ -32,13 +32,15 @@ module.exports = {
             excludes : [
                 '**/*.bem/*.js',
                 '**/*.i18n/*.js',
+                '**/*.i18n.js',
+                '**/i18n.test.js',
                 '**/*.bemjson.js',
                 '**/*.deps.js',
                 '**/*.node.js',
                 '**/*.spec.js',
                 '**/*.vanilla.js',
                 '**/*.bh.js',
-                '**/i-bem.test.bemhtml/*',
+                '**/*.bemhtml.js',
                 'common.blocks/vow/vow.js',
                 'common.blocks/jquery/__event/_type/jquery__event_type_pointer*',
                 'common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.tests/**'
@@ -119,7 +121,7 @@ module.exports = {
                     'extend'
                 ]
             },
-            includes : ['*.blocks/**/*.bemhtml']
+            includes : ['*.blocks/**/*.bemhtml.js']
         },
 
         bemtree : {
@@ -143,7 +145,7 @@ module.exports = {
                     'extend'
                 ]
             },
-            includes : ['*.blocks/**/*.bemtree']
+            includes : ['*.blocks/**/*.bemtree.js']
         },
 
         bhjs : {

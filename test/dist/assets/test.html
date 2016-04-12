@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link href="mocha.css" rel="stylesheet" />
+        <link href="../../../dist/${ platform }/bem-core.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div id="mocha"></div>
+        <script src="https://yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+        <script src="../../../dist/${ platform }/bem-core.js+bemhtml.js"></script>
+        <script src="mocha.js"></script>
+        <script src="sinon.js"></script>
+        <script src="chai.js"></script>
+        <script src="sinon-chai.js"></script>
+        <script>
+            (function() {
+                modules.define('spec', ['mocha', 'chai', 'sinon', 'sinon-chai'],
+                    function(provide, mocha, chai, sinon, sinonChai) {
+                        mocha.ui('bdd');
+
+                        chai.use(sinonChai);
+                        chai.should();
+
+                        provide();
+                    });
+            }());
+        </script>
+${ scripts }
+        <script>
+            (function() {
+                var global = this;
+
+                modules.require(['jquery', 'mocha', 'spec'], function($, mocha) {
+                    (global.mochaPhantomJS || mocha).run(done);
+
+                    function done() {
+                         $('#mocha').show();
+                    }
+                });
+            }());
+        </script>
+    </body>
+</html>

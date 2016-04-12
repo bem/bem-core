@@ -1,2 +1,0 @@
-block('b1').mix()({ block: 'b2' });
-block('b2').js()(true);
