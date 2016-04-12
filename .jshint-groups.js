@@ -9,13 +9,6 @@ module.exports = {
         loopfunc : true,
         onecase : true,
         quotmark : 'single',
-        globals : {
-          '$$mode' : true,
-          '$$block' : true,
-          '$$elem' : true,
-          '$$elemMods' : true,
-          '$$mods' : true
-        }
     },
 
     groups : {
@@ -47,8 +40,7 @@ module.exports = {
                 '**/*.spec.js',
                 '**/*.vanilla.js',
                 '**/*.bh.js',
-                '**/i-bem.bemhtml.test/**',
-                '**/i-bem.bemtree.test/**',
+                '**/*.bemhtml.js',
                 'common.blocks/vow/vow.js',
                 'common.blocks/jquery/__event/_type/jquery__event_type_pointer*',
                 'common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.tests/**'
@@ -129,7 +121,7 @@ module.exports = {
                     'extend'
                 ]
             },
-            includes : ['*.blocks/**/*.bemhtml']
+            includes : ['*.blocks/**/*.bemhtml.js']
         },
 
         bemtree : {
@@ -152,7 +144,7 @@ module.exports = {
                     'extend'
                 ]
             },
-            includes : ['*.blocks/**/*.bemtree']
+            includes : ['*.blocks/**/*.bemtree.js']
         },
 
         bhjs : {
