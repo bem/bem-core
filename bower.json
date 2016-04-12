@@ -15,7 +15,7 @@
   ],
   "main": "",
   "devDependencies": {
-    "bem-pr": "git://github.com/tadatuta/bem-pr#new-bem-xjst"
+    "bem-pr": "narqo/bem-pr#0.13.0"
   },
   "license": "MPL-2.0",
   "private": true,
