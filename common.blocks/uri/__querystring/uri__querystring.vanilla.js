@@ -1,9 +1,9 @@
 /**
- * @module querystring
+ * @module uri__querystring
  * @description A set of helpers to work with query strings
  */
 
-modules.define('querystring', ['querystring__uri'], function(provide, uri) {
+modules.define('uri__querystring', ['uri'], function(provide, uri) {
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
