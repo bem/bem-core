@@ -1,4 +1,4 @@
-# bem-core library [![Build Status](https://travis-ci.org/bem/bem-core.svg?branch=v2)](https://travis-ci.org/bem/bem-core) [![GitHub Release](https://img.shields.io/github/release/bem/bem-core.svg)](https://github.com/bem/bem-core/releases)
+# bem-core library [![Build Status](https://travis-ci.org/bem/bem-core.svg?branch=v2)](https://travis-ci.org/bem/bem-core) [![GitHub Release](https://img.shields.io/github/release/bem/bem-core.svg)](https://github.com/bem/bem-core/releases) [![devDependency Status](https://david-dm.org/bem/bem-core/dev-status.svg)](https://david-dm.org/bem/bem-core#info=devDependencies)
 
 Documentation on `bem-core` in a much more informative way is also available at [bem.info](https://en.bem.info/libs/bem-core/). It is also available [in Russian](https://ru.bem.info/libs/bem-core/).
 
