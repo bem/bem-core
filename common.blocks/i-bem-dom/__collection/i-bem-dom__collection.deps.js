@@ -6,7 +6,6 @@
 },
 {
     tech : 'spec.js',
-    mustDeps : { block : 'i-bem', tech : 'bemhtml' },
     shouldDeps : [
         { block : 'i-bem', tech : 'js' },
         { block : 'objects', tech : 'js' },
