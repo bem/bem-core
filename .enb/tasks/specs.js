@@ -47,7 +47,10 @@ function configure(helper, platform) {
         templateEngine : {
             bemtreeTemplateTech : require('enb-bemxjst/techs/bemtree'),
             templateTech : require('enb-bemxjst/techs/bemhtml'),
-            templateOptions : { sourceSuffixes : ['bemhtml', 'bemhtml.js'] },
+            templateOptions : {
+                sourceSuffixes : ['bemhtml', 'bemhtml.js'],
+                engineOptions : { elemJsInstances : true }
+            },
             htmlTech : require('enb-bemxjst/techs/bemjson-to-html'),
             htmlTechOptionNames : { bemjsonFile : 'bemjsonFile', templateFile : 'bemhtmlFile' }
         }

@@ -119,7 +119,8 @@ module.exports = function(node, opts) {
                 [techs.engines.bemhtmlI18N, {
                     target : '.tmp.bemhtml.{lang}.js',
                     lang : '{lang}',
-                    keysetsFile : '.tmp.keysets.{lang}.js'
+                    keysetsFile : '.tmp.keysets.{lang}.js',
+                    engineOptions : { elemJsInstances : true }
                 }],
                 [techs.html.bemhtml, {
                     target : '?.{lang}.html',
@@ -151,7 +152,10 @@ module.exports = function(node, opts) {
         if(BEM_TEMPLATE_ENGINE === 'BEMHTML') {
             // build HTML using BEMJSON + BEMHTML
             node.addTechs([
-                [techs.engines.bemhtml, { target : '.tmp.bemhtml.js' }],
+                [techs.engines.bemhtml, {
+                    target : '.tmp.bemhtml.js',
+                    engineOptions : { elemJsInstances : true }
+                }],
                 [techs.html.bemhtml, {
                     target : '?.html',
                     bemhtmlFile : '.tmp.bemhtml.js'

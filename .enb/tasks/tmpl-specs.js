@@ -62,7 +62,8 @@ function configure(helper, platform) {
                     sourceSuffixes : ['bemhtml', 'bemhtml.js'],
                     requires : {
                         i18n : { globals : 'BEM.I18N' }
-                    }
+                    },
+                    engineOptions : { elemJsInstances : true }
                 }
             }
         }
