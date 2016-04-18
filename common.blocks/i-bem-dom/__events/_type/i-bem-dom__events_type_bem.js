@@ -61,25 +61,33 @@ var EVENT_PREFIX = '__bem__',
         _createEventManager : function(ctx, params, isInstance) {
             function wrapperFn(fn, fnCtx, fnId) {
                 return function(e, data, flags, originalEvent) {
-                    if(flags[fnId]) return;
+                    if(flags.fns[fnId]) return;
 
-                    var instance;
+                    var instance,
+                        instanceDomElem;
 
                     if(isInstance) {
                         instance = ctx;
+                        instanceDomElem = instance.domElem;
                     } else {
                         // TODO: we could optimize all these "closest" to a single traversing
-                        var entityDomNode = $(e.target).closest(params.ctxSelector);
-                        entityDomNode.length && (instance = entityDomNode.bem(ctx));
+                        instanceDomElem = $(e.target).closest(params.ctxSelector);
+                        instanceDomElem.length && (instance = instanceDomElem.bem(ctx));
                     }
 
-                    if(instance) {
+                    if(instance &&
+                        (!flags.propagationStoppedDomNode ||
+                            !$.contains(instanceDomElem[0], flags.propagationStoppedDomNode))) {
                         originalEvent.data = e.data;
                         // TODO: do we really need both target and bemTarget?
                         originalEvent.bemTarget = originalEvent.target;
-                        flags[fnId] = true;
+                        flags.fns[fnId] = true;
                         fn.call(fnCtx || instance, originalEvent, data);
-                        originalEvent.isPropagationStopped() && e.stopPropagation();
+
+                        if(originalEvent.isPropagationStopped()) {
+                            e.stopPropagation();
+                            flags.propagationStoppedDomNode = instanceDomElem[0];
+                        }
                     }
                 };
             }
@@ -108,7 +116,7 @@ provide({
         var event = eventBuilder(e, { bindEntityCls : ctx.__self });
 
         specialEventsStorage[event] &&
-            ctx.domElem.trigger(event, [data, {}, originalEvent]);
+            ctx.domElem.trigger(event, [data, { fns : {}, propagationStoppedDomNode : null }, originalEvent]);
     },
 
     EventManagerFactory : EventManagerFactory

@@ -888,6 +888,44 @@ describe('BEM events', function() {
                 });
             });
         });
+
+        describe('stop propagation', function() {
+            beforeEach(function() {
+                Block1 = bemDom.declBlock('block', {}, {
+                    onInit : function() {
+                        this._events(Block3).on('click', spy1);
+                    }
+                });
+
+                Block2 = bemDom.declBlock('block2', {}, {
+                    onInit : function() {
+                        this._events(Block3).on('click', function(e) {
+                            e.stopPropagation();
+                        });
+                    }
+                });
+
+                Block3 = bemDom.declBlock('block3');
+
+                block1 = initDom({
+                    block : 'block',
+                    content : [
+                        {
+                            block : 'block2',
+                            js : true,
+                            content : { block : 'block3' }
+                        }
+                    ]
+                }).bem(Block1);
+            });
+
+            it('should properly stop propagation', function() {
+                var block3 = block1.findChildBlock(Block3);
+                block3._emit('click');
+
+                spy1.should.not.have.been.called;
+            });
+        });
     });
 });
 
