@@ -166,17 +166,12 @@ function declEntity(baseCls, entityName, base, props, staticProps) {
 
     props && convertModHandlersToMethods(props);
 
-    if(staticProps && typeof staticProps.live === 'boolean') {
-        var live = staticProps.live;
-        staticProps.live = function() { return live; };
-    }
-
     var Base = Array.isArray(base)? base[0] : base,
         entityCls;
 
     entityName === Base.getEntityName()?
-        // makes a new "live" if the old one was already executed
-        (entityCls = inherit.self(base, props, staticProps))._processLive(true) :
+        // makes a new "init" if the old one was already executed
+        (entityCls = inherit.self(base, props, staticProps))._processInit(true) :
         (entityCls = entities[entityName] = inherit(base, props, staticProps));
 
     return entityCls;
@@ -470,13 +465,12 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
     _name : null,
 
     /**
-     * Processes a BEM entity's live properties
+     * Processes a BEM entity's init
      * @private
-     * @param {Boolean} [heedLive=false] Whether to take into account that the BEM entity already processed its live properties
-     * @returns {Boolean} Whether the BEM entity is a live
+     * @param {Boolean} [heedInit=false] Whether to take into account that the BEM entity already processed its init property
      */
-    _processLive : function(heedLive) {
-        return false;
+    _processInit : function(heedInit) {
+        this._inited = true;
     },
 
     /**

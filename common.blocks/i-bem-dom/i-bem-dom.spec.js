@@ -20,6 +20,22 @@ describe('i-bem-dom', function() {
         });
     });
 
+    describe('decl', function() {
+        it('should enable to inherit block to itself', function() {
+            var Block = bemDom.declBlock('block', {}),
+                Block2 = bemDom.declBlock('block', {});
+
+            Block2.should.be.equal(Block);
+        });
+
+        it('should enable to inherit elem to itself', function() {
+            var Elem = bemDom.declElem('block', 'elem', {}),
+                Elem2 = bemDom.declElem('block', 'elem', {});
+
+            Elem2.should.be.equal(Elem);
+        });
+    });
+
     describe('getMod', function() {
         it('should return properly extracted mod from html', function() {
             var Block = bemDom.declBlock('block');
@@ -969,7 +985,7 @@ describe('i-bem-dom', function() {
             });
         });
 
-        it('shouldn\'t init live block', function() {
+        it('shouldn\'t init lazy block', function() {
             bemDom.declBlock('block', {
                 onSetMod : {
                     js : {
@@ -977,15 +993,14 @@ describe('i-bem-dom', function() {
                     }
                 }
             }, {
-                live : true
+                lazyInit : true
             });
 
-            rootNode = bemDom.init(BEMHTML.apply({
+            rootNode = initDom({
                 tag : 'div',
                 content : { block : 'block', js : true }
-            }));
+            });
 
-            bemDom.init(rootNode);
             spy.should.not.have.been.called;
         });
 
@@ -998,10 +1013,10 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = bemDom.init(BEMHTML.apply({
+            rootNode = initDom({
                 tag : 'div',
                 content : { block : 'block', js : true }
-            }));
+            });
 
             spy.should.have.been.called;
         });
@@ -1139,10 +1154,10 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = bemDom.init(BEMHTML.apply({
+            rootNode = initDom({
                 tag : 'div',
                 content : { block : 'block1', js : true }
-            }));
+            });
 
             bemDom.replace(rootNode.find('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
 
@@ -1206,7 +1221,7 @@ describe('i-bem-dom', function() {
             var Block = bemDom.declBlock('block'),
                 Block2 = bemDom.declBlock('block2');
 
-            domElem = $(BEMHTML.apply([
+            domElem = initDom([
                 {
                     block : 'block',
                     js : { id : '1' },
@@ -1226,9 +1241,8 @@ describe('i-bem-dom', function() {
                 {
                     block : 'block2'
                 }
-            ]));
+            ]);
 
-            bemDom.init(domElem);
             block = domElem.filter('.block').bem(Block);
             block2 = domElem.filter('.block2').bem(Block2);
         });
@@ -1239,8 +1253,70 @@ describe('i-bem-dom', function() {
         });
     });
 
-    describe('live init', function() {
+    describe('onInit', function() {
+        var spy, Block;
+
+        beforeEach(function() {
+            spy = sinon.spy();
+
+            Block = bemDom.declBlock('block', {}, {
+                onInit : spy
+            });
+        });
+
+        it('should have been called once', function() {
+            rootNode = initDom([{
+                block : 'block',
+                js : true
+            }, {
+                block : 'block',
+                js : true
+            }]);
+
+            spy.should.have.been.calledOnce;
+        });
+
+        it('should have been properly called in case of additional declaration after first initialization', function() {
+            rootNode = initDom({
+                block : 'block',
+                js : true
+            });
+
+            var spy2 = sinon.spy();
+
+            bemDom.declBlock('block', {}, {
+                onInit : spy2
+            });
+
+            spy.should.have.been.calledOnce;
+            spy2.should.have.been.calledOnce;
+        });
+    });
+
+    describe('lazy init', function() {
         var spy;
+
+        it('should be possible to force initialization', function() {
+            spy = sinon.spy();
+
+            bemDom.declBlock('block', {
+                onSetMod : {
+                    'js' : {
+                        'inited' : spy
+                    }
+                }
+            }, {
+                lazyInit : true
+            });
+
+            rootNode = initDom({
+                block : 'block',
+                js : { lazyInit : false }
+            });
+
+            spy.should.have.been.called;
+        });
+
         describe('on DOM events', function() {
             beforeEach(function() {
                 spy = sinon.spy();
@@ -1252,15 +1328,16 @@ describe('i-bem-dom', function() {
                         }
                     }
                 }, {
-                    live : function() {
+                    lazyInit : true,
+                    onInit : function() {
                         this._domEvents().on('click', functions.noop);
                     }
                 });
 
-                rootNode = bemDom.init(BEMHTML.apply({
-                        block : 'block',
-                        js : true
-                    })).appendTo('body');
+                rootNode = initDom({
+                    block : 'block',
+                    js : true
+                });
             });
 
             it('should init block on DOM event', function() {
@@ -1282,22 +1359,22 @@ describe('i-bem-dom', function() {
                         }
                     }
                 }, {
-                    live : function() {
+                    lazyInit : true,
+                    onInit : function() {
                         this._events(Block2).on('click', functions.noop);
                     }
                 });
 
                 var Block2 = bemDom.declBlock('block2');
 
-                block2 = bemDom.init(BEMHTML.apply({
+                block2 = initDom({
                         block : 'block',
                         js : true,
                         content : {
                             block : 'block2',
                             js : true
                         }
-                    }))
-                    .appendTo('body')
+                    })
                     .find(Block2._buildSelector())
                     .bem(Block2);
             });
@@ -1339,6 +1416,10 @@ provide();
 
 function createDomNode(bemjson) {
     return bemDom.init(BEMHTML.apply(bemjson));
+}
+
+function initDom(bemjson) {
+    return createDomNode(bemjson).appendTo(bemDom.scope);
 }
 
 function getEntityIds(entities) {
