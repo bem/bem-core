@@ -1,5 +1,740 @@
 # Миграция
 
+## 4.0.0
+
+### Отдельный блок `i-bem-dom`
+
+Элемент `dom` блока `i-bem` был перенесён в отдельный блок `i-bem-dom`.
+
+Было:
+
+```js
+modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
+    // ...
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
+    // ...
+});
+```
+
+Блоки `i-bem` и `i-bem-dom` больше не являются классами, представляя собой модули с методами для декларации
+БЭМ-сущностей, ссылками на классы БЭМ-сущностей и некоторыми дополнительными хелперами. Эти методы больше не являются методами класса для соответсвующих блоков.
+
+Задача: [#413](https://github.com/bem/bem-core/issues/413).
+
+### Декларация
+
+### Декларация блока
+
+Для декларации блока, вместо метода `decl()`, следует использовать метод `declBlock()`.
+
+Было:
+
+```js
+modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
+
+provide(BEMDOM.decl(this.name, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
+
+provide(bemDom.declBlock(this.name, { /* ... */ }));
+
+});
+```
+
+### Декларация модификатора
+
+Для декларации модификатора, вместо метода `decl()`, следует использовать метод `declMod()`.
+
+Было:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.decl({ modName : 'my-mod', modVal : 'my-val' }, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.declMod({ modName : 'my-mod', modVal : 'myVal' }, { /* ... */ }));
+
+});
+```
+
+### Доопределение блока
+
+Вместо метода `decl()` класса блока следует использовать метод `declBlock()` модуля `i-bem-dom`.
+
+Было:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.decl({ /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom, MyDomBlock) {
+
+provide(bemDom.declBlock(MyDomBlock, { /* ... */ }));
+
+});
+```
+
+### Декларация наследуемого блока
+
+Было:
+
+```js
+modules.define('my-dom-block', ['i-bem__dom', 'my-base-dom-block'], function(provide, BEMDOM, MyBaseDomBlock) {
+
+provide(BEMDOM.decl({ block : this.name, baseBlock : MyBaseDomBlock }, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', ['i-bem-dom', 'my-base-dom-block'], function(provide, bemDom, MyBaseDomBlock) {
+
+provide(bemDom.declBlock(this.name, MyBaseDomBlock, { /* ... */ }));
+
+});
+```
+
+### Декларация блока-микса
+
+Было:
+
+```js
+modules.define('my-mix-block', ['i-bem__dom'], function(provide, BEMDOM) {
+
+provide(BEMDOM.declMix(this.name, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-mix-block', ['i-bem-dom'], function(provide, bemDom) {
+
+provide(bemDom.declMix({ /* ... */ }));
+
+});
+```
+
+### Примешивание блока-микса
+
+Было:
+
+```js
+modules.define('my-dom-block', ['i-bem__dom', 'my-mix-1', 'my-mix-2'], function(provide, BEMDOM) {
+
+provide(BEMDOM.decl({ block : this.name, baseMix : ['my-mix-1', 'my-mix-2']}, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', ['i-bem-dom', 'my-mix-1', 'my-mix-2'], function(provide, bemDom, MyMix1, MyMix2) {
+
+provide(bemDom.declBlock(this.name, [MyMix1, MyMix2], { /* ... */ }));
+
+});
+```
+
+### Триггеры для изменения модификаторов
+
+При декларации определённого модификатора (например, `_my-mod_my-val`) невозможно было задекларировать поведение
+на удаление этого модификатора. Приходилось делать две декларации.
+
+Было:
+
+```js
+// my-dom-block_my-mod_my-val.js
+
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+MyDomBlock.decl({
+    onSetMod : {
+        'my-mod' : {
+            '' : function() { /* ... */ } // декларация для удаления модификатора _my-mod_my-val
+        }
+    }
+
+});
+
+provide(MyDomBlock.decl({ modName : 'my-mod', modVal : 'my-val' }, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.declMod({ modName : 'my-mod', modVal : 'my-val' }, {
+    onSetMod : {
+        'mod1' : {
+            '' : function() { /* ... */ } // декларация для удаления модификатора _my-mod_my-val
+        }
+    }
+}));
+```
+
+Задача: [#1025](https://github.com/bem/bem-core/issues/1025).
+
+Появился сокращённый синтаксис для декларации поведения на изменение модификатора.
+
+Было:
+
+```js
+onSetMod : {
+    'my-mod' : {
+        '*' : function(modName, modVal, prevModVal) {
+            if(prevModVal === 'my-val') {
+                /* ... */ // декларация для изменения _my-mod_my-val в любое другое значение
+            }
+        }
+    }
+}
+```
+
+Стало:
+
+```js
+onSetMod : {
+    'my-mod' : {
+        '~my-val' : function() { /* ... */ } // декларация для изменения значения my-mod из my-val в любое другое значение
+        }
+    }
+}
+```
+
+Было:
+
+```js
+onSetMod : {
+    'my-mod' : {
+        '*' : function(modName, modVal) {
+            if(modVal !== 'my-val') {
+                /* ... */ // декларация для изменения my-mod в любое значение, кроме my-val
+            }
+        }
+    }
+}
+```
+
+Стало:
+
+```js
+onSetMod : {
+    'my-mod' : {
+        '!my-val' : function() { /* ... */ } // декларация для изменения my-mod в любое значение, кроме my-val
+        }
+    }
+}
+```
+
+Задача: [#1072](https://github.com/bem/bem-core/issues/1072).
+
+
+### Ленивая инициализация
+
+Функциональность поля `live` была разделена на две части: поле `lazyInit` и метод `onInit()`.
+
+Было:
+
+```js
+modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
+
+provide(BEMDOM.decl(this.name, { /* ... */ }, {
+    live : true
+}));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
+
+provide(bemDom.declBlock(this.name, { /* ... */ }, {
+    lazyInit : true
+}));
+
+});
+```
+
+Было:
+
+```js
+modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
+
+provide(BEMDOM.decl(this.name, { /* ... */ }, {
+    live : function() {
+        /* ... */
+    }
+}));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
+
+provide(bemDom.declBlock(this.name, { /* ... */ }, {
+    lazyInit : true,
+
+    onInit : function() {
+        /* ... */
+    }
+}));
+
+});
+```
+
+Было:
+
+```js
+modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
+
+provide(BEMDOM.decl(this.name, { /* ... */ }, {
+    live : function() {
+        /* ... */
+        return false;
+    }
+}));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
+
+provide(bemDom.declBlock(this.name, { /* ... */ }, {
+    onInit : function() {
+        /* ... */
+    }
+}));
+
+});
+```
+
+Задача: [#877](https://github.com/bem/bem-core/issues/877).
+
+### Экземпляры для элементов
+
+Удалены элемент `elem-instances` блока `i-bem` и модификатор `elem-instances` элемента `dom` блока `i-bem`.
+Теперь соответсвующая функциональность является частью `i-bem` и `i-bem-dom`.
+
+Было:
+
+```js
+modules.define('my-dom-block__my-elem', ['i-bem__dom'], function(provide, BEMDOM) {
+
+provide(BEMDOM.decl({ block : 'my-dom-block', elem : 'my-elem' }, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block__my-elem', ['i-bem-dom'], function(provide, bemDom) {
+
+provide(bemDom.declElem('my-dom-block', 'my-elem', { /* ... */ }));
+
+});
+```
+
+Теперь метод `_elem()` экземпляра блока (бывший `elem()`) возвращает не jQuery-объект, а экземпляр класса элемента.
+
+#### Cпособы взаимодействия с элементами
+
+Было:
+
+```js
+this.setMod(this.elem('my-elem'), 'my-mod', 'my-val');
+```
+
+Стало:
+
+```js
+this._elem('my-elem').setMod('my-mod', 'my-val');
+```
+
+Аналогично для методов `getMod()`, `hasMod()`, `toggleMod()`, `delMod()`.
+
+#### Удалённые методы и поля
+
+Из API блока удачены методы: `elemify()` `elemParams()`, `getMods()` и поле `onElemSetMod`. Соответсвующая
+им функциональность выражается через экземпляры элементов.
+
+См. так же изменения про [методы поиска](#Методы-поиска).
+
+Задача: [#581](https://github.com/bem/bem-core/issues/581).
+
+### Методы поиска
+
+Переименованы следующие методы:
+
+- `findBlockInside()` в `findChildBlock()`
+- `findBlocksInside()` в `findChildBlocks()`
+- `findBlockOutside()` в `findParentBlock()`
+- `findBlocksOutside()` в `findParentBlocks()`
+- `findBlockOn()` в `findMixedBlock()`
+- `findBlocksOn()` в `findMixedBlocks()`
+
+Из этих методов удален опциональный первый параметр про элемент.
+
+Добавлены методы: `findChildElem()`, `findChildElems()`, `findParentElem()`, `findParentElems()`, `findMixedElem()`, `findMixedElems()`.
+
+Было:
+
+```js
+this.findBlockInside(this.elem('my-elem'), 'my-block-2');
+```
+
+Стало:
+
+```js
+this.findChildElem('my-elem').findChildBlock('my-block-2');
+```
+
+Удалены методы: `findElem()`, `closestElem()`, вместо них следует использовать методы `findChildElem()`
+и `findParentElem()`, соответсвенно.
+
+Методы `findChildBlocks()`, `findParentBlocks()`, `findMixedBlocks()`, `findChildElems()`, `findParentElems()`,
+`findMixedElems()` возвращают [коллекции БЭМ-сущностей](#Коллекции).
+
+#### Проверка вложенности
+
+Вместо удаленного метода `containsDomElem()`, следует использовать метод `containsEntity()`.
+
+Было:
+
+```js
+this.containsDomElem(someElem);
+```
+
+Стало:
+
+```js
+this.containsEntity(someElem);
+```
+
+### Коллекции
+
+Функциональность элемента `collection` блока `i-bem` перестала быть опциональной.
+
+Все методы возвращавшие массив БЭМ-сущностей, теперь возвращают коллекции.
+
+Было:
+
+```js
+this.findBlocksInside('my-block-2')[0].setMod('my-mod', 'my-val');
+```
+
+Стало:
+
+```js
+this.findBlocksInside('my-block-2').get(0).setMod('my-mod', 'my-val');
+```
+
+Было:
+
+```js
+this.findBlocksInside('my-block-2').forEach(function(myBlock2) {
+    return myBlock2.setMod('my-mod', 'my-val');
+});
+```
+
+Стало:
+
+```js
+this.findChildBlocks('my-block-2').setMod('my-mod', 'my-val');
+```
+
+Задача: [#582](https://github.com/bem/bem-core/issues/582).
+
+### События
+
+API работы с событиями значильно упрощено. Удалены методы экземпляра блока: `on()`, `un()`, `once()`, `bindTo()`,
+`unbindFrom()`, `bindToDoc()`, `bindToWin()`, `unbindFromDoc()`, `unbindFromWin()` и методы класса: `liveBindTo()`,
+`liveUnbindFrom()`, `on()`, `un()`, `once()`, `liveInitOnBlockEvent()`, `liveInitOnBlockInsideEvent()`.
+Вместо них добавлены методы `_domEvents()` и `_events()`, возвращающие экземпляр класса менеджера событий, с методами
+`on()`, `un()` и `one()`;
+
+#### DOM-события на экземплярах
+
+Было:
+
+```js
+BEMDOM.decl('my-block', {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                this.bindTo('click', this._onClick);
+            }
+        }
+    }
+});
+```
+
+Стало:
+
+```js
+bemDom.declBlock('my-block', {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                this._domEvents().on('click', this._onClick);
+            }
+        }
+    }
+});
+```
+
+Было:
+
+```js
+BEMDOM.decl('my-block', {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                this.bindToDoc('click', this._onDocClick);
+            }
+        }
+    }
+});
+```
+
+Стало:
+
+```js
+bemDom.declBlock('my-block', {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                this._domEvents(demDom.doc).on('click', this._onDocClick);
+            }
+        }
+    }
+});
+```
+
+Было:
+
+```js
+BEMDOM.decl('my-block', {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                this.bindToWin('resize', this._onWinResize);
+            }
+        }
+    }
+});
+```
+
+Стало:
+
+```js
+bemDom.declBlock('my-block', {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                this._domEvents(demDom.win).on('resize', this._onWinResize);
+            }
+        }
+    }
+});
+```
+
+#### БЭМ-события на экземплярах
+
+Было:
+
+```js
+BEMDOM.decl('my-block', {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                this.findBlockOutside('my-block-2').on('my-event', this._onMyBlock2MyEvent, this);
+            },
+
+            '' : function() {
+                this.findBlockOutside('my-block-2').un('my-event', this._onMyBlock2MyEvent, this);
+            }
+        }
+    }
+});
+```
+
+Стало:
+
+```js
+bemDom.declBlock('my-block', {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                this._events(this.findParentBlock('my-block-2')).on('my-event', this._onMyBlock2MyEvent);
+            }
+        }
+    }
+});
+```
+
+#### Делегированные DOM-события
+
+Было:
+
+```js
+BEMDOM.decl('my-block', { /* ... */ }, {
+    live : function() {
+        this.liveBindTo('click', this.prototype._onClick);
+    }
+});
+```
+
+Стало:
+
+```js
+bemDom.declBlock('my-block', { /* ... */ }, {
+    onInit : function() {
+        this._domEvents().on('click', this.prototype._onClick);
+    }
+});
+```
+
+Было:
+
+```js
+BEMDOM.decl('my-block', { /* ... */ }, {
+    live : function() {
+        this.liveBindTo('my-elem', 'click', this.prototype._onMyElemClick);
+    }
+});
+```
+
+Стало:
+
+```js
+bemDom.declBlock('my-block', { /* ... */ }, {
+    onInit : function() {
+        this._domEvents('my-elem').on('click', this.prototype._onMyElemClick);
+    }
+});
+```
+
+#### Делегированные БЭМ-события
+
+Было:
+
+```js
+BEMDOM.decl('my-block', { /* ... */ }, {
+    live : function() {
+        this.liveInitOnBlockInsideEvent('my-event', 'my-block-2', this.prototype._onMyBlock2MyEvent);
+    }
+});
+```
+
+Стало:
+
+```js
+bemDom.declBlock('my-block', { /* ... */ }, {
+    onInit : function() {
+        this._events(MyBlock2).on('my-event', this.prototype._onMyBlock2MyEvent);
+    }
+});
+```
+
+Было:
+
+```js
+BEMDOM.decl('my-block', {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                MyBlock2.on(this.domElem, 'my-event', this._onMyBlock2MyEvent, this);
+            },
+
+            '' : function() {
+                MyBlock2.un(this.domElem, 'my-event', this._onMyBlock2MyEvent, this);
+            }
+        }
+    }
+});
+```
+
+Стало:
+
+```js
+bemDom.declBlock('my-block', {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                this._events(MyBlock2).on('my-event', this._onMyBlock2MyEvent);
+            }
+        }
+    }
+});
+```
+
+Задача: [#394](https://github.com/bem/bem-core/issues/394).
+
+### Имена protected-методов начинаются с `_`
+
+Переименованы protected-методы:
+
+- `emit()` в `_emit()`
+- `elem()` в `_elem()`
+- `elems()` в `_elems()`
+- `dropElemCache()` в `_dropElemCache()`
+- `buildClass()` в `_buildClass()`
+- `buildSelector()` в `_buildSelector()`
+
+Задача: [#586](https://github.com/bem/bem-core/issues/586).
+
+## 3.0.0
+
+Для миграции на версию 3.0.0 достаточно ознакомиться с [историей изменений](https://ru.bem.info/libs/bem-core/v3/changelog/#300).
+
+## 2.0.0
+
+Для миграции на версию 2.0.0 достаточно ознакомиться с [историей изменений](https://ru.bem.info/libs/bem-core/v2/changelog/#200).
+
 ## 1.0.0
 
 Для версии 1.0.0 миграция подразумевается с использования [bem-bl](https://github.com/bem/bem-bl/) на использование [bem-core](https://github.com/bem/bem-core/).
