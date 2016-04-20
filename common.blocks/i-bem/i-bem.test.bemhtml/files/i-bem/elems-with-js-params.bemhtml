@@ -1,4 +1,0 @@
-block('b1')(
-    elem('e4').js()(true),
-    elem('e5').js()({ p1: 'v1' })
-);
