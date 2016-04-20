@@ -554,13 +554,20 @@ provide(/** @exports */{
 
     /**
      * Declares block and creates a block class
-     * @param {String} blockName Block name
+     * @param {String|Function} blockName Block name or block class
      * @param {Function|Array[Function]} [base] base block + mixes
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      * @returns {Function} Block class
      */
     declBlock : function(blockName, base, props, staticProps) {
+        if(typeof blockName !== 'string') {
+            staticProps = props;
+            props = base;
+            base = blockName;
+            blockName = base.getEntityName();
+        }
+
         var res = declEntity(Block, blockName, base, props, staticProps);
         res._name = res._blockName = blockName;
         return res;
@@ -568,15 +575,26 @@ provide(/** @exports */{
 
     /**
      * Declares elem and creates an elem class
-     * @param {String} blockName Block name
-     * @param {String} elemName Elem name
+     * @param {String} [blockName] Block name
+     * @param {String|Function} elemName Elem name or elem class
      * @param {Function|Function[]} [base] base elem + mixes
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      * @returns {Function} Elem class
      */
     declElem : function(blockName, elemName, base, props, staticProps) {
-        var res = declEntity(Elem, blockName + ELEM_DELIM + elemName, base, props, staticProps);
+        var entityName;
+        if(typeof blockName === 'string')
+            entityName = blockName + ELEM_DELIM + elemName;
+        else {
+            staticProps = props;
+            props = base;
+            base = blockName;
+            elemName = blockName._name;
+            entityName = base.getEntityName();
+        }
+
+        var res = declEntity(Elem, entityName, base, props, staticProps);
         res._blockName = blockName;
         res._name = elemName;
         return res;

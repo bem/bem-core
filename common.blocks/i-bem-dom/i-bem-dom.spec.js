@@ -28,9 +28,23 @@ describe('i-bem-dom', function() {
             Block2.should.be.equal(Block);
         });
 
+        it('should enable to inherit block to itself using entity class', function() {
+            var Block = bemDom.declBlock('block', {}),
+                Block2 = bemDom.declBlock(Block, {});
+
+            Block2.should.be.equal(Block);
+        });
+
         it('should enable to inherit elem to itself', function() {
             var Elem = bemDom.declElem('block', 'elem', {}),
                 Elem2 = bemDom.declElem('block', 'elem', {});
+
+            Elem2.should.be.equal(Elem);
+        });
+
+        it('should enable to inherit elem to itself using entity class', function() {
+            var Elem = bemDom.declElem('block', 'elem', {}),
+                Elem2 = bemDom.declElem(Elem, {});
 
             Elem2.should.be.equal(Elem);
         });
