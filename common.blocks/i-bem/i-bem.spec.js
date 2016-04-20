@@ -1,11 +1,13 @@
-modules.define('spec', ['i-bem', 'sinon'], function(provide, bem, sinon) {
+modules.define('spec', ['i-bem', 'sinon', 'objects'], function(provide, bem, sinon, objects) {
 
 describe('i-bem', function() {
-    describe('decl', function() {
-        afterEach(function() {
-            delete bem.entities['block'];
+    afterEach(function() {
+        objects.each(bem.entities, function(_, entityName) {
+            delete bem.entities[entityName];
         });
+    });
 
+    describe('decl', function() {
         it('should enable to declare block', function() {
             var Block = bem.declBlock('block', {});
 
@@ -28,8 +30,6 @@ describe('i-bem', function() {
 
             (new Block2()).should.be.instanceOf(Block);
             (new Block2()).should.be.instanceOf(Block2);
-
-            delete bem.entities['block2'];
         });
 
         it('should enable to inherit block to itself', function() {
@@ -39,9 +39,23 @@ describe('i-bem', function() {
             Block2.should.be.equal(Block);
         });
 
+        it('should enable to inherit block to itself using entity class', function() {
+            var Block = bem.declBlock('block', {}),
+                Block2 = bem.declBlock(Block, {});
+
+            Block2.should.be.equal(Block);
+        });
+
         it('should enable to inherit elem to itself', function() {
             var Elem = bem.declElem('block', 'elem', {}),
                 Elem2 = bem.declElem('block', 'elem', {});
+
+            Elem2.should.be.equal(Elem);
+        });
+
+        it('should enable to inherit elem to itself using entity', function() {
+            var Elem = bem.declElem('block', 'elem', {}),
+                Elem2 = bem.declElem(Elem, {});
 
             Elem2.should.be.equal(Elem);
         });
@@ -100,7 +114,6 @@ describe('i-bem', function() {
                 instance = Block.create();
 
             instance.should.be.instanceOf(Block);
-            delete bem.entities['block'];
         });
 
         it('should return instance of element with proper block', function() {
@@ -111,8 +124,6 @@ describe('i-bem', function() {
 
             elem.should.be.instanceOf(Elem);
             elem.block().should.be.instanceOf(Block);
-            delete bem.entities['block'];
-            delete bem.entities['block__elem'];
         });
     });
 
@@ -122,9 +133,6 @@ describe('i-bem', function() {
             block = bem
                 .declBlock('block', {})
                 .create({ mod1 : 'val1', mod2 : true, mod3 : false });
-        });
-        afterEach(function() {
-            delete bem.entities['block'];
         });
 
         describe('getMod', function() {
@@ -304,10 +312,6 @@ describe('i-bem', function() {
     });
 
     describe('beforeSetMod', function() {
-        afterEach(function() {
-            delete bem.entities['block'];
-        });
-
         it('should call properly matched callbacks by order', function() {
             var order = [],
                 spyMod1Val2 = sinon.spy(),
@@ -547,10 +551,6 @@ describe('i-bem', function() {
     });
 
     describe('onSetMod', function() {
-        afterEach(function() {
-            delete bem.entities['block'];
-        });
-
         it('should call properly matched callbacks by order', function() {
             var order = [],
                 spyMod1Val2 = sinon.spy(),
@@ -711,7 +711,7 @@ describe('i-bem', function() {
                 spy2 = sinon.spy(),
                 spy3 = sinon.spy(),
                 spy4 = sinon.spy(),
-                Block = bem.declBlock();
+                Block = bem.declBlock('block');
 
             Block.declMod({ modName : 'm1', modVal : 'v1' }, {
                 onSetMod : {
@@ -895,9 +895,6 @@ describe('i-bem', function() {
             block = bem
                 .declBlock('block', {})
                 .create({ mod1 : 'val1' });
-        });
-        afterEach(function() {
-            delete bem.entities['block'];
         });
 
         it('should call callback asynchronously', function(done) {
