@@ -164,12 +164,18 @@ function declEntity(baseCls, entityName, base, props, staticProps) {
         base = entities[entityName] || baseCls;
     }
 
+    Array.isArray(base) || (base = [base]);
+
+    if(!base[0].__bemEntity) {
+        base = base.slice();
+        base.unshift(entities[entityName] || baseCls);
+    }
+
     props && convertModHandlersToMethods(props);
 
-    var Base = Array.isArray(base)? base[0] : base,
-        entityCls;
+    var entityCls;
 
-    entityName === Base.getEntityName()?
+    entityName === base[0].getEntityName()?
         // makes a new "init" if the old one was already executed
         (entityCls = inherit.self(base, props, staticProps))._processInit(true) :
         (entityCls = entities[entityName] = inherit(base, props, staticProps));
@@ -461,6 +467,8 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
 
         return inherit.self(this, props, staticProps);
     },
+
+    __bemEntity : true,
 
     _name : null,
 
