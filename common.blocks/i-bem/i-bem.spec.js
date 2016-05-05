@@ -61,7 +61,7 @@ describe('i-bem', function() {
         });
 
         it('should enable to mix block', function() {
-            var MixBlock = bem.declMix({}),
+            var MixBlock = bem.declMixin({}),
                 Block = bem.declBlock('block', MixBlock, {}),
                 block = Block.create();
 
@@ -69,15 +69,15 @@ describe('i-bem', function() {
         });
 
         it('should enable to mix blocks', function() {
-            var MixBlock1 = bem.declMix({}),
-                MixBlock2 = bem.declMix({}),
+            var MixBlock1 = bem.declMixin({}),
+                MixBlock2 = bem.declMixin({}),
                 Block = bem.declBlock('block', [MixBlock1, MixBlock2], {});
 
             (new Block()).should.be.instanceOf(bem.Block);
         });
 
         it('should enable to inherit and mix blocks', function() {
-            var MixBlock = bem.declMix({}),
+            var MixBlock = bem.declMixin({}),
                 BaseBlock = bem.declBlock('base-block', {}),
                 Block = bem.declBlock('block', [BaseBlock, MixBlock], {});
 

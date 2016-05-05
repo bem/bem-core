@@ -866,7 +866,7 @@ bemDom = /** @exports */{
         return bem.declElem(blockName, elemName, baseElems, props, staticProps);
     },
 
-    declMix : bem.declMix,
+    declMixin : bem.declMixin,
 
     /**
      * Initializes blocks on a fragment of the DOM tree
