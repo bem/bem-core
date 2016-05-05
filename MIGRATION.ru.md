@@ -123,7 +123,10 @@ provide(bemDom.declBlock(this.name, MyBaseDomBlock, { /* ... */ }));
 });
 ```
 
-### Декларация блока-микса
+### Декларация миксина
+
+Метод `declMix` переименован в `declMixin`, чтобы отделить понятие
+[миксов нескольких БЭМ-сущностей на одном DOM-узле](https://ru.bem.info/methodology/key-concepts/#Микс) от миксинов на уровне JS.
 
 Было:
 
@@ -138,14 +141,14 @@ provide(BEMDOM.declMix(this.name, { /* ... */ }));
 Стало:
 
 ```js
-modules.define('my-mix-block', ['i-bem-dom'], function(provide, bemDom) {
+modules.define('my-mixin-block', ['i-bem-dom'], function(provide, bemDom) {
 
-provide(bemDom.declMix({ /* ... */ }));
+provide(bemDom.declMixin({ /* ... */ }));
 
 });
 ```
 
-### Примешивание блока-микса
+### Примешивание миксина
 
 Было:
 
@@ -160,9 +163,9 @@ provide(BEMDOM.decl({ block : this.name, baseMix : ['my-mix-1', 'my-mix-2']}, { 
 Стало:
 
 ```js
-modules.define('my-dom-block', ['i-bem-dom', 'my-mix-1', 'my-mix-2'], function(provide, bemDom, MyMix1, MyMix2) {
+modules.define('my-dom-block', ['i-bem-dom', 'my-mixin-1', 'my-mixin-2'], function(provide, bemDom, MyMixin1, MyMixin2) {
 
-provide(bemDom.declBlock(this.name, [MyMix1, MyMix2], { /* ... */ }));
+provide(bemDom.declBlock(this.name, [MyMixin1, MyMixin2], { /* ... */ }));
 
 });
 ```
