@@ -609,12 +609,12 @@ provide(/** @exports */{
     },
 
     /**
-     * Declares mix
+     * Declares mixin
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      * @returns {Function} mix
      */
-    declMix : function(props, staticProps) {
+    declMixin : function(props, staticProps) {
         convertModHandlersToMethods(props || (props = {}));
         return inherit(props, staticProps);
     },
