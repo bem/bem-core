@@ -1,7 +1,6 @@
 {
   "name": "bem-core",
   "version": "3.0.1",
-  "private": true,
   "description": "bem-core Library",
   "repository": {
     "type": "git",
