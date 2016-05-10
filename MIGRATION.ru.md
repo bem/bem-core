@@ -459,6 +459,23 @@ this.findChildElem('my-elem').findChildBlock('my-block-2');
 Методы `findChildBlocks()`, `findParentBlocks()`, `findMixedBlocks()`, `findChildElems()`, `findParentElems()`,
 `findMixedElems()` возвращают [коллекции БЭМ-сущностей](#Коллекции).
 
+Методы `findChildElem()` и `findChildElems()` (в отличие от предыдущего аналога `findElem`) не выполняют поиск на собственных DOM-узлах экземпляра.
+
+Было:
+
+```js
+this.findElem('my-elem');
+```
+
+Стало:
+
+```js
+this.findChildElems('my-elem').concat(this.findMixedElems('my-elem'));
+```
+
+Но рекомендется обратить внимание, действительно ли необходимы оба поиска:
+в большинстве случаев достаточно использовать или `this.findChildElems('my-elem')` или `this.findMixedElems('my-elem')`.
+
 #### Проверка вложенности
 
 Вместо удаленного метода `containsDomElem()`, следует использовать метод `containsEntity()`.
