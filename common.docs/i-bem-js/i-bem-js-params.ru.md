@@ -1,60 +1,88 @@
 <a name="data-bem"></a>
-## Передача параметров экземпляру блока
+## Передача параметров экземпляру блока и элемента
 
 ### Синтаксис передачи параметров
 
-Параметры блока хранятся в атрибуте `data-bem` HTML-элемента и передаются блоку в момент инициализации. Параметры позволяют влиять на поведение конкретного экземпляра блока, привязанного к данному HTML-элементу.
+Параметры блока и элемента хранятся в атрибуте `data-bem` HTML-элемента и передаются экземпляру в момент инициализации.
+Параметры позволяют влиять на поведение конкретного экземпляра, привязанного к данному HTML-элементу.
 
 Значение атрибута `data-bem` должно содержать валидный JSON описвающий хэш вида:
 
 * ключ — `{String}`, имя блока;
-* значение — `{Object}`, параметры данного блока. Если данному экземпляру блока не требуются
-параметры, указывается пустой хэш `{}`.
+* значение — `{Object}`, параметры данного блока. Если данному экземпляру не требуются параметры, указывается пустой хэш `{}`.
 
 ```html
-<div class="my-block i-bem" data-bem='{ "my-block": {} }'></div>
+<div class="my-block i-bem" data-bem='{ "my-block" : {} }'></div>
+<div class="my-block__my-elem i-bem" data-bem='{ "my-block__my-elem" : {} }'></div>
 ```
 
 
-Если к HTML-элементу [привязано несколько JS-блоков](./i-bem-js-html-binding.ru.md#html-mixes), в значении атрибута `data-bem` должны содержаться параметры для каждого из них:
+Если к HTML-элементу [привязано несколько блоков или элементов в технологии JS](./i-bem-js-html-binding.ru.md#html-mixes),
+то в значении атрибута `data-bem` должны содержаться параметры для каждого из них:
 
 ```html
-<div class="my-block another-block i-bem" data-bem='{ "my-block": {}, "another-block": {} }'></div>
-```
-
-
-**Параметры элемента** передаются через атрибута `data-bem` DOM-узла элемента. Например, передать параметры элементу `my-elem` блока `my-block` можно так:
-
-```html
-<div class="my-block i-bem" data-bem='{ "my-block": {} }'>
-    <div class="my-block__my-elem" data-bem='{ "my-block__my-elem": {} }'></div>
-</div>
+<div class="a-block b-block i-bem" data-bem='{ "a-block" : {}, "b-block" : {} }'></div>
 ```
 
 Указание имени блока в параметрах позволяет:
 
- * ускорить инициализацию блоков – не нужно парсить значение атрибута `class`.
- * размещать несколько блоков на одном HTML-элементе без необходимости множить его атрибуты.
+ * размещать несколько блоков на одном HTML-элементе без необходимости множить его атрибуты
+ * ускорить инициализацию блоков – не нужно парсить значение атрибута `class`
 
-### Доступ к параметрам из экземпляра блока
+### Задание параметров по умолчанию
 
-Доступ к параметрам из экземпляра блока можно получить через поле `this.params`. Его значение – хэш параметров из атрибута `data-bem` DOM-элемента блока (`this.domElem`).
+Для задания параметров по умолчанию в декларации блока или элемента необходимо переопределить метод `_getDefaultParams`.
+Его результат будет объединён со значениями параметров из атрибута `data-bem` DOM-элемента, при этом параметры из атрибута будут иметь приоритет.
 
-Например, получить доступ к параметрам блока `my-block` можно так:
-
-```html
-<div class="my-block i-bem" data-bem='{ "my-block": { "foo" : "bar" } }'></div>
-```
-
+Например:
 
 ```js
-modules.define('my-block', ['i-bem__dom'], function(provide, BEMDOM) {
+modules.define('my-block', ['i-bem-dom'], function(provide, bemDom) {
 
-provide(BEMDOM.decl(this.name, {
+provide(bemDom.declBlock(this.name, {
+    _getDefaultParams : function() {
+        return {
+            param1 : 'val1'
+            param2 : 'val2'
+        }
+    }
+}));
+
+});
+```
+
+```html
+<div class="my-block i-bem" data-bem='{ "my-block" : { "param1" : "val2", "param3" : "val3" } }'></div>
+```
+
+Итоговые параметры:
+
+```js
+{
+    param1 : 'val2',
+    param2 : 'val2',
+    param3 : 'val3'
+}
+```
+
+### Доступ к параметрам из экземпляра
+
+Доступ к параметрам из экземпляра блока и элемента можно получить через поле `this.params`.
+
+Например:
+
+```html
+<div class="my-block i-bem" data-bem='{ "my-block" : { "param1" : "val1" } }'></div>
+```
+
+```js
+modules.define('my-block', ['i-bem-dom'], function(provide, bemDom) {
+
+provide(bemDom.declBlock(this.name, {
     onSetMod : {
         'js' : {
             'inited': function() {
-                console.log(this.params); // { foo : 'bar' }
+                console.log(this.params); // { param1 : 'val1' }
             }
         }
     }
@@ -63,28 +91,3 @@ provide(BEMDOM.decl(this.name, {
 });
 ```
 
-
-Для получения параметров элемента служит метод экземпляра блока `elemParams`. Он принимает аргументом строку с именем элемента или его jQuery-объект. Возвращает хэш параметров элемента.
-
-```html
-<div class="my-block i-bem" data-bem='{ "my-block": {} }'>
-    <div class="my-block__my-elem" data-bem='{ "my-block__my-elem": { "foo" : "bar" } }'></div>
-</div>
-```
-
-
-```js
-modules.define('my-block', ['i-bem__dom'], function(provide, BEMDOM) {
-
-provide(BEMDOM.decl(this.name, {
-    onSetMod : {
-        'js' : {
-            'inited': function() {
-                    console.log(this.elemParams('my-elem')); // { foo : 'bar' }
-            }
-        }
-    }
-}));
-
-});
-```
