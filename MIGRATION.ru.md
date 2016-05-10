@@ -354,6 +354,24 @@ provide(bemDom.declBlock(this.name, { /* ... */ }, {
 });
 ```
 
+Было:
+
+```js
+{
+    block : 'b1',
+    js : { live : false }
+}
+```
+
+Стало:
+
+```js
+{
+    block : 'b1',
+    js : { lazyInit : false }
+}
+```
+
 Задача: [#877](https://github.com/bem/bem-core/issues/877).
 
 ### Экземпляры для элементов
