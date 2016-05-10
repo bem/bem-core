@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.1
+
+### Bug fixes
+
+- An issue with pointer events on iOS devices was fixed ([#1253](https://github.com/bem/bem-core/issues/1253)).
+
 ## 3.0.0
 
 ### Breaking changes
