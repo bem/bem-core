@@ -22,7 +22,7 @@
 
 Для реализации взаимодействия блоков `i-bem.js` предоставляет API:
 
-* [Поиск экземпляров блоков в DOM-дереве](i-bem-js-dom.ru.md#api-find)
+* [Поиск экземпляров блоков в DOM-дереве](i-bem-js-dom.ru.md#api-blocks-find)
 * [Доступ к экземплярам блоков без DOM-представления](i-bem-js-html-binding.ru.md#api-nodom)
 * [Доступ к классам блоков](#api-calss)
 
