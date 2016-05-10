@@ -550,7 +550,7 @@ bemDom.declBlock('my-block', {
     onSetMod : {
         'js' : {
             'inited' : function() {
-                this._domEvents(demDom.doc).on('click', this._onDocClick);
+                this._domEvents(bemDom.doc).on('click', this._onDocClick);
             }
         }
     }
@@ -578,7 +578,7 @@ bemDom.declBlock('my-block', {
     onSetMod : {
         'js' : {
             'inited' : function() {
-                this._domEvents(demDom.win).on('resize', this._onWinResize);
+                this._domEvents(bemDom.win).on('resize', this._onWinResize);
             }
         }
     }
