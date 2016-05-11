@@ -831,39 +831,41 @@ bemDom = /** @exports */{
 
     /**
      * Declares DOM-based block and creates block class
-     * @param {String} blockName Block name
-     * @param {Function|Array[Function]} [baseBlocks] base block + mixes
+     * @param {String|Function} blockName Block name or block class
+     * @param {Function|Array[Function]} [base] base block + mixes
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      * @returns {Function} Block class
      */
-    declBlock : function(blockName, baseBlocks, props, staticProps) {
-        if(!baseBlocks || (typeof baseBlocks === 'object' && !Array.isArray(baseBlocks))) {
+    declBlock : function(blockName, base, props, staticProps) {
+        if(!base || (typeof base === 'object' && !Array.isArray(base))) {
             staticProps = props;
-            props = baseBlocks;
-            baseBlocks = entities[blockName] || Block;
+            props = base;
+            base = typeof blockName === 'string'?
+                entities[blockName] || Block :
+                blockName;
         }
 
-        return bem.declBlock(blockName, baseBlocks, props, staticProps);
+        return bem.declBlock(blockName, base, props, staticProps);
     },
 
     /**
      * Declares elem and creates elem class
      * @param {String} blockName Block name
      * @param {String} elemName Elem name
-     * @param {Function|Array[Function]} [baseElems] base elem + mixes
+     * @param {Function|Array[Function]} [base] base elem + mixes
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      * @returns {Function} Elem class
      */
-    declElem : function(blockName, elemName, baseElems, props, staticProps) {
-        if(!baseElems || (typeof baseElems === 'object' && !Array.isArray(baseElems))) {
+    declElem : function(blockName, elemName, base, props, staticProps) {
+        if(!base || (typeof base === 'object' && !Array.isArray(base))) {
             staticProps = props;
-            props = baseElems;
-            baseElems = entities[blockName + ELEM_DELIM + elemName] || Elem;
+            props = base;
+            base = entities[blockName + ELEM_DELIM + elemName] || Elem;
         }
 
-        return bem.declElem(blockName, elemName, baseElems, props, staticProps);
+        return bem.declElem(blockName, elemName, base, props, staticProps);
     },
 
     declMixin : bem.declMixin,

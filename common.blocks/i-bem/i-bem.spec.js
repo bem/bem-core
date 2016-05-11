@@ -33,31 +33,103 @@ describe('i-bem', function() {
         });
 
         it('should enable to inherit block to itself', function() {
-            var Block = bem.declBlock('block', {}),
-                Block2 = bem.declBlock('block', {});
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                Block = bem.declBlock('block', {
+                    onSetMod : {
+                        js : {
+                            inited : spy1
+                        }
+                    }
+                }),
+                Block2 = bem.declBlock('block', {
+                    onSetMod : {
+                        js : {
+                            inited : spy2
+                        }
+                    }
+                });
+
+            Block.create();
 
             Block2.should.be.equal(Block);
+            spy1.should.not.have.been.called;
+            spy2.should.have.been.called;
         });
 
         it('should enable to inherit block to itself using entity class', function() {
-            var Block = bem.declBlock('block', {}),
-                Block2 = bem.declBlock(Block, {});
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                Block = bem.declBlock('block', {
+                    onSetMod : {
+                        js : {
+                            inited : spy1
+                        }
+                    }
+                }),
+                Block2 = bem.declBlock(Block, {
+                    onSetMod : {
+                        js : {
+                            inited : spy2
+                        }
+                    }
+                });
+
+            Block.create();
 
             Block2.should.be.equal(Block);
+            spy1.should.not.have.been.called;
+            spy2.should.have.been.called;
         });
 
         it('should enable to inherit elem to itself', function() {
-            var Elem = bem.declElem('block', 'elem', {}),
-                Elem2 = bem.declElem('block', 'elem', {});
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                Elem = bem.declElem('block', 'elem', {
+                    onSetMod : {
+                        js : {
+                            inited : spy1
+                        }
+                    }
+                }),
+                Elem2 = bem.declElem('block', 'elem', {
+                    onSetMod : {
+                        js : {
+                            inited : spy2
+                        }
+                    }
+                });
+
+            Elem.create();
 
             Elem2.should.be.equal(Elem);
+            spy1.should.not.have.been.called;
+            spy2.should.have.been.called;
         });
 
         it('should enable to inherit elem to itself using entity', function() {
-            var Elem = bem.declElem('block', 'elem', {}),
-                Elem2 = bem.declElem(Elem, {});
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                Elem = bem.declElem('block', 'elem', {
+                    onSetMod : {
+                        js : {
+                            inited : spy1
+                        }
+                    }
+                }),
+                Elem2 = bem.declElem(Elem, {
+                    onSetMod : {
+                        js : {
+                            inited : spy2
+                        }
+                    }
+                });
+
+            Elem.create();
 
             Elem2.should.be.equal(Elem);
+            spy1.should.not.have.been.called;
+            spy2.should.have.been.called;
         });
 
         it('should enable to mix block', function() {
