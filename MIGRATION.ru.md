@@ -450,7 +450,7 @@ this.findBlockInside(this.elem('my-elem'), 'my-block-2');
 Стало:
 
 ```js
-this.findChildElem('my-elem').findChildBlock('my-block-2');
+this.findChildElem('my-elem').findChildBlock(MyBlock2);
 ```
 
 Удалены методы: `findElem()`, `closestElem()`, вместо них следует использовать методы `findChildElem()`
@@ -507,7 +507,7 @@ this.findBlocksInside('my-block-2')[0].setMod('my-mod', 'my-val');
 Стало:
 
 ```js
-this.findBlocksInside('my-block-2').get(0).setMod('my-mod', 'my-val');
+this.findChildBlocks(MyBlock2).get(0).setMod('my-mod', 'my-val');
 ```
 
 Было:
@@ -521,7 +521,7 @@ this.findBlocksInside('my-block-2').forEach(function(myBlock2) {
 Стало:
 
 ```js
-this.findChildBlocks('my-block-2').setMod('my-mod', 'my-val');
+this.findChildBlocks(MyBlock2).setMod('my-mod', 'my-val');
 ```
 
 Задача: [#582](https://github.com/bem/bem-core/issues/582).
