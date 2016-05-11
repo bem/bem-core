@@ -510,6 +510,7 @@ describe('DOM events', function() {
                 spy1.should.have.been.called;
                 spy2.should.have.been.called;
 
+                spy3.should.have.been.calledOn(block1);
                 spy3.args[0][2].should.have.been.equal(data);
             });
 
@@ -579,6 +580,7 @@ describe('DOM events', function() {
                 spy1.should.have.been.called;
                 spy2.should.have.been.called;
 
+                spy3.should.have.been.calledOn(block1);
                 spy3.args[0][2].should.have.been.equal(data);
             });
 

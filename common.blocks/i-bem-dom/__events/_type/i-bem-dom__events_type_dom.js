@@ -38,7 +38,7 @@ var eventBuilder = function(e) {
                     }
 
                     if(instance) {
-                        e.bemTarget = $(this).bem(params.bindEntityCls);
+                        params.bindEntityCls && (e.bemTarget = $(this).bem(params.bindEntityCls));
                         fn.call(instance, e);
                     }
                 };
