@@ -158,11 +158,7 @@ function convertModHandlersToMethods(props) {
 }
 
 function declEntity(baseCls, entityName, base, props, staticProps) {
-    if(!base || (typeof base === 'object' && !Array.isArray(base))) {
-        staticProps = props;
-        props = base;
-        base = entities[entityName] || baseCls;
-    }
+    base || (base = entities[entityName] || baseCls);
 
     Array.isArray(base) || (base = [base]);
 
@@ -569,14 +565,19 @@ provide(/** @exports */{
      * @returns {Function} Block class
      */
     declBlock : function(blockName, base, props, staticProps) {
-        if(typeof blockName !== 'string') {
+        if(typeof base === 'object' && !Array.isArray(base)) {
             staticProps = props;
             props = base;
-            base = blockName;
-            blockName = base.getEntityName();
+            base = undef;
         }
 
-        var res = declEntity(Block, blockName, base, props, staticProps);
+        var baseCls = Block;
+        if(typeof blockName !== 'string') {
+            baseCls = blockName;
+            blockName = blockName.getEntityName();
+        }
+
+        var res = declEntity(baseCls, blockName, base, props, staticProps);
         res._name = res._blockName = blockName;
         return res;
     },
@@ -591,18 +592,28 @@ provide(/** @exports */{
      * @returns {Function} Elem class
      */
     declElem : function(blockName, elemName, base, props, staticProps) {
-        var entityName;
-        if(typeof blockName === 'string')
-            entityName = blockName + ELEM_DELIM + elemName;
-        else {
+        var baseCls = Elem,
+            entityName;
+
+        if(typeof blockName !== 'string') {
             staticProps = props;
             props = base;
-            base = blockName;
+            base = elemName;
             elemName = blockName._name;
-            entityName = base.getEntityName();
+            baseCls = blockName;
+            blockName = baseCls._blockName;
+            entityName = baseCls.getEntityName();
+        } else {
+            entityName = blockName + ELEM_DELIM + elemName;
         }
 
-        var res = declEntity(Elem, entityName, base, props, staticProps);
+        if(typeof base === 'object' && !Array.isArray(base)) {
+            staticProps = props;
+            props = base;
+            base = undef;
+        }
+
+        var res = declEntity(baseCls, entityName, base, props, staticProps);
         res._blockName = blockName;
         res._name = elemName;
         return res;

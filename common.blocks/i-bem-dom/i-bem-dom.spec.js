@@ -22,31 +22,109 @@ describe('i-bem-dom', function() {
 
     describe('decl', function() {
         it('should enable to inherit block to itself', function() {
-            var Block = bemDom.declBlock('block', {}),
-                Block2 = bemDom.declBlock('block', {});
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                Block = bemDom.declBlock('block', {
+                    onSetMod : {
+                        js : {
+                            inited : spy1
+                        }
+                    }
+                }),
+                Block2 = bemDom.declBlock('block', {
+                    onSetMod : {
+                        js : {
+                            inited : spy2
+                        }
+                    }
+                }),
+                block = (rootNode = createDomNode({
+                    block : 'block'
+                })).bem(Block);
 
             Block2.should.be.equal(Block);
+            spy1.should.not.have.been.called;
+            spy2.should.have.been.called;
         });
 
         it('should enable to inherit block to itself using entity class', function() {
-            var Block = bemDom.declBlock('block', {}),
-                Block2 = bemDom.declBlock(Block, {});
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                Block = bemDom.declBlock('block', {
+                    onSetMod : {
+                        js : {
+                            inited : spy1
+                        }
+                    }
+                }),
+                Block2 = bemDom.declBlock(Block, {
+                    onSetMod : {
+                        js : {
+                            inited : spy2
+                        }
+                    }
+                }),
+                block = (rootNode = createDomNode({
+                    block : 'block'
+                })).bem(Block);
 
             Block2.should.be.equal(Block);
+            spy1.should.not.have.been.called;
+            spy2.should.have.been.called;
         });
 
         it('should enable to inherit elem to itself', function() {
-            var Elem = bemDom.declElem('block', 'elem', {}),
-                Elem2 = bemDom.declElem('block', 'elem', {});
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                Elem = bem.declElem('block', 'elem', {
+                    onSetMod : {
+                        js : {
+                            inited : spy1
+                        }
+                    }
+                }),
+                Elem2 = bem.declElem('block', 'elem', {
+                    onSetMod : {
+                        js : {
+                            inited : spy2
+                        }
+                    }
+                }),
+                elem = (rootNode = createDomNode({
+                    block : 'block',
+                    elem : 'elem'
+                })).bem(Elem);
 
             Elem2.should.be.equal(Elem);
+            spy1.should.not.have.been.called;
+            spy2.should.have.been.called;
         });
 
         it('should enable to inherit elem to itself using entity class', function() {
-            var Elem = bemDom.declElem('block', 'elem', {}),
-                Elem2 = bemDom.declElem(Elem, {});
+            var spy1 = sinon.spy(),
+                spy2 = sinon.spy(),
+                Elem = bem.declElem('block', 'elem', {
+                    onSetMod : {
+                        js : {
+                            inited : spy1
+                        }
+                    }
+                }),
+                Elem2 = bem.declElem(Elem, {
+                    onSetMod : {
+                        js : {
+                            inited : spy2
+                        }
+                    }
+                }),
+                elem = (rootNode = createDomNode({
+                    block : 'block',
+                    elem : 'elem'
+                })).bem(Elem);
 
             Elem2.should.be.equal(Elem);
+            spy1.should.not.have.been.called;
+            spy2.should.have.been.called;
         });
     });
 
