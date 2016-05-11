@@ -72,9 +72,7 @@ var undef,
                 e,
                 params.bindSelector,
                 data,
-                fnStorage[fnId] = params.bindEntityCls?
-                    this._fnWrapper(fn, _fnCtx, fnId) :
-                    fn);
+                fnStorage[fnId] = this._fnWrapper(fn, _fnCtx, fnId));
 
             return this;
         },
@@ -112,13 +110,13 @@ var undef,
                 if(argsLen === 1) {
                     this._unbindByEvent(this._storage[e], e);
                 } else {
-                    var wrappedFn;
-                    if(params.bindEntityCls) {
-                        var fnId = identify(fn, _fnCtx),
-                            fnStorage = this._storage[e];
-                        if(wrappedFn = fnStorage && fnStorage[fnId])
-                            delete fnStorage[fnId];
-                    }
+                    var wrappedFn,
+                        fnId = identify(fn, _fnCtx),
+                        fnStorage = this._storage[e];
+
+                    if(wrappedFn = fnStorage && fnStorage[fnId])
+                        delete fnStorage[fnId];
+
                     params.bindDomElem.off(e, params.bindSelector, wrappedFn || fn);
                 }
             } else {
