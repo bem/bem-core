@@ -4,7 +4,7 @@
  */
 modules.define('ua', ['i-bem__dom'], function(provide, bemDom, ua) {
 
-provide(/** @exports */bemDom.decl(this.name,
+provide(/** @exports */bemDom.declBlock(this.name,
     {
         onSetMod : {
             'js' : {
