@@ -322,13 +322,20 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * Lazy search for elements nested in a block (caches results)
      * @protected
      * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
-     * @returns {Elem[]}
+     * @returns {BemDomCollection}
      */
     _elems : function(Elem) {
         var key = buildElemKey(Elem);
-        return key in this._elemsCache?
-            this._elemsCache[key] :
-            this.findChildElems(Elem);
+
+        if(key in this._elemsCache) return this._elemsCache[key];
+
+        var res = this._elemsCache[key] = this.findMixedElems(Elem).concat(this.findChildElems(Elem));
+
+        res.forEach(function(entity) {
+            entity._findBackRefs.push(this);
+        }, this);
+
+        return res;
     },
 
     /**
@@ -339,10 +346,15 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     _elem : function(Elem) {
         var key = buildElemKey(Elem);
+
         // NOTE: can use this._elemsCache but it's too rare case
-        return key in this._elemCache?
-            this._elemCache[key] :
-            this.findChildElem(Elem);
+        if(key in this._elemCache) return this._elemCache[key];
+
+        var res = this._elemCache[key] = this.findMixedElem(Elem) || this.findChildElem(Elem);
+
+        res && res._findBackRefs.push(this);
+
+        return res;
     },
 
     /**
@@ -429,13 +441,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Elem}
      */
     findChildElem : function(Elem, strictMode) {
-        if(strictMode)
-            return this._filterFindElemResults(this._findEntities('find', Elem))[0];
-
-        var res = this._findEntities('find', Elem, true);
-        res && res._findBackRefs.push(this);
-
-        return this._elemCache[buildElemKey(Elem)] = res;
+        return strictMode?
+            this._filterFindElemResults(this._findEntities('find', Elem)).get(0) :
+            this._findEntities('find', Elem, true);
     },
 
     /**
@@ -446,14 +454,10 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     findChildElems : function(Elem, strictMode) {
         var res = this._findEntities('find', Elem);
-        if(strictMode)
-            return this._filterFindElemResults(res);
 
-        res.forEach(function(entity) {
-            entity._findBackRefs.push(this);
-        }, this);
-
-        return this._elemsCache[buildElemKey(Elem)] = res;
+        return strictMode?
+            this._filterFindElemResults(res) :
+            res;
     },
 
     /**
@@ -500,8 +504,8 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * Filters results of findElem helper execution in strict mode
      * @private
-     * @param {Elem[]} res Elements
-     * @returns {Elem[]}
+     * @param {BemDomCollection} res Elements
+     * @returns {BemDomCollection}
      */
     _filterFindElemResults : function(res) {
         var block = this.block();

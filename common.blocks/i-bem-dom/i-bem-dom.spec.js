@@ -510,7 +510,7 @@ describe('i-bem-dom', function() {
 
     describe('find*Elem(s)', function() {
         var b1Block,
-            B1E1Elem, B1E2Elem, B1E3Elem, B1E4Elem, B1E5Elem;
+            B1E1Elem, B1E2Elem, B1E3Elem, B1E4Elem, B1E5Elem, B1E6Elem;
 
         beforeEach(function() {
             var B1Block = bemDom.declBlock('b1');
@@ -520,6 +520,7 @@ describe('i-bem-dom', function() {
             B1E3Elem = bemDom.declElem('b1', 'e3');
             B1E4Elem = bemDom.declElem('b1', 'e4');
             B1E5Elem = bemDom.declElem('b1', 'e5');
+            B1E6Elem = bemDom.declElem('b1', 'e6');
 
             rootNode = createDomNode(
                 {
@@ -554,13 +555,20 @@ describe('i-bem-dom', function() {
                                             { elem : 'e4', js : { id : '6' } }
                                         ],
                                         js : { id : '3' },
-                                        content : {
-                                            elem : 'e1',
-                                            elemMods : { m1 : true },
-                                            js : { id : '4' }
-                                        }
+                                        content : [
+                                            {
+                                                elem : 'e1',
+                                                elemMods : { m1 : true },
+                                                js : { id : '4' }
+                                            },
+                                            {
+                                                block : 'b1',
+                                                content : { elem : 'e6', js : { id : '10' } }
+                                            }
+                                        ]
                                     }
-                                }
+                                },
+                                { elem : 'e6', js : { id : '11' } }
                             ]
                         },
                         {
@@ -613,6 +621,10 @@ describe('i-bem-dom', function() {
                         b1Block.findChildElems({ elem : B1E1Elem, modName : 'm1' }))
                     .should.be.eql(['4']);
             });
+
+            it('should find elems in strict mode', function() {
+                getEntityIds(b1Block.findChildElems(B1E6Elem, true)).should.be.eql(['11']);
+            });
         });
 
         describe('findChildElem', function() {
@@ -663,6 +675,12 @@ describe('i-bem-dom', function() {
                     .findChildElem({ elem : B1E5Elem })
                     .params.id
                         .should.be.equal('9');
+            });
+
+            it('should find elem in strict mode', function() {
+                b1Block.findChildElem(B1E6Elem, true)
+                    .params.id
+                        .should.be.equal('11');
             });
         });
 
@@ -807,8 +825,8 @@ describe('i-bem-dom', function() {
 
             rootNode = createDomNode({
                 block : 'b1',
+                mix : { elem : 'e1', js : { id : 1 } },
                 content : [
-                    { elem : 'e1', js : { id : 1 } },
                     { elem : 'e1', elemMods : { m1 : 'v1' }, js : { id : 2 } },
                     {
                         elem : 'e2', js : { id : 3 },
@@ -884,7 +902,7 @@ describe('i-bem-dom', function() {
             });
 
             it('should drop elems cache in case mods change', function() {
-                var elem = b1Block.findChildElem(B1E1Elem);
+                var elem = b1Block._elem(B1E1Elem);
 
                 b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledOnce;
@@ -904,50 +922,11 @@ describe('i-bem-dom', function() {
                 b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledTwice;
             });
-
-            it('should cache found elems with findChildElems', function() {
-                // warm cache
-                [B1E1Elem, B1E2Elem, B1E3Elem].forEach(function (Elem) {
-                    b1Block.findChildElems({ elem : Elem });
-                    b1Block.findChildElems({ elem : Elem, modName : 'inner', modVal : 'no' });
-                    b1Block.findChildElems({ elem : Elem, modName : 'inner', modVal : 'yes' });
-                    b1Block.findChildElems({ elem : Elem, modName : 'bool', modVal : true });
-                });
-
-                // reset spy. it shouldn't be called inside `elems`
-                spy.restore();
-                spy = sinon.spy(b1Block, 'findChildElems');
-
-                getEntityIds(b1Block._elems('e1')).should.be.eql([1, 2, 4, 8]);
-                getEntityIds(b1Block._elems('e2')).should.be.eql([3, 7, 9]);
-                getEntityIds(b1Block._elems('e3')).should.be.eql([5, 6]);
-                getEntityIds(b1Block._elems({ elem : 'e1', modName : 'inner', modVal : 'yes' })).should.be.eql([8]);
-                getEntityIds(b1Block._elems({ elem : 'e2', modName : 'inner', modVal : 'yes' })).should.be.eql([7]);
-                getEntityIds(b1Block._elems({ elem : 'e3', modName : 'inner', modVal : 'no' })).should.be.eql([5]);
-                getEntityIds(b1Block._elems({ elem : 'e1', modName : 'bool', modVal : true })).should.be.eql([8]);
-                getEntityIds(b1Block._elems({ elem : 'e2', modName : 'bool', modVal : true })).should.be.eql([7, 9]);
-                getEntityIds(b1Block._elems({ elem : 'e3', modName : 'bool', modVal : true })).should.be.eql([5]);
-
-                b1Block.findChildElems.called.should.be.false;
-                b1Block.findChildElems.restore();
-            });
-
-            it('should update _elemsCache on findChildElem call', function() {
-                b1Block._elems('e1');
-                rootNode.html(BEMHTML.apply({
-                    block : 'b1',
-                    elem : 'e1',
-                    js : { id : 10 }
-                }));
-                b1Block.findChildElems('e1');
-
-                getEntityIds(b1Block._elems('e1')).should.be.eql([10]);
-            });
         });
 
         describe('elem', function() {
             beforeEach(function() {
-                spy = sinon.spy(b1Block, 'findChildElem');
+                spy = sinon.spy(b1Block, 'findMixedElem');
             });
 
             it('should find first elem by elem class', function() {
@@ -987,7 +966,7 @@ describe('i-bem-dom', function() {
             });
 
             it('should drop elem cache in case mods change', function() {
-                var elem = b1Block.findChildElems(B1E1Elem).get(0);
+                var elem = b1Block._elems(B1E1Elem).get(0);
 
                 b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledOnce;
