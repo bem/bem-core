@@ -922,6 +922,13 @@ describe('i-bem-dom', function() {
                 b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledTwice;
             });
+
+            it('should drop elems cache via dropElemCache for all mods', function() {
+                b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._dropElemCache(B1E1Elem);
+                b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                spy.should.be.calledTwice;
+            });
         });
 
         describe('elem', function() {
@@ -983,6 +990,13 @@ describe('i-bem-dom', function() {
             it('should drop elem cache via dropElemCache', function() {
                 b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 b1Block._dropElemCache({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                spy.should.be.calledTwice;
+            });
+
+            it('should drop elem cache via dropElemCache for all mods', function() {
+                b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
+                b1Block._dropElemCache(B1E1Elem);
                 b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledTwice;
             });
