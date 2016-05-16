@@ -814,6 +814,7 @@ describe('i-bem-dom', function() {
             B1E1Elem,
             B1E2Elem,
             B1E3Elem,
+            B1E4Elem,
             spy;
 
         beforeEach(function() {
@@ -822,6 +823,7 @@ describe('i-bem-dom', function() {
             B1E1Elem = bemDom.declElem('b1', 'e1');
             B1E2Elem = bemDom.declElem('b1', 'e2');
             B1E3Elem = bemDom.declElem('b1', 'e3');
+            B1E4Elem = bemDom.declElem('b1', 'e4');
 
             rootNode = createDomNode({
                 block : 'b1',
@@ -852,7 +854,8 @@ describe('i-bem-dom', function() {
                             }
                         }
                     },
-                    { elem : 'e2', js : { id : 9 }, elemMods : { bool : true } }
+                    { elem : 'e2', js : { id : 9 }, elemMods : { bool : true } },
+                    { elem : 'e4' }
                 ]
             });
 
@@ -915,20 +918,6 @@ describe('i-bem-dom', function() {
                 b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledThrice;
             });
-
-            it('should drop elems cache via dropElemCache', function() {
-                b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                b1Block._dropElemCache({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                spy.should.be.calledTwice;
-            });
-
-            it('should drop elems cache via dropElemCache for all mods', function() {
-                b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                b1Block._dropElemCache(B1E1Elem);
-                b1Block._elems({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                spy.should.be.calledTwice;
-            });
         });
 
         describe('elem', function() {
@@ -986,19 +975,84 @@ describe('i-bem-dom', function() {
                 b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
                 spy.should.be.calledThrice;
             });
+        });
 
-            it('should drop elem cache via dropElemCache', function() {
-                b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                b1Block._dropElemCache({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                spy.should.be.calledTwice;
+        describe('drop cache', function() {
+            var b1e2DomElem;
+
+            beforeEach(function() {
+                b1e2DomElem = b1Block.findChildElem(B1E2Elem).domElem;
+                spy = sinon.spy(b1Block, 'findChildElems');
             });
 
-            it('should drop elem cache via dropElemCache for all mods', function() {
-                b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                b1Block._dropElemCache(B1E1Elem);
-                b1Block._elem({ elem : B1E1Elem, modName : 'm2', modVal : 'v1' });
-                spy.should.be.calledTwice;
+            describe('for affected elems', function() {
+                it('should drop elems cache on DOM destruct', function() {
+                    b1Block._elems(B1E1Elem);
+
+                    bemDom.destruct(b1e2DomElem);
+
+                    b1Block._elems(B1E1Elem);
+                    spy.should.be.calledTwice;
+                });
+
+                it('should drop elems cache on DOM update', function() {
+                    b1Block._elems(B1E1Elem);
+
+                    bemDom.update(b1e2DomElem, BEMHTML.apply({
+                        block : 'b1',
+                        elem : 'e1'
+                    }));
+
+                    b1Block._elems(B1E1Elem);
+                    spy.should.be.calledTwice;
+                });
+
+                it('should drop elems cache on DOM replace', function() {
+                    b1Block._elems(B1E1Elem);
+
+                    bemDom.replace(b1e2DomElem, BEMHTML.apply({
+                        block : 'b1',
+                        elem : 'e1'
+                    }));
+
+                    b1Block._elems(B1E1Elem);
+                    spy.should.be.calledTwice;
+                });
+            });
+
+            describe('for not affected elems', function() {
+                it('should not drop elems cache on DOM destruct', function() {
+                    b1Block._elems(B1E4Elem);
+
+                    bemDom.destruct(b1e2DomElem);
+
+                    b1Block._elems(B1E4Elem);
+                    spy.should.be.callOnce;
+                });
+
+                it('should not drop elems cache on DOM update', function() {
+                    b1Block._elems(B1E4Elem);
+
+                    bemDom.update(b1e2DomElem, BEMHTML.apply({
+                        block : 'b1',
+                        elem : 'e1'
+                    }));
+
+                    b1Block._elems(B1E4Elem);
+                    spy.should.be.callOnce;
+                });
+
+                it('should not drop elems cache on DOM replace', function() {
+                    b1Block._elems(B1E4Elem);
+
+                    bemDom.replace(b1e2DomElem, BEMHTML.apply({
+                        block : 'b1',
+                        elem : 'e1'
+                    }));
+
+                    b1Block._elems(B1E4Elem);
+                    spy.should.be.callOnce;
+                });
             });
         });
     });
