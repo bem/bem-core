@@ -241,7 +241,7 @@ function storeDomNodeParents(domElem) {
 /**
  * Build key for elem
  * @param {Function|String|Object} elem Element class or name or description elem, modName, modVal
- * @returns {String}
+ * @returns {Object}
  */
 function buildElemKey(elem) {
     if(typeof elem === 'string') {
@@ -252,7 +252,10 @@ function buildElemKey(elem) {
         elem.elem = elem.elem.getName();
     }
 
-    return elem.elem + buildModPostfix(elem.modName, elem.modVal);
+    return {
+        elem : elem.elem,
+        mod : buildModPostfix(elem.modName, elem.modVal)
+    };
 }
 
 // jscs:disable requireMultipleVarDecl
@@ -325,11 +328,14 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     _elems : function(Elem) {
-        var key = buildElemKey(Elem);
+        var key = buildElemKey(Elem),
+            elemsCache = this._elemsCache[key.elem];
 
-        if(key in this._elemsCache) return this._elemsCache[key];
+        if(elemsCache && key.mod in elemsCache)
+            return elemsCache[key.mod];
 
-        var res = this._elemsCache[key] = this.findMixedElems(Elem).concat(this.findChildElems(Elem));
+        var res = (elemsCache || (this._elemsCache[key.elem] = {}))[key.mod] =
+            this.findMixedElems(Elem).concat(this.findChildElems(Elem));
 
         res.forEach(function(entity) {
             entity._findBackRefs.push(this);
@@ -345,12 +351,15 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Elem}
      */
     _elem : function(Elem) {
-        var key = buildElemKey(Elem);
+        var key = buildElemKey(Elem),
+            elemCache = this._elemCache[key.elem];
 
         // NOTE: can use this._elemsCache but it's too rare case
-        if(key in this._elemCache) return this._elemCache[key];
+        if(elemCache && key.mod in elemCache)
+            return elemCache[key.mod];
 
-        var res = this._elemCache[key] = this.findMixedElem(Elem) || this.findChildElem(Elem);
+        var res = (elemCache || (this._elemCache[key.elem] = {}))[key.mod] =
+            this.findMixedElem(Elem) || this.findChildElem(Elem);
 
         res && res._findBackRefs.push(this);
 
@@ -372,8 +381,13 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
         (Array.isArray(elems)? elems : slice.call(arguments)).forEach(function(elem) {
             var key = buildElemKey(elem);
-            delete this._elemsCache[key];
-            delete this._elemCache[key];
+            if(key.mod) {
+                this._elemsCache[key.elem] && delete this._elemsCache[key.elem][key.mod];
+                this._elemCache[key.elem] && delete this._elemCache[key.elem][key.mod];
+            } else {
+                delete this._elemsCache[key.elem];
+                delete this._elemCache[key.elem];
+            }
         }, this);
 
         return this;
