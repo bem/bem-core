@@ -285,7 +285,7 @@ var undef,
                         elemName = bindCtx.getName();
                     }
 
-                    var entityName = bemInternal.buildClass(blockName, elemName);
+                    var entityName = bemInternal.buildClassName(blockName, elemName);
                     res.bindEntityCls = this._getEntityCls(entityName);
                     res.bindSelector = '.' + (res.key = entityName + bemInternal.buildModPostfix(modName, modVal));
                 }

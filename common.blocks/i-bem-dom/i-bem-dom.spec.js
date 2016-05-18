@@ -204,7 +204,7 @@ describe('i-bem-dom', function() {
     });
 
     describe('setMod', function() {
-        it('should properly set CSS classes', function() {
+        it('should properly set CSS class names', function() {
             var Block = bemDom.declBlock('block');
 
             [
@@ -243,7 +243,7 @@ describe('i-bem-dom', function() {
             });
         });
 
-        it('should properly set elem CSS classes', function() {
+        it('should properly set elem CSS class names', function() {
             var Block = bemDom.declBlock('block'),
                 rootNode;
 

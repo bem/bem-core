@@ -58,8 +58,8 @@ var undef,
 
     entities = bem.entities,
 
-    BEM_CLASS = 'i-bem',
-    BEM_SELECTOR = '.' + BEM_CLASS,
+    BEM_CLASS_NAME = 'i-bem',
+    BEM_SELECTOR = '.' + BEM_CLASS_NAME,
     BEM_PARAMS_ATTR = 'data-bem',
 
     NAME_PATTERN = bemInternal.NAME_PATTERN,
@@ -68,7 +68,7 @@ var undef,
     ELEM_DELIM = bemInternal.ELEM_DELIM,
 
     buildModPostfix = bemInternal.buildModPostfix,
-    buildClass = bemInternal.buildClass,
+    buildClassName = bemInternal.buildClassName,
 
     reverse = Array.prototype.reverse,
     slice = Array.prototype.slice,
@@ -148,7 +148,7 @@ function initEntity(entityName, domElem, params, ignoreLazyInit, callback) {
     entityCls._processInit();
 
     if(!entityCls.lazyInit || ignoreLazyInit || params.lazyInit === false) {
-        ignoreLazyInit && domElem.addClass(BEM_CLASS); // add css class for preventing memory leaks in further destructing
+        ignoreLazyInit && domElem.addClass(BEM_CLASS_NAME); // add css class for preventing memory leaks in further destructing
 
         entity = new entityCls(uniqIdToDomElems[uniqId], params, !!ignoreLazyInit);
         delete uniqIdToDomElems[uniqId];
@@ -582,13 +582,13 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
                     this.__self._blockName + ELEM_DELIM + entity,
             selector = '.' +
                 (typeof entity === 'object'?
-                    buildClass(
+                    buildClassName(
                         entityName,
                         entity.modName,
                         typeof entity.modVal === 'undefined'?
                             true :
                             entity.modVal) :
-                    buildClass(entityName)) +
+                    buildClassName(entityName)) +
                 (onlyFirst? ':first' : ''),
             domElems = this.domElem[select](selector);
 
@@ -674,21 +674,21 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         this.__base.apply(this, arguments);
 
         if(modName !== 'js' || modVal !== '') {
-            var classPrefix = _self._buildModClassPrefix(modName),
-                classRE = _self._buildModValRE(modName),
+            var classNamePrefix = _self._buildModClassNamePrefix(modName),
+                classNameRE = _self._buildModValRE(modName),
                 needDel = modVal === '';
 
             this.domElem.each(function() {
                 var className = this.className,
-                    modClassName = classPrefix;
+                    modClassName = classNamePrefix;
 
                 modVal !== true && (modClassName += MOD_DELIM + modVal);
 
                 (oldModVal === true?
-                    classRE.test(className) :
-                    (' ' + className).indexOf(' ' + classPrefix + MOD_DELIM) > -1)?
+                    classNameRE.test(className) :
+                    (' ' + className).indexOf(' ' + classNamePrefix + MOD_DELIM) > -1)?
                         this.className = className.replace(
-                            classRE,
+                            classNameRE,
                             (needDel? '' : '$1' + modClassName)) :
                         needDel || $(this).addClass(modClassName);
             });
@@ -764,7 +764,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @param {String} modName Modifier name
      * @returns {String}
      */
-    _buildModClassPrefix : function(modName) {
+    _buildModClassNamePrefix : function(modName) {
         return this.getEntityName() + MOD_DELIM + modName;
     },
 
@@ -777,19 +777,19 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     _buildModValRE : function(modName) {
         return new RegExp(
             '(\\s|^)' +
-            this._buildModClassPrefix(modName) +
+            this._buildModClassNamePrefix(modName) +
             '(?:' + MOD_DELIM + '(' + NAME_PATTERN + '))?(?=\\s|$)');
     },
 
     /**
-     * Builds a CSS class corresponding to the entity and modifier
+     * Builds a CSS class name corresponding to the entity and modifier
      * @protected
      * @param {String} [modName] Modifier name
      * @param {String} [modVal] Modifier value
      * @returns {String}
      */
-    _buildClass : function(modName, modVal) {
-        return buildClass(this.getEntityName(), modName, modVal);
+    _buildClassName : function(modName, modVal) {
+        return buildClassName(this.getEntityName(), modName, modVal);
     },
 
     /**
@@ -800,7 +800,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {String}
      */
     _buildSelector : function(modName, modVal) {
-        return '.' + this._buildClass(modName, modVal);
+        return '.' + this._buildClassName(modName, modVal);
     }
 });
 
