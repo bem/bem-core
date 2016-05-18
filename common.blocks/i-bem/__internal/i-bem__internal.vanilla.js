@@ -41,12 +41,12 @@ function buildModPostfix(modName, modVal) {
     return res;
 }
 
-function buildBlockClass(name, modName, modVal) {
+function buildBlockClassName(name, modName, modVal) {
     return name + buildModPostfix(modName, modVal);
 }
 
-function buildElemClass(block, name, modName, modVal) {
-    return buildBlockClass(block, undef, undef) +
+function buildElemClassName(block, name, modName, modVal) {
+    return buildBlockClassName(block, undef, undef) +
         ELEM_DELIM + name +
         buildModPostfix(modName, modVal);
 }
@@ -60,14 +60,14 @@ provide(/** @exports */{
     buildModPostfix : buildModPostfix,
 
     /**
-     * Builds the class of a block or element with a modifier
+     * Builds the class name of a block or element with a modifier
      * @param {String} block Block name
      * @param {String} [elem] Element name
      * @param {String} [modName] Modifier name
      * @param {String|Number} [modVal] Modifier value
-     * @returns {String} Class
+     * @returns {String} Class name
      */
-    buildClass : function(block, elem, modName, modVal) {
+    buildClassName : function(block, elem, modName, modVal) {
         if(isSimple(modName)) {
             if(!isSimple(modVal)) {
                 modVal = modName;
@@ -85,33 +85,33 @@ provide(/** @exports */{
         }
 
         return elem?
-            buildElemClass(block, elem, modName, modVal) :
-            buildBlockClass(block, modName, modVal);
+            buildElemClassName(block, elem, modName, modVal) :
+            buildBlockClassName(block, modName, modVal);
     },
 
     /**
-     * Builds full classes for a buffer or element with modifiers
+     * Builds full class names for a buffer or element with modifiers
      * @param {String} block Block name
      * @param {String} [elem] Element name
      * @param {Object} [mods] Modifiers
      * @returns {String} Class
      */
-    buildClasses : function(block, elem, mods) {
+    buildClassNames : function(block, elem, mods) {
         if(elem && typeof elem !== 'string') {
             mods = elem;
             elem = undef;
         }
 
         var res = elem?
-            buildElemClass(block, elem, undef, undef) :
-            buildBlockClass(block, undef, undef);
+            buildElemClassName(block, elem, undef, undef) :
+            buildBlockClassName(block, undef, undef);
 
         if(mods) {
             for(var modName in mods) {
                 if(mods.hasOwnProperty(modName) && mods[modName]) {
                     res += ' ' + (elem?
-                        buildElemClass(block, elem, modName, mods[modName]) :
-                        buildBlockClass(block, modName, mods[modName]));
+                        buildElemClassName(block, elem, modName, mods[modName]) :
+                        buildBlockClassName(block, modName, mods[modName]));
                 }
             }
         }
