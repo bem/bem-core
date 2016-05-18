@@ -52,6 +52,8 @@ HTML-коде страницы, варианты соотношения HTML-э�
 
 [init-live]: ./i-bem-js-init.ru.md#init-live
 
+[collections]: ./i-bem-js-collections.ru.md
+
 [interact]: ./i-bem-js-interact.ru.md
 
 [extras]: ./i-bem-js-extras.ru.md
