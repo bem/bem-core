@@ -82,17 +82,31 @@ var undef,
  * Initializes entities on a DOM element
  * @param {jQuery} domElem DOM element
  * @param {String} uniqInitId ID of the "initialization wave"
+ * @param {Object} [dropElemCacheQueue] queue of elems to be droped from cache
  */
-function initEntities(domElem, uniqInitId) {
+function initEntities(domElem, uniqInitId, dropElemCacheQueue) {
     var domNode = domElem[0],
         params = getParams(domNode),
-        entityName;
+        entityName,
+        splitted,
+        blockName,
+        elemName;
 
-    for(entityName in params)
+    for(entityName in params) {
+        if(dropElemCacheQueue) {
+            splitted = entityName.split(ELEM_DELIM);
+            blockName = splitted[0];
+            elemName = splitted[1];
+            elemName &&
+                ((dropElemCacheQueue[blockName] ||
+                    (dropElemCacheQueue[blockName] = {}))[elemName] = true);
+        }
+
         initEntity(
             entityName,
             domElem,
             processParams(params[entityName], entityName, uniqInitId));
+    }
 }
 
 /**
@@ -239,6 +253,26 @@ function storeDomNodeParents(domElem) {
 }
 
 /**
+ * Clears the cache for elements in context
+ * @param {jQuery} ctx
+ */
+function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
+    ctx.add(ctx.parents()).each(function(_, domNode) {
+        var params = domElemToParams[identify(domNode)];
+
+        params && objects.each(params, function(entityParams) {
+            var entity = uniqIdToEntity[entityParams.uniqId];
+            if(entity) {
+                var elemNames = dropElemCacheQueue[entity.__self._blockName];
+                elemNames && entity._dropElemCache(Object.keys(elemNames));
+            }
+        });
+    });
+
+    dropElemCacheQueue = {};
+}
+
+/**
  * Build key for elem
  * @param {Function|String|Object} elem Element class or name or description elem, modName, modVal
  * @returns {Object}
@@ -367,8 +401,8 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     },
 
     /**
-     * Clearing the cache for elements
-     * @protected
+     * Clears the cache for elements
+     * @private
      * @param {?...(Function|String|Object)} elems Nested elements names or description elem, modName, modVal
      * @returns {BemDomEntity} this
      */
@@ -634,7 +668,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
         this._findBackRefs.forEach(function(ref) {
             oldModVal === '' || ref._dropElemCache({ elem : name, modName : modName, modVal : oldModVal });
-            modVal === '' || ref._dropElemCache({ elem : name, modName : modName, modVal : modVal });
+            ref._dropElemCache(modVal === ''? name : { elem : name, modName : modName, modVal : modVal });
         });
 
         this.__base.apply(this, arguments);
@@ -898,12 +932,16 @@ bemDom = /** @exports */{
             $(ctx) :
             ctx || bemDom.scope;
 
-        var uniqInitId = identify();
+        var dropElemCacheQueue = ctx === bemDom.scope? {} : undef,
+            uniqInitId = identify();
+
         findDomElem(ctx, BEM_SELECTOR).each(function() {
-            initEntities($(this), uniqInitId);
+            initEntities($(this), uniqInitId, dropElemCacheQueue);
         });
 
         bem._runInitFns();
+
+        dropElemCacheQueue && dropElemCacheForCtx(ctx, dropElemCacheQueue);
 
         return ctx;
     },
@@ -920,12 +958,12 @@ bemDom = /** @exports */{
 
         reverse.call(findDomElem(_ctx, BEM_SELECTOR)).each(function(_, domNode) {
             var params = getParams(domNode);
-            objects.each(params, function(blockParams) {
-                if(blockParams.uniqId) {
-                    var block = uniqIdToEntity[blockParams.uniqId];
-                    block?
-                        removeDomNodeFromEntity(block, domNode) :
-                        delete uniqIdToDomElems[blockParams.uniqId];
+            objects.each(params, function(entityParams) {
+                if(entityParams.uniqId) {
+                    var entity = uniqIdToEntity[entityParams.uniqId];
+                    entity?
+                        removeDomNodeFromEntity(entity, domNode) :
+                        delete uniqIdToDomElems[entityParams.uniqId];
                 }
             });
             delete domElemToParams[identify(domNode)];
