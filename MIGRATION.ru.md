@@ -419,7 +419,9 @@ this._elem('my-elem').setMod('my-mod', 'my-val');
 
 #### Удалённые методы и поля
 
-Из API блока удачены методы: `elemify()` `elemParams()`, `getMods()` и поле `onElemSetMod`. Соответсвующая
+Удалён метод `dropElemCache()`, теперь инвалидация кэшей осуществляется автоматически при модификациях DOM. Задача: [#1352](https://github.com/bem/bem-core/issues/1352).
+
+Из API блока удачены методы: `elemify()` `elemParams()`, `getMods()` и поле `onElemSetMod`. Соответствующая
 им функциональность выражается через экземпляры элементов.
 
 См. так же изменения про [методы поиска](#Методы-поиска).
@@ -759,11 +761,10 @@ bemDom.declBlock('my-block', {
 - `emit()` в `_emit()`
 - `elem()` в `_elem()`
 - `elems()` в `_elems()`
-- `dropElemCache()` в `_dropElemCache()`
-- `buildClass()` в `_buildClass()`
+- `buildClass()` в `_buildClassName()`
 - `buildSelector()` в `_buildSelector()`
 
-Задача: [#586](https://github.com/bem/bem-core/issues/586).
+Задачи: [#586](https://github.com/bem/bem-core/issues/586), [#1359](https://github.com/bem/bem-core/issues/1359).
 
 ## 3.0.0
 
