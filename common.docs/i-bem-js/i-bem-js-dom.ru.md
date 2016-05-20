@@ -30,7 +30,7 @@
 
 Для методов поиска элементов:
 
-* `elem` `{String|Function|Object}` – имя, класс или описание искомого элемента. Описанием служит хеш вида `{ elem : MyElem, modName : 'my-mod', modVal : 'my-val' }`.
+* `elem` `{String|Function|Object}` – имя, класс или описание искомого элемента. Описанием служит хеш вида `{ elem : MyElem, modName : 'my-mod', modVal : 'my-val' }` или `{ elem : 'my-elem', modName : 'my-mod', modVal : 'my-val' }`.
 * `[strictMode=false]` `{Boolean}` – нужно ли учитывать вложенность одноимённых блоков.
 
 Вспомогательные методы для поиска парные. Различаются возвращаемым значением:
@@ -72,7 +72,7 @@ provide(bemDom.declBlock(this.name, {
 Для оптимизации производительности для распространённых случаев поиска элементов одновременно по двум осям (**внутри** и **на себе**),
 служат кэширующие методы `_elem(elem)` и `_elems(elem)`. Оба метода принимают один параметр:
 
-* `elem` `{String|Function|Object}` – имя, класс или описание искомого элемента. Описанием служит хеш вида `{ elem : MyElem, modName : 'my-mod', modVal : 'my-val' }`.
+* `elem` `{String|Function|Object}` – имя, класс или описание искомого элемента. Описанием служит хеш вида `{ elem : MyElem, modName : 'my-mod', modVal : 'my-val' }` или `{ elem : 'my-elem', modName : 'my-mod', modVal : 'my-val' }`.
 
 Аналогично с некэширующими методами поиска кеширующие метода различаются возвращаемым значением:
 
