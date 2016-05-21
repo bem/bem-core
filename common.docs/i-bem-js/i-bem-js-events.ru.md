@@ -55,7 +55,7 @@ bemDom.declBlock('my-block', {
     onSetMod : {
         'js' : {
             'inited': function() {
-                this._domEvents('click').on(function() {
+                this._domEvents().on('click', function() {
                     this.setMod('size', 'big');
                 });
             }
@@ -72,7 +72,7 @@ bemDom.declBlock('my-block', {
     onSetMod : {
         'js' : {
             'inited': function() {
-                this._domEvents('submit').on('submit', 'click', this._onSubmit);
+                this._domEvents('submit').on('click', this._onSubmit);
             }
         }
     },
@@ -108,7 +108,7 @@ bemDom.declBlock('my-block', {
     onSetMod : {
         'js' : {
             'inited': function() {
-                this._domEvents('click').on(function(e) {
+                this._domEvents('submit').on('click', function(e) {
                     e.stopPropagation(); // останавливаем всплытие события
                     this._onSubmit();
                 });
