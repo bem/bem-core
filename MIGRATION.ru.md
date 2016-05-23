@@ -720,6 +720,36 @@ bemDom.declBlock('my-block', { /* ... */ }, {
 });
 ```
 
+Следует обратить внимание, что параметр с функцией обработчиком события теперь обязательный.
+
+Было:
+
+```js
+modules.define('my-block', ['i-bem__dom', 'my-block-2'], function(provide, BEMDOM) {
+
+provide(BEMDOM.decl(this.name, { /* ... */ }, {
+    live : function() {
+        this.liveInitOnBlockInsideEvent('my-event', 'my-block-2');
+    }
+}));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-block', ['i-bem-dom', 'my-block-2', 'functions'], function(provide, bemDom, MyBlock2, functions) {
+
+provide(bemDom.declBlock(this.name, { /* ... */ }, {
+    onInit : function() {
+        this._events(MyBlock2).on('my-event', functions.noop);
+    }
+}));
+
+});
+```
+
 Было:
 
 ```js
