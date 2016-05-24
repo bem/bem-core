@@ -49,7 +49,7 @@ var undef,
         /**
          * Adds an event handler
          * @param {String|Object|events:Event} e Event type
-         * @param {Object} [data] Additional data that the handler gets as e.data
+         * @param {*} [data] Additional data that the handler gets as e.data
          * @param {Function} fn Handler
          * @returns {EventManager} this
          */
@@ -80,7 +80,7 @@ var undef,
         /**
          * Adds an event handler
          * @param {String} e Event type
-         * @param {Object} [data] Additional data that the handler gets as e.data
+         * @param {*} [data] Additional data that the handler gets as e.data
          * @param {Function} fn Handler
          * @returns {EventManager} this
          */
