@@ -112,7 +112,7 @@ provide(bemDom.declBlock(this.name, {
 
 * Удалить DOM-фрагмент:
 
-  * `descturct(ctx, [excludeSelf])`
+  * `destruct(ctx, [excludeSelf])`
 
 Сигнатура функции:
 
