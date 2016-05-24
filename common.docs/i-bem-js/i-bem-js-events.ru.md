@@ -88,14 +88,14 @@ bemDom.declBlock('my-form', {
 
 [Менеджер событий](#manager) обладает необходимым интерфейсом для подписки на события и отписки от них.
 
-**Пример:** При [инициализации класса блока][init] `my-form` выполняется подписка на событие `click` всех элементов `button` внутри любого блока `my-form`,
+**Пример:** При [инициализации класса блока][init-class] `my-form` выполняется подписка на событие `click` всех элементов `button` внутри любого блока `my-form`,
 при наступлении которого выполнится инициализация блока `my-form` (если он уже не проинициализирован) и у полученного экземпляра будет вызвана функция-обработчик `_onSubmit`.
 
 ```js
 bemDom.declBlock('my-form', {
     _onSubmit : function() { /* ... */ }
 }, {
-    lazy : true,
+    lazyInit : true,
 
     onInit : function() {
         this._domEvents('button').on('click', this.prototype._onSubmit);
@@ -238,8 +238,10 @@ provide(bemDom.declBlock(this.name, {
 [Менеджер событий](#manager) обладает необходимым интерфейсом для подписки на события и отписки от них, в том числе для работы
 с [событиями на изменения модификатора](#manager-mods).
 
-**Пример:** При [инициализации класса блока][init] `my-form` выполняется подписка на событие `click` любого блока `button` внутри любого `my-form`,
-при наступлении которого выполнится инициализация блока `my-form` (если он уже не проинициализирован) и у полученного экземпляра будет вызвана функция-обработчик `_onSubmit`.
+**Пример:** При [инициализации класса блока][init-class] `my-form` выполняется подписка на событие `click`
+любого блока `button` внутри любого `my-form`,
+при наступлении которого выполнится инициализация блока `my-form` (если он уже не проинициализирован)
+и у полученного экземпляра будет вызвана функция-обработчик `_onSubmit`.
 
 ```js
 modules.define('my-form', ['i-bem-dom', 'button'], function(provide, bemDom, Button) {
@@ -247,7 +249,7 @@ modules.define('my-form', ['i-bem-dom', 'button'], function(provide, bemDom, But
 provide(bemDom.declBlock(this.name, {
     _onSubmit: function() { /* ... */ }
 }, {
-    lazy : true,
+    lazyInit : true,
 
     onInit : function() {
         this._events(Button).on('click', this.prototype._onSubmit);
@@ -364,6 +366,8 @@ this._event(this.findChildBlock(Button)).on({ modName : 'disabled', modVal : '' 
 
 [init]: ./i-bem-js-init.ru.md
 
-[init-live]: ./i-bem-js-init.ru.md#init-live
+[init-lazy]: ./i-bem-js-init.ru.md#init-lazy
+
+[init-class]: ./i-bem-js-init.ru.md#init-class
 
 [interact]: ./i-bem-js-interact.ru.md

@@ -182,4 +182,4 @@ provide(bemDom.declBlock(this.name,
 
 [dom]: ./i-bem-js-dom.ru.md
 
-[init-live]: ./i-bem-js-init.ru.md#init-live
+[init-lazy]: ./i-bem-js-init.ru.md#init-lazy

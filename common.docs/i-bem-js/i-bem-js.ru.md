@@ -50,7 +50,7 @@ HTML-коде страницы, варианты соотношения HTML-э�
 
 [init]: ./i-bem-js-init.ru.md
 
-[init-live]: ./i-bem-js-init.ru.md#init-live
+[init-lazy]: ./i-bem-js-init.ru.md#init-lazy
 
 [collections]: ./i-bem-js-collections.ru.md
 
