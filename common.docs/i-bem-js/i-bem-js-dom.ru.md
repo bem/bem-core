@@ -105,6 +105,16 @@ provide(bemDom.declBlock(this.name, {
 
 ***
 
+<a name="block-api"></a>
+#### Кеширующий метод поиска экземпляра блока элемента
+
+* `block()` — **TODO: this.block()**
+
+<a name="contains"></a>
+#### Проверка вложенности
+
+**TODO:** `this.containsEntity()`
+
 <a name="dynamic"></a>
 ### Динамическое обновление блоков и элементов в DOM-дереве
 
