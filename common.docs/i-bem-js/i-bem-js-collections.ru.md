@@ -14,9 +14,9 @@ API
 
 Экземпляр класса коллекции создается базовыми средствами JavaScript,
 с помощью класса `BemCollection` модуля `i-bem__collection` или `BemDomCollection` модуля `i-bem-dom__collection`.
-Конструктор обоих классов принимает один аргумент:
+Конструктор обоих классов принимает один аргумент в виде массива, либо несколько аргументов:
 
-* `entities` `{Array}` — массив экземпляров БЭМ-сущностей.
+* `entities` `{Array|...i-bem:Entity|...i-bem-dom:Entity}` — массив или несколько экземпляров БЭМ-сущностей.
 
 **Пример:**
 
@@ -33,7 +33,7 @@ provide(bemDom.declBlock(this.name, {
                 var button = this.findChildBlock(Button),
                     input = this.findChildBlock(Input);
 
-                this._controls = new BemDomCollection([button, input]);
+                this._controls = new BemDomCollection(button, input);
             }
         }
     }
@@ -80,3 +80,33 @@ provide(bemDom.declBlock(this.name, {
 * `toArray()` — преобразовывает коллекцию в массив экземпляров блоков и элементов.
 
 **Пример:**
+
+```js
+modules.define('my-form', ['i-bem-dom', 'input'], function(provide, bemDom, Input) {
+
+provide(bemDom.declBlock(this.name, {
+    onSetMod : {
+        'js' : {
+            'inited' : function() {
+                this._inputs = this.findChildBlocks(Input);
+            }
+        },
+
+        'disabled' : function(monName, modVal) {
+            this._inputs.setMod(modName, modVal);
+        }
+    },
+
+    getValue : function() {
+        return this._inputs
+            .filter(function(input) {
+                return !input.hasMod('disabled');
+            })
+            .map(function(input) {
+                return input.getValue();
+            });
+    }
+}));
+
+});
+```
