@@ -351,9 +351,10 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
     /**
      * @abstract
+     * @protected
      * @returns {Block}
      */
-    block : function() {},
+    _block : function() {},
 
     /**
      * Lazy search for elements nested in a block (caches results)
@@ -556,9 +557,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     _filterFindElemResults : function(res) {
-        var block = this.block();
+        var block = this._block();
         return res.filter(function(elem) {
-            return elem.block() === block;
+            return elem._block() === block;
         });
     },
 
@@ -812,7 +813,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
  */
 var Block = inherit([bem.Block, BemDomEntity], /** @lends Block.prototype */{
     /** @override */
-    block : function() {
+    _block : function() {
         return this;
     }
 });
@@ -825,8 +826,8 @@ var Block = inherit([bem.Block, BemDomEntity], /** @lends Block.prototype */{
  */
 var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
     /** @override */
-    block : function() {
-        return this._block || (this._block = this.findParentBlock(getEntityCls(this.__self._blockName)));
+    _block : function() {
+        return this._blockInstance || (this._blockInstance = this.findParentBlock(getEntityCls(this.__self._blockName)));
     }
 });
 

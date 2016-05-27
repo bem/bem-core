@@ -219,7 +219,7 @@ describe('i-bem', function() {
                 elem = Elem.create(block);
 
             elem.should.be.instanceOf(Elem);
-            elem.block().should.be.instanceOf(Block);
+            elem._block().should.be.instanceOf(Block);
         });
     });
 
