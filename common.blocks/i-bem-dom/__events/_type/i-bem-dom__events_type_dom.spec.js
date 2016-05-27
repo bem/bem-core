@@ -7,7 +7,7 @@ var undef,
     expect = chai.expect;
 
 describe('DOM events', function() {
-    var Block1, Block2, block1, spy1, spy2, spy3, spy4, spy5, spy6, spy7,
+    var Block1, Block2, Block3, block1, spy1, spy2, spy3, spy4, spy5, spy6, spy7,
         wrapSpy = function(spy) {
             return function(e) {
                 // NOTE: we need to pass bemTarget and data explicitly, as `e` is being
@@ -649,9 +649,21 @@ describe('DOM events', function() {
                     }
                 });
 
+                Block3 = bemDom
+                    .declBlock('block3')
+                    .declMod({ modName : 'm1', modVal : 'v1' }, {}, {
+                        onInit : function() {
+                            this._domEvents({ modName : 'm1', modVal : 'v1' }).on('click', spy6);
+                        }
+                    });
+
                 block1 = initDom({
                     block : 'block1',
-                    mix : { block : 'block2', js : true }
+                    mix : { block : 'block2', js : true },
+                    content : [
+                        { block : 'block3', js : true },
+                        { block : 'block3', mods : { m1 : 'v1' }, js : true }
+                    ]
                 }).bem(Block1);
             });
 
@@ -704,6 +716,16 @@ describe('DOM events', function() {
                 Block1._domEvents().un('click', spy4);
                 block1.domElem.trigger('click');
                 spy4.should.not.have.been.called;
+            });
+
+            it('should properly bind to self with modifier', function() {
+                var blocks = block1.findChildBlocks(Block3);
+
+                blocks.get(0).domElem.trigger('click');
+                spy6.should.not.have.been.called;
+
+                blocks.get(1).domElem.trigger('click');
+                spy6.should.have.been.called;
             });
         });
 
