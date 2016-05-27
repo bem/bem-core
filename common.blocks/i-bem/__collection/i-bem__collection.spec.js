@@ -15,6 +15,15 @@ describe('BEM collections', function() {
             collection.size().should.be.equal(1);
             collection.get(0).should.be.equal(b1);
         });
+
+        it('should create collection via arguments', function() {
+            var b1 = Block.create(),
+                b2 = Block.create(),
+                collection = new BemCollection(b1, b2);
+            collection.size().should.be.equal(2);
+            collection.get(0).should.be.equal(b1);
+            collection.get(1).should.be.equal(b2);
+        });
     });
 
     describe('common methods', function() {

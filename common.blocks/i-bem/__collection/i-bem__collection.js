@@ -14,7 +14,7 @@ var BemCollection = inherit(/** @lends BemCollection.prototype */{
     __constructor : function(entities) {
         var _entities = this._entities = [],
             uniq = {};
-        entities.forEach(function(entity) {
+        (Array.isArray(entities)? entities : arraySlice.call(arguments)).forEach(function(entity) {
             if(!uniq[entity._uniqId]) {
                 uniq[entity._uniqId] = true;
                 _entities.push(entity);
@@ -225,7 +225,8 @@ function buildComplexProxyFn(arrayMethodName, entityMethodName) {
     };
 }
 
-var arrayConcat = Array.prototype.concat;
+var arrayConcat = Array.prototype.concat,
+    arraySlice = Array.prototype.slice;
 
 provide(BemCollection);
 
