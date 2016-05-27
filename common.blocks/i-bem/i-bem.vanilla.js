@@ -509,10 +509,11 @@ var Block = BemEntity;
 var Elem = inherit(BemEntity, /** @lends Elem.prototype */ {
     /**
      * Returns the own block of current element
+     * @protected
      * @returns {Block}
      */
-    block : function() {
-        return this._block;
+    _block : function() {
+        return this._blockInstance;
     }
 }, /** @lends Elem */{
     /**
@@ -524,7 +525,7 @@ var Elem = inherit(BemEntity, /** @lends Elem.prototype */ {
      */
     create : function(block, mods, params) {
         var res = new this(mods, params);
-        res._block = block;
+        res._blockInstance = block;
         return res;
     },
 
