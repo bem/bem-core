@@ -67,7 +67,34 @@ provide(bemDom.declBlock(this.name, Button, {
 <a name="spec-methods"></a>
 #### Вспомогательные методы
 
-* `_nextTick()` — **TODO: this._nextTick()**
+* `_nextTick(fn)` — производит асинхронный вызов функции `fn` `{Function}`, в следующем витке событийного цикла.
+  Функция `fn` вызывается в контексте текущего экземпляра, при условии, что он ещё существует.
+
+**Пример:** Подписываемся на событие `pointerclick` на документе в следующем витке событийного цикла,
+чтобы попап не закрывался (по клику во вне) до того, как обработается клик на нём.
+
+```js
+modules.define('popup', ['i-bem-dom'], function(provide, bemDom) {
+
+provide(bemDom.decl(this.name, {
+    onSetMod : {
+        'visible' : {
+            'true' : function() {
+                this.nextTick(function() {
+                    this._domEvents(bemDom.doc).on('pointerclick', this._onDocPointerClick);
+                });
+            }
+        }
+    },
+
+    _onDocPointerClick : function() {
+        // ...
+        this.delMod('visible');
+    }
+}));
+
+});
+```
 
 ### Статические свойства блока и элемента
 

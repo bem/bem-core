@@ -108,12 +108,26 @@ provide(bemDom.declBlock(this.name, {
 <a name="block-api"></a>
 #### Кеширующий метод поиска экземпляра блока элемента
 
-* `block()` — **TODO: this.block()**
+* `_block()` — возвращает экземпляр блока, для элемента.
+
+**Пример:**
+
+```js
+modules.define('my-form__submit-control', ['i-bem-dom'], function(provide, bemDom) {
+
+provide(bemDom.declElem('my-form', 'submit-control', {
+    _onClick : function() {
+        this._block.submit();
+    }
+}));
+
+});
+```
 
 <a name="contains"></a>
 #### Проверка вложенности
 
-**TODO:** `this.containsEntity()`
+* `containsEntity(entity)` — проверяет вложенна ли переданный экземпляр `entity` `{i-bem-dom:Entity}` в текущий экземпляр.
 
 <a name="dynamic"></a>
 ### Динамическое обновление блоков и элементов в DOM-дереве
