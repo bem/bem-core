@@ -314,33 +314,34 @@ describe('i-bem__dom', function() {
                 .should.be.eql(['4']);
         });
 
-        it('should force init for found blocks', function(done) {
+        it('should force init for found blocks', function() {
+            var res;
             DOM.decl('block', {
                 onSetMod : {
                     'js' : {
                         'inited' : function() {
-                            this.findBlocksInside('block2').map(function(block) {
-                                return block.hasMod('js', 'inited');
-                            }).should.be.eql([true, true]);
-                            done();
+                            res = this.findBlocksInside('block2').map(function(block2) {
+                                return block2.hasMod('js', 'inited');
+                            });
                         }
                     }
                 }
             });
-
             DOM.decl('block2');
 
-            DOM.init(BEMHTML.apply({
+            DOM.destruct(DOM.init(BEMHTML.apply({
                 block : 'block',
                 js : true,
                 content : [
                     { block : 'block2', js : true },
                     { block : 'block2', js : true }
                 ]
-            }));
+            })));
 
             delete DOM.blocks['block'];
             delete DOM.blocks['block2'];
+
+            res.should.be.eql([true, true]);
         });
     });
 
