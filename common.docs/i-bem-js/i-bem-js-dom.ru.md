@@ -127,7 +127,7 @@ provide(bemDom.declElem('my-form', 'submit-control', {
 <a name="contains"></a>
 #### Проверка вложенности
 
-* `containsEntity(entity)` — проверяет вложенна ли переданный экземпляр `entity` `{i-bem-dom:Entity}` в текущий экземпляр.
+* `containsEntity(entity)` — проверяет вложена ли переданный экземпляр `entity` `{i-bem-dom:Entity}` в текущий экземпляр.
 
 <a name="dynamic"></a>
 ### Динамическое обновление блоков и элементов в DOM-дереве
