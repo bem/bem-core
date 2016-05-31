@@ -80,7 +80,7 @@ provide(bemDom.decl(this.name, {
     onSetMod : {
         'visible' : {
             'true' : function() {
-                this.nextTick(function() {
+                this._nextTick(function() {
                     this._domEvents(bemDom.doc).on('pointerclick', this._onDocPointerClick);
                 });
             }
