@@ -2,93 +2,53 @@
 ## Работа с DOM-деревом
 
 <a name="domElem"></a>
-### DOM-узел экземпляра блока
+### DOM-узел экземпляра блока и элемента
 
-В контексте экземпляра блока с DOM-представлением зарезервировано поле `this.domElem`, содержащее jQuery-объект со ссылками на все DOM-узлы, с которыми связан данный экземпляр.
-
-<a name="elem-api"></a>
-### Элементы
-
-БЭМ-элементы блоков представлены в `i-bem.js` как DOM-узлы, вложенные в DOM-узел экземпляра блока. 
-
-Для обращения к DOM-узлам элементов и работы с их модификаторами, следует использовать API экземпляра блока:
-
-* Кэширующий доступ: `elem(elems, [modName], [modVal])`. Элемент,
-полученный таким образом, не требуется сохранять в переменную.
-
-```js
-BEMDOM.decl('link', {
-    setInnerText: function() {
-        this.elem('inner').text('Текст ссылки');
-        /* ... */
-        this.elem('inner').text('Другой текст');
-    }
-);
-```
-
-
-* Некэширующий доступ: `findElem(elems, [modName], [modVal])`.
-
-```js
-BEMDOM.decl('link', {
-    setInnerText: function() {
-        var inner = this.findElem('inner');
-        inner.text('Текст ссылки');
-        /* ... */
-        inner.text('Другой текст');
-    }
-});
-```
-
-
-При [динамическом добавлении и удалении элементов блока](#dynamic) может
-потребоваться очистить кэш элементов. Для этого служит метод `dropElemCache('elements')`. Он принимает строку – разделенный пробелами список имен элементов, кэш которых нужно сбросить.
-
-```js
-BEMDOM.decl('attach', {
-    clear: function() {
-        BEMDOM.destruct(this.elem('control'));
-        BEMDOM.destruct(this.elem('file'));
-        return this.dropElemCache('control file');
-    }
-});
-```
-
+В контексте экземпляра блока и элемента с DOM-представлением зарезервировано поле `this.domElem`,
+содержащее jQuery-объект со ссылками на все DOM-узлы, с которыми связан данный экземпляр.
 
 <a name="api-find"></a>
-### Поиск экземпляров блоков в DOM-дереве
+### Поиск экземпляров блоков и элементов в DOM-дереве
 
-Обращение к другому блоку в `i-bem.js` выполняется из текущего блока,
-размещенного на определенном узле DOM-дерева. Поиск других блоков в
-DOM-дереве может вестись по трем направлениям (осям) относительно
-DOM-узла текущего блока:
+Обращение к другому блоку в `i-bem.js` выполняется из текущего блока, размещенного на определенном узле DOM-дерева.
+Поиск других блоков в DOM-дереве может вестись по трём направлениям (осям) относительно DOM-узла текущего блока:
 
-* **Внутри блока** — на DOM-узлах, вложенных в DOM-узел текущего блока. Вспомогательные методы: `findBlocksInside([elem], block)` и `findBlockInside([elem], block)`.
-* **Снаружи блока** — на DOM-узлах, потомком которых является DOM-узел
-текущего блока. Вспомогательные методы: `findBlocksOutside([elem], block)` и `findBlockOutside([elem], block)`.
-* **На себе** — на том же DOM-узле, на котором размещен текущий блок. Это актуально в случае [размещения нескольких JS-блоков на одном DOM-узле](i-bem-js-html-binding.ru.md#html-mixes) (микс). Вспомогательные методы: `findBlocksOn([elem], block)` и `findBlockOn([elem], block)`.
+* **Внутри блока** — на DOM-узлах, вложенных в DOM-узел текущего блока.
+  Вспомогательные методы: `findChildBlock(block)`, `findChildBlocks(block)`, `findChildElem(elem)`, `findChildElems(elem)`.
+* **Снаружи блока** — на DOM-узлах, потомком которых является DOM-узел текущего блока.
+  Вспомогательные методы: `findParentBlock(block)`, `findParentBlocks(block)`, `findParentElem(elem)`, `findParentElems(elem)`.
+* **На себе** — на том же DOM-узле, на котором размещен текущий блок.
+  Это актуально в случае [размещения нескольких JS-блоков на одном DOM-узле](i-bem-js-html-binding.ru.md#html-mixes) (микс).
+  Вспомогательные методы: `findMixedBlock(block)`, `findMixedBlocks(block)`, `findMixedElem(elem)`, `findMixedElems(elem)`.
+  Методы `findMixedBlocks(block)` и `findMixedElems(elem)` могут возвращать больше одного экземпляра в случае,
+  когда к [блоку или элементу с несколькими DOM-узлами](i-bem-js-html-binding#distrib-block)
+  примешаны несколько разных экземпляров одного и того же блока (`block`) или (`elem`).
 
-Сигнатура вспомогательных методов идентична:
+Сигнатура вспомогательных методов поиска блоков идентична:
 
-* `[elem]` `{String|jQuery}` – имя или DOM-узел элемента блока.
-* `block` `{String|Object}` – имя или описание искомого блока. Описанием служит хеш вида `{ block : 'name', modName : 'foo', modVal : 'bar' }`.
+* `block` `{Function|Object}` – класс или описание искомого блока. Описанием служит хеш вида `{ block : MyBlock, modName : 'my-mod', modVal : 'my-val' }`.
+
+Для методов поиска элементов:
+
+* `elem` `{String|Function|Object}` – имя, класс или описание искомого элемента. Описанием служит хеш вида `{ elem : MyElem, modName : 'my-mod', modVal : 'my-val' }` или `{ elem : 'my-elem', modName : 'my-mod', modVal : 'my-val' }`.
+* `[strictMode=false]` `{Boolean}` – нужно ли учитывать вложенность одноимённых блоков.
 
 Вспомогательные методы для поиска парные. Различаются возвращаемым значением:
 
-* `findBlocks<Direction>` – возвращает массив найденных блоков.
-* `findBlock<Direction>` – возвращает первый найденный блок.
+* `find<Direction>Block` и `find<Direction>Elem` – возвращает первый найденный экземпляр
+* `find<Direction>Blocks` `find<Direction>Elems` – возвращает [коллекцию](i-bem-js-collections.ru.md) найденных экземпляров
 
-**Пример**: При переключении модификатора `disabled` экземпляр блока
-`attach` находит вложенный в него блок `button` и переключает его
-модификатор `disabled` в то же значение, которое получил сам:
+**Пример**:
 
 ```js
-modules.define('attach', ['i-bem__dom', 'button'], function(provide, BEMDOM) {
+modules.define('attach', ['i-bem-dom', 'button'], function(provide, bemDom, Button) {
 
-provide(BEMDOM.decl(this.name, {
+provide(bemDom.declBlock(this.name, {
     onSetMod: {
-        'disabled': function(modName, modVal) {
-            this.findBlockInside('button').setMod(modName, modVal);
+        'js': {
+            'inited' : function(modName, modVal) {
+                this._button = this.findChildBlock(Button);
+            }
         }
     }
 }));
@@ -100,68 +60,129 @@ provide(BEMDOM.decl(this.name, {
 ***
 
 **NB** Не используйте jQuery-селекторы для поиска блоков и элементов.
-`i-bem.js` предоставляет высокоуровневое API для доступа к DOM-узлам блоков и элементов. Прямое обращение к DOM-дереву делает код менее устойчивым к изменениям БЭМ-библиотек и может привести к возникновению сложно обнаруживаемых ошибок.
+`i-bem.js` предоставляет высокоуровневое API для доступа к DOM-узлам блоков и элементов.
+Прямое обращение к DOM-дереву делает код менее устойчивым к изменениям БЭМ-библиотек и может привести
+к возникновению сложно обнаруживаемых ошибок.
 
 ***
+
+<a name="elem-api"></a>
+#### Кэширующие методы поиска экземпляров элементов
+
+Для оптимизации производительности для распространённых случаев поиска элементов одновременно по двум осям (**внутри** и **на себе**),
+служат кэширующие методы `_elem(elem)` и `_elems(elem)`. Оба метода принимают один параметр:
+
+* `elem` `{String|Function|Object}` – имя, класс или описание искомого элемента. Описанием служит хеш вида `{ elem : MyElem, modName : 'my-mod', modVal : 'my-val' }` или `{ elem : 'my-elem', modName : 'my-mod', modVal : 'my-val' }`.
+
+Аналогично с некэширующими методами поиска кеширующие метода различаются возвращаемым значением:
+
+* `_elem()` – возвращает первый найденный экземпляр элемента
+* `_elems()` – возвращает [коллекцию](i-bem-js-collections.ru.md) найденных экземпляров элементов
+
+**Пример**:
+
+```js
+modules.define('button', ['i-bem-dom', 'button__control'], function(provide, bemDom, ButtonControl) {
+
+provide(bemDom.declBlock(this.name, {
+    setName : function(name) {
+        this._elem(LinkInner).setName(name);
+    },
+
+    setValue : function(value) {
+        this._elem(LinkInner).setValue(value);
+    }
+}));
+
+});
+```
+
+***
+
+**NB** Результат кеширующих методов нет необходимости сохранять в переменную (см. предыдущий пример).
+В то время как для некеширующих методов хорошей практикой является единоразовый поиск всего,
+что нужно, с сохранением в переменную или внутреннее поле.
+
+***
+
+<a name="block-api"></a>
+#### Кеширующий метод поиска экземпляра блока элемента
+
+* `_block()` — возвращает экземпляр блока, для элемента.
+
+**Пример:**
+
+```js
+modules.define('my-form__submit-control', ['i-bem-dom'], function(provide, bemDom) {
+
+provide(bemDom.declElem('my-form', 'submit-control', {
+    _onClick : function() {
+        this._block.submit();
+    }
+}));
+
+});
+```
+
+<a name="contains"></a>
+#### Проверка вложенности
+
+* `containsEntity(entity)` — проверяет вложена ли переданный экземпляр `entity` `{i-bem-dom:Entity}` в текущий экземпляр.
 
 <a name="dynamic"></a>
 ### Динамическое обновление блоков и элементов в DOM-дереве
 
-В современных интерфейсах зачастую необходимо создавать новые
-фрагменты DOM-дерева и заменять старые в процессе работы (AJAX). В
-`i-bem.js` предусмотрены следующие функции для добавления и замены
-фрагментов DOM-дерева.
+В модуле `i-bem-dom` предусмотрены следующие функции для добавления и замены фрагментов DOM-дерева.
+
+* Удалить DOM-фрагмент:
+
+  * `destruct(ctx, [excludeSelf])`
+
+Сигнатура функции:
+
+  * `ctx` `{jQuery}` – корневой DOM-элемент. Удаляется со всем вложенными DOM-узлами.
+  * `[excludeSelf]` `{Boolean}` – не удалять корневой DOM-элемент, если значение `true`. По умолчанию `false`.
 
 * Добавить DOM-фрагмент:
 
-  * `append` —  в конец указанного контекста;
-  * `prepend` — в начало указанного контекста;
-  * `before` — перед указанным контекстом;
-  * `after` — после указанного контекста;
+  * `append(ctx, content)` —  в конец указанного контекста;
+  * `prepend(ctx, content)` — в начало указанного контекста;
+  * `before(ctx, content)` — перед указанным контекстом;
+  * `after(ctx, content)` — после указанного контекста;
 
 * Заместить DOM-фрагмент:
 
-  * `update` —  внутри указанного контекста;
-  * `replace` — заменить указанный контекст новым DOM-фрагментом.
+  * `update(ctx, content)` —  внутри указанного контекста;
+  * `replace(ctx, content)` — заменить указанный контекст новым DOM-фрагментом.
 
-Все функции автоматически выполняют [инициализацию блоков на обновленном фрагменте DOM-дерева](i-bem-js-init.ru.md#init-ajax).
+Сигнатура функций добавления и замены идентична:
 
-Чтобы упростить создание БЭМ-сущностей на обновляемых фрагментах
-DOM-дерева, можно использовать шаблонизатор
-[BEMHTML](https://ru.bem.info/technology/bemhtml/current/intro/), подключив
-его в качестве [ym][]-модуля. БЭМ-сущности описываются в формате
-[BEMJSON](https://ru.bem.info/technology/bemjson/current/bemjson/)
-непосредственно в коде блока. Функция `BEMHTML.apply` генерирует
-HTML-элементы по BEMJSON-декларации в соответствии с правилами
-именования БЭМ.
+* `ctx` `{jQuery}` – DOM-элемент
+* `content` `{jQuery|String}` – содержимое
 
-**Пример:** Метод `_updateFileElem` блока `attach` удаляет элемент `file`, если он существовал, и создает новый элемент с помощью функции `BEMHTML.apply`:
+Все функции возвращают DOM-элемент с содержимым для которого была выполнена [инициализация для новых блоков и элементов](i-bem-js-init.ru.md#init-fragment).
+
+Чтобы упростить создание БЭМ-сущностей на обновляемых фрагментах DOM-дерева,
+можно использовать шаблонизатор [BEMHTML](https://ru.bem.info/technology/bemhtml/current/intro/), подключив его в качестве [ym][]-модуля.
+БЭМ-сущности описываются в формате [BEMJSON](https://ru.bem.info/technology/bemjson/current/bemjson/) непосредственно в коде блока.
+Функция `BEMHTML.apply` генерирует HTML-элементы по BEMJSON-декларации в соответствии с правилами именования БЭМ.
+
+**Пример:** Метод `_updateFileElem` блока `attach` удаляет элемент `file`, если он существовал,
+и создает новый элемент с помощью функции `BEMHTML.apply`:
 
 ```js
-modules.define(
-    'attach',
-    ['BEMHTML', 'strings__escape', 'i-bem__dom'],
-    function(provide, BEMHTML, escape, BEMDOM) {
+modules.define( 'attach', ['BEMHTML', 'i-bem-dom'], function(provide, BEMHTML, bemDom) {
 
-provide(BEMDOM.decl(this.name, {
+provide(bemDom.declBlock(this.name, {
     _updateFileElem : function() {
-        var fileName = extractFileNameFromPath(this.getVal());
-        this.elem('file').length && BEMDOM.destruct(this.elem('file'));
-        BEMDOM.append(
-            this.domElem,
+        bemDom.replace(
+            this._elem('file').domElem,
             BEMHTML.apply({
                 block : 'attach',
                 elem : 'file',
-                content : [
-                    {
-                        elem : 'icon',
-                        mods : { file : extractExtensionFromFileName(fileName) }
-                    },
-                    { elem : 'text', content : escape.html(fileName) },
-                    { elem : 'clear' }
-                ]
+                content : this.getValue()
             }));
-        return this.dropElemCache('file');
+        return this;
     }
 }));
 
@@ -173,4 +194,4 @@ provide(BEMDOM.decl(this.name, {
 
 [i-bem]: https://ru.bem.info/libs/bem-core/current/desktop/i-bem/jsdoc/
 
-[i-bem__dom]: https://ru.bem.info/libs/bem-core/current/desktop/i-bem/jsdoc/
+[i-bem-dom]: https://ru.bem.info/libs/bem-core/current/desktop/i-bem-dom/jsdoc/

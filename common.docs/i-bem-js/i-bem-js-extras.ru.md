@@ -3,7 +3,9 @@
 
 Информацию о БЭМ-методологии, инструментарии и новостях в мире БЭМ смотрите на сайте [bem.info](https://ru.bem.info/).
 
-Полную информацию обо всех методах API `i-bem.js` можно найти в разделе [JSDoc](https://ru.bem.info/libs/bem-core/current/desktop/i-bem/jsdoc/) блока `i-bem`.
+Полную информацию обо всех методах API `i-bem.js` можно найти в разделе JSDoc
+[блока `i-bem`](https://ru.bem.info/libs/bem-core/current/desktop/i-bem/jsdoc/)
+и [`i-bem-dom`](https://ru.bem.info/libs/bem-core/current/desktop/i-bem-dom/jsdoc/).
 
 Обменяться опытом и задать вопрос опытным пользователям и разработчикам `i-bem.js` можно на [форуме](https://ru.bem.info/forum/).
 

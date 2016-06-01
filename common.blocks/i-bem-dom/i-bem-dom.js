@@ -542,7 +542,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     },
 
     /**
-     * Finds mixed elements
+     * Finds mixed elements.
      * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
      * @returns {BemDomCollection}
      */
