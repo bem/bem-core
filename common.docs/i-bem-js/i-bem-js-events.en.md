@@ -1,7 +1,4 @@
-<a name="events"></a>
-
-Events
-------
+# Events
 
 In `i-bem.js`, two types of events are supported:
 
@@ -18,9 +15,7 @@ In `i-bem.js`, two types of events are supported:
 DOM events should be used only in *internal* block procedures. Use BEM events for
 a block interaction with the *external* environment (other blocks).
 
-<a name="delegated-events"></a>
-
-### Delegating events
+## Delegating events
 
 Handling BEM events and DOM events can be **delegated** to a container
 (the entire document, or a specific DOM node). In this case, the container
@@ -36,19 +31,17 @@ than by subscribing to many events on elements). Second, this makes it possible 
 
 Both BEM events and DOM events can be delegated.
 
-<a name="dom-events"></a>
-
-### DOM events
+## DOM events
 
 Interaction with DOM events in `i-bem.js` is fully implemented using the jQuery framework.
 
-#### Subscribing to DOM events
+### Subscribing to DOM events
 
 A set of methods for subscribing to DOM events is reserved on the block instance object:
 
 -   `bindTo([elem], event, handler)` — To events of the block main DOM node and its elements DOM nodes.
--   `bindToDoc(event, [data], handler)` – To events of the `document` DOM node.
--   `bindToWin(event, [data], handler)` – To events of the `window` DOM node.
+-   `bindToDoc(event, [data], handler)` — To events of the `document` DOM node.
+-   `bindToWin(event, [data], handler)` — To events of the `window` DOM node.
 
 **Example:** At [initialization of the block instance](./i-bem-js-init.en.md)
 `my-block`, the `click` event is subscribed to. When this event occurs,
@@ -86,31 +79,28 @@ BEMDOM.decl('my-block', {
 });
 ```
 
-------------------------------------------------------------------------
-
-**NB** The handler function is executed in the context of the
+**Note:** The handler function is executed in the context of the
 block instance where the event occurred.
 
-------------------------------------------------------------------------
-
-#### Removing subscriptions to DOM events
+### Removing subscriptions to DOM events
 
 Subscriptions to DOM events are removed automatically when a block instance is destroyed. However, the block instance object has a set of methods reserved for removing subscriptions manually while the block is working:
 
 -   `unbindFrom([elem], event, [handler])` — Unsubscribing from events of the block main DOM node and its elements DOM nodes.
--   `unbindFromDoc(event, [handler])` – Unsubscribing from events of the `document` DOM node.
--   `unbindFromWin(event, [handler])` – Unsubscribing from events of the `window` DOM node.
+-   `unbindFromDoc(event, [handler])` — Unsubscribing from events of the `document` DOM node.
+-   `unbindFromWin(event, [handler])` — Unsubscribing from events of the `window` DOM node.
 
 If the handler function isn't specified when calling one of these methods, all the handlers are removed that were set by the block on the DOM node for this event.
 
 ```js
 _stopKeysListening : function() {
-    this.unbindFromDoc('keydown');  // removing all the handlers of the 'keydown' event
-                                    // set by the block for the 'document' DOM node
+    // removing all the handlers of the 'keydown' event
+    // set by the block for the 'document' DOM node
+    this.unbindFromDoc('keydown');
 }
 ```
 
-#### DOM event object
+### DOM event object
 
 The first argument the handler function gets is a jQuery object for the DOM event — [`{jQuery.Event}`](https://api.jquery.com/category/events/event-object/).
 
@@ -137,15 +127,9 @@ BEMDOM.decl('my-block', {
 
 A DOM event can be generated manually, such as using the jQuery `trigger` function. After the event object, the handler function of the DOM event gets arguments with the parameters that were used to call `trigger` when the event was created.
 
-------------------------------------------------------------------------
+**Note:** Parameters for the environment and behavior of an event handler function are identical to the jQuery [handler function](https://api.jquery.com/on/#event-handler).
 
-**NB** Parameters for the environment and behavior of an event handler function are identical to the jQuery [handler function](http://api.jquery.com/on/#event-handler).
-
-------------------------------------------------------------------------
-
-<a name="dom-events-delegated"></a>
-
-#### Delegating DOM events
+### Delegating DOM events
 
 We recommend using the `liveBindTo([elem], event, handler)` method to delegate handling DOM events. In the block [static declaration methods](./i-bem-js-decl.en.md), the `live` property is reserved for subscribing to delegated DOM events.
 
@@ -163,44 +147,37 @@ BEMDOM.decl('menu', {
 });
 ```
 
-If the `live` property is set in the block declaration, the initialization of block instances will be *deferred* until the moment when the block instance is needed ([lazy initialization](./i-bem-js-init.en.md#lazy-initialization)). This moment could be a DOM event on the block instance that was delegated the subscription, or a request sent to the block instance [from another block](./i-bem-js-interact.en.md).
+If the `live` property is set in the block declaration, the initialization of block instances will be *deferred* until the moment when the block instance is needed ([lazy initialization](i-bem-js-init.en.md#initialization-on-event-lazy-initialization)). This moment could be a DOM event on the block instance that was delegated the subscription, or a request sent to the block instance [from another block](./i-bem-js-interact.en.md).
 
-------------------------------------------------------------------------
-
-**NB** A handler function is executed in the context of the nearest block of this type in the direction of the DOM event bubbling (from bottom to top through the DOM tree).
-
-------------------------------------------------------------------------
+**Note:** A handler function is executed in the context of the nearest block of this type in the direction of the DOM event bubbling (from bottom to top through the DOM tree).
 
 To use delegated events in a block without deferring initialization, the function set in the `live` property should return `false`:
 
 ```js
 modules.define('my-block', ['i-bem__dom'], function(provide, BEMDOM) {
 
-provide(BEMDOM.decl(this.name,
-    {
-        _onClick: function() { /* ... */ }  // will be run each time
-                                            // the 'click' event occurs
-    },
-    {
-        live: function() {
-            this.liveBindTo('click', function() { this._onClick() });
-            return false; // block instances will be initialized automatically
+    provide(BEMDOM.decl(this.name,
+        {
+            _onClick: function() { /* ... */ }  // will be run each time
+                                                // the 'click' event occurs
+        },
+        {
+            live: function() {
+                this.liveBindTo('click', function() { this._onClick() });
+
+                return false; // block instances will be initialized automatically
+            }
         }
-    }
-));
+    ));
 
 });
 ```
 
-<a name="bem-events"></a>
-
-### BEM events
+## BEM events
 
 In contrast to DOM events, BEM events are not generated on DOM elements, but on **block instances**. Block elements can't generate BEM events.
 
-<a name="bem-events-subscribe"></a>
-
-#### Generating BEM events
+### Generating BEM events
 
 The `emit(event, [data])` method of a block instance is used for generating BEM events.
 
@@ -213,7 +190,8 @@ BEMDOM.decl('submit', {
     onSetMod: {
         'js': {
             'inited': function() {
-                this.bindTo('click', this._onClick); // subscribing to the "click" DOM event
+                // subscribing to the "click" DOM event
+                this.bindTo('click', this._onClick);
             }
         }
     },
@@ -228,9 +206,7 @@ BEMDOM.decl('submit', {
 
 You can pass any data as the second `emit` argument, which will be accessible as the second argument of the handler function.
 
-<a name="bem-events-subscribe"></a>
-
-#### Subscribing to BEM events
+### Subscribing to BEM events
 
 The `on(event, [data], handler, [handlerCtx])` method of a block instance is used for subscribing to BEM events on block instances.
 
@@ -253,22 +229,14 @@ BEMDOM.decl('my-form', {
 });
 ```
 
-------------------------------------------------------------------------
+**Note:** If you don't pass the `[handlerCtx]` argument, the context for the handler function will be the block where the BEM event occurred (in the example above, this is the `submit` block).
 
-**NB** If you don't pass the `[handlerCtx]` argument, the context for the handler function will be the block where the BEM event occurred (in the example above, this is the `submit` block).
-
-------------------------------------------------------------------------
-
-<a name="bem-events-unsubscribe"></a>
-
-#### Removing subscriptions to BEM events
+### Removing subscriptions to BEM events
 
 Subscriptions to BEM events are removed automatically when the block instance is destroyed. To remove a subscription manually, use the
 `un(event, [handler], [handlerCtx])` method of the block instance.
 
-<a name="bem-events-modchange"></a>
-
-#### Events when modifiers are changed
+### Events when modifiers are changed
 
 Use the `on(event, [data], handler, [handlerCtx])` block instance method for subscribing to BEM events for changes to a modifier of a block or element. The method accepts the arguments:
 
@@ -277,11 +245,13 @@ Use the `on(event, [data], handler, [handlerCtx])` block instance method for sub
 
 The object describing the modifier can contain the following reserved properties:
 
--   `modName` `{String}` – Modifier name. Required property.
--   `modVal` `{String}` – Modifier value. Required property. With the value `*`, the subscription is for setting the modifier to **any** value. With the value `''`, the subscription is for **deleting** the modifier. For more information, see the section [Triggers for setting modifiers](i-bem-js-states.en.md#triggers-for-setting-modifiers).
--   `elem` `{String}` – Element name (for element modifiers).
+-   `modName {String}` — Modifier name. Required property.
+-   `modVal {String}` — Modifier value. Required property. With the value `*`, the subscription is for setting the modifier to **any** value. With the value `''`, the subscription is for **deleting** the modifier. For more information, see the section [Triggers for setting modifiers](i-bem-js-states.en.md#triggers-to-set-modifiers).
+-   `elem {String}` — Element name (for element modifiers).
 
-**Example**: At initialization, the `form` block subscribes to the event of changing a modifier on the nested `submit` block. For example, subscriptions can be for:
+**Example**: At initialization, the `form` block subscribes to the event of changing a modifier on the nested `submit` block.
+
+Subscriptions can be for:
 
 -   Setting the `disabled` modifier to any value.
 
@@ -291,6 +261,7 @@ The object describing the modifier can contain the following reserved properties
         'js': {
             'inited': function() {
                 var submit = findBlockInside('submit');
+
                 submit.on({ modName : 'disabled', modVal : '*' }, function() {});
             }
         }
@@ -316,9 +287,7 @@ The object describing the modifier can contain the following reserved properties
     submit.on({ elem : 'control', modName : 'm1', modVal : '' }, function() {});
     ```
 
-<a name="bem-events-delegated"></a>
-
-#### Delegating BEM events
+### Delegating BEM events
 
 Delegating BEM events means that the block subscribes to a particular BEM event on **all instances** of the block with the specified name **in the scope of the specified context**.
 
@@ -335,54 +304,55 @@ Subscribing to delegated BEM events is performed using the `MyBlock.on([ctx], ev
 ```js
 modules.define('menu', ['i-bem__dom', 'link'], function(provide, BEMDOM, Link) {
 
-provide(BEMDOM.decl(this.name,
-    onSetMod : {
-        'js' : {
-            'inited' : function() {
-                Link.on( // subscribing to BEM event
-                    this.domElem, // container — the DOM node of the 'menu' block instance
-                    'click', // BEM event
-                    this._onLinkClick, // handler
-                    this); // handler context — an instance of the 'menu' block
-            },
+    provide(BEMDOM.decl(this.name,
+        onSetMod : {
+            'js' : {
+                'inited' : function() {
+                    Link.on( // subscribing to BEM event
 
-            '' : function() {
-                Link.un( // unsubscribing from the BEM event
-                    this.domElem,
-                    'click',
-                    this._onLinkClick,
-                    this);
+                        // container — the DOM node of the 'menu' block instance
+                        this.domElem,
+
+                        'click', // BEM event
+
+                        this._onLinkClick, // handler
+
+                        this); // handler context — an instance of the 'menu' block
+                },
+
+                '' : function() {
+                    Link.un( // unsubscribing from the BEM event
+                        this.domElem,
+                        'click',
+                        this._onLinkClick,
+                        this);
+                }
             }
-        }
-    },
+        },
 
-    _onLinkClick : function(e) {
-        var clickedLink = e.target; // instance of the 'link' block
-                                    // where the 'click' BEM event occurred
-    }
-});
+        _onLinkClick : function(e) {
+            var clickedLink = e.target; // instance of the 'link' block
+                                        // where the 'click' BEM event occurred
+        }
+    });
 
 });
 ```
 
 Any BEM events can be delegated, including events for changes to modifiers.
 
-------------------------------------------------------------------------
-
-**NB** **Unsubscribing** from delegated BEM events never happens automatically. Subscriptions should always be removed explicitly using
+**Note:** **Unsubscribing** from delegated BEM events never happens automatically. Subscriptions should always be removed explicitly using
 the block static method `un([ctx], event, [handler], [handlerCtx])`.
 
-------------------------------------------------------------------------
+## BEM event object
 
-<a name="api"></a>
+When invoked, a handler function gets an argument with an object describing the BEM event. The BEM event object class `events.Event` is defined in the [ym](https://github.com/ymaps/modules/blob/master/README.md) module of [`events`](https://en.bem.info/libs/bem-core/current/desktop/events/#class-Event) in the bem-core library.
 
-### BEM event object
-
-When invoked, a handler function gets an argument with an object describing the BEM event. The BEM event object class `events.Event` is defined in the [ym](https://github.com/ymaps/modules) module of [`events`](../../common.blocks/events/events.vanilla.js) in the bem-core library. This object contains the fields:
+This object contains the fields:
 
 -   `target` — Instance of the block where the BEM event occurred.
 -   `data` — Any additional data passed as the `data` argument when subscribing to a BEM event.
 -   `result` — The last value returned by this event handler. The same as [jQuery.Event.result](https://api.jquery.com/event.result/).
 -   `type` — The type of event. The same as [jQuery.Event.type](https://api.jquery.com/event.type/).
 
-For more information about properties and methods of a BEM event object, see the [documentation for the 'events' block](../../common.blocks/events).
+For more information about properties and methods of a BEM event object, see the [documentation for the 'events' block](https://en.bem.info/libs/bem-core/current/desktop/events/).

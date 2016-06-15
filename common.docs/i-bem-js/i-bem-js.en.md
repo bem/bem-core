@@ -1,25 +1,21 @@
-i-bem.js: User's guide
-======================
-
-i-bem.js: JavaScript framework for BEM
---------------------------------------
+# i-bem.js: JavaScript framework for BEM
 
 `i-bem.js` is a specialized JavaScript framework for web development
-using the [BEM methodology](https://en.bem.info/method/).
+using the [BEM methodology](https://en.bem.info/methodology/).
 
 `i-bem.js` makes it possible to:
 
 -   Develop a web interface in terms of blocks, elements, and modifiers.
 -   Describe a block logic in declarative style, as a set of states.
--   Easily integrate JavaScript code with BEMHTML or BH templates and CSS in BEM style.
+-   Easily integrate JavaScript code with [BEMHTML](https://en.bem.info/platform/bem-xjst/) or BH templates and CSS in BEM style.
 -   Flexibly redefine the behavior of library blocks.
 
 `i-bem.js` is not meant to replace the general-purpose framework, like jQuery.
 
-**What this document covers**:
+## Table of contents
 
 -   [Overview](./i-bem-js-common.en.md) of the framework: its relationship to the BEM subject domain, and a summary of the framework modular
-    structure, a template project, and assembly tools written
+    structure, a template project, and build tools written
     using `i-bem.js`.
 -   [Binding JS blocks to HTML](./i-bem-js-html-binding.en.md) — Markup for JS blocks in a page
     HTML code and the possible relationships of HTML elements to JS blocks.
