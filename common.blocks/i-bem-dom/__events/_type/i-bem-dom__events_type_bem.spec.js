@@ -4,7 +4,7 @@ modules.define(
     function(provide, bem, bemDom, objects, events, $, chai, sinon, BEMHTML) {
 
 describe('BEM events', function() {
-    var Block1, Block2, Block3, block1, spy1, spy2, spy3, spy4, spy5, spy6, spy7, spy8,
+    var Block1, Block2, Block3, block1, spy1, spy2, spy3, spy4, spy5, spy6, spy7, spy8, spy9,
         wrapSpy = function(spy) {
             return function(e) {
                 // NOTE: we need to pass bemTarget and data explicitly, as `e` is being
@@ -23,6 +23,7 @@ describe('BEM events', function() {
         spy6 = sinon.spy();
         spy7 = sinon.spy();
         spy8 = sinon.spy();
+        spy9 = sinon.spy();
     });
 
     afterEach(function() {
@@ -319,6 +320,7 @@ describe('BEM events', function() {
                                             .on('click', data, spy3);
 
                                          this._events('e2').on('click', spy5);
+                                         this._events('e6').on('click', spy9);
                                     }
                                 }
                             }
@@ -343,6 +345,7 @@ describe('BEM events', function() {
 
                         block1 = initDom({
                             block : 'block',
+                            mix : { block : 'block', elem : 'e6' },
                             content : [
                                 { elem : 'e1', content : { elem : 'e3' } },
                                 { elem : 'e2', content : { elem : 'e1' } },
@@ -377,7 +380,13 @@ describe('BEM events', function() {
 
                         it('should properly bind handlers', function() {
                             block1._elem('e3')._emit('click');
+
                             spy1.should.not.have.been.called;
+                        });
+
+                        it('should properly bind handler to mixed elem', function() {
+                            block1._elem('e6')._emit('click');
+                            spy9.should.have.been.called;
                         });
 
                         it('should properly unbind all handlers', function() {
@@ -400,6 +409,13 @@ describe('BEM events', function() {
                             spy1.should.have.been.called;
                             spy2.should.not.have.been.called;
                             spy3.should.have.been.called;
+                        });
+
+                        it('should properly unbind handler from mixed elem', function() {
+                            block1._events('e6').un('click', spy9);
+                            block1._elem('e6')._emit('click');
+
+                            spy9.should.not.have.been.called;
                         });
                     });
 
