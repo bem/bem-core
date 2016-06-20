@@ -202,6 +202,32 @@ describe('i-bem', function() {
             baseMethodSpy.should.have.been.calledOnce;
             modsMethodSpy.should.have.been.calledOnce;
         });
+
+        it('should apply method if block has any mod', function() {
+            var baseMethodSpy = sinon.spy(),
+                modsMethodSpy = sinon.spy(),
+                Block = bem
+                    .declBlock('block', { method : baseMethodSpy })
+                    .declMod({ modName : 'mod1', modVal : '*' }, { method : modsMethodSpy }),
+                instance = new Block({ mod1 : 'val1' });
+
+            instance.method();
+
+            baseMethodSpy.should.not.have.been.called;
+            modsMethodSpy.should.have.been.calledOnce;
+
+            instance.setMod('mod1', 'val2');
+            instance.method();
+
+            baseMethodSpy.should.not.have.been.called;
+            modsMethodSpy.should.have.been.calledTwice;
+
+            instance.delMod('mod1');
+            instance.method();
+
+            baseMethodSpy.should.have.been.calledOnce;
+            modsMethodSpy.should.have.been.calledTwice;
+        });
     });
 
     describe('create', function() {
