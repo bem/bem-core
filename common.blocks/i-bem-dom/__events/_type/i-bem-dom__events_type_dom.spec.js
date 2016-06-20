@@ -7,7 +7,7 @@ var undef,
     expect = chai.expect;
 
 describe('DOM events', function() {
-    var Block1, Block2, Block3, block1, spy1, spy2, spy3, spy4, spy5, spy6, spy7,
+    var Block1, Block2, Block3, block1, spy1, spy2, spy3, spy4, spy5, spy6, spy7, spy8,
         wrapSpy = function(spy) {
             return function(e) {
                 // NOTE: we need to pass bemTarget and data explicitly, as `e` is being
@@ -25,6 +25,7 @@ describe('DOM events', function() {
         spy5 = sinon.spy();
         spy6 = sinon.spy();
         spy7 = sinon.spy();
+        spy8 = sinon.spy();
     });
 
     afterEach(function() {
@@ -145,7 +146,6 @@ describe('DOM events', function() {
                         elem1 = elemType === 'string'?
                             'e1' :
                             bemDom.declElem('block', 'e1');
-
                         Block1 = bemDom.declBlock('block', {
                             onSetMod : {
                                 'js' : {
@@ -153,9 +153,10 @@ describe('DOM events', function() {
                                         this._domEvents(elem1)
                                             .on('click', spy1)
                                             .on('click', spy2)
-                                            .on('click', data, spy3);
+                                            .on('click', data, wrapSpy(spy3));
 
                                         this._domEvents('e2').on('click', spy5);
+                                        this._domEvents('e4').on('click', spy8);
                                     }
                                 }
                             }
@@ -178,6 +179,7 @@ describe('DOM events', function() {
 
                         block1 = createDomNode({
                             block : 'block',
+                            mix : { block : 'block', elem : 'e4' },
                             content : [
                                 { elem : 'e1', content : { elem : 'e3' } },
                                 { elem : 'e2', content : { elem : 'e1' } }
@@ -197,12 +199,18 @@ describe('DOM events', function() {
                             spy2.should.have.been.called;
 
                             spy3.should.have.been.called;
-                            spy3.args[0][0].data.should.have.been.equal(data);
-                            spy3.args[0][0].bemTarget.should.be.instanceOf(Elem1);
-                            spy3.args[0][0].bemTarget.domElem[0]
+                            spy3.args[0][2].should.have.been.equal(data);
+                            spy3.args[0][1].should.be.instanceOf(Elem1);
+                            spy3.args[0][1].domElem[0]
                                 .should.be.equal(block1._elem(elem1).domElem[0]);
 
                             spy5.should.not.have.been.called;
+                        });
+
+                        it('should properly bind handlers to mixed elem', function() {
+                            block1._elem('e4').domElem.trigger('click');
+
+                            spy8.should.have.been.called;
                         });
 
                         it('should properly unbind all handlers', function() {
@@ -225,6 +233,13 @@ describe('DOM events', function() {
                             spy1.should.have.been.called;
                             spy2.should.not.have.been.called;
                             spy3.should.have.been.called;
+                        });
+
+                        it('should properly unbind handlers from mixed elem', function() {
+                            block1._domEvents('e4').un('click', spy8);
+                            block1._elem('e4').domElem.trigger('click');
+
+                            spy8.should.not.have.been.called;
                         });
                     });
 

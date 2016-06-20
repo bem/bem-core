@@ -68,11 +68,16 @@ var undef,
             var fnStorage = this._storage[e] || (this._storage[e] = {}),
                 fnId = identify(fn, _fnCtx);
 
-            fnStorage[fnId] || params.bindDomElem[_isOnce? 'one' : 'on'](
-                e,
-                params.bindSelector,
-                data,
-                fnStorage[fnId] = this._fnWrapper(fn, _fnCtx, fnId));
+            if(!fnStorage[fnId]) {
+                var bindDomElem = params.bindDomElem,
+                    onMethod = _isOnce? 'one' : 'on',
+                    bindSelector = params.bindSelector,
+                    handler = fnStorage[fnId] = this._fnWrapper(fn, _fnCtx, fnId);
+
+                bindDomElem[onMethod](e, bindSelector, data, handler);
+                bindSelector && bindDomElem.is(bindSelector) && bindDomElem[onMethod](e, data, handler);
+                // FIXME: "once" won't properly work in case of nested and mixed elem with the same name
+            }
 
             return this;
         },
@@ -112,12 +117,17 @@ var undef,
                 } else {
                     var wrappedFn,
                         fnId = identify(fn, _fnCtx),
-                        fnStorage = this._storage[e];
+                        fnStorage = this._storage[e],
+                        bindDomElem = params.bindDomElem,
+                        bindSelector = params.bindSelector;
 
                     if(wrappedFn = fnStorage && fnStorage[fnId])
                         delete fnStorage[fnId];
 
-                    params.bindDomElem.off(e, params.bindSelector, wrappedFn || fn);
+                    var handler = wrappedFn || fn;
+
+                    bindDomElem.off(e, params.bindSelector, handler);
+                    bindSelector && bindDomElem.is(bindSelector) && bindDomElem.off(e, handler);
                 }
             } else {
                 objects.each(this._storage, this._unbindByEvent, this);
@@ -127,9 +137,14 @@ var undef,
         },
 
         _unbindByEvent : function(fnStorage, e) {
-            var params = this._params;
+            var params = this._params,
+                bindDomElem = params.bindDomElem,
+                bindSelector = params.bindSelector,
+                unbindWithoutSelector = bindSelector && bindDomElem.is(bindSelector);
+
             fnStorage && objects.each(fnStorage, function(fn) {
-                params.bindDomElem.off(e, params.bindSelector, fn);
+                bindDomElem.off(e, bindSelector, fn);
+                unbindWithoutSelector && bindDomElem.off(e, fn);
             });
             this._storage[e] = null;
         }
