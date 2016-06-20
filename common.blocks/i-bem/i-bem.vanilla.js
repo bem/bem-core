@@ -141,8 +141,13 @@ function buildCheckMod(modName, modVal) {
 }
 
 function checkMod(block, modName, modVal) {
+    var prevModVal = block._processingMods[modName];
+
     // check if a block has either current or previous modifier value equal to passed modVal
-    return block.hasMod(modName, modVal) || block._processingMods[modName] === modVal;
+    return modVal === '*'?
+        /* jshint eqnull: true */
+        block.hasMod(modName) || prevModVal != null :
+        block.hasMod(modName, modVal) || prevModVal === modVal;
 }
 
 function convertModHandlersToMethods(props) {
