@@ -10,7 +10,7 @@
     "bem",
     "core"
   ],
-  "author": "Sergey Belov <peimei@ya.ru>",
+  "author": "",
   "license": "MPL-2.0",
   "dependencies": {
     "bem-environ": "^1.4.0",
