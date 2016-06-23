@@ -606,6 +606,29 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
     },
 
     /**
+     * Returns values of modifiers of the block/nested element
+     * @param {Object} [elem] Nested element
+     * @param {String} [...modNames] Modifier names
+     * @returns {Object} Hash of modifier values
+     */
+    getMods : function(elem) {
+        var hasElem = elem && typeof elem !== 'string',
+            modCache = this._modCache,
+            modNames = [].slice.call(arguments, hasElem? 1 : 0),
+            res = this._extractMods(modNames, hasElem? elem : undef);
+
+        if(!hasElem) { // Caching
+            modNames.length?
+                modNames.forEach(function(name) {
+                    modCache[name] = res[name];
+                }) :
+                modCache = res;
+        }
+
+        return res;
+    },
+
+    /**
      * Sets a modifier for a block/nested element
      * @param {jQuery} [elem] Nested element
      * @param {String} modName Modifier name

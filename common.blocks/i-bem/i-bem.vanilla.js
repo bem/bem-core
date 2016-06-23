@@ -331,18 +331,18 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     getMods : function(elem) {
         var hasElem = elem && typeof elem !== 'string',
-            modNames = [].slice.call(arguments, hasElem? 1 : 0),
-            res = this._extractMods(modNames, hasElem? elem : undef);
+            modCache = this._modCache,
+            modNames = [].slice.call(arguments, hasElem? 1 : 0);
 
-        if(!hasElem) { // caching
-            modNames.length?
-                modNames.forEach(function(name) {
-                    this._modCache[name] = res[name];
-                }, this) :
-                this._modCache = res;
-        }
+        return !modNames.length?
+            modCache :
+            modNames.reduce(function(res, mod) {
+                if(mod in modCache) {
+                    res[mod] = modCache[mod];
+                }
 
-        return res;
+                return res;
+            }, {});
     },
 
     /**
@@ -523,17 +523,6 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     _extractModVal : function(modName, elem) {
         return '';
-    },
-
-    /**
-     * Retrieves name/value for a list of modifiers
-     * @private
-     * @param {Array} modNames Names of modifiers
-     * @param {Object} [elem] Element
-     * @returns {Object} Hash of modifier values by name
-     */
-    _extractMods : function(modNames, elem) {
-        return {};
     },
 
     /**

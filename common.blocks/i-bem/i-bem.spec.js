@@ -114,7 +114,18 @@ describe('i-bem', function() {
             delete BEM.blocks['block'];
         });
 
+        describe('getMods', function() {
+            it('should return specified mods', function() {
+                block.getMods('mod1', 'mod2', 'mod3').should.be.eql({ mod1 : 'val1', mod2 : true, mod3 : false });
+            });
+        });
+
         describe('getMod', function() {
+            it('should return correct value after getMods()', function() {
+                block.getMods();
+                block.getMod('mod1').should.be.equal('val1');
+            });
+
             it('should return current mod\'s value', function() {
                 block.getMod('mod1').should.be.equal('val1');
             });
