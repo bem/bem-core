@@ -66,11 +66,11 @@ BEMDOM.decl('my-block', {
 которого будет вызвана функция-обработчик `_onSubmit`.
 
 ```js
-BEMDOM.decl('my-block', {
+BEMDOM.decl('my-form', {
     onSetMod : {
         'js' : {
             'inited': function() {
-                this.bindTo('submit', 'click', this._onSubmit);
+                this.bindTo(this.elem('submit'), 'click', this._onSubmit);
             }
         }
     },
