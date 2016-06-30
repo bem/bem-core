@@ -70,7 +70,7 @@ BEMDOM.decl('my-form', {
     onSetMod : {
         'js' : {
             'inited': function() {
-                this.bindTo(this.elem('submit'), 'click', this._onSubmit);
+                this.bindTo('submit', 'click', this._onSubmit);
             }
         }
     },
