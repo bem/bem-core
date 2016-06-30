@@ -66,7 +66,7 @@ BEMDOM.decl('my-block', {
 которого будет вызвана функция-обработчик `_onSubmit`.
 
 ```js
-BEMDOM.decl('my-block', {
+BEMDOM.decl('my-form', {
     onSetMod : {
         'js' : {
             'inited': function() {
