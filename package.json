@@ -15,7 +15,7 @@
   "license": "MPL-2.0",
   "dependencies": {
     "bem-environ": "~1.4.0",
-    "bem-xjst": "0.9.0",
+    "bem-xjst": "6.3.0",
     "ym": "0.1.2"
   },
   "devDependencies": {
