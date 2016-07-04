@@ -19,7 +19,7 @@
     "ym": "0.1.2"
   },
   "devDependencies": {
-    "bem-naming": "1.0.0",
+    "bem-naming": "^1.0.1",
     "bem-walk": "1.0.0-alpha1",
     "borschik-tech-cleancss": "2.1.0",
     "bower": "^1.5.2",
