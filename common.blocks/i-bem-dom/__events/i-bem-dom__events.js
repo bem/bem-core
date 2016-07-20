@@ -226,21 +226,10 @@ var undef,
             var ctxId = identify(ctx),
                 ctxStorage = eventStorage[ctxId],
                 storageSuffix = this._storageSuffix,
-                isBindToInstance = typeof ctx !== 'function';
+                isBindToInstance = typeof ctx !== 'function',
+                ctxCls,
+                selector = '';
 
-            if(!ctxStorage) {
-                ctxStorage = eventStorage[ctxId] = {};
-                if(isBindToInstance) {
-                    ctx._events().on({ modName : 'js', modVal : '' }, function() {
-                        var storageKey;
-                        ctxStorage[storageKey = docId + storageSuffix] && ctxStorage[storageKey].un();
-                        ctxStorage[storageKey = winId + storageSuffix] && ctxStorage[storageKey].un();
-                        delete ctxStorage[ctxId];
-                    });
-                }
-            }
-
-            var ctxCls, selector = '';
             if(isBindToInstance) {
                 ctxCls = ctx.__self;
             } else {
@@ -251,6 +240,17 @@ var undef,
             var params = this._buildEventManagerParams(bindCtx, bindScope, selector, ctxCls),
                 storageKey = params.key + storageSuffix;
 
+            if(!ctxStorage) {
+                ctxStorage = eventStorage[ctxId] = {};
+                if(isBindToInstance) {
+                    ctx._events().on({ modName : 'js', modVal : '' }, function() {
+                        params.bindToArbitraryDomElem && ctxStorage[storageKey] &&
+                            ctxStorage[storageKey].un();
+                        delete ctxStorage[ctxId];
+                    });
+                }
+            }
+
             return ctxStorage[storageKey] ||
                 (ctxStorage[storageKey] = this._createEventManager(ctx, params, isBindToInstance));
         },
@@ -259,6 +259,7 @@ var undef,
             var res = {
                 bindEntityCls : null,
                 bindDomElem : bindScope,
+                bindToArbitraryDomElem : false,
                 bindSelector : ctxSelector,
                 ctxSelector : ctxSelector,
                 key : ''
@@ -267,14 +268,14 @@ var undef,
             if(bindCtx) {
                 var typeOfCtx = typeof bindCtx;
 
-                if(bindCtx.jquery && bindCtx.length === 1) {
-                    if(bindCtx[0] !== winNode && bindCtx[0] !== docNode)
-                        throw Error('DOM-events: jQuery-chain can contain only document or window');
+                if(bindCtx.jquery) {
                     res.bindDomElem = bindCtx;
-                    res.key = identify(bindCtx[0]);
-                } else if(bindCtx === winNode || bindCtx === docNode) {
+                    res.key = identify.apply(null, bindCtx.get());
+                    res.bindToArbitraryDomElem = true;
+                } else if(bindCtx === winNode || bindCtx === docNode || (typeOfCtx === 'object' && bindCtx.nodeType === 1)) { // NOTE: duck-typing check for "is-DOM-element"
                     res.bindDomElem = $(bindCtx);
                     res.key = identify(bindCtx);
+                    res.bindToArbitraryDomElem = true;
                 } else if(typeOfCtx === 'object' && bindCtx.__self) { // bem entity instance
                     res.bindDomElem = bindCtx.domElem;
                     res.key = bindCtx._uniqId;

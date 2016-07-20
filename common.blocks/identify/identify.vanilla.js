@@ -36,11 +36,11 @@ provide(
                 return identify(obj);
             }
 
-            var res = '';
+            var res = [];
             for(var i = 0, len = arguments.length; i < len; i++) {
-                res += identify(arguments[i]);
+                res.push(identify(arguments[i]));
             }
-            return res;
+            return res.sort().join('');
         }
 
         return get();

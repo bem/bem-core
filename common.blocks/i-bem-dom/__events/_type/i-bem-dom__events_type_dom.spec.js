@@ -638,6 +638,91 @@ describe('DOM events', function() {
                 spy4.should.not.have.been.called;
             });
         });
+
+        describe('arbitrary jQuery-chain or DOM-node events', function() {
+            var rootNode;
+
+            beforeEach(function() {
+                Block1 = bemDom.declBlock('block', {
+                    onSetMod : {
+                        'js' : {
+                            'inited' : function() {
+                                this._domEvents(rootNode[0])
+                                    .on('click', spy1)
+                                    .on('click', spy2);
+
+                                this._domEvents(rootNode.find('div').andSelf())
+                                    .on('dblclick', data, wrapSpy(spy3))
+                                    .once('dblclick', spy4);
+                            }
+                        }
+                    }
+                });
+                rootNode = createDomNode({
+                    content : {
+                        content : { block : 'block', tag : 'p' }
+                    }
+                });
+                block1 = rootNode.find(Block1._buildSelector()).bem(Block1);
+            });
+
+            it('should properly bind handlers', function() {
+                rootNode.trigger('click');
+
+                spy1.should.have.been.calledOnce;
+                spy2.should.have.been.calledOnce;
+
+                rootNode.find('div').trigger('dblclick');
+
+                spy3.should.have.been.calledTwice;
+                spy3.should.have.been.calledOn(block1);
+                spy3.args[0][2].should.have.been.equal(data);
+            });
+
+            it('should properly bind once handler', function() {
+                rootNode.trigger('dblclick');
+                spy4.should.have.been.called;
+
+                rootNode.trigger('dblclick');
+                spy4.should.have.been.calledOnce;
+            });
+
+            it('should properly unbind all handlers', function() {
+                block1._domEvents(rootNode[0]).un('click');
+                rootNode.trigger('click');
+
+                spy1.should.not.have.been.called;
+                spy2.should.not.have.been.called;
+
+                block1._domEvents(rootNode.find('div').andSelf()).un('dblclick');
+                rootNode.find('div').trigger('dblclick');
+
+                spy3.should.not.have.been.called;
+                spy4.should.not.have.been.called;
+            });
+
+            it('should properly unbind specified handler', function() {
+                block1._domEvents(rootNode[0]).un('click', spy1);
+                rootNode.trigger('click');
+
+                spy1.should.not.have.been.called;
+                spy2.should.have.been.called;
+            });
+
+            it('should properly unbind once handler', function() {
+                block1._domEvents(rootNode.find('div').andSelf()).un('dblclick', spy4);
+                rootNode.find('div').trigger('dblclick');
+                spy4.should.not.have.been.called;
+            });
+
+            it('should properly unbind all handlers on block destruct', function() {
+                bemDom.destruct(block1.domElem);
+                rootNode.trigger('click');
+
+                spy1.should.not.have.been.called;
+                spy2.should.not.have.been.called;
+            });
+        });
     });
 
     describe('delegated events', function() {
