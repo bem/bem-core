@@ -1233,6 +1233,30 @@ describe('i-bem-dom', function() {
             bemDom.destruct(blockNode);
             spy.should.have.been.called;
         });
+
+        // see https://github.com/bem/bem-core/issues/1383
+        it('should not re-initialize destructing entities during destruct', function() {
+            var Block = bemDom.declBlock('block', {
+                    __constructor : function() {
+                        this.__base.apply(this, arguments);
+                        spy();
+                    }
+                }, {
+                    onInit : function() {
+                        this._domEvents().on('blur', functions.noop);
+                    }
+                });
+
+            rootNode = initDom({
+                block : 'block',
+                js : true,
+                tag : 'input'
+            });
+
+            rootNode.focus();
+            bemDom.destruct(rootNode);
+            spy.should.have.been.calledOnce;
+        });
     });
 
     describe('bemDom.update', function() {

@@ -126,9 +126,7 @@ function initEntities(domElem, uniqInitId, dropElemCacheQueue) {
 function initEntity(entityName, domElem, params, ignoreLazyInit, callback) {
     var domNode = domElem[0];
 
-    if(destructingDomNodes[identify(domNode)]) {
-        return;
-    }
+    if(destructingDomNodes[identify(domNode)]) return;
 
     params || (params = processParams(getEntityParams(domNode, entityName), entityName));
 
