@@ -56,6 +56,12 @@ var undef,
      */
     domElemToParams = {},
 
+    /**
+     * Storage for DOM nodes that are being destructed
+     * @type Object
+     */
+    destructingDomNodes = {},
+
     entities = bem.entities,
 
     BEM_CLASS_NAME = 'i-bem',
@@ -119,6 +125,8 @@ function initEntities(domElem, uniqInitId, dropElemCacheQueue) {
  */
 function initEntity(entityName, domElem, params, ignoreLazyInit, callback) {
     var domNode = domElem[0];
+
+    if(destructingDomNodes[identify(domNode)]) return;
 
     params || (params = processParams(getEntityParams(domNode, entityName), entityName));
 
@@ -835,10 +843,11 @@ var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
  * Returns a block on a DOM element and initializes it if necessary
  * @param {Function} BemDomEntity entity
  * @param {Object} [params] entity parameters
- * @returns {BemDomEntity}
+ * @returns {BemDomEntity|null}
  */
 $.fn.bem = function(BemDomEntity, params) {
-    return initEntity(BemDomEntity.getEntityName(), this, params, true)._setInitedMod();
+    var entity = initEntity(BemDomEntity.getEntityName(), this, params, true);
+    return entity? entity._setInitedMod() : null;
 };
 
 $(function() {
@@ -954,11 +963,18 @@ bemDom = /** @exports */{
      * @private
      */
     _destruct : function(ctx, excludeSelf, destructDom) {
-        var _ctx;
+        var _ctx,
+            currentDestructingDomNodes = [];
+
         storeDomNodeParents(_ctx = excludeSelf? ctx.children() : ctx);
 
         reverse.call(findDomElem(_ctx, BEM_SELECTOR)).each(function(_, domNode) {
-            var params = getParams(domNode);
+            var params = getParams(domNode),
+                domNodeId = identify(domNode);
+
+            destructingDomNodes[domNodeId] = true;
+            currentDestructingDomNodes.push(domNodeId);
+
             objects.each(params, function(entityParams) {
                 if(entityParams.uniqId) {
                     var entity = uniqIdToEntity[entityParams.uniqId];
@@ -976,6 +992,10 @@ bemDom = /** @exports */{
 
         // flush parent nodes storage that has been filled above
         domNodesToParents = {};
+
+        currentDestructingDomNodes.forEach(function(domNodeId) {
+            delete destructingDomNodes[domNodeId];
+        });
     },
 
     /**
