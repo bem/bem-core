@@ -41,6 +41,12 @@ describe('identify', function() {
         identify(obj1, obj2).should.be.equal(identify(obj1) + identify(obj2));
     });
 
+    it('should not depend on order of several arguments', function() {
+        var obj1 = {},
+            obj2 = {};
+        identify(obj1, obj2).should.be.equal(identify(obj2, obj1));
+    });
+
     it('should properly process arguments', function() {
         var obj1 = {},
             obj2,
