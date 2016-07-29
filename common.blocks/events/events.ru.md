@@ -32,13 +32,13 @@
 
 | Элемент | Способы использования | Описание |
 | ------- | --------------------- | -------- |
-| <a href="#elems-channels">channels</a> | <code>JS</code> | Предназначен для работы с именованными каналами событий. |
+| <a href="#Элемент-channels-блока-events">channels</a> | <code>JS</code> | Предназначен для работы с именованными каналами событий. |
 
 ### Функции предоставляемые элементами блока
 
 | Элемент | Функция | Возвращаемое значение | Описание |
 | ------- | ------- | ----------------------------- | -------- |
-| <a href="#elems-channels">channels</a> | channels(<br><code>[{String} id]</code>, <br><code>[{Boolean} drop]</code>) | <code>{Object}</code>&#124;<code>{undefined}</code> | Создает или удаляет именованный канал событий. |
+| <a href="#Элемент-channels-блока-events">channels</a> | channels(<br><code>[{String} id]</code>, <br><code>[{Boolean} drop]</code>) | <code>{Object}</code>&#124;<code>{undefined}</code> | Создает или удаляет именованный канал событий. |
 
 ### Публичные технологии блока
 
