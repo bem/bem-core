@@ -12,12 +12,12 @@ block('page').elem('conditional-comment')(
             hasNegationOrIncludeOthers = hasNegation || includeOthers;
 
         return [
-            '<!--[if ' + cond + ']>',
-            includeOthers? '<!' : '',
-            hasNegationOrIncludeOthers? '-->' : '',
+            { html : '<!--[if ' + cond + ']>' },
+            includeOthers? { html : '<!' } : '',
+            hasNegationOrIncludeOthers? { html : '-->' } : '',
             applyNext(),
-            hasNegationOrIncludeOthers? '<!--' : '',
-            '<![endif]-->'
+            hasNegationOrIncludeOthers? { html : '<!--' } : '',
+            { html : '<![endif]-->' }
         ];
     })
 );

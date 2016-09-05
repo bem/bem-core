@@ -10,15 +10,15 @@ block('page').elem('css').match(function() {
                     [ie, '', ''];
 
         return [
-            '<!--[if ' + hideRule[0] + ']>' + hideRule[1],
+            { html : '<!--[if ' + hideRule[0] + ']>' + hideRule[1] },
             this.ctx,
-            hideRule[2] + '<![endif]-->'
+            { html : hideRule[2] + '<![endif]-->' }
         ];
     }),
-    def().match(function() { return this.ctx.ie === true; })(function() {
+    replace().match(function() { return this.ctx.ie === true; })(function() {
         var url = this.ctx.url;
-        return applyCtx([6, 7, 8, 9].map(function(v) {
+        return [6, 7, 8, 9].map(function(v) {
             return { elem : 'css', url : url + '.ie' + v + '.css', ie : 'IE ' + v };
-        }));
+        });
     })
 );
