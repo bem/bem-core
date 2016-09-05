@@ -56,6 +56,20 @@ function configure(helper, platform) {
                     }
                 }
             },
+            bhEscaped : {
+                tech : 'enb-bh/techs/bh-bundle',
+                options : {
+                    devMode : false,
+                    requires : {
+                        i18n : { globals : 'BEM.I18N' }
+                    },
+                    bhOptions : {
+                        jsAttrName : 'data-bem',
+                        jsAttrScheme : 'json',
+                        escapeContent : true
+                    }
+                }
+            },
             bemhtml : {
                 tech : 'enb-bemxjst/techs/bemhtml',
                 options : {
@@ -64,6 +78,19 @@ function configure(helper, platform) {
                         i18n : { globals : 'BEM.I18N' }
                     },
                     engineOptions : { elemJsInstances : true }
+                }
+            },
+            bemhtmlEscaped : {
+                tech : 'enb-bemxjst/techs/bemhtml',
+                options : {
+                    sourceSuffixes : ['bemhtml', 'bemhtml.js'],
+                    engineOptions : {
+                        elemJsInstances : true,
+                        escapeContent : true
+                    },
+                    requires : {
+                        i18n : { globals : 'BEM.I18N' }
+                    }
                 }
             }
         }

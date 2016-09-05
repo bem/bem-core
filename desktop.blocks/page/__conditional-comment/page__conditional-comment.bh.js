@@ -12,12 +12,12 @@ module.exports = function(bh) {
             hasNegationOrIncludeOthers = hasNegation || includeOthers;
 
         return [
-            '<!--[if ' + cond + ']>',
-            includeOthers? '<!' : '',
-            hasNegationOrIncludeOthers? '-->' : '',
+            { html : '<!--[if ' + cond + ']>', tag : false },
+            includeOthers? { html : '<!', tag : false } : '',
+            hasNegationOrIncludeOthers? { html : '-->', tag : false } : '',
             json,
-            hasNegationOrIncludeOthers? '<!--' : '',
-            '<![endif]-->'
+            hasNegationOrIncludeOthers? { html : '<!--', tag : false } : '',
+            { html : '<![endif]-->', tag : false }
         ];
     });
 
