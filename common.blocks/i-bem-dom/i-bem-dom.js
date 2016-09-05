@@ -352,9 +352,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
          */
         this._findBackRefs = [];
 
-        this.__base(null, params, initImmediately);
+        uniqIdToEntity[params.uniqId || identify(this)] = this;
 
-        uniqIdToEntity[this._uniqId] = this;
+        this.__base(null, params, initImmediately);
     },
 
     /**
