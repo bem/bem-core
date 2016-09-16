@@ -788,6 +788,31 @@ bemDom.declBlock('my-block', {
 
 Следует обратить внимание, что теперь, отписка от событий происходит автоматически во время уничтожения экземпляра.
 
+#### Подписка на БЭМ-события из стороннего кода
+
+Было:
+
+```js
+modules.require(['jquery', 'i-bem__dom'], function($, BEMDOM) {
+
+$('.my-block').bem('my-block').on('my-event', function() { /* ... */ });
+
+});
+```
+
+Стало:
+
+```js
+modules.require(['jquery', 'my-block', 'events__observable'], function($, MyBlock, observable) {
+
+observable($('.my-block').bem(MyBlock))
+    .on('my-event', function() { /* ... */ });
+
+});
+```
+
+При этом в засимости нужно добавить `{ block : 'events', elem : 'observable', mods : { type : 'bem-dom' } }`.
+
 Задача: [#394](https://github.com/bem/bem-core/issues/394).
 
 #### Имена protected-методов начинаются с `_`
