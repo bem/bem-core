@@ -79,6 +79,54 @@ provide(MyDomBlock.declMod({ modName : 'my-mod', modVal : 'myVal' }, { /* ... */
 });
 ```
 
+#### Декларация булевого модификатора
+
+Было:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.decl({ modName : 'my-mod', modVal : 'true' }, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.declMod({ modName : 'my-mod' }, { /* ... */ }));
+
+});
+```
+
+Задача: [#1374](https://github.com/bem/bem-core/issues/1374).
+
+#### Декларация для модификатора с любым значением
+
+Было:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.decl({ modName : 'my-mod' }, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.declMod({ modName : 'my-mod', modVal : '*' }, { /* ... */ }));
+
+});
+```
+
+Задача: [#1376](https://github.com/bem/bem-core/pull/1376).
+
 #### Доопределение блока
 
 Вместо метода `decl()` класса блока следует использовать метод `declBlock()` модуля `i-bem-dom`.
