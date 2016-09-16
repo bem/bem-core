@@ -1,5 +1,44 @@
 # История изменений
 
+## 4.0.0
+
+### Изменения, ломающие обратную совместимость
+
+- Изменения в блоке `i-bem`. Подробнее в [MIGRATION.ru.md](MIGRATION.ru.md#изменения-в-блоке-i-bem).
+- Изменения в блоке `querystring`. Подробнее в [MIGRATION.ru.md](MIGRATION.ru.md#изменения-в-блоке-querystring).
+- Из модуля `identify` удален опциональный параметр `onlyGet` ([#1028](https://github.com/bem/bem-core/issues/1028)).
+- Из модуля `events` удалены все статические методы ([#1024](https://github.com/bem/bem-core/issues/1024)).
+- В классе `Event` модуля `events` удалено поле `result` ([#1023](https://github.com/bem/bem-core/issues/1023)).
+- Элемент `css` блока `page` больше не поддерживает автоматическое добавление условных комментариев для IE ([#379](https://github.com/bem/bem-core/issues/379)).
+
+## 3.0.1
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлены pointer-события на iOS-устройствах ([#1253](https://github.com/bem/bem-core/issues/1253)).
+
+## 3.0.0
+
+### Изменения, ломающие обратную совместимость
+
+- Удалены базовые шаблоны и документация для `BEMHTML` и `BEMTREE` ([#1258](https://github.com/bem/bem-core/issues/1258)). Следует использовать версию `bem-xjst` не ниже 6.3.0.
+- Расширения файлов BEMHTML-шаблонов переименованы с `*.bemhtml` на `*.bemhtml.js` ([#984](https://github.com/bem/bem-core/issues/984)). Необходимо убедиться, что в конфиге сборки поддерживается новое расширение.
+- Удален элемент `i-bem__i18n` ([#1304](https://github.com/bem/bem-core/issues/1304)). Для интернационализации следует использовать блок `i18n`.
+- `jquery__events_type_pointerclick` больше не использует библиотеку [FastClick](https://github.com/ftlabs/fastclick) ([#1088](https://github.com/bem/bem-core/issues/1088)).
+
+### Крупные изменения
+
+- `jQuery` была обновлена до 2.2.3 и 1.12.3 ([#1260](https://github.com/bem/bem-core/issues/1260)).
+
+### В релиз вошли следующие исправления ошибок
+
+- В блоке `page` на уровне `blocks.touch` исправлена ошибка с невалидным значением `user-scalable=0` для `<meta name=viewport>` ([#1294](https://github.com/bem/bem-core/issues/1294)).
+- Исправлена ошибка в `jquery__event_type_pointernative`, которая приводила к возникновению JS ошибки в IE8 ([1317](https://github.com/bem/bem-core/issues/1317)).
+
+### Также в релиз вошли следующие изменения
+
+- dist: Автоматическая инициализация блоков теперь опциональна ([#1271](https://github.com/bem/bem-core/issues/1271)).
+
 ## 2.9.0
 
 ### Крупные изменения

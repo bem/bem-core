@@ -1,5 +1,33 @@
 # Changelog
 
+## 3.0.1
+
+### Bug fixes
+
+- An issue with pointer events on iOS devices was fixed ([#1253](https://github.com/bem/bem-core/issues/1253)).
+
+## 3.0.0
+
+### Breaking changes
+
+- Base templates for `BEMHTML` and `BEMTREE` were removed ([#1258](https://github.com/bem/bem-core/issues/1258)). `bem-xjst` 6.3.0+ should be used instead.
+- File extentions of BEMHTML templates were renamed from `*.bemhtml` to `*.bemhtml.js` ([#984](https://github.com/bem/bem-core/issues/984)). Please check that new extention is supported in you build config.
+- `i-bem__i18n` element was removed ([#1304](https://github.com/bem/bem-core/issues/1304)). Please use `i18n` block for internationalization.
+- `jquery__events_type_pointerclick` is not using [FastClick](https://github.com/ftlabs/fastclick) anymore ([#1088](https://github.com/bem/bem-core/issues/1088)).
+
+### Notable changes
+
+- `jQuery` was updated to 2.2.3 and 1.12.3 ([#1260](https://github.com/bem/bem-core/issues/1260)).
+
+### Bug fixes
+
+- An issue in `page` was fixed. `<meta name=viewport>` had wrong `user-scalable` value on the touch level ([#1294](https://github.com/bem/bem-core/issues/1294)).
+- An issue in `jquery__event_type_pointernative` which led to JS error in IE8 was fixed ([1317](https://github.com/bem/bem-core/issues/1317)).
+
+### Other changes
+
+- dist: Autoinitialisation of blocks is optional now ([#1271](https://github.com/bem/bem-core/issues/1271)).
+
 ## 2.9.0
 
 ### Notable changes

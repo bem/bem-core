@@ -915,6 +915,47 @@ observable($('.my-block').bem(MyBlock))
 
 Задача: [#967](https://github.com/bem/bem-core/issues/967).
 
+### Изменения в блоке `page`
+
+Элемент `page__css` больше не поддреживает поле `ie`. Используйте элемент `page__conditional-comment`.
+
+Было:
+
+```
+{
+    block : 'page',
+    head : [
+        { elem : 'css', url : 'my-css.css', ie : false },
+        { elem : 'css', url : 'my-css', ie : true }
+    ],
+    content : 'Page content'
+}
+```
+
+Стало:
+
+```
+{
+    block : 'page',
+    head : [
+        {
+            elem : 'conditional-comment',
+            condition : '! IE',
+            content : { elem : 'css', url : 'my-css.css' }
+        },
+        {
+            elem : 'conditional-comment',
+            condition : '> IE 8',
+            content : { elem : 'css', url : 'my-css.ie.css' }
+        }
+        // и т.д. для других нужных версий IE
+    ],
+    content : 'Page content'
+}
+```
+
+Задача: [#379](https://github.com/bem/bem-core/issues/379).
+
 ## 3.0.0
 
 Для миграции на версию 3.0.0 достаточно ознакомиться с [историей изменений](https://ru.bem.info/libs/bem-core/v3/changelog/#300).
