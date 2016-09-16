@@ -449,7 +449,10 @@ provide(bemDom.declElem('my-dom-block', 'my-elem', { /* ... */ }));
 });
 ```
 
-Теперь метод `_elem()` экземпляра блока (бывший `elem()`) возвращает не jQuery-объект, а экземпляр класса элемента.
+Теперь метод `_elem(elemName)` экземпляра блока (бывший `elem(elemName)`) возвращает не jQuery-объект со всеми элементами
+с именем `elemName`, а экземпляр класса элемента.
+
+Для того, чтобы получить коллекцию экземпляров класса элемента, используйте метод `_elems()`.
 
 ##### Cпособы взаимодействия с элементами
 
@@ -895,7 +898,6 @@ observable($('.my-block').bem(MyBlock))
 
 - `emit()` в `_emit()`
 - `elem()` в `_elem()`
-- `elems()` в `_elems()`
 - `buildClass()` в `_buildClassName()`
 - `buildSelector()` в `_buildSelector()`
 
