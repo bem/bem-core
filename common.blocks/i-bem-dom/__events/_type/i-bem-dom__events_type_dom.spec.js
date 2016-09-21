@@ -651,7 +651,7 @@ describe('DOM events', function() {
                                     .on('click', spy1)
                                     .on('click', spy2);
 
-                                this._domEvents(rootNode.find('div').andSelf())
+                                this._domEvents(rootNode.find('div').addBack())
                                     .on('dblclick', data, wrapSpy(spy3))
                                     .once('dblclick', spy4);
                             }
@@ -694,7 +694,7 @@ describe('DOM events', function() {
                 spy1.should.not.have.been.called;
                 spy2.should.not.have.been.called;
 
-                block1._domEvents(rootNode.find('div').andSelf()).un('dblclick');
+                block1._domEvents(rootNode.find('div').addBack()).un('dblclick');
                 rootNode.find('div').trigger('dblclick');
 
                 spy3.should.not.have.been.called;
@@ -710,7 +710,7 @@ describe('DOM events', function() {
             });
 
             it('should properly unbind once handler', function() {
-                block1._domEvents(rootNode.find('div').andSelf()).un('dblclick', spy4);
+                block1._domEvents(rootNode.find('div').addBack()).un('dblclick', spy4);
                 rootNode.find('div').trigger('dblclick');
                 spy4.should.not.have.been.called;
             });
