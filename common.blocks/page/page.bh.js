@@ -10,7 +10,7 @@ module.exports = function(bh) {
             ], true);
 
         return [
-            json.doctype || '<!DOCTYPE html>',
+            { html : json.doctype || '<!DOCTYPE html>', tag : false },
             {
                 tag : 'html',
                 cls : 'ua_js_no',

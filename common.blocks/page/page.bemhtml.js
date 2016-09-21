@@ -1,11 +1,15 @@
 block('page')(
 
+    mode('doctype')(function() {
+        return { html : this.ctx.doctype || '<!DOCTYPE html>' };
+    }),
+
     wrap()(function() {
         var ctx = this.ctx;
         this._nonceCsp = ctx.nonce;
 
         return [
-            ctx.doctype || '<!DOCTYPE html>',
+            apply('doctype'),
             {
                 tag : 'html',
                 cls : 'ua_js_no',

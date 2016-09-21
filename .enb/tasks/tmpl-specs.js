@@ -56,10 +56,34 @@ function configure(helper, platform) {
                     }
                 }
             },
+            bhEscaped : {
+                tech : 'enb-bh/techs/bh-bundle',
+                options : {
+                    devMode : false,
+                    requires : {
+                        i18n : { globals : 'BEM.I18N' }
+                    },
+                    bhOptions : {
+                        jsAttrName : 'data-bem',
+                        jsAttrScheme : 'json',
+                        escapeContent : true
+                    }
+                }
+            },
             bemhtml : {
                 tech : 'enb-bemxjst/techs/bemhtml',
                 options : {
                     sourceSuffixes : ['bemhtml', 'bemhtml.js'],
+                    requires : {
+                        i18n : { globals : 'BEM.I18N' }
+                    }
+                }
+            },
+            bemhtmlEscaped : {
+                tech : 'enb-bemxjst/techs/bemhtml',
+                options : {
+                    sourceSuffixes : ['bemhtml', 'bemhtml.js'],
+                    engineOptions : { escapeContent : true },
                     requires : {
                         i18n : { globals : 'BEM.I18N' }
                     }
