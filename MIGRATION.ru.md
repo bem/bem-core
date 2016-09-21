@@ -2,7 +2,9 @@
 
 ## 4.0.0
 
-### Отдельный блок `i-bem-dom`
+### Изменения в блоке `i-bem`
+
+#### Отдельный блок `i-bem-dom`
 
 Элемент `dom` блока `i-bem` был перенесён в отдельный блок `i-bem-dom`.
 
@@ -27,9 +29,9 @@ modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
 
 Задача: [#413](https://github.com/bem/bem-core/issues/413).
 
-### Декларация
+#### Декларация
 
-### Декларация блока
+#### Декларация блока
 
 Для декларации блока, вместо метода `decl()`, следует использовать метод `declBlock()`.
 
@@ -53,7 +55,7 @@ provide(bemDom.declBlock(this.name, { /* ... */ }));
 });
 ```
 
-### Декларация модификатора
+#### Декларация модификатора
 
 Для декларации модификатора, вместо статического метода `decl()`, следует использовать статический метод `declMod()`.
 
@@ -77,7 +79,55 @@ provide(MyDomBlock.declMod({ modName : 'my-mod', modVal : 'myVal' }, { /* ... */
 });
 ```
 
-### Доопределение блока
+#### Декларация булевого модификатора
+
+Было:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.decl({ modName : 'my-mod', modVal : 'true' }, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.declMod({ modName : 'my-mod' }, { /* ... */ }));
+
+});
+```
+
+Задача: [#1374](https://github.com/bem/bem-core/issues/1374).
+
+#### Декларация для модификатора с любым значением
+
+Было:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.decl({ modName : 'my-mod' }, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+modules.define('my-dom-block', function(provide, MyDomBlock) {
+
+provide(MyDomBlock.declMod({ modName : 'my-mod', modVal : '*' }, { /* ... */ }));
+
+});
+```
+
+Задача: [#1376](https://github.com/bem/bem-core/pull/1376).
+
+#### Доопределение блока
 
 Вместо метода `decl()` класса блока следует использовать метод `declBlock()` модуля `i-bem-dom`.
 
@@ -101,7 +151,7 @@ provide(bemDom.declBlock(MyDomBlock, { /* ... */ }));
 });
 ```
 
-### Декларация наследуемого блока
+#### Декларация наследуемого блока
 
 Было:
 
@@ -123,7 +173,7 @@ provide(bemDom.declBlock(this.name, MyBaseDomBlock, { /* ... */ }));
 });
 ```
 
-### Декларация миксина
+#### Декларация миксина
 
 Метод `declMix` переименован в `declMixin`, чтобы отделить понятие
 [миксов нескольких БЭМ-сущностей на одном DOM-узле](https://ru.bem.info/methodology/key-concepts/#Микс) от миксинов на уровне JS.
@@ -148,7 +198,7 @@ provide(bemDom.declMixin({ /* ... */ }));
 });
 ```
 
-### Примешивание миксина
+#### Примешивание миксина
 
 Было:
 
@@ -170,7 +220,7 @@ provide(bemDom.declBlock(this.name, [MyMixin1, MyMixin2], { /* ... */ }));
 });
 ```
 
-### Триггеры для изменения модификаторов
+#### Триггеры для изменения модификаторов
 
 При декларации определённого модификатора (например, `_my-mod_my-val`) невозможно было задекларировать поведение
 на удаление этого модификатора. Приходилось делать две декларации.
@@ -267,7 +317,7 @@ onSetMod : {
 Задача: [#1072](https://github.com/bem/bem-core/issues/1072).
 
 
-### Ленивая инициализация
+#### Ленивая инициализация
 
 Функциональность поля `live` была разделена на две части: поле `lazyInit` и метод `onInit()`.
 
@@ -374,7 +424,7 @@ provide(bemDom.declBlock(this.name, { /* ... */ }, {
 
 Задача: [#877](https://github.com/bem/bem-core/issues/877).
 
-### Экземпляры для элементов
+#### Экземпляры для элементов
 
 Удалены элемент `elem-instances` блока `i-bem` и модификатор `elem-instances` элемента `dom` блока `i-bem`.
 Теперь соответствующая функциональность является частью `i-bem` и `i-bem-dom`.
@@ -399,9 +449,12 @@ provide(bemDom.declElem('my-dom-block', 'my-elem', { /* ... */ }));
 });
 ```
 
-Теперь метод `_elem()` экземпляра блока (бывший `elem()`) возвращает не jQuery-объект, а экземпляр класса элемента.
+Теперь метод `_elem(elemName)` экземпляра блока (бывший `elem(elemName)`) возвращает не jQuery-объект со всеми элементами
+с именем `elemName`, а экземпляр класса элемента.
 
-#### Cпособы взаимодействия с элементами
+Для того, чтобы получить коллекцию экземпляров класса элемента, используйте метод `_elems()`.
+
+##### Cпособы взаимодействия с элементами
 
 Было:
 
@@ -417,7 +470,7 @@ this._elem('my-elem').setMod('my-mod', 'my-val');
 
 Аналогично для методов `getMod()`, `hasMod()`, `toggleMod()`, `delMod()`.
 
-#### Удалённые методы и поля
+##### Удалённые методы и поля
 
 Удалён метод `dropElemCache()`, теперь инвалидация кэшей осуществляется автоматически при модификациях DOM. Задача: [#1352](https://github.com/bem/bem-core/issues/1352).
 
@@ -428,7 +481,7 @@ this._elem('my-elem').setMod('my-mod', 'my-val');
 
 Задача: [#581](https://github.com/bem/bem-core/issues/581).
 
-### Методы поиска
+#### Методы поиска
 
 Переименованы следующие методы:
 
@@ -478,7 +531,7 @@ this.findChildElems('my-elem').concat(this.findMixedElems('my-elem'));
 Но рекомендется обратить внимание, действительно ли необходимы оба поиска:
 в большинстве случаев достаточно использовать или `this.findChildElems('my-elem')` или `this.findMixedElems('my-elem')`.
 
-#### Проверка вложенности
+##### Проверка вложенности
 
 Вместо удаленного метода `containsDomElem()`, следует использовать метод `containsEntity()`.
 
@@ -494,7 +547,7 @@ this.containsDomElem(someElem);
 this.containsEntity(someElem);
 ```
 
-### Коллекции
+#### Коллекции
 
 Функциональность элемента `collection` блока `i-bem` перестала быть опциональной.
 
@@ -528,7 +581,7 @@ this.findChildBlocks(MyBlock2).setMod('my-mod', 'my-val');
 
 Задача: [#582](https://github.com/bem/bem-core/issues/582).
 
-### События
+#### События
 
 API работы с событиями значильно упрощено. Удалены методы экземпляра блока: `on()`, `un()`, `once()`, `bindTo()`,
 `unbindFrom()`, `bindToDoc()`, `bindToWin()`, `unbindFromDoc()`, `unbindFromWin()` и методы класса: `liveBindTo()`,
@@ -536,7 +589,7 @@ API работы с событиями значильно упрощено. Уд
 Вместо них добавлены методы `_domEvents()` и `_events()`, возвращающие экземпляр класса менеджера событий, с методами
 `on()`, `un()` и `one()`;
 
-#### DOM-события на экземплярах
+##### DOM-события на экземплярах
 
 Было:
 
@@ -622,7 +675,7 @@ bemDom.declBlock('my-block', {
 });
 ```
 
-#### БЭМ-события на экземплярах
+##### БЭМ-события на экземплярах
 
 Было:
 
@@ -658,7 +711,7 @@ bemDom.declBlock('my-block', {
 
 Следует обратить внимание, что теперь, отписка от событий происходит автоматически во время уничтожения экземпляра.
 
-#### Делегированные DOM-события
+##### Делегированные DOM-события
 
 Было:
 
@@ -700,7 +753,7 @@ bemDom.declBlock('my-block', { /* ... */ }, {
 });
 ```
 
-#### Делегированные БЭМ-события
+##### Делегированные БЭМ-события
 
 Было:
 
@@ -786,23 +839,79 @@ bemDom.declBlock('my-block', {
 
 Следует обратить внимание, что теперь, отписка от событий происходит автоматически во время уничтожения экземпляра.
 
+#### Взаимодействие стороннего кода с БЭМ-блоками
+
+##### Получение экземпляра БЭМ-блока
+
+Теперь, метод jQuery-объекта `bem()` принимает БЭМ-класс, вместо строки.
+
+Было:
+
+```js
+modules.require(['jquery', 'i-bem__dom'], function($, BEMDOM) {
+
+var myBlock = $('.my-block').bem('my-block');
+
+});
+```
+
+Стало:
+
+```js
+modules.require(['jquery', 'my-block'], function($, MyBlock) {
+
+var myBlock = $('.my-block').bem(MyBlock);
+
+});
+```
+
+##### Подписка на БЭМ-события из стороннего кода
+
+Было:
+
+```js
+modules.require(['jquery', 'i-bem__dom'], function($, BEMDOM) {
+
+$('.my-block').bem('my-block').on('my-event', function() { /* ... */ });
+
+});
+```
+
+Стало:
+
+```js
+modules.require(['jquery', 'my-block', 'events__observable'], function($, MyBlock, observable) {
+
+observable($('.my-block').bem(MyBlock))
+    .on('my-event', function() { /* ... */ });
+
+});
+```
+
+При этом в засимости нужно добавить `{ block : 'events', elem : 'observable', mods : { type : 'bem-dom' } }`.
+
 Задача: [#394](https://github.com/bem/bem-core/issues/394).
 
-### Имена protected-методов начинаются с `_`
+#### Имена protected-методов начинаются с `_`
 
 Переименованы protected-методы:
 
 - `emit()` в `_emit()`
 - `elem()` в `_elem()`
-- `elems()` в `_elems()`
 - `buildClass()` в `_buildClassName()`
 - `buildSelector()` в `_buildSelector()`
 
 Задачи: [#586](https://github.com/bem/bem-core/issues/586), [#1359](https://github.com/bem/bem-core/issues/1359).
 
-### Удалённые методы
+#### Удалённые методы
 
 Удалён метод `getMods()`.
+
+### Изменения в блоке `querystring`
+
+Элемент `querystring__uri` стал блоком `uri`. Блок `querystring` стал элементом `uri__querystring`.
+
+Задача: [#967](https://github.com/bem/bem-core/issues/967).
 
 ## 3.0.0
 
