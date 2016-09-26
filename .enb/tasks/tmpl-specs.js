@@ -70,32 +70,48 @@ function configure(helper, platform) {
                     }
                 }
             },
-            bemhtml6 : {
-                tech : 'enb-bemxjst/techs/bemhtml',
+            bemhtml6x : {
+                tech : 'enb-bemxjst-6x/techs/bemhtml',
                 options : {
                     sourceSuffixes : ['bemhtml', 'bemhtml.js'],
+                    exportName : 'BEMHTML',
                     requires : {
                         i18n : { globals : 'BEM.I18N' }
                     },
                     engineOptions : { elemJsInstances : true }
                 }
             },
-            bemhtml7 : {
-                tech : require.resolve('enb-bemxjst-7x/techs/bemhtml'),
+            bemhtml7x : {
+                tech : 'enb-bemxjst-7x/techs/bemhtml',
                 options : {
                     sourceSuffixes : ['bemhtml', 'bemhtml.js'],
                     requires : {
                         i18n : { globals : 'BEM.I18N' }
                     },
-                    exportName : 'BEMHTML',
                     engineOptions : {
                         elemJsInstances : true,
                         xhtml : true
+                    },
+                    exportName : 'BEMHTML'
+                }
+            },
+            bemhtml7xEscaped : {
+                tech : 'enb-bemxjst-7x/techs/bemhtml',
+                options : {
+                    sourceSuffixes : ['bemhtml', 'bemhtml.js'],
+                    engineOptions : {
+                        elemJsInstances : true,
+                        escapeContent : true,
+                        xhtml : true
+                    },
+                    exportName : 'BEMHTML',
+                    requires : {
+                        i18n : { globals : 'BEM.I18N' }
                     }
                 }
             },
-            bemhtml7Escaped : {
-                tech : 'enb-bemxjst-7x/techs/bemhtml',
+            bemhtml : {
+                tech : 'enb-bemxjst/techs/bemhtml',
                 options : {
                     sourceSuffixes : ['bemhtml', 'bemhtml.js'],
                     requires : {
