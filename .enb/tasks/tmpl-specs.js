@@ -70,25 +70,48 @@ function configure(helper, platform) {
                     }
                 }
             },
-            bemhtml : {
-                tech : 'enb-bemxjst/techs/bemhtml',
+            bemhtml6x : {
+                tech : 'enb-bemxjst-6x/techs/bemhtml',
                 options : {
                     sourceSuffixes : ['bemhtml', 'bemhtml.js'],
+                    exportName : 'BEMHTML',
                     requires : {
                         i18n : { globals : 'BEM.I18N' }
                     }
                 }
             },
-            bemhtmlEscaped : {
-                tech : 'enb-bemxjst/techs/bemhtml',
+            bemhtml7x : {
+                tech : 'enb-bemxjst-7x/techs/bemhtml',
                 options : {
                     sourceSuffixes : ['bemhtml', 'bemhtml.js'],
-                    engineOptions : { escapeContent : true },
+                    engineOptions : { xhtml : true },
+                    exportName : 'BEMHTML',
                     requires : {
                         i18n : { globals : 'BEM.I18N' }
                     }
                 }
-            }
+            },
+            bemhtml7xEscaped : {
+                tech : 'enb-bemxjst-7x/techs/bemhtml',
+                options : {
+                    sourceSuffixes : ['bemhtml', 'bemhtml.js'],
+                    engineOptions : { escapeContent : true, xhtml : true },
+                    exportName : 'BEMHTML',
+                    requires : {
+                        i18n : { globals : 'BEM.I18N' }
+                    }
+                }
+            },
+            bemhtml : {
+                tech : 'enb-bemxjst/techs/bemhtml',
+                options : {
+                    sourceSuffixes : ['bemhtml', 'bemhtml.js'],
+                    engineOptions : { xhtml : true },
+                    requires : {
+                        i18n : { globals : 'BEM.I18N' }
+                    }
+                }
+            },
         }
     });
 }
