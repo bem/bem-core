@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.1.0
+
+### Bug fixes
+
+- An issue in `getMods()` method of `i-bem` was fixed ([#1379](https://github.com/bem/bem-core/issues/1379)).
+
+### Notable changes
+
+- Templates: support for escaped mode was introduced ([#1406](https://github.com/bem/bem-core/issues/1406)).
+
+### Other changes
+
+- Minor documentation updates.
+
 ## 3.0.1
 
 ### Bug fixes
