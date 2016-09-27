@@ -22,7 +22,7 @@
     "borschik": "^1.5.3",
     "bower": "^1.7.9",
     "chai": "^3.2.0",
-    "chai-as-promised": "^5.1.0",
+    "chai-as-promised": "^6.0.0",
     "enb": "^1.2.0",
     "enb-bem-docs": "0.11.0",
     "enb-bem-examples": "^1.0.1",
