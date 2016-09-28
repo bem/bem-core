@@ -12,7 +12,7 @@ Before:
 
 ```js
 modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
-    // ...
+    /* ... */
 });
 ```
 
@@ -20,7 +20,7 @@ After:
 
 ```js
 modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
-    // ...
+    /* ... */
 });
 ```
 
@@ -39,7 +39,7 @@ Before:
 ```js
 modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
 
-provide(BEMDOM.decl(this.name, { /* ...*/ }));
+provide(BEMDOM.decl(this.name, { /* ... */ }));
 
 });
 ```
@@ -49,7 +49,7 @@ After:
 ```js
 modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
 
-provide(bemDom.declBlock(this.name, { /* ...*/ }));
+provide(bemDom.declBlock(this.name, { /* ... */ }));
 
 });
 ```
@@ -63,7 +63,7 @@ Before:
 ```js
 modules.define('my-dom-block', function(provide, MyDomBlock) {
 
-provide(MyDomBlock.decl({ modName : 'my-mod', modVal : 'my-val' }, { /* ...*/ }));
+provide(MyDomBlock.decl({ modName : 'my-mod', modVal : 'my-val' }, { /* ... */ }));
 
 });
 ```
@@ -73,7 +73,7 @@ After:
 ```js
 modules.define('my-dom-block', function(provide, MyDomBlock) {
 
-provide(MyDomBlock.declMod({ modName : 'my-mod', modVal : 'myVal' }, { /* ...*/ }));
+provide(MyDomBlock.declMod({ modName : 'my-mod', modVal : 'myVal' }, { /* ... */ }));
 
 });
 ```
@@ -85,7 +85,7 @@ Before:
 ```js
 modules.define('my-dom-block', function(provide, MyDomBlock) {
 
-provide(MyDomBlock.decl({ modName : 'my-mod', modVal : 'true' }, { /* ...*/ }));
+provide(MyDomBlock.decl({ modName : 'my-mod', modVal : 'true' }, { /* ... */ }));
 
 });
 ```
@@ -95,7 +95,7 @@ After:
 ```js
 modules.define('my-dom-block', function(provide, MyDomBlock) {
 
-provide(MyDomBlock.declMod({ modName : 'my-mod' }, { /* ...*/ }));
+provide(MyDomBlock.declMod({ modName : 'my-mod' }, { /* ... */ }));
 
 });
 ```
@@ -109,7 +109,7 @@ Before:
 ```js
 modules.define('my-dom-block', function(provide, MyDomBlock) {
 
-provide(MyDomBlock.decl({ modName : 'my-mod' }, { /* ...*/ }));
+provide(MyDomBlock.decl({ modName : 'my-mod' }, { /* ... */ }));
 
 });
 ```
@@ -119,7 +119,7 @@ After:
 ```js
 modules.define('my-dom-block', function(provide, MyDomBlock) {
 
-provide(MyDomBlock.declMod({ modName : 'my-mod', modVal : '*' }, { /* ...*/ }));
+provide(MyDomBlock.declMod({ modName : 'my-mod', modVal : '*' }, { /* ... */ }));
 
 });
 ```
@@ -135,7 +135,7 @@ Before:
 ```js
 modules.define('my-dom-block', function(provide, MyDomBlock) {
 
-provide(MyDomBlock.decl({ /* ...*/ }));
+provide(MyDomBlock.decl({ /* ... */ }));
 
 });
 ```
@@ -145,7 +145,7 @@ After:
 ```js
 modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom, MyDomBlock) {
 
-provide(bemDom.declBlock(MyDomBlock, { /* ...*/ }));
+provide(bemDom.declBlock(MyDomBlock, { /* ... */ }));
 
 });
 ```
@@ -157,7 +157,7 @@ Before:
 ```js
 modules.define('my-dom-block', ['i-bem__dom', 'my-base-dom-block'], function(provide, BEMDOM, MyBaseDomBlock) {
 
-provide(BEMDOM.decl({ block : this.name, baseBlock : MyBaseDomBlock }, { /* ...*/ }));
+provide(BEMDOM.decl({ block : this.name, baseBlock : MyBaseDomBlock }, { /* ... */ }));
 
 });
 ```
@@ -167,7 +167,7 @@ After:
 ```js
 modules.define('my-dom-block', ['i-bem-dom', 'my-base-dom-block'], function(provide, bemDom, MyBaseDomBlock) {
 
-provide(bemDom.declBlock(this.name, MyBaseDomBlock, { /* ...*/ }));
+provide(bemDom.declBlock(this.name, MyBaseDomBlock, { /* ... */ }));
 
 });
 ```
@@ -181,7 +181,7 @@ Before:
 ```js
 modules.define('my-mix-block', ['i-bem__dom'], function(provide, BEMDOM) {
 
-provide(BEMDOM.declMix(this.name, { /* ...*/ }));
+provide(BEMDOM.declMix(this.name, { /* ... */ }));
 
 });
 ```
@@ -191,7 +191,7 @@ After:
 ```js
 modules.define('my-mixin-block', ['i-bem-dom'], function(provide, bemDom) {
 
-provide(bemDom.declMixin({ /* ...*/ }));
+provide(bemDom.declMixin({ /* ... */ }));
 
 });
 ```
@@ -203,7 +203,7 @@ Before:
 ```js
 modules.define('my-dom-block', ['i-bem__dom', 'my-mix-1', 'my-mix-2'], function(provide, BEMDOM) {
 
-provide(BEMDOM.decl({ block : this.name, baseMix : ['my-mix-1', 'my-mix-2']}, { /* ...*/ }));
+provide(BEMDOM.decl({ block : this.name, baseMix : ['my-mix-1', 'my-mix-2']}, { /* ... */ }));
 
 });
 ```
@@ -213,7 +213,7 @@ After:
 ```js
 modules.define('my-dom-block', ['i-bem-dom', 'my-mixin-1', 'my-mixin-2'], function(provide, bemDom, MyMixin1, MyMixin2) {
 
-provide(bemDom.declBlock(this.name, [MyMixin1, MyMixin2], { /* ...*/ }));
+provide(bemDom.declBlock(this.name, [MyMixin1, MyMixin2], { /* ... */ }));
 
 });
 ```
@@ -232,13 +232,13 @@ modules.define('my-dom-block', function(provide, MyDomBlock) {
 MyDomBlock.decl({
     onSetMod : {
         'my-mod' : {
-            '' : function() { /* ...*/ } // declaration for deleting the _my-mod_my-val modifier
+            '' : function() { /* ... */ } // declaration for deleting the _my-mod_my-val modifier
         }
     }
 
 });
 
-provide(MyDomBlock.decl({ modName : 'my-mod', modVal : 'my-val' }, { /* ...*/ }));
+provide(MyDomBlock.decl({ modName : 'my-mod', modVal : 'my-val' }, { /* ... */ }));
 
 });
 ```
@@ -324,7 +324,7 @@ Before:
 ```js
 modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
 
-provide(BEMDOM.decl(this.name, { /* ...*/ }, {
+provide(BEMDOM.decl(this.name, { /* ... */ }, {
     live : true
 }));
 
@@ -336,7 +336,7 @@ After:
 ```js
 modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
 
-provide(bemDom.declBlock(this.name, { /* ...*/ }, {
+provide(bemDom.declBlock(this.name, { /* ... */ }, {
     lazyInit : true
 }));
 
@@ -348,9 +348,9 @@ Before:
 ```js
 modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
 
-provide(BEMDOM.decl(this.name, { /* ...*/ }, {
+provide(BEMDOM.decl(this.name, { /* ... */ }, {
     live : function() {
-        /* ...*/
+        /* ... */
     }
 }));
 
@@ -362,11 +362,11 @@ After:
 ```js
 modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
 
-provide(bemDom.declBlock(this.name, { /* ...*/ }, {
+provide(bemDom.declBlock(this.name, { /* ... */ }, {
     lazyInit : true,
 
     onInit : function() {
-        /* ...*/
+        /* ... */
     }
 }));
 
@@ -378,9 +378,9 @@ Before:
 ```js
 modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
 
-provide(BEMDOM.decl(this.name, { /* ...*/ }, {
+provide(BEMDOM.decl(this.name, { /* ... */ }, {
     live : function() {
-        /* ...*/
+        /* ... */
         return false;
     }
 }));
@@ -393,9 +393,9 @@ After:
 ```js
 modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
 
-provide(bemDom.declBlock(this.name, { /* ...*/ }, {
+provide(bemDom.declBlock(this.name, { /* ... */ }, {
     onInit : function() {
-        /* ...*/
+        /* ... */
     }
 }));
 
@@ -432,7 +432,7 @@ Before:
 ```js
 modules.define('my-dom-block__my-elem', ['i-bem__dom'], function(provide, BEMDOM) {
 
-provide(BEMDOM.decl({ block : 'my-dom-block', elem : 'my-elem' }, { /* ...*/ }));
+provide(BEMDOM.decl({ block : 'my-dom-block', elem : 'my-elem' }, { /* ... */ }));
 
 });
 ```
@@ -442,7 +442,7 @@ After:
 ```js
 modules.define('my-dom-block__my-elem', ['i-bem-dom'], function(provide, bemDom) {
 
-provide(bemDom.declElem('my-dom-block', 'my-elem', { /* ...*/ }));
+provide(bemDom.declElem('my-dom-block', 'my-elem', { /* ... */ }));
 
 });
 ```
@@ -706,7 +706,7 @@ Note that unsubscribing from events is now automatic when the instance is destro
 Before:
 
 ```js
-BEMDOM.decl('my-block', { /* ...*/ }, {
+BEMDOM.decl('my-block', { /* ... */ }, {
     live : function() {
         this.liveBindTo('click', this.prototype._onClick);
     }
@@ -716,7 +716,7 @@ BEMDOM.decl('my-block', { /* ...*/ }, {
 After:
 
 ```js
-bemDom.declBlock('my-block', { /* ...*/ }, {
+bemDom.declBlock('my-block', { /* ... */ }, {
     onInit : function() {
         this._domEvents().on('click', this.prototype._onClick);
     }
@@ -726,7 +726,7 @@ bemDom.declBlock('my-block', { /* ...*/ }, {
 Before:
 
 ```js
-BEMDOM.decl('my-block', { /* ...*/ }, {
+BEMDOM.decl('my-block', { /* ... */ }, {
     live : function() {
         this.liveBindTo('my-elem', 'click', this.prototype._onMyElemClick);
     }
@@ -736,7 +736,7 @@ BEMDOM.decl('my-block', { /* ...*/ }, {
 After:
 
 ```js
-bemDom.declBlock('my-block', { /* ...*/ }, {
+bemDom.declBlock('my-block', { /* ... */ }, {
     onInit : function() {
         this._domEvents('my-elem').on('click', this.prototype._onMyElemClick);
     }
@@ -748,7 +748,7 @@ bemDom.declBlock('my-block', { /* ...*/ }, {
 Before:
 
 ```js
-BEMDOM.decl('my-block', { /* ...*/ }, {
+BEMDOM.decl('my-block', { /* ... */ }, {
     live : function() {
         this.liveInitOnBlockInsideEvent('my-event', 'my-block-2', this.prototype._onMyBlock2MyEvent);
     }
@@ -758,7 +758,7 @@ BEMDOM.decl('my-block', { /* ...*/ }, {
 After:
 
 ```js
-bemDom.declBlock('my-block', { /* ...*/ }, {
+bemDom.declBlock('my-block', { /* ... */ }, {
     onInit : function() {
         this._events(MyBlock2).on('my-event', this.prototype._onMyBlock2MyEvent);
     }
@@ -772,7 +772,7 @@ Before:
 ```js
 modules.define('my-block', ['i-bem__dom', 'my-block-2'], function(provide, BEMDOM) {
 
-provide(BEMDOM.decl(this.name, { /* ...*/ }, {
+provide(BEMDOM.decl(this.name, { /* ... */ }, {
     live : function() {
         this.liveInitOnBlockInsideEvent('my-event', 'my-block-2');
     }
@@ -786,7 +786,7 @@ After:
 ```js
 modules.define('my-block', ['i-bem-dom', 'my-block-2', 'functions'], function(provide, bemDom, MyBlock2, functions) {
 
-provide(bemDom.declBlock(this.name, { /* ...*/ }, {
+provide(bemDom.declBlock(this.name, { /* ... */ }, {
     onInit : function() {
         this._events(MyBlock2).on('my-event', functions.noop);
     }
@@ -862,7 +862,7 @@ Before:
 ```js
 modules.require(['jquery', 'i-bem__dom'], function($, BEMDOM) {
 
-$('.my-block').bem('my-block').on('my-event', function() { /* ...*/ });
+$('.my-block').bem('my-block').on('my-event', function() { /* ... */ });
 
 });
 ```
@@ -873,7 +873,7 @@ After:
 modules.require(['jquery', 'my-block', 'events__observable'], function($, MyBlock, observable) {
 
 observable($('.my-block').bem(MyBlock))
-    .on('my-event', function() { /* ...*/ });
+    .on('my-event', function() { /* ... */ });
 
 });
 ```
@@ -958,9 +958,8 @@ Before:
 
 ```js
 // block code
-$.throttle(...
+$.throttle()
 // block code
-)
 ```
 
 After:
@@ -968,9 +967,8 @@ After:
 ```js
 module.define('my-module', ['functions__throttle'], function(provide, throttle) {
 // module code
-throttle(...
+throttle()
 // module code
-)
 });
 ```
 
@@ -983,7 +981,7 @@ Instead of a declaration via BEM.DOM.decl, you need to extend the `i-bem__dom` m
 Before:
 
 ```js
-BEM.DOM.decl('block', ...);
+BEM.DOM.decl('block', /* ... */);
 ```
 
 After:
@@ -991,7 +989,7 @@ After:
 ```js
 modules.define('i-bem__dom', function(provide, BEMDOM) {
 
-BEMDOM.decl('block', ...);
+BEMDOM.decl('block', /* ... */);
 
 provide(BEMDOM);
 
@@ -1081,7 +1079,7 @@ Before:
 BEM.DOM.decl('block', {
     method : function() {
         this.afterCurrentEvent(function() {
-            ...
+            /* ... */
         })
     }
 });
@@ -1095,7 +1093,7 @@ modules.define('i-bem__dom', function(provide, BEMDOM) {
 BEMDOM.decl('block', {
     method : function() {
         this.nextTick(function() {
-                ...
+                /* ... */
             });
         }
     });
@@ -1131,7 +1129,7 @@ Before:
 
 ```js
 onClick : function(e) {
-    e.data.domElem.attr(...)
+    e.data.domElem.attr(/* ... */);
 }
 ```
 
@@ -1139,7 +1137,7 @@ After:
 
 ```js
 onClick : function(e) {
-    $(e.currentTarget).attr(...)
+    $(e.currentTarget).attr(/* ... */);
 }
 ```
 
@@ -1152,7 +1150,7 @@ Before:
 ```js
 BEM.DOM.decl('block', {
     method : function() {
-        BEM.channel('channel-name').on(....)
+        BEM.channel('channel-name').on(/* ... */);
     }
 });
 ```
@@ -1164,7 +1162,7 @@ modules.define('i-bem__dom', ['events__channels'], function(provide, channels, B
 
 BEMDOM.decl('block', {
     method : function() {
-        channels('channel-name').on(....)
+        channels('channel-name').on(/* ... */);
 
         }
     });
@@ -1180,7 +1178,7 @@ Before:
 ```js
 BEM.DOM.decl('block', {
     method : function() {
-        BEM.channel('sys').on('tick', ...)
+        BEM.channel('sys').on('tick', /* ... */);
     }
 });
 ```
@@ -1192,7 +1190,7 @@ modules.define('i-bem__dom', ['tick'], function(provide, tick, BEMDOM) {
 
 BEMDOM.decl('block', {
     method : function() {
-        tick.on('tick', ...)
+        tick.on('tick', /* ... */);
 
         }
     });
@@ -1204,8 +1202,7 @@ Before:
 ```js
 BEM.DOM.decl('block', {
     method : function() {
-        BEM.channel('sys').on('wakeup', ...)
-
+        BEM.channel('sys').on('wakeup', /* ... */);
     }
 });
 ```
@@ -1217,7 +1214,7 @@ modules.define('i-bem__dom', ['idle'], function(provide, idle, BEMDOM) {
 
 BEMDOM.decl('block', {
     method : function() {
-        idle.on('wakeup', ...)
+        idle.on('wakeup', /* ... */);
 
         }
     });
@@ -1231,7 +1228,7 @@ Before:
 
 ```js
 BEM.decl('i-router', {
-    route : function() { ... }
+    route : function() { /* ... */ }
 });
 ```
 
@@ -1241,7 +1238,7 @@ After:
 modules.define('router', function(provide) {
 
 provide({
-    route : function() { ... }
+    route : function() { /* ... */ }
 });
 
 });
@@ -1252,7 +1249,7 @@ If for some reason you need BEM blocks (not BEM.DOM blocks), you can declare the
 Before:
 
 ```js
-BEM.decl('my-block', { ... });
+BEM.decl('my-block', { /* ... */ });
 ```
 
 After:
@@ -1260,7 +1257,7 @@ After:
 ```js
 modules.define('i-bem', function(provide, BEM) {
 
-BEM.decl('my-block', { ... });
+BEM.decl('my-block', { /* ... */ });
 
 provide(BEM);
 

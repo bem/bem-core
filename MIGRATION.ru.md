@@ -12,7 +12,7 @@
 
 ```js
 modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
-    // ...
+    /* ... */
 });
 ```
 
@@ -20,7 +20,7 @@ modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
 
 ```js
 modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
-    // ...
+    /* ... */
 });
 ```
 
@@ -258,6 +258,7 @@ provide(MyDomBlock.declMod({ modName : 'my-mod', modVal : 'my-val' }, {
         }
     }
 }));
+
 });
 ```
 
@@ -529,7 +530,7 @@ this.findElem('my-elem');
 this.findChildElems('my-elem').concat(this.findMixedElems('my-elem'));
 ```
 
-Но рекомендется обратить внимание, действительно ли необходимы оба поиска:
+Но рекомендуется обратить внимание, действительно ли необходимы оба поиска:
 в большинстве случаев достаточно использовать или `this.findChildElems('my-elem')` или `this.findMixedElems('my-elem')`.
 
 ##### Проверка вложенности
@@ -889,7 +890,7 @@ observable($('.my-block').bem(MyBlock))
 });
 ```
 
-При этом в засимости нужно добавить `{ block : 'events', elem : 'observable', mods : { type : 'bem-dom' } }`.
+При этом в зависимости нужно добавить `{ block : 'events', elem : 'observable', mods : { type : 'bem-dom' } }`.
 
 Задача: [#394](https://github.com/bem/bem-core/issues/394).
 
@@ -929,7 +930,7 @@ observable($('.my-block').bem(MyBlock))
 ### Модули
 
 Весь код теперь пишется в терминах модульной системы https://github.com/ymaps/modules.
-Все зависимости должны явно указываться в коде, обращения к глобальным объектом необходимо минимизировать, а, по возможности, и полностью исключить.
+Все зависимости должны явно указываться в коде, обращения к глобальным объектам необходимо минимизировать, а, по возможности, и полностью исключить.
 
 Пример:
 
@@ -963,7 +964,7 @@ jQuery теперь используется только для операци�
 
 Также, все jQuery-плагины, не связанные непосредственно с jQuery
 (`$.observable`, `$.inherit`, `$.cookie`, `$.identify`, `$.throttle`) стали модулями:
- * модуль `events` вместо `$.observable` для работы с событиями, предоставляющий "классы" `EventsEmitter` и `Event`)
+ * модуль `events` вместо `$.observable` для работы с событиями, предоставляющий "классы" `EventsEmitter` и `Event`
  * модуль `inherit` вместо `$.inherit` для работы с "классами" и наследованием
  * модуль `cookie` вместо `$.cookie`
  * модуль `identify` вместо `$.identify`
@@ -973,18 +974,17 @@ jQuery теперь используется только для операци�
 
 ```js
 // код блока
-$.throttle(...
+$.throttle()
 // код блока
-)
+
 ```
 
 Стало:
 ```js
 module.define('my-module', ['functions__throttle'], function(provide, throttle) {
 // код модуля
-throttle(...
+throttle()
 // код модуля
-)
 });
 ```
 
@@ -996,13 +996,13 @@ throttle(...
 
 Было:
 ```js
-BEM.DOM.decl('block', ...);
+BEM.DOM.decl('block', /* ... */);
 ```
 Стало:
 ```js
 modules.define('i-bem__dom', function(provide, BEMDOM) {
 
-BEMDOM.decl('block', ...);
+BEMDOM.decl('block', /* ... */);
 
 provide(BEMDOM);
 
@@ -1094,8 +1094,8 @@ obj.on('event', this._method, this);
 BEM.DOM.decl('block', {
     method : function() {
         this.afterCurrentEvent(function() {
-            ...
-        })
+            /* ... */
+        });
     }
 });
 ```
@@ -1108,7 +1108,7 @@ modules.define('i-bem__dom', function(provide, BEMDOM) {
 BEMDOM.decl('block', {
     method : function() {
         this.nextTick(function() {
-                ...
+                /* ... */
             });
         }
     });
@@ -1145,7 +1145,7 @@ DOM-элемент, к которому был подвешен обработч
 
 ```js
 onClick : function(e) {
-    e.data.domElem.attr(...)
+    e.data.domElem.attr(/* ... */);
 }
 ```
 
@@ -1153,7 +1153,7 @@ onClick : function(e) {
 
 ```js
 onClick : function(e) {
-    $(e.currentTarget).attr(...)
+    $(e.currentTarget).attr(/* ... */);
 }
 ```
 
@@ -1166,7 +1166,7 @@ onClick : function(e) {
 ```js
 BEM.DOM.decl('block', {
     method : function() {
-        BEM.channel('channel-name').on(....)
+        BEM.channel('channel-name').on(/* ... */);
     }
 });
 ```
@@ -1178,7 +1178,7 @@ modules.define('i-bem__dom', ['events__channels'], function(provide, channels, B
 
 BEMDOM.decl('block', {
     method : function() {
-        channels('channel-name').on(....)
+        channels('channel-name').on(/* ... */);
 
         }
     });
@@ -1194,7 +1194,7 @@ BEMDOM.decl('block', {
 ```js
 BEM.DOM.decl('block', {
     method : function() {
-        BEM.channel('sys').on('tick', ...)
+        BEM.channel('sys').on('tick', /* ... */);
     }
 });
 ```
@@ -1206,10 +1206,11 @@ modules.define('i-bem__dom', ['tick'], function(provide, tick, BEMDOM) {
 
 BEMDOM.decl('block', {
     method : function() {
-        tick.on('tick', ...)
+        tick.on('tick', /* ... */);
 
         }
     });
+
 });
 ```
 
@@ -1218,8 +1219,7 @@ BEMDOM.decl('block', {
 ```js
 BEM.DOM.decl('block', {
     method : function() {
-        BEM.channel('sys').on('wakeup', ...)
-
+        BEM.channel('sys').on('wakeup', /* ... */);
     }
 });
 ```
@@ -1231,7 +1231,7 @@ modules.define('i-bem__dom', ['idle'], function(provide, idle, BEMDOM) {
 
 BEMDOM.decl('block', {
     method : function() {
-        idle.on('wakeup', ...)
+        idle.on('wakeup', /* ... */);
 
         }
     });
@@ -1247,7 +1247,7 @@ BEMDOM.decl('block', {
 
 ```js
 BEM.decl('i-router', {
-    route : function() { ... }
+    route : function() { /* ... */ }
 });
 ```
 
@@ -1257,7 +1257,7 @@ BEM.decl('i-router', {
 modules.define('router', function(provide) {
 
 provide({
-    route : function() { ... }
+    route : function() { /* ... */ }
 });
 
 });
@@ -1268,7 +1268,7 @@ provide({
 Было:
 
 ```js
-BEM.decl('my-block', { ... });
+BEM.decl('my-block', { /* ... */ });
 ```
 
 Стало:
@@ -1276,7 +1276,7 @@ BEM.decl('my-block', { ... });
 ```js
 modules.define('i-bem', function(provide, BEM) {
 
-BEM.decl('my-block', { ... });
+BEM.decl('my-block', { /* ... */ });
 
 provide(BEM);
 
