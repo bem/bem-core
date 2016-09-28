@@ -12,7 +12,7 @@
 
 ```js
 modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
-    // ...
+    /* ... */
 });
 ```
 
@@ -20,7 +20,7 @@ modules.define('my-dom-block', ['i-bem__dom'], function(provide, BEMDOM) {
 
 ```js
 modules.define('my-dom-block', ['i-bem-dom'], function(provide, bemDom) {
-    // ...
+    /* ... */
 });
 ```
 
@@ -934,7 +934,7 @@ observable($('.my-block').bem(MyBlock))
 
 Пример:
 
-```javascript
+```js
 modules.define(
     'my-module', // имя модуля
     ['module-from-library', 'my-another-module'], // зависимости модуля
@@ -976,10 +976,10 @@ jQuery теперь используется только для операци�
 // код блока
 $.throttle()
 // код блока
+
 ```
 
 Стало:
-
 ```js
 module.define('my-module', ['functions__throttle'], function(provide, throttle) {
 // код модуля
@@ -995,16 +995,14 @@ throttle()
 Вместо декларации через BEM.DOM.decl необходимо доопределять модуль `i-bem__dom`.
 
 Было:
-
 ```js
-BEM.DOM.decl('block', ...);
+BEM.DOM.decl('block', /* ... */);
 ```
 Стало:
-
 ```js
 modules.define('i-bem__dom', function(provide, BEMDOM) {
 
-BEMDOM.decl('block', ...);
+BEMDOM.decl('block', /* ... */);
 
 provide(BEMDOM);
 
@@ -1019,8 +1017,10 @@ provide(BEMDOM);
 
 ```js
 onSetMod : {
-    js : function() {
-        // код конструктора
+  js : function() {
+      // код конструктора
+    }
+}
 ```
 
 Стало:
@@ -1030,6 +1030,9 @@ onSetMod : {
     'js' : {
         'inited' : function() {
             // код конструктора
+        }
+    }
+}
 ```
 
 #### Деструктор
@@ -1043,7 +1046,9 @@ onSetMod : {
 destruct : function() {
     this.__base.apply(this, arguments);
     // код деструктора
+}
 ```
+
 Стало:
 
 ```js
@@ -1051,6 +1056,9 @@ onSetMod : {
     js : {
         '' : function() {
             // код деструктора
+        }
+    }
+}
 ```
 
 #### Метод `changeThis`
@@ -1061,7 +1069,7 @@ onSetMod : {
 
 ```js
 // код блока
-obj.on('event', this.changeThis(this._method);
+obj.on('event', this.changeThis(this._method));
 // код блока
 ```
 
@@ -1084,7 +1092,11 @@ obj.on('event', this._method, this);
 ```js
 BEM.DOM.decl('block', {
     method : function() {
-        this.afterCurrentEvent(function() { ...
+        this.afterCurrentEvent(function() {
+            /* ... */
+        });
+    }
+});
 ```
 
 Стало:
@@ -1094,7 +1106,12 @@ modules.define('i-bem__dom', function(provide, BEMDOM) {
 
 BEMDOM.decl('block', {
     method : function() {
-        this.nextTick(function() { ...
+        this.nextTick(function() {
+                /* ... */
+            });
+        }
+    });
+});
 ```
 
 #### Метод `findElem`
@@ -1127,14 +1144,16 @@ DOM-элемент, к которому был подвешен обработч
 
 ```js
 onClick : function(e) {
-    e.data.domElem.attr(...
+    e.data.domElem.attr(/* ... */);
+}
 ```
 
 Стало:
 
 ```js
 onClick : function(e) {
-    $(e.currentTarget).attr(...
+    $(e.currentTarget).attr(/* ... */);
+}
 ```
 
 #### Каналы (channels)
@@ -1146,7 +1165,9 @@ onClick : function(e) {
 ```js
 BEM.DOM.decl('block', {
     method : function() {
-        BEM.channel('channel-name').on(....
+        BEM.channel('channel-name').on(/* ... */);
+    }
+});
 ```
 
 Стало:
@@ -1156,7 +1177,11 @@ modules.define('i-bem__dom', ['events__channels'], function(provide, channels, B
 
 BEMDOM.decl('block', {
     method : function() {
-        channels('channel-name').on(....
+        channels('channel-name').on(/* ... */);
+
+        }
+    });
+});
 ```
 
 #### Блок `i-system` и канал `sys` событий `tick`, `idle`, `wakeup`
@@ -1181,8 +1206,9 @@ modules.define('i-bem__dom', ['tick'], function(provide, tick, BEMDOM) {
 BEMDOM.decl('block', {
     method : function() {
         tick.on('tick', /* ... */);
-    }
-});
+
+        }
+    });
 
 });
 ```
@@ -1192,7 +1218,9 @@ BEMDOM.decl('block', {
 ```js
 BEM.DOM.decl('block', {
     method : function() {
-        BEM.channel('sys').on('wakeup', ...
+        BEM.channel('sys').on('wakeup', /* ... */);
+    }
+});
 ```
 
 Стало:
@@ -1202,10 +1230,15 @@ modules.define('i-bem__dom', ['idle'], function(provide, idle, BEMDOM) {
 
 BEMDOM.decl('block', {
     method : function() {
-        idle.on('wakeup', ...
+        idle.on('wakeup', /* ... */);
+
+        }
+    });
+});
 ```
 
 ### BEM-блоки
+
 Те BEM-блоки, которые использовались как хранилище для каких-то методов, при этом никак не использующие BEM-методологию, теперь
 могут быть написаны как модули.
 
@@ -1213,7 +1246,7 @@ BEMDOM.decl('block', {
 
 ```js
 BEM.decl('i-router', {
-    route : function() { ... }
+    route : function() { /* ... */ }
 });
 ```
 
@@ -1223,7 +1256,7 @@ BEM.decl('i-router', {
 modules.define('router', function(provide) {
 
 provide({
-    route : function() { ... }
+    route : function() { /* ... */ }
 });
 
 });
@@ -1234,7 +1267,7 @@ provide({
 Было:
 
 ```js
-BEM.decl('my-block', { ... });
+BEM.decl('my-block', { /* ... */ });
 ```
 
 Стало:
@@ -1242,7 +1275,7 @@ BEM.decl('my-block', { ... });
 ```js
 modules.define('i-bem', function(provide, BEM) {
 
-BEM.decl('my-block', { ... });
+BEM.decl('my-block', { /* ... */ });
 
 provide(BEM);
 
@@ -1250,6 +1283,7 @@ provide(BEM);
 ```
 
 #### Рефакторинг на примере блока `b-spin`
+
 Было:
 
 ```js
@@ -1311,6 +1345,7 @@ BEM.DOM.decl('b-spin', {
 
 });
 ```
+
 Стало:
 
 ```js
