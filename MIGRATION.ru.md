@@ -1069,9 +1069,8 @@ onSetMod : {
 
 ```js
 // код блока
-obj.on('event', this.changeThis(this._method);
+obj.on('event', this.changeThis(this._method));
 // код блока
-)
 ```
 
 Стало:

@@ -1056,9 +1056,8 @@ Before:
 
 ```js
 // block code
-obj.on('event', this.changeThis(this._method);
+obj.on('event', this.changeThis(this._method));
 // block code
-)
 ```
 
 After:
