@@ -445,8 +445,8 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      * If the condition parameter is not passed: modVal1 is set if modVal2 was set, or vice versa.
      * @param {Object} [elem] Nested element
      * @param {String} modName Modifier name
-     * @param {String} [modVal1=true] First modifier value, optional for boolean modifiers
-     * @param {String} [modVal2] Second modifier value
+     * @param {String|Boolean} [modVal1=true] First modifier value, optional for boolean modifiers
+     * @param {String|Boolean} [modVal2] Second modifier value
      * @param {Boolean} [condition] Condition
      * @returns {BEM} this
      */

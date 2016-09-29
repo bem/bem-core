@@ -290,6 +290,18 @@ describe('i-bem', function() {
                     .hasMod('mod1')
                         .should.be.false;
             });
+
+            it('should switch mod\'s value if value is a number', function() {
+                block
+                    .toggleMod('mod1', 1)
+                    .hasMod('mod1', '1')
+                        .should.be.true;
+
+                block
+                    .toggleMod('mod1', 1)
+                    .hasMod('mod1')
+                        .should.be.false;
+            });
         });
     });
 
