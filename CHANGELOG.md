@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.0.0
+
+### Breaking changes
+
+- Changes in the `i-bem` block. See [MIGRATION.en.md](MIGRATION.en.md#changes-in-the-i-bem-block).
+- Changes in the `querystring`. See [MIGRATION.en.md](MIGRATION.ru.md#changes-in-the-querystring-block).
+- The optional parameter `onlyGet` was removed from the `identify` module ([#1028](https://github.com/bem/bem-core/issues/1028)).
+- All static methods were removed from the `events` module ([#1024](https://github.com/bem/bem-core/issues/1024)).
+- The `result` field in `Event` class of `events` module was removed  ([#1023](https://github.com/bem/bem-core/issues/1023)).
+- The `css` element of the `page` block does not support auto insertion of conditional comments for IE ([#379](https://github.com/bem/bem-core/issues/379)).
+
 ## 3.1.0
 
 ### Bug fixes

@@ -903,6 +903,47 @@ The `querystring__uri` element is now the `uri` block. The `querystring` block i
 
 Issue: [#967](https://github.com/bem/bem-core/issues/967).
 
+### Changes in the `page` block
+
+The `page__css` element does not support `ie` field. Use the `page__conditional-comment` element instead.
+
+Before:
+
+```
+{
+    block : 'page',
+    head : [
+        { elem : 'css', url : 'my-css.css', ie : false },
+        { elem : 'css', url : 'my-css', ie : true }
+    ],
+    content : 'Page content'
+}
+```
+
+After:
+
+```
+{
+    block : 'page',
+    head : [
+        {
+            elem : 'conditional-comment',
+            condition : '! IE',
+            content : { elem : 'css', url : 'my-css.css' }
+        },
+        {
+            elem : 'conditional-comment',
+            condition : '> IE 8',
+            content : { elem : 'css', url : 'my-css.ie.css' }
+        }
+        // and so on for needed IE versions
+    ],
+    content : 'Page content'
+}
+```
+
+Issue: [#379](https://github.com/bem/bem-core/issues/379).
+
 ## 3.0.0
 
 To migrate to version 3.0.0, review the [history of changes](https://en.bem.info/libs/bem-core/v3/changelog/#300).
