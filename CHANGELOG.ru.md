@@ -4,8 +4,8 @@
 
 ### Изменения, ломающие обратную совместимость
 
-- Изменения в блоке `i-bem`. Подробнее в [MIGRATION.ru.md](MIGRATION.ru.md#изменения-в-блоке-i-bem).
-- Изменения в блоке `querystring`. Подробнее в [MIGRATION.ru.md](MIGRATION.ru.md#изменения-в-блоке-querystring).
+- Изменения в блоке `i-bem`. Подробнее в [MIGRATION.ru.md](MIGRATION.ru.md#Изменения-в-блоке-i-bem).
+- Изменения в блоке `querystring`. Подробнее в [MIGRATION.ru.md](MIGRATION.ru.md#Изменения-в-блоке-querystring).
 - Из модуля `identify` удален опциональный параметр `onlyGet` ([#1028](https://github.com/bem/bem-core/issues/1028)).
 - Из модуля `events` удалены все статические методы ([#1024](https://github.com/bem/bem-core/issues/1024)).
 - В классе `Event` модуля `events` удалено поле `result` ([#1023](https://github.com/bem/bem-core/issues/1023)).
