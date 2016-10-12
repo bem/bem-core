@@ -890,6 +890,7 @@ Renamed the protected methods:
 - `elem()` to `_elem()`
 - `buildClass()` to `_buildClassName()`
 - `buildSelector()` to `_buildSelector()`
+- `getDefaultParams()` to `_getDefaultParams()`
 
 Issues: [#586](https://github.com/bem/bem-core/issues/586) and [#1359](https://github.com/bem/bem-core/issues/1359).
 

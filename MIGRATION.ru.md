@@ -902,6 +902,7 @@ observable($('.my-block').bem(MyBlock))
 - `elem()` в `_elem()`
 - `buildClass()` в `_buildClassName()`
 - `buildSelector()` в `_buildSelector()`
+- `getDefaultParams()` в `_getDefaultParams()`
 
 Задачи: [#586](https://github.com/bem/bem-core/issues/586), [#1359](https://github.com/bem/bem-core/issues/1359).
 
