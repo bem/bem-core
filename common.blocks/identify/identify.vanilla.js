@@ -6,15 +6,19 @@ modules.define('identify', function(provide) {
 
 var counter = 0,
     expando = '__' + (+new Date),
+    global = this.global,
     get = function() {
         return 'uniq' + (++counter);
     },
     identify = function(obj) {
         if((typeof obj === 'object' && obj !== null) || typeof obj === 'function') {
-            var key = 'uniqueID' in obj && obj !== document ?
-                'uniqueID' :
-                expando; // Use when possible native uniqueID for elements in IE
-
+            var key;
+            if('uniqueID' in obj) {
+                obj === global.document && (obj = obj.documentElement);
+                key = 'uniqueID';
+            } else {
+                key = expando;
+            }
             return key in obj?
                 obj[key] :
                 obj[key] = get();
