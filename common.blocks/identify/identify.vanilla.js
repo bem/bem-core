@@ -11,7 +11,7 @@ var counter = 0,
     },
     identify = function(obj) {
         if((typeof obj === 'object' && obj !== null) || typeof obj === 'function') {
-            var key = 'uniqueID' in obj?
+            var key = 'uniqueID' in obj && obj !== document ?
                 'uniqueID' :
                 expando; // Use when possible native uniqueID for elements in IE
 
