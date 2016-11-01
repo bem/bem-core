@@ -14,7 +14,8 @@ modules.define('next-tick', function(provide) {
 var global = this.global,
     fns = [],
     enqueueFn = function(fn) {
-        return fns.push(fn) === 1;
+        fns.push(fn);
+        return fns.length === 1;
     },
     callFns = function() {
         var fnsToCall = fns, i = 0, len = fns.length;

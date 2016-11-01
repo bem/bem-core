@@ -1,7 +1,7 @@
 /**
  * @module vow
  * @author Filatov Dmitry <dfilatov@yandex-team.ru>
- * @version 0.4.10
+ * @version 0.4.13
  * @license
  * Dual licensed under the MIT and GPL licenses:
  *   * http://www.opensource.org/licenses/mit-license.php
@@ -14,7 +14,8 @@ var undef,
     nextTick = (function() {
         var fns = [],
             enqueueFn = function(fn) {
-                return fns.push(fn) === 1;
+                fns.push(fn);
+                return fns.length === 1;
             },
             callFns = function() {
                 var fnsToCall = fns, i = 0, len = fns.length;
@@ -60,7 +61,7 @@ var undef,
             }
 
             if(isPostMessageAsync) {
-                var msg = '__promise' + +new Date,
+                var msg = '__promise' + Math.random() + '_' +new Date,
                     onMessage = function(e) {
                         if(e.data === msg) {
                             e.stopPropagation && e.stopPropagation();
@@ -695,7 +696,8 @@ Promise.prototype = /** @lends Promise.prototype */ {
         }
 
         var isResolved = this.isResolved(),
-            isFulfilled = this.isFulfilled();
+            isFulfilled = this.isFulfilled(),
+            isRejected = this.isRejected();
 
         nextTick(function() {
             var i = 0, cb, defer, fn;
@@ -719,12 +721,14 @@ Promise.prototype = /** @lends Promise.prototype */ {
                         defer.resolve(res) :
                         defer.notify(res);
                 }
+                else if(isFulfilled) {
+                    defer.resolve(arg);
+                }
+                else if(isRejected) {
+                    defer.reject(arg);
+                }
                 else {
-                    isResolved?
-                        isFulfilled?
-                            defer.resolve(arg) :
-                            defer.reject(arg) :
-                        defer.notify(arg);
+                    defer.notify(arg);
                 }
             }
         });
@@ -1325,4 +1329,4 @@ if(typeof define === 'function') {
 
 defineAsGlobal && (global.vow = vow);
 
-})(this);
+})(typeof window !== 'undefined'? window : global);
