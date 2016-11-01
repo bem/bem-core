@@ -1,7 +1,7 @@
 /**
  * @module vow
  * @author Filatov Dmitry <dfilatov@yandex-team.ru>
- * @version 0.4.12
+ * @version 0.4.13
  * @license
  * Dual licensed under the MIT and GPL licenses:
  *   * http://www.opensource.org/licenses/mit-license.php
@@ -14,7 +14,8 @@ var undef,
     nextTick = (function() {
         var fns = [],
             enqueueFn = function(fn) {
-                return fns.push(fn) === 1;
+                fns.push(fn);
+                return fns.length === 1;
             },
             callFns = function() {
                 var fnsToCall = fns, i = 0, len = fns.length;
