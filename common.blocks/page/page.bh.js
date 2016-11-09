@@ -13,6 +13,7 @@ module.exports = function(bh) {
             { html : json.doctype || '<!DOCTYPE html>', tag : false },
             {
                 tag : 'html',
+                attrs : { lang : json.lang },
                 cls : 'ua_js_no',
                 content : [
                     {
