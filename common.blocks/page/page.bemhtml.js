@@ -12,6 +12,7 @@ block('page')(
             apply('doctype'),
             {
                 tag : 'html',
+                attrs : { lang : ctx.lang },
                 cls : 'ua_js_no',
                 content : [
                     {
