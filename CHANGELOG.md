@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.2.0
+
+### Bug fixes
+
+- `modules.define` recursion problem was fixed ([#1446](https://github.com/bem/bem-core/issues/1446)).
+- Support for escaping in `ua` block was fixed ([#1435](https://github.com/bem/bem-core/issues/1435)).
+- Workaround for `Array.prototype.push` bug in `Opera 41` was implemented.
+
+### Other changes
+
+- Ability to specify `html@lang` attribute was added to `page` block ([#751](https://github.com/bem/bem-core/issues/751)).
+
 ## 3.1.0
 
 ### Bug fixes
