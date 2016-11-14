@@ -1095,15 +1095,19 @@ provide(bemDom);
 
 (function() {
 
-var origDefine = modules.define;
+var origDefine = modules.define,
+    storedDeps = []; // NOTE: see https://github.com/bem/bem-core/issues/1446
 
 modules.define = function(name, deps, decl) {
     origDefine.apply(modules, arguments);
 
-    name !== 'i-bem-dom__init' && arguments.length > 2 && ~deps.indexOf('i-bem-dom') &&
-        modules.define('i-bem-dom__init', [name], function(provide, _, prev) {
-            provide(prev);
+    if(name !== 'i-bem-dom__init' && arguments.length > 2 && ~deps.indexOf('i-bem-dom')) {
+        storedDeps.push(name);
+        storedDeps.length === 1 && modules.define('i-bem-dom__init', storedDeps, function(provide) {
+            provide(arguments[arguments.length - 1]);
+            storedDeps = [];
         });
+    }
 };
 
 })();
