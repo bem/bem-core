@@ -54,9 +54,8 @@ var undef,
          * @returns {EventManager} this
          */
         on : function(e, data, fn, _fnCtx, _isOnce) {
-            var params = this._params;
-
-            e = this._eventBuilder(e, params);
+            var params = this._params,
+                event = this._eventBuilder(e, params);
 
             if(functions.isFunction(data)) {
                 _isOnce = _fnCtx;
@@ -65,17 +64,25 @@ var undef,
                 data = undef;
             }
 
-            var fnStorage = this._storage[e] || (this._storage[e] = {}),
+            var fnStorage = this._storage[event] || (this._storage[event] = {}),
                 fnId = identify(fn, _fnCtx);
 
             if(!fnStorage[fnId]) {
                 var bindDomElem = params.bindDomElem,
-                    onMethod = _isOnce? 'one' : 'on',
                     bindSelector = params.bindSelector,
-                    handler = fnStorage[fnId] = this._fnWrapper(fn, _fnCtx, fnId);
+                    _this = this,
+                    handler = fnStorage[fnId] = this._fnWrapper(
+                        _isOnce?
+                            function() {
+                                _this.un(e, fn, _fnCtx);
+                                fn.apply(this, arguments);
+                            } :
+                            fn,
+                        _fnCtx,
+                        fnId);
 
-                bindDomElem[onMethod](e, bindSelector, data, handler);
-                bindSelector && bindDomElem.is(bindSelector) && bindDomElem[onMethod](e, data, handler);
+                bindDomElem.on(event, bindSelector, data, handler);
+                bindSelector && bindDomElem.is(bindSelector) && bindDomElem.on(event, data, handler);
                 // FIXME: "once" won't properly work in case of nested and mixed elem with the same name
             }
 
@@ -108,16 +115,15 @@ var undef,
         un : function(e, fn, _fnCtx) {
             var argsLen = arguments.length;
             if(argsLen) {
-                var params = this._params;
-
-                e = this._eventBuilder(e, params);
+                var params = this._params,
+                    event = this._eventBuilder(e, params);
 
                 if(argsLen === 1) {
-                    this._unbindByEvent(this._storage[e], e);
+                    this._unbindByEvent(this._storage[event], event);
                 } else {
                     var wrappedFn,
                         fnId = identify(fn, _fnCtx),
-                        fnStorage = this._storage[e],
+                        fnStorage = this._storage[event],
                         bindDomElem = params.bindDomElem,
                         bindSelector = params.bindSelector;
 
@@ -126,8 +132,8 @@ var undef,
 
                     var handler = wrappedFn || fn;
 
-                    bindDomElem.off(e, params.bindSelector, handler);
-                    bindSelector && bindDomElem.is(bindSelector) && bindDomElem.off(e, handler);
+                    bindDomElem.off(event, params.bindSelector, handler);
+                    bindSelector && bindDomElem.is(bindSelector) && bindDomElem.off(event, handler);
                 }
             } else {
                 objects.each(this._storage, this._unbindByEvent, this);

@@ -95,6 +95,11 @@ describe('BEM events', function() {
 
                 block1._emit('click');
                 spy7.should.have.been.calledOnce;
+
+                block1._events().once('click', spy7);
+
+                block1._emit('click');
+                spy7.should.have.been.calledTwice;
             });
 
             it('should properly bind the same handler', function() {
@@ -670,6 +675,10 @@ describe('BEM events', function() {
 
                 block1._emit('click');
                 spy4.should.have.been.calledOnce;
+
+                block1._events().once('click', spy4);
+                block1._emit('click');
+                spy4.should.have.been.calledTwice;
             });
 
             it('should properly unbind all handlers', function() {
