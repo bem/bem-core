@@ -87,6 +87,10 @@ describe('DOM events', function() {
 
                 block1.domElem.trigger('click');
                 spy4.should.have.been.calledOnce;
+
+                block1._domEvents().once('click', spy4);
+                block1.domElem.trigger('click');
+                spy4.should.have.been.calledTwice;
             });
 
             it('should properly bind the same handler', function() {
@@ -461,6 +465,10 @@ describe('DOM events', function() {
 
                 block1._elem('elem1').domElem.trigger('click');
                 spy4.should.have.been.calledOnce;
+
+                block1._domEvents(collection).once('click', spy4);
+                block1._elem('elem1').domElem.trigger('click');
+                spy4.should.have.been.calledTwice;
             });
 
             it('should properly bind the same handler', function() {
@@ -535,6 +543,10 @@ describe('DOM events', function() {
 
                 bemDom.doc.trigger('click');
                 spy4.should.have.been.calledOnce;
+
+                block1._domEvents(bemDom.doc).once('click', spy4);
+                bemDom.doc.trigger('click');
+                spy4.should.have.been.calledTwice;
             });
 
             it('should properly unbind all handlers', function() {
@@ -605,6 +617,10 @@ describe('DOM events', function() {
 
                 bemDom.win.trigger('resize');
                 spy4.should.have.been.calledOnce;
+
+                block1._domEvents(bemDom.win).once('click', spy4);
+                bemDom.win.trigger('click');
+                spy4.should.have.been.calledTwice;
             });
 
             it('should properly unbind all handlers', function() {
@@ -685,6 +701,10 @@ describe('DOM events', function() {
 
                 rootNode.trigger('dblclick');
                 spy4.should.have.been.calledOnce;
+
+                block1._domEvents(rootNode.find('div').addBack()).once('dblclick', spy4);
+                rootNode.trigger('dblclick');
+                spy4.should.have.been.calledTwice;
             });
 
             it('should properly unbind all handlers', function() {
@@ -784,6 +804,10 @@ describe('DOM events', function() {
 
                 block1.domElem.trigger('click');
                 spy4.should.have.been.calledOnce;
+
+                block1._domEvents().once('click', spy4);
+                block1.domElem.trigger('click');
+                spy4.should.have.been.calledTwice;
             });
 
             it('should properly unbind all handlers', function() {
