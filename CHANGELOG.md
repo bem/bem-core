@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.1.0
+
+### Bug fixes
+
+- Fixed a bug in `identify` returning different result on each call for `document` ([#1441](https://github.com/bem/bem-core/issues/1441)).
+- `modules.define` recursion problem was fixed ([#1446](https://github.com/bem/bem-core/issues/1446)).
+- Support for escaping in `ua` block was fixed ([#1435](https://github.com/bem/bem-core/issues/1435)).
+- Workaround for `Array.prototype.push` bug in `Opera 41` was implemented.
+- An issue with pointer events on iOS devices was fixed ([#1253](https://github.com/bem/bem-core/issues/1253)).
+- An issue in `i-bem-dom__events` was fixed. Method `once()` was broken in some cases ([#1452](https://github.com/bem/bem-core/issues/1452)).
+
+### Other changes
+
+- Ability to specify `html@lang` attribute was added to `page` block ([#751](https://github.com/bem/bem-core/issues/751)).
+
 ## 4.0.0
 
 ### Breaking changes
@@ -10,6 +25,18 @@
 - All static methods were removed from the `events` module ([#1024](https://github.com/bem/bem-core/issues/1024)).
 - The `result` field in `Event` class of `events` module was removed  ([#1023](https://github.com/bem/bem-core/issues/1023)).
 - The `css` element of the `page` block does not support auto insertion of conditional comments for IE ([#379](https://github.com/bem/bem-core/issues/379)).
+
+## 3.2.0
+
+### Bug fixes
+
+- `modules.define` recursion problem was fixed ([#1446](https://github.com/bem/bem-core/issues/1446)).
+- Support for escaping in `ua` block was fixed ([#1435](https://github.com/bem/bem-core/issues/1435)).
+- Workaround for `Array.prototype.push` bug in `Opera 41` was implemented.
+
+### Other changes
+
+- Ability to specify `html@lang` attribute was added to `page` block ([#751](https://github.com/bem/bem-core/issues/751)).
 
 ## 3.1.0
 
