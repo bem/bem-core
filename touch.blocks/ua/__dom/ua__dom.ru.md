@@ -6,13 +6,13 @@
 Это позволяет учитывать особенности мобильного устройства, проверяя наличие и значение модификаторов.
 
 ```js
-modules.define('ios-test', ['i-bem__dom'], function(provide, BEMDOM) {
+modules.define('ios-test', ['i-bem-dom', 'ua'], function(provide, bemDom, Ua) {
 
-provide(BEMDOM.decl(this.name, {
+provide(bemDom.declBlock(this.name, {
     onSetMod: {
         js: {
             inited: function() {
-                this.findBlockOutside('ua').hasMod('platform', 'ios') &&
+                this.findParentBlock(Ua).hasMod('platform', 'ios') &&
                     this.setMod('ios');
             }
         },
@@ -126,20 +126,19 @@ provide(BEMDOM.decl(this.name, {
 Значение модификатора изменяется динамически при смене ориентации устройства. Поэтому можно подписываться на изменение значения модификатора:
 
 ```js
-modules.define('inner', ['i-bem__dom'], function(provide, BEMDOM) {
+modules.define('inner', ['i-bem-dom', 'ua'], function(provide, bemDom, Ua) {
 
-provide(BEMDOM.decl(this.name, {
+provide(bemDom.declBlock(this.name, {
     onSetMod: {
         js: {
             inited: function() {
-                this._ua = this
-                    .findBlockOutside('ua')
+                this._ua = this.findParentBlock(Ua);
+
+                this
+                    ._events(this.ua)
                     .on({ modName : 'orient', modVal : '*' }, this._onOrientChange, this);
 
                 this.setMod('orient', this._ua.getMod('orient'));
-            },
-            '': function() {
-                this._ua.un({ modName : 'orient', modVal : '*' }, this._onOrientChange, this);
             }
         },
 
@@ -161,7 +160,7 @@ provide(BEMDOM.decl(this.name, {
     _reDraw: function(orient) {
         // обновляем содержимое контейнера `inner` при смене ориентации устройства
         console.log(orient);
-        BEMDOM.update(this.domElem, orient);
+        bemDom.update(this.domElem, orient);
     }
 }));
 
