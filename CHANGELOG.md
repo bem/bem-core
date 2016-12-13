@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.1.1
+
+### Bug fixes
+
+— Fixed a bug in `ua` block on `touch.blocks` level ([#1460](https://github.com/bem/bem-core/pull/1460)).
+
 ## 4.1.0
 
 ### Bug fixes
