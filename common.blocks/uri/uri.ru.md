@@ -1,4 +1,4 @@
-# querystring
+# uri
 
 Блок предоставляет объект, содержащий набор методов для декодирования строки из формата URI.
 
@@ -15,14 +15,14 @@
 
 | Элемент | Способы использования | Описание |
 | --------| --------------------- | -------- |
-| <a href="#elems-querystring">querystring</a> | <code>JS</code> | Элемент предоставляет объект, содержащий набор методов для работы со строкой запроса формата URI. предназначен для декодирования строки из формата URI. |
+| <a href="#elems-uri">uri</a> | <code>JS</code> | Элемент предоставляет объект, содержащий набор методов для работы со строкой запроса формата URI. предназначен для декодирования строки из формата URI. |
 
 #### Свойства и методы объекта
 
 | Элемент | Имя | Возвращаемое значение | Описание |
 | ------- | --- | --------------------- | -------- |
-| <a href="#elems-querystring">querystring</a> | <a href="#elems-querystring-fields-parse">parse</a>(<code>{String} str</code>) | <code>{Object}</code> | Формирует объект на основании параметров запроса адресной строки. |
-| | <a href="#elems-querystring-fields-stringify">stringify</a>(<code>{Object} obj</code>) | <code>{String}</code> | Формирует строку запроса на основании свойств объекта. |
+| <a href="#elems-uri">uri</a> | <a href="#elems-uri-fields-parse">parse</a>(<code>{String} str</code>) | <code>{Object}</code> | Формирует объект на основании параметров запроса адресной строки. |
+| | <a href="#elems-uri-fields-stringify">stringify</a>(<code>{Object} obj</code>) | <code>{String}</code> | Формирует строку запроса на основании свойств объекта. |
 
 ### Публичные технологии блока
 
@@ -85,7 +85,7 @@ modules.require('uri', function(uri){
 <a name="elems-name-fields"></a>
 ### Свойства и методы объекта
 
-<a name="elems-querystring-fields-parse"></a>
+<a name="elems-uri-fields-parse"></a>
 #### Метод `parse`
 
 Формирует объект на основании строки параметров в формате URI.
@@ -96,7 +96,7 @@ modules.require('uri', function(uri){
 
 Возвращаемое значение: `{Object}`. Объект, сформированный на основании параметров адресной строки.
 
-<a name="elems-querystring-fields-stringify"></a>
+<a name="elems-uri-fields-stringify"></a>
 #### Метод `stringify`
 
 Формирует строку запроса в формате URI на основании объекта.
