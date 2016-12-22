@@ -817,7 +817,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
  * @class Block
  * @description Base class for creating BEM blocks that have DOM representation
  * @augments i-bem:Block
- * @exports
+ * @exports i-bem-dom:Block
  */
 var Block = inherit([bem.Block, BemDomEntity], /** @lends Block.prototype */{
     /** @override */
@@ -830,7 +830,7 @@ var Block = inherit([bem.Block, BemDomEntity], /** @lends Block.prototype */{
  * @class Elem
  * @description Base class for creating BEM elements that have DOM representation
  * @augments i-bem:Elem
- * @exports
+ * @exports i-bem-dom:Elem
  */
 var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
     /** @override */
@@ -885,7 +885,7 @@ bemDom = /** @exports */{
 
     /**
      * @param {*} entity
-     * @return {Boolean}
+     * @returns {Boolean}
      */
     isEntity : function(entity) {
         return entity instanceof Block || entity instanceof Elem;
