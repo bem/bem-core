@@ -8,28 +8,28 @@
 
 | Элемент | Способы использования | Описание |
 | --------| --------------------- | -------- |
-| <a href="#elems-codes">codes</a> | <code>JS</code> | Предоставляет объект, содержащий набор констант – имен часто используемых клавиатурных кодов. |
+| <a href="#elems-codes">codes</a> | `JS` | Предоставляет объект, содержащий набор констант – имен часто используемых клавиатурных кодов. |
 
 ### Свойства и методы элементов блока
 
 | Элемент | Имя | Тип |
 | ------- | --- | --- |
-| <a href="#elems-codes">codes</a> | BACKSPACE | <code>{String}</code> |
-| | TAB | <code>{String}</code> |
-| | ENTER | <code>{String}</code> |
-| | CAPS_LOCK | <code>{String}</code> |
-| | ESC | <code>{String}</code> |
-| | SPACE | <code>{String}</code> |
-| | PAGE_UP | <code>{String}</code> |
-| | PAGE_DOWN | <code>{String}</code> |
-| | END | <code>{String}</code> |
-| | HOME | <code>{String}</code> |
-| | LEFT | <code>{String}</code> |
-| | UP | <code>{String}</code> |
-| | RIGHT | <code>{String}</code> |
-| | DOWN | <code>{String}</code> |
-| | INSERT | <code>{String}</code> |
-| | DELETE | <code>{String}</code> |
+| <a href="#elems-codes">codes</a> | BACKSPACE | `String` |
+| | TAB | `String` |
+| | ENTER | `String` |
+| | CAPS_LOCK | `String` |
+| | ESC | `String` |
+| | SPACE | `String` |
+| | PAGE_UP | `String` |
+| | PAGE_DOWN | `String` |
+| | END | `String` |
+| | HOME | `String` |
+| | LEFT | `String` |
+| | UP | `String` |
+| | RIGHT | `String` |
+| | DOWN | `String` |
+| | INSERT | `String` |
+| | DELETE | `String` |
 
 ### Публичные технологии блока
 
@@ -37,20 +37,23 @@
 
 * `js`
 
-## Подробности
+## Описание
 
 <a name="elems"></a>
+
 ### Элементы блока
 
 <a name="elems-codes"></a>
+
 #### Элемент `codes`
 
 Предоставляет объект, содержащий набор констант – имен часто используемых клавиатурных кодов.
 
 <a name="elems-codes-fields"></a>
+
 ##### Свойства и методы объекта
 
-Тип: `{String}`.
+Тип: `String`.
 
 Значениями имен (свойств объекта) являются коды клавиш. Использование осмысленных имен вместо кодов клавиш делает код понятнее.
 

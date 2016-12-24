@@ -1,11 +1,15 @@
+<a name="elems-event"></a>
+
 # Элемент `event` блока `jquery`
 
 Элемент реализует поддержку дополнительных типов событий jQuery. Дополнительные типы подключаются с помощью соответствующих значений модификатора `type`.
 
 <a name="modifiers"></a>
+
 ## Модификаторы элемента
 
 <a name="modifiers-name"></a>
+
 ### Модификатор `type`
 
 Предоставляет набор полифилов, реализующих уровень абстракции над jQuery-событиями устройств ввода. Это позволяет создавать общую логику для различных платформ (десктопы, телефоны и т.д.) и дополнять ее методами, специфическими для конкретного вида устройств.
@@ -44,21 +48,25 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends pointer-test.prototype */ 
 В зависимости от значения модификатора, будут подключены разные полифилы.
 
 <a name="modifiers-type-pointer"></a>
+
 #### Модификатор `type` в значении `pointer`
 
 Модификатор для подключения всех типов pointer-событий. Не вводит дополнительной логики.
 
 <a name="modifiers-type-pointerclick"></a>
+
 #### Модификатор `type` в значении `pointerclick`
 
 Подключает полифил, реализующий событие `pointerclick`.
 
 <a name="events-pointerclick"></a>
+
 ##### Событие `pointerclick`
 
 Генерируется по нажатию левой клавиши мыши или в момент контакта с рабочей поверхностью устройства. Использование `pointerclick` позволяет избавиться от задержки события `click` на тач-устройствах.
 
 <a name="modifiers-type-pointernative"></a>
+
 #### Модификатор `type` в значении `pointernative`
 
 Подключает полифил, реализующий базовую функциональность модели [W3C Pointer Events](http://www.w3.org/TR/pointerevents/).
@@ -66,14 +74,16 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends pointer-test.prototype */ 
 С модификатором доступен следующий набор событий:
 
 <a name="events-pointerover"></a>
+
 ##### Событие `pointerover`
 
-Генерируется в момент:
+Генерируется:
 
 * Когда указатель находится над элементом.
 * Перед событием `pointerdown`, для устройств, не поддерживающих `hover`.
 
 <a name="events-pointerenter"></a>
+
 ##### Событие `pointerenter`
 
 Генерируется:
@@ -84,6 +94,7 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends pointer-test.prototype */ 
 Событие аналогично `pointerover`, но не всплывает.
 
 <a name="events-pointerdown"></a>
+
 ##### Событие `pointerdown`
 
 Генерируется в момент, когда устройство ввода входит в состояние *активного нажатия*:
@@ -92,11 +103,13 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends pointer-test.prototype */ 
 * Для перьевых и тач- устройств – состояние контакта с рабочей поверхностью устройства.
 
 <a name="events-pointermove"></a>
+
 ##### Событие `pointermove`
 
 Генерируется при изменении координат указателя.
 
-<a name="events-eventname"></a>
+<a name="events-pointerup"></a>
+
 ##### Событие `pointerup`
 
 Генерируется по выходу из состояния *активного нажатия*:
@@ -105,6 +118,7 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends pointer-test.prototype */ 
 * Для перьевых и тач- устройств – моменту разрыва контакта с рабочей поверхностью устройства.
 
 <a name="events-pointerout"></a>
+
 ##### Событие `pointerout`
 
 Генерируется при выходе указателя из *активной зоны* элемента:
@@ -113,6 +127,7 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends pointer-test.prototype */ 
 * После событий `pointerup` и `pointercancel` для устройств, не поддерживающих `hover`. Например, когда стилус (палец) покидает рабочую зону устройства.
 
 <a name="events-pointerleave"></a>
+
 ##### Событие `pointerleave`
 
 Генерируется при выходе указателя из *активной зоны* элемента:
@@ -122,7 +137,8 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends pointer-test.prototype */ 
 
 Событие аналогично `pointerout`, но не всплывает.
 
-<a name="events-eventname"></a>
+<a name="events-pointercancel"></a>
+
 ##### Событие `pointercancel`
 
 Генерируется в случаях, когда:
@@ -134,17 +150,20 @@ provide(BEMDOM.decl({ block : this.name }, /** @lends pointer-test.prototype */ 
 
 После генерации события `pointercancel` последовательно генерируются события `pointerout` и `pointerleave`.
 
-<a name="modifiers-type-pointernative"></a>
+<a name="modifiers-type-pointerpressrealease"></a>
+
 #### Модификатор `type` в значении `pointerpressrealease`
 
 Подключает полифил, реализующий события `pointerpress` и `pointerrelease`. Полифил использует события Pointer Events.
 
-<a name="events-eventname"></a>
+<a name="events-pointerpress"></a>
+
 ##### Событие `pointerpress`
 
 Генерируется по событию `pointerdown`.
 
-<a name="events-eventname"></a>
+<a name="events-pointerrelease"></a>
+
 ##### Событие `pointerrelease`
 
 Генерируется по событиям `pointerup` и `pointercancel`.

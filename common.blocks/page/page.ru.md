@@ -2,20 +2,19 @@
 
 Блок предоставляет шаблоны, создающие набор HTML-элементов верхнего уровня страницы: `<html>`, `<head>`, `<body>`.
 
-
 ## Обзор
 
-### Специализированные поля блока
+### Специальные поля блока
 
 | Поле | Тип | Описание |
 | ---- | --- | -------- |
-| <a href="#declfields-doctype">doctype</a> | `{String}` | Позволяет переопределить строку DTD текущего документа. |
-| <a href="#declfields-title">title</a> | `{String}` | Позволяет указать содержимое `<title>`. |
-| <a href="#declfields-favicon">favicon</a> | `{String}` | Позволяет указать URL значка страницы (фавиконки). |
-| <a href="#declfields-head">head</a> | `{BEMJSON}` | Позволяет дополнить содержимое `<head>`. |
-| <a href="#declfields-styles">styles</a> | `{BEMJSON}` | Позволяет подключать таблицы стилей CSS. |
-| <a href="#declfields-scripts">scripts</a> | `{BEMJSON}` | Позволяет подключать скрипты в тело документа. |
-| <a href="#declfields-content">content</a> | `{BEMJSON}` | Позволяет указать содержимое страницы. |
+| <a href="#declfields-doctype">doctype</a> | `String` | Позволяет переопределить строку DTD текущего документа. |
+| <a href="#declfields-title">title</a> | `String` | Позволяет указать содержимое `<title>`. |
+| <a href="#declfields-favicon">favicon</a> | `String` | Позволяет указать URL значка страницы (фавиконки). |
+| <a href="#declfields-head">head</a> | `BEMJSON` | Позволяет дополнить содержимое `<head>`. |
+| <a href="#declfields-styles">styles</a> | `BEMJSON` | Позволяет подключать таблицы стилей CSS. |
+| <a href="#declfields-scripts">scripts</a> | `BEMJSON` | Позволяет подключать скрипты в тело документа. |
+| <a href="#declfields-content">content</a> | `BEMJSON` | Позволяет указать содержимое страницы. |
 
 ### Элементы блока
 
@@ -25,14 +24,14 @@
 | <a href="#elems-js">js</a> | `BEMJSON` | Служит для подключения JS по ссылке или в виде строки. |
 | <a href="#elems-meta">meta</a> | `BEMJSON` | Служит для создания HTML-элементов `<meta>`. |
 
-### Специализированные поля элементов блока
+### Специальные поля элементов блока
 
 | Элемент | Поле | Тип | Описание |
 | ------- | ---- | --- | -------- |
-| <a href="#elems-css">css</a> | <a href="#elems-css-declfields-url">url</a> | `{String}`  | Позволяет задать URL для загрузки стилей. |
-|  | <a href="#elems-css-declfields-content">content</a> | `{String}`  | Служит для задания стилей в виде строки |
-| <a href="#elems-js">js</a> | <a href="#elems-css-declfields-url">url</a> | `{String}`  | Позволяет задать URL для загрузки скрипта. |
-|  | <a href="#elems-css-declfields-content">content</a> | `{String}`  | Служит для задания скриптов в виде строки |
+| <a href="#elems-css">css</a> | <a href="#elems-css-declfields-url">url</a> | `String`  | Позволяет задать URL для загрузки стилей. |
+|  | <a href="#elems-css-declfields-content">content</a> | `String`  | Служит для задания стилей в виде строки |
+| <a href="#elems-js">js</a> | <a href="#elems-css-declfields-url">url</a> | `String`  | Позволяет задать URL для загрузки скрипта. |
+|  | <a href="#elems-css-declfields-content">content</a> | `String`  | Служит для задания скриптов в виде строки |
 
 ### Публичные технологии блока
 
@@ -41,24 +40,27 @@
 * `bh.js`
 * `bemhtml`
 
-## Подробности
+## Описание
 
-Блок отвечает за создание HTML-элементов верхнего уровня, подключение к странице CSS, JS, элементов `<meta>` и указание заголовка. Для этого в BEMJSON-декларации блока и элементов блока зарезервированы специализированные поля.
+Блок отвечает за создание HTML-элементов верхнего уровня, подключение к странице CSS, JS, элементов `<meta>` и указание заголовка. Для этого в BEMJSON-декларации блока и элементов блока зарезервированы специальные поля.
 
 <a name="declfields"></a>
-### Специализированные поля блока
+
+### Специальные поля блока
 
 <a name="declfields-doctype"></a>
+
 #### Поле  `doctype`
 
-Тип: `{String}`.
+Тип: `String`.
 
 Позволяет явно указать строку с DTD (Document Type Definition) текущего документа. Если свойство не задано, по умолчанию будет использоваться `<!DOCTYPE html>`.
 
 <a name="declfields-title"></a>
+
 #### Поле `title`
 
-Тип: `{String}`.
+Тип: `String`.
 
 Название страницы. Становится HTML-элементом `<title>`.
 
@@ -70,11 +72,11 @@
 }
 ```
 
-
 <a name="declfields-favicon"></a>
+
 #### Поле `favicon`
 
-Тип: `{String}`.
+Тип: `String`.
 
 Позволяет указать URL значка страницы (фавиконки):
 
@@ -87,11 +89,11 @@
 }
 ```
 
-
 <a name="declfields-head"></a>
+
 #### Поле `head`
 
-Тип: `{BEMJSON}`.
+Тип: `BEMJSON`.
 
 Позволяет дополнить содержимое `HTML`-элемента `<head>`, определенное в шаблоне блока:
 
@@ -108,9 +110,10 @@
 ```
 
 <a name="declfields-styles"></a>
+
 #### Поле `styles`
 
-Тип: `{BEMJSON}`.
+Тип: `BEMJSON`.
 
 Позволяет подключить `CSS`:
 
@@ -123,11 +126,11 @@
 }
 ```
 
-
 <a name="declfields-scripts"></a>
+
 #### Поле `scripts`
 
-Тип: `{BEMJSON}`.
+Тип: `BEMJSON`.
 
 Позволяет подключать JS в тело страницы в конец HTML-элемента `<body>`:
 
@@ -140,11 +143,11 @@
 }
 ```
 
-
 <a name="declfields-content"></a>
+
 #### Поле `content`
 
-Тип: `{BEMJSON}`.
+Тип: `BEMJSON`.
 
 Позволяет указать содержимое страницы.
 
@@ -163,11 +166,12 @@
 }
 ```
 
-
 <a name="elems"></a>
+
 ### Элементы блока
 
 <a name="elems-css"></a>
+
 #### Элемент `css`
 
 Служит для подключения CSS по ссылке или в виде строки. В зависимости от того, указано ли в декларации элемента поле `url`, создается HTML-элемент с тегом:
@@ -175,8 +179,8 @@
 * `<link>` и свойством `stylesheet`, если `url` есть.
 * `<style>`, если поле `url` неуказано. В этом случае предполагается, что содержимое элемента передается с помощью свойства `content` BEMJSON-декларации элемента.
 
-
 <a name="elems-css-declfields-content"></a>
+
 ##### Специализированное поле `content`
 
 Тип: `String`.
@@ -195,8 +199,8 @@
  }
 ```
 
-
 <a name="elems-css-declfields-url"></a>
+
 ##### Специализированное поле `url`
 
 Тип: `String`.
@@ -204,11 +208,13 @@
 Позволяет задать URL для загрузки таблицы CSS. Значение поля `url` BEMJSON-декларации передается свойству `href` создаваемого HTML-элемента.
 
 <a name="elems-js"></a>
-#### Элемент `js` 
+
+#### Элемент `js`
 
 Служит для подключения JS по ссылке или в виде строки. Создает HTML-элемент `<script>`.
 
 <a name="elems-js-declfields-content"></a>
+
 ##### Специализированное поле `content`
 
 Тип: `String`.
@@ -228,6 +234,7 @@
 ```
 
 <a name="elems-js-declfields-url"></a>
+
 ##### Специализированное поле `url`
 
 Тип: `String`.
@@ -243,8 +250,8 @@
 }
 ```
 
-
 <a name="elems-meta"></a>
+
 #### Элемент `meta`
 
 Служит для создания HTML-элементов `<meta>` и указания для них пользовательских метаданных. Метаданные передаются как ключи и значения хеша атрибутов – свойства `attrs` BEMJSON-декларации элемента:
@@ -260,6 +267,5 @@
     content : 'Страница с подключенным CSS и meta-данными'
 }
 ```
-
 
 Подробнее смотрите в документации к `<meta>` [на MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta).
