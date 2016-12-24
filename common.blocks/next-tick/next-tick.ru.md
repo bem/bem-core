@@ -9,39 +9,42 @@
 
 Функция подходит для случаев, когда нужно, чтобы callback был выполнен после того, как другие функции в рамках событийного цикла отработали. Например, чтобы убедиться что доступны данные, динамически вычислявшиеся в текущем цикле.
 
-Принимаемые аргументы:
+**Принимаемые аргументы:**
 
-* `fn` `{Function}` – функция, которую нужно вызвать в следующем событийном цикле. Обязательный аргумент.
+* `fn {Function}` – функция, которую нужно вызвать в следующем событийном цикле. Обязательный аргумент.
 
 Не имеет возвращаемого значения.
 
-Например:
+Пример:
 
 ```js
 modules.require(['next-tick', 'events'], function(nextTick, events) {
-    var event = new events.Event();
 
-    nextTick(function() { event.emit('click') }); 
+var event = new events.Event();
 
-    // ··· 
+nextTick(function() { event.emit('click') }); 
 
-    event.on('click', function(e) { console.log(e.type) })
+// ··· 
+
+event.on('click', function(e) { console.log(e.type) })
 });
 ```
 
-
 ## Порядок вызова callback
 
-В рамках событийного цикла работы блок формирует очередь, добавляя каждую следующую callback функцию в ее конец. Порядок вызова callback сохраняется. Например:
+В рамках событийного цикла работы блок формирует очередь, добавляя каждую следующую callback функцию в ее конец. Порядок вызова callback сохраняется.
+
+Пример:
 
 ```js
 modules.require(['next-tick'], function(nextTick) {
-    var order = [];
+  
+var order = [];
 
-    nextTick(function() { order.push(1); });
-    nextTick(function() { order.push(2); });
-    nextTick(function() { order.push(3); });
-    nextTick(function() { console.log(order)); }; // should be [1, 2, 3]
+nextTick(function() { order.push(1); });
+nextTick(function() { order.push(2); });
+nextTick(function() { order.push(3); });
+nextTick(function() { console.log(order); }); // should be [1, 2, 3]
 });
 ```
 
