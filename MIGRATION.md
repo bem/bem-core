@@ -577,7 +577,7 @@ Issue: [#582](https://github.com/bem/bem-core/issues/582).
 #### Events
 
 The events API has been simplified. Deleted the following block instance methods: `on()`, `un()`, `once()`, `bindTo()`, `unbindFrom()`, `bindToDoc()`, `bindToWin()`, `unbindFromDoc()`, `unbindFromWin()`, and class methods: `liveBindTo()`, `liveUnbindFrom()`, `on()`, `un()`, `once()`, `liveInitOnBlockEvent()`, `liveInitOnBlockInsideEvent()`.
-They have been replaced with the new `_domEvents()` and `_events()` methods, which return an instance of the events manager class with the `on()`, `un()` and `one()` methods.
+They have been replaced with the new `_domEvents()` and `_events()` methods, which return an instance of the events manager class with the `on()`, `un()` and `once()` methods.
 
 ##### DOM events on instances
 
