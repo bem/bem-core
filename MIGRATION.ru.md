@@ -589,7 +589,7 @@ API работы с событиями значильно упрощено. Уд
 `unbindFrom()`, `bindToDoc()`, `bindToWin()`, `unbindFromDoc()`, `unbindFromWin()` и методы класса: `liveBindTo()`,
 `liveUnbindFrom()`, `on()`, `un()`, `once()`, `liveInitOnBlockEvent()`, `liveInitOnBlockInsideEvent()`.
 Вместо них добавлены методы `_domEvents()` и `_events()`, возвращающие экземпляр класса менеджера событий, с методами
-`on()`, `un()` и `one()`;
+`on()`, `un()` и `once()`;
 
 ##### DOM-события на экземплярах
 
