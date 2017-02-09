@@ -9,8 +9,8 @@ Block parameters are stored in the `data-bem` attribute of an HTML element, and 
 
 The value of the `data-bem` attribute must contain valid JSON describing a hash in the format:
 
--   key — `{String}`, name of the block.
--   value — `{Object}`, parameters of the block. If this instance of the block does not need
+* key — `{String}`, name of the block.
+* value — `{Object}`, parameters of the block. If this instance of the block does not need
     parameters, specify an empty hash `{}`.
 
 ```html
@@ -36,8 +36,8 @@ If an HTML element has [multiple JS blocks bound to it](./i-bem-js-html-binding.
 
 Specifying the block name in the parameters provides the following advantages:
 
--   Blocks are initialized faster, since the value of the `class` attribute doesn't have to be parsed.
--   Multiple blocks can be put on the same HTML element without having to multiply its attributes.
+* Blocks are initialized faster, since the value of the `class` attribute doesn't have to be parsed.
+* Multiple blocks can be put on the same HTML element without having to multiply its attributes.
 
 ### Accessing parameters from a block instance
 
