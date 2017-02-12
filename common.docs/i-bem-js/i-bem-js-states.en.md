@@ -33,11 +33,7 @@ Modifiers can change as part of the block functioning (for example, as a reactio
 
 When setting, deleting, and changing modifier values, [triggers](#triggers) are executed.
 
-------------------------------------------------------------------------
-
-**NB** If modifiers were set in a block HTML element before its initialization, the triggers to set these modifiers **are not executed**. In this case, the block instance gets its original state, and doesn't change it.
-
-------------------------------------------------------------------------
+> **Note** If modifiers were set in a block HTML element before its initialization, the triggers to set these modifiers **are not executed**. In this case, the block instance gets its original state, and doesn't change it.
 
 <a name="mods-api"></a>
 
@@ -45,14 +41,16 @@ When setting, deleting, and changing modifier values, [triggers](#triggers) are 
 
 Methods of a block instance for working with modifiers:
 
--   `hasMod([elem], modName, [modVal])` – Checks for the presence of a modifier. Returns `true` if the `modName` modifier is set.
--   `getMod([elem], modName)` – Returns the value of `modName`.
--   `getMods([elem], [...modNames])` – Returns a hash with the values of all modifiers. You can get the values of multiple modifiers by passing their names in separate arguments (`[...modNames]`). To get the modifiers of an element, you can specify the `[elem]` argument.
--   `setMod([elem], modName, [modVal=true])` – Sets the `modName` modifier. If the value of `modVal` isn't specified, a *simple modifier* will be set.
--   `toggleMod([elem], modName, modVal1, [modVal2], [condition])` – Toggles a modifier's value. If the `[modVal2]` argument is passed, it switches between `modVal1` and `modVal2`. If not, `modVal1` will be set and removed in turn. The `condition` argument with the `true` value allows inverting the order for toggling modifier values.
--   `delMod([elem], modName)` – Deletes `modName`.
+* `hasMod([elem], modName, [modVal])` – Checks for the presence of a modifier. Returns `true` if the `modName` modifier is set.
+* `getMod([elem], modName)` – Returns the value of `modName`.
+* `getMods([elem], [...modNames])` – Returns a hash with the values of all modifiers. You can get the values of multiple modifiers by passing their names in separate arguments (`[...modNames]`). To get the modifiers of an element, you can specify the `[elem]` argument.
+* `setMod([elem], modName, [modVal=true])` – Sets the `modName` modifier. If the value of `modVal` isn't specified, a *simple modifier* will be set.
+* `toggleMod([elem], modName, modVal1, [modVal2], [condition])` – Toggles a modifier's value. If the `[modVal2]` argument is passed, it switches between `modVal1` and `modVal2`. If not, `modVal1` will be set and removed in turn. The `condition` argument with the `true` value allows inverting the order for toggling modifier values.
+* `delMod([elem], modName)` – Deletes `modName`.
 
-**Example:** The `changeColor` method of the `square` block toggles the `color` modifier between the values `green` and `red`, if the block has the `has-color` modifier set:
+**Example**
+
+The `changeColor` method of the `square` block toggles the `color` modifier between the values `green` and `red`, if the block has the `has-color` modifier set:
 
 ```js
 BEMDOM.decl('square', {
@@ -66,7 +64,9 @@ BEMDOM.decl('square', {
 
 The same methods allow managing modifiers of the block elements. To do this, a reference to the **element DOM node** (not the element name) is passed as the first argument.
 
-**Example:** On a click, the `searchbox` block can assign its `input` element the simple modifier `clean` (the assumed value is `true`):
+**Example**
+
+On a click, the `searchbox` block can assign its `input` element the simple modifier `clean` (the assumed value is `true`):
 
 ```js
 BEMDOM.decl('searchbox', {
@@ -76,11 +76,7 @@ BEMDOM.decl('searchbox', {
 });
 ```
 
-------------------------------------------------------------------------
-
-**NB** Use the API for changing the values of modifiers. Don't set modifiers by altering the CSS classes of the corresponding DOM node yourself.
-
-------------------------------------------------------------------------
+> **Note** Use the API for changing the values of modifiers. Don't set modifiers by altering the CSS classes of the corresponding DOM node yourself.
 
 For complete documentation of the API for managing modifiers, see the [JSDoc](https://en.bem.info/libs/bem-core/current/desktop/i-bem/jsdoc/) section for the `i-bem` block.
 
@@ -112,8 +108,8 @@ listed in the list of events above (from general to specific).
 
 Thus, when defining a trigger, the user specifies:
 
--   The execution phase (before or after setting a modifier).
--   The event type (the modifier name and value to set).
+* The execution phase (before or after setting a modifier).
+* The event type (the modifier name and value to set).
 
 <a name="mods-api-trigger-phase"></a>
 
@@ -122,7 +118,9 @@ Thus, when defining a trigger, the user specifies:
 An additional phase prior to setting a modifier allows performing
 certain checks without risk of affecting the logic for setting the modifier. For example, if there are mutually exclusive modifiers, it makes sense before setting one of them to check whether the other is already set.
 
-**Example**: The `focused` modifier won't be set on the `searchbox` block if it has the `disabled` modifier.
+**Example**
+
+The `focused` modifier won't be set on the `searchbox` block if it has the `disabled` modifier.
 
 ```js
 BEMDOM.decl('searchbox', {
@@ -146,8 +144,4 @@ If the trigger for the phase prior to setting (`beforeSetMod`) returns `false`, 
 
 For more information about using triggers, see [Declaring triggers](i-bem-js-decl.en.md#declaring-triggers).
 
-------------------------------------------------------------------------
-
-**NB** The trigger to set the `js` modifier to `inited` is a constructor of a block instance, but with the value `''` it is a destructor of a block instance. For more information, see [Initialization](./i-bem-js-init.en.md).
-
-------------------------------------------------------------------------
+> **Note** The trigger to set the `js` modifier to `inited` is a constructor of a block instance, but with the value `''` it is a destructor of a block instance. For more information, see [Initialization](./i-bem-js-init.en.md).

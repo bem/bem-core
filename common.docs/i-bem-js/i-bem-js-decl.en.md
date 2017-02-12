@@ -8,15 +8,15 @@ A block instance implements the functionality of its class and has its own indep
 
 In **object-oriented programming** terms:
 
--   A block is a class
--   And a block instance is a class instance
+* A block is a class
+* And a block instance is a class instance
 
 In accordance with OOP, all the functionality of a block is implemented modularly in the methods of the class *(=block)*.
 
 The block methods are divided into:
 
--   Block instance methods
--   Static methods
+* Block instance methods
+* Static methods
 
 The code of a block in `i-bem.js` is called a **declaration** to emphasize the declarative programming style
 adopted in BEM.
@@ -41,7 +41,9 @@ The `decl` method accepts the following arguments:
 
 The declared methods will be applied to all instances of the block, regardless of their states (modifiers).
 
-**Example:** Declaration of methods for the `button` block.
+**Example**
+
+Declaration of methods for the `button` block.
 
 ```js
 modules.define('button', ['i-bem__dom'], function(provide, BEMDOM) {
@@ -83,25 +85,19 @@ provide(BEM.decl(this.name,
 });
 ```
 
-------------------------------------------------------------------------
-
-**NB** It is convenient to format infrastructure code as a block without DOM representation if you are planning to use BEM block APIs in it (states expressed as modifiers, BEM events,
-and so on). If you are not planning to use the BEM subject domain,
-you can format infrastructure code as a [ym](https://github.com/ymaps/modules) module.
-
-**Example:**
-
-```js
-modules.define('router', function(provide) {
-
-provide({
-    route : function() { /* ... */ }
-});
-
-});
-```
-
-------------------------------------------------------------------------
+> **Note** It is convenient to format infrastructure code as a block without DOM representation if you are planning to use BEM block APIs in it (states expressed as modifiers, BEM events, and so on). If you are not planning to use the BEM subject domain, you can format infrastructure code as a [ym](https://github.com/ymaps/modules) module.
+>
+> **Example**
+>
+> ```js
+> modules.define('router', function(provide) {
+>
+> provide({
+>     route : function() { /* ... */ }
+> });
+>
+> });
+> ```
 
 <a name="inher"></a>
 
@@ -142,12 +138,7 @@ provide(BEMDOM.decl({ block : this.name, baseBlock : ABlock }));
 This mechanism allows using the methods of the base block inside a derived block.
 To call base block methods of the same name, use the [helper property](i-bem-js-context.en.md#helper-property) `this.__base`.
 
-------------------------------------------------------------------------
-
-**NB** You can create inheritance chains in `i-bem`, meaning that a block inherits from another one
-that, in turn, inherits from a third block, and so on.
-
-------------------------------------------------------------------------
+> **Note** You can create inheritance chains in `i-bem`, meaning that a block inherits from another one that, in turn, inherits from a third block, and so on.
 
 <a name="inher-over"></a>
 
@@ -182,8 +173,8 @@ So in order to extend a block functionality, you often need to implement support
 
 To add a modifier, pass the redefined block `decl` method:
 
--   A hash with the `modName` and `modVal` keys. The `modName` value is a string with the modifier name. The `modVal` value is a string with the modifier value.
--   A hash of methods that will be available for the block with the corresponding modifier. If there are methods and modifiers of the same name, their implementation from the hash is used.
+* A hash with the `modName` and `modVal` keys. The `modName` value is a string with the modifier name. The `modVal` value is a string with the modifier value.
+* A hash of methods that will be available for the block with the corresponding modifier. If there are methods and modifiers of the same name, their implementation from the hash is used.
 
 ```js
 modules.define('ablock', ['i-bem__dom'], function(provide, BEMDOM) {
@@ -199,13 +190,7 @@ provide(ABlock.decl({ modName : 'm1', modVal : 'v1' }, {})); // Redefining the b
 });
 ```
 
-------------------------------------------------------------------------
-
-**NB** The block [static methods](./i-bem-js-context.en.md) will be available to all its instances, *regardless of modifier values*.
-Modifiers are properties of the block instance, but static methods belong to the
-block class and do not take the status of modifiers into account.
-
-------------------------------------------------------------------------
+> **Note** The block [static methods](./i-bem-js-context.en.md) will be available to all its instances, *regardless of modifier values*. Modifiers are properties of the block instance, but static methods belong to the block class and do not take the status of modifiers into account.
 
 <a name="inher-mixins"></a>
 
@@ -249,11 +234,7 @@ provide(BEMDOM.declMix('mymix', //only a string with the name
 });
 ```
 
-------------------------------------------------------------------------
-
-**NB** You can't instantiate a mixed block and use it as an independent block.
-
-------------------------------------------------------------------------
+> **Note** You can't instantiate a mixed block and use it as an independent block.
 
 <a name="trigger-decl"></a>
 
@@ -261,10 +242,10 @@ provide(BEMDOM.declMix('mymix', //only a string with the name
 
 [Triggers](./i-bem-js-states.en.md) that are executed when setting modifiers are described in the block declaration. The following properties are reserved for this purpose in the hash of the block instance methods:
 
--   `beforeSetMod` — Triggers called before setting **block modifiers**.
--   `beforeElemSetMod` — Triggers called before setting **element modifiers**.
--   `onSetMod` — Triggers called after setting **block modifiers**.
--   `onElemSetMod` — Triggers called after setting block **element modifiers**.
+* `beforeSetMod` — Triggers called before setting **block modifiers**.
+* `beforeElemSetMod` — Triggers called before setting **element modifiers**.
+* `onSetMod` — Triggers called after setting **block modifiers**.
+* `onElemSetMod` — Triggers called after setting block **element modifiers**.
 
 ```js
 modules.define('block-name', function(provide, BEMDOM) {
@@ -287,9 +268,9 @@ provide(BEMDOM.decl(this.name,
 
 The value of the `beforeSetMod` and `onSetMod` properties is a hash associating changes to modifiers with triggers. A trigger receives the following arguments:
 
--   `modName` – The modifier name.
--   `modVal` – The value of the modifier being set.
--   `prevModVal` – The previous modifier value. For `beforeSetMod`, this is the current value of the modifier, which will be changed to `modVal` if the trigger doesn't return `false`.
+* `modName` – The modifier name.
+* `modVal` – The value of the modifier being set.
+* `prevModVal` – The previous modifier value. For `beforeSetMod`, this is the current value of the modifier, which will be changed to `modVal` if the trigger doesn't return `false`.
 
 ```js
 {
@@ -298,6 +279,7 @@ The value of the `beforeSetMod` and `onSetMod` properties is a hash associating 
         'val1': function(modName, modVal, prevModVal) { /* ... */ }, // trigger to set mod2 to the value val1
         'val2': function(modName, modVal, prevModVal) { /* ... */ }, // trigger to set mod2 to the value val2
         '': function(modName, modVal, prevModVal) { /* ... */ } // trigger to delete the mod2 modifier
+    }
     'mod3': {
         'true': function(modName, modVal, prevModVal) { /* ... */ }, // trigger to set the simple modifier mod3
         '': function(modName, modVal, prevModVal) { /* ... */ }, // trigger to delete the simple modifier mod3
@@ -316,10 +298,10 @@ onSetMod: function(modName, modVal, prevModVal) { /* ... */ }
 Triggers to set **element modifiers** are described in the `beforeElemSetMod` and `onElemSetMod` properties. The hash in the property values has an extra nesting level — the **element name**.
 The trigger is passed the following as arguments:
 
--   `elem` — The element name.
--   `modName` – The modifier name.
--   `modVal` – The value of the modifier being set.
--   `prevModVal` – The previous modifier value. For `beforeSetMod`, this is the current value of the modifier, which will be changed to `modVal` if the trigger doesn't return `false`.
+* `elem` — The element name.
+* `modName` – The modifier name.
+* `modVal` – The value of the modifier being set.
+* `prevModVal` – The previous modifier value. For `beforeSetMod`, this is the current value of the modifier, which will be changed to `modVal` if the trigger doesn't return `false`.
 
 ```js
 {
