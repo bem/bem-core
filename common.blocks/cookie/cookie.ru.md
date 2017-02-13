@@ -85,7 +85,7 @@ modules.require('cookie', function(cookie) {
 
     console.log(cookie.get('mycookie')); // 'foobar'
 
-    cookie.set('mycookie', null }); // удаляем cookie
+    cookie.set('mycookie', null); // удаляем cookie
     console.log(cookie.get('mycookie')); // null
 
 });
