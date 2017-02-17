@@ -27,7 +27,7 @@ provide(/** @exports */bemDom.declBlock(this.name,
                         .setMod('screen-size', ua.screenSize)
                         .setMod('svg', ua.svg? 'yes' : 'no')
                         .setMod('orient', ua.landscape? 'landscape' : 'portrait')
-                        .bindToWin(
+                        ._domEvents(bemDom.win).on(
                             'orientchange',
                             function(e, data) {
                                 ua.width = data.width;
