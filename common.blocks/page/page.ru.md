@@ -101,7 +101,7 @@
 {
     block : 'page',
     title : 'Заголовок страницы',
-    head: [
+    head : [
         { elem : 'js', url : 'jquery-min.js' },
         { elem : 'meta', attrs : { name : 'description', content : 'Yet another webdev blog' } }
     ],
@@ -193,7 +193,7 @@
     title : 'Page title',
     styles : {
         elem : 'css',
-        content : '.page { color: #f00 }'
+        content : '.page { color : #f00 }'
     },
     content : 'Страница с тэгом <style>'
  }

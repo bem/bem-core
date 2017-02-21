@@ -65,7 +65,7 @@ console.log(objects.extend(obj1, obj2)); // { a : 1, b : 3, c : 4 }
 
 ```js
 modules.require(['objects'], function(objects) {
-  
+
 var obj1 = {},
     obj2 = { foo : 'bar' };
 

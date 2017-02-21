@@ -19,27 +19,26 @@
 Все pointer-события являются пользовательскими событиями jQuery. Подписка на pointer-события осуществляется стандартным образом:
 
 ```js
-modules.define(
-    'pointer-test',
-    ['i-bem__dom', 'jquery'],
-    function(provide, BEMDOM, $) {
+modules.define('pointer-test', ['i-bem-dom'], function(provide, bemDom) {
 
-provide(BEMDOM.decl({ block : this.name }, /** @lends pointer-test.prototype */ {
+provide(bemDom.declBlock(this.name, /** @lends pointer-test.prototype */ {
     onSetMod : {
-        'js' : {
-            'inited' : function() {
-                this.bindTo('pointerpress', this.onPress); // при инициализации подписываемся на pointerpress на самом блоке
+        js : {
+            inited : function() {
+                // при инициализации подписываемся на pointerpress на самом блоке
+                this._domEvents().on('pointerpress', this._onPress);
             }
         }
-
     },
-    onPress : function(e) {
+    _onPress : function(e) {
         console.log(e.type);
-        this.bindTo('pointerrelease', this.onRelease); // при вызове обработчика для pointerpress подписываемся на pointerrelease
+        // при вызове обработчика для pointerpress подписываемся на pointerrelease
+        this._domEvents().on('pointerrelease', this._onRelease);
     },
-    onRelease : function(e) {
+    _onRelease : function(e) {
         console.log(e.type);
-        this.unbindFrom('pointerrelease', this.onRelease); // при вызове обработчика для pointerrelease отписываемся от pointerrelease
+        // при вызове обработчика для pointerrelease отписываемся от pointerrelease
+        this._domEvents().un('pointerrelease', this._onRelease);
     }
 }));
 });

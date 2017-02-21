@@ -19,27 +19,26 @@ Each polyfill adds a set of **pointer events** for creating hardware agnostic lo
 All the pointer events are jQuery user events. Subscribe to pointer events in the standard way:
 
 ```js
-modules.define(
-    'pointer-test',
-    ['i-bem__dom', 'jquery'],
-    function(provide, BEMDOM, $) {
+modules.define('pointer-test', ['i-bem-dom'], function(provide, bemDom) {
 
-provide(BEMDOM.decl({ block : this.name }, /** @lends pointer-test.prototype */ {
+provide(bemDom.declBlock(this.name, /** @lends pointer-test.prototype */ {
     onSetMod : {
-        'js' : {
-            'inited' : function() {
-                this.bindTo('pointerpress', this.onPress); // subscribing to pointerpress on the block itself during initialization
+        js : {
+            inited : function() {
+                // subscribing to pointerpress on the block itself during initialization
+                this._domEvents().on('pointerpress', this._onPress);
             }
         }
-
     },
-    onPress : function(e) {
+    _onPress : function(e) {
         console.log(e.type);
-        this.bindTo('pointerrelease', this.onRelease); // subscribing to pointerrelease when calling the pointerpress handler
+        // subscribing to pointerrelease when calling the pointerpress handler
+        this._domEvents().on('pointerrelease', this._onRelease);
     },
-    onRelease : function(e) {
+    _onRelease : function(e) {
         console.log(e.type);
-        this.unbindFrom('pointerrelease', this.onRelease); // unsubscribing from pointerrelease when calling the pointerrelease handler
+        // unsubscribing from pointerrelease when calling the pointerrelease handler
+        this._domEvents().un('pointerrelease', this._onRelease);
     }
 }));
 });

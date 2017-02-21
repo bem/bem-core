@@ -60,16 +60,13 @@
 Например, метод `_onKeyDown` использует имена клавиш `UP` и `DOWN` при проверке поля `keyCode` объекта события:
 
 ```js
-modules.define(
-    'input',
-    ['i-bem__dom', 'keyboard__codes'],
-    function(provide, bemDom, keyCodes) {
+modules.define('input', ['i-bem-dom', 'keyboard__codes'], function(provide, bemDom, keyCodes) {
 
-provide(bemDom.decl(this.name, /** @lends input.prototype */{
+provide(bemDom.declBlock(this.name, /** @lends input.prototype */{
     onSetMod : {
-        'js': {
-            inited: function() {
-                this.bindTo('keydown', this._onKeyDown);
+        js : {
+            inited : function() {
+                this._domEvents().on('keydown', this._onKeyDown);
             }
         }
     },
