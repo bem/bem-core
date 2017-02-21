@@ -60,21 +60,18 @@
 Например, метод `_onKeyDown` использует имена клавиш `UP` и `DOWN` при проверке поля `keyCode` объекта события:
 
 ```js
-modules.define(
-    'input',
-    ['i-bem__dom', 'keyboard__codes'],
-    function(provide, bemDom, keyCodes) {
+modules.define('input', ['i-bem-dom', 'keyboard__codes'], function(provide, bemDom, keyCodes) {
 
-provide(bemDom.decl(this.name, /** @lends input.prototype */{
-    onSetMod : {
-        'js': {
+provide(bemDom.declBlock(this.name, /** @lends input.prototype */{
+    onSetMod: {
+        js: {
             inited: function() {
-                this.bindTo('keydown', this._onKeyDown);
+                this._domEvents().on('keydown', this._onKeyDown);
             }
         }
     },
 
-    _onKeyDown : function(e) {
+    _onKeyDown: function(e) {
         if((e.keyCode === keyCodes.UP || e.keyCode === keyCodes.DOWN) && !e.shiftKey) {
             // ...
         }

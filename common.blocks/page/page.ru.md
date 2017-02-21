@@ -66,9 +66,9 @@
 
 ```js
 {
-    block : 'page',
-    title : 'Заголовок страницы',
-    content : 'Блок page'
+    block: 'page',
+    title: 'Заголовок страницы',
+    content: 'Блок page'
 }
 ```
 
@@ -82,10 +82,10 @@
 
 ```js
 {
-    block : 'page',
-    title : 'Заголовок страницы',
-    favicon : 'favicon.ico',
-    content : 'Страница с пользовательской фавиконкой'
+    block: 'page',
+    title: 'Заголовок страницы',
+    favicon: 'favicon.ico',
+    content: 'Страница с пользовательской фавиконкой'
 }
 ```
 
@@ -99,13 +99,13 @@
 
 ```js
 {
-    block : 'page',
-    title : 'Заголовок страницы',
+    block: 'page',
+    title: 'Заголовок страницы',
     head: [
-        { elem : 'js', url : 'jquery-min.js' },
-        { elem : 'meta', attrs : { name : 'description', content : 'Yet another webdev blog' } }
+        { elem: 'js', url: 'jquery-min.js' },
+        { elem: 'meta', attrs: { name: 'description', content: 'Yet another webdev blog' } }
     ],
-    content : 'Страница с подключенным JS и meta-данными'
+    content: 'Страница с подключенным JS и meta-данными'
 }
 ```
 
@@ -119,10 +119,10 @@
 
 ```js
 {
-    block : 'page',
-    title : 'Заголовок страницы',
-    styles : { elem : 'css', url : '_index.css' },
-    content : 'Страница с подключенным CSS'
+    block: 'page',
+    title: 'Заголовок страницы',
+    styles: { elem: 'css', url: '_index.css' },
+    content: 'Страница с подключенным CSS'
 }
 ```
 
@@ -136,10 +136,10 @@
 
 ```js
 {
-    block : 'page',
-    title : 'Заголовок страницы',
-    scripts : { elem : 'js', url : '_index.js' },
-    content : 'Страница со скриптом подключенным в body'
+    block: 'page',
+    title: 'Заголовок страницы',
+    scripts: { elem: 'js', url: '_index.js' },
+    content: 'Страница со скриптом подключенным в body'
 }
 ```
 
@@ -153,15 +153,15 @@
 
 ```js
 {
-    block : 'page',
-    title : 'Заголовок страницы',
-    content : {
-        block : 'link',
-        mods : { pseudo : 'yes', togcolor : 'yes', color : 'green' },
-        url : '#',
-        target : '_blank',
-        title : 'Кликни меня',
-        content : 'Псевдоссылка, меняющая цвет по клику'
+    block: 'page',
+    title: 'Заголовок страницы',
+    content: {
+        block: 'link',
+        mods: { pseudo: 'yes', togcolor: 'yes', color: 'green' },
+        url: '#',
+        target: '_blank',
+        title: 'Кликни меня',
+        content: 'Псевдоссылка, меняющая цвет по клику'
     }
 }
 ```
@@ -189,13 +189,13 @@
 
 ```js
 {
-    block : 'page',
-    title : 'Page title',
-    styles : {
-        elem : 'css',
-        content : '.page { color: #f00 }'
+    block: 'page',
+    title: 'Page title',
+    styles: {
+        elem: 'css',
+        content: '.page { color: #f00 }'
     },
-    content : 'Страница с тэгом <style>'
+    content: 'Страница с тэгом <style>'
  }
 ```
 
@@ -223,13 +223,13 @@
 
 ```js
 {
-    block : 'page',
-    title : 'Page title',
-    scripts : {
-        elem : 'js',
-        content : 'console.log(document.title)'
+    block: 'page',
+    title: 'Page title',
+    scripts: {
+        elem: 'js',
+        content: 'console.log(document.title)'
     },
-    content : 'Страница с тэгом <script>'
+    content: 'Страница с тэгом <script>'
 }
 ```
 
@@ -243,10 +243,10 @@
 
 ```js
 {
-    block : 'page',
-    title : 'Page title',
-    styles : { elem : 'css', url : '_index.css' },
-    content : 'Страница с тэгом style'
+    block: 'page',
+    title: 'Page title',
+    styles: { elem: 'css', url: '_index.css' },
+    content: 'Страница с тэгом style'
 }
 ```
 
@@ -258,13 +258,13 @@
 
 ```js
 {
-    block : 'page',
-    title : 'Заголовок страницы',
-    head : [
-        { elem : 'css', url : 'example.css' },
-        { elem : 'meta', attrs : { name : 'keywords', content : 'js, css, html' } }
+    block: 'page',
+    title: 'Заголовок страницы',
+    head: [
+        { elem: 'css', url: 'example.css' },
+        { elem: 'meta', attrs: { name: 'keywords', content: 'js, css, html' } }
     ],
-    content : 'Страница с подключенным CSS и meta-данными'
+    content: 'Страница с подключенным CSS и meta-данными'
 }
 ```
 

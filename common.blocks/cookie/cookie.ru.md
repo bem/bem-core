@@ -78,9 +78,9 @@ modules.require('cookie', function(cookie) {
 modules.require('cookie', function(cookie) {
 
     cookie.set('mycookie', 'foobar', {
-        expires : 1, // срок жизни одни сутки
-        path : '/', // доступно для всех страниц
-        secure : true // передавать cookie только по SSL
+        expires: 1, // срок жизни одни сутки
+        path: '/', // доступно для всех страниц
+        secure: true // передавать cookie только по SSL
     });
 
     console.log(cookie.get('mycookie')); // 'foobar'

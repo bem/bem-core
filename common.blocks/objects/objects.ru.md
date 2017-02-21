@@ -42,10 +42,10 @@
 ```js
 modules.require(['objects'], function(objects) {
 
-var obj1 = { a : 1, b : 2 },
-    obj2 = { b : 3, c : 4 };
+var obj1 = { a: 1, b: 2 },
+    obj2 = { b: 3, c: 4 };
 
-console.log(objects.extend(obj1, obj2)); // { a : 1, b : 3, c : 4 }
+console.log(objects.extend(obj1, obj2)); // { a: 1, b: 3, c: 4 }
 });
 ```
 
@@ -65,9 +65,9 @@ console.log(objects.extend(obj1, obj2)); // { a : 1, b : 3, c : 4 }
 
 ```js
 modules.require(['objects'], function(objects) {
-  
+
 var obj1 = {},
-    obj2 = { foo : 'bar' };
+    obj2 = { foo: 'bar' };
 
 console.log(objects.isEmpty(obj1)); // true
 console.log(objects.isEmpty(obj2)); // false
@@ -95,7 +95,7 @@ console.log(objects.isEmpty(obj2)); // false
 ```js
 modules.require(['objects'], function(objects) {
     objects.each(
-        { a : 1, b : 2 },
+        { a: 1, b: 2 },
         function(val, key) {
             console.log(key, val);
         });

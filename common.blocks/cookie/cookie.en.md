@@ -78,9 +78,9 @@ Example:
 modules.require('cookie', function(cookie) {
 
     cookie.set('mycookie', 'foobar', {
-        expires : 1, // lifetime is one day
-        path : '/', // available for all pages secure
-        secure : true // only send the cookie over SSL
+        expires: 1, // lifetime is one day
+        path: '/', // available for all pages secure
+        secure: true // only send the cookie over SSL
     });
 
     console.log(cookie.get('mycookie')); // 'foobar'
