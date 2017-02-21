@@ -63,15 +63,15 @@
 modules.define('input', ['i-bem-dom', 'keyboard__codes'], function(provide, bemDom, keyCodes) {
 
 provide(bemDom.declBlock(this.name, /** @lends input.prototype */{
-    onSetMod: {
-        js: {
-            inited: function() {
+    onSetMod : {
+        js : {
+            inited : function() {
                 this._domEvents().on('keydown', this._onKeyDown);
             }
         }
     },
 
-    _onKeyDown: function(e) {
+    _onKeyDown : function(e) {
         if((e.keyCode === keyCodes.UP || e.keyCode === keyCodes.DOWN) && !e.shiftKey) {
             // ...
         }

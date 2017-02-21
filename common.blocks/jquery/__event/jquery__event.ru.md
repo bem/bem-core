@@ -22,20 +22,20 @@
 modules.define('pointer-test', ['i-bem-dom'], function(provide, bemDom) {
 
 provide(bemDom.declBlock(this.name, /** @lends pointer-test.prototype */ {
-    onSetMod: {
-        js: {
-            inited: function() {
+    onSetMod : {
+        js : {
+            inited : function() {
                 // при инициализации подписываемся на pointerpress на самом блоке
                 this._domEvents().on('pointerpress', this._onPress);
             }
         }
     },
-    _onPress: function(e) {
+    _onPress : function(e) {
         console.log(e.type);
         // при вызове обработчика для pointerpress подписываемся на pointerrelease
         this._domEvents().on('pointerrelease', this._onRelease);
     },
-    _onRelease: function(e) {
+    _onRelease : function(e) {
         console.log(e.type);
         // при вызове обработчика для pointerrelease отписываемся от pointerrelease
         this._domEvents().un('pointerrelease', this._onRelease);

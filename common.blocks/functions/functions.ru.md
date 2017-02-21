@@ -67,11 +67,11 @@ modules.require('functions', function(func) {
 modules.define('base-class', ['inherit', 'functions'], function(provide, inherit, functions) {
 
 provide(inherit({
-    getData: function() {
+    getData : function() {
         this._sendRequest();
     },
 
-    _sendRequest: functions.noop
+    _sendRequest : functions.noop
 
 }));
 

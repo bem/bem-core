@@ -73,12 +73,12 @@ Use for escaping control characters in HTML and XML attributes. Processes the co
 For example, in the [`common.blocks/select`](https://github.com/bem/bem-components/blob/v2/common.blocks/select/select.js#L237) block in the `bem-components` library, `strings__escape` is used for escaping control characters in the `value` property of an HTML element:
 
 ```js
-_createControlHTML: function(name, val) {
+_createControlHTML : function(name, val) {
     // Using string concatenation to not depend on template engines
     return '<input ' +
         'type="hidden" ' +
         'name="' + name + '" ' +
         'class="' + this.buildClass('control') + '" ' +
-        'value="' + escape.attr(typeof val === 'object'? JSON.stringify(val): val) + '"/>';
+        'value="' + escape.attr(typeof val === 'object'? JSON.stringify(val) : val) + '"/>';
 }
 ```

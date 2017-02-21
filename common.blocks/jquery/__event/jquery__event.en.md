@@ -22,20 +22,20 @@ All the pointer events are jQuery user events. Subscribe to pointer events in th
 modules.define('pointer-test', ['i-bem-dom'], function(provide, bemDom) {
 
 provide(bemDom.declBlock(this.name, /** @lends pointer-test.prototype */ {
-    onSetMod: {
-        js: {
-            inited: function() {
+    onSetMod : {
+        js : {
+            inited : function() {
                 // subscribing to pointerpress on the block itself during initialization
                 this._domEvents().on('pointerpress', this._onPress);
             }
         }
     },
-    _onPress: function(e) {
+    _onPress : function(e) {
         console.log(e.type);
         // subscribing to pointerrelease when calling the pointerpress handler
         this._domEvents().on('pointerrelease', this._onRelease);
     },
-    _onRelease: function(e) {
+    _onRelease : function(e) {
         console.log(e.type);
         // unsubscribing from pointerrelease when calling the pointerrelease handler
         this._domEvents().un('pointerrelease', this._onRelease);

@@ -228,7 +228,7 @@ modules.require(['events'], function(events) {
 });
 ```
 
-* хеш вида `{ 'событие-1': обработчик-1, ... , 'событие-n': обработчик-n }` – чтобы установить сразу несколько обработчиков для разных типов событий;
+* хеш вида `{ 'событие-1' : обработчик-1, ... , 'событие-n' : обработчик-n }` – чтобы установить сразу несколько обработчиков для разных типов событий;
 
 ```js
 modules.require(['events'], function(events) {
@@ -236,8 +236,8 @@ modules.require(['events'], function(events) {
     var myEmitter = new events.Emitter();
 
     myEmitter.on({
-        myevent1: function(e) { console.log(e.type) },
-        myevent2: function(e) { console.log(e.type) }
+        myevent1 : function(e) { console.log(e.type) },
+        myevent2 : function(e) { console.log(e.type) }
     });  
 
     myEmitter.emit('myevent1'); // 'myevent1'

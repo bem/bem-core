@@ -228,7 +228,7 @@ modules.require(['events'], function(events) {
 });
 ```
 
-* A hash of `{ 'event-1': handler-1, ... , 'event-n': handler-n }`, in order to set multiple handlers for different event types.
+* A hash of `{ 'event-1' : handler-1, ... , 'event-n' : handler-n }`, in order to set multiple handlers for different event types.
 
 ```js
 modules.require(['events'], function(events) {
@@ -236,8 +236,8 @@ modules.require(['events'], function(events) {
     var myEmitter = new events.Emitter();
 
     myEmitter.on({
-        myevent1: function(e) { console.log(e.type) },
-        myevent2: function(e) { console.log(e.type) }
+        myevent1 : function(e) { console.log(e.type) },
+        myevent2 : function(e) { console.log(e.type) }
     });  
 
     myEmitter.emit('myevent1'); // 'myevent1'

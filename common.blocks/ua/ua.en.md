@@ -40,5 +40,5 @@ It doesn't have a visual representation on the page.
 To use it, add the element to the `deps.js` dependencies file for the block that needs information about SVG support:
 
 ```js
-({ shouldDeps: { block: 'ua', elem: 'svg' } })
+({ shouldDeps : { block : 'ua', elem : 'svg' } })
 ```

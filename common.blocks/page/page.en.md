@@ -66,9 +66,9 @@ Title of the page. It becomes the `<title>` HTML element.
 
 ```js
 {
-    block: 'page',
-    title: 'title',
-    content: 'Block page'
+    block : 'page',
+    title : 'title',
+    content : 'Block page'
 }
 ```
 
@@ -82,10 +82,10 @@ Use this field to specify the URL of the favicon for the page:
 
 ```js
 {
-    block: 'page',
-    title: 'title',
-    favicon: 'favicon.ico',
-    content: 'Page with users favicon.ico'
+    block : 'page',
+    title : 'title',
+    favicon : 'favicon.ico',
+    content : 'Page with users favicon.ico'
 }
 ```
 
@@ -99,13 +99,13 @@ Use this field to add content to the `<head>` `HTML` element that is defined in 
 
 ```js
 {
-    block: 'page',
-    title: 'title',
-    head: [
-        { elem: 'js', url: 'jquery-min.js' },
-        { elem: 'meta', attrs: { name: 'description', content: 'Yet another webdev blog' } }
+    block : 'page',
+    title : 'title',
+    head : [
+        { elem : 'js', url : 'jquery-min.js' },
+        { elem : 'meta', attrs : { name : 'description', content : 'Yet another webdev blog' } }
     ],
-    content: 'Page with JS and meta-data'
+    content : 'Page with JS and meta-data'
 }
 ```
 
@@ -119,10 +119,10 @@ Use this field to connect `CSS`:
 
 ```js
 {
-    block: 'page',
-    title: 'title',
-    styles: { elem: 'css', url: '_index.css' },
-    content: 'Page with CSS'
+    block : 'page',
+    title : 'title',
+    styles : { elem : 'css', url : '_index.css' },
+    content : 'Page with CSS'
 }
 ```
 
@@ -136,10 +136,10 @@ Embeds JS in the body of the page, at the end of the `<body>` HTML element:
 
 ```js
 {
-    block: 'page',
-    title: 'title',
-    scripts: { elem: 'js', url: '_index.js' },
-    content: 'Page with JS in body'
+    block : 'page',
+    title : 'title',
+    scripts : { elem : 'js', url : '_index.js' },
+    content : 'Page with JS in body'
 }
 ```
 
@@ -153,15 +153,15 @@ Use this field to set the page content.
 
 ```js
 {
-    block: 'page',
-    title: 'title',
-    content: {
-        block: 'link',
-        mods: { pseudo: 'yes', togcolor: 'yes', color: 'green' },
-        url: '#',
-        target: '_blank',
-        title: 'Click me',
-        content: 'Pseudo link'
+    block : 'page',
+    title : 'title',
+    content : {
+        block : 'link',
+        mods : { pseudo : 'yes', togcolor : 'yes', color : 'green' },
+        url : '#',
+        target : '_blank',
+        title : 'Click me',
+        content : 'Pseudo link'
     }
 }
 ```
@@ -189,13 +189,13 @@ Use this field for explicitly passing the content of the `<style>` HTML element:
 
 ```js
 {
-    block: 'page',
-    title: 'Page title',
-    styles: {
-        elem: 'css',
-        content: '.page { color: #f00 }'
+    block : 'page',
+    title : 'Page title',
+    styles : {
+        elem : 'css',
+        content : '.page { color : #f00 }'
     },
-    content: 'Page with tag <style>'
+    content : 'Page with tag <style>'
  }
 ```
 
@@ -223,13 +223,13 @@ Use this field for explicitly passing the content of the `<script>` HTML element
 
 ```js
 {
-    block: 'page',
-    title: 'Page title',
-    scripts: {
-        elem: 'js',
-        content: 'console.log(document.title)'
+    block : 'page',
+    title : 'Page title',
+    scripts : {
+        elem : 'js',
+        content : 'console.log(document.title)'
     },
-    content: 'Page with tag <script>'
+    content : 'Page with tag <script>'
 }
 ```
 
@@ -243,10 +243,10 @@ Sets the URL for downloading a script. The value of the `url` field in the BEMJS
 
 ```js
 {
-    block: 'page',
-    title: 'Page title',
-    styles: { elem: 'css', url: '_index.css' },
-    content: 'Page with tag style'
+    block : 'page',
+    title : 'Page title',
+    styles : { elem : 'css', url : '_index.css' },
+    content : 'Page with tag style'
 }
 ```
 
@@ -258,13 +258,13 @@ Creates `<meta>` HTML elements and defines user metadata for them. Metadata is p
 
 ```js
 {
-    block: 'page',
-    title: 'title',
-    head: [
-        { elem: 'css', url: 'example.css' },
-        { elem: 'meta', attrs: { name: 'keywords', content: 'js, css, html' } }
+    block : 'page',
+    title : 'title',
+    head : [
+        { elem : 'css', url : 'example.css' },
+        { elem : 'meta', attrs : { name : 'keywords', content : 'js, css, html' } }
     ],
-    content: 'Page with CSS и meta-data'
+    content : 'Page with CSS и meta-data'
 }
 ```
 
