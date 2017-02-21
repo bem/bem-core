@@ -8,29 +8,29 @@
 
 ```bemjson
 [{
-    block: 'header',
-    attrs: { style: 'border: 2px solid blue;' },
-    content: 'Top element'
+    block : 'header',
+    attrs : { style : 'border : 2px solid blue;' },
+    content : 'Top element'
 },
 {
-    block: 'clearfix',
-    attrs: { style: 'border: 2px dotted yellow;' },
-    content: [
+    block : 'clearfix',
+    attrs : { style : 'border : 2px dotted yellow;' },
+    content : [
     {
-        block: 'float',
-        attrs: { style: 'float: left; border: 1px solid green;' },
-        content: 'Floating item 1'
+        block : 'float',
+        attrs : { style : 'float : left; border : 1px solid green;' },
+        content : 'Floating item 1'
     },
     {
-        block: 'float',
-        attrs: { style: 'float: left; border: 1px solid green;' },
-        content: 'Floating item 2'
+        block : 'float',
+        attrs : { style : 'float : left; border : 1px solid green;' },
+        content : 'Floating item 2'
     }]
 },
 {
-    block: 'footer',
-    attrs: { style: 'border: 2px solid red' },
-    content: 'Footer'
+    block : 'footer',
+    attrs : { style : 'border : 2px solid red' },
+    content : 'Footer'
 }]
 ```
 
@@ -38,30 +38,30 @@
 
 ```bemjson
 [{
-    block: 'header',
-    attrs: { style: 'border: 2px solid blue;' },
-    content: 'Top element'
+    block : 'header',
+    attrs : { style : 'border : 2px solid blue;' },
+    content : 'Top element'
 },
 {
-    block: 'some-container',
-    mix: [{ block: 'clearfix' }],
-    attrs: { style: 'border: 2px dotted yellow;' },
-    content: [
+    block : 'some-container',
+    mix : [{ block : 'clearfix' }],
+    attrs : { style : 'border : 2px dotted yellow;' },
+    content : [
     {
-        block: 'float',
-        attrs: { style: 'float: left; border: 1px solid green;' },
-        content: 'Floating item 1'
+        block : 'float',
+        attrs : { style : 'float : left; border : 1px solid green;' },
+        content : 'Floating item 1'
     },
     {
-        block: 'float',
-        attrs: { style: 'float: left; border: 1px solid green;' },
-        content: 'Floating item 2'
+        block : 'float',
+        attrs : { style : 'float : left; border : 1px solid green;' },
+        content : 'Floating item 2'
     }]
 },
 {
-    block: 'footer',
-    attrs: { style: 'border: 2px solid red' },
-    content: 'Footer'
+    block : 'footer',
+    attrs : { style : 'border : 2px solid red' },
+    content : 'Footer'
 }]
 ```
 
