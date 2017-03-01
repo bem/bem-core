@@ -115,7 +115,7 @@ modules.define('my-form__submit-control', ['i-bem-dom'], function(provide, bemDo
 
 provide(bemDom.declElem('my-form', 'submit-control', {
     _onClick : function() {
-        this._block.submit();
+        this._block().submit();
     }
 }));
 
