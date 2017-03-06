@@ -66,7 +66,9 @@ block('page')(
     elem('favicon')(
         bem()(false),
         tag()('link'),
-        attrs()(function() { return { rel : 'shortcut icon', href : this.ctx.url }; })
+        attrs()(function() {
+            return this.extend(applyNext() || {}, { rel : 'shortcut icon', href : this.ctx.url });
+        })
     )
 
 );

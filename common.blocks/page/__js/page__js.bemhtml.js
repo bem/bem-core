@@ -9,6 +9,6 @@ block('page').elem('js')(
             attrs.nonce = this._nonceCsp;
         }
 
-        return attrs;
+        return this.extend(applyNext() || {}, attrs);
     })
 );
