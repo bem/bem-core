@@ -339,6 +339,22 @@ describe('i-bem-dom', function() {
         });
 
         describe('findChildBlocks', function() {
+            it('should throw error if Block given as string', function() {
+                function find() {
+                    rootBlock.findChildBlocks('string');
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
+            it('should throw error if Block given as description object with block as string', function() {
+                function find() {
+                    rootBlock.findChildBlocks({ block : 'string' });
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
             it('should return BEM-collection', function() {
                 rootBlock.findChildBlocks(B1Block).should.be.instanceOf(BemDomCollection);
             });
@@ -370,6 +386,22 @@ describe('i-bem-dom', function() {
         });
 
         describe('findChildBlock', function() {
+            it('should throw error if Block given as string', function() {
+                function find() {
+                    rootBlock.findChildBlock('string');
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
+            it('should throw error if Block given as description object with block as string', function() {
+                function find() {
+                    rootBlock.findChildBlock({ block : 'string' });
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
             it('should return instance of Block found by class', function() {
                 rootBlock.findChildBlock(B1Block).should.be.instanceOf(B1Block);
             });
@@ -410,6 +442,22 @@ describe('i-bem-dom', function() {
                 leafBlock = rootBlock.findChildBlock({ block : B1Block, modName : 'm1', modVal : true });
             });
 
+            it('should throw error if Block given as string', function() {
+                function find() {
+                    rootBlock.findParentBlocks('string');
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
+            it('should throw error if Block given as description object with block as string', function() {
+                function find() {
+                    rootBlock.findParentBlocks({ block : 'string' });
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
             it('should return BEM-collection', function() {
                 leafBlock.findParentBlocks(B1Block).should.be.instanceOf(BemDomCollection);
             });
@@ -441,6 +489,22 @@ describe('i-bem-dom', function() {
                 leafBlock = rootBlock.findChildBlock({ block : B1Block, modName : 'm1', modVal : true });
             });
 
+            it('should throw error if Block given as string', function() {
+                function find() {
+                    rootBlock.findParentBlock('string');
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
+            it('should throw error if Block given as description object with block as string', function() {
+                function find() {
+                    rootBlock.findParentBlock({ block : 'string' });
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
             it('should find first ancestor block by block class', function() {
                 leafBlock.findParentBlock(B1Block).params.id.should.be.equal('3');
             });
@@ -465,6 +529,22 @@ describe('i-bem-dom', function() {
         });
 
         describe('findMixedBlocks', function() {
+            it('should throw error if Block given as string', function() {
+                function find() {
+                    rootBlock.findMixedBlocks('string');
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
+            it('should throw error if Block given as description object with block as string', function() {
+                function find() {
+                    rootBlock.findMixedBlocks({ block : 'string' });
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
             it('should return BEM-collection', function() {
                 rootBlock.findChildBlock({ block : B3Block }).findMixedBlocks(B4Block)
                     .should.be.instanceOf(BemDomCollection);
@@ -478,6 +558,22 @@ describe('i-bem-dom', function() {
         });
 
         describe('findMixedBlock', function() {
+            it('should throw error if Block given as string', function() {
+                function find() {
+                    rootBlock.findMixedBlock('string');
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
+            it('should throw error if Block given as description object with block as string', function() {
+                function find() {
+                    rootBlock.findMixedBlock({ block : 'string' });
+                }
+
+                find.should.throw(Error, 'Block must be a class or description (block, modName, modVal) of the block to find');
+            });
+
             it('should find first mixed block by block class', function() {
                 rootBlock.findChildBlock({ block : B3Block })
                     .findMixedBlock(B4Block)
