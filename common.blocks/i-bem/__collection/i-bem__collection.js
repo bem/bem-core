@@ -179,7 +179,7 @@ var BemCollection = inherit(/** @lends BemCollection.prototype */{
                 arg instanceof BemCollection?  arg._entities : arg);
         }
 
-        return new BemCollection(arrayConcat.apply(this._entities, argsForConcat));
+        return new this.__self(arrayConcat.apply(this._entities, argsForConcat));
     },
 
     /**
