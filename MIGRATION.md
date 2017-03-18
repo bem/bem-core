@@ -451,6 +451,9 @@ Now the `_elem(elemName)` method of the block instance (previously `elem(elemNam
 
 To get a collection of instances of the element's class, use the `_elems()` method.
 
+Note: don't forget to switch on support for elements instances in template engine.
+For `bem-xjst` please refer to https://github.com/bem/bem-xjst/blob/master/docs/en/3-api.md#support-js-instances-for-elements-bem-core-v4 or for `BH` see https://github.com/bem/bh#jselem.
+
 ##### Ways to work with elements
 
 Before:

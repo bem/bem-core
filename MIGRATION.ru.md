@@ -456,6 +456,9 @@ provide(bemDom.declElem('my-dom-block', 'my-elem', { /* ... */ }));
 
 Для того, чтобы получить коллекцию экземпляров класса элемента, используйте метод `_elems()`.
 
+Не забудьте включить поддержку экземплятор для элементов в шаблонизаторе.
+Опция [elemJsInstances](https://github.com/bem/bem-xjst/blob/master/docs/ru/3-api.md#%D0%9F%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%BA%D0%B0-js-%D1%8D%D0%BA%D0%B7%D0%B5%D0%BC%D0%BF%D0%BB%D1%8F%D1%80%D0%BE%D0%B2-%D0%B4%D0%BB%D1%8F-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-bem-core-v4) для `bem-xjst` или [jsElem](https://github.com/bem/bh#jselem) для `BH`.
+
 ##### Cпособы взаимодействия с элементами
 
 Было:
