@@ -668,6 +668,16 @@ bemDom.declBlock('my-block', {
 });
 ```
 
+##### Link to instance
+
+If an event was fired on BEM instance the event object will contain a link to an instance:
+
+```js
+this._domEvents('my-elem').on('click', function(e) {
+    e.bemTarget // refers to `my-elem` instance
+});
+```
+
 ##### BEM events on instances
 
 Before:
