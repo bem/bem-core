@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.2.0
+
+### Notable changes
+
+- `bem-xjst 8.x` support was introduced in BEMHTML templates ([#1486](https://github.com/bem/bem-core/issues/1485)).
+
+### Bug fixes
+
+- `concat()` method was fixed in `i-bem-dom__collection` ([#1488](https://github.com/bem/bem-core/issues/1488)).
+- An issue in `ua__dom` was fix ([#1479](https://github.com/bem/bem-core/issues/1478)).
+- dist: `i-bem-dom__init_auto` was removed from `no-autoinit` bundle ([#1482](https://github.com/bem/bem-core/issues/1481)).
+
+### Other changes
+
+- Now `findChildBlock`, `findChildBlocks`, `findParentBlock`, `findParentBlocks`, `findMixedBlock` and `findMixedBlocks` methods throw an error if block is given as String ([#1469](https://github.com/bem/bem-core/pull/1469/)).
+- `buildClassName` function was optimized ([#1404](https://github.com/bem/bem-core/pull/1404)).
+- Docs: English translations were added ([#1483](https://github.com/bem/bem-core/pull/1483), [#1476](https://github.com/bem/bem-core/pull/1476), [#1475](https://github.com/bem/bem-core/pull/1475)).
+- Migration: Added notes about bemTarget ([#1491](https://github.com/bem/bem-core/issues/1472)).
+- Migration: added info about template options ([#1467](https://github.com/bem/bem-core/issues/1467)).
+- Fixed issues in docs.
+
 ## 4.1.1
 
 ### Bug fixes

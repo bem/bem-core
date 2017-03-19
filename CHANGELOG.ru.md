@@ -1,5 +1,26 @@
 # История изменений
 
+## 4.2.0
+
+### Крупные изменения
+
+- В BEMHTML-шаблонах реализована поддержка `bem-xjst 8.x` ([#1486](https://github.com/bem/bem-core/issues/1485)).
+
+### В релиз вошли следующие исправления ошибок
+
+- Исправлена работа метода `concat()` в i-bem-dom__collection ([#1488](https://github.com/bem/bem-core/issues/1488)).
+- Исправлена опечатка в `ua__dom`, приводящая к runtime-ошибке при использовании touch-уровня ([#1479](https://github.com/bem/bem-core/issues/1478)).
+- dist: Исправлена ошибка, при которой `i-bem-dom__init_auto` подключался в `no-autoinit`-бандл ([#1482](https://github.com/bem/bem-core/issues/1481)).
+
+### Также в релиз вошли следующие изменения
+
+- Теперь методы `findChildBlock`, `findChildBlocks`, `findParentBlock`, `findParentBlocks`, `findMixedBlock` и `findMixedBlocks` выбрасывают исключение, если блок передан строкой ([#1469](https://github.com/bem/bem-core/pull/1469/)).
+- Оптимизирована функция построения имен классов ([#1404](https://github.com/bem/bem-core/pull/1404)).
+- Добавлены переводы на английский ([#1483](https://github.com/bem/bem-core/pull/1483), [#1476](https://github.com/bem/bem-core/pull/1476), [#1475](https://github.com/bem/bem-core/pull/1475)).
+- Миграционный гайд: добавлено примечание о `bemTarget` ([#1491](https://github.com/bem/bem-core/issues/1472)).
+- Миграционный гайд: добавлено примечание о необходимых опциях для шаблонизаторов ([#1467](https://github.com/bem/bem-core/issues/1467)).
+- Исправлены ошибки в документации.
+
 ## 4.1.1
 
 ### В релиз вошли следующие исправления ошибок
