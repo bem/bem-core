@@ -1,14 +1,12 @@
 {
     "title": "История изменений",
     "longTitle": "bem-core: история изменений",
-    "createDate": "26-07-2013",
+    "createDate": "25-12-2013",
     "editDate": "",
     "summary": "История изменений.",
     "thumbnail": "",
     "authors": ["berezhnoy-sergey","filatov-dmitry"],
     "tags": ["bem-core"],
-    "categories": [{"name": "bem-core/1.0.0", "url": "bem-core/1.0.0"}],
     "translators": [],
-    "url": "/common.docs/changelog/",
     "type": "libs"
 }

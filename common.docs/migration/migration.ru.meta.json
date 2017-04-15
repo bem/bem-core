@@ -7,8 +7,6 @@
     "thumbnail": "",
     "authors": ["filatov-dmitry"],
     "tags": ["bem-core"],
-    "categories": [{"name": "bem-core/1.0.0", "url": "bem-core/1.0.0"}],
     "translators": [],
-    "url": "/common.docs/i-bem-js/",
     "type": "libs"
 }

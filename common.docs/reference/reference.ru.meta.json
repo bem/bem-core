@@ -1,16 +1,11 @@
 {
     "title": "Референс по BEMHTML",
     "createDate": "06-03-2013",
-    "editDate": "29-01-2014",
+    "editDate": "",
     "summary": "Cправочное руководство по шаблонизатору BEMHTML.",
     "thumbnail": "",
-    "authors": ["maslinsky-kirill", "ivanichenko-sergey"],
+    "authors": ["maslinsky-kirill"],
     "tags": ["BEMHTML"],
-    "categories": [
-        {"name": "bem-core/1.1.1/BEMHTML", "url": "bem-core/1.1.1/bemhtml", "type": "libs"},
-        {"name": "Шаблонизаторы/BEMHTML", "url": "templating-engines/bemhtml", "order": "30/10","type": "tools"}
-    ],
     "translators": [],
-    "url": "/common.docs/reference/",
     "type": ["libs", "tools"]
 }
