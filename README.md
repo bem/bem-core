@@ -35,7 +35,6 @@ the project.
   - `next-tick` — polyfill for `nextTick`/`setTimeout(0, ...)`
   - `inherit` — OOP helpers
   - `jquery` — jQuery
-  - `clearfix` — CSS clearfix trick
   - `identify` — identify JS-objects
   - `cookie` — helpers for work with browser cookies
   - `vow` — Promises/A+ implementation
