@@ -44,6 +44,28 @@ describe('i-bem_elem-instances', function() {
                 delete BEM.blocks['block__elem'] :
                 delete BEM.blocks['undefined__elem'];
         });
+
+        it('should not share properties between elements', function() {
+            BEM
+                .decl('block')
+                .decl({ elem : 'elem1' }, {
+                    value : 'secret'
+                })
+                .decl({ elem : 'elem2' }, {
+                });
+
+            var baseInstance = BEM.create({ block : 'block' }),
+                instance1 = BEM.create({ block : 'block', elem : 'elem1' }),
+                instance2 = BEM.create({ block : 'block', elem : 'elem2' });
+
+            baseInstance.should.not.have.property('value');
+            instance1.should.have.property('value').that.equal('secret');
+            instance2.should.not.have.property('value');
+
+            delete BEM.blocks['block'];
+            delete BEM.blocks['block__elem1'];
+            delete BEM.blocks['block__elem2'];
+        });
     });
 
     describe('create', function() {

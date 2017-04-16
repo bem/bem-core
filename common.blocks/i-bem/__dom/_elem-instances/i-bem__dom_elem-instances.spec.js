@@ -27,6 +27,39 @@ describe('i-bem__dom_elem-instances', function() {
             delete DOM.blocks['block'];
             delete DOM.blocks['block__elem'];
         });
+
+        it('should not share properties between elements', function() {
+            DOM
+                .decl('block')
+                .decl({ block : 'block', elem : 'elem1' }, {
+                    value : 'secret'
+                }, {})
+                .decl({ block : 'block', elem : 'elem2' }, {}, {});
+
+            var rootNode = $(BEMHTML.apply({
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem1',
+                        js : true,
+                        content : {
+                            elem : 'elem2',
+                            js : true
+                        }
+                    }
+                })),
+                block = rootNode.bem('block'),
+                elem1 = block.elemInstance('elem1'),
+                elem2 = block.elemInstance('elem2');
+
+            block.should.not.have.property('value');
+            elem1.should.have.property('value').that.equal('secret');
+            elem2.should.not.have.property('value');
+
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block__elem1'];
+            delete DOM.blocks['block__elem2'];
+        });
     });
 
     describe('block', function() {
