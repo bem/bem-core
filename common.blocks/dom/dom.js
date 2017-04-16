@@ -32,8 +32,10 @@ provide(/** @exports */{
      * @returns {jQuery}
      */
     getFocused : function() {
-        // "Error: Unspecified error." in iframe in IE9
-        try { return $(document.activeElement); } catch(e) {}
+        var d = document,
+            documentElement = d.documentElement;
+
+        return $(documentElement && documentElement.activeElement || d.activeElement);
     },
 
     /**
