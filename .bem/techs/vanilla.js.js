@@ -44,7 +44,7 @@ exports.techMixin = {
     },
 
     getYmChunk : function(output) {
-        var outputDir = PATH.resolve(output, '..');
+        var outputDir = PATH.resolve('.');
         return PATH.relative(outputDir, ymPath);
     },
 
