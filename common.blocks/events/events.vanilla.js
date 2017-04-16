@@ -228,7 +228,8 @@ var undef,
                                 e.target || (e.target = this);
                             }
 
-                            e.data = item.data;
+                            data && (item.data = data); // check if new value provided for data field
+                            e.data || (e.data = item.data); // check if event alredy have some value in data field
                             res = item.fn.apply(item.ctx || this, arguments);
                             if(typeof res !== 'undefined') {
                                 e.result = res;
