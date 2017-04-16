@@ -71,14 +71,23 @@ BEMContext.prototype.generateId = function generateId() {
     return this.identify(this.ctx);
 };
 
-BEMContext.prototype.doAsync = function doAsync(fn) {
+/**
+ *
+ * @param {Function} fn
+ * @param {...*} [args]
+ * @returns {vow:Promise}
+ */
+BEMContext.prototype.doAsync = function doAsync(fn, args) {
     var mode  = this._mode,
         ctx   = this.ctx,
         block = this.block,
         elem  = this.elem,
         mods  = this.mods,
         elemMods = this.elemMods,
-        promise = Vow.invoke(fn);
+        callArgs = arguments.length > 1 && Array.apply(null, arguments),
+        promise;
+
+    promise = callArgs ? Vow.invoke.apply(Vow, callArgs) : Vow.invoke(fn);
 
     this.__queue.push(promise);
 
@@ -89,7 +98,7 @@ BEMContext.prototype.doAsync = function doAsync(fn) {
         this.elem  = elem;
         this.mods  = mods;
         this.elemMods = elemMods;
-    }.bind(this));
+    }, this);
 
     return promise;
 };
