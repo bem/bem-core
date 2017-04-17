@@ -942,26 +942,15 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      * @returns {Boolean} Whether the block is a live block
      */
     _processLive : function(heedLive) {
-        var res = this._liveInitable;
-
         if('live' in this) {
-            var noLive = typeof res === 'undefined';
+            var noLive = typeof this._liveInitable === 'undefined';
 
             if(noLive ^ heedLive) { // should be opposite to each other
-                res = this.live() !== false;
-
-                var blockName = this.getName(),
-                    origLive = this.live;
-
-                this.live = function() {
-                    return this.getName() === blockName?
-                        res :
-                        origLive.apply(this, arguments);
-                };
+                return this.live() !== false;
             }
         }
 
-        return res;
+        return this._liveInitable;
     },
 
     /**
@@ -1055,11 +1044,23 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
 
         content = getJqueryCollection(content);
 
-        this.destruct(ctx);
+        if(this.scope.is(ctx)) {
+            this.destruct(ctx, true);
+            this.scope.replaceWith(content);
+            liveClassEventStorage = {};
+            this.scope = content;
 
-        return this.init(prev.length?
-            content.insertAfter(prev) :
-            content.prependTo(parent));
+            for(var blockName in blocks) {
+                delete blocks[blockName]._liveInitable;
+            }
+
+            return this.init();
+        } else {
+            this.destruct(ctx);
+            return this.init(prev.length?
+                content.insertAfter(prev) :
+                content.prependTo(parent));
+        }
     },
 
     /**
