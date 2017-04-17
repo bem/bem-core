@@ -62,7 +62,6 @@ var undef,
         '[^' + MOD_DELIM + ']' + MOD_DELIM + '(' + NAME_PATTERN + ')' +
         '(?:' + MOD_DELIM + '(' + NAME_PATTERN + '))?$'),
 
-    buildModPostfix = INTERNAL.buildModPostfix,
     buildClass = INTERNAL.buildClass,
 
     reverse = Array.prototype.reverse;
@@ -832,11 +831,10 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
      */
     dropElemCache : function(names, modName, modVal) {
         if(names) {
-            var modPostfix = buildModPostfix(modName, modVal);
             names.indexOf(' ') < 0?
-                delete this._elemCache[names + modPostfix] :
+                delete this._elemCache[this.__self.buildClass(names, modName, modVal)] :
                 names.split(' ').forEach(function(name) {
-                    delete this._elemCache[name + modPostfix];
+                    delete this._elemCache[this.__self.buildClass(name, modName, modVal)];
                 }, this);
         } else {
             this._elemCache = {};
