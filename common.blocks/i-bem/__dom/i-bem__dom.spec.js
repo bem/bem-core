@@ -1,7 +1,9 @@
 modules.define(
     'spec',
-    ['i-bem__dom', 'objects', 'jquery', 'sinon', 'BEMHTML'],
-    function(provide, DOM, objects, $, sinon, BEMHTML) {
+    ['i-bem__dom', 'objects', 'jquery', 'sinon', 'chai', 'BEMHTML'],
+    function(provide, DOM, objects, $, sinon, chai, BEMHTML) {
+
+var expect = chai.expect;
 
 describe('i-bem__dom', function() {
     describe('getMod', function() {
@@ -341,6 +343,123 @@ describe('i-bem__dom', function() {
 
             delete DOM.blocks['block'];
             delete DOM.blocks['block2'];
+        });
+    });
+
+    describe('findBlock[s]Outside', function() {
+        function getBlockIds(blocks) {
+            return blocks.map(function(block) {
+                return block.params.id;
+            });
+        }
+
+        var rootNode, ctx1, ctx2, ctx3;
+        beforeEach(function() {
+            rootNode = $(BEMHTML.apply(
+                {
+                    block : 'b1',
+                    mods : { m1 : 'v1' },
+                    js : { id : '1' },
+                    content : {
+                        block : 'b1',
+                        js : { id : '2' },
+                        content : [
+                            {
+                                block : 'b2',
+                                js : { id : '3' },
+                                cls : 'ctx1'
+                            },
+                            {
+                                block : 'b1',
+                                mods : { m1 : 'v1' },
+                                js : { id : '4' },
+                                cls : 'ctx2'
+                            },
+                            {
+                                block : 'b2',
+                                js : { id : '5' },
+                                mix : {
+                                    block : 'b1',
+                                    mods : { m1 : 'v1' },
+                                    js : { id : '6' }
+                                },
+                                cls : 'ctx3'
+                            }
+                        ]
+                    }
+                }));
+            DOM.init(rootNode);
+            ctx1 = rootNode.find('.ctx1').bem('b2');
+            ctx2 = rootNode.find('.ctx2').bem('b1');
+            ctx3 = rootNode.find('.ctx3').bem('b2');
+        });
+
+        afterEach(function() {
+            DOM.destruct(rootNode);
+            delete DOM.blocks['b1'];
+            delete DOM.blocks['b2'];
+        });
+
+        it('should return null if can not find outside block', function() {
+            expect(ctx1.findBlockOutside('b0')).to.be.equal(null);
+        });
+
+        it('should find outside block by name', function() {
+            ctx1.findBlockOutside('b1').params.id.should.be.equal('2');
+        });
+
+        it('should find outside block by name, modName and modVal', function() {
+            ctx1.findBlockOutside({ block : 'b1', modName : 'm1', modVal : 'v1' })
+                .params.id.should.be.equal('1');
+        });
+
+        it('should find outside block ignore self by name', function() {
+            ctx2.findBlockOutside('b1').params.id.should.be.equal('2');
+        });
+
+        it('should find outside block ignore self by name, modName and modVal', function() {
+            ctx2.findBlockOutside({ block : 'b1', modName : 'm1', modVal : 'v1' })
+                .params.id.should.be.equal('1');
+        });
+
+        it('should find outside block ignore mixed by name', function() {
+            ctx3.findBlockOutside('b1').params.id.should.be.equal('2');
+        });
+
+        it('should find outside block ignore mixed by name, modName and modVal', function() {
+            ctx3.findBlockOutside({ block : 'b1', modName : 'm1', modVal : 'v1' })
+                .params.id.should.be.equal('1');
+        });
+
+        it('should return empty array if can not find outside blocks', function() {
+            ctx1.findBlocksOutside('b0').should.be.eql([]);
+        });
+
+        it('should find all outside blocks by name', function() {
+            getBlockIds(ctx1.findBlocksOutside('b1')).should.be.eql(['2', '1']);
+        });
+
+        it('should find all outside blocks by name, modName and modVal', function() {
+            getBlockIds(ctx1.findBlocksOutside({ block : 'b1', modName : 'm1', modVal : 'v1' }))
+                .should.be.eql(['1']);
+        });
+
+        it('should find all outside blocks excepting self by name', function() {
+            getBlockIds(ctx2.findBlocksOutside('b1')).should.be.eql(['2', '1']);
+        });
+
+        it('should find all outside blocks excepting self by name, modName and modVal', function() {
+            getBlockIds(ctx2.findBlocksOutside({ block : 'b1', modName : 'm1', modVal : 'v1' }))
+                .should.be.eql(['1']);
+        });
+
+        it('should find all outside blocks excepting mixed by name', function() {
+            getBlockIds(ctx3.findBlocksOutside('b1')).should.be.eql(['2', '1']);
+        });
+
+        it('should find all outside blocks excepting mixed by name, modName and modVal', function() {
+            getBlockIds(ctx3.findBlocksOutside({ block : 'b1', modName : 'm1', modVal : 'v1' }))
+                .should.be.eql(['1']);
         });
     });
 
