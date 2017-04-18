@@ -195,6 +195,11 @@ BEMContext.prototype.isShortTag = function isShortTag(t) {
     return SHORT_TAGS.hasOwnProperty(t);
 };
 
+BEMContext.prototype.mods = function(mods) {
+    this.ctx.mods = this.extend(this.ctx.mods || {}, mods);
+    return applyNext();
+};
+
 BEMContext.prototype.extend = function extend(o1, o2) {
     if(!o1 || !o2) return o1 || o2;
     var res = {}, n;
