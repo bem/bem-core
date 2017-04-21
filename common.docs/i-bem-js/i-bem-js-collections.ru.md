@@ -65,7 +65,7 @@ provide(bemDom.declBlock(this.name, {
 ### Методы коллекции
 
 * `setMod(modName, [modVal=true])`, `delMod(modName)`, `toggleMod(modName, modVal1, [modVal2], [condition])` — соответсвуют одноименным методам [управления модификаторами](./i-bem-js-states.ru.md#Управление-модификаторами) экземпляра блока и элемента.
-* `everyHasMod(modName, [modVal])`, `someHasMod(modName, [modVal])` — применяют метод `hasMod(modName, modVal)` для каждой сущности коллекции. Возвращает `true`, если все вызовы вернули `true` и если хотя бы один вызов вернул `true`, соответсвенно.
+* `everyHasMod(modName, [modVal])`, `someHasMod(modName, [modVal])` — применяют метод `hasMod(modName, modVal)` для каждой сущности коллекции. Возвращает `true`, если все вызовы вернули `true` и если хотя бы один вызов вернул `true`, соответственно.
 * `get(i)` — возвращает элемент коллекции по индексу i.
 * `size()` — возвращает размер коллекции.
 * `forEach(fn, ctx)`, `map(fn, ctx)`, `reduce(fn, ctx)`, `reduceRight(fn, ctx)`, `filter(fn, ctx)`, `some(fn, ctx)`, `every(fn, ctx)`, `has(entity)`, `find(fn, ctx)`, `concat(...args)` — соответствует одноименным методам [объекта Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
