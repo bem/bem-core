@@ -47,7 +47,7 @@
     "jscs-bem": "^0.2.0",
     "jshint": "^2.9.1",
     "jshint-groups": "^0.8.0",
-    "mocha": "^2.4.5",
+    "mocha": "^3.3.0",
     "vow": "^0.4.12"
   },
   "scripts": {
