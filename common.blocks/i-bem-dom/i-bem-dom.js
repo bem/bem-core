@@ -276,8 +276,6 @@ function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
             }
         });
     });
-
-    dropElemCacheQueue = {};
 }
 
 /**
@@ -967,7 +965,7 @@ bemDom = /** @exports */{
             $(ctx) :
             ctx || bemDom.scope;
 
-        var dropElemCacheQueue = ctx === bemDom.scope? {} : undef,
+        var dropElemCacheQueue = {},
             uniqInitId = identify();
 
         findDomElem(ctx, BEM_SELECTOR).each(function() {
@@ -976,7 +974,7 @@ bemDom = /** @exports */{
 
         bem._runInitFns();
 
-        dropElemCacheQueue && dropElemCacheForCtx(ctx, dropElemCacheQueue);
+        dropElemCacheForCtx(ctx, dropElemCacheQueue);
 
         return ctx;
     },
