@@ -97,7 +97,7 @@ onSetMod: {
 ### Waves of initialization
 
 The instances of blocks that are present on a page do not have
-to be initialized simultaneously. The blocks can be added dyamically
+to be initialized simultaneously. The blocks can be added dynamically
 and initialized on request or on an event.
 Initialization of a consecutive group of blocks is called a **wave of initialization**.
 
