@@ -12,7 +12,7 @@ modules.define(
  */
 var Observable = inherit(/** @lends Observable.prototype */{
     /**
-     * @constructor
+     * @constructs
      * @param {Object} emitter
      */
     __constructor : function(emitter) {

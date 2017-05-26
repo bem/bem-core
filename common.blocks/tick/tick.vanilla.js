@@ -14,7 +14,7 @@ var TICK_INTERVAL = 50,
      */
     Tick = inherit(events.Emitter, /** @lends Tick.prototype */{
         /**
-         * @constructor
+         * @constructs
          */
         __constructor : function() {
             this._timer = null;
