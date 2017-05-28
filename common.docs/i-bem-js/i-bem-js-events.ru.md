@@ -272,7 +272,7 @@ provide(bemDom.declBlock(this.name, {
       onSetMod: {
           'js': {
               'inited': function() {
-                  this._event(this.findChildBlock(Button))
+                  this._events(this.findChildBlock(Button))
                       .on({ modName : 'disabled', modVal : '*' }, this._onButtonDisabledChange);
               }
           }
@@ -287,13 +287,13 @@ provide(bemDom.declBlock(this.name, {
 * установку модификатора `'disabled'` в значение `'true'`;
 
   ```js
-  this._event(this.findChildBlock(Button)).on({ modName : 'disabled', modVal : 'true' }, this._onButtonDisable);
+  this._events(this.findChildBlock(Button)).on({ modName : 'disabled', modVal : 'true' }, this._onButtonDisable);
   ```
 
 * удаление модификатора `'disabled'`;
 
   ```js
-  this._event(this.findChildBlock(Button)).on({ modName : 'disabled', modVal : '' }, this._onButtonEnable);
+  this._events(this.findChildBlock(Button)).on({ modName : 'disabled', modVal : '' }, this._onButtonEnable);
   ```
 
 ### Объект БЭМ-события
