@@ -1128,6 +1128,21 @@ describe('i-bem-dom', function() {
                     spy.should.be.calledTwice;
                 });
 
+                it.only('should drop elems cache on DOM append of elems without js', function() {
+                    console.log('b1Block 1', b1Block.domElem.html());
+                    b1Block._elems(B1E1Elem);
+                    console.log('b1Block 2', b1Block.domElem.html());
+
+                    bemDom.append(b1Block.domElem, BEMHTML.apply({
+                        block : 'b1',
+                        elem : 'e1',
+                        content : 'blablabla'
+                    }));
+
+                    b1Block._elems(B1E1Elem);
+                    spy.should.be.calledTwice;
+                });
+
                 it('should drop elems cache on DOM update in case of elem without data-bem', function() {
                     b1Block._elems(B1E1Elem);
 

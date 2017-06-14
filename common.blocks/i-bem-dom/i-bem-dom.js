@@ -98,15 +98,15 @@ function initEntities(domElem, uniqInitId, dropElemCacheQueue) {
         blockName,
         elemName;
 
+    console.log('initEntities', Object.keys(params));
     for(entityName in params) {
-        if(dropElemCacheQueue) {
-            splitted = entityName.split(ELEM_DELIM);
-            blockName = splitted[0];
-            elemName = splitted[1];
-            elemName &&
-                ((dropElemCacheQueue[blockName] ||
-                    (dropElemCacheQueue[blockName] = {}))[elemName] = true);
-        }
+        splitted = entityName.split(ELEM_DELIM);
+        blockName = splitted[0];
+        elemName = splitted[1];
+        elemName &&
+            ((dropElemCacheQueue[blockName] ||
+                (dropElemCacheQueue[blockName] = {}))[elemName] = true);
+        console.log('dropElemCacheQueue', dropElemCacheQueue);
 
         initEntity(
             entityName,
@@ -217,13 +217,13 @@ function getParams(domNode) {
 /**
  * Returns parameters of an entity extracted from DOM node
  * @param {HTMLElement} domNode DOM node
- * @param {String} blockName
+ * @param {String} entityName
  * @returns {Object}
  */
 
-function getEntityParams(domNode, blockName) {
+function getEntityParams(domNode, entityName) {
     var params = getParams(domNode);
-    return params[blockName] || (params[blockName] = {});
+    return params[entityName] || (params[entityName] = {});
 }
 
 /**
@@ -265,6 +265,7 @@ function storeDomNodeParents(domElem) {
  * @param {jQuery} ctx
  */
 function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
+    console.log('\n\n!! dropElemCacheForCtx', ctx.html(), dropElemCacheQueue);
     ctx.add(ctx.parents()).each(function(_, domNode) {
         var params = domElemToParams[identify(domNode)];
 
@@ -272,6 +273,7 @@ function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
             var entity = uniqIdToEntity[entityParams.uniqId];
             if(entity) {
                 var elemNames = dropElemCacheQueue[entity.__self._blockName];
+                //delete dropElemCacheQueue[entity.__self._blockName];
                 elemNames && entity._dropElemCache(Object.keys(elemNames));
             }
         });
