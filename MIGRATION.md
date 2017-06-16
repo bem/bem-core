@@ -451,6 +451,12 @@ Now the `_elem(elemName)` method of the block instance (previously `elem(elemNam
 
 To get a collection of instances of the element's class, use the `_elems()` method.
 
+
+Now the caches for elements with JS implementation found with `_elem()` and `_elems()` are invalidated automatically when the DOM is modified.
+Issue: [#1352](https://github.com/bem/bem-core/issues/1352).
+
+Note: When this methods are used for elements without JS implementation you still need to use `_dropElemCache()` in cases of dynamically DOM update.
+
 Note: don't forget to switch on support for elements instances in template engine.
 For `bem-xjst` please refer to https://github.com/bem/bem-xjst/blob/master/docs/en/3-api.md#support-js-instances-for-elements-bem-core-v4 or for `BH` see https://github.com/bem/bh#jselem.
 
@@ -471,8 +477,6 @@ this._elem('my-elem').setMod('my-mod', 'my-val');
 The same is true for the methods `getMod()`, `hasMod()`, `toggleMod()`, and `delMod()`.
 
 ##### Deleted methods and fields
-
-Removed the `dropElemCache()` method. Now the caches are invalidated automatically when the DOM is modified. Issue: [#1352](https://github.com/bem/bem-core/issues/1352).
 
 The following methods were deleted from the block API: `elemify()`, `elemParams()`, and the `onElemSetMod` field. The corresponding functionality is provided in instances of elements.
 
@@ -901,6 +905,7 @@ Renamed the protected methods:
 
 - `emit()` to `_emit()`
 - `elem()` to `_elem()`
+- `dropElemCache()` to `_dropElemCache()`
 - `buildClass()` to `_buildClassName()`
 - `buildSelector()` to `_buildSelector()`
 - `getDefaultParams()` to `_getDefaultParams()`

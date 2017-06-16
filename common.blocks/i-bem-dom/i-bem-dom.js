@@ -98,7 +98,6 @@ function initEntities(domElem, uniqInitId, dropElemCacheQueue) {
         blockName,
         elemName;
 
-    console.log('initEntities', Object.keys(params));
     for(entityName in params) {
         splitted = entityName.split(ELEM_DELIM);
         blockName = splitted[0];
@@ -106,7 +105,6 @@ function initEntities(domElem, uniqInitId, dropElemCacheQueue) {
         elemName &&
             ((dropElemCacheQueue[blockName] ||
                 (dropElemCacheQueue[blockName] = {}))[elemName] = true);
-        console.log('dropElemCacheQueue', dropElemCacheQueue);
 
         initEntity(
             entityName,
@@ -265,7 +263,6 @@ function storeDomNodeParents(domElem) {
  * @param {jQuery} ctx
  */
 function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
-    console.log('\n\n!! dropElemCacheForCtx', ctx.html(), dropElemCacheQueue);
     ctx.add(ctx.parents()).each(function(_, domNode) {
         var params = domElemToParams[identify(domNode)];
 
@@ -273,7 +270,6 @@ function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
             var entity = uniqIdToEntity[entityParams.uniqId];
             if(entity) {
                 var elemNames = dropElemCacheQueue[entity.__self._blockName];
-                //delete dropElemCacheQueue[entity.__self._blockName];
                 elemNames && entity._dropElemCache(Object.keys(elemNames));
             }
         });
@@ -970,6 +966,7 @@ bemDom = /** @exports */{
         var dropElemCacheQueue = {},
             uniqInitId = identify();
 
+        // NOTE: we find only js-entities, so cahced elems without js can't be dropped from cache
         findDomElem(ctx, BEM_SELECTOR).each(function() {
             initEntities($(this), uniqInitId, dropElemCacheQueue);
         });
