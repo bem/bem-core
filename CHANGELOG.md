@@ -46,8 +46,8 @@
 
 ### Breaking changes
 
-- Changes in the `i-bem` block. See [MIGRATION.md](MIGRATION.en.md#changes-in-the-i-bem-block).
-- Changes in the `querystring`. See [MIGRATION.md](MIGRATION.ru.md#changes-in-the-querystring-block).
+- Changes in the `i-bem` block. See [MIGRATION.md](MIGRATION.md#changes-in-the-i-bem-block).
+- Changes in the `querystring`. See [MIGRATION.md](MIGRATION.md#changes-in-the-querystring-block).
 - The optional parameter `onlyGet` was removed from the `identify` module ([#1028](https://github.com/bem/bem-core/issues/1028)).
 - All static methods were removed from the `events` module ([#1024](https://github.com/bem/bem-core/issues/1024)).
 - The `result` field in `Event` class of `events` module was removed  ([#1023](https://github.com/bem/bem-core/issues/1023)).
