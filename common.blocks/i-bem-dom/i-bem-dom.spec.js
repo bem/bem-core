@@ -1114,6 +1114,46 @@ describe('i-bem-dom', function() {
                     b1Block._elems(B1E1Elem);
                     spy.should.be.calledTwice;
                 });
+
+                it('should drop elems cache on DOM append', function() {
+                    b1Block._elems(B1E1Elem);
+
+                    bemDom.append(b1Block.domElem, BEMHTML.apply({
+                        block : 'b1',
+                        elem : 'e1',
+                        js : true
+                    }));
+
+                    b1Block._elems(B1E1Elem);
+                    spy.should.be.calledTwice;
+                });
+
+                // NOTE: does't work because of too complex elems cache maintaince in case of elems without js
+                it.skip('should drop elems cache on DOM append of elems without js', function() {
+                    b1Block._elems(B1E1Elem);
+
+                    bemDom.append(b1Block.domElem, BEMHTML.apply({
+                        block : 'b1',
+                        elem : 'e1'
+                    }));
+
+                    b1Block._elems(B1E1Elem);
+                    spy.should.be.calledTwice;
+                });
+
+                it('should drop elems cache on DOM update in case of elem without data-bem', function() {
+                    b1Block._elems(B1E1Elem);
+
+                    bemDom.append(b1Block.domElem, BEMHTML.apply({
+                        block : 'b1',
+                        elem : 'e2',
+                        js : true,
+                        mix : { block : 'b1', elem : 'e1', js : true }
+                    }));
+
+                    b1Block._elems(B1E1Elem);
+                    spy.should.be.calledTwice;
+                });
             });
 
             describe('for not affected elems', function() {

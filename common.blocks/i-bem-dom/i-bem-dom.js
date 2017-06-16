@@ -99,14 +99,12 @@ function initEntities(domElem, uniqInitId, dropElemCacheQueue) {
         elemName;
 
     for(entityName in params) {
-        if(dropElemCacheQueue) {
-            splitted = entityName.split(ELEM_DELIM);
-            blockName = splitted[0];
-            elemName = splitted[1];
-            elemName &&
-                ((dropElemCacheQueue[blockName] ||
-                    (dropElemCacheQueue[blockName] = {}))[elemName] = true);
-        }
+        splitted = entityName.split(ELEM_DELIM);
+        blockName = splitted[0];
+        elemName = splitted[1];
+        elemName &&
+            ((dropElemCacheQueue[blockName] ||
+                (dropElemCacheQueue[blockName] = {}))[elemName] = true);
 
         initEntity(
             entityName,
@@ -217,13 +215,13 @@ function getParams(domNode) {
 /**
  * Returns parameters of an entity extracted from DOM node
  * @param {HTMLElement} domNode DOM node
- * @param {String} blockName
+ * @param {String} entityName
  * @returns {Object}
  */
 
-function getEntityParams(domNode, blockName) {
+function getEntityParams(domNode, entityName) {
     var params = getParams(domNode);
-    return params[blockName] || (params[blockName] = {});
+    return params[entityName] || (params[entityName] = {});
 }
 
 /**
@@ -276,8 +274,6 @@ function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
             }
         });
     });
-
-    dropElemCacheQueue = {};
 }
 
 /**
@@ -967,16 +963,17 @@ bemDom = /** @exports */{
             $(ctx) :
             ctx || bemDom.scope;
 
-        var dropElemCacheQueue = ctx === bemDom.scope? {} : undef,
+        var dropElemCacheQueue = {},
             uniqInitId = identify();
 
+        // NOTE: we find only js-entities, so cahced elems without js can't be dropped from cache
         findDomElem(ctx, BEM_SELECTOR).each(function() {
             initEntities($(this), uniqInitId, dropElemCacheQueue);
         });
 
         bem._runInitFns();
 
-        dropElemCacheQueue && dropElemCacheForCtx(ctx, dropElemCacheQueue);
+        dropElemCacheForCtx(ctx, dropElemCacheQueue);
 
         return ctx;
     },

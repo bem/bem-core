@@ -456,6 +456,11 @@ provide(bemDom.declElem('my-dom-block', 'my-elem', { /* ... */ }));
 
 Для того, чтобы получить коллекцию экземпляров класса элемента, используйте метод `_elems()`.
 
+Теперь кэш для элементов с JS-реализацией найденных через `_elem()` и `_elems()` инвалидируется автоматически при DOM модификациях.
+Задача: [#1352](https://github.com/bem/bem-core/issues/1352).
+
+Когда эти методы используются для элементов без JS-реализации необходимо использовать `_dropElemCache()` при динамическом обновлении DOM.
+
 Не забудьте включить поддержку экземплятор для элементов в шаблонизаторе.
 Опция [elemJsInstances](https://github.com/bem/bem-xjst/blob/master/docs/ru/3-api.md#%D0%9F%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%BA%D0%B0-js-%D1%8D%D0%BA%D0%B7%D0%B5%D0%BC%D0%BF%D0%BB%D1%8F%D1%80%D0%BE%D0%B2-%D0%B4%D0%BB%D1%8F-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-bem-core-v4) для `bem-xjst` или [jsElem](https://github.com/bem/bh#jselem) для `BH`.
 
@@ -476,8 +481,6 @@ this._elem('my-elem').setMod('my-mod', 'my-val');
 Аналогично для методов `getMod()`, `hasMod()`, `toggleMod()`, `delMod()`.
 
 ##### Удалённые методы и поля
-
-Удалён метод `dropElemCache()`, теперь инвалидация кэшей осуществляется автоматически при модификациях DOM. Задача: [#1352](https://github.com/bem/bem-core/issues/1352).
 
 Из API блока удалены методы: `elemify()`, `elemParams()` и поле `onElemSetMod`. Соответствующая
 им функциональность выражается через экземпляры элементов .
@@ -913,6 +916,7 @@ observable($('.my-block').bem(MyBlock))
 
 - `emit()` в `_emit()`
 - `elem()` в `_elem()`
+- `dropElemCache()` в `_dropElemCache()`
 - `buildClass()` в `_buildClassName()`
 - `buildSelector()` в `_buildSelector()`
 - `getDefaultParams()` в `_getDefaultParams()`
