@@ -81,6 +81,13 @@ describe('DOM events', function() {
                 spy3.args[0][2].should.have.been.equal(data);
             });
 
+            it('should pass data to handler', function() {
+                var data = { test : 'data' };
+                block1.domElem.trigger('click', data);
+
+                spy1.args[0][1].should.have.been.equal(data);
+            });
+
             it('should properly bind once handler', function() {
                 block1.domElem.trigger('click');
                 spy4.should.have.been.called;
