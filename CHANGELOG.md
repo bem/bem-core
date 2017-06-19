@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.2.1
+
+### Bug fixes
+
+- Fixed an issue with elems cache invalidation on DOM modifications ([#1487](https://github.com/bem/bem-core/issues/1487)).
+- Fixed an issue in `i-bem-dom__events` when event's data was not passed to handler ([#1509](https://github.com/bem/bem-core/pull/1509)).
+- Fixed method `isEditable` of `dom` module. Missing editable input types were added ([#1502](https://github.com/bem/bem-core/pull/1502)).
+
+### Other changes
+- Fixed syntax error in `i-bem-dom` JSDoc.
+- Minor documentation updates.
+- [CLA](https://github.com/bem/bem-core/blob/v4/CLA.md) introduced.
+
 ## 4.2.0
 
 ### Notable changes
