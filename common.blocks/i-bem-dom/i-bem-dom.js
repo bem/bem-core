@@ -253,7 +253,7 @@ function storeDomNodeParent(domNode) {
  */
 function storeDomNodesParents(domNodes) {
     if(domNodes instanceof Element) {
-        storeDomNodeParent(domNodes)
+        storeDomNodeParent(domNodes);
     } else {
         var i = 0, domNode;
 
@@ -1049,8 +1049,7 @@ bemDom = /** @exports */{
                 initEntities(domNode, uniqInitId, dropElemCacheQueue);
 
             var domNodes = domNode.querySelectorAll(BEM_SELECTOR),
-                j = 0,
-                domNode;
+                j = 0;
 
             // NOTE: we find only js-entities, so cahced elems without js can't be dropped from cache
             while(domNode = domNodes[j++])
@@ -1256,14 +1255,15 @@ bemDom = /** @exports */{
         typeof content === 'string' &&
             (content = getDomNodesByHtmlString(content));
 
-        var i = 0,
+        var parent = ctx.parentNode,
+            i = 0,
             isDomNode = content instanceof Element,
             domNode = content,
             firstInitedEntity = null;
 
         // once when content is an element and cycle for content as NodeList|HTMLCollection
         while((isDomNode && !i++) || (domNode = content[i++])) {
-            parent.insertBefore(domNode, next);
+            parent.insertBefore(domNode, ctx);
 
             var initedEntity = this.init(domNode);
 
