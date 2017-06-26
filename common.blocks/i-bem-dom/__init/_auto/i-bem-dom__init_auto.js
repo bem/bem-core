@@ -11,7 +11,6 @@ modules.require(
         document.addEventListener('DOMContentLoaded', onDomReady) :
         onDomReady();
 })(function() {
-    console.log('called domready');
     nextTick(init);
 });
 
