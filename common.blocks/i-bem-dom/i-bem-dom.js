@@ -14,7 +14,6 @@ modules.define(
         'identify',
         'objects',
         'functions',
-        'jquery',
         'dom'
     ],
     function(
@@ -28,15 +27,14 @@ modules.define(
         identify,
         objects,
         functions,
-        $,
         dom) {
 
 var undef,
     /**
-     * Storage for DOM elements by unique key
+     * Storage for DOM nodes by unique key
      * @type Object
      */
-    uniqIdToDomElems = {},
+    uniqIdToDomNodes = {},
 
     /**
      * Storage for blocks by unique key
@@ -54,7 +52,7 @@ var undef,
      * Storage for block parameters
      * @type Object
      */
-    domElemToParams = {},
+    domNodeToParams = {},
 
     /**
      * Storage for DOM nodes that are being destructed
@@ -85,14 +83,13 @@ var undef,
     bemDom;
 
 /**
- * Initializes entities on a DOM element
- * @param {jQuery} domElem DOM element
+ * Initializes entities on a DOM node
+ * @param {Element} domNode DOM node
  * @param {String} uniqInitId ID of the "initialization wave"
  * @param {Object} [dropElemCacheQueue] queue of elems to be droped from cache
  */
-function initEntities(domElem, uniqInitId, dropElemCacheQueue) {
-    var domNode = domElem[0],
-        params = getParams(domNode),
+function initEntities(domNode, uniqInitId, dropElemCacheQueue) {
+    var params = getParams(domNode),
         entityName,
         splitted,
         blockName,
@@ -108,22 +105,20 @@ function initEntities(domElem, uniqInitId, dropElemCacheQueue) {
 
         initEntity(
             entityName,
-            domElem,
+            domNode,
             processParams(params[entityName], entityName, uniqInitId));
     }
 }
 
 /**
- * Initializes a specific entity on a DOM element, or returns the existing entity if it was already created
+ * Initializes a specific entity on a DOM node, or returns the existing entity if it was already created
  * @param {String} entityName Entity name
- * @param {jQuery} domElem DOM element
+ * @param {Element} domNode DOM node
  * @param {Object} [params] Initialization parameters
  * @param {Boolean} [ignoreLazyInit=false] Ignore lazy initialization
  * @param {Function} [callback] Handler to call after complete initialization
  */
-function initEntity(entityName, domElem, params, ignoreLazyInit, callback) {
-    var domNode = domElem[0];
-
+function initEntity(entityName, domNode, params, ignoreLazyInit, callback) {
     if(destructingDomNodes[identify(domNode)]) return;
 
     params || (params = processParams(getEntityParams(domNode, entityName), entityName));
@@ -132,32 +127,39 @@ function initEntity(entityName, domElem, params, ignoreLazyInit, callback) {
         entity = uniqIdToEntity[uniqId];
 
     if(entity) {
-        if(entity.domElem.index(domNode) < 0) {
-            entity.domElem = entity.domElem.add(domElem);
-            objects.extend(entity.params, params);
-        }
+
+    // TODO: multy DOM nodes case
+    //     if(entity.domElem.index(domNode) < 0) {
+    //         entity.domElem = entity.domElem.add(domElem);
+    //         objects.extend(entity.params, params);
+    //     }
 
         return entity;
     }
 
-    uniqIdToDomElems[uniqId] = uniqIdToDomElems[uniqId]?
-        uniqIdToDomElems[uniqId].add(domElem) :
-        domElem;
+    // TODO: multy DOM nodes case
+    // uniqIdToDomElems[uniqId] = uniqIdToDomElems[uniqId]?
+    //     uniqIdToDomElems[uniqId].add(domElem) :
+    //     domElem;
 
-    var parentDomNode = domNode.parentNode;
-    if(!parentDomNode || parentDomNode.nodeType === 11) { // jquery doesn't unique disconnected node
-        $.unique(uniqIdToDomElems[uniqId]);
-    }
+    uniqIdToDomNodes[uniqId] = domNode;
+
+    // TODO: add tests for
+    // i-bem__dom: multiple live initialization on disconnected node add same node many times
+    // var parentDomNode = domNode.parentNode;
+    // if(!parentDomNode || parentDomNode.nodeType === 11) { // jquery doesn't unique disconnected node
+    //     $.unique(uniqIdToDomElems[uniqId]);
+    // }
 
     var entityCls = getEntityCls(entityName);
 
     entityCls._processInit();
 
     if(!entityCls.lazyInit || ignoreLazyInit || params.lazyInit === false) {
-        ignoreLazyInit && domElem.addClass(BEM_CLASS_NAME); // add css class for preventing memory leaks in further destructing
+        ignoreLazyInit && domNode.classList.add(BEM_CLASS_NAME); // add css class for preventing memory leaks in further destructing
 
-        entity = new entityCls(uniqIdToDomElems[uniqId], params, !!ignoreLazyInit);
-        delete uniqIdToDomElems[uniqId];
+        entity = new entityCls(uniqIdToDomNodes[uniqId], params, !!ignoreLazyInit);
+        delete uniqIdToDomNodes[uniqId];
         callback && callback.apply(entity, slice.call(arguments, 4));
         return entity;
     }
@@ -188,28 +190,14 @@ function processParams(params, entityName, uniqInitId) {
 }
 
 /**
- * Helper for searching for a DOM element using a selector inside the context, including the context itself
- * @param {jQuery} ctx Context
- * @param {String} selector CSS selector
- * @param {Boolean} [excludeSelf=false] Exclude context from search
- * @returns {jQuery}
- */
-function findDomElem(ctx, selector, excludeSelf) {
-    var res = ctx.find(selector);
-    return excludeSelf?
-       res :
-       res.add(ctx.filter(selector));
-}
-
-/**
  * Returns parameters of an entity's DOM element
  * @param {HTMLElement} domNode DOM node
  * @returns {Object}
  */
 function getParams(domNode) {
     var uniqId = identify(domNode);
-    return domElemToParams[uniqId] ||
-        (domElemToParams[uniqId] = extractParams(domNode));
+    return domNodeToParams[uniqId] ||
+        (domNodeToParams[uniqId] = extractParams(domNode));
 }
 
 /**
@@ -240,40 +228,82 @@ function extractParams(domNode) {
  * @param {HTMLElement} domNode DOM node
  */
 function removeDomNodeFromEntity(entity, domNode) {
-    if(entity.domElem.length === 1) {
-        entity._delInitedMod();
-        delete uniqIdToEntity[entity._uniqId];
-    } else {
-        entity.domElem = entity.domElem.not(domNode);
-    }
+    // TODO: fixme
+    // if(entity.domElem.length === 1) {
+    //     entity._delInitedMod();
+    //     delete uniqIdToEntity[entity._uniqId];
+    // } else {
+    //     entity.domElem = entity.domElem.not(domNode);
+    // }
+    entity._delInitedMod();
+    delete uniqIdToEntity[entity._uniqId];
+}
+
+/**
+ * Stores DOM node's parent node to the storage
+ * @param {Element} node list
+ */
+function storeDomNodeParent(domNode) {
+    domNodesToParents[identify(domNode)] = domNode.parentNode;
 }
 
 /**
  * Stores DOM node's parent nodes to the storage
- * @param {jQuery} domElem
+ * @param {Element|NodeList|HTMLCollection} node list
  */
-function storeDomNodeParents(domElem) {
-    domElem.each(function() {
-        domNodesToParents[identify(this)] = this.parentNode;
-    });
+function storeDomNodesParents(domNodes) {
+    if(domNodes instanceof Element) {
+        storeDomNodeParent(domNodes)
+    } else {
+        var i = 0, domNode;
+
+        while(domNode = domNodes[i++]) storeDomNodeParent(domNode);
+    }
+}
+
+/**
+ * Creates detached DOM nodes from HTML string
+ * @param {String} html
+ * @returns {NodeList}
+ */
+function getDomNodesByHtmlString(html) {
+    var wrapperElement = document.createElement('div');
+    wrapperElement.innerHTML = html;
+    var childNodes = wrapperElement.childNodes;
+
+    return childNodes.length === 1 ? childNodes[0] : childNodes;
 }
 
 /**
  * Clears the cache for elements in context
- * @param {jQuery} ctx
+ * @param {Element|NodeList|HTMLCollection} ctx
  */
 function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
-    ctx.add(ctx.parents()).each(function(_, domNode) {
-        var params = domElemToParams[identify(domNode)];
+    var visited = {};
 
-        params && objects.each(params, function(entityParams) {
-            var entity = uniqIdToEntity[entityParams.uniqId];
-            if(entity) {
-                var elemNames = dropElemCacheQueue[entity.__self._blockName];
-                elemNames && entity._dropElemCache(Object.keys(elemNames));
-            }
-        });
-    });
+
+    var i = 0,
+        isDomNode = ctx instanceof Element,
+        domNode = ctx;
+
+    // once when ctx is an element and cycle for ctx as NodeList|HTMLCollection
+    while((isDomNode && !i++) || (domNode = ctx[i++])) {
+        var domNodeId = identify(domNode);
+
+        do {
+            visited[domNodeId] = true;
+
+            var params = domNodeToParams[domNodeId];
+
+            params && objects.each(params, function(entityParams) {
+                var entity = uniqIdToEntity[entityParams.uniqId];
+                if(entity) {
+                    var elemNames = dropElemCacheQueue[entity.__self._blockName];
+                    elemNames && entity._dropElemCache(Object.keys(elemNames));
+                }
+            });
+        } while((domNodeId = identify(domNode = domNode.parentElement)) && !visited[domNodeId]);
+    }
 }
 
 /**
@@ -299,15 +329,6 @@ function buildElemKey(elem) {
 // jscs:disable requireMultipleVarDecl
 
 /**
- * Returns jQuery collection for provided HTML
- * @param {jQuery|String} html
- * @returns {jQuery}
- */
-function getJqueryCollection(html) {
-    return $(typeof html === 'string'? $.parseHTML(html, null, true) : html);
-}
-
-/**
  * Validates block to be class or specified description
  * @param {*} Block Any argument passed to find*Block as Block
  * @throws {Error} Will throw an error if the Block argument isn't correct
@@ -329,17 +350,17 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * @constructs
      * @private
-     * @param {jQuery} domElem DOM element that the entity is created on
+     * @param {Element} domNode DOM element that the entity is created on
      * @param {Object} params parameters
      * @param {Boolean} [initImmediately=true]
      */
-    __constructor : function(domElem, params, initImmediately) {
+    __constructor : function(domNode, params, initImmediately) {
         /**
          * DOM elements of entity
          * @member {jQuery}
          * @readonly
          */
-        this.domElem = domElem;
+        this.domNode = domNode;
 
         /**
          * Cache for elements collections
@@ -449,12 +470,12 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * Finds the first child block
      * @param {Function|Object} Block Block class or description (block, modName, modVal) of the block to find
-     * @returns {Block}
+     * @returns {Block|null}
      */
     findChildBlock : function(Block) {
         validateBlockParam(Block);
 
-        return this._findEntities('find', Block, true);
+        return this._findChildEntities(Block, true);
     },
 
     /**
@@ -465,18 +486,18 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     findChildBlocks : function(Block) {
         validateBlockParam(Block);
 
-        return this._findEntities('find', Block);
+        return this._findChildEntities(Block);
     },
 
     /**
      * Finds the first parent block
      * @param {Function|Object} Block Block class or description (block, modName, modVal) of the block to find
-     * @returns {Block}
+     * @returns {Block|null}
      */
     findParentBlock : function(Block) {
         validateBlockParam(Block);
 
-        return this._findEntities('parents', Block, true);
+        return this._findParentEntities(Block, true);
     },
 
     /**
@@ -487,18 +508,18 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     findParentBlocks : function(Block) {
         validateBlockParam(Block);
 
-        return this._findEntities('parents', Block);
+        return this._findParentEntities(Block);
     },
 
     /**
      * Finds first mixed block
      * @param {Function|Object} Block Block class or description (block, modName, modVal) of the block to find
-     * @returns {Block}
+     * @returns {Block|null}
      */
     findMixedBlock : function(Block) {
         validateBlockParam(Block);
 
-        return this._findEntities('filter', Block, true);
+        return this._findMixedEntities(Block, true);
     },
 
     /**
@@ -509,19 +530,19 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     findMixedBlocks : function(Block) {
         validateBlockParam(Block);
 
-        return this._findEntities('filter', Block);
+        return this._findMixedEntities(Block);
     },
 
     /**
      * Finds the first child element
      * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
      * @param {Boolean} [strictMode=false]
-     * @returns {Elem}
+     * @returns {Elem|null}
      */
     findChildElem : function(Elem, strictMode) {
         return strictMode?
-            this._filterFindElemResults(this._findEntities('find', Elem)).get(0) :
-            this._findEntities('find', Elem, true);
+            this._filterFindElemResults(this._findChildEntities(Elem)).get(0) :
+            this._findChildEntities(Elem, true);
     },
 
     /**
@@ -531,7 +552,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     findChildElems : function(Elem, strictMode) {
-        var res = this._findEntities('find', Elem);
+        var res = this._findChildEntities(Elem);
 
         return strictMode?
             this._filterFindElemResults(res) :
@@ -542,12 +563,12 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * Finds the first parent element
      * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
      * @param {Boolean} [strictMode=false]
-     * @returns {Elem}
+     * @returns {Elem|null}
      */
     findParentElem : function(Elem, strictMode) {
         return strictMode?
-            this._filterFindElemResults(this._findEntities('parents', Elem))[0] :
-            this._findEntities('parents', Elem, true);
+            this._filterFindElemResults(this._findParentEntities(Elem))[0] :
+            this._findParentEntities(Elem, true);
     },
 
     /**
@@ -557,17 +578,17 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     findParentElems : function(Elem, strictMode) {
-        var res = this._findEntities('parents', Elem);
+        var res = this._findParentEntities(Elem);
         return strictMode? this._filterFindElemResults(res) : res;
     },
 
     /**
      * Finds the first mixed element
      * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
-     * @returns {Elem}
+     * @returns {Elem|null}
      */
     findMixedElem : function(Elem) {
-        return this._findEntities('filter', Elem, true);
+        return this._findMixedEntities(Elem, true);
     },
 
     /**
@@ -576,7 +597,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     findMixedElems : function(Elem) {
-        return this._findEntities('filter', Elem);
+        return this._findMixedEntities(Elem);
     },
 
     /**
@@ -593,75 +614,134 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     },
 
     /**
-     * Finds entities
+     * Finds child entities
      * @private
-     * @param {String} select
      * @param {Function|String|Object} entity
      * @param {Boolean} [onlyFirst=false]
      * @returns {*}
      */
-    _findEntities : function(select, entity, onlyFirst) {
-        var entityName = functions.isFunction(entity)?
-                entity.getEntityName() :
-                typeof entity === 'object'?
-                    entity.block?
-                        entity.block.getEntityName() :
-                        typeof entity.elem === 'string'?
-                            this.__self._blockName + ELEM_DELIM + entity.elem :
-                            entity.elem.getEntityName() :
-                    this.__self._blockName + ELEM_DELIM + entity,
-            selector = '.' +
-                (typeof entity === 'object'?
-                    buildClassName(
-                        entityName,
-                        entity.modName,
-                        typeof entity.modVal === 'undefined'?
-                            true :
-                            entity.modVal) :
-                    entityName) +
-                (onlyFirst? ':first' : ''),
-            domElems = this.domElem[select](selector);
-
-        if(onlyFirst) return domElems[0]?
-            initEntity(entityName, domElems.eq(0), undef, true)._setInitedMod() :
-            null;
+    _findChildEntities : function(entity, onlyFirst) {
+        var entityName = this._buildEntityNameByEntity(entity),
+            selector = '.' + this._buildClassNameByEntity(entity, entityName),
+            // TODO: support multiple nodes
+            domNodes = onlyFirst?
+                [this.domNode.querySelector(selector)] :
+                this.domNode.querySelectorAll(selector);
 
         var res = [],
-            uniqIds = {};
+            uniqIds = {},
+            i = 0,
+            domNode;
 
-        domElems.each(function(i, domElem) {
-            var block = initEntity(entityName, $(domElem), undef, true)._setInitedMod();
+        while(domNode = domNodes[i++]) {
+            var block = initEntity(entityName, domNode, undef, true)._setInitedMod();
             if(!uniqIds[block._uniqId]) {
                 uniqIds[block._uniqId] = true;
                 res.push(block);
             }
-        });
 
-        return new BemDomCollection(res);
+            if(onlyFirst && block) return block;
+        }
+
+        return onlyFirst ? null : new BemDomCollection(res);
+    },
+
+    /**
+     * Finds parent entities
+     * @private
+     * @param {Function|String|Object} entity
+     * @param {Boolean} [onlyFirst=false]
+     * @returns {*}
+     */
+    _findParentEntities : function(entity, onlyFirst) {
+        var entityName = this._buildEntityNameByEntity(entity),
+            className = this._buildClassNameByEntity(entity, entityName),
+            domNode = this.domNode,
+            res = [],
+            uniqIds = {};
+
+        // TODO: support multiple nodes
+        while(domNode = domNode.parentNode) {
+            if(!domNode.classList.contains(className)) continue;
+
+            var block = initEntity(entityName, domNode, undef, true)._setInitedMod();
+            if(!uniqIds[block._uniqId]) {
+                uniqIds[block._uniqId] = true;
+                res.push(block);
+            }
+
+            if(onlyFirst && block) return block;
+        }
+
+        return onlyFirst ? null : new BemDomCollection(res);
+    },
+
+    /**
+     * Finds mixed entities
+     * @private
+     * @param {Function|String|Object} entity
+     * @param {Boolean} [onlyFirst=false]
+     * @returns {*}
+     */
+    _findMixedEntities : function(entity, onlyFirst) {
+        var entityName = this._buildEntityNameByEntity(entity),
+            className = this._buildClassNameByEntity(entity, entityName);
+
+        // TODO: support multiple nodes
+        var res = this.domNode.classList.contains(className)?
+            initEntity(entityName, this.domNode, undef, true)._setInitedMod() :
+            null;
+
+        return onlyFirst?
+            res :
+            new BemDomCollection(res? [res] : []);
+    },
+
+    _buildEntityNameByEntity : function(entity) {
+        return functions.isFunction(entity)?
+            entity.getEntityName() :
+            typeof entity === 'object'?
+                entity.block?
+                    entity.block.getEntityName() :
+                    typeof entity.elem === 'string'?
+                        this.__self._blockName + ELEM_DELIM + entity.elem :
+                        entity.elem.getEntityName() :
+                this.__self._blockName + ELEM_DELIM + entity;
+    },
+
+    _buildClassNameByEntity : function(entity, entityName) {
+        return typeof entity === 'object'?
+            buildClassName(
+                entityName,
+                entity.modName,
+                typeof entity.modVal === 'undefined'?
+                    true :
+                    entity.modVal) :
+            entityName;
     },
 
     /**
      * Returns an manager to bind and unbind DOM events for particular context
      * @protected
-     * @param {Function|String|Object|Elem|BemDomCollection|document|window} [ctx=this.domElem] context to bind,
+     * @param {Function|String|Object|Elem|BemDomCollection|document|window} [ctx=this.domNode] context to bind,
      *     can be BEM-entity class, instance, collection of BEM-entities,
      *     element name or description (elem, modName, modVal), document or window
      * @returns {EventManager}
      */
     _domEvents : function(ctx) {
-        return domEventManagerFactory.getEventManager(this, ctx, this.domElem);
+        return domEventManagerFactory.getEventManager(this, ctx, this.domNode);
     },
 
     /**
      * Returns an manager to bind and unbind BEM events for particular context
      * @protected
-     * @param {Function|String|BemDomEntity|BemDomCollection|Object} [ctx=this.domElem] context to bind,
+     * @param {Function|String|BemDomEntity|BemDomCollection|Object} [ctx=this.domNode] context to bind,
      *     can be BEM-entity class, instance, collection of BEM-entities,
      *     element name or description (elem, modName, modVal)
      * @returns {EventManager}
      */
     _events : function(ctx) {
-        return bemEventManagerFactory.getEventManager(this, ctx, this.domElem);
+        return bemEventManagerFactory.getEventManager(this, ctx, this.domNode);
     },
 
     /**
@@ -681,11 +761,10 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
     /** @override */
     _extractModVal : function(modName) {
-        var domNode = this.domElem[0],
-            matches;
+        var matches;
 
-        domNode &&
-            (matches = domNode.className
+        this.domNode &&
+            (matches = this.domNode.className
                 .match(this.__self._buildModValRE(modName)));
 
         return matches? matches[2] || true : '';
@@ -708,20 +787,20 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
                 classNameRE = _self._buildModValRE(modName),
                 needDel = modVal === '';
 
-            this.domElem.each(function() {
-                var className = this.className,
-                    modClassName = classNamePrefix;
+            // TODO: support multy node case
+            var domNode = this.domNode,
+                className = domNode.className,
+                modClassName = classNamePrefix;
 
-                modVal !== true && (modClassName += MOD_DELIM + modVal);
+            modVal !== true && (modClassName += MOD_DELIM + modVal);
 
-                (oldModVal === true?
-                    classNameRE.test(className) :
-                    (' ' + className).indexOf(' ' + classNamePrefix + MOD_DELIM) > -1)?
-                        this.className = className.replace(
-                            classNameRE,
-                            (needDel? '' : '$1' + modClassName)) :
-                        needDel || $(this).addClass(modClassName);
-            });
+            (oldModVal === true?
+                classNameRE.test(className) :
+                (' ' + className).indexOf(' ' + classNamePrefix + MOD_DELIM) > -1)?
+                    domNode.className = className.replace(
+                        classNameRE,
+                        (needDel? '' : '$1' + modClassName)) :
+                    needDel || domNode.classList.add(modClassName);
         }
     },
 
@@ -739,7 +818,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Boolean}
      */
     containsEntity : function(entity) {
-        return dom.contains(this.domElem, entity.domElem);
+        return dom.contains(this.domNode, entity.domNode);
     }
 
 }, /** @lends BemDomEntity */{
@@ -860,37 +939,19 @@ var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
     }
 });
 
-/**
- * Returns a block on a DOM element and initializes it if necessary
- * @param {Function} BemDomEntity entity
- * @param {Object} [params] entity parameters
- * @returns {BemDomEntity|null}
- */
-$.fn.bem = function(BemDomEntity, params) {
-    var entity = initEntity(BemDomEntity.getEntityName(), this, params, true);
-    return entity? entity._setInitedMod() : null;
-};
 
-$(function() {
+(function(onDomReady) {
+    document.readyState === 'loading'?
+        document.addEventListener('DOMContentLoaded', onDomReady) :
+        onDomReady();
+})(function() {
 
 bemDom = /** @exports */{
     /**
      * Scope
-     * @type jQuery
+     * @type Element
      */
-    scope : $('body'),
-
-    /**
-     * Document shortcut
-     * @type jQuery
-     */
-    doc : $(document),
-
-    /**
-     * Window shortcut
-     * @type jQuery
-     */
-    win : $(window),
+    scope : document.body,
 
     /**
      * Base bemDom block
@@ -910,6 +971,19 @@ bemDom = /** @exports */{
      */
     isEntity : function(entity) {
         return entity instanceof Block || entity instanceof Elem;
+    },
+
+    /**
+     * Returns an entity on a DOM node or first entity of node list and initializes it if necessary
+     * @param {Element|NodeList|HTMLCollection} domNode DOM node
+     * @param {Function} BemDomEntity entity
+     * @param {Object} [params] entity parameters
+     * @returns {BemDomEntity|null}
+     */
+    getEntity : function(domNode, BemDomEntity, params) {
+        domNode instanceof Element || (domNode = domNode[0]);
+        var entity = initEntity(BemDomEntity.getEntityName(), domNode, params, true);
+        return entity? entity._setInitedMod() : null;
     },
 
     /**
@@ -955,21 +1029,33 @@ bemDom = /** @exports */{
 
     /**
      * Initializes blocks on a fragment of the DOM tree
-     * @param {jQuery|String} [ctx=scope] Root DOM node
-     * @returns {jQuery} ctx Initialization context
+     * @param {Element|NodeList|HTMLCollection|String} [ctx=scope] Root DOM node or HTML string
+     * @returns {Element|NodeList} ctx Initialization context
      */
     init : function(ctx) {
         ctx = typeof ctx === 'string'?
-            $(ctx) :
+            getDomNodesByHtmlString(ctx) :
             ctx || bemDom.scope;
 
         var dropElemCacheQueue = {},
-            uniqInitId = identify();
+            uniqInitId = identify(),
+            i = 0,
+            isDomNode = ctx instanceof Element,
+            domNode = ctx;
 
-        // NOTE: we find only js-entities, so cahced elems without js can't be dropped from cache
-        findDomElem(ctx, BEM_SELECTOR).each(function() {
-            initEntities($(this), uniqInitId, dropElemCacheQueue);
-        });
+        // once when ctx is an element and cycle for ctx as NodeList|HTMLCollection
+        while((isDomNode && !i++) || (domNode = ctx[i++])) {
+            domNode.classList.contains(BEM_CLASS_NAME) &&
+                initEntities(domNode, uniqInitId, dropElemCacheQueue);
+
+            var domNodes = domNode.querySelectorAll(BEM_SELECTOR),
+                j = 0,
+                domNode;
+
+            // NOTE: we find only js-entities, so cahced elems without js can't be dropped from cache
+            while(domNode = domNodes[j++])
+                initEntities(domNode, uniqInitId, dropElemCacheQueue);
+        }
 
         bem._runInitFns();
 
@@ -979,8 +1065,8 @@ bemDom = /** @exports */{
     },
 
     /**
-     * @param {jQuery} ctx Root DOM node
-     * @param {Boolean} [excludeSelf=false] Exclude the main domElem
+     * @param {Element} ctx Root DOM node
+     * @param {Boolean} [excludeSelf=false] Exclude the main domNode
      * @param {Boolean} [destructDom=false] Remove DOM node during destruction
      * @private
      */
@@ -988,29 +1074,46 @@ bemDom = /** @exports */{
         var _ctx,
             currentDestructingDomNodes = [];
 
-        storeDomNodeParents(_ctx = excludeSelf? ctx.children() : ctx);
+        if(!(ctx instanceof Element)) throw Error('destruct should be called on one DOM node');
 
-        reverse.call(findDomElem(_ctx, BEM_SELECTOR)).each(function(_, domNode) {
-            var params = getParams(domNode),
-                domNodeId = identify(domNode);
+        storeDomNodesParents(_ctx = excludeSelf? ctx.childNodes : ctx);
 
-            destructingDomNodes[domNodeId] = true;
-            currentDestructingDomNodes.push(domNodeId);
+        var i = _ctx.length || 1,
+            isDomNode = _ctx instanceof Element,
+            ctxDomNode = _ctx;
 
-            objects.each(params, function(entityParams) {
-                if(entityParams.uniqId) {
-                    var entity = uniqIdToEntity[entityParams.uniqId];
-                    entity?
-                        removeDomNodeFromEntity(entity, domNode) :
-                        delete uniqIdToDomElems[entityParams.uniqId];
-                }
-            });
-            delete domElemToParams[identify(domNode)];
-        });
+        // once when _ctx is an element and cycle for _ctx as NodeList|HTMLCollection
+        while((isDomNode && i--) || (ctxDomNode = _ctx[--i])) {
+            var domNodes = ctxDomNode.querySelectorAll(BEM_SELECTOR),
+                j = domNodes.length,
+                domNode;
+
+            while((domNode = domNodes[--j]) || (domNode = ctxDomNode)) {
+                var params = getParams(domNode),
+                    domNodeId = identify(domNode);
+
+                destructingDomNodes[domNodeId] = true;
+                currentDestructingDomNodes.push(domNodeId);
+
+                objects.each(params, function(entityParams) {
+                    if(entityParams.uniqId) {
+                        var entity = uniqIdToEntity[entityParams.uniqId];
+                        entity?
+                            removeDomNodeFromEntity(entity, domNode) :
+                            delete uniqIdToDomNodes[entityParams.uniqId];
+                    }
+                });
+                delete domNodeToParams[identify(domNode)];
+
+                if(domNode === ctxDomNode) break;
+            }
+        }
 
         // NOTE: it was moved here as jquery events aren't triggered on detached DOM elements
         destructDom &&
-            (excludeSelf? ctx.empty() : ctx.remove());
+            (excludeSelf?
+                ctx.innerHTML = '' :
+                ctx.parentNode && ctx.parentNode.removeChild(ctx));
 
         // flush parent nodes storage that has been filled above
         domNodesToParents = {};
@@ -1022,8 +1125,8 @@ bemDom = /** @exports */{
 
     /**
      * Destroys blocks on a fragment of the DOM tree
-     * @param {jQuery} ctx Root DOM node
-     * @param {Boolean} [excludeSelf=false] Exclude the main domElem
+     * @param {Element} ctx Root DOM node
+     * @param {Boolean} [excludeSelf=false] Exclude the main DOM node
      */
     destruct : function(ctx, excludeSelf) {
         this._destruct(ctx, excludeSelf, true);
@@ -1031,8 +1134,8 @@ bemDom = /** @exports */{
 
     /**
      * Detaches blocks on a fragment of the DOM tree without DOM tree destruction
-     * @param {jQuery} ctx Root DOM node
-     * @param {Boolean} [excludeSelf=false] Exclude the main domElem
+     * @param {Element} ctx Root DOM node
+     * @param {Boolean} [excludeSelf=false] Exclude the main DOM node
      */
     detach : function(ctx, excludeSelf) {
         this._destruct(ctx, excludeSelf);
@@ -1040,72 +1143,165 @@ bemDom = /** @exports */{
 
     /**
      * Replaces a fragment of the DOM tree inside the context, destroying old blocks and intializing new ones
-     * @param {jQuery} ctx Root DOM node
-     * @param {jQuery|String} content New content
-     * @returns {jQuery} Updated root DOM node
+     * @param {Element} ctx Root DOM node
+     * @param {Element|String} content New content
+     * @returns {Element} Updated root DOM node
      */
     update : function(ctx, content) {
         this.destruct(ctx, true);
-        return this.init(ctx.html(content));
+
+        typeof content === 'string' ?
+            ctx.innerHTML = content :
+            ctx.appendChild(content);
+
+        return this.init(ctx);
     },
 
     /**
      * Changes a fragment of the DOM tree including the context and initializes blocks.
-     * @param {jQuery} ctx Root DOM node
-     * @param {jQuery|String} content Content to be added
-     * @returns {jQuery} New content
+     * @param {Element} ctx Root DOM node
+     * @param {Element|String} content Content to be added
+     * @returns {Element} First DOM node of new content
      */
     replace : function(ctx, content) {
-        var prev = ctx.prev(),
-            parent = ctx.parent();
-
-        content = getJqueryCollection(content);
+        var next = ctx.nextSibling,
+            parent = ctx.parentNode;
 
         this.destruct(ctx);
 
-        return this.init(prev.length?
-            content.insertAfter(prev) :
-            content.prependTo(parent));
+        typeof content === 'string' &&
+            (content = getDomNodesByHtmlString(content));
+
+        var i = 0,
+            isDomNode = content instanceof Element,
+            domNode = content,
+            firstInitedEntity = null;
+
+        // once when content is an element and cycle for content as NodeList|HTMLCollection
+        while((isDomNode && !i++) || (domNode = content[i++])) {
+            next?
+                parent.insertBefore(domNode, next) :
+                parent.appendChild(domNode);
+
+            var initedEntity = this.init(domNode);
+
+            firstInitedEntity || (firstInitedEntity = initedEntity);
+        }
+
+        return firstInitedEntity;
     },
 
     /**
      * Adds a fragment of the DOM tree at the end of the context and initializes blocks
-     * @param {jQuery} ctx Root DOM node
-     * @param {jQuery|String} content Content to be added
-     * @returns {jQuery} New content
+     * @param {Element} ctx Root DOM node
+     * @param {Element|String} content Content to be added
+     * @returns {Element} First DOM node of new content
      */
     append : function(ctx, content) {
-        return this.init(getJqueryCollection(content).appendTo(ctx));
+        typeof content === 'string' &&
+            (content = getDomNodesByHtmlString(content));
+
+        var i = 0,
+            isDomNode = content instanceof Element,
+            domNode = content,
+            firstInitedEntity = null;
+
+        // once when content is an element and cycle for content as NodeList|HTMLCollection
+        while((isDomNode && !i++) || (domNode = content[i++])) {
+            ctx.appendChild(domNode);
+
+            var initedEntity = this.init(domNode);
+
+            firstInitedEntity || (firstInitedEntity = initedEntity);
+        }
+
+        return firstInitedEntity;
     },
 
     /**
      * Adds a fragment of the DOM tree at the beginning of the context and initializes blocks
      * @param {jQuery} ctx Root DOM node
      * @param {jQuery|String} content Content to be added
-     * @returns {jQuery} New content
+     * @returns {jQuery} First DOM node of new content
      */
     prepend : function(ctx, content) {
-        return this.init(getJqueryCollection(content).prependTo(ctx));
+        typeof content === 'string' &&
+            (content = getDomNodesByHtmlString(content));
+
+        var firstChild = ctx.firstChild,
+            i = 0,
+            isDomNode = content instanceof Element,
+            domNode = content,
+            firstInitedEntity = null;
+
+        // once when content is an element and cycle for content as NodeList|HTMLCollection
+        while((isDomNode && !i++) || (domNode = content[i++])) {
+            ctx.insertBefore(domNode, firstChild);
+
+            var initedEntity = this.init(domNode);
+
+            firstInitedEntity || (firstInitedEntity = initedEntity);
+        }
+
+        return firstInitedEntity;
     },
 
     /**
      * Adds a fragment of the DOM tree before the context and initializes blocks
-     * @param {jQuery} ctx Contextual DOM node
-     * @param {jQuery|String} content Content to be added
-     * @returns {jQuery} New content
+     * @param {Element} ctx Contextual DOM node
+     * @param {Element|String} content Content to be added
+     * @returns {Element} First DOM node of new content
      */
     before : function(ctx, content) {
-        return this.init(getJqueryCollection(content).insertBefore(ctx));
+        typeof content === 'string' &&
+            (content = getDomNodesByHtmlString(content));
+
+        var i = 0,
+            isDomNode = content instanceof Element,
+            domNode = content,
+            firstInitedEntity = null;
+
+        // once when content is an element and cycle for content as NodeList|HTMLCollection
+        while((isDomNode && !i++) || (domNode = content[i++])) {
+            parent.insertBefore(domNode, next);
+
+            var initedEntity = this.init(domNode);
+
+            firstInitedEntity || (firstInitedEntity = initedEntity);
+        }
+
+        return firstInitedEntity;
     },
 
     /**
      * Adds a fragment of the DOM tree after the context and initializes blocks
-     * @param {jQuery} ctx Contextual DOM node
-     * @param {jQuery|String} content Content to be added
-     * @returns {jQuery} New content
+     * @param {Element} ctx Contextual DOM node
+     * @param {Element|String} content Content to be added
+     * @returns {Element} First DOM node of new content
      */
     after : function(ctx, content) {
-        return this.init(getJqueryCollection(content).insertAfter(ctx));
+        typeof content === 'string' &&
+            (content = getDomNodesByHtmlString(content));
+
+        var next = ctx.nextSibling,
+            parent = ctx.parentNode,
+            i = 0,
+            isDomNode = content instanceof Element,
+            domNode = content,
+            firstInitedEntity = null;
+
+        // once when content is an element and cycle for content as NodeList|HTMLCollection
+        while((isDomNode && !i++) || (domNode = content[i++])) {
+            next?
+                parent.insertBefore(domNode, next) :
+                parent.appendChild(domNode);
+
+            var initedEntity = this.init(domNode);
+
+            firstInitedEntity || (firstInitedEntity = initedEntity);
+        }
+
+        return firstInitedEntity;
     }
 };
 

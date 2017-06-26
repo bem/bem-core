@@ -1,3 +1,3 @@
 ({
-    shouldDeps : ['jquery', 'next-tick']
+    shouldDeps : ['next-tick']
 })
