@@ -3,10 +3,15 @@
  */
 
 modules.require(
-    ['i-bem-dom__init', 'jquery', 'next-tick'],
-    function(init, $, nextTick) {
+    ['i-bem-dom__init', 'next-tick'],
+    function(init, nextTick) {
 
-$(function() {
+(function(onDomReady) {
+    document.readyState === 'loading'?
+        document.addEventListener('DOMContentLoaded', onDomReady) :
+        onDomReady();
+})(function() {
+    console.log('called domready');
     nextTick(init);
 });
 

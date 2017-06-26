@@ -38,9 +38,9 @@ describe('i-bem-dom', function() {
                         }
                     }
                 }),
-                block = (rootNode = createDomNode({
-                    block : 'block'
-                })).bem(Block);
+                block = bemDom.getEntity(
+                    rootNode = createDom({ block : 'block' }),
+                    Block);
 
             Block2.should.be.equal(Block);
             spy1.should.not.have.been.called;
@@ -64,9 +64,9 @@ describe('i-bem-dom', function() {
                         }
                     }
                 }),
-                block = (rootNode = createDomNode({
-                    block : 'block'
-                })).bem(Block);
+                block = bemDom.getEntity(
+                    rootNode = createDom({ block : 'block' }),
+                    Block);
 
             Block2.should.be.equal(Block);
             spy1.should.not.have.been.called;
@@ -90,10 +90,9 @@ describe('i-bem-dom', function() {
                         }
                     }
                 }),
-                elem = (rootNode = createDomNode({
-                    block : 'block',
-                    elem : 'elem'
-                })).bem(Elem);
+                elem = bemDom.getEntity(
+                    rootNode = createDom({ block : 'block', elem : 'elem' }),
+                    Elem);
 
             Elem2.should.be.equal(Elem);
             spy1.should.not.have.been.called;
@@ -117,10 +116,9 @@ describe('i-bem-dom', function() {
                         }
                     }
                 }),
-                elem = (rootNode = createDomNode({
-                    block : 'block',
-                    elem : 'elem'
-                })).bem(Elem);
+                elem = bemDom.getEntity(
+                    rootNode = createDom({ block : 'block', elem : 'elem' }),
+                    Elem);
 
             Elem2.should.be.equal(Elem);
             spy1.should.not.have.been.called;
@@ -151,12 +149,15 @@ describe('i-bem-dom', function() {
                     val : true
                 }
             ].forEach(function(data) {
-                (rootNode = createDomNode({
-                    block : 'block',
-                    mods : data.mods,
-                    mix : data.mix
-                })).bem(Block).getMod('m1')
-                    .should.be.eql(data.val);
+                bemDom.getEntity(
+                    rootNode = createDom({
+                        block : 'block',
+                        mods : data.mods,
+                        mix : data.mix
+                    }),
+                    Block)
+                        .getMod('m1')
+                            .should.be.eql(data.val);
 
                 bemDom.destruct(rootNode);
             });
@@ -188,15 +189,17 @@ describe('i-bem-dom', function() {
                     val : true
                 }
             ].forEach(function(data) {
-                (rootNode = createDomNode({
+                rootNode = createDom({
                     block : 'block',
                     content : {
                         elem : 'elem',
                         elemMods : data.elemMods,
                         mix : data.mix
                     }
-                })).bem(Block)._elem('elem').getMod('m1')
-                    .should.be.equal(data.val);
+                });
+
+                bemDom.getEntity(rootNode, Block)
+                    ._elem('elem').getMod('m1') .should.be.equal(data.val);
 
                 bemDom.destruct(rootNode);
             });
@@ -225,11 +228,13 @@ describe('i-bem-dom', function() {
                     mix : { block : 'bla-block', mods : { m3 : true, m1 : 'v1' } }
                 }
             ].forEach(function(data) {
-                var block = (rootNode = createDomNode({
+                var block = bemDom.getEntity(
+                    rootNode = createDom({
                         block : 'block',
                         mods : data.beforeMods,
                         mix : data.mix
-                    })).bem(Block);
+                    }),
+                    Block);
 
                 objects.each(data.mods, function(modVal, modName) {
                     modName === 'm3'?
@@ -237,7 +242,7 @@ describe('i-bem-dom', function() {
                         block.setMod(modName, modVal);
                 });
 
-                block.domElem[0].className.should.be.equal(data.afterCls);
+                block.domNode.className.should.be.equal(data.afterCls);
 
                 bemDom.destruct(rootNode);
             });
@@ -259,13 +264,16 @@ describe('i-bem-dom', function() {
                     mods : { m1 : 'v1', m2 : 'v2', m3 : true, m4 : 'v4', m5 : true, m6 : false, m7 : '' }
                 }
             ].forEach(function(data) {
-                var elem = (rootNode = createDomNode({
+                var elem = bemDom.getEntity(
+                    rootNode = createDom({
                         block : 'block',
                         content : {
                             elem : 'elem',
                             mods : data.elemMods
                         }
-                    })).bem(Block)._elem('elem');
+                    }),
+                    Block)
+                        ._elem('elem');
 
                 objects.each(data.mods, function(modVal, modName) {
                     modName === 'm3'?
@@ -273,7 +281,7 @@ describe('i-bem-dom', function() {
                         elem.setMod(modName, modVal);
                 });
 
-                elem.domElem[0].className.should.be.equal(data.afterCls);
+                elem.domNode.className.should.be.equal(data.afterCls);
 
                 bemDom.destruct(rootNode);
             });
@@ -291,7 +299,7 @@ describe('i-bem-dom', function() {
             B4Block = bemDom.declBlock('b4');
             B5Block = bemDom.declBlock('b5');
 
-            rootNode = createDomNode({
+            rootNode = createDom({
                 block : 'root',
                 content : {
                     block : 'b1',
@@ -335,7 +343,7 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootBlock = rootNode.bem(RootBlock);
+            rootBlock = bemDom.getEntity(rootNode, RootBlock);
         });
 
         describe('findChildBlocks', function() {
@@ -550,7 +558,8 @@ describe('i-bem-dom', function() {
                     .should.be.instanceOf(BemDomCollection);
             });
 
-            it('should find all mixed blocks by block class', function() {
+            // TODO: multi
+            it.skip('should find all mixed blocks by block class', function() {
                 getEntityIds(
                     rootBlock.findChildBlock({ block : B3Block }).findMixedBlocks(B4Block))
                         .should.be.eql(['6', '8']);
@@ -618,7 +627,7 @@ describe('i-bem-dom', function() {
             B1E5Elem = bemDom.declElem('b1', 'e5');
             B1E6Elem = bemDom.declElem('b1', 'e6');
 
-            rootNode = createDomNode(
+            rootNode = createDom(
                 {
                     block : 'b1',
                     content : [
@@ -678,7 +687,7 @@ describe('i-bem-dom', function() {
                     ]
                 });
 
-            b1Block = rootNode.bem(B1Block);
+            b1Block = bemDom.getEntity(rootNode, B1Block);
         });
 
         describe('findChildElems', function() {
@@ -860,7 +869,8 @@ describe('i-bem-dom', function() {
                     .should.be.instanceOf(BemDomCollection);
             });
 
-            it('should find all mixed elems by elem class', function() {
+            // TODO: multi
+            it.skip('should find all mixed elems by elem class', function() {
                 getEntityIds(
                     b1Block.findChildElem(B1E3Elem).findMixedElems(B1E4Elem))
                         .should.be.eql(['6', '8']);
@@ -882,7 +892,8 @@ describe('i-bem-dom', function() {
                             .should.be.equal('6');
             });
 
-            it('should find first mixed elem by elem class, modName and modVal', function() {
+            // TODO: multy
+            it.skip('should find first mixed elem by elem class, modName and modVal', function() {
                 b1Block.findChildElem(B1E3Elem)
                     .findMixedElem({ elem : B1E4Elem, modName : 'm2', modVal : 'v1' })
                         .params.id
@@ -921,7 +932,7 @@ describe('i-bem-dom', function() {
             B1E3Elem = bemDom.declElem('b1', 'e3');
             B1E4Elem = bemDom.declElem('b1', 'e4');
 
-            rootNode = createDomNode({
+            rootNode = createDom({
                 block : 'b1',
                 mix : { elem : 'e1', js : { id : 1 } },
                 content : [
@@ -955,7 +966,7 @@ describe('i-bem-dom', function() {
                 ]
             });
 
-            b1Block = rootNode.bem(B1Block);
+            b1Block = bemDom.getEntity(rootNode, B1Block);
         });
 
         afterEach(function() {
@@ -1074,10 +1085,10 @@ describe('i-bem-dom', function() {
         });
 
         describe('drop cache', function() {
-            var b1e2DomElem;
+            var b1e2DomNode;
 
             beforeEach(function() {
-                b1e2DomElem = b1Block.findChildElem(B1E2Elem).domElem;
+                b1e2DomNode = b1Block.findChildElem(B1E2Elem).domNode;
                 spy = sinon.spy(b1Block, 'findChildElems');
             });
 
@@ -1085,7 +1096,7 @@ describe('i-bem-dom', function() {
                 it('should drop elems cache on DOM destruct', function() {
                     b1Block._elems(B1E1Elem);
 
-                    bemDom.destruct(b1e2DomElem);
+                    bemDom.destruct(b1e2DomNode);
 
                     b1Block._elems(B1E1Elem);
                     spy.should.be.calledTwice;
@@ -1094,19 +1105,20 @@ describe('i-bem-dom', function() {
                 it('should drop elems cache on DOM update', function() {
                     b1Block._elems(B1E1Elem);
 
-                    bemDom.update(b1e2DomElem, BEMHTML.apply({
+                    bemDom.update(b1e2DomNode, BEMHTML.apply({
                         block : 'b1',
-                        elem : 'e1'
+                        elem : 'e5',
                     }));
 
                     b1Block._elems(B1E1Elem);
+
                     spy.should.be.calledTwice;
                 });
 
                 it('should drop elems cache on DOM replace', function() {
                     b1Block._elems(B1E1Elem);
 
-                    bemDom.replace(b1e2DomElem, BEMHTML.apply({
+                    bemDom.replace(b1e2DomNode, BEMHTML.apply({
                         block : 'b1',
                         elem : 'e1'
                     }));
@@ -1118,7 +1130,7 @@ describe('i-bem-dom', function() {
                 it('should drop elems cache on DOM append', function() {
                     b1Block._elems(B1E1Elem);
 
-                    bemDom.append(b1Block.domElem, BEMHTML.apply({
+                    bemDom.append(b1Block.domNode, BEMHTML.apply({
                         block : 'b1',
                         elem : 'e1',
                         js : true
@@ -1132,7 +1144,7 @@ describe('i-bem-dom', function() {
                 it.skip('should drop elems cache on DOM append of elems without js', function() {
                     b1Block._elems(B1E1Elem);
 
-                    bemDom.append(b1Block.domElem, BEMHTML.apply({
+                    bemDom.append(b1Block.domNode, BEMHTML.apply({
                         block : 'b1',
                         elem : 'e1'
                     }));
@@ -1144,7 +1156,7 @@ describe('i-bem-dom', function() {
                 it('should drop elems cache on DOM update in case of elem without data-bem', function() {
                     b1Block._elems(B1E1Elem);
 
-                    bemDom.append(b1Block.domElem, BEMHTML.apply({
+                    bemDom.append(b1Block.domNode, BEMHTML.apply({
                         block : 'b1',
                         elem : 'e2',
                         js : true,
@@ -1160,7 +1172,7 @@ describe('i-bem-dom', function() {
                 it('should not drop elems cache on DOM destruct', function() {
                     b1Block._elems(B1E4Elem);
 
-                    bemDom.destruct(b1e2DomElem);
+                    bemDom.destruct(b1e2DomNode);
 
                     b1Block._elems(B1E4Elem);
                     spy.should.be.callOnce;
@@ -1169,7 +1181,7 @@ describe('i-bem-dom', function() {
                 it('should not drop elems cache on DOM update', function() {
                     b1Block._elems(B1E4Elem);
 
-                    bemDom.update(b1e2DomElem, BEMHTML.apply({
+                    bemDom.update(b1e2DomNode, BEMHTML.apply({
                         block : 'b1',
                         elem : 'e1'
                     }));
@@ -1181,7 +1193,7 @@ describe('i-bem-dom', function() {
                 it('should not drop elems cache on DOM replace', function() {
                     b1Block._elems(B1E4Elem);
 
-                    bemDom.replace(b1e2DomElem, BEMHTML.apply({
+                    bemDom.replace(b1e2DomNode, BEMHTML.apply({
                         block : 'b1',
                         elem : 'e1'
                     }));
@@ -1208,19 +1220,19 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = createDomNode({
-                tag : 'div',
+            rootNode = createDom({
                 content : { block : 'block', js : true }
             });
 
             spy.should.have.been.called;
         });
 
-        it('should properly init block with multiple DOM nodes', function(done) {
+        it.skip('should properly init block with multiple DOM nodes', function(done) {
             bemDom.declBlock('block', {
                 onSetMod : {
                     js : {
                         inited : function() {
+                            // TODO: multy
                             this.domElem.length.should.be.equal(2);
                             done();
                         }
@@ -1228,8 +1240,7 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = createDomNode({
-                tag : 'div',
+            rootNode = createDom({
                 content : [
                     { block : 'block', js : { id : 'id' } },
                     { block : 'block', js : { id : 'id' } }
@@ -1237,13 +1248,14 @@ describe('i-bem-dom', function() {
             });
         });
 
-        it('should properly init elem with multiple DOM nodes', function(done) {
+        it.skip('should properly init elem with multiple DOM nodes', function(done) {
             bemDom.declBlock('block');
 
             bemDom.declElem('block', 'e1', {
                 onSetMod : {
                     js : {
                         inited : function() {
+                            // TODO: multy
                             this.domElem.length.should.be.equal(2);
                             done();
                         }
@@ -1251,7 +1263,7 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = createDomNode({
+            rootNode = createDom({
                 block : 'block',
                 content : [
                     { elem : 'e1', js : { id : 'id' } },
@@ -1271,8 +1283,7 @@ describe('i-bem-dom', function() {
                 lazyInit : true
             });
 
-            rootNode = initDom({
-                tag : 'div',
+            rootNode = createDomInScope({
                 content : { block : 'block', js : true }
             });
 
@@ -1288,8 +1299,7 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = initDom({
-                tag : 'div',
+            rootNode = createDomInScope({
                 content : { block : 'block', js : true }
             });
 
@@ -1308,15 +1318,14 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = createDomNode({
-                tag : 'div',
+            rootNode = createDom({
                 content : { block : 'block1', js : true }
             });
 
-            bemDom.detach(rootNode.find('.block1'));
+            bemDom.detach(rootNode.querySelector('.block1'));
 
             spy.should.have.been.calledOnce;
-            rootNode.find('.block1').length.should.be.equal(1);
+            rootNode.querySelectorAll('.block1').length.should.be.equal(1);
         });
     });
 
@@ -1326,7 +1335,8 @@ describe('i-bem-dom', function() {
             spy = sinon.spy();
         });
 
-        it('should destruct block only if it has no dom nodes', function() {
+        // TODO: multy
+        it.skip('should destruct block only if it has no dom nodes', function() {
             bemDom.declBlock('block', {
                 onSetMod : {
                     js : {
@@ -1335,18 +1345,17 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = createDomNode({
-                tag : 'div',
+            rootNode = createDom({
                 content : [
                     { block : 'block', js : { id : 'block' } },
                     { block : 'block', js : { id : 'block' } }
                 ]
             });
 
-            bemDom.destruct(rootNode.find('.block :eq(0)'));
+            bemDom.destruct(rootNode.querySelector('.block').childNodes[0]);
             spy.should.not.have.been.called;
 
-            bemDom.destruct(rootNode.find('.block'));
+            bemDom.destruct(rootNode.querySelector('.block'));
             spy.should.have.been.called;
         });
 
@@ -1359,19 +1368,18 @@ describe('i-bem-dom', function() {
                     }
                 });
 
-            rootNode = createDomNode({
-                tag : 'div',
+            rootNode = createDom({
                 content : { block : 'block' }
             });
 
-            var blockNode = rootNode.find('.block');
-            blockNode.bem(Block);
+            var blockNode = rootNode.querySelector('.block');
+            bemDom.getEntity(blockNode, Block);
             bemDom.destruct(blockNode);
             spy.should.have.been.called;
         });
 
         // see https://github.com/bem/bem-core/issues/1383
-        it('should not re-initialize destructing entities during destruct', function() {
+        it.skip('should not re-initialize destructing entities during destruct', function() {
             var Block = bemDom.declBlock('block', {
                     __constructor : function() {
                         this.__base.apply(this, arguments);
@@ -1383,7 +1391,7 @@ describe('i-bem-dom', function() {
                     }
                 });
 
-            rootNode = initDom({
+            rootNode = createDomInScope({
                 block : 'block',
                 js : true,
                 tag : 'input'
@@ -1415,8 +1423,7 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = createDomNode({
-                tag : 'div',
+            rootNode = createDom({
                 content : { block : 'block1', js : true }
             });
 
@@ -1428,9 +1435,9 @@ describe('i-bem-dom', function() {
         });
 
         it('should allow to pass simple string', function() {
-            var domElem = $('<div/>');
-            bemDom.update(domElem, 'simple string');
-            domElem.html().should.be.equal('simple string');
+            var domNode = document.createElement('div');
+            bemDom.update(domNode, 'simple string');
+            domNode.innerHTML.should.be.equal('simple string');
         });
     });
 
@@ -1483,38 +1490,37 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = initDom({
-                tag : 'div',
+            rootNode = createDomInScope({
                 content : { block : 'block1', js : true }
             });
 
-            bemDom.replace(rootNode.find('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
+            bemDom.replace(rootNode.querySelector('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
 
             spyBlock1Destructed.should.have.been.calledOnce;
             spyBlock2Inited.should.have.been.calledOnce;
 
-            rootNode.html().should.be.equal('<div class="block2 i-bem block2_js_inited" data-bem="{&quot;block2&quot;:{}}"></div>');
+            rootNode.innerHTML.should.be.equal('<div class="block2 i-bem block2_js_inited" data-bem="{&quot;block2&quot;:{}}"></div>');
 
             bemDom.destruct(rootNode);
 
-            rootNode = createDomNode({
-                    tag : 'div',
+            rootNode = createDom({
                     content : [{ tag : 'p' }, { block : 'block1', js : true }, { tag : 'p' }]
                 });
 
-            bemDom.replace(rootNode.find('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
+            bemDom.replace(rootNode.querySelector('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
 
             spyBlock1Destructed.should.have.been.calledTwice;
             spyBlock2Inited.should.have.been.calledTwice;
 
-            rootNode.html().should.be.equal('<p></p><div class="block2 i-bem block2_js_inited" data-bem="{&quot;block2&quot;:{}}"></div><p></p>');
+            rootNode.innerHTML.should.be.equal('<p></p><div class="block2 i-bem block2_js_inited" data-bem="{&quot;block2&quot;:{}}"></div><p></p>');
         });
     });
 
     // don't add specs for other DOM changing methods as they are implemented the same way
 
     describe('params', function() {
-        it('should properly join params', function(done) {
+        // TODO: multy
+        it.skip('should properly join params', function(done) {
             var Block = bemDom.declBlock('block', {
                     _getDefaultParams : function() {
                         return { p1 : 1 };
@@ -1536,8 +1542,7 @@ describe('i-bem-dom', function() {
                 }
             });
 
-            rootNode = createDomNode({
-                tag : 'div',
+            rootNode = createDom({
                 content : [
                     { block : 'block', js : { id : 'bla', p2 : 2 }, mix : { block : 'block2', js : true } },
                     { block : 'block', js : { id : 'bla', p3 : 3 } }
@@ -1547,38 +1552,39 @@ describe('i-bem-dom', function() {
     });
 
     describe('containsEntity', function() {
-        var domElem, block, block2;
+        var domNode, block, block2;
         beforeEach(function() {
             var Block = bemDom.declBlock('block'),
                 Block2 = bemDom.declBlock('block2');
 
-            domElem = initDom([
-                {
-                    block : 'block',
-                    js : { id : '1' },
-                    content : [
-                        { elem : 'e1' },
-                        { elem : 'e2' }
-                    ]
-                },
-                {
-                    block : 'block',
-                    js : { id : '1' },
-                    content : [
-                        { elem : 'e1' },
-                        { elem : 'e2', content : { elem : 'e2-1' } }
-                    ]
-                },
-                {
-                    block : 'block2'
-                }
-            ]);
+            domNode = createDomInScope({
+                content : [
+                    {
+                        block : 'block',
+                        js : { id : '1' },
+                        content : [
+                            { elem : 'e1' },
+                            { elem : 'e2' }
+                        ]
+                    },
+                    {
+                        block : 'block',
+                        js : { id : '1' },
+                        content : [
+                            { elem : 'e1' },
+                            { elem : 'e2', content : { elem : 'e2-1' } }
+                        ]
+                    },
+                    { block : 'block2' }
+                ]
+            });
 
-            block = domElem.filter('.block').bem(Block);
-            block2 = domElem.filter('.block2').bem(Block2);
+            block = bemDom.getEntity(domNode.querySelector('.block'), Block);
+            block2 = bemDom.getEntity(domNode.querySelector('.block2'), Block2);
         });
 
-        it('should properly checks for nested entities', function() {
+        // TODO: multy
+        it.skip('should properly checks for nested entities', function() {
             block.containsEntity(block._elem('e2-1')).should.be.true;
             block.containsEntity(block2).should.be.false;
         });
@@ -1596,19 +1602,18 @@ describe('i-bem-dom', function() {
         });
 
         it('should have been called once', function() {
-            rootNode = initDom([{
-                block : 'block',
-                js : true
-            }, {
-                block : 'block',
-                js : true
-            }]);
+            rootNode = createDomInScope({
+                content: [
+                    { block : 'block', js : true },
+                    { block : 'block', js : true }
+                ]
+            });
 
             spy.should.have.been.calledOnce;
         });
 
         it('should have been properly called in case of additional declaration after first initialization', function() {
-            rootNode = initDom({
+            rootNode = createDomInScope({
                 block : 'block',
                 js : true
             });
@@ -1640,7 +1645,7 @@ describe('i-bem-dom', function() {
                 lazyInit : true
             });
 
-            rootNode = initDom({
+            rootNode = createDomInScope({
                 block : 'block',
                 js : { lazyInit : false }
             });
@@ -1648,7 +1653,7 @@ describe('i-bem-dom', function() {
             spy.should.have.been.called;
         });
 
-        describe('on DOM events', function() {
+        describe.skip('on DOM events', function() {
             beforeEach(function() {
                 spy = sinon.spy();
 
@@ -1665,7 +1670,7 @@ describe('i-bem-dom', function() {
                     }
                 });
 
-                rootNode = initDom({
+                rootNode = createDomInScope({
                     block : 'block',
                     js : true
                 });
@@ -1678,7 +1683,7 @@ describe('i-bem-dom', function() {
             });
         });
 
-        describe('on BEM events', function() {
+        describe.skip('on BEM events', function() {
             var block2;
             beforeEach(function() {
                 spy = sinon.spy();
@@ -1698,16 +1703,16 @@ describe('i-bem-dom', function() {
 
                 var Block2 = bemDom.declBlock('block2');
 
-                block2 = initDom({
+                block2 = bemDom.getEntity(
+                    createDomInScope({
                         block : 'block',
                         js : true,
                         content : {
                             block : 'block2',
                             js : true
                         }
-                    })
-                    .find(Block2._buildSelector())
-                    .bem(Block2);
+                    }).querySelector(Block2._buildSelector()),
+                    Block2);
             });
 
             it('should init block on BEM event', function() {
@@ -1745,12 +1750,16 @@ describe('i-bem-dom', function() {
 
 provide();
 
-function createDomNode(bemjson) {
+function createDom(bemjson) {
     return bemDom.init(BEMHTML.apply(bemjson));
 }
 
-function initDom(bemjson) {
-    return createDomNode(bemjson).appendTo(bemDom.scope);
+function createEntity(bemjson, entityCls) {
+    return bemDom.getEntity(createDom(bemjson), entityCls);
+}
+
+function createDomInScope(bemjson) {
+    return bemDom.append(bemDom.scope, createDom(bemjson));
 }
 
 function getEntityIds(entities) {
