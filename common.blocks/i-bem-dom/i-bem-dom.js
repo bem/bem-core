@@ -353,7 +353,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
          * @member {Element}
          * @readonly
          */
-        this.domNode = domNode;
+        this.domNode = domNodes[0];
 
         /**
          * DOM elements of entity
@@ -631,68 +631,23 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
         while(domNode = domNodes[i++]) {
             var childrenDomNodes = onlyFirst?
-                    domNode.querySelector(selector) :
+                    [domNode.querySelector(selector)] :
                     domNode.querySelectorAll(selector),
                 j = 0,
                 childDomNode;
 
             while(childDomNode = childrenDomNodes[j++]) {
-                var entity = initEntity(entityName, domNode, undef, true)._setInitedMod();
-                if(!uniqIds[entity._uniqId]) {
-                    uniqIds[entity._uniqId] = true;
-                    res.push(entity);
+                var resEntity = initEntity(entityName, childDomNode, undef, true)._setInitedMod();
+                if(!uniqIds[resEntity._uniqId]) {
+                    uniqIds[resEntity._uniqId] = true;
+                    res.push(resEntity);
                 }
 
-                if(onlyFirst && entity) return entity;
+                if(onlyFirst && resEntity) return resEntity;
             }
-        }
-
-        while(domNode = domNodes[i++]) {
-            var entity = initEntity(entityName, domNode, undef, true)._setInitedMod();
-            if(!uniqIds[entity._uniqId]) {
-                uniqIds[entity._uniqId] = true;
-                res.push(entity);
-            }
-
-            if(onlyFirst && entity) return entity;
         }
 
         return onlyFirst? null : new BemDomCollection(res);
-    },
-
-    /**
-     * Finds child DOM nodes
-     * @private
-     * @param {String} selector
-     * @param {Boolean} [onlyFirst=false]
-     * @returns {*}
-     */
-    _findChildDomNodes : function(selector, onlyFirst) {
-        var res = [],
-            uniqIds = {},
-            domNodes = this.domNodes,
-            i = 0,
-            domNode;
-
-        while(domNode = domNodes[i++]) {
-            var childrenDomNodes = onlyFirst?
-                domNode.querySelector(selector) :
-                domNode.querySelectorAll(selector);
-
-            if(onlyFirst && childrenDomNodes) return childrenDomNodes;
-
-            var j = 0, childDomNode;
-
-            while(childDomNode = childrenDomNodes[j++]) {
-                var id = identify(childDomNode);
-                if(!uniqIds[id]) {
-                    uniqIds[id] = true;
-                    res.push(childDomNode);
-                }
-            }
-        }
-
-        return onlyFirst? null : res;
     },
 
     /**
@@ -715,13 +670,13 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
             while(domNode = domNode.parentNode) {
                 if(!domNode.classList.contains(className)) continue;
 
-                var entity = initEntity(entityName, domNode, undef, true)._setInitedMod();
-                if(!uniqIds[entity._uniqId]) {
-                    uniqIds[entity._uniqId] = true;
-                    res.push(entity);
+                var resEntity = initEntity(entityName, domNode, undef, true)._setInitedMod();
+                if(!uniqIds[resEntity._uniqId]) {
+                    uniqIds[resEntity._uniqId] = true;
+                    res.push(resEntity);
                 }
 
-                if(onlyFirst && entity) return entity;
+                if(onlyFirst && resEntity) return resEntity;
             }
         }
 
@@ -745,16 +700,15 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
             domNode;
 
         while(domNode = domNodes[i++]) {
-            // TODO: support multiple nodes
             if(!domNode.classList.contains(className)) continue;
 
-            var entity = initEntity(entityName, domNode, undef, true)._setInitedMod();
-            if(!uniqIds[entity._uniqId]) {
-                uniqIds[entity._uniqId] = true;
-                res.push(entity);
+            var resEntity = initEntity(entityName, domNode, undef, true)._setInitedMod();
+            if(!uniqIds[resEntity._uniqId]) {
+                uniqIds[resEntity._uniqId] = true;
+                res.push(resEntity);
             }
 
-            if(onlyFirst && entity) return entity;
+            if(onlyFirst && resEntity) return resEntity;
         }
 
         return onlyFirst? null : new BemDomCollection(res);
