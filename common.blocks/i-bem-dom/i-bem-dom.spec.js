@@ -558,8 +558,7 @@ describe('i-bem-dom', function() {
                     .should.be.instanceOf(BemDomCollection);
             });
 
-            // TODO: multi
-            it.skip('should find all mixed blocks by block class', function() {
+            it('should find all mixed blocks by block class', function() {
                 getEntityIds(
                     rootBlock.findChildBlock({ block : B3Block }).findMixedBlocks(B4Block))
                         .should.be.eql(['6', '8']);
@@ -869,8 +868,7 @@ describe('i-bem-dom', function() {
                     .should.be.instanceOf(BemDomCollection);
             });
 
-            // TODO: multi
-            it.skip('should find all mixed elems by elem class', function() {
+            it('should find all mixed elems by elem class', function() {
                 getEntityIds(
                     b1Block.findChildElem(B1E3Elem).findMixedElems(B1E4Elem))
                         .should.be.eql(['6', '8']);
@@ -892,8 +890,7 @@ describe('i-bem-dom', function() {
                             .should.be.equal('6');
             });
 
-            // TODO: multy
-            it.skip('should find first mixed elem by elem class, modName and modVal', function() {
+            it('should find first mixed elem by elem class, modName and modVal', function() {
                 b1Block.findChildElem(B1E3Elem)
                     .findMixedElem({ elem : B1E4Elem, modName : 'm2', modVal : 'v1' })
                         .params.id
@@ -1333,8 +1330,7 @@ describe('i-bem-dom', function() {
             spy = sinon.spy();
         });
 
-        // TODO: multy
-        it.skip('should destruct block only if it has no dom nodes', function() {
+        it('should destruct block only if it has no dom nodes', function() {
             bemDom.declBlock('block', {
                 onSetMod : {
                     js : {
@@ -1350,7 +1346,7 @@ describe('i-bem-dom', function() {
                 ]
             });
 
-            bemDom.destruct(rootNode.querySelector('.block').childNodes[0]);
+            bemDom.destruct(rootNode.querySelector('.block'));
             spy.should.not.have.been.called;
 
             bemDom.destruct(rootNode.querySelector('.block'));
@@ -1517,8 +1513,7 @@ describe('i-bem-dom', function() {
     // don't add specs for other DOM changing methods as they are implemented the same way
 
     describe('params', function() {
-        // TODO: multy
-        it.skip('should properly join params', function(done) {
+        it('should properly join params', function(done) {
             var Block = bemDom.declBlock('block', {
                     _getDefaultParams : function() {
                         return { p1 : 1 };
@@ -1549,7 +1544,7 @@ describe('i-bem-dom', function() {
         });
     });
 
-    describe('containsEntity', function() {
+    describe.skip('containsEntity', function() {
         var domNode, block, block2;
         beforeEach(function() {
             var Block = bemDom.declBlock('block'),
@@ -1581,8 +1576,7 @@ describe('i-bem-dom', function() {
             block2 = bemDom.getEntity(domNode.querySelector('.block2'), Block2);
         });
 
-        // TODO: multy
-        it.skip('should properly checks for nested entities', function() {
+        it('should properly checks for nested entities', function() {
             block.containsEntity(block._elem('e2-1')).should.be.true;
             block.containsEntity(block2).should.be.false;
         });
