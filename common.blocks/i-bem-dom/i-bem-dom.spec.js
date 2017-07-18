@@ -1,7 +1,7 @@
 modules.define(
     'spec',
-    ['i-bem', 'i-bem-dom', 'i-bem-dom__collection', 'objects', 'functions', 'jquery', 'chai', 'sinon', 'BEMHTML'],
-    function(provide, bem, bemDom, BemDomCollection, objects, functions, $, chai, sinon, BEMHTML) {
+    ['i-bem', 'i-bem-dom', 'i-bem-dom__collection', 'objects', 'functions', 'chai', 'sinon', 'BEMHTML'],
+    function(provide, bem, bemDom, BemDomCollection, objects, functions, chai, sinon, BEMHTML) {
 
 var undef,
     expect = chai.expect;
@@ -1544,7 +1544,7 @@ describe('i-bem-dom', function() {
         });
     });
 
-    describe.skip('containsEntity', function() {
+    describe('containsEntity', function() {
         var domNode, block, block2;
         beforeEach(function() {
             var Block = bemDom.declBlock('block'),
