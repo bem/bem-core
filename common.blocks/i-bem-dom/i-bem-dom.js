@@ -255,19 +255,6 @@ function storeDomNodesParents(domNodes) {
 }
 
 /**
- * Creates detached DOM nodes from HTML string
- * @param {String} html
- * @returns {NodeList}
- */
-function getDomNodesByHtmlString(html) {
-    var wrapperElement = document.createElement('div');
-    wrapperElement.innerHTML = html;
-    var childNodes = wrapperElement.childNodes;
-
-    return childNodes.length === 1 ? childNodes[0] : childNodes;
-}
-
-/**
  * Clears the cache for elements in context
  * @param {Element|NodeList|HTMLCollection} ctx
  */
@@ -836,7 +823,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     containsEntity : function(entity) {
         // TODO: support multi node case and refactor `dom`
-        return dom.contains(this.domNode, entity.domNode);
+        return dom.contains(this.domNodes, entity.domNodes);
     }
 
 }, /** @lends BemDomEntity */{
@@ -1052,7 +1039,7 @@ bemDom = /** @exports */{
      */
     init : function(ctx) {
         ctx = typeof ctx === 'string'?
-            getDomNodesByHtmlString(ctx) :
+            dom.fromString(ctx) :
             ctx || bemDom.scope;
 
         var dropElemCacheQueue = {},
@@ -1187,7 +1174,7 @@ bemDom = /** @exports */{
         this.destruct(ctx);
 
         typeof content === 'string' &&
-            (content = getDomNodesByHtmlString(content));
+            (content = dom.fromString(content));
 
         var i = 0,
             isDomNode = content instanceof Element,
@@ -1216,7 +1203,7 @@ bemDom = /** @exports */{
      */
     append : function(ctx, content) {
         typeof content === 'string' &&
-            (content = getDomNodesByHtmlString(content));
+            (content = dom.fromString(content));
 
         var i = 0,
             isDomNode = content instanceof Element,
@@ -1243,7 +1230,7 @@ bemDom = /** @exports */{
      */
     prepend : function(ctx, content) {
         typeof content === 'string' &&
-            (content = getDomNodesByHtmlString(content));
+            (content = dom.fromString(content));
 
         var firstChild = ctx.firstChild,
             i = 0,
@@ -1271,7 +1258,7 @@ bemDom = /** @exports */{
      */
     before : function(ctx, content) {
         typeof content === 'string' &&
-            (content = getDomNodesByHtmlString(content));
+            (content = dom.fromString(content));
 
         var parent = ctx.parentNode,
             i = 0,
@@ -1299,7 +1286,7 @@ bemDom = /** @exports */{
      */
     after : function(ctx, content) {
         typeof content === 'string' &&
-            (content = getDomNodesByHtmlString(content));
+            (content = dom.fromString(content));
 
         var next = ctx.nextSibling,
             parent = ctx.parentNode,
