@@ -1227,13 +1227,12 @@ describe('i-bem-dom', function() {
             spy.should.have.been.called;
         });
 
-        it.skip('should properly init block with multiple DOM nodes', function(done) {
+        it('should properly init block with multiple DOM nodes', function(done) {
             bemDom.declBlock('block', {
                 onSetMod : {
                     js : {
                         inited : function() {
-                            // TODO: multy
-                            this.domElem.length.should.be.equal(2);
+                            this.domNodes.length.should.be.equal(2);
                             done();
                         }
                     }
@@ -1248,15 +1247,14 @@ describe('i-bem-dom', function() {
             });
         });
 
-        it.skip('should properly init elem with multiple DOM nodes', function(done) {
+        it('should properly init elem with multiple DOM nodes', function(done) {
             bemDom.declBlock('block');
 
             bemDom.declElem('block', 'e1', {
                 onSetMod : {
                     js : {
                         inited : function() {
-                            // TODO: multy
-                            this.domElem.length.should.be.equal(2);
+                            this.domNodes.length.should.be.equal(2);
                             done();
                         }
                     }
