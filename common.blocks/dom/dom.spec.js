@@ -4,7 +4,7 @@ describe('dom', function() {
     describe('contains', function() {
         var domNode;
         beforeEach(function() {
-            domNode = document.createElement('div');
+            domNode = createDomNode();
             domNode.innerHTML = '<div class="a">' +
                     '<div class="x"/>' +
                 '</div>' +
@@ -37,7 +37,7 @@ describe('dom', function() {
 
     describe('getFocused', function() {
         it('should returns focused DOM elem', function() {
-            var input = document.createElement('input');
+            var input = createDomNode('input');
             document.documentElement.appendChild(input);
             input.focus();
 
@@ -48,54 +48,50 @@ describe('dom', function() {
         });
     });
 
-    describe.skip('isFocusable', function() {
+    describe('isFocusable', function() {
         it('should returns true if given DOM elem is iframe, input, button, textarea or select', function() {
-            dom.isFocusable($('<iframe/>')).should.be.true;
-            dom.isFocusable($('<input/>')).should.be.true;
-            dom.isFocusable($('<button/>')).should.be.true;
-            dom.isFocusable($('<textarea/>')).should.be.true;
-            dom.isFocusable($('<select/>')).should.be.true;
+            ['input', 'button', 'textarea', 'select'].forEach(function(elementName) {
+                dom.isFocusable(createDomNode(elementName)).should.be.true;
+            });
         });
 
         it('should returns false if given DOM elem is disabled', function() {
-            dom.isFocusable($('<input disabled="disabled"/>')).should.be.false;
-            dom.isFocusable($('<button disabled="disabled"/>')).should.be.false;
-            dom.isFocusable($('<textarea disabled="disabled"/>')).should.be.false;
-            dom.isFocusable($('<select disabled="disabled"/>')).should.be.false;
+            ['input', 'button', 'textarea', 'select'].forEach(function(elementName) {
+                dom.isFocusable(createDomNode(elementName, { disabled : 'disabled' })).should.be.false;
+            });
         });
 
         it('should returns true if given DOM elem is link with href', function() {
-            dom.isFocusable($('<a href="/"/>')).should.be.true;
-            dom.isFocusable($('<a/>')).should.be.false;
+            dom.isFocusable(createDomNode('a', { href : '/' })).should.be.true;
+            dom.isFocusable(createDomNode('a')).should.be.false;
         });
 
         it('should returns true if given DOM elem has tabindex', function() {
-            dom.isFocusable($('<span tabindex="4"/>')).should.be.true;
-            dom.isFocusable($('<a tabindex="5"/>')).should.be.true;
-            dom.isFocusable($('<span/>')).should.be.false;
+            dom.isFocusable(createDomNode('span', { tabindex : '4' })).should.be.true;
+            dom.isFocusable(createDomNode('a', { tabindex : '5' })).should.be.true;
+            dom.isFocusable(createDomNode('span')).should.be.false;
         });
 
         it('should returns false if given DOM elem is empty', function() {
-            dom.isFocusable($('.__no-exist')).should.be.false;
+            dom.isFocusable(document.querySelector('.__no-exist')).should.be.false;
         });
     });
 
-    describe.skip('containsFocus', function() {
-        var domElem, domNode;
+    describe('containsFocus', function() {
+        var domNode;
         beforeEach(function() {
-            domElem = $(
-                '<div>' +
-                    '<div class="a">' +
-                        '<input class="x"/>' +
-                    '</div>' +
-                    '<div class="b"/>' +
-                '</div>')
-                    .appendTo('body');
-            domNode.querySelectorAll('.x').focus();
+            domNode = createDomNode();
+            domNode.innerHTML = '<div class="a">' +
+                    '<input class="x"/>' +
+                '</div>' +
+                '<div class="b"/>';
+            document.documentElement.appendChild(domNode);
+
+            domNode.querySelector('.x').focus();
         });
 
         afterEach(function() {
-            domElem.remove();
+            domNode.parentNode.removeChild(domNode);
         });
 
         it('should returns true if context contains focused DOM elem', function() {
@@ -115,37 +111,47 @@ describe('dom', function() {
         });
     });
 
-    describe.skip('isEditable', function() {
+    describe('isEditable', function() {
         it('should returns true if given DOM elem is text or password input', function() {
-            dom.isEditable($('<input type="text"/>')).should.be.true;
-            dom.isEditable($('<input type="password"/>')).should.be.true;
-            dom.isEditable($('<textarea/>')).should.be.true;
-            dom.isEditable($('<input type="radio"/>')).should.be.false;
-            dom.isEditable($('<input type="checkbox"/>')).should.be.false;
-            dom.isEditable($('<div/>')).should.be.false;
+            dom.isEditable(createDomNode('input', { type : 'text' })).should.be.true;
+            dom.isEditable(createDomNode('input', { type : 'password' })).should.be.true;
+            dom.isEditable(createDomNode('textarea')).should.be.true;
+            dom.isEditable(createDomNode('input', { type : 'radio' })).should.be.false;
+            dom.isEditable(createDomNode('input', { type : 'checkbox' })).should.be.false;
+            dom.isEditable(createDomNode()).should.be.false;
         });
 
         it('should returns false if given input is readonly', function() {
-            dom.isEditable($('<input type="text" readonly="readonly"/>')).should.be.false;
-            dom.isEditable($('<texarea readonly="readonly"/>')).should.be.false;
+            dom.isEditable(createDomNode('input', { type : 'text', readonly : 'readonly' })).should.be.false;
+            dom.isEditable(createDomNode('texarea', { readonly : 'readonly' })).should.be.false;
         });
 
         it('should returns false if given input is disabled', function() {
-            dom.isEditable($('<input type="text" disabled="disabled"/>')).should.be.false;
-            dom.isEditable($('<texarea disabled="disabled"/>')).should.be.false;
+            dom.isEditable(createDomNode('input', { type : 'text', disabled : 'disabled' })).should.be.false;
+            dom.isEditable(createDomNode('texarea', { disabled : 'disabled' })).should.be.false;
         });
 
         it('should returns true for contenteditable DOM elems', function() {
-            dom.isEditable($('<div contenteditable="true"/>')).should.be.true;
-            dom.isEditable($('<div contenteditable="false"/>')).should.be.false;
-            dom.isEditable($('<div contenteditable="yet-another-val"/>')).should.be.false;
+            dom.isEditable(createDomNode('div', { contenteditable : 'true' })).should.be.true;
+            dom.isEditable(createDomNode('div', { contenteditable : 'false' })).should.be.false;
+            dom.isEditable(createDomNode('div', { contenteditable : 'yet-another-val' })).should.be.false;
         });
 
         it('should returns false if given DOM elem is empty', function() {
-            dom.isEditable($('.__no-exist')).should.be.false;
+            dom.isEditable(document.querySelector('.__no-exist')).should.be.false;
         });
     });
 });
+
+function createDomNode(elemName, attrs) {
+    var elem = document.createElement(elemName || 'div');
+
+    attrs && Object.keys(attrs).forEach(function(attrName) {
+        elem.setAttribute(attrName, attrs[attrName]);
+    });
+
+    return elem;
+}
 
 provide();
 
