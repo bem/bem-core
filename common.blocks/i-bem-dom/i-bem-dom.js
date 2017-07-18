@@ -86,7 +86,7 @@ var undef,
  * Initializes entities on a DOM node
  * @param {Element} domNode DOM node
  * @param {String} uniqInitId ID of the "initialization wave"
- * @param {Object} [dropElemCacheQueue] queue of elems to be droped from cache
+ * @param {Object} [dropElemCacheQueue] queue of elems to be dropped from cache
  */
 function initEntities(domNode, uniqInitId, dropElemCacheQueue) {
     var params = getParams(domNode),
@@ -128,7 +128,7 @@ function initEntity(entityName, domNode, params, ignoreLazyInit, callback) {
 
     if(entity) {
 
-    // TODO: multy DOM nodes case
+    // TODO: multi DOM nodes case
     //     if(entity.domElem.index(domNode) < 0) {
     //         entity.domElem = entity.domElem.add(domElem);
     //         objects.extend(entity.params, params);
@@ -137,7 +137,7 @@ function initEntity(entityName, domNode, params, ignoreLazyInit, callback) {
         return entity;
     }
 
-    // TODO: multy DOM nodes case
+    // TODO: multi DOM nodes case
     // uniqIdToDomElems[uniqId] = uniqIdToDomElems[uniqId]?
     //     uniqIdToDomElems[uniqId].add(domElem) :
     //     domElem;
@@ -787,7 +787,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
                 classNameRE = _self._buildModValRE(modName),
                 needDel = modVal === '';
 
-            // TODO: support multy node case
+            // TODO: support multi node case
             var domNode = this.domNode,
                 className = domNode.className,
                 modClassName = classNamePrefix;
@@ -1051,7 +1051,7 @@ bemDom = /** @exports */{
             var domNodes = domNode.querySelectorAll(BEM_SELECTOR),
                 j = 0;
 
-            // NOTE: we find only js-entities, so cahced elems without js can't be dropped from cache
+            // NOTE: we find only js-entities, so cached elems without js can't be dropped from cache
             while(domNode = domNodes[j++])
                 initEntities(domNode, uniqInitId, dropElemCacheQueue);
         }
@@ -1141,7 +1141,7 @@ bemDom = /** @exports */{
     },
 
     /**
-     * Replaces a fragment of the DOM tree inside the context, destroying old blocks and intializing new ones
+     * Replaces a fragment of the DOM tree inside the context, destroying old blocks and initializing new ones
      * @param {Element} ctx Root DOM node
      * @param {Element|String} content New content
      * @returns {Element} Updated root DOM node
