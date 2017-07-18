@@ -127,28 +127,23 @@ function initEntity(entityName, domNode, params, ignoreLazyInit, callback) {
         entity = uniqIdToEntity[uniqId];
 
     if(entity) {
-
-    // TODO: multi DOM nodes case
-    //     if(entity.domElem.index(domNode) < 0) {
-    //         entity.domElem = entity.domElem.add(domElem);
-    //         objects.extend(entity.params, params);
-    //     }
+         if(entity.domNodes.indexOf(domNode) < 0) {
+             entity.domNodes.push(domNode);
+             objects.extend(entity.params, params);
+         }
 
         return entity;
     }
 
-    // TODO: multi DOM nodes case
-    // uniqIdToDomElems[uniqId] = uniqIdToDomElems[uniqId]?
-    //     uniqIdToDomElems[uniqId].add(domElem) :
-    //     domElem;
-
-    uniqIdToDomNodes[uniqId] = domNode;
+    uniqIdToDomNodes[uniqId]?
+        uniqIdToDomNodes[uniqId].push(domNode) :
+        (uniqIdToDomNodes[uniqId] = [domNode]);
 
     // TODO: add tests for
     // i-bem__dom: multiple live initialization on disconnected node add same node many times
     // var parentDomNode = domNode.parentNode;
     // if(!parentDomNode || parentDomNode.nodeType === 11) { // jquery doesn't unique disconnected node
-    //     $.unique(uniqIdToDomElems[uniqId]);
+    //     $.unique(uniqIdToDomNodes[uniqId]);
     // }
 
     var entityCls = getEntityCls(entityName);
@@ -228,15 +223,13 @@ function extractParams(domNode) {
  * @param {HTMLElement} domNode DOM node
  */
 function removeDomNodeFromEntity(entity, domNode) {
-    // TODO: fixme
-    // if(entity.domElem.length === 1) {
-    //     entity._delInitedMod();
-    //     delete uniqIdToEntity[entity._uniqId];
-    // } else {
-    //     entity.domElem = entity.domElem.not(domNode);
-    // }
-    entity._delInitedMod();
-    delete uniqIdToEntity[entity._uniqId];
+    var domNodes = entity.domNodes;
+    if(domNodes.length === 1) {
+        entity._delInitedMod();
+        delete uniqIdToEntity[entity._uniqId];
+    } else {
+        domNodes.splice(domNodes.indexOf(domNode), 1);
+    }
 }
 
 /**
@@ -350,17 +343,24 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * @constructs
      * @private
-     * @param {Element} domNode DOM element that the entity is created on
+     * @param {Array[Element]} domNodes DOM elements that the entity is created on
      * @param {Object} params parameters
      * @param {Boolean} [initImmediately=true]
      */
-    __constructor : function(domNode, params, initImmediately) {
+    __constructor : function(domNodes, params, initImmediately) {
         /**
-         * DOM elements of entity
-         * @member {jQuery}
+         * DOM element of entity
+         * @member {Element}
          * @readonly
          */
         this.domNode = domNode;
+
+        /**
+         * DOM elements of entity
+         * @member {Array[Element]}
+         * @readonly
+         */
+        this.domNodes = domNodes;
 
         /**
          * Cache for elements collections
@@ -623,27 +623,76 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     _findChildEntities : function(entity, onlyFirst) {
         var entityName = this._buildEntityNameByEntity(entity),
             selector = '.' + this._buildClassNameByEntity(entity, entityName),
-            // TODO: support multiple nodes
-            domNodes = onlyFirst?
-                [this.domNode.querySelector(selector)] :
-                this.domNode.querySelectorAll(selector);
-
-        var res = [],
+            res = [],
             uniqIds = {},
+            domNodes = this.domNodes,
             i = 0,
             domNode;
 
         while(domNode = domNodes[i++]) {
-            var block = initEntity(entityName, domNode, undef, true)._setInitedMod();
-            if(!uniqIds[block._uniqId]) {
-                uniqIds[block._uniqId] = true;
-                res.push(block);
-            }
+            var childrenDomNodes = onlyFirst?
+                    domNode.querySelector(selector) :
+                    domNode.querySelectorAll(selector),
+                j = 0,
+                childDomNode;
 
-            if(onlyFirst && block) return block;
+            while(childDomNode = childrenDomNodes[j++]) {
+                var entity = initEntity(entityName, domNode, undef, true)._setInitedMod();
+                if(!uniqIds[entity._uniqId]) {
+                    uniqIds[entity._uniqId] = true;
+                    res.push(entity);
+                }
+
+                if(onlyFirst && entity) return entity;
+            }
         }
 
-        return onlyFirst ? null : new BemDomCollection(res);
+        while(domNode = domNodes[i++]) {
+            var entity = initEntity(entityName, domNode, undef, true)._setInitedMod();
+            if(!uniqIds[entity._uniqId]) {
+                uniqIds[entity._uniqId] = true;
+                res.push(entity);
+            }
+
+            if(onlyFirst && entity) return entity;
+        }
+
+        return onlyFirst? null : new BemDomCollection(res);
+    },
+
+    /**
+     * Finds child DOM nodes
+     * @private
+     * @param {String} selector
+     * @param {Boolean} [onlyFirst=false]
+     * @returns {*}
+     */
+    _findChildDomNodes : function(selector, onlyFirst) {
+        var res = [],
+            uniqIds = {},
+            domNodes = this.domNodes,
+            i = 0,
+            domNode;
+
+        while(domNode = domNodes[i++]) {
+            var childrenDomNodes = onlyFirst?
+                domNode.querySelector(selector) :
+                domNode.querySelectorAll(selector);
+
+            if(onlyFirst && childrenDomNodes) return childrenDomNodes;
+
+            var j = 0, childDomNode;
+
+            while(childDomNode = childrenDomNodes[j++]) {
+                var id = identify(childDomNode);
+                if(!uniqIds[id]) {
+                    uniqIds[id] = true;
+                    res.push(childDomNode);
+                }
+            }
+        }
+
+        return onlyFirst? null : res;
     },
 
     /**
@@ -656,24 +705,27 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     _findParentEntities : function(entity, onlyFirst) {
         var entityName = this._buildEntityNameByEntity(entity),
             className = this._buildClassNameByEntity(entity, entityName),
-            domNode = this.domNode,
             res = [],
-            uniqIds = {};
+            uniqIds = {},
+            domNodes = this.domNodes,
+            i = 0,
+            domNode;
 
-        // TODO: support multiple nodes
-        while(domNode = domNode.parentNode) {
-            if(!domNode.classList.contains(className)) continue;
+        while(domNode = domNodes[i++]) {
+            while(domNode = domNode.parentNode) {
+                if(!domNode.classList.contains(className)) continue;
 
-            var block = initEntity(entityName, domNode, undef, true)._setInitedMod();
-            if(!uniqIds[block._uniqId]) {
-                uniqIds[block._uniqId] = true;
-                res.push(block);
+                var entity = initEntity(entityName, domNode, undef, true)._setInitedMod();
+                if(!uniqIds[entity._uniqId]) {
+                    uniqIds[entity._uniqId] = true;
+                    res.push(entity);
+                }
+
+                if(onlyFirst && entity) return entity;
             }
-
-            if(onlyFirst && block) return block;
         }
 
-        return onlyFirst ? null : new BemDomCollection(res);
+        return onlyFirst? null : new BemDomCollection(res);
     },
 
     /**
@@ -685,16 +737,27 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     _findMixedEntities : function(entity, onlyFirst) {
         var entityName = this._buildEntityNameByEntity(entity),
-            className = this._buildClassNameByEntity(entity, entityName);
+            className = this._buildClassNameByEntity(entity, entityName),
+            res = [],
+            uniqIds = {},
+            domNodes = this.domNodes,
+            i = 0,
+            domNode;
 
-        // TODO: support multiple nodes
-        var res = this.domNode.classList.contains(className)?
-            initEntity(entityName, this.domNode, undef, true)._setInitedMod() :
-            null;
+        while(domNode = domNodes[i++]) {
+            // TODO: support multiple nodes
+            if(!domNode.classList.contains(className)) continue;
 
-        return onlyFirst?
-            res :
-            new BemDomCollection(res? [res] : []);
+            var entity = initEntity(entityName, domNode, undef, true)._setInitedMod();
+            if(!uniqIds[entity._uniqId]) {
+                uniqIds[entity._uniqId] = true;
+                res.push(entity);
+            }
+
+            if(onlyFirst && entity) return entity;
+        }
+
+        return onlyFirst? null : new BemDomCollection(res);
     },
 
     _buildEntityNameByEntity : function(entity) {
@@ -763,8 +826,8 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     _extractModVal : function(modName) {
         var matches;
 
-        this.domNode &&
-            (matches = this.domNode.className
+        this.domNodes[0] &&
+            (matches = this.domNodes[0].className
                 .match(this.__self._buildModValRE(modName)));
 
         return matches? matches[2] || true : '';
@@ -785,22 +848,22 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         if(modName !== 'js' || modVal !== '') {
             var classNamePrefix = _self._buildModClassNamePrefix(modName),
                 classNameRE = _self._buildModValRE(modName),
-                needDel = modVal === '';
-
-            // TODO: support multi node case
-            var domNode = this.domNode,
-                className = domNode.className,
+                needDel = modVal === '',
                 modClassName = classNamePrefix;
 
             modVal !== true && (modClassName += MOD_DELIM + modVal);
 
-            (oldModVal === true?
-                classNameRE.test(className) :
-                (' ' + className).indexOf(' ' + classNamePrefix + MOD_DELIM) > -1)?
-                    domNode.className = className.replace(
-                        classNameRE,
-                        (needDel? '' : '$1' + modClassName)) :
-                    needDel || domNode.classList.add(modClassName);
+            this.domNodes.forEach(function(domNode) {
+                var className = domNode.className;
+
+                (oldModVal === true?
+                    classNameRE.test(className) :
+                    (' ' + className).indexOf(' ' + classNamePrefix + MOD_DELIM) > -1)?
+                        domNode.className = className.replace(
+                            classNameRE,
+                            (needDel? '' : '$1' + modClassName)) :
+                        needDel || domNode.classList.add(modClassName);
+            });
         }
     },
 
@@ -818,6 +881,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Boolean}
      */
     containsEntity : function(entity) {
+        // TODO: support multi node case and refactor `dom`
         return dom.contains(this.domNode, entity.domNode);
     }
 
