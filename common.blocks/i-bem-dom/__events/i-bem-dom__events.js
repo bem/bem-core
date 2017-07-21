@@ -9,7 +9,6 @@ modules.define(
         'inherit',
         'identify',
         'objects',
-        'jquery',
         'functions'
     ],
     function(
@@ -19,7 +18,6 @@ modules.define(
         inherit,
         identify,
         objects,
-        $,
         functions) {
 
 var undef,
@@ -68,7 +66,7 @@ var undef,
                 fnId = identify(fn, _fnCtx);
 
             if(!fnStorage[fnId]) {
-                var bindDomElem = params.bindDomElem,
+                var bindDomNodes = params.bindDomNodes,
                     bindSelector = params.bindSelector,
                     _this = this,
                     handler = fnStorage[fnId] = this._fnWrapper(
@@ -81,8 +79,12 @@ var undef,
                         _fnCtx,
                         fnId);
 
-                bindDomElem.on(event, bindSelector, data, handler);
-                bindSelector && bindDomElem.is(bindSelector) && bindDomElem.on(event, data, handler);
+                // bindDomNodes.on(event, bindSelector, data, handler);
+                bindDomNodes.forEach(function(domNode) {
+                    domNode.addEventListener(event, handler);
+                });
+
+                // bindSelector && bindDomElem.is(bindSelector) && bindDomElem.on(event, data, handler);
                 // FIXME: "once" won't properly work in case of nested and mixed elem with the same name
             }
 
@@ -124,7 +126,7 @@ var undef,
                     var wrappedFn,
                         fnId = identify(fn, _fnCtx),
                         fnStorage = this._storage[event],
-                        bindDomElem = params.bindDomElem,
+                        bindDomNodes = params.bindDomNodes,
                         bindSelector = params.bindSelector;
 
                     if(wrappedFn = fnStorage && fnStorage[fnId])
@@ -132,8 +134,11 @@ var undef,
 
                     var handler = wrappedFn || fn;
 
-                    bindDomElem.off(event, params.bindSelector, handler);
-                    bindSelector && bindDomElem.is(bindSelector) && bindDomElem.off(event, handler);
+                    bindDomNodes.forEach(function(domNode) {
+                        domNode.removeEventListener(event, handler);
+                    });
+                    // bindDomElem.off(event, params.bindSelector, handler);
+                    // bindSelector && bindDomElem.is(bindSelector) && bindDomElem.off(event, handler);
                 }
             } else {
                 objects.each(this._storage, this._unbindByEvent, this);
@@ -144,13 +149,16 @@ var undef,
 
         _unbindByEvent : function(fnStorage, e) {
             var params = this._params,
-                bindDomElem = params.bindDomElem,
+                bindDomNodes = params.bindDomNodes,
                 bindSelector = params.bindSelector,
-                unbindWithoutSelector = bindSelector && bindDomElem.is(bindSelector);
+                unbindWithoutSelector = false && bindSelector && bindDomNodes.is(bindSelector); // TODO
 
             fnStorage && objects.each(fnStorage, function(fn) {
-                bindDomElem.off(e, bindSelector, fn);
-                unbindWithoutSelector && bindDomElem.off(e, fn);
+                bindDomNodes.forEach(function(domNode) {
+                    domNode.removeEventListener(e, fn);
+                });
+                // bindDomNodes.off(e, bindSelector, fn);
+                // unbindWithoutSelector && bindDomNodes.off(e, fn);
             });
             this._storage[e] = null;
         }
@@ -209,17 +217,18 @@ var undef,
      * @exports i-bem-dom__events:EventManagerFactory
      */
     EventManagerFactory = inherit(/** @lends EventManagerFactory.prototype */{
-        __constructor : function(getEntityCls) {
+        __constructor : function(getEntityCls, getEntity) {
             this._storageSuffix = identify();
             this._getEntityCls = getEntityCls;
+            this._getEntity = getEntity;
             this._eventManagerCls = EventManager;
         },
 
         /**
          * Instantiates event manager
          * @param {Function|i-bem-dom:BemDomEntity} ctx BemDomEntity class or instance
-         * @param {*} bindCtx context to bind
-         * @param {jQuery} bindScope bind scope
+         * @param {Function|String|Object|Elem|BemDomCollection|document|window} bindCtx context to bind
+         * @param {Element|NodeList|HTMLCollection} bindScope bind scope
          * @returns {EventManager}
          */
         getEventManager : function(ctx, bindCtx, bindScope) {
@@ -250,7 +259,7 @@ var undef,
                 ctxStorage = eventStorage[ctxId] = {};
                 if(isBindToInstance) {
                     ctx._events().on({ modName : 'js', modVal : '' }, function() {
-                        params.bindToArbitraryDomElem && ctxStorage[storageKey] &&
+                        params.bindToArbitraryDomNode && ctxStorage[storageKey] &&
                             ctxStorage[storageKey].un();
                         delete ctxStorage[ctxId];
                     });
@@ -264,8 +273,8 @@ var undef,
         _buildEventManagerParams : function(bindCtx, bindScope, ctxSelector, ctxCls) {
             var res = {
                 bindEntityCls : null,
-                bindDomElem : bindScope,
-                bindToArbitraryDomElem : false,
+                bindDomNodes : bindScope,
+                bindToArbitraryDomNode : false,
                 bindSelector : ctxSelector,
                 ctxSelector : ctxSelector,
                 key : ''
@@ -274,16 +283,12 @@ var undef,
             if(bindCtx) {
                 var typeOfCtx = typeof bindCtx;
 
-                if(bindCtx.jquery) {
-                    res.bindDomElem = bindCtx;
-                    res.key = identify.apply(null, bindCtx.get());
-                    res.bindToArbitraryDomElem = true;
-                } else if(bindCtx === winNode || bindCtx === docNode || (typeOfCtx === 'object' && bindCtx.nodeType === 1)) { // NOTE: duck-typing check for "is-DOM-element"
-                    res.bindDomElem = $(bindCtx);
+                if(bindCtx === winNode || bindCtx === docNode) {
+                    res.bindDomNodes = [bindCtx];
                     res.key = identify(bindCtx);
-                    res.bindToArbitraryDomElem = true;
+                    res.bindToArbitraryDomNode = true;
                 } else if(typeOfCtx === 'object' && bindCtx.__self) { // bem entity instance
-                    res.bindDomElem = bindCtx.domElem;
+                    res.bindDomNodes = bindCtx.domNodes;
                     res.key = bindCtx._uniqId;
                     res.bindEntityCls = bindCtx.__self;
                 } else if(typeOfCtx === 'string' || typeOfCtx === 'object' || typeOfCtx === 'function') {
