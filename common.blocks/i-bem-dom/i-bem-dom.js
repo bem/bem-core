@@ -77,8 +77,8 @@ var undef,
     reverse = Array.prototype.reverse,
     slice = Array.prototype.slice,
 
-    domEventManagerFactory = new domEvents.EventManagerFactory(getEntityCls),
-    bemEventManagerFactory = new bemEvents.EventManagerFactory(getEntityCls),
+    domEventManagerFactory = new domEvents.EventManagerFactory(getEntityCls, getEntity),
+    bemEventManagerFactory = new bemEvents.EventManagerFactory(getEntityCls, getEntity),
 
     bemDom;
 
@@ -167,6 +167,19 @@ function getEntityCls(entityName) {
     return splitted[1]?
         bemDom.declElem(splitted[0], splitted[1], {}, { lazyInit : true }, true) :
         bemDom.declBlock(entityName, {}, { lazyInit : true }, true);
+}
+
+/**
+ * Returns an entity on a DOM node or first entity of node list and initializes it if necessary
+ * @param {Element|NodeList|HTMLCollection} domNode DOM node
+ * @param {Function} BemDomEntity entity
+ * @param {Object} [params] entity parameters
+ * @returns {BemDomEntity|null}
+ */
+function getEntity(domNode, BemDomEntity, params) {
+    domNode instanceof Element || (domNode = domNode[0]);
+    var entity = initEntity(BemDomEntity.getEntityName(), domNode, params, true);
+    return entity? entity._setInitedMod() : null;
 }
 
 /**
@@ -335,13 +348,6 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @param {Boolean} [initImmediately=true]
      */
     __constructor : function(domNodes, params, initImmediately) {
-        /**
-         * DOM element of entity
-         * @member {Element}
-         * @readonly
-         */
-        this.domNode = domNodes[0];
-
         /**
          * DOM elements of entity
          * @member {Array[Element]}
@@ -727,25 +733,25 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * Returns an manager to bind and unbind DOM events for particular context
      * @protected
-     * @param {Function|String|Object|Elem|BemDomCollection|document|window} [ctx=this.domNode] context to bind,
-     *     can be BEM-entity class, instance, collection of BEM-entities,
+     * @param {Function|String|Object|Elem|BemDomCollection|document|window} [ctx=this.domNodes] context to bind,
+     *     can be BEM-element class, instance, collection of BEM-entities,
      *     element name or description (elem, modName, modVal), document or window
      * @returns {EventManager}
      */
     _domEvents : function(ctx) {
-        return domEventManagerFactory.getEventManager(this, ctx, this.domNode);
+        return domEventManagerFactory.getEventManager(this, ctx, this.domNodes);
     },
 
     /**
      * Returns an manager to bind and unbind BEM events for particular context
      * @protected
-     * @param {Function|String|BemDomEntity|BemDomCollection|Object} [ctx=this.domNode] context to bind,
+     * @param {Function|String|BemDomEntity|BemDomCollection|Object} [ctx=this.domNodes] context to bind,
      *     can be BEM-entity class, instance, collection of BEM-entities,
      *     element name or description (elem, modName, modVal)
      * @returns {EventManager}
      */
     _events : function(ctx) {
-        return bemEventManagerFactory.getEventManager(this, ctx, this.domNode);
+        return bemEventManagerFactory.getEventManager(this, ctx, this.domNodes);
     },
 
     /**
@@ -985,11 +991,7 @@ bemDom = /** @exports */{
      * @param {Object} [params] entity parameters
      * @returns {BemDomEntity|null}
      */
-    getEntity : function(domNode, BemDomEntity, params) {
-        domNode instanceof Element || (domNode = domNode[0]);
-        var entity = initEntity(BemDomEntity.getEntityName(), domNode, params, true);
-        return entity? entity._setInitedMod() : null;
-    },
+    getEntity : getEntity,
 
     /**
      * Declares DOM-based block and creates block class
@@ -1080,7 +1082,7 @@ bemDom = /** @exports */{
 
         if(!(ctx instanceof Element)) throw Error('destruct should be called on one DOM node');
 
-        storeDomNodesParents(_ctx = excludeSelf? ctx.childNodes : ctx);
+        storeDomNodesParents(_ctx = excludeSelf? ctx.children : ctx);
 
         var i = _ctx.length || 1,
             isDomNode = _ctx instanceof Element,

@@ -5,14 +5,12 @@ modules.define(
     'i-bem-dom__events_type_dom',
     [
         'i-bem-dom__events',
-        'inherit',
-        'jquery'
+        'inherit'
     ],
     function(
         provide,
         bemDomEvents,
-        inherit,
-        $) {
+        inherit) {
 
 var eventBuilder = function(e) {
         return e;
@@ -25,6 +23,8 @@ var eventBuilder = function(e) {
     EventManagerFactory = inherit(bemDomEvents.EventManagerFactory,/** @lends EventManagerFactory.prototype */{
         /** @override */
         _createEventManager : function(ctx, params, isInstance) {
+            var getEntity = this._getEntity;
+
             function wrapperFn(fn) {
                 return function(e) {
                     var instance;
@@ -33,12 +33,15 @@ var eventBuilder = function(e) {
                         instance = ctx;
                     } else {
                         // TODO: we could optimize all these "closest" to a single traversing
-                        var entityDomNode = $(e.target).closest(params.ctxSelector);
-                        entityDomNode.length && (instance = entityDomNode.bem(ctx));
+                        var entityDomNode = e.target;
+                        do {
+                            entityDomNode.classList.contains(params.ctxSelector) &&
+                                (instance = getEntity(entityDomNode, ctx));
+                        } while(instance || (entityDomNode = entityDomNode.parentNode));
                     }
 
                     if(instance) {
-                        params.bindEntityCls && (e.bemTarget = $(this).bem(params.bindEntityCls));
+                        params.bindEntityCls && (e.bemTarget = getEntity(this, params.bindEntityCls));
                         fn.apply(instance, arguments);
                     }
                 };
