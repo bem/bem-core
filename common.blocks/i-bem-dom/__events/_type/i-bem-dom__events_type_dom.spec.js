@@ -530,6 +530,11 @@ describe('DOM events', function() {
                             }
                         }
                     }
+                }, {
+                    onInit : function() {
+                        // NOTE: this works `bemDom.doc.on('click', spy5);`
+                        this._domEvents(bemDom.doc).on('click', spy5);
+                    }
                 });
                 block1 = bemDom.init(BEMHTML.apply({ block : 'block' })).bem(Block1);
             });
@@ -539,6 +544,7 @@ describe('DOM events', function() {
 
                 spy1.should.have.been.called;
                 spy2.should.have.been.called;
+                spy5.should.have.been.called;
 
                 spy3.should.have.been.calledOn(block1);
                 spy3.args[0][2].should.have.been.equal(data);
