@@ -59,7 +59,7 @@ var EVENT_PREFIX = '__bem__',
     EventManagerFactory = inherit(bemDomEvents.EventManagerFactory,/** @lends EventManagerFactory.prototype */{
         /** @override */
         _createEventManager : function(ctx, params, isInstance) {
-            function wrapperFn(fn, fnCtx, fnId) {
+            function handlerWrapper(fn, data, fnCtx, fnId) {
                 return function(e, data, flags, originalEvent) {
                     if(flags.fns[fnId]) return;
 
@@ -92,7 +92,7 @@ var EVENT_PREFIX = '__bem__',
                 };
             }
 
-            return new this._eventManagerCls(params, wrapperFn, eventBuilder);
+            return new this._eventManagerCls(params, handlerWrapper, eventBuilder);
         }
     });
 

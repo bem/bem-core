@@ -965,6 +965,18 @@ bemDom = /** @exports */{
     scope : document.body,
 
     /**
+     * Document shortcut
+     * @type Document
+     */
+    doc : document,
+
+    /**
+     * Window shortcut
+     * @type Window
+     */
+    win : window,
+
+    /**
      * Base bemDom block
      * @type Function
      */
@@ -1080,7 +1092,15 @@ bemDom = /** @exports */{
         var _ctx,
             currentDestructingDomNodes = [];
 
-        if(!(ctx instanceof Element)) throw Error('destruct should be called on one DOM node');
+        if(!(ctx instanceof Element)) {
+            if(ctx.forEach) {
+                ctx.forEach(function(domNode) {
+                    this._destruct(domNode,  excludeSelf, destructDom);
+                }, this);
+            } else {
+                throw Error('destruct should be called on one DOM node or collection of them');
+            }
+        }
 
         storeDomNodesParents(_ctx = excludeSelf? ctx.children : ctx);
 

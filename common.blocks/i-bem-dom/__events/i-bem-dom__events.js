@@ -34,12 +34,12 @@ var undef,
         /**
          * @constructs
          * @param {Object} params EventManager parameters
-         * @param {Function} fnWrapper Wrapper function to build event handler
+         * @param {Function} handlerWrapper Wrapper function to build event handler
          * @param {Function} eventBuilder Function to build event
          */
-        __constructor : function(params, fnWrapper, eventBuilder) {
+        __constructor : function(params, handlerWrapper, eventBuilder) {
             this._params = params;
-            this._fnWrapper = fnWrapper;
+            this._handlerWrapper = handlerWrapper;
             this._eventBuilder = eventBuilder;
             this._storage = {};
         },
@@ -67,24 +67,26 @@ var undef,
 
             if(!fnStorage[fnId]) {
                 var bindDomNodes = params.bindDomNodes,
-                    bindSelector = params.bindSelector,
+                    bindClassName = params.bindClassName,
                     _this = this,
-                    handler = fnStorage[fnId] = this._fnWrapper(
+                    handler = fnStorage[fnId] = this._handlerWrapper(
                         _isOnce?
                             function() {
                                 _this.un(e, fn, _fnCtx);
                                 fn.apply(this, arguments);
                             } :
                             fn,
+                        data,
                         _fnCtx,
                         fnId);
 
-                // bindDomNodes.on(event, bindSelector, data, handler);
+                // bindDomNodes.on(event, bindClassName, data, handler);
+                bindDomNodes.forEach || console.log('bindDomNodes.forEach', bindDomNodes.forEach);
                 bindDomNodes.forEach(function(domNode) {
                     domNode.addEventListener(event, handler);
                 });
 
-                // bindSelector && bindDomElem.is(bindSelector) && bindDomElem.on(event, data, handler);
+                // bindClassName && bindDomElem.is(bindClassName) && bindDomElem.on(event, data, handler);
                 // FIXME: "once" won't properly work in case of nested and mixed elem with the same name
             }
 
@@ -127,7 +129,7 @@ var undef,
                         fnId = identify(fn, _fnCtx),
                         fnStorage = this._storage[event],
                         bindDomNodes = params.bindDomNodes,
-                        bindSelector = params.bindSelector;
+                        bindClassName = params.bindClassName;
 
                     if(wrappedFn = fnStorage && fnStorage[fnId])
                         delete fnStorage[fnId];
@@ -137,8 +139,8 @@ var undef,
                     bindDomNodes.forEach(function(domNode) {
                         domNode.removeEventListener(event, handler);
                     });
-                    // bindDomElem.off(event, params.bindSelector, handler);
-                    // bindSelector && bindDomElem.is(bindSelector) && bindDomElem.off(event, handler);
+                    // bindDomElem.off(event, params.bindClassName, handler);
+                    // bindClassName && bindDomElem.is(bindClassName) && bindDomElem.off(event, handler);
                 }
             } else {
                 objects.each(this._storage, this._unbindByEvent, this);
@@ -150,15 +152,15 @@ var undef,
         _unbindByEvent : function(fnStorage, e) {
             var params = this._params,
                 bindDomNodes = params.bindDomNodes,
-                bindSelector = params.bindSelector,
-                unbindWithoutSelector = false && bindSelector && bindDomNodes.is(bindSelector); // TODO
+                bindClassName = params.bindClassName,
+                unbindWithoutClassName = false && bindClassName && bindDomNodes.is(bindClassName); // TODO
 
             fnStorage && objects.each(fnStorage, function(fn) {
                 bindDomNodes.forEach(function(domNode) {
                     domNode.removeEventListener(e, fn);
                 });
-                // bindDomNodes.off(e, bindSelector, fn);
-                // unbindWithoutSelector && bindDomNodes.off(e, fn);
+                // bindDomNodes.off(e, bindClassName, fn);
+                // unbindWithoutClassName && bindDomNodes.off(e, fn);
             });
             this._storage[e] = null;
         }
@@ -243,16 +245,16 @@ var undef,
                 storageSuffix = this._storageSuffix,
                 isBindToInstance = typeof ctx !== 'function',
                 ctxCls,
-                selector = '';
+                className = '';
 
             if(isBindToInstance) {
                 ctxCls = ctx.__self;
             } else {
                 ctxCls = ctx;
-                selector = ctx._buildSelector();
+                className = ctx._buildClassName();
             }
 
-            var params = this._buildEventManagerParams(bindCtx, bindScope, selector, ctxCls),
+            var params = this._buildEventManagerParams(bindCtx, bindScope, className, ctxCls),
                 storageKey = params.key + storageSuffix;
 
             if(!ctxStorage) {
@@ -270,13 +272,13 @@ var undef,
                 (ctxStorage[storageKey] = this._createEventManager(ctx, params, isBindToInstance));
         },
 
-        _buildEventManagerParams : function(bindCtx, bindScope, ctxSelector, ctxCls) {
+        _buildEventManagerParams : function(bindCtx, bindScope, ctxClassName, ctxCls) {
             var res = {
                 bindEntityCls : null,
                 bindDomNodes : bindScope,
                 bindToArbitraryDomNode : false,
-                bindSelector : ctxSelector,
-                ctxSelector : ctxSelector,
+                bindClassName : ctxClassName,
+                ctxClassName : ctxClassName,
                 key : ''
             };
 
@@ -314,7 +316,7 @@ var undef,
 
                     var entityName = bemInternal.buildClassName(blockName, elemName);
                     res.bindEntityCls = this._getEntityCls(entityName);
-                    res.bindSelector = '.' + (res.key = entityName + bemInternal.buildModPostfix(modName, modVal));
+                    res.bindClassName = res.key = entityName + bemInternal.buildModPostfix(modName, modVal);
                 }
             } else {
                 res.bindEntityCls = ctxCls;

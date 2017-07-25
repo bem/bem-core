@@ -25,29 +25,46 @@ var eventBuilder = function(e) {
         _createEventManager : function(ctx, params, isInstance) {
             var getEntity = this._getEntity;
 
-            function wrapperFn(fn) {
+            function handlerWrapper(fn, data) {
                 return function(e) {
-                    var instance;
+                    var instance, targetDomNode;
 
                     if(isInstance) {
                         instance = ctx;
+
+                        if(params.bindClassName) {
+                            var domNode = e.target;
+                            do {
+                                if(domNode.classList.contains(params.bindClassName)) {
+                                    targetDomNode = domNode;
+                                    break;
+                                }
+                                if(domNode === e.currentTarget) break;
+                            } while(domNode = domNode.parentNode);
+
+                            targetDomNode || (instance = undefined);
+                        }
                     } else {
                         // TODO: we could optimize all these "closest" to a single traversing
                         var entityDomNode = e.target;
                         do {
-                            entityDomNode.classList.contains(params.ctxSelector) &&
-                                (instance = getEntity(entityDomNode, ctx));
-                        } while(instance || (entityDomNode = entityDomNode.parentNode));
+                            if(entityDomNode.classList.contains(params.ctxClassName)) {
+                                instance = getEntity(entityDomNode, ctx);
+                                break;
+                            }
+                        } while(entityDomNode = entityDomNode.parentNode);
                     }
 
                     if(instance) {
-                        params.bindEntityCls && (e.bemTarget = getEntity(this, params.bindEntityCls));
+                        e.data = data;
+
+                        params.bindEntityCls && (e.bemTarget = getEntity(targetDomNode || this, params.bindEntityCls));
                         fn.apply(instance, arguments);
                     }
                 };
             }
 
-            return new this._eventManagerCls(params, wrapperFn, eventBuilder);
+            return new this._eventManagerCls(params, handlerWrapper, eventBuilder);
         }
     });
 
