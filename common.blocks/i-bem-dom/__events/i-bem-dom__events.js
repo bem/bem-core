@@ -81,7 +81,6 @@ var undef,
                         fnId);
 
                 // bindDomNodes.on(event, bindClassName, data, handler);
-                bindDomNodes.forEach || console.log('bindDomNodes.forEach', bindDomNodes.forEach);
                 bindDomNodes.forEach(function(domNode) {
                     domNode.addEventListener(event, handler);
                 });
@@ -275,7 +274,7 @@ var undef,
         _buildEventManagerParams : function(bindCtx, bindScope, ctxClassName, ctxCls) {
             var res = {
                 bindEntityCls : null,
-                bindDomNodes : bindScope,
+                bindDomNodes : bindScope instanceof Element? [bindScope] : bindScope,
                 bindToArbitraryDomNode : false,
                 bindClassName : ctxClassName,
                 ctxClassName : ctxClassName,
@@ -285,8 +284,12 @@ var undef,
             if(bindCtx) {
                 var typeOfCtx = typeof bindCtx;
 
-                if(bindCtx === winNode || bindCtx === docNode) {
-                    res.bindDomNodes = [bindCtx];
+                if(bindCtx.forEach) { // NOTE: duck-typing check for collection of DOM nodes
+                    res.bindDomNodes = bindCtx;
+                    res.key = identify.apply(null, bindCtx);
+                    res.bindToArbitraryDomElem = true;
+                } else if(bindCtx === winNode || bindCtx === docNode || bindCtx instanceof Element) {
+                    res.bindDomNodes = bindCtx === docNode? [docNode.documentElement] : [bindCtx];
                     res.key = identify(bindCtx);
                     res.bindToArbitraryDomNode = true;
                 } else if(typeOfCtx === 'object' && bindCtx.__self) { // bem entity instance
