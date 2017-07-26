@@ -27,32 +27,35 @@ var eventBuilder = function(e) {
 
             function handlerWrapper(fn, data) {
                 return function(e) {
-                    var instance, targetDomNode;
+                    var instance, targetDomNode, domNode = e.target;
 
                     if(isInstance) {
                         instance = ctx;
 
                         if(params.bindClassName) {
-                            var domNode = e.target;
                             do {
                                 if(domNode.classList.contains(params.bindClassName)) {
                                     targetDomNode = domNode;
                                     break;
                                 }
                                 if(domNode === e.currentTarget) break;
-                            } while(domNode = domNode.parentNode);
+                            } while(domNode = domNode.parentElement);
 
                             targetDomNode || (instance = undefined);
                         }
                     } else {
-                        // TODO: we could optimize all these "closest" to a single traversing
-                        var entityDomNode = e.target;
                         do {
-                            if(entityDomNode.classList.contains(params.ctxClassName)) {
-                                instance = getEntity(entityDomNode, ctx);
+                            if(!targetDomNode) {
+                                if(domNode.classList.contains(params.bindClassName)) {
+                                    targetDomNode = domNode;
+                                } else continue;
+                            }
+
+                            if(domNode.classList.contains(params.ctxClassName)) {
+                                instance = getEntity(domNode, ctx);
                                 break;
                             }
-                        } while(entityDomNode = entityDomNode.parentNode);
+                        } while(domNode = domNode.parentElement);
                     }
 
                     if(instance) {
