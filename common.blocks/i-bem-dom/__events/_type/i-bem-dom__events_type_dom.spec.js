@@ -64,7 +64,7 @@ describe('DOM events', function() {
                     }
                 });
 
-                block1 = createBemEntity(
+                block1 = initBemEntity(
                     {
                         block : 'block1',
                         mix : { block : 'block2', js : true }
@@ -183,7 +183,7 @@ describe('DOM events', function() {
                             }
                         });
 
-                        block1 = createBemEntity(
+                        block1 = initBemEntity(
                             {
                                 block : 'block',
                                 mix : { block : 'block', elem : 'e4' },
@@ -308,7 +308,7 @@ describe('DOM events', function() {
                             }
                         });
 
-                        block1 = createBemEntity(
+                        block1 = initBemEntity(
                             {
                                 block : 'block',
                                 content : [
@@ -373,7 +373,7 @@ describe('DOM events', function() {
                         }
                     });
 
-                    block1 = createBemEntity(
+                    block1 = initBemEntity(
                         {
                             block : 'block',
                             content : [
@@ -455,7 +455,7 @@ describe('DOM events', function() {
 
                 Elem1 = bemDom.declElem('block1', 'elem1');
 
-                block1 = createBemEntity(
+                block1 = initBemEntity(
                     {
                         block : 'block1',
                         content : { elem : 'elem1' }
@@ -537,7 +537,7 @@ describe('DOM events', function() {
                         }
                     }
                 });
-                block1 = createBemEntity({ block : 'block' }, Block1);
+                block1 = initBemEntity({ block : 'block' }, Block1);
             });
 
             it('should properly bind handlers', function() {
@@ -609,11 +609,11 @@ describe('DOM events', function() {
                         }
                     }
                 });
-                block1 = createBemEntity({ block : 'block' }, Block1);
+                block1 = initBemEntity({ block : 'block' }, Block1);
             });
 
             it('should properly bind handlers', function() {
-                window.dispatchEvent(new Event('resize'));
+                windowDispatchEvent('resize');
 
                 spy1.should.have.been.called;
                 spy2.should.have.been.called;
@@ -623,20 +623,20 @@ describe('DOM events', function() {
             });
 
             it('should properly bind once handler', function() {
-                window.dispatchEvent(new Event('resize'));
+                windowDispatchEvent('resize');
                 spy4.should.have.been.called;
 
-                window.dispatchEvent(new Event('resize'));
+                windowDispatchEvent('resize');
                 spy4.should.have.been.calledOnce;
 
                 block1._domEvents(window).once('click', spy4);
-                window.dispatchEvent(new Event('click'));
+                windowDispatchEvent('click');
                 spy4.should.have.been.calledTwice;
             });
 
             it('should properly unbind all handlers', function() {
                 block1._domEvents(window).un('resize');
-                window.dispatchEvent(new Event('resize'));
+                windowDispatchEvent('resize');
 
                 spy1.should.not.have.been.called;
                 spy2.should.not.have.been.called;
@@ -644,7 +644,7 @@ describe('DOM events', function() {
 
             it('should properly unbind specified handler', function() {
                 block1._domEvents(window).un('resize', spy1);
-                window.dispatchEvent(new Event('resize'));
+                windowDispatchEvent('resize');
 
                 spy1.should.not.have.been.called;
                 spy2.should.have.been.called;
@@ -652,13 +652,13 @@ describe('DOM events', function() {
 
             it('should properly unbind once handler', function() {
                 block1._domEvents(window).un('resize', spy4);
-                window.dispatchEvent(new Event('resize'));
+                windowDispatchEvent('resize');
                 spy4.should.not.have.been.called;
             });
 
             it.skip('should properly unbind all handlers on block destruct', function() {
                 bemDom.destruct(block1.domNodes);
-                window.dispatchEvent(new Event('resize'));
+                windowDispatchEvent('resize');
 
                 spy1.should.not.have.been.called;
                 spy2.should.not.have.been.called;
@@ -685,7 +685,7 @@ describe('DOM events', function() {
                         }
                     }
                 });
-                rootNode = createDomNode({
+                rootNode = initDom({
                     content : {
                         content : { block : 'block', tag : 'p' }
                     }
@@ -1064,6 +1064,12 @@ function destructDom() {
 
 function initBemEntity(bemjson, entityCls) {
     return bemDom.getEntity(initDom(bemjson), entityCls);
+}
+
+function windowDispatchEvent(eventName) {
+    var event = document.createEvent('Event');
+    event.initEvent(eventName, true, true);
+    window.dispatchEvent(event);
 }
 
 // shim for PhantomJS < 2.0.0
