@@ -27,16 +27,12 @@ describe('BEM events', function() {
     });
 
     afterEach(function() {
-        bemDom.destruct(bemDom.scope, true);
+        destructDom();
 
         objects.each(bem.entities, function(_, entityName) {
             delete bem.entities[entityName];
         });
     });
-
-    function initDom(bemjson) {
-        return createDomNode(bemjson).appendTo(bemDom.scope);
-    }
 
     describe('on instance events', function() {
         describe('block BEM events', function() {
@@ -69,10 +65,12 @@ describe('BEM events', function() {
                     }
                 });
 
-                block1 = initDom({
-                    block : 'block1',
-                    mix : { block : 'block2', js : true }
-                }).bem(Block1);
+                block1 = initBemEntity(
+                    {
+                        block : 'block1',
+                        mix : { block : 'block2', js : true }
+                    },
+                    Block1);
             });
 
             it('should properly bind handlers', function() {
@@ -116,7 +114,7 @@ describe('BEM events', function() {
             });
 
             it('should not handle homonymous dom event', function() {
-                block1.domElem.trigger('click');
+                block1.domNodes[0].click();
                 spy1.should.not.have.been.called;
             });
 
@@ -192,7 +190,7 @@ describe('BEM events', function() {
             it('should emit only destructing event after destruction', function() {
                 block1._events().on({ modName : 'js', modVal : '' }, spy8);
 
-                bemDom.destruct(block1.domElem);
+                bemDom.destruct(block1.domNodes);
                 block1.setMod('m1', 'v1');
 
                 spy8.should.have.been.called;
@@ -223,13 +221,15 @@ describe('BEM events', function() {
 
                 Block2 = bemDom.declBlock('block2');
 
-                block1 = initDom({
-                    block : 'block1',
-                    content : [
-                        { block : 'block2' },
-                        { block : 'block2' }
-                    ]
-                }).bem(Block1);
+                block1 = initBemEntity(
+                    {
+                        block : 'block1',
+                        content : [
+                            { block : 'block2' },
+                            { block : 'block2' }
+                        ]
+                    },
+                    Block1);
             });
 
             it('should properly bind handlers', function() {
@@ -283,15 +283,17 @@ describe('BEM events', function() {
 
                 Block2 = bemDom.declBlock('block2');
 
-                block1 = initDom({
-                    block : 'block',
-                    content : [
-                        {
-                            block : 'block2',
-                            content : { block : 'block2' }
-                        }
-                    ]
-                }).bem(Block1);
+                block1 = initBemEntity(
+                    {
+                        block : 'block',
+                        content : [
+                            {
+                                block : 'block2',
+                                content : { block : 'block2' }
+                            }
+                        ]
+                    },
+                    Block1);
             });
 
             it('should properly handle events (bound in class context) from nested block', function() {
@@ -348,17 +350,19 @@ describe('BEM events', function() {
                             }
                         });
 
-                        block1 = initDom({
-                            block : 'block',
-                            mix : { block : 'block', elem : 'e6' },
-                            content : [
-                                { elem : 'e1', content : { elem : 'e3' } },
-                                { elem : 'e2', content : { elem : 'e1' } },
-                                { elem : 'e4', js : { id : 'ie4' } },
-                                { elem : 'e4', js : { id : 'ie4' } },
-                                { elem : 'e5', content : { elem : 'e5' } }
-                            ]
-                        }).bem(Block1);
+                        block1 = initBemEntity(
+                            {
+                                block : 'block',
+                                mix : { block : 'block', elem : 'e6' },
+                                content : [
+                                    { elem : 'e1', content : { elem : 'e3' } },
+                                    { elem : 'e2', content : { elem : 'e1' } },
+                                    { elem : 'e4', js : { id : 'ie4' } },
+                                    { elem : 'e4', js : { id : 'ie4' } },
+                                    { elem : 'e5', content : { elem : 'e5' } }
+                                ]
+                            },
+                            Block1);
 
                         elem2 = block1._elem('e2');
                     });
@@ -379,8 +383,8 @@ describe('BEM events', function() {
                             nestedE5._emit('click');
 
                             spy8.should.have.been.calledOnce;
-                            spy8.args[0][0].bemTarget.domElem[0]
-                                .should.be.equal(nestedE5.domElem[0]);
+                            spy8.args[0][0].bemTarget.domNodes[0]
+                                .should.be.equal(nestedE5.domNodes[0]);
                         });
 
                         it('should properly bind handlers', function() {
@@ -432,8 +436,8 @@ describe('BEM events', function() {
                             spy6.should.have.been.called;
                             spy6.should.have.been.calledOn(elem2);
                             spy6.args[0][1].should.be.instanceOf(Elem1);
-                            spy6.args[0][1].domElem[0]
-                                .should.be.equal(e2elem1.domElem[0]);
+                            spy6.args[0][1].domNodes[0]
+                                .should.be.equal(e2elem1.domNodes[0]);
 
                             spy7.should.have.been.called;
                         });
@@ -462,6 +466,10 @@ describe('BEM events', function() {
 
                 describe('elem as ' + elemType + ', modName, modVal', function() {
                     beforeEach(function() {
+                        elem1 = elemType === 'string'?
+                            'e1' :
+                            bemDom.declElem('block', 'e1');
+
                         Block1 = bemDom.declBlock('block', {
                             onSetMod : {
                                 'js' : {
@@ -476,13 +484,15 @@ describe('BEM events', function() {
                             }
                         });
 
-                        block1 = createDomNode({
-                            block : 'block',
-                            content : [
-                                { elem : 'e1' },
-                                { elem : 'e1', elemMods : { m1 : 'v1' } }
-                            ]
-                        }).bem(Block1);
+                        block1 = initBemEntity(
+                            {
+                                block : 'block',
+                                content : [
+                                    { elem : 'e1' },
+                                    { elem : 'e1', elemMods : { m1 : 'v1' } }
+                                ]
+                            },
+                            Block1);
                     });
 
                     it('should properly bind handlers', function() {
@@ -540,10 +550,12 @@ describe('BEM events', function() {
 
                 Block2 = bemDom.declBlock('block2');
 
-                block1 = initDom({
-                    block : 'block1',
-                    content : { block : 'block2' }
-                }).bem(Block1);
+                block1 = initBemEntity(
+                    {
+                        block : 'block1',
+                        content : { block : 'block2' }
+                    },
+                    Block1);
             });
 
             it('should properly bind handlers', function() {
@@ -602,16 +614,18 @@ describe('BEM events', function() {
 
                 Block3 = bemDom.declBlock('block3');
 
-                block1 = initDom({
-                    block : 'block',
-                    content : [
-                        {
-                            block : 'block2',
-                            js : true,
-                            content : { block : 'block3' }
-                        }
-                    ]
-                }).bem(Block1);
+                block1 = initBemEntity(
+                    {
+                        block : 'block',
+                        content : [
+                            {
+                                block : 'block2',
+                                js : true,
+                                content : { block : 'block3' }
+                            }
+                        ]
+                    },
+                    Block1);
             });
 
             it('should properly stop propagation', function() {
@@ -625,10 +639,6 @@ describe('BEM events', function() {
     });
 
     describe('delegated events', function() {
-        function initDom(bemjson) {
-            return createDomNode(bemjson).appendTo(bemDom.scope);
-        }
-
         describe('block events', function() {
             beforeEach(function() {
                 Block1 = bemDom.declBlock('block1', {}, {
@@ -650,10 +660,12 @@ describe('BEM events', function() {
                     }
                 });
 
-                block1 = initDom({
-                    block : 'block1',
-                    mix : { block : 'block2', js : true }
-                }).bem(Block1);
+                block1 = initBemEntity(
+                    {
+                        block : 'block1',
+                        mix : { block : 'block2', js : true }
+                    },
+                    Block1);
             });
 
             it('should properly bind handlers', function() {
@@ -775,13 +787,15 @@ describe('BEM events', function() {
                             }
                         });
 
-                        block1 = initDom({
-                            block : 'block',
-                            content : [
-                                { elem : 'e1', content : { elem : 'e3' } },
-                                { elem : 'e2', content : { elem : 'e1' } }
-                            ]
-                        }).bem(Block1);
+                        block1 = initBemEntity(
+                            {
+                                block : 'block',
+                                content : [
+                                    { elem : 'e1', content : { elem : 'e3' } },
+                                    { elem : 'e2', content : { elem : 'e1' } }
+                                ]
+                            },
+                            Block1);
 
                         elem2 = block1._elem('e2');
                     });
@@ -798,8 +812,8 @@ describe('BEM events', function() {
                             spy3.should.have.been.called;
                             spy3.args[0][0].data.should.have.been.equal(data);
                             spy3.args[0][1].should.be.instanceOf(Elem1);
-                            spy3.args[0][1].domElem[0]
-                                .should.be.equal(block1._elem(elem1).domElem[0]);
+                            spy3.args[0][1].domNodes[0]
+                                .should.be.equal(block1._elem(elem1).domNodes[0]);
 
                             spy5.should.not.have.been.called;
                         });
@@ -831,8 +845,8 @@ describe('BEM events', function() {
                             spy6.should.have.been.called;
                             spy6.should.have.been.calledOn(elem2);
                             spy6.args[0][1].should.be.instanceOf(Elem1);
-                            spy6.args[0][1].domElem[0]
-                                .should.be.equal(e2elem1.domElem[0]);
+                            spy6.args[0][1].domNodes[0]
+                                .should.be.equal(e2elem1.domNodes[0]);
 
                             spy7.should.have.been.called;
                         });
@@ -871,13 +885,15 @@ describe('BEM events', function() {
                             }
                         });
 
-                        block1 = initDom({
-                            block : 'block',
-                            content : [
-                                { elem : 'e1' },
-                                { elem : 'e1', elemMods : { m1 : 'v1' } }
-                            ]
-                        }).bem(Block1);
+                        block1 = initBemEntity(
+                            {
+                                block : 'block',
+                                content : [
+                                    { elem : 'e1' },
+                                    { elem : 'e1', elemMods : { m1 : 'v1' } }
+                                ]
+                            },
+                            Block1);
                     });
 
                     it('should properly bind handlers', function() {
@@ -932,16 +948,18 @@ describe('BEM events', function() {
 
                 Block3 = bemDom.declBlock('block3');
 
-                block1 = initDom({
-                    block : 'block',
-                    content : [
-                        {
-                            block : 'block2',
-                            js : true,
-                            content : { block : 'block3' }
-                        }
-                    ]
-                }).bem(Block1);
+                block1 = initBemEntity(
+                    {
+                        block : 'block',
+                        content : [
+                            {
+                                block : 'block2',
+                                js : true,
+                                content : { block : 'block3' }
+                            }
+                        ]
+                    },
+                    Block1);
             });
 
             it('should properly stop propagation', function() {
@@ -959,5 +977,42 @@ provide();
 function createDomNode(bemjson) {
     return bemDom.init(BEMHTML.apply(bemjson));
 }
+
+function createBemEntity(bemjson, entityCls) {
+    return bemDom.getEntity(createDomNode(bemjson), entityCls);
+}
+
+var initedDom = [];
+
+function initDom(bemjson) {
+    return bemDom.append(bemDom.scope, createDomNode(bemjson));
+}
+
+function destructDom() {
+    var domNode;
+    while(domNode = initedDom.pop()) bemDom.destruct(domNode);
+}
+
+function initBemEntity(bemjson, entityCls) {
+    return bemDom.getEntity(initDom(bemjson), entityCls);
+}
+
+// shim for PhantomJS < 2.0.0
+['click', 'dblclick'].forEach(function(eventName) {
+    HTMLElement.prototype[eventName] || (HTMLElement.prototype[eventName] = function() {
+        var e = document.createEvent('MouseEvent');
+        e.initMouseEvent(
+            eventName,
+            true, // bubble
+            true, // cancelable
+            window,
+            null,
+            0, 0, 0, 0, // coordinates
+            false, false, false, false, // modifier keys
+            0, // button=left
+            null);
+        this.dispatchEvent(e);
+    });
+});
 
 });
