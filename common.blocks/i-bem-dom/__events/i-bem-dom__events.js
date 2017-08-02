@@ -53,7 +53,7 @@ var undef,
          */
         on : function(e, data, fn, _fnCtx, _isOnce) {
             var params = this._params,
-                event = this._eventBuilder(e, params);
+                event = this._eventBuilder(e, params, 'on');
 
             if(functions.isFunction(data)) {
                 _isOnce = _fnCtx;
@@ -82,7 +82,7 @@ var undef,
 
                 // bindDomNodes.on(event, bindClassName, data, handler);
                 bindDomNodes.forEach(function(domNode) {
-                    domNode.addEventListener(event, handler);
+                    domNode.addEventListener(event, handler, false);
                 });
 
                 // bindClassName && bindDomElem.is(bindClassName) && bindDomElem.on(event, data, handler);
@@ -119,7 +119,7 @@ var undef,
             var argsLen = arguments.length;
             if(argsLen) {
                 var params = this._params,
-                    event = this._eventBuilder(e, params);
+                    event = this._eventBuilder(e, params, 'un');
 
                 if(argsLen === 1) {
                     this._unbindByEvent(this._storage[event], event);

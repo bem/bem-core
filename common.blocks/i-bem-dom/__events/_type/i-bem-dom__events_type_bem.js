@@ -8,7 +8,7 @@ modules.define(
         'i-bem__internal',
         'inherit',
         'functions',
-        'jquery',
+        'dom',
         'identify',
         'events'
     ],
@@ -18,35 +18,33 @@ modules.define(
         bemInternal,
         inherit,
         functions,
-        $,
+        dom,
         identify,
         events) {
 
 var EVENT_PREFIX = '__bem__',
     MOD_CHANGE_EVENT = 'modchange',
 
-    specialEvents = $.event.special,
-    specialEventsStorage = {},
+    // specialEvents = $.event.special,
+    eventsInUse = {},
 
-    createSpecialEvent = function(event) {
-        return {
-            setup : function() {
-                specialEventsStorage[event] || (specialEventsStorage[event] = true);
-            },
-            teardown : functions.noop
-        };
+    createCustomEvent = function(eventName, detail) {
+        var event = document.createEvent('CustomEvent');
+        event.initCustomEvent(eventName, true, true, detail);
+        return event;
     },
 
-    eventBuilder = function(e, params) {
+    eventBuilder = function(e, params, eventMethod) {
         var event = EVENT_PREFIX + params.bindEntityCls.getEntityName() +
             (typeof e === 'object'?
                 e instanceof events.Event?
-                    e.type :
+                    ' ' + e.type :
                     bemInternal.buildModPostfix(e.modName, e.modVal) :
-                e);
+                ' ' + e);
 
-        specialEvents[event] ||
-            (specialEvents[event] = createSpecialEvent(event));
+        eventMethod === 'on' && // TODO: count usage and remove on 'un'
+            !eventsInUse[event] &&
+                (eventsInUse[event] = true);
 
         return event;
     },
@@ -59,34 +57,61 @@ var EVENT_PREFIX = '__bem__',
     EventManagerFactory = inherit(bemDomEvents.EventManagerFactory,/** @lends EventManagerFactory.prototype */{
         /** @override */
         _createEventManager : function(ctx, params, isInstance) {
-            function handlerWrapper(fn, data, fnCtx, fnId) {
-                return function(e, data, flags, originalEvent) {
-                    if(flags.fns[fnId]) return;
+            var getEntity = this._getEntity;
 
-                    var instance,
-                        instanceDomElem;
+            function handlerWrapper(fn, data, fnCtx, fnId) {
+                return function(e) {
+                    var detail = e.detail,
+                        fns = detail.fns,
+                        originalEvent = detail.originalEvent;
+
+                    if(fns[fnId]) return;
+
+                    var instance, instanceDomNodes, targetDomNode, domNode = e.target;
 
                     if(isInstance) {
                         instance = ctx;
-                        instanceDomElem = instance.domElem;
+                        instanceDomNodes = instance.domNodes;
+
+                        if(params.bindClassName) {
+                            do {
+                                if(domNode.classList.contains(params.bindClassName)) {
+                                    targetDomNode = domNode;
+                                    break;
+                                }
+                                if(domNode === e.currentTarget) break;
+                            } while(domNode = domNode.parentElement);
+
+                            targetDomNode || (instance = undefined);
+                        }
                     } else {
-                        // TODO: we could optimize all these "closest" to a single traversing
-                        instanceDomElem = $(e.target).closest(params.ctxSelector);
-                        instanceDomElem.length && (instance = instanceDomElem.bem(ctx));
+                        do {
+                            if(!targetDomNode) {
+                                if(domNode.classList.contains(params.bindClassName)) {
+                                    targetDomNode = domNode;
+                                } else continue;
+                            }
+
+                            if(domNode.classList.contains(params.ctxClassName)) {
+                                instance = getEntity(domNode, ctx);
+                                instanceDomNodes = [domNode];
+                                break;
+                            }
+                        } while(domNode = domNode.parentElement);
                     }
 
                     if(instance &&
-                        (!flags.propagationStoppedDomNode ||
-                            !$.contains(instanceDomElem[0], flags.propagationStoppedDomNode))) {
-                        originalEvent.data = e.data;
+                        (!detail.propagationStoppedDomNode ||
+                            !dom.contains(instanceDomNodes[0], detail.propagationStoppedDomNode))) { // TODO: check about [0]
+                        originalEvent.data = data;
                         // TODO: do we really need both target and bemTarget?
                         originalEvent.bemTarget = originalEvent.target;
-                        flags.fns[fnId] = true;
-                        fn.call(fnCtx || instance, originalEvent, data);
+                        fns[fnId] = true;
+                        fn.call(fnCtx || instance, originalEvent, detail.data);
 
                         if(originalEvent.isPropagationStopped()) {
                             e.stopPropagation();
-                            flags.propagationStoppedDomNode = instanceDomElem[0];
+                            detail.propagationStoppedDomNode = instanceDomNodes[0];
                         }
                     }
                 };
@@ -113,10 +138,21 @@ provide({
             originalEvent = e;
         }
 
-        var event = eventBuilder(e, { bindEntityCls : ctx.__self });
+        var event = eventBuilder(e, { bindEntityCls : ctx.__self }, 'emit');
 
-        specialEventsStorage[event] &&
-            ctx.domElem.trigger(event, [data, { fns : {}, propagationStoppedDomNode : null }, originalEvent]);
+        if(eventsInUse[event]) {
+            var i = 0, domNode;
+            while(domNode = ctx.domNodes[i++])
+                domNode.dispatchEvent(
+                    createCustomEvent(
+                        event,
+                        {
+                            data : data,
+                            fns : {},
+                            propagationStoppedDomNode : null,
+                            originalEvent : originalEvent
+                        }));
+        }
     },
 
     EventManagerFactory : EventManagerFactory
