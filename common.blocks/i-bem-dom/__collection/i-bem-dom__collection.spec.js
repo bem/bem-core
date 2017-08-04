@@ -59,7 +59,7 @@ describe('BEM collections', function() {
                 ]
             }));
 
-            rootBlock = rootNode.bem(RootBlock);
+            rootBlock = bemDom.getEntity(rootNode, RootBlock);
         });
 
         describe('findChildBlock', function() {

@@ -20,13 +20,15 @@ describe('events__observable_type_bem-dom', function() {
         spy1 = sinon.spy();
         spy2 = sinon.spy();
         spy3 = sinon.spy();
-        block = bemDom.init(BEMHTML.apply({
-            block : 'block'
-        })).appendTo('body').bem(bemDom.declBlock('block'));
+        block = bemDom.getEntity(
+            bemDom.append(
+                bemDom.scope,
+                BEMHTML.apply({ block : 'block' })),
+            bemDom.declBlock('block'));
     });
 
     afterEach(function() {
-        bemDom.destruct(block.domElem);
+        bemDom.destruct(block.domNodes);
     });
 
     describe('on', function() {
