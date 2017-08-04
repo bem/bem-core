@@ -974,18 +974,12 @@ describe('BEM events', function() {
 
 provide();
 
-function createDomNode(bemjson) {
-    return bemDom.init(BEMHTML.apply(bemjson));
-}
-
-function createBemEntity(bemjson, entityCls) {
-    return bemDom.getEntity(createDomNode(bemjson), entityCls);
-}
-
 var initedDom = [];
 
 function initDom(bemjson) {
-    return bemDom.append(bemDom.scope, createDomNode(bemjson));
+    var res = bemDom.append(bemDom.scope, BEMHTML.apply(bemjson));
+    initedDom.push(res);
+    return res;
 }
 
 function destructDom() {
