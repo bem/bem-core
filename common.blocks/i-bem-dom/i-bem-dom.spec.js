@@ -1387,7 +1387,7 @@ describe('i-bem-dom', function() {
         });
 
         // see https://github.com/bem/bem-core/issues/1383
-        it.skip('should not re-initialize destructing entities during destruct', function() {
+        it('should not re-initialize destructing entities during destruct', function() {
             var Block = bemDom.declBlock('block', {
                     __constructor : function() {
                         this.__base.apply(this, arguments);
@@ -1609,7 +1609,7 @@ describe('i-bem-dom', function() {
 
         it('should have been called once', function() {
             rootNode = createDomInScope({
-                content: [
+                content : [
                     { block : 'block', js : true },
                     { block : 'block', js : true }
                 ]
@@ -1659,7 +1659,7 @@ describe('i-bem-dom', function() {
             spy.should.have.been.called;
         });
 
-        describe.skip('on DOM events', function() {
+        describe('on DOM events', function() {
             beforeEach(function() {
                 spy = sinon.spy();
 
@@ -1684,12 +1684,12 @@ describe('i-bem-dom', function() {
 
             it('should init block on DOM event', function() {
                 spy.should.not.have.been.called;
-                rootNode.trigger('click');
+                rootNode.click();
                 spy.should.have.been.called;
             });
         });
 
-        describe.skip('on BEM events', function() {
+        describe('on BEM events', function() {
             var block2;
             beforeEach(function() {
                 spy = sinon.spy();
@@ -1773,5 +1773,23 @@ function getEntityIds(entities) {
         return entity.params.id;
     });
 }
+
+// shim for PhantomJS < 2.0.0
+['click', 'dblclick'].forEach(function(eventName) {
+    HTMLElement.prototype[eventName] || (HTMLElement.prototype[eventName] = function() {
+        var e = document.createEvent('MouseEvent');
+        e.initMouseEvent(
+            eventName,
+            true, // bubble
+            true, // cancelable
+            window,
+            null,
+            0, 0, 0, 0, // coordinates
+            false, false, false, false, // modifier keys
+            0, // button=left
+            null);
+        this.dispatchEvent(e);
+    });
+});
 
 });
