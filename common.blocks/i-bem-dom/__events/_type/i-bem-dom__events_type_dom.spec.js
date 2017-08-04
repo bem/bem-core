@@ -584,7 +584,7 @@ describe('DOM events', function() {
                 spy4.should.not.have.been.called;
             });
 
-            it.skip('should properly unbind all handlers on block destruct', function() {
+            it('should properly unbind all handlers on block destruct', function() {
                 bemDom.destruct(block1.domNodes);
                 document.documentElement.click();
 
@@ -656,7 +656,7 @@ describe('DOM events', function() {
                 spy4.should.not.have.been.called;
             });
 
-            it.skip('should properly unbind all handlers on block destruct', function() {
+            it('should properly unbind all handlers on block destruct', function() {
                 bemDom.destruct(block1.domNodes);
                 windowDispatchEvent('resize');
 
@@ -746,7 +746,7 @@ describe('DOM events', function() {
                 spy4.should.not.have.been.called;
             });
 
-            it.skip('should properly unbind all handlers on block destruct', function() {
+            it('should properly unbind all handlers on block destruct', function() {
                 bemDom.destruct(block1.domNodes);
                 rootNode.click();
 
