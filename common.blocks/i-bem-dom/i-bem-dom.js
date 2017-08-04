@@ -127,24 +127,15 @@ function initEntity(entityName, domNode, params, ignoreLazyInit, callback) {
         entity = uniqIdToEntity[uniqId];
 
     if(entity) {
-         if(entity.domNodes.indexOf(domNode) < 0) {
-             entity.domNodes.push(domNode);
-             objects.extend(entity.params, params);
-         }
+        uniqPush(entity.domNodes, domNode) &&
+            objects.extend(entity.params, params);
 
         return entity;
     }
 
     uniqIdToDomNodes[uniqId]?
-        uniqIdToDomNodes[uniqId].push(domNode) :
-        (uniqIdToDomNodes[uniqId] = [domNode]);
-
-    // TODO: add tests for
-    // i-bem__dom: multiple live initialization on disconnected node add same node many times
-    // var parentDomNode = domNode.parentNode;
-    // if(!parentDomNode || parentDomNode.nodeType === 11) { // jquery doesn't unique disconnected node
-    //     $.unique(uniqIdToDomNodes[uniqId]);
-    // }
+        uniqPush(uniqIdToDomNodes[uniqId], domNode) :
+        uniqIdToDomNodes[uniqId] = [domNode];
 
     var entityCls = getEntityCls(entityName);
 
@@ -333,6 +324,10 @@ function validateBlockParam(Block) {
     ) {
         throw new Error('Block must be a class or description (block, modName, modVal) of the block to find');
     }
+}
+
+function uniqPush(arr, obj) {
+    if(arr.indexOf(obj) < 0) return arr.push(obj);
 }
 
 /**

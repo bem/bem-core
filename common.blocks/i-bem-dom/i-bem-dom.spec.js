@@ -242,7 +242,7 @@ describe('i-bem-dom', function() {
                         block.setMod(modName, modVal);
                 });
 
-                block.domNode.className.should.be.equal(data.afterCls);
+                block.domNodes[0].className.should.be.equal(data.afterCls);
 
                 bemDom.destruct(rootNode);
             });
@@ -281,7 +281,7 @@ describe('i-bem-dom', function() {
                         elem.setMod(modName, modVal);
                 });
 
-                elem.domNode.className.should.be.equal(data.afterCls);
+                elem.domNodes[0].className.should.be.equal(data.afterCls);
 
                 bemDom.destruct(rootNode);
             });
@@ -1085,7 +1085,7 @@ describe('i-bem-dom', function() {
             var b1e2DomNode;
 
             beforeEach(function() {
-                b1e2DomNode = b1Block.findChildElem(B1E2Elem).domNode;
+                b1e2DomNode = b1Block.findChildElem(B1E2Elem).domNodes[0];
                 spy = sinon.spy(b1Block, 'findChildElems');
             });
 
@@ -1127,7 +1127,7 @@ describe('i-bem-dom', function() {
                 it('should drop elems cache on DOM append', function() {
                     b1Block._elems(B1E1Elem);
 
-                    bemDom.append(b1Block.domNode, BEMHTML.apply({
+                    bemDom.append(b1Block.domNodes[0], BEMHTML.apply({
                         block : 'b1',
                         elem : 'e1',
                         js : true
@@ -1141,7 +1141,7 @@ describe('i-bem-dom', function() {
                 it.skip('should drop elems cache on DOM append of elems without js', function() {
                     b1Block._elems(B1E1Elem);
 
-                    bemDom.append(b1Block.domNode, BEMHTML.apply({
+                    bemDom.append(b1Block.domNodes[0], BEMHTML.apply({
                         block : 'b1',
                         elem : 'e1'
                     }));
@@ -1153,7 +1153,7 @@ describe('i-bem-dom', function() {
                 it('should drop elems cache on DOM update in case of elem without data-bem', function() {
                     b1Block._elems(B1E1Elem);
 
-                    bemDom.append(b1Block.domNode, BEMHTML.apply({
+                    bemDom.append(b1Block.domNodes[0], BEMHTML.apply({
                         block : 'b1',
                         elem : 'e2',
                         js : true,
@@ -1265,6 +1265,20 @@ describe('i-bem-dom', function() {
                     { elem : 'e1', js : { id : 'id' } }
                 ]
             });
+        });
+
+        it('should properly lazy init elem with multiple DOM nodes', function() {
+            var Block = bemDom.declBlock('block');
+
+            rootNode = createDom({
+                block : 'block',
+                content : [
+                    { elem : 'e1', js : { id : 'id' } },
+                    { elem : 'e1', js : { id : 'id' } }
+                ]
+            });
+
+            bemDom.getEntity(rootNode, Block)._elem('e1').domNodes.length.should.be.equal(2);
         });
 
         it('shouldn\'t init lazy block', function() {
