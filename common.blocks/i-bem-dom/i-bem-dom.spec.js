@@ -1420,7 +1420,8 @@ describe('i-bem-dom', function() {
                 content : { block : 'block1', js : true }
             });
 
-            bemDom.update(rootNode, BEMHTML.apply({ block : 'block2', js : true }));
+            bemDom.update(rootNode, BEMHTML.apply({ block : 'block2', js : true }))
+                .should.be.equal(rootNode);
 
             spyBlock1Destructed.called.should.be.true;
             spyBlock2Inited.called.should.be.true;
@@ -1430,6 +1431,35 @@ describe('i-bem-dom', function() {
             var domElem = $('<div/>');
             bemDom.update(domElem, 'simple string');
             domElem.html().should.be.equal('simple string');
+        });
+    });
+
+    describe('bemDom.before', function() {
+        it('should properly update tree', function() {
+            var spyBlock2Inited = sinon.spy(),
+                block2DomElem;
+
+            bemDom.declBlock('block2', {
+                onSetMod : {
+                    js : {
+                        inited : function() {
+                            spyBlock2Inited();
+                            block2DomElem = this.domElem;
+                        }
+                    }
+                }
+            });
+
+            rootNode = createDomNode({
+                tag : 'div',
+                content : { block : 'block1', js : true }
+            });
+
+            var newCtx = bemDom.before(rootNode.find('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
+
+            newCtx.is(block2DomElem).should.be.true;
+            rootNode.children().eq(0).is(block2DomElem).should.be.true;
+            spyBlock2Inited.called.should.be.true;
         });
     });
 
@@ -1480,6 +1510,8 @@ describe('i-bem-dom', function() {
             rootNode.html().should.be.equal('<p></p><div class="block2 i-bem block2_js_inited" data-bem="{&quot;block2&quot;:{}}"></div><p></p>');
         });
     });
+
+    // don't add specs for other DOM changing methods as they are implemented the same way
 
     describe('params', function() {
         it('should properly join params', function(done) {
