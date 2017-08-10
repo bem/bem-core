@@ -1,14 +1,13 @@
 /**
  * @module inherit
- * @version 2.2.1
+ * @version 2.2.6
  * @author Filatov Dmitry <dfilatov@yandex-team.ru>
  * @description This module provides some syntax sugar for "class" declarations, constructors, mixins, "super" calls and static members.
  */
 
 (function(global) {
 
-var hasIntrospection = (function(){'_';}).toString().indexOf('_') > -1,
-    emptyBase = function() {},
+var noop = function() {},
     hasOwnProperty = Object.prototype.hasOwnProperty,
     objCreate = Object.create || function(ptp) {
         var inheritance = function() {};
@@ -36,11 +35,10 @@ var hasIntrospection = (function(){'_';}).toString().indexOf('_') > -1,
     isFunction = function(obj) {
         return toStr.call(obj) === '[object Function]';
     },
-    noOp = function() {},
     needCheckProps = true,
     testPropObj = { toString : '' };
 
-for(var i in testPropObj) { // fucking ie hasn't toString, valueOf in for
+for(var i in testPropObj) { // It's a pity ie hasn't toString, valueOf in for
     testPropObj.hasOwnProperty(i) && (needCheckProps = false);
 }
 
@@ -68,20 +66,26 @@ function override(base, res, add) {
         }
         prop = add[name];
         if(isFunction(prop) &&
-                (!hasIntrospection || prop.toString().indexOf('.__base') > -1)) {
+                (!prop.prototype || !prop.prototype.__self) && // check to prevent wrapping of "class" functions
+                (prop.toString().indexOf('.__base') > -1)) {
             res[name] = (function(name, prop) {
                 var baseMethod = base[name]?
                         base[name] :
-                        name === '__constructor'? // case of inheritance from plane function
+                        name === '__constructor'? // case of inheritance from plain function
                             res.__self.__parent :
-                            noOp;
-                return function() {
-                    var baseSaved = this.__base;
-                    this.__base = baseMethod;
-                    var res = prop.apply(this, arguments);
-                    this.__base = baseSaved;
-                    return res;
-                };
+                            noop,
+                    result = function() {
+                        var baseSaved = this.__base;
+
+                        this.__base = result.__base;
+                        var res = prop.apply(this, arguments);
+                        this.__base = baseSaved;
+
+                        return res;
+                    };
+                result.__base = baseMethod;
+
+                return result;
             })(name, prop);
         } else {
             res[name] = prop;
@@ -115,10 +119,10 @@ function inherit() {
     var args = arguments,
         withMixins = isArray(args[0]),
         hasBase = withMixins || isFunction(args[0]),
-        base = hasBase? withMixins? applyMixins(args[0]) : args[0] : emptyBase,
+        base = hasBase? withMixins? applyMixins(args[0]) : args[0] : noop,
         props = args[hasBase? 1 : 0] || {},
         staticProps = args[hasBase? 2 : 1],
-        res = props.__constructor || (hasBase && base.prototype.__constructor)?
+        res = props.__constructor || (hasBase && base.prototype && base.prototype.__constructor)?
             function() {
                 return this.__constructor.apply(this, arguments);
             } :
@@ -164,25 +168,26 @@ inherit.self = function() {
 };
 
 var defineAsGlobal = true;
+/* istanbul ignore next */
 if(typeof exports === 'object') {
     module.exports = inherit;
     defineAsGlobal = false;
 }
-
-if(typeof modules === 'object') {
+/* istanbul ignore next */
+if(typeof modules === 'object' && typeof modules.define === 'function') {
     modules.define('inherit', function(provide) {
         provide(inherit);
     });
     defineAsGlobal = false;
 }
-
+/* istanbul ignore next */
 if(typeof define === 'function') {
     define(function(require, exports, module) {
         module.exports = inherit;
     });
     defineAsGlobal = false;
 }
-
+/* istanbul ignore next */
 defineAsGlobal && (global.inherit = inherit);
 
 })(this);
