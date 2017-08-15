@@ -4,16 +4,17 @@ describe('dom', function() {
     describe('contains', function() {
         var domNode;
         beforeEach(function() {
-            domNode = createDomNode();
-            domNode.innerHTML = '<div class="a">' +
+            document.documentElement.appendChild(domNode = createDomNode(
+                'div',
+                '<div class="a">' +
                     '<div class="x"/>' +
                 '</div>' +
                 '<div class="a">' +
                     '<div class="x"/>' +
                     '<div class="y"/>' +
                 '</div>' +
-                '<div class="c"/>';
-            document.documentElement.appendChild(domNode);
+                '<div class="c"/>'
+            ));
         });
 
         afterEach(function() {
@@ -80,12 +81,13 @@ describe('dom', function() {
     describe('containsFocus', function() {
         var domNode;
         beforeEach(function() {
-            domNode = createDomNode();
-            domNode.innerHTML = '<div class="a">' +
+            document.documentElement.appendChild(domNode = createDomNode(
+                'div',
+                '<div class="a">' +
                     '<input class="x"/>' +
                 '</div>' +
-                '<div class="b"/>';
-            document.documentElement.appendChild(domNode);
+                '<div class="b"/>'
+            ));
 
             domNode.querySelector('.x').focus();
         });
@@ -132,23 +134,91 @@ describe('dom', function() {
         });
 
         it('should returns true for contenteditable DOM elems', function() {
-            dom.isEditable(createDomNode('div', { contenteditable : 'true' })).should.be.true;
-            dom.isEditable(createDomNode('div', { contenteditable : 'false' })).should.be.false;
-            dom.isEditable(createDomNode('div', { contenteditable : 'yet-another-val' })).should.be.false;
+            dom.isEditable(createDomNode({ contenteditable : 'true' })).should.be.true;
+            dom.isEditable(createDomNode({ contenteditable : 'false' })).should.be.false;
+            dom.isEditable(createDomNode({ contenteditable : 'yet-another-val' })).should.be.false;
         });
 
         it('should returns false if given DOM elem is empty', function() {
             dom.isEditable(document.querySelector('.__no-exist')).should.be.false;
         });
     });
+
+    describe('each', function() {
+        var domNode;
+        beforeEach(function() {
+            document.documentElement.appendChild(domNode = createDomNode(
+                'div',
+                '<div class="a"/>' +
+                '<div class="b"/>' +
+                '<div class="c"/>'
+            ));
+        });
+
+        afterEach(function() {
+            domNode.parentNode.removeChild(domNode);
+        });
+
+        it('should properly iterate many DOM nodes', function() {
+            var res = [];
+
+            dom.each(domNode.querySelectorAll('div'), function(childDomNode, i) {
+                res.push(childDomNode.className);
+            });
+
+            res.should.be.eql(['a', 'b', 'c']);
+        });
+
+        it('should properly stop iteration', function() {
+            var res = [];
+
+            dom.each(domNode.querySelectorAll('div'), function(childDomNode, i) {
+                res.push(childDomNode.className);
+                if(i === 2) return false;
+            });
+
+            res.should.be.eql(['a', 'b']);
+        });
+
+        it('should properly iterate one DOM node', function() {
+            var res = [];
+
+            dom.each(domNode.querySelector('div'), function(childDomNode, i) {
+                res.push(childDomNode.className);
+            });
+
+            res.should.be.eql(['a']);
+        });
+
+        it('should properly return iterated DOM nodes', function() {
+            var domNodes = domNode.querySelectorAll('div');
+
+            dom.each(domNodes, function(_, __, argDomNodes) {
+                argDomNodes.should.be.equal(domNodes);
+            }).should.be.equal(domNodes);
+        });
+    });
 });
 
-function createDomNode(elemName, attrs) {
+function createDomNode(elemName, attrs, html) {
+    if(typeof elemName === 'object') {
+        html = attrs;
+        attrs = elemName;
+        elemName = undefined;
+    }
+
     var elem = document.createElement(elemName || 'div');
+
+    if(typeof attrs === 'string') {
+        html = attrs;
+        attrs = undefined;
+    }
 
     attrs && Object.keys(attrs).forEach(function(attrName) {
         elem.setAttribute(attrName, attrs[attrName]);
     });
+
+    html && (elem.innerHTML = html);
 
     return elem;
 }
