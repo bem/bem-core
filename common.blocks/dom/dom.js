@@ -69,7 +69,6 @@ provide(/** @exports */{
     * @returns {Boolean}
     */
     isFocusable : function(domNode) {
-        if(!domNode) return false;
         if(domNode.hasAttribute('tabindex')) return true;
 
         switch(domNode.tagName.toLowerCase()) {
@@ -95,8 +94,6 @@ provide(/** @exports */{
     * @returns {Boolean}
     */
     isEditable : function(domNode) {
-        if(!domNode) return false;
-
         switch(domNode.tagName.toLowerCase()) {
             case 'input':
                 return EDITABLE_INPUT_TYPES.hasOwnProperty(domNode.type) && !domNode.disabled && !domNode.readOnly;
@@ -112,7 +109,7 @@ provide(/** @exports */{
     /**
      * Creates detached DOM nodes from HTML string
      * @param {String} html
-     * @returns {NodeList}
+     * @returns {Element|NodeList}
      */
     fromString : function(html) {
         var wrapperElement = document.createElement('div');
@@ -120,6 +117,27 @@ provide(/** @exports */{
         var childNodes = wrapperElement.childNodes;
 
         return childNodes.length === 1? childNodes[0] : childNodes;
+    },
+
+    /**
+     * Iterates over one or many DOM nodes
+     * @param {Element|NodeList|HTMLCollection} domNodes
+     * @param {Function} fn
+     * @param {Object} [ctx]
+     * @returns {Element|NodeList|HTMLCollection}
+     */
+    each : function(domNodes, fn, ctx) {
+        var i = 0,
+            isDomNode = domNodes instanceof Element,
+            domNode = domNodes;
+
+        // once when content is an element and cycle for content as NodeList|HTMLCollection
+        while((isDomNode && !i++) || (domNode = domNodes[i++])) {
+            var res = fn.call(ctx, domNode, i, domNodes);
+            if(res === false) return domNodes;
+        }
+
+        return domNodes;
     }
 });
 

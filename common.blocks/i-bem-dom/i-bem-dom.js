@@ -238,7 +238,7 @@ function removeDomNodeFromEntity(entity, domNode) {
 
 /**
  * Stores DOM node's parent node to the storage
- * @param {Element} node list
+ * @param {Element} domNode
  */
 function storeDomNodeParent(domNode) {
     domNodesToParents[identify(domNode)] = domNode.parentNode;
@@ -246,16 +246,12 @@ function storeDomNodeParent(domNode) {
 
 /**
  * Stores DOM node's parent nodes to the storage
- * @param {Element|NodeList|HTMLCollection} node list
+ * @param {Element|NodeList|HTMLCollection} domNodes node list
  */
 function storeDomNodesParents(domNodes) {
-    if(domNodes instanceof Element) {
-        storeDomNodeParent(domNodes);
-    } else {
-        var i = 0, domNode;
-
-        while(domNode = domNodes[i++]) storeDomNodeParent(domNode);
-    }
+    domNodes instanceof Element?
+        storeDomNodeParent(domNodes) :
+        domNodes.forEach(storeDomNodeParent);
 }
 
 /**
@@ -263,10 +259,8 @@ function storeDomNodesParents(domNodes) {
  * @param {Element|NodeList|HTMLCollection} ctx
  */
 function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
-    var visited = {};
-
-
-    var i = 0,
+    var visited = {},
+        i = 0,
         isDomNode = ctx instanceof Element,
         domNode = ctx;
 
@@ -631,7 +625,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
                     res.push(resEntity);
                 }
 
-                if(onlyFirst && resEntity) return resEntity;
+                if(onlyFirst) return resEntity;
             }
         }
 
@@ -664,7 +658,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
                     res.push(resEntity);
                 }
 
-                if(onlyFirst && resEntity) return resEntity;
+                if(onlyFirst) return resEntity;
             }
         }
 
@@ -696,7 +690,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
                 res.push(resEntity);
             }
 
-            if(onlyFirst && resEntity) return resEntity;
+            if(onlyFirst) return resEntity;
         }
 
         return onlyFirst? null : new BemDomCollection(res);
@@ -823,7 +817,6 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Boolean}
      */
     containsEntity : function(entity) {
-        // TODO: support multi node case and refactor `dom`
         return dom.contains(this.domNodes, entity.domNodes);
     }
 
@@ -1064,10 +1057,12 @@ bemDom = /** @exports */{
 
             var domNodes = domNode.querySelectorAll(BEM_SELECTOR),
                 j = 0;
-
             // NOTE: we find only js-entities, so cached elems without js can't be dropped from cache
             while(domNode = domNodes[j++])
                 initEntities(domNode, uniqInitId, dropElemCacheQueue);
+            //domNode.querySelectorAll(BEM_SELECTOR).forEach(function(bemDomNode) {
+                //initEntities(bemDomNode, uniqInitId, dropElemCacheQueue);
+            //});
         }
 
         bem._runInitFns();
@@ -1088,13 +1083,15 @@ bemDom = /** @exports */{
             currentDestructingDomNodes = [];
 
         if(!(ctx instanceof Element)) {
-            if(ctx.forEach) {
+            if(ctx.forEach) { // TODO: NodeList have no forEach
                 ctx.forEach(function(domNode) {
-                    this._destruct(domNode,  excludeSelf, destructDom);
+                    this._destruct(domNode, excludeSelf, destructDom);
                 }, this);
-            } else {
-                throw Error('destruct should be called on one DOM node or collection of them');
+
+                return;
             }
+
+            throw Error('destruct should be called on one DOM node or collection of them');
         }
 
         storeDomNodesParents(_ctx = excludeSelf? ctx.children : ctx);
@@ -1109,7 +1106,10 @@ bemDom = /** @exports */{
                 j = domNodes.length,
                 domNode;
 
-            while((domNode = domNodes[--j]) || (domNode = ctxDomNode)) {
+            // reverse iteration for childs and self
+            do {
+                domNode = domNodes[--j] || ctxDomNode;
+
                 var params = getParams(domNode),
                     domNodeId = identify(domNode);
 
@@ -1126,8 +1126,7 @@ bemDom = /** @exports */{
                 });
                 delete domNodeToParams[identify(domNode)];
 
-                if(domNode === ctxDomNode) break;
-            }
+            } while(domNode !== ctxDomNode)
         }
 
         // NOTE: it was moved here as jquery events aren't triggered on detached DOM elements
@@ -1171,7 +1170,7 @@ bemDom = /** @exports */{
     update : function(ctx, content) {
         this.destruct(ctx, true);
 
-        typeof content === 'string' ?
+        typeof content === 'string'?
             ctx.innerHTML = content :
             ctx.appendChild(content);
 

@@ -141,8 +141,8 @@ provide({
         var event = eventBuilder(e, { bindEntityCls : ctx.__self }, 'emit');
 
         if(eventsInUse[event]) {
-            var fns = {}, i = 0, domNode;
-            while(domNode = ctx.domNodes[i++])
+            var fns = {};
+            ctx.domNodes.forEach(function(domNode) {
                 domNode.dispatchEvent(
                     createCustomEvent(
                         event,
@@ -152,6 +152,7 @@ provide({
                             propagationStoppedDomNode : null,
                             originalEvent : originalEvent
                         }));
+            });
         }
     },
 
