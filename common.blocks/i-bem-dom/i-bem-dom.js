@@ -49,6 +49,15 @@ var undef,
     domNodesToParents = {},
 
     /**
+     * Stores DOM node's parent node to the storage
+     * @param {Element} domNode
+     * @type Function
+     */
+    storeDomNodeParent = function(domNode) {
+        domNodesToParents[identify(domNode)] = domNode.parentNode;
+    },
+
+    /**
      * Storage for block parameters
      * @type Object
      */
@@ -151,6 +160,31 @@ function initEntity(entityName, domNode, params, ignoreLazyInit, callback) {
     }
 }
 
+/**
+ * Init a fragment of the DOM tree with call of callback before
+ * @param {Element|String} content Content to be added
+ * @param {Function} [beforeInit] callback to call before init
+ * @param {Object} [ctx] context of callback call
+ * @returns {Element} First DOM node of new content
+ */
+function initFragment(content, beforeInit, ctx) {
+    var firstInitedDomNode = null;
+
+    dom.each(
+        typeof content === 'string'?
+            dom.fromString(content) :
+            content,
+        function(domNode) {
+            beforeInit && beforeInit.call(ctx, domNode);
+
+            var initedDomNode = bemDom.init(domNode);
+
+            firstInitedDomNode || (firstInitedDomNode = initedDomNode);
+        });
+
+    return firstInitedDomNode;
+}
+
 function getEntityCls(entityName) {
     if(entities[entityName]) return entities[entityName];
 
@@ -237,35 +271,13 @@ function removeDomNodeFromEntity(entity, domNode) {
 }
 
 /**
- * Stores DOM node's parent node to the storage
- * @param {Element} domNode
- */
-function storeDomNodeParent(domNode) {
-    domNodesToParents[identify(domNode)] = domNode.parentNode;
-}
-
-/**
- * Stores DOM node's parent nodes to the storage
- * @param {Element|NodeList|HTMLCollection} domNodes node list
- */
-function storeDomNodesParents(domNodes) {
-    domNodes instanceof Element?
-        storeDomNodeParent(domNodes) :
-        domNodes.forEach(storeDomNodeParent);
-}
-
-/**
  * Clears the cache for elements in context
  * @param {Element|NodeList|HTMLCollection} ctx
  */
 function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
-    var visited = {},
-        i = 0,
-        isDomNode = ctx instanceof Element,
-        domNode = ctx;
+    var visited = {};
 
-    // once when ctx is an element and cycle for ctx as NodeList|HTMLCollection
-    while((isDomNode && !i++) || (domNode = ctx[i++])) {
+    dom.each(ctx, function(domNode) {
         var domNodeId = identify(domNode);
 
         do {
@@ -281,7 +293,7 @@ function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
                 }
             });
         } while((domNodeId = identify(domNode = domNode.parentElement)) && !visited[domNodeId]);
-    }
+    });
 }
 
 /**
@@ -606,7 +618,6 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         var entityName = this._buildEntityNameByEntity(entity),
             selector = '.' + this._buildClassNameByEntity(entity, entityName),
             res = [],
-            uniqIds = {},
             domNodes = this.domNodes,
             i = 0,
             domNode;
@@ -620,10 +631,8 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
             while(childDomNode = childrenDomNodes[j++]) {
                 var resEntity = initEntity(entityName, childDomNode, undef, true)._setInitedMod();
-                if(!uniqIds[resEntity._uniqId]) {
-                    uniqIds[resEntity._uniqId] = true;
-                    res.push(resEntity);
-                }
+
+                res.push(resEntity);
 
                 if(onlyFirst) return resEntity;
             }
@@ -643,7 +652,6 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         var entityName = this._buildEntityNameByEntity(entity),
             className = this._buildClassNameByEntity(entity, entityName),
             res = [],
-            uniqIds = {},
             domNodes = this.domNodes,
             i = 0,
             domNode;
@@ -653,10 +661,8 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
                 if(!domNode.classList.contains(className)) continue;
 
                 var resEntity = initEntity(entityName, domNode, undef, true)._setInitedMod();
-                if(!uniqIds[resEntity._uniqId]) {
-                    uniqIds[resEntity._uniqId] = true;
-                    res.push(resEntity);
-                }
+
+                res.push(resEntity);
 
                 if(onlyFirst) return resEntity;
             }
@@ -676,7 +682,6 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         var entityName = this._buildEntityNameByEntity(entity),
             className = this._buildClassNameByEntity(entity, entityName),
             res = [],
-            uniqIds = {},
             domNodes = this.domNodes,
             i = 0,
             domNode;
@@ -685,10 +690,8 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
             if(!domNode.classList.contains(className)) continue;
 
             var resEntity = initEntity(entityName, domNode, undef, true)._setInitedMod();
-            if(!uniqIds[resEntity._uniqId]) {
-                uniqIds[resEntity._uniqId] = true;
-                res.push(resEntity);
-            }
+
+            res.push(resEntity);
 
             if(onlyFirst) return resEntity;
         }
@@ -938,7 +941,6 @@ var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
     }
 });
 
-
 (function(onDomReady) {
     document.readyState === 'loading'?
         document.addEventListener('DOMContentLoaded', onDomReady) :
@@ -1046,24 +1048,16 @@ bemDom = /** @exports */{
 
         var dropElemCacheQueue = {},
             uniqInitId = identify(),
-            i = 0,
-            isDomNode = ctx instanceof Element,
-            domNode = ctx;
+            _initEntities = function(domNode) {
+                initEntities(domNode, uniqInitId, dropElemCacheQueue);
+            };
 
-        // once when ctx is an element and cycle for ctx as NodeList|HTMLCollection
-        while((isDomNode && !i++) || (domNode = ctx[i++])) {
+        dom.each(ctx, function(domNode) {
             domNode.classList.contains(BEM_CLASS_NAME) &&
-                initEntities(domNode, uniqInitId, dropElemCacheQueue);
+                _initEntities(domNode);
 
-            var domNodes = domNode.querySelectorAll(BEM_SELECTOR),
-                j = 0;
-            // NOTE: we find only js-entities, so cached elems without js can't be dropped from cache
-            while(domNode = domNodes[j++])
-                initEntities(domNode, uniqInitId, dropElemCacheQueue);
-            //domNode.querySelectorAll(BEM_SELECTOR).forEach(function(bemDomNode) {
-                //initEntities(bemDomNode, uniqInitId, dropElemCacheQueue);
-            //});
-        }
+            dom.each(domNode.querySelectorAll(BEM_SELECTOR), _initEntities);
+        });
 
         bem._runInitFns();
 
@@ -1083,8 +1077,8 @@ bemDom = /** @exports */{
             currentDestructingDomNodes = [];
 
         if(!(ctx instanceof Element)) {
-            if(ctx.forEach) { // TODO: NodeList have no forEach
-                ctx.forEach(function(domNode) {
+            if(ctx.length) {
+                dom.each(ctx, function(domNode) {
                     this._destruct(domNode, excludeSelf, destructDom);
                 }, this);
 
@@ -1094,7 +1088,9 @@ bemDom = /** @exports */{
             throw Error('destruct should be called on one DOM node or collection of them');
         }
 
-        storeDomNodesParents(_ctx = excludeSelf? ctx.children : ctx);
+        dom.each(
+            _ctx = excludeSelf? ctx.children : ctx,
+            storeDomNodeParent);
 
         var i = _ctx.length || 1,
             isDomNode = _ctx instanceof Element,
@@ -1106,7 +1102,7 @@ bemDom = /** @exports */{
                 j = domNodes.length,
                 domNode;
 
-            // reverse iteration for childs and self
+            // reverse iteration for childs AND self
             do {
                 domNode = domNodes[--j] || ctxDomNode;
 
@@ -1124,12 +1120,11 @@ bemDom = /** @exports */{
                             delete uniqIdToDomNodes[entityParams.uniqId];
                     }
                 });
-                delete domNodeToParams[identify(domNode)];
 
-            } while(domNode !== ctxDomNode)
+                delete domNodeToParams[identify(domNode)];
+            } while(domNode !== ctxDomNode);
         }
 
-        // NOTE: it was moved here as jquery events aren't triggered on detached DOM elements
         destructDom &&
             (excludeSelf?
                 ctx.innerHTML = '' :
@@ -1189,26 +1184,11 @@ bemDom = /** @exports */{
 
         this.destruct(ctx);
 
-        typeof content === 'string' &&
-            (content = dom.fromString(content));
-
-        var i = 0,
-            isDomNode = content instanceof Element,
-            domNode = content,
-            firstInitedEntity = null;
-
-        // once when content is an element and cycle for content as NodeList|HTMLCollection
-        while((isDomNode && !i++) || (domNode = content[i++])) {
+        return initFragment(content, function(domNode) {
             next?
                 parent.insertBefore(domNode, next) :
                 parent.appendChild(domNode);
-
-            var initedEntity = this.init(domNode);
-
-            firstInitedEntity || (firstInitedEntity = initedEntity);
-        }
-
-        return firstInitedEntity;
+        });
     },
 
     /**
@@ -1218,24 +1198,9 @@ bemDom = /** @exports */{
      * @returns {Element} First DOM node of new content
      */
     append : function(ctx, content) {
-        typeof content === 'string' &&
-            (content = dom.fromString(content));
-
-        var i = 0,
-            isDomNode = content instanceof Element,
-            domNode = content,
-            firstInitedEntity = null;
-
-        // once when content is an element and cycle for content as NodeList|HTMLCollection
-        while((isDomNode && !i++) || (domNode = content[i++])) {
+        return initFragment(content, function(domNode) {
             ctx.appendChild(domNode);
-
-            var initedEntity = this.init(domNode);
-
-            firstInitedEntity || (firstInitedEntity = initedEntity);
-        }
-
-        return firstInitedEntity;
+        });
     },
 
     /**
@@ -1245,25 +1210,9 @@ bemDom = /** @exports */{
      * @returns {jQuery} First DOM node of new content
      */
     prepend : function(ctx, content) {
-        typeof content === 'string' &&
-            (content = dom.fromString(content));
-
-        var firstChild = ctx.firstChild,
-            i = 0,
-            isDomNode = content instanceof Element,
-            domNode = content,
-            firstInitedEntity = null;
-
-        // once when content is an element and cycle for content as NodeList|HTMLCollection
-        while((isDomNode && !i++) || (domNode = content[i++])) {
-            ctx.insertBefore(domNode, firstChild);
-
-            var initedEntity = this.init(domNode);
-
-            firstInitedEntity || (firstInitedEntity = initedEntity);
-        }
-
-        return firstInitedEntity;
+        return initFragment(content, function(domNode) {
+            ctx.insertBefore(domNode, ctx.firstChild);
+        });
     },
 
     /**
@@ -1273,25 +1222,9 @@ bemDom = /** @exports */{
      * @returns {Element} First DOM node of new content
      */
     before : function(ctx, content) {
-        typeof content === 'string' &&
-            (content = dom.fromString(content));
-
-        var parent = ctx.parentNode,
-            i = 0,
-            isDomNode = content instanceof Element,
-            domNode = content,
-            firstInitedEntity = null;
-
-        // once when content is an element and cycle for content as NodeList|HTMLCollection
-        while((isDomNode && !i++) || (domNode = content[i++])) {
-            parent.insertBefore(domNode, ctx);
-
-            var initedEntity = this.init(domNode);
-
-            firstInitedEntity || (firstInitedEntity = initedEntity);
-        }
-
-        return firstInitedEntity;
+        return initFragment(content, function(domNode) {
+            ctx.parentNode.insertBefore(domNode, ctx);
+        });
     },
 
     /**
@@ -1301,28 +1234,14 @@ bemDom = /** @exports */{
      * @returns {Element} First DOM node of new content
      */
     after : function(ctx, content) {
-        typeof content === 'string' &&
-            (content = dom.fromString(content));
-
         var next = ctx.nextSibling,
-            parent = ctx.parentNode,
-            i = 0,
-            isDomNode = content instanceof Element,
-            domNode = content,
-            firstInitedEntity = null;
+            parent = ctx.parentNode;
 
-        // once when content is an element and cycle for content as NodeList|HTMLCollection
-        while((isDomNode && !i++) || (domNode = content[i++])) {
+        return initFragment(content, function(domNode) {
             next?
                 parent.insertBefore(domNode, next) :
                 parent.appendChild(domNode);
-
-            var initedEntity = this.init(domNode);
-
-            firstInitedEntity || (firstInitedEntity = initedEntity);
-        }
-
-        return firstInitedEntity;
+        });
     }
 };
 
