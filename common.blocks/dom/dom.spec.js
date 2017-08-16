@@ -30,10 +30,6 @@ describe('dom', function() {
         it('should returns true for itself', function() {
             dom.contains(domNode.querySelectorAll('.x'), domNode.querySelectorAll('.x')).should.be.true;
         });
-
-        it('should returns false for empty DOM elem', function() {
-            dom.contains(domNode.querySelectorAll('.a'), domNode.querySelectorAll('.no-exist')).should.be.false;
-        });
     });
 
     describe('getFocused', function() {
@@ -72,10 +68,6 @@ describe('dom', function() {
             dom.isFocusable(createDomNode('a', { tabindex : '5' })).should.be.true;
             dom.isFocusable(createDomNode('span')).should.be.false;
         });
-
-        it('should returns false if given DOM elem is empty', function() {
-            dom.isFocusable(document.querySelector('.__no-exist')).should.be.false;
-        });
     });
 
     describe('containsFocus', function() {
@@ -107,10 +99,6 @@ describe('dom', function() {
         it('should returns false if context not contains focused DOM elem', function() {
             dom.containsFocus(domNode.querySelectorAll('.b')).should.be.false;
         });
-
-        it('should returns false if context is empty', function() {
-            dom.containsFocus(domNode.querySelectorAll('.__no-exist')).should.be.false;
-        });
     });
 
     describe('isEditable', function() {
@@ -137,10 +125,6 @@ describe('dom', function() {
             dom.isEditable(createDomNode({ contenteditable : 'true' })).should.be.true;
             dom.isEditable(createDomNode({ contenteditable : 'false' })).should.be.false;
             dom.isEditable(createDomNode({ contenteditable : 'yet-another-val' })).should.be.false;
-        });
-
-        it('should returns false if given DOM elem is empty', function() {
-            dom.isEditable(document.querySelector('.__no-exist')).should.be.false;
         });
     });
 
