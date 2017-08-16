@@ -148,7 +148,7 @@ describe('dom', function() {
 
             dom.each(domNode.querySelectorAll('div'), function(childDomNode, i) {
                 res.push(childDomNode.className);
-            });
+            }).should.be.true;
 
             res.should.be.eql(['a', 'b', 'c']);
         });
@@ -159,7 +159,7 @@ describe('dom', function() {
             dom.each(domNode.querySelectorAll('div'), function(childDomNode, i) {
                 res.push(childDomNode.className);
                 if(i === 2) return false;
-            });
+            }).should.be.false;
 
             res.should.be.eql(['a', 'b']);
         });
@@ -172,14 +172,6 @@ describe('dom', function() {
             });
 
             res.should.be.eql(['a']);
-        });
-
-        it('should properly return iterated DOM nodes', function() {
-            var domNodes = domNode.querySelectorAll('div');
-
-            dom.each(domNodes, function(_, __, argDomNodes) {
-                argDomNodes.should.be.equal(domNodes);
-            }).should.be.equal(domNodes);
         });
     });
 });

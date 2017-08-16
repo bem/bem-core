@@ -57,7 +57,8 @@ var EVENT_PREFIX = '__bem__',
     EventManagerFactory = inherit(bemDomEvents.EventManagerFactory,/** @lends EventManagerFactory.prototype */{
         /** @override */
         _createEventManager : function(ctx, params, isInstance) {
-            var getEntity = this._getEntity;
+            var getEntity = this._getEntity,
+                getEventActors = this._getEventActors.bind(this);
 
             function handlerWrapper(fn, data, fnCtx, fnId) {
                 return function(e) {
@@ -67,42 +68,13 @@ var EVENT_PREFIX = '__bem__',
 
                     if(fns[fnId]) return;
 
-                    var instance, instanceDomNodes, targetDomNode, domNode = e.target;
+                    var instance = getEventActors(e, ctx, params, isInstance).instance;
 
-                    if(isInstance) {
-                        instance = ctx;
-                        instanceDomNodes = instance.domNodes;
+                    if(!instance) return;
 
-                        if(params.bindClassName) {
-                            do {
-                                if(domNode.classList.contains(params.bindClassName)) {
-                                    targetDomNode = domNode;
-                                    break;
-                                }
-                                if(domNode === e.currentTarget) break;
-                            } while(domNode = domNode.parentElement);
+                    var instanceDomNode = instance.domNodes[0]; // TODO: check about [0]
 
-                            targetDomNode || (instance = undefined);
-                        }
-                    } else {
-                        do {
-                            if(!targetDomNode) {
-                                if(domNode.classList.contains(params.bindClassName)) {
-                                    targetDomNode = domNode;
-                                } else continue;
-                            }
-
-                            if(domNode.classList.contains(params.ctxClassName)) {
-                                instance = getEntity(domNode, ctx);
-                                instanceDomNodes = [domNode];
-                                break;
-                            }
-                        } while(domNode = domNode.parentElement);
-                    }
-
-                    if(instance &&
-                        (!detail.propagationStoppedDomNode ||
-                            !dom.contains(instanceDomNodes[0], detail.propagationStoppedDomNode))) { // TODO: check about [0]
+                    if(!detail.propagationStoppedDomNode || !dom.contains(instanceDomNode, detail.propagationStoppedDomNode)) {
                         originalEvent.data = data;
                         // TODO: do we really need both target and bemTarget?
                         originalEvent.bemTarget = originalEvent.target;
@@ -111,7 +83,7 @@ var EVENT_PREFIX = '__bem__',
 
                         if(originalEvent.isPropagationStopped()) {
                             e.stopPropagation();
-                            detail.propagationStoppedDomNode = instanceDomNodes[0];
+                            detail.propagationStoppedDomNode = instanceDomNode;
                         }
                     }
                 };

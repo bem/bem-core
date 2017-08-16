@@ -607,6 +607,27 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         });
     },
 
+    _findEntities : function(entity, onlyFirst, fn) {
+        var entityName = this._buildEntityNameByEntity(entity),
+            className = this._buildClassNameByEntity(entity, entityName),
+            selector = '.' + className,
+            res = [],
+            resEntity = null,
+            _initEntity = function(domNode) {
+                resEntity = initEntity(entityName, domNode, undef, true)._setInitedMod();
+
+                res.push(resEntity);
+
+                return !onlyFirst;
+            };
+
+        this.domNodes.some(function(domNode) {
+            return !fn(domNode, _initEntity, className, selector);
+        });
+
+        return onlyFirst? resEntity : new BemDomCollection(res);
+    },
+
     /**
      * Finds child entities
      * @private
@@ -615,30 +636,13 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {*}
      */
     _findChildEntities : function(entity, onlyFirst) {
-        var entityName = this._buildEntityNameByEntity(entity),
-            selector = '.' + this._buildClassNameByEntity(entity, entityName),
-            res = [],
-            domNodes = this.domNodes,
-            i = 0,
-            domNode;
-
-        while(domNode = domNodes[i++]) {
-            var childrenDomNodes = onlyFirst?
-                    [domNode.querySelector(selector)] :
-                    domNode.querySelectorAll(selector),
-                j = 0,
-                childDomNode;
-
-            while(childDomNode = childrenDomNodes[j++]) {
-                var resEntity = initEntity(entityName, childDomNode, undef, true)._setInitedMod();
-
-                res.push(resEntity);
-
-                if(onlyFirst) return resEntity;
-            }
-        }
-
-        return onlyFirst? null : new BemDomCollection(res);
+        return this._findEntities(entity, onlyFirst, function(domNode, _initEntity, _, selector) {
+            return dom.each(
+                onlyFirst?
+                      domNode.querySelector(selector) :
+                      domNode.querySelectorAll(selector),
+                _initEntity);
+        });
     },
 
     /**
@@ -649,26 +653,13 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {*}
      */
     _findParentEntities : function(entity, onlyFirst) {
-        var entityName = this._buildEntityNameByEntity(entity),
-            className = this._buildClassNameByEntity(entity, entityName),
-            res = [],
-            domNodes = this.domNodes,
-            i = 0,
-            domNode;
-
-        while(domNode = domNodes[i++]) {
+        return this._findEntities(entity, onlyFirst, function(domNode, _initEntity, className) {
             while(domNode = domNode.parentNode) {
                 if(!domNode.classList.contains(className)) continue;
 
-                var resEntity = initEntity(entityName, domNode, undef, true)._setInitedMod();
-
-                res.push(resEntity);
-
-                if(onlyFirst) return resEntity;
+                if(_initEntity(domNode) === false) return false;
             }
-        }
-
-        return onlyFirst? null : new BemDomCollection(res);
+        });
     },
 
     /**
@@ -679,24 +670,11 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {*}
      */
     _findMixedEntities : function(entity, onlyFirst) {
-        var entityName = this._buildEntityNameByEntity(entity),
-            className = this._buildClassNameByEntity(entity, entityName),
-            res = [],
-            domNodes = this.domNodes,
-            i = 0,
-            domNode;
+        return this._findEntities(entity, onlyFirst, function(domNode, _initEntity, className) {
+            if(!domNode.classList.contains(className)) return true;
 
-        while(domNode = domNodes[i++]) {
-            if(!domNode.classList.contains(className)) continue;
-
-            var resEntity = initEntity(entityName, domNode, undef, true)._setInitedMod();
-
-            res.push(resEntity);
-
-            if(onlyFirst) return resEntity;
-        }
-
-        return onlyFirst? null : new BemDomCollection(res);
+            return _initEntity(domNode);
+        });
     },
 
     _buildEntityNameByEntity : function(entity) {

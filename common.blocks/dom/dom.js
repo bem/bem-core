@@ -124,9 +124,11 @@ provide(/** @exports */{
      * @param {Element|NodeList|HTMLCollection} domNodes
      * @param {Function} fn
      * @param {Object} [ctx]
-     * @returns {Element|NodeList|HTMLCollection}
+     * @returns {Boolean} if iteration was completed
      */
     each : function(domNodes, fn, ctx) {
+        if(!domNodes) return true;
+
         var i = 0,
             isDomNode = domNodes instanceof Element,
             domNode = domNodes;
@@ -134,10 +136,10 @@ provide(/** @exports */{
         // once when content is an element and cycle for content as NodeList|HTMLCollection
         while((isDomNode && !i++) || (domNode = domNodes[i++])) {
             var res = fn.call(ctx, domNode, i, domNodes);
-            if(res === false) return domNodes;
+            if(res === false) return false;
         }
 
-        return domNodes;
+        return true;
     }
 });
 
