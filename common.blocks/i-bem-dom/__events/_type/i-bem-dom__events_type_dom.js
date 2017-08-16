@@ -23,47 +23,19 @@ var eventBuilder = function(e) {
     EventManagerFactory = inherit(bemDomEvents.EventManagerFactory,/** @lends EventManagerFactory.prototype */{
         /** @override */
         _createEventManager : function(ctx, params, isInstance) {
-            var getEntity = this._getEntity;
+            var getEntity = this._getEntity,
+                getEventActors = this._getEventActors.bind(this);
 
             function handlerWrapper(fn, data) {
                 return function(e) {
-                    var instance, targetDomNode, domNode = e.target;
+                    var actors = getEventActors(e, ctx, params, isInstance);
 
-                    if(isInstance) {
-                        instance = ctx;
+                    if(!actors.instance) return;
 
-                        if(params.bindClassName) {
-                            do {
-                                if(domNode.classList.contains(params.bindClassName)) {
-                                    targetDomNode = domNode;
-                                    break;
-                                }
-                                if(domNode === e.currentTarget) break;
-                            } while(domNode = domNode.parentElement);
+                    e.data = data;
 
-                            targetDomNode || (instance = undefined);
-                        }
-                    } else {
-                        do {
-                            if(!targetDomNode) {
-                                if(domNode.classList.contains(params.bindClassName)) {
-                                    targetDomNode = domNode;
-                                } else continue;
-                            }
-
-                            if(domNode.classList.contains(params.ctxClassName)) {
-                                instance = getEntity(domNode, ctx);
-                                break;
-                            }
-                        } while(domNode = domNode.parentElement);
-                    }
-
-                    if(instance) {
-                        e.data = data;
-
-                        params.bindEntityCls && (e.bemTarget = getEntity(targetDomNode || this, params.bindEntityCls));
-                        fn.apply(instance, arguments);
-                    }
+                    params.bindEntityCls && (e.bemTarget = getEntity(actors.targetDomNode || this, params.bindEntityCls));
+                    fn.apply(actors.instance, arguments);
                 };
             }
 
