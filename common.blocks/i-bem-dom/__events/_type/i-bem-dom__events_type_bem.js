@@ -25,7 +25,6 @@ modules.define(
 var EVENT_PREFIX = '__bem__',
     MOD_CHANGE_EVENT = 'modchange',
 
-    // specialEvents = $.event.special,
     eventsInUse = {},
 
     createCustomEvent = function(eventName, detail) {
@@ -72,9 +71,7 @@ var EVENT_PREFIX = '__bem__',
 
                     if(!instance) return;
 
-                    var instanceDomNode = instance.domNodes[0]; // TODO: check about [0]
-
-                    if(!detail.propagationStoppedDomNode || !dom.contains(instanceDomNode, detail.propagationStoppedDomNode)) {
+                    if(!detail.propagationStoppedDomNodes || !dom.contains(instance.domNodes, detail.propagationStoppedDomNodes)) {
                         originalEvent.data = data;
                         // TODO: do we really need both target and bemTarget?
                         originalEvent.bemTarget = originalEvent.target;
@@ -83,7 +80,7 @@ var EVENT_PREFIX = '__bem__',
 
                         if(originalEvent.isPropagationStopped()) {
                             e.stopPropagation();
-                            detail.propagationStoppedDomNode = instanceDomNode;
+                            detail.propagationStoppedDomNodes = instance.domNodes;
                         }
                     }
                 };
@@ -121,7 +118,7 @@ provide({
                         {
                             data : data,
                             fns : fns,
-                            propagationStoppedDomNode : null,
+                            propagationStoppedDomNodes : null,
                             originalEvent : originalEvent
                         }));
             });
