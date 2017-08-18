@@ -80,13 +80,9 @@ var undef,
                         _fnCtx,
                         fnId);
 
-                // bindDomNodes.on(event, bindClassName, data, handler);
                 bindDomNodes.forEach(function(domNode) {
                     domNode.addEventListener(event, handler, false);
                 });
-
-                // bindClassName && bindDomElem.is(bindClassName) && bindDomElem.on(event, data, handler);
-                // FIXME: "once" won't properly work in case of nested and mixed elem with the same name
             }
 
             return this;
@@ -138,8 +134,6 @@ var undef,
                     bindDomNodes.forEach(function(domNode) {
                         domNode.removeEventListener(event, handler);
                     });
-                    // bindDomElem.off(event, params.bindClassName, handler);
-                    // bindClassName && bindDomElem.is(bindClassName) && bindDomElem.off(event, handler);
                 }
             } else {
                 objects.each(this._storage, this._unbindByEvent, this);
@@ -151,15 +145,12 @@ var undef,
         _unbindByEvent : function(fnStorage, e) {
             var params = this._params,
                 bindDomNodes = params.bindDomNodes,
-                bindClassName = params.bindClassName,
-                unbindWithoutClassName = false && bindClassName && bindDomNodes.is(bindClassName); // TODO
+                bindClassName = params.bindClassName;
 
             fnStorage && objects.each(fnStorage, function(fn) {
                 bindDomNodes.forEach(function(domNode) {
                     domNode.removeEventListener(e, fn);
                 });
-                // bindDomNodes.off(e, bindClassName, fn);
-                // unbindWithoutClassName && bindDomNodes.off(e, fn);
             });
             this._storage[e] = null;
         }
@@ -284,7 +275,7 @@ var undef,
             if(bindCtx) {
                 var typeOfCtx = typeof bindCtx;
 
-                if(bindCtx.length) { // NOTE: duck-typing check for collection of DOM nodes
+                if(bindCtx.length && typeOfCtx !== 'string') { // NOTE: duck-typing check for collection of DOM nodes
                     res.bindDomNodes = bindCtx;
                     res.key = identify.apply(null, bindCtx);
                     res.bindToArbitraryDomElem = true;
