@@ -241,7 +241,7 @@ function extractParams(domNode) {
  */
 function removeDomNodeFromEntity(entity, domNode) {
     if(entity.domElem.length === 1) {
-        entity._delInitedMod();
+        entity.delMod('js');
         delete uniqIdToEntity[entity._uniqId];
     } else {
         entity.domElem = entity.domElem.not(domNode);
