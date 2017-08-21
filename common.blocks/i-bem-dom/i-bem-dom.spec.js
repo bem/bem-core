@@ -1449,35 +1449,6 @@ describe('i-bem-dom', function() {
         });
     });
 
-    describe('bemDom.before', function() {
-        it('should properly update tree', function() {
-            var spyBlock2Inited = sinon.spy(),
-                block2DomElem;
-
-            bemDom.declBlock('block2', {
-                onSetMod : {
-                    js : {
-                        inited : function() {
-                            spyBlock2Inited();
-                            block2DomElem = this.domElem;
-                        }
-                    }
-                }
-            });
-
-            rootNode = createDomNode({
-                tag : 'div',
-                content : { block : 'block1', js : true }
-            });
-
-            var newCtx = bemDom.before(rootNode.find('.block1'), BEMHTML.apply({ block : 'block2', js : true }));
-
-            newCtx.is(block2DomElem).should.be.true;
-            rootNode.children().eq(0).is(block2DomElem).should.be.true;
-            spyBlock2Inited.called.should.be.true;
-        });
-    });
-
     describe('bemDom.replace', function() {
         it('should properly replace tree', function() {
             var spyBlock1Destructed = sinon.spy(),
@@ -1524,7 +1495,109 @@ describe('i-bem-dom', function() {
         });
     });
 
-    // don't add specs for other DOM changing methods as they are implemented the same way
+    describe('bemDom.append', function() {
+        it('should properly update tree', function() {
+            var block2DomNodes;
+
+            bemDom.declBlock('block2', {
+                onSetMod : {
+                    js : {
+                        inited : function() {
+                            block2DomNodes = this.domNodes;
+                        }
+                    }
+                }
+            });
+
+            rootNode = createDom({
+                tag : 'div',
+                content : { block : 'block1', js : true }
+            });
+
+            bemDom.append(rootNode, BEMHTML.apply({ block : 'block2', js : true }))
+                .should.be.eql(block2DomNodes[0]);
+
+            rootNode.children[1].should.be.eql(block2DomNodes[0]);
+        });
+    });
+
+    describe('bemDom.prepend', function() {
+        it('should properly update tree', function() {
+            var block2DomNodes;
+
+            bemDom.declBlock('block2', {
+                onSetMod : {
+                    js : {
+                        inited : function() {
+                            block2DomNodes = this.domNodes;
+                        }
+                    }
+                }
+            });
+
+            rootNode = createDom({
+                tag : 'div',
+                content : { block : 'block1', js : true }
+            });
+
+            bemDom.prepend(rootNode, BEMHTML.apply({ block : 'block2', js : true }))
+                .should.be.eql(block2DomNodes[0]);
+
+            rootNode.children[0].should.be.eql(block2DomNodes[0]);
+        });
+    });
+
+    describe('bemDom.before', function() {
+        it('should properly update tree', function() {
+            var block2DomNodes;
+
+            bemDom.declBlock('block2', {
+                onSetMod : {
+                    js : {
+                        inited : function() {
+                            block2DomNodes = this.domNodes;
+                        }
+                    }
+                }
+            });
+
+            rootNode = createDom({
+                tag : 'div',
+                content : { block : 'block1', js : true }
+            });
+
+            bemDom.before(rootNode.querySelector('.block1'), BEMHTML.apply({ block : 'block2', js : true }))
+                .should.be.eql(block2DomNodes[0]);
+
+            rootNode.children[0].should.be.eql(block2DomNodes[0]);
+        });
+    });
+
+    describe('bemDom.after', function() {
+        it('should properly update tree', function() {
+            var block2DomNodes;
+
+            bemDom.declBlock('block2', {
+                onSetMod : {
+                    js : {
+                        inited : function() {
+                            block2DomNodes = this.domNodes;
+                        }
+                    }
+                }
+            });
+
+            rootNode = createDom({
+                tag : 'div',
+                content : { block : 'block1', js : true }
+            });
+
+            bemDom.after(rootNode.querySelector('.block1'), BEMHTML.apply({ block : 'block2', js : true }))
+                .should.be.eql(block2DomNodes[0]);
+
+            rootNode.children[1].should.be.eql(block2DomNodes[0]);
+        });
+    });
 
     describe('params', function() {
         it('should properly join params', function(done) {
