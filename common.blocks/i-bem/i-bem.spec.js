@@ -1038,7 +1038,7 @@ describe('i-bem', function() {
         it('should not call callback if block destructed', function(done) {
             var spy = sinon.spy();
             block._nextTick(spy);
-            block._delInitedMod();
+            block.delMod('js');
             setTimeout(function() {
                 spy.called.should.be.false;
                 done();

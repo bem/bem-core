@@ -240,14 +240,6 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
     },
 
     /**
-     * Deletes a BEM entity
-     * @private
-     */
-    _delInitedMod : function() {
-        this.delMod('js');
-    },
-
-    /**
      * Checks whether a BEM entity has a modifier
      * @param {String} modName Modifier name
      * @param {String|Boolean} [modVal] Modifier value. If not of type String or Boolean, it is casted to String
