@@ -536,15 +536,21 @@ describe('DOM events', function() {
                             }
                         }
                     }
+                }, {
+                    onInit : function() {
+                        // NOTE: this works `document.addEventListener('click', spy5);`
+                        this._domEvents(document).on('click', spy5);
+                    }
                 });
                 block1 = initBemEntity({ block : 'block' }, Block1);
             });
 
-            it('should properly bind handlers', function() {
+            it.only('should properly bind handlers', function() {
                 document.documentElement.click();
 
                 spy1.should.have.been.called;
                 spy2.should.have.been.called;
+                spy5.should.have.been.called;
 
                 spy3.should.have.been.calledOn(block1);
                 spy3.args[0][2].should.have.been.equal(data);
