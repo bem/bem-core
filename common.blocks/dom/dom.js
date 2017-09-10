@@ -33,7 +33,7 @@ provide(/** @exports */{
             domNode = what;
 
         // once when where is an element and cycle for where as NodeList|HTMLCollection
-        while((isDomNode && !i++) || (domNode = what[i++])) {
+        while((isDomNode && !(i++)) || (domNode = what[i++])) {
             do {
                 if(where instanceof Element?
                     where === domNode :
@@ -134,7 +134,7 @@ provide(/** @exports */{
             domNode = domNodes;
 
         // once when content is an element and cycle for content as NodeList|HTMLCollection
-        while((isDomNode && !i++) || (domNode = domNodes[i++])) {
+        while((isDomNode && !(i++)) || (domNode = domNodes[i++])) {
             var res = fn.call(ctx, domNode, i, domNodes);
             if(res === false) return false;
         }
