@@ -2,10 +2,10 @@
  * @module idle
  */
 
-modules.define('idle', ['inherit', 'events', 'jquery'], function(provide, inherit, events, $) {
+modules.define('idle', ['inherit', 'events'], function(provide, inherit, events) {
 
 var IDLE_TIMEOUT = 3000,
-    USER_EVENTS = 'mousemove keydown click',
+    USER_EVENTS = ['mousemove', 'keydown', 'click'],
     /**
      * @class Idle
      * @augments events:Emitter
@@ -18,6 +18,7 @@ var IDLE_TIMEOUT = 3000,
             this._timer = null;
             this._isStarted = false;
             this._isIdle = false;
+            this._onUserAction = this._onUserAction.bind(this);
         },
 
         /**
@@ -27,7 +28,9 @@ var IDLE_TIMEOUT = 3000,
             if(!this._isStarted) {
                 this._isStarted = true;
                 this._startTimer();
-                $(document).on(USER_EVENTS, $.proxy(this._onUserAction, this));
+                USER_EVENTS.forEach(function(event) {
+                    document.addEventListener(event, this._onUserAction);
+                }, this);
             }
         },
 
@@ -38,7 +41,9 @@ var IDLE_TIMEOUT = 3000,
             if(this._isStarted) {
                 this._isStarted = false;
                 this._stopTimer();
-                $(document).off(USER_EVENTS, this._onUserAction);
+                USER_EVENTS.forEach(function(event) {
+                    document.removeEventListener(event, this._onUserAction);
+                }, this);
             }
         },
 
