@@ -805,6 +805,16 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         throw Error('bemDom entities can not be created otherwise than from DOM');
     },
 
+    /**
+     * Returns an entity of current class on a DOM node and initializes it if necessary
+     * @param {Element|NodeList|HTMLCollection} domNode DOM node
+     * @param {Object} [params] entity parameters
+     * @returns {BemDomEntity|null}
+     */
+    getFromDom : function(domNode, params) {
+        return getEntity(domNode, this, params);
+    },
+
     /** @override */
     _processInit : function(heedInit) {
         /* jshint eqeqeq: false */
