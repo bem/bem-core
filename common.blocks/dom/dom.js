@@ -3,7 +3,7 @@
  * @description some DOM utils
  */
 
-modules.define('dom', ['jquery'], function(provide, $) {
+modules.define('dom', function(provide) {
 
 var EDITABLE_INPUT_TYPES = {
         'datetime-local' : true,

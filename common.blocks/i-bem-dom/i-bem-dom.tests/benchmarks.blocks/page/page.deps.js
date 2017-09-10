@@ -8,7 +8,6 @@
         {
             block : 'i-bem-dom',
             elem : 'init'
-        },
-        'jquery'
+        }
     ]
 })

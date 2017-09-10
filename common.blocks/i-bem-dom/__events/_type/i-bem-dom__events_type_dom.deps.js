@@ -1,8 +1,7 @@
 [{
     shouldDeps : [
         'identify',
-        'inherit',
-        'jquery'
+        'inherit'
     ]
 },
 {
