@@ -1,7 +1,7 @@
 modules.define(
     'spec',
-    ['i-bem', 'i-bem-dom', 'objects', 'events', 'jquery', 'chai', 'sinon', 'BEMHTML'],
-    function(provide, bem, bemDom, objects, events, $, chai, sinon, BEMHTML) {
+    ['i-bem', 'i-bem-dom', 'objects', 'events', 'chai', 'sinon', 'BEMHTML'],
+    function(provide, bem, bemDom, objects, events, chai, sinon, BEMHTML) {
 
 describe('BEM events', function() {
     var Block1, Block2, Block3, block1, spy1, spy2, spy3, spy4, spy5, spy6, spy7, spy8, spy9,

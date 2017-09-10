@@ -1181,9 +1181,9 @@ bemDom = /** @exports */{
 
     /**
      * Adds a fragment of the DOM tree at the beginning of the context and initializes blocks
-     * @param {jQuery} ctx Root DOM node
-     * @param {jQuery|String} content Content to be added
-     * @returns {jQuery} First DOM node of new content
+     * @param {Element} ctx Root DOM node
+     * @param {Element|String} content Content to be added
+     * @returns {Element} First DOM node of new content
      */
     prepend : function(ctx, content) {
         return initFragment(content, function(domNode) {

@@ -1,7 +1,6 @@
 [{
     shouldDeps : [
         'inherit',
-        'jquery',
         'events',
         { block : 'i-bem', elem : 'internal' }
     ]
