@@ -37,9 +37,9 @@ var EVENT_PREFIX = '__bem__',
         var event = EVENT_PREFIX + params.bindEntityCls.getEntityName() +
             (typeof e === 'object'?
                 e instanceof events.Event?
-                    ' ' + e.type :
+                    ':' + e.type :
                     bemInternal.buildModPostfix(e.modName, e.modVal) :
-                ' ' + e);
+                ':' + e);
 
         eventMethod === 'on' && // TODO: count usage and remove on 'un'
             !eventsInUse[event] &&
