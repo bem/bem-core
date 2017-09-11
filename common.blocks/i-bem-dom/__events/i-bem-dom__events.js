@@ -52,6 +52,14 @@ var undef,
          * @returns {EventManager} this
          */
         on : function(e, data, fn, _fnCtx, _isOnce) {
+            if(typeof e === 'string' && e.indexOf(' ') > -1) {
+                e.split(' ').forEach(function(event) {
+                    this.on(event, data, fn, _fnCtx, _isOnce);
+                }, this);
+
+                return this;
+            }
+
             var params = this._params,
                 event = this._eventBuilder(e, params, 'on');
 
@@ -114,6 +122,14 @@ var undef,
         un : function(e, fn, _fnCtx) {
             var argsLen = arguments.length;
             if(argsLen) {
+                if(typeof e === 'string' && e.indexOf(' ') > -1) {
+                    e.split(' ').forEach(function(event) {
+                        this.un(event, fn, _fnCtx);
+                    }, this);
+
+                    return this;
+                }
+
                 var params = this._params,
                     event = this._eventBuilder(e, params, 'un');
 

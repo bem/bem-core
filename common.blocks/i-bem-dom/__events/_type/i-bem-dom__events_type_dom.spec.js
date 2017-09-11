@@ -44,7 +44,7 @@ describe('DOM events', function() {
                         'js' : {
                             'inited' : function() {
                                 this._domEvents()
-                                    .on('click', spy1)
+                                    .on('click keypress', spy1)
                                     .on('click', spy2)
                                     .on('click', data, wrapSpy(spy3))
                                     .once('click', spy4);
