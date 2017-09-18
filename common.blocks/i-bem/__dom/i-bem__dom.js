@@ -622,7 +622,7 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
                 modNames.forEach(function(name) {
                     modCache[name] = res[name];
                 }) :
-                modCache = res;
+                this._modCache = res;
         }
 
         return res;
