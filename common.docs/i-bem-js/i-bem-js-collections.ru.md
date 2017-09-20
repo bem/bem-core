@@ -84,7 +84,7 @@ provide(bemDom.declBlock(this.name, {
             }
         },
 
-        'disabled' : function(monName, modVal) {
+        'disabled' : function(modName, modVal) {
             this._inputs.setMod(modName, modVal);
         }
     },
