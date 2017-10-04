@@ -1035,6 +1035,9 @@ DOM = BEM.decl('i-bem__dom',/** @lends BEMDOM.prototype */{
             });
             delete domElemToParams[identify(domNode)];
         });
+
+        // flush parent nodes storage that has been filled above
+        domNodesToParents = {};
     },
 
     /**
