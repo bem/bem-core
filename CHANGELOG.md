@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.2.1
+
+### Bug fixes
+
+- Memory leak in `i-bem__dom` was fixed ([#1536](https://github.com/bem/bem-core/pull/1536)).
+
+### Other changes
+
+- Update `inherit` library to `2.2.6` ([#1520](https://github.com/bem/bem-core/pull/1520)).
+
 ## 3.2.0
 
 ### Bug fixes
