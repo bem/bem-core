@@ -291,14 +291,14 @@ var undef,
             if(bindCtx) {
                 var typeOfCtx = typeof bindCtx;
 
-                if(bindCtx.length && typeOfCtx !== 'string') { // NOTE: duck-typing check for collection of DOM nodes
+                if (bindCtx === winNode || bindCtx === docNode || bindCtx instanceof Element) {
+                    res.bindDomNodes = bindCtx === docNode ? [docNode.documentElement] : [bindCtx];
+                    res.key = identify(bindCtx);
+                    res.bindToArbitraryDomNode = true;
+                } else if(bindCtx.length && typeOfCtx !== 'string') { // NOTE: duck-typing check for collection of DOM nodes
                     res.bindDomNodes = bindCtx;
                     res.key = identify.apply(null, bindCtx);
                     res.bindToArbitraryDomElem = true;
-                } else if(bindCtx === winNode || bindCtx === docNode || bindCtx instanceof Element) {
-                    res.bindDomNodes = bindCtx === docNode? [docNode.documentElement] : [bindCtx];
-                    res.key = identify(bindCtx);
-                    res.bindToArbitraryDomNode = true;
                 } else if(typeOfCtx === 'object' && bindCtx.__self) { // bem entity instance
                     res.bindDomNodes = bindCtx.domNodes;
                     res.key = bindCtx._uniqId;
