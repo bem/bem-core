@@ -91,11 +91,11 @@ modules.define('button', ['i-bem-dom', 'button__control'], function(provide, bem
 
 provide(bemDom.declBlock(this.name, {
     setName : function(name) {
-        this._elem(LinkInner).setName(name);
+        this._elem(ButtonControl).setName(name);
     },
 
     setValue : function(value) {
-        this._elem(LinkInner).setValue(value);
+        this._elem(ButtonControl).setValue(value);
     }
 }));
 
