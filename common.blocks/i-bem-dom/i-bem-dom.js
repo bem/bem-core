@@ -322,6 +322,26 @@ function validateBlockParam(Block) {
 }
 
 /**
+ * Returns base entities for declaration
+ * @param {Function} baseCls block|elem class
+ * @param {String} entityName entityName
+ * @param {Function|Array[Function]} [base] base block|elem + mixes
+ * @returns {Array<Function>}
+ */
+function getEntityBase(baseCls, entityName, base) {
+    base || (base = entities[entityName] || baseCls);
+
+    Array.isArray(base) || (base = [base]);
+
+    if(!base[0].__bemEntity) {
+        base = base.slice();
+        base.unshift(entities[entityName] || baseCls);
+    }
+
+    return base;
+}
+
+/**
  * @class BemDomEntity
  * @description Base mix for BEM entities that have DOM representation
  */
@@ -929,6 +949,8 @@ bemDom = /** @exports */{
                 blockName;
         }
 
+        base = getEntityBase(Block, blockName, base);
+
         return bem.declBlock(blockName, base, props, staticProps);
     },
 
@@ -942,11 +964,15 @@ bemDom = /** @exports */{
      * @returns {Function} Elem class
      */
     declElem : function(blockName, elemName, base, props, staticProps) {
+        var entityName = blockName + ELEM_DELIM + elemName;
+
         if(!base || (typeof base === 'object' && !Array.isArray(base))) {
             staticProps = props;
             props = base;
-            base = entities[blockName + ELEM_DELIM + elemName] || Elem;
+            base = entities[entityName] || Elem;
         }
+
+        base = getEntityBase(Elem, entityName, base);
 
         return bem.declElem(blockName, elemName, base, props, staticProps);
     },

@@ -126,6 +126,44 @@ describe('i-bem-dom', function() {
             spy1.should.not.have.been.called;
             spy2.should.have.been.called;
         });
+
+        it('should enable to mix block', function() {
+            var MixBlock = bemDom.declMixin({}),
+
+                Block = bemDom.declBlock('block', MixBlock),
+                block = (rootNode = createDomNode({
+                    block : 'block'
+                })).bem(Block),
+
+                Elem = bemDom.declElem('block', 'elem', MixBlock),
+                elem = (rootNode = createDomNode({
+                    block : 'block',
+                    elem : 'elem'
+                })).bem(Elem);
+
+            block.should.be.instanceOf(bemDom.Block);
+            elem.should.be.instanceOf(bemDom.Elem);
+        });
+
+        it('should enable to inherit and mix blocks', function() {
+            var MixBlock = bemDom.declMixin({}),
+
+                Block1 = bemDom.declBlock('block1'),
+                Block2 = bemDom.declBlock('block2', [Block1, MixBlock]),
+                block2 = (rootNode = createDomNode({
+                    block : 'block2'
+                })).bem(Block2),
+
+                Elem1 = bemDom.declElem('block', 'elem1'),
+                Elem2 = bemDom.declElem('block', 'elem2', [Elem1, MixBlock]),
+                elem2 = (rootNode = createDomNode({
+                    block : 'block',
+                    elem : 'elem2'
+                })).bem(Elem2);
+
+            block2.should.be.instanceOf(Block1);
+            elem2.should.be.instanceOf(Elem1);
+        });
     });
 
     describe('getMod', function() {
