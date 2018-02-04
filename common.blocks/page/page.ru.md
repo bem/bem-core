@@ -30,8 +30,8 @@
 | ------- | ---- | --- | -------- |
 | <a href="#elems-css">css</a> | <a href="#elems-css-declfields-url">url</a> | `String`  | Позволяет задать URL для загрузки стилей. |
 |  | <a href="#elems-css-declfields-content">content</a> | `String`  | Служит для задания стилей в виде строки |
-| <a href="#elems-js">js</a> | <a href="#elems-css-declfields-url">url</a> | `String`  | Позволяет задать URL для загрузки скрипта. |
-|  | <a href="#elems-css-declfields-content">content</a> | `String`  | Служит для задания скриптов в виде строки |
+| <a href="#elems-js">js</a> | <a href="#elems-js-declfields-url">url</a> | `String`  | Позволяет задать URL для загрузки скрипта. |
+|  | <a href="#elems-js-declfields-content">content</a> | `String`  | Служит для задания скриптов в виде строки |
 
 ### Публичные технологии блока
 
