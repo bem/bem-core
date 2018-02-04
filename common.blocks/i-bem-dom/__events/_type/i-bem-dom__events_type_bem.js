@@ -96,8 +96,10 @@ var EVENT_PREFIX = '__bem__',
         }
     });
 
-provide({
+provide(/** @exports */ {
     /**
+     * Emits BEM event
+     * @augments i-bem-dom__events_type_bem
      * @param {BemDomEntity} ctx
      * @param {String|Object|events:Event} e Event name
      * @param {Object} [data]

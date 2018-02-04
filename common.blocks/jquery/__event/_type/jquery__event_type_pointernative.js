@@ -36,8 +36,7 @@ var doc = document,
  * Returns a snapshot of the event, with writable properties.
  *
  * @param {Event} event An event that contains properties to copy.
- * @returns {Object} An object containing shallow copies of `inEvent`'s
- *    properties.
+ * @returns {Object} An object containing shallow copies of `inEvent`'s properties.
  */
 function cloneEvent(event) {
     var eventCopy = $.extend(new $.Event(), event);
@@ -83,6 +82,7 @@ var MOUSE_PROPS = {
 /*!
  * Pointer event constructor
  *
+ * @class PointerEvent
  * @param {String} type
  * @param {Object} [params]
  * @returns {Event}
