@@ -113,7 +113,7 @@
 
 ## API
 
-Автосгенерированную документацию на JavaScript API блоков (JSDoc) можно посмотреть на bem.info. Например, для блока `i-bem` она доступна по ссылке https://ru.bem.info/libs/bem-core/current/desktop/i-bem/jsdoc/.
+Автосгенерированную документацию на JavaScript API блоков (JSDoc) можно посмотреть на bem.info. Например, для блока `i-bem` она доступна по ссылке https://ru.bem.info/platform/libs/bem-core/current/desktop/i-bem/#jsdoc
 
 ## Разработка
 
