@@ -154,7 +154,7 @@ var undef,
  */
 
 /**
- * @constructs vow:Deferred
+ * @constructor
  * @description
  * You can use `vow.defer()` instead of using this constructor.
  *
@@ -269,7 +269,7 @@ var PROMISE_STATUS = {
  */
 
 /**
- * @constructs vow:Promise
+ * @constructor
  * @param {Function} resolver See https://github.com/domenic/promises-unwrapping/blob/master/README.md#the-promise-constructor for details.
  * @description
  * You should use this constructor directly only if you are going to use `vow` as DOM Promises implementation.
