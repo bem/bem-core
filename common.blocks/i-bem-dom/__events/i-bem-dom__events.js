@@ -34,7 +34,7 @@ var undef,
      */
     EventManager = inherit(/** @lends EventManager.prototype */{
         /**
-         * @constructs
+         * @constructor
          * @param {Object} params EventManager parameters
          * @param {Function} fnWrapper Wrapper function to build event handler
          * @param {Function} eventBuilder Function to build event
@@ -171,7 +171,7 @@ var undef,
      */
     CollectionEventManager = inherit(/** @lends CollectionEventManager.prototype */{
         /**
-         * @constructs
+         * @constructor
          * @param {Array} eventManagers Array of event managers
          */
         __constructor : function(eventManagers) {

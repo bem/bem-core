@@ -8,7 +8,7 @@ modules.define('i-bem__collection', ['inherit'], function(provide, inherit) {
  */
 var BemCollection = inherit(/** @lends BemCollection.prototype */{
     /**
-     * @constructs
+     * @constructor
      * @param {Array} entities BEM entities
      */
     __constructor : function(entities) {

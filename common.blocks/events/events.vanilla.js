@@ -16,7 +16,7 @@ var undef,
      */
     Event = inherit(/** @lends Event.prototype */{
         /**
-         * @constructs
+         * @constructor
          * @param {String} type
          * @param {Object} target
          */

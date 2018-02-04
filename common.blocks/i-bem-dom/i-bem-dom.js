@@ -347,7 +347,7 @@ function getEntityBase(baseCls, entityName, base) {
  */
 var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
-     * @constructs
+     * @constructor
      * @private
      * @param {jQuery} domElem DOM element that the entity is created on
      * @param {Object} params parameters

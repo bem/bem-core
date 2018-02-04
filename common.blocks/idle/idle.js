@@ -12,7 +12,7 @@ var IDLE_TIMEOUT = 3000,
      */
     Idle = inherit(events.Emitter, /** @lends Idle.prototype */{
         /**
-         * @constructs
+         * @constructor
          */
         __constructor : function() {
             this._timer = null;

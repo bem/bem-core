@@ -192,7 +192,7 @@ function declEntity(baseCls, entityName, base, props, staticProps) {
  */
 var BemEntity = inherit(/** @lends BemEntity.prototype */ {
     /**
-     * @constructs
+     * @constructor
      * @private
      * @param {Object} mods BemEntity modifiers
      * @param {Object} params BemEntity parameters
