@@ -63,7 +63,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Подключение i-bem.js</title>
+<title>Простой компонент</title>
 </head>
 <body class="page i-bem" data-bem='{ "page": {} }'>
 
@@ -75,7 +75,7 @@
             onSetMod: {
                 js: {
                     inited: function() {
-                        bemDom.prepend(this.domElem, "<h1>Hello, world!</h1>");
+                        bemDom.prepend(this.domElem, '<h1>Hello, world!</h1>');
                     }
                 }
             },
