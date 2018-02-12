@@ -35,4 +35,4 @@
 ## См. также
 
 * [Справочное руководство по i-bem.js](https://ru.bem.info/platform/tutorials/i-bem/)
-* [Создаем свой проект на БЭМ](https://ru.bem.info/platform/tutorials/start-with-project-stub/)
+* [Учебные материалы](https://ru.bem.info/platform/tutorials/)
