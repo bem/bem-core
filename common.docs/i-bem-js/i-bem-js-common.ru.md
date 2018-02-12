@@ -13,7 +13,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Примеры i-bem.js</title>
+<title>Подключение i-bem.js</title>
 </head>
 <body class="page">
 
