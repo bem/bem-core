@@ -17,9 +17,6 @@
 </head>
 <body class="page">
 
-    <!-- Целевой контейнер -->
-+   <div class="page__inner"></div>
-
     <!-- Библиотека bem-core -->
 +   <script src="https://yastatic.net/bem-core/latest/desktop/bem-core.no-autoinit.js"></script>
     <script>
