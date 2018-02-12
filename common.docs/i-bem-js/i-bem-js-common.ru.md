@@ -74,7 +74,7 @@
             onSetMod: {
                 js: {
                     inited: function() {
-                        bemDom.prepend(this.domElem, '<h1 class="page__tittle" >Hello, world!</h1>');
+                        bemDom.prepend(this.domElem, '<h1 class="heading">Hello, world!</h1>');
                     }
                 }
             },
