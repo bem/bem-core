@@ -55,7 +55,6 @@
 
 Если не планируется использование других технологий БЭМ-платформы, достаточно поместить код библиотеки `bem-core` в существующий проект.
 
-
 ### Простой компонент
 
 ```html
@@ -75,7 +74,7 @@
             onSetMod: {
                 js: {
                     inited: function() {
-                        bemDom.prepend(this.domElem, '<h1>Hello, world!</h1>');
+                        bemDom.prepend(this.domElem, '<h1 class="page__tittle" >Hello, world!</h1>');
                     }
                 }
             },
