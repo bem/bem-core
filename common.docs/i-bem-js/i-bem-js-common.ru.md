@@ -1,14 +1,38 @@
 ## Знакомьтесь: i-bem.js
 
+* [Настройка страницы](#Настройка-страницы)
+* [Модульная система i-bem.js](#Модульная-система-i-bemjs)
+
+### Настройка страницы
+
+Фреймворк `i-bem.js` входит в состав библиотеки [bem-core](https://ru.bem.info/platform/libs/bem-core/). Чтобы работать с `i-bem.js` в браузере, нужно включить библиотеку. В примере ниже показано, как добавляются сценарии на страницу из Yаndex CDN.
 
 
+```diff index.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Примеры i-bem.js</title>
+</head>
+<body class="page">
 
+    <!-- Целевой контейнер -->
++   <div class="page__inner"></div>
 
-* [Модульная система i-bem.js](Модульная система i-bem.js)
+    <!-- Библиотека bem-core -->
++   <script src="https://yastatic.net/bem-core/latest/desktop/bem-core.no-autoinit.js"></script>
+    <script>
+        // Чистый код i-bem.js и JavaScript
+    </script>
+
+</body>
+</html>
+```
+
 
 ### Модульная система i-bem.js
 
-Фреймворк `i-bem.js` входит в состав библиотеки [bem-core](https://ru.bem.info/platform/libs/bem-core/).
 
 Реализация `i-bem.js` состоит из двух модулей:
 
