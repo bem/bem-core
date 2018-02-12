@@ -19,7 +19,7 @@
 
 ## Структура документа
 
-* [Знакомьтесь: i-bem.js](./i-bem-js-common.ru.md).
+* [Знакомьтесь: i-bem.js](./i-bem-js-common.ru.md)
 
 
 * ======
