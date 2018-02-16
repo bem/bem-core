@@ -431,11 +431,19 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
      * @param {Object} mod
      * @param {String} mod.modName
      * @param {String|Boolean|Array} [mod.modVal]
+     * @param {Function|Array[Function]} [base] base block + mixes
      * @param {Object} props
      * @param {Object} [staticProps]
      * @returns {Function}
      */
-    declMod : function(mod, props, staticProps) {
+    declMod : function(mod, base, props, staticProps) {
+        // Check for absent optional `base`
+        if(typeof base === 'object' && !Array.isArray(base)) {
+            staticProps = props;
+            props = base;
+            base = null;
+        }
+
         props && convertModHandlersToMethods(props);
 
         var checkMod = buildCheckMod(mod.modName, mod.modVal),
@@ -458,7 +466,22 @@ var BemEntity = inherit(/** @lends BemEntity.prototype */ {
                 });
         });
 
-        return inherit.self(this, props, staticProps);
+        // If `base` is a list of mixins or single proto...
+        if(Array.isArray(base) || typeof base === 'function') {
+            // ...Prepending main prototype to list
+            base = [this].concat(base);
+        }
+        // ...Unexpected `base`...
+        else if(base) {
+            throw new Error('Mixin parameter `base` must be prototype or list of prototypes: `{Function|Array[Function]}`');
+        }
+        // No `base`...
+        else {
+            base = this;
+        }
+
+        // Pass `base` instead of `this`
+        return inherit.self(base, props, staticProps);
     },
 
     __bemEntity : true,
