@@ -39,6 +39,7 @@ document.body.appendChild(h1);
 <meta charset="utf-8">
 <title>Подключение i-bem.js</title>
 </head>
+<!-- Блок page -->
 <body class="page">
 
     <!-- Библиотека bem-core -->
@@ -104,6 +105,7 @@ document.body.appendChild(h1);
 <meta charset="utf-8">
 <title>Простой компонент</title>
 </head>
+<!-- Блок page -->
 <body class="page i-bem" data-bem='{ "page": {} }'>
 
     <!-- Библиотека bem-core -->
@@ -138,13 +140,15 @@ document.body.appendChild(h1);
 <meta charset="utf-8">
 <title>Несколько компонентов</title>
 </head>
+<!-- Блок page -->
 <body class="page i-bem" data-bem='{ "page": {} }'>
-
+    <!-- Блок user -->
     <div class="user i-bem" data-bem='{ "user": {} }'></div>
 
     <!-- Библиотека bem-core -->
     <script src="https://yastatic.net/bem-core/latest/desktop/bem-core.no-autoinit.js"></script>
     <script>
+    // Модуль блока page
     modules.define('page', ['i-bem-dom'], function(provide, bemDom){
         provide(bemDom.declBlock(this.name, {
             onSetMod: {
@@ -156,6 +160,7 @@ document.body.appendChild(h1);
             }
         }));
     });
+    // Модуль блока user
     modules.define('user', ['i-bem-dom'], function(provide, bemDom){
         provide(bemDom.declBlock(this.name, {
             onSetMod: {
@@ -176,7 +181,7 @@ document.body.appendChild(h1);
 </html>
 ```
 
-JavaScript реализацию каждого блока можно вынести в отдельные файлы и затем выполнить инициализацию модуля `i-bem-dom`:
+JavaScript-реализацию каждого блока можно вынести в отдельные файлы и затем выполнить инициализацию модуля `i-bem-dom`:
 
 ```html
 <!DOCTYPE html>
@@ -185,8 +190,9 @@ JavaScript реализацию каждого блока можно вынес�
 <meta charset="utf-8">
 <title>Несколько компонентов</title>
 </head>
+<!-- Блок page -->
 <body class="page i-bem" data-bem='{ "page": {} }'>
-
+    <!-- Блок user -->
     <div class="user i-bem" data-bem='{ "user": {} }'></div>
 
     <!-- Библиотека bem-core -->
