@@ -70,7 +70,7 @@ document.body.appendChild(h1);
 
   JavaScript реализация блока `i-bem`. Модуль рассчитан на использование в любом JS-окружении: как на клиенте, так и на сервере (например, в Node.js).
 
-  **Пример**
+  Для декларации HTML-элемента в модуле `i-bem`, необходимо применить метод `bem.declBlock()`:
 
   ```js
   modules.define('page', ['i-bem'], function(provide, bem){
@@ -85,7 +85,7 @@ document.body.appendChild(h1);
 
   [Виртуальная DOM](#Виртуальная-dom) (JavaScript реализация DOM). Модуль рассчитан на использование на клиенте.
 
-  **Пример**
+  Для декларации HTML-элемента в модуле `i-bem-dom`, необходимо применить метод `bemDom.declBlock()`:
 
   ```js
   modules.define('page', ['i-bem-dom'], function(provide, bemDom){
@@ -98,6 +98,8 @@ document.body.appendChild(h1);
   > **Примечание.** Зависит от библиотеки [jQuery](https://jquery.com), поэтому отдельная установка не требуется. Все методы jQuery доступны по умолчанию.
 
 ### Простой компонент
+
+Для Задекларируем блок `page` в виртуальной DOM, после чего вызовем метод  `bemDom.prepend()` для создания нового HTML-элемента.
 
 ```html
 <!DOCTYPE html>
