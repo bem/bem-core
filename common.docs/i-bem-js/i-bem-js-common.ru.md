@@ -136,7 +136,7 @@ document.body.appendChild(h1);
 <html>
 <head>
 <meta charset="utf-8">
-<title>Простой компонент</title>
+<title>Несколько компонентов</title>
 </head>
 <body class="page i-bem" data-bem='{ "page": {} }'>
 
@@ -168,6 +168,32 @@ document.body.appendChild(h1);
             }
         }));
     });
+    // Инициализация
+    modules.require('i-bem-dom__init', function(init) { init(); });
+    </script>
+
+</body>
+</html>
+```
+
+Код каждого блока можно вынести в отдельные файлы и затем выполнить инициализацию:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Несколько компонентов</title>
+</head>
+<body class="page i-bem" data-bem='{ "page": {} }'>
+
+    <div class="user i-bem" data-bem='{ "user": {} }'></div>
+
+    <!-- Библиотека bem-core -->
+    <script src="https://yastatic.net/bem-core/latest/desktop/bem-core.no-autoinit.js"></script>
+    <script src="page.js"></script>
+    <script src="user.js"></script>
+    <script>
     // Инициализация
     modules.require('i-bem-dom__init', function(init) { init(); });
     </script>
