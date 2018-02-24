@@ -144,6 +144,8 @@ document.body.appendChild(h1);
 </html>
 ```
 
+[Открыть в JSFiddle](https://jsfiddle.net/Sergeib84/a0rk2175/2/)
+
 ### Несколько компонентов
 
 ```html
