@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900px" height="445px" viewBox="0 0 900 445" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Desktop</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop">
+            <g id="Group" transform="translate(438.000000, 98.000000)">
+                <text id="&lt;body&gt;" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
+                    <tspan x="141.327" y="117">&lt;body&gt;</tspan>
+                </text>
+                <text id="&lt;head&gt;" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
+                    <tspan x="0.725999857" y="117">&lt;head&gt;</tspan>
+                </text>
+                <text id="&lt;title&gt;" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
+                    <tspan x="2.25699983" y="181">&lt;title&gt;</tspan>
+                </text>
+                <text id="&lt;header&gt;" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
+                    <tspan x="201.142" y="181">&lt;header&gt;</tspan>
+                </text>
+                <text id="&lt;sidebar&gt;" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
+                    <tspan x="81.3149998" y="181">&lt;sidebar&gt;</tspan>
+                </text>
+                <path d="M236.5,189.5 L236.5,229.5" id="Line-2" stroke="#808080" stroke-width="1.5" stroke-linecap="square"></path>
+                <polyline id="Line-3" stroke="#808080" stroke-width="1.5" stroke-linecap="square" transform="translate(172.500000, 143.500000) scale(1, -1) translate(-172.500000, -143.500000) " points="115 126 172.5 161 230 126"></polyline>
+                <text id="&lt;button&gt;" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
+                    <tspan x="201.132" y="246">&lt;button&gt;</tspan>
+                </text>
+                <polyline id="Line-3" stroke="#808080" stroke-width="1.5" stroke-linecap="square" transform="translate(91.500000, 81.500000) scale(1, -1) translate(-91.500000, -81.500000) " points="34 64 91.5 99 149 64"></polyline>
+                <g id="Group-2" transform="translate(64.000000, 44.000000)" fill="#000000" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005">
+                    <text id="&lt;html&gt;">
+                        <tspan x="0.408999857" y="13">&lt;html&gt;</tspan>
+                    </text>
+                </g>
+                <path d="M28.5,123.5 L28.5,163.5" id="Line-2" stroke="#808080" stroke-width="1.5" stroke-linecap="square"></path>
+                <text id="DOM" font-family="YandexSansText-Bold, Yandex Sans Text" font-size="20" font-weight="bold" letter-spacing="1.70000005" fill="#000000">
+                    <tspan x="65.0899999" y="19">DOM</tspan>
+                </text>
+            </g>
+            <g id="group191-23" transform="translate(186.000000, 196.000000)">
+                <g id="group192-24">
+                    <g id="shape195-27" transform="translate(0.000000, 44.000000)">
+                        <path d="M59.73,8.28 L58.21,6.76 L38.47,0.68 C38.47,0.68 20.27,0.68 20.25,0.68 L1.52,6.76 L0,8.28 L59.73,8.28 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                        <path d="M59.73,8.28 L58.21,6.76 L38.47,0.68 C38.47,0.68 20.27,0.68 20.25,0.68 L1.52,6.76 L0,8.28" id="Shape" stroke="#010202" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                    <g id="shape196-30" transform="translate(14.780700, 22.740200)">
+                        <path d="M1.92,0.68 C0.76,0.96 1.38777878e-17,2.07 0.13,3.26 L0.4,5.74 L0.71,6.33 C1.16,7.24 1.97,7.95 2.94,8.28 L1.92,0.68 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                        <path d="M1.92,0.68 C0.76,0.96 1.38777878e-17,2.07 0.13,3.26 L0.4,5.74 L0.71,6.33 C1.16,7.24 1.97,7.95 2.94,8.28" id="Shape" stroke="#010202" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                    <g id="shape197-33" transform="translate(41.001100, 22.740200)">
+                        <path d="M1.01,0.68 C2.18,0.96 2.94,2.07 2.81,3.26 L2.53,5.74 L2.23,6.33 C1.77,7.24 0.96,7.95 0,8.28 L1.01,0.68 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                        <path d="M1.01,0.68 C2.18,0.96 2.94,2.07 2.81,3.26 L2.53,5.74 L2.23,6.33 C1.77,7.24 0.96,7.95 0,8.28" id="Shape" stroke="#010202" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                    <g id="shape198-36" transform="translate(20.247500, 37.000000)">
+                        <path d="M0,0.09 L0,6.16 C0,11.2 4.07,15.28 9.11,15.28 C14.15,15.28 18.22,11.2 18.22,6.16 L18.22,0.09 L0,0.09 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                        <path d="M0,0.09 L0,6.16 C0,11.2 4.07,15.28 9.11,15.28 C14.15,15.28 18.22,11.2 18.22,6.16 L18.22,0.09" id="Shape" stroke="#010202" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                    <g id="group199-39" transform="translate(15.691800, 0.901010)">
+                        <g id="group200-40" transform="translate(0.000000, 0.974691)" fill-rule="nonzero">
+                            <g id="shape201-41" transform="translate(0.000000, 0.308800)" fill="#FFCC09">
+                                <path d="M27.33,13.65 L27.33,14.66 L25.84,24.28 L25.82,24.28 C25.82,24.28 27.03,15.72 20.25,15.67 C13.06,15.67 7.59,12.13 7.59,12.13 C3.09,13.62 2.02,16.68 2.02,16.68 L1.52,20.23 L1.42,23.77 L0,14.66 L0,13.65 C0,10 1.59,6.71 4.1,4.33 C6.61,1.95 10.02,0.48 13.67,0.48 C20.93,0.48 27.33,6.38 27.33,13.65 Z" id="Shape"></path>
+                            </g>
+                            <g id="shape202-43" transform="translate(1.392010, 12.000000)" fill="#FFFFFF">
+                                <path d="M24.45,12.58 L23.97,15.67 C23.59,18.94 22.32,22.02 20.27,24.61 L17.29,28.38 C16.35,29.57 14.91,30.28 13.39,30.28 L12.28,30.28 L11.14,30.28 C9.62,30.28 8.17,29.57 7.24,28.38 L4.25,24.61 C2.23,22.02 0.94,18.94 0.56,15.67 L0,12.08 L0.13,8.53 L0.63,4.99 C0.63,4.99 1.7,1.93 6.2,0.44 C6.2,0.44 11.67,3.98 18.86,3.98 C25.64,4.03 24.42,12.58 24.42,12.58 L24.45,12.58 Z" id="Shape"></path>
+                            </g>
+                        </g>
+                        <g id="group203-45" transform="translate(0.000000, 1.000000)">
+                            <g id="shape204-46" stroke="#010202" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                                <path d="M1.39,24.05 L1.95,27.67 C2.33,30.94 3.59,34.02 5.64,36.61 L8.63,40.38 C9.57,41.57 11.01,42.28 12.53,42.28 L13.67,42.28 L14.81,42.28 C16.32,42.28 17.77,41.57 18.7,40.38 L21.69,36.61 C23.74,34.02 25.01,30.94 25.39,27.67 L25.87,24.58 L27.36,14.97 L27.36,13.95 C27.36,6.69 20.96,0.79 13.69,0.79 C10.05,0.79 6.63,2.26 4.13,4.64 C1.62,7.02 0,10.28 0,13.93 L0,14.94 L1.39,24.05 Z" id="Shape"></path>
+                            </g>
+                            <g id="shape205-48" transform="translate(1.417320, 12.283500)">
+                                <path d="M24.4,12.28 C24.4,12.28 25.61,3.72 18.83,3.67 C11.64,3.67 6.18,0.13 6.18,0.13 C1.67,1.62 0.61,4.68 0.61,4.68 L0.1,8.23 L0,11.77 L24.4,12.28 Z" id="Shape"></path>
+                                <path d="M24.4,12.28 C24.4,12.28 25.61,3.72 18.83,3.67 C11.64,3.67 6.18,0.13 6.18,0.13 C1.67,1.62 0.61,4.68 0.61,4.68 L0.1,8.23 L0,11.77" id="Shape" stroke="#010202" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </g>
+                    </g>
+                    <g id="shape206-51" transform="translate(20.247500, 20.246300)">
+                        <path d="M0,0.65 L6.07,0.65 C7.19,0.65 8.1,1.56 8.1,2.67 L8.1,11.28 L11.14,11.28 L0,0.65 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                        <path d="M0,0.65 L6.07,0.65 C7.19,0.65 8.1,1.56 8.1,2.67 L8.1,11.28 L11.14,11.28" id="Shape" stroke="#010202" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                    <g id="shape207-54" transform="translate(31.889800, 20.616400)" stroke="#010202" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                        <path d="M0,0.28 L6.58,0.28" id="Shape"></path>
+                    </g>
+                    <g id="shape208-57" transform="translate(25.309300, 34.802000)">
+                        <path d="M0,0.77 L0.73,1.02 C1.24,1.2 1.8,1.28 2.33,1.28 L5.75,1.28 C6.28,1.28 6.83,1.2 7.34,1.02 L8.07,0.77 L0,0.77 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                        <path d="M0,0.77 L0.73,1.02 C1.24,1.2 1.8,1.28 2.33,1.28 L5.75,1.28 C6.28,1.28 6.83,1.2 7.34,1.02 L8.07,0.77" id="Shape" stroke="#010202" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                    <g id="shape209-60" transform="translate(27.840300, 38.839100)" stroke="#010202" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                        <path d="M0,0.28 L3.04,0.28" id="Shape"></path>
+                    </g>
+                    <g id="shape210-63" transform="translate(22.778400, 24.159700)" stroke="#010202" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                        <path d="M0,0.28 L1.52,0.28" id="Shape"></path>
+                    </g>
+                    <g id="shape211-66" transform="translate(34.420700, 24.159700)" stroke="#010202" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                        <path d="M0,0.28 L1.52,0.28" id="Shape"></path>
+                    </g>
+                </g>
+            </g>
+            <g id="Group-3" transform="translate(278.000000, 155.000000)">
+                <g id="group302-95" transform="translate(55.000000, 69.000000) rotate(90.000000) translate(-55.000000, -69.000000) translate(30.000000, 42.000000)" fill="#FFFFFF" fill-rule="nonzero" stroke="#808080" stroke-width="1.5">
+                    <g id="shape303-96">
+                        <polygon id="Shape" points="13.05 24.9 13.05 53.62 36.55 53.62 36.55 24.9 49.61 24.9 24.8 0.09 0 24.9"></polygon>
+                    </g>
+                </g>
+                <text id="JavaScript" font-family="YandexSansText-Bold, Yandex Sans Text" font-size="20" font-weight="bold" letter-spacing="1.70000005" fill="#000000">
+                    <tspan x="0.829999762" y="19">JavaScript</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
