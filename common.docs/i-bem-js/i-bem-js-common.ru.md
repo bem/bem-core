@@ -144,7 +144,7 @@ document.body.appendChild(h1);
 </html>
 ```
 
-[Открыть в JSFiddle](https://jsfiddle.net/Sergeib84/a0rk2175/2/)
+[Открыть в JSFiddle](https://jsfiddle.net/Sergeib84/a0rk2175/)
 
 ### Несколько компонентов
 
@@ -195,6 +195,8 @@ document.body.appendChild(h1);
 </body>
 </html>
 ```
+
+[Открыть в JSFiddle](https://jsfiddle.net/Sergeib84/1qhuttrw/)
 
 JavaScript-реализацию каждого блока можно вынести в отдельные файлы и затем выполнить инициализацию модуля `i-bem-dom`:
 
