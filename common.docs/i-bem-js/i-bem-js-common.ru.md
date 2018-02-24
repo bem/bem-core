@@ -39,7 +39,7 @@ document.body.appendChild(h1);
 
 Браузер дает JavaScript-программистам возможность доступа к DOM при помощи специальных методов.
 
-![DOM](https://rawgit.com/bem/bem-core/godfreyd-i-bem-js/common.docs/i-bem-js/i-bem-js-common__dom.svg##1)
+![DOM](https://rawgit.com/bem/bem-core/godfreyd-i-bem-js/common.docs/i-bem-js/i-bem-js-common__dom.svg#№41)
 
 `i-bem.js` помогает работать с DOM декларативно и не думать о том, как найти тот или иной элемент. Все HTML-элементы объявленные в `i-bem.js` имеют свой JavaScript объект с набором инструкций, применяемых для построения пользовательского интерфейса и взаимодействия с браузером. Таким образом, разработчик изменяет виртуальную модель DOM, а `i-bem.js` отображает эти изменения наиболее эффективным образом.
 
