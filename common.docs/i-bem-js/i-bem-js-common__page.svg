@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="700px" height="570px" viewBox="0 0 700 570" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="900px" height="445px" viewBox="0 0 900 445" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
     <title>Desktop</title>
     <desc>Created with Sketch.</desc>
     <defs>
-        <rect id="path-1" x="0" y="0" width="400" height="510"></rect>
-        <rect id="path-2" x="30" y="250" width="110" height="220"></rect>
-        <pattern id="pattern-3" width="30" height="30" x="0" y="220" patternUnits="userSpaceOnUse">
+        <rect id="path-1" x="0" y="0" width="400" height="385"></rect>
+        <rect id="path-2" x="30" y="125" width="110" height="220"></rect>
+        <pattern id="pattern-3" width="30" height="30" x="0" y="95" patternUnits="userSpaceOnUse">
             <use xlink:href="#image-4"></use>
         </pattern>
         <image id="image-4" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAEDWlDQ1BJQ0MgUHJvZmlsZQAAOI2NVV1oHFUUPrtzZyMkzlNsNIV0qD8NJQ2TVjShtLp/3d02bpZJNtoi6GT27s6Yyc44M7v9oU9FUHwx6psUxL+3gCAo9Q/bPrQvlQol2tQgKD60+INQ6Ium65k7M5lpurHeZe58853vnnvuuWfvBei5qliWkRQBFpquLRcy4nOHj4g9K5CEh6AXBqFXUR0rXalMAjZPC3e1W99Dwntf2dXd/p+tt0YdFSBxH2Kz5qgLiI8B8KdVy3YBevqRHz/qWh72Yui3MUDEL3q44WPXw3M+fo1pZuQs4tOIBVVTaoiXEI/MxfhGDPsxsNZfoE1q66ro5aJim3XdoLFw72H+n23BaIXzbcOnz5mfPoTvYVz7KzUl5+FRxEuqkp9G/Ajia219thzg25abkRE/BpDc3pqvphHvRFys2weqvp+krbWKIX7nhDbzLOItiM8358pTwdirqpPFnMF2xLc1WvLyOwTAibpbmvHHcvttU57y5+XqNZrLe3lE/Pq8eUj2fXKfOe3pfOjzhJYtB/yll5SDFcSDiH+hRkH25+L+sdxKEAMZahrlSX8ukqMOWy/jXW2m6M9LDBc31B9LFuv6gVKg/0Szi3KAr1kGq1GMjU/aLbnq6/lRxc4XfJ98hTargX++DbMJBSiYMIe9Ck1YAxFkKEAG3xbYaKmDDgYyFK0UGYpfoWYXG+fAPPI6tJnNwb7ClP7IyF+D+bjOtCpkhz6CFrIa/I6sFtNl8auFXGMTP34sNwI/JhkgEtmDz14ySfaRcTIBInmKPE32kxyyE2Tv+thKbEVePDfW/byMM1Kmm0XdObS7oGD/MypMXFPXrCwOtoYjyyn7BV29/MZfsVzpLDdRtuIZnbpXzvlf+ev8MvYr/Gqk4H/kV/G3csdazLuyTMPsbFhzd1UabQbjFvDRmcWJxR3zcfHkVw9GfpbJmeev9F08WW8uDkaslwX6avlWGU6NRKz0g/SHtCy9J30o/ca9zX3Kfc19zn3BXQKRO8ud477hLnAfc1/G9mrzGlrfexZ5GLdn6ZZrrEohI2wVHhZywjbhUWEy8icMCGNCUdiBlq3r+xafL549HQ5jH+an+1y+LlYBifuxAvRN/lVVVOlwlCkdVm9NOL5BE4wkQ2SMlDZU97hX86EilU/lUmkQUztTE6mx1EEPh7OmdqBtAvv8HdWpbrJS6tJj3n0CWdM6busNzRV3S9KTYhqvNiqWmuroiKgYhshMjmhTh9ptWhsF7970j/SbMrsPE1suR5z7DMC+P/Hs+y7ijrQAlhyAgccjbhjPygfeBTjzhNqy28EdkUh8C+DU9+z2v/oyeH791OncxHOs5y2AtTc7nb/f73TWPkD/qwBnjX8BoJ98VVBg/m8AAADqSURBVEgN7ZVdDgIhDISl19KrrOFoBD2KXsOjkO1slAQBaVjovthHdjIfP7Otcc69iOjK9ThVijVn/nQbqTMzTCWbNDjkEfANfAQ8grXhCVgTnoG14EWwBrwKng0n7/0FkFJZa5+8voQQWDZWRzNMJZv8d66hg4DzUfVLUq3ZsxMwkv2G33kELoJR2a3LwIAjlUh7a/7u0RXBGvAqeDacfv3seGNcd6vJ9OianavHVHIYsycgeI7vkvptbywVj9TFcI00xS20/CJYIv5ca8tUokvAmvAMrAUvgjXgVfBsOCEogJRqVvNAJ1wBMfROw+AwCxUAAAAASUVORK5CYII="></image>
-        <rect id="path-5" x="30" y="185" width="340" height="55"></rect>
-        <pattern id="pattern-6" width="30" height="30" x="0" y="155" patternUnits="userSpaceOnUse">
+        <rect id="path-5" x="30" y="60" width="340" height="55"></rect>
+        <pattern id="pattern-6" width="30" height="30" x="0" y="30" patternUnits="userSpaceOnUse">
             <use xlink:href="#image-7"></use>
         </pattern>
         <image id="image-7" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAEDWlDQ1BJQ0MgUHJvZmlsZQAAOI2NVV1oHFUUPrtzZyMkzlNsNIV0qD8NJQ2TVjShtLp/3d02bpZJNtoi6GT27s6Yyc44M7v9oU9FUHwx6psUxL+3gCAo9Q/bPrQvlQol2tQgKD60+INQ6Ium65k7M5lpurHeZe58853vnnvuuWfvBei5qliWkRQBFpquLRcy4nOHj4g9K5CEh6AXBqFXUR0rXalMAjZPC3e1W99Dwntf2dXd/p+tt0YdFSBxH2Kz5qgLiI8B8KdVy3YBevqRHz/qWh72Yui3MUDEL3q44WPXw3M+fo1pZuQs4tOIBVVTaoiXEI/MxfhGDPsxsNZfoE1q66ro5aJim3XdoLFw72H+n23BaIXzbcOnz5mfPoTvYVz7KzUl5+FRxEuqkp9G/Ajia219thzg25abkRE/BpDc3pqvphHvRFys2weqvp+krbWKIX7nhDbzLOItiM8358pTwdirqpPFnMF2xLc1WvLyOwTAibpbmvHHcvttU57y5+XqNZrLe3lE/Pq8eUj2fXKfOe3pfOjzhJYtB/yll5SDFcSDiH+hRkH25+L+sdxKEAMZahrlSX8ukqMOWy/jXW2m6M9LDBc31B9LFuv6gVKg/0Szi3KAr1kGq1GMjU/aLbnq6/lRxc4XfJ98hTargX++DbMJBSiYMIe9Ck1YAxFkKEAG3xbYaKmDDgYyFK0UGYpfoWYXG+fAPPI6tJnNwb7ClP7IyF+D+bjOtCpkhz6CFrIa/I6sFtNl8auFXGMTP34sNwI/JhkgEtmDz14ySfaRcTIBInmKPE32kxyyE2Tv+thKbEVePDfW/byMM1Kmm0XdObS7oGD/MypMXFPXrCwOtoYjyyn7BV29/MZfsVzpLDdRtuIZnbpXzvlf+ev8MvYr/Gqk4H/kV/G3csdazLuyTMPsbFhzd1UabQbjFvDRmcWJxR3zcfHkVw9GfpbJmeev9F08WW8uDkaslwX6avlWGU6NRKz0g/SHtCy9J30o/ca9zX3Kfc19zn3BXQKRO8ud477hLnAfc1/G9mrzGlrfexZ5GLdn6ZZrrEohI2wVHhZywjbhUWEy8icMCGNCUdiBlq3r+xafL549HQ5jH+an+1y+LlYBifuxAvRN/lVVVOlwlCkdVm9NOL5BE4wkQ2SMlDZU97hX86EilU/lUmkQUztTE6mx1EEPh7OmdqBtAvv8HdWpbrJS6tJj3n0CWdM6busNzRV3S9KTYhqvNiqWmuroiKgYhshMjmhTh9ptWhsF7970j/SbMrsPE1suR5z7DMC+P/Hs+y7ijrQAlhyAgccjbhjPygfeBTjzhNqy28EdkUh8C+DU9+z2v/oyeH791OncxHOs5y2AtTc7nb/f73TWPkD/qwBnjX8BoJ98VVBg/m8AAADqSURBVEgN7ZVdDgIhDISl19KrrOFoBD2KXsOjkO1slAQBaVjovthHdjIfP7Otcc69iOjK9ThVijVn/nQbqTMzTCWbNDjkEfANfAQ8grXhCVgTnoG14EWwBrwKng0n7/0FkFJZa5+8voQQWDZWRzNMJZv8d66hg4DzUfVLUq3ZsxMwkv2G33kELoJR2a3LwIAjlUh7a/7u0RXBGvAqeDacfv3seGNcd6vJ9OianavHVHIYsycgeI7vkvptbywVj9TFcI00xS20/CJYIv5ca8tUokvAmvAMrAUvgjXgVfBsOCEogJRqVvNAJ1wBMfROw+AwCxUAAAAASUVORK5CYII="></image>
+        <rect id="path-8" x="540" y="109" width="63" height="22" rx="2"></rect>
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Desktop">
-            <g id="Group" transform="translate(149.000000, 32.000000)">
+            <g id="Group" transform="translate(250.000000, 32.000000)">
                 <g id="Rectangle">
                     <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
-                    <rect stroke="#000000" stroke-width="1.5" x="0.75" y="0.75" width="398.5" height="508.5"></rect>
+                    <rect stroke="#808080" stroke-width="1.5" x="0.75" y="0.75" width="398.5" height="383.5"></rect>
                 </g>
-                <rect id="Rectangle" stroke="#8165E9" stroke-width="1.5" x="15.75" y="30.75" width="368.5" height="103.5"></rect>
-                <rect id="Rectangle" stroke="#8165E9" stroke-width="1.5" x="15.75" y="155.75" width="368.5" height="333.5"></rect>
-                <rect id="Rectangle" stroke="#FFD000" stroke-width="1.5" x="30.75" y="60.75" width="338.5" height="53.5"></rect>
-                <text id="html" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
-                    <tspan x="15.3929999" y="20">html</tspan>
-                </text>
-                <text id="head" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#8165E9">
-                    <tspan x="30.2099999" y="50">head</tspan>
-                </text>
-                <text id="title" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#FFD000">
-                    <tspan x="45.2409999" y="80">title</tspan>
-                </text>
-                <text id="header" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
-                    <tspan x="45.1259999" y="205">header</tspan>
-                </text>
-                <text id="sidebar" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
-                    <tspan x="45.2989998" y="270">sidebar</tspan>
-                </text>
-                <text id="body" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#8165E9">
-                    <tspan x="30.3109999" y="175">body</tspan>
-                </text>
+                <rect id="Rectangle" stroke="#FFD000" stroke-width="1.5" x="15.75" y="30.75" width="368.5" height="333.5"></rect>
                 <g id="Rectangle-321">
                     <use fill-opacity="0.200000018" fill="url(#pattern-3)" fill-rule="evenodd" xlink:href="#path-2"></use>
-                    <rect stroke-opacity="0.1" stroke="#000000" stroke-width="1" x="30.5" y="250.5" width="109" height="219"></rect>
+                    <rect stroke-opacity="0.1" stroke="#000000" stroke-width="1" x="30.5" y="125.5" width="109" height="219"></rect>
                 </g>
                 <g id="Rectangle-331">
                     <use fill-opacity="0.200000018" fill="url(#pattern-6)" fill-rule="evenodd" xlink:href="#path-5"></use>
-                    <rect stroke-opacity="0.1" stroke="#000000" stroke-width="1" x="30.5" y="185.5" width="339" height="54"></rect>
+                    <rect stroke-opacity="0.1" stroke="#000000" stroke-width="1" x="30.5" y="60.5" width="339" height="54"></rect>
                 </g>
+                <text id="body" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#FFD000">
+                    <tspan x="30.3109999" y="50">body</tspan>
+                </text>
+                <text id="sidebar" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
+                    <tspan x="45.2989998" y="145">sidebar</tspan>
+                </text>
+                <text id="header" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
+                    <tspan x="45.1259999" y="80">header</tspan>
+                </text>
+                <text id="html" font-family="YandexSansText-Regular, Yandex Sans Text" font-size="14" font-weight="normal" letter-spacing="1.70000005" fill="#000000">
+                    <tspan x="15.3929999" y="20">html</tspan>
+                </text>
             </g>
+            <g id="Rectangle-16">
+                <use fill-opacity="0.249999985" fill="#C3D3EF" fill-rule="evenodd" xlink:href="#path-8"></use>
+                <rect stroke-opacity="0.3" stroke="#4C6592" stroke-width="1" x="539.5" y="108.5" width="64" height="23" rx="2"></rect>
+            </g>
+            <text id="Button" font-family="ArialMT, Arial" font-size="13" font-weight="normal" fill="#202020">
+                <tspan x="553" y="124">Button</tspan>
+            </text>
         </g>
     </g>
 </svg>
