@@ -17,6 +17,8 @@
 
 В БЭМ такие компоненты принято называть [блоками](https://ru.bem.info/methodology/key-concepts/#Блок). Очень важно, чтобы компоненты были переиспользуемыми и расширяемыми.
 
+**Пример**
+
 ![page](https://rawgit.com/bem/bem-core/godfreyd-i-bem-js/common.docs/i-bem-js/i-bem-js-common__page.svg##1)
 
 ### Виртуальная DOM
