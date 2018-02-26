@@ -115,7 +115,10 @@ document.body.appendChild(h1);
 
 ### Простой компонент
 
-Как отмечалось выше, для декларации компонента в [виртуальной DOM](#Виртуальная-dom), необходимо вызвать метод `bemDom.declBlock()`. Метод принимает имя [БЭМ-сущности](https://ru.bem.info/methodology/key-concepts/#БЭМ-сущность) и реализует взаимодействие с ней.
+Чтобы создать компонент в `i-bem.js`, необходимо:
+
+* создать JavaScript-экземпляр блока;
+* связать HTML-элемент с JavaScript-экземпляром.
 
 **Пример**
 
@@ -126,12 +129,13 @@ document.body.appendChild(h1);
 <meta charset="utf-8">
 <title>Простой компонент</title>
 </head>
-<!-- Блок page -->
+<!-- Привязка HTML-элемента body к JavaScript-экземпляру блока page -->
 <body class="page i-bem" data-bem='{ "page": {} }'>
 
     <!-- Библиотека bem-core -->
     <script src="https://yastatic.net/bem-core/latest/desktop/bem-core.no-autoinit.js"></script>
     <script>
+    // Cоздание модуля ym, содержащий JavaScript-реализацию блока page
     modules.define('page', ['i-bem-dom'], function(provide, bemDom){
         provide(bemDom.declBlock(this.name, {
             onSetMod: {
