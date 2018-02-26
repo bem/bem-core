@@ -129,7 +129,7 @@ document.body.appendChild(h1);
 <meta charset="utf-8">
 <title>Простой компонент</title>
 </head>
-<!-- Привязка HTML-элемента body к JavaScript-экземпляру блока page -->
+<!-- Привязка HTML-элемента к JavaScript-экземпляру блока page -->
 <body class="page i-bem" data-bem='{ "page": {} }'>
 
     <!-- Библиотека bem-core -->
@@ -160,6 +160,8 @@ document.body.appendChild(h1);
 
 ### Несколько компонентов
 
+Чтобы создать несколько компонентов в `i-bem.js`, необходимо повторить все действия, выполненные в [предыдущем разделе](#Простой-компонент), с каждым из блоков.
+
 ```html
 <!DOCTYPE html>
 <html>
@@ -167,15 +169,15 @@ document.body.appendChild(h1);
 <meta charset="utf-8">
 <title>Несколько компонентов</title>
 </head>
-<!-- Блок page -->
+<!-- Привязка HTML-элемента к JavaScript-экземпляру блока page -->
 <body class="page i-bem" data-bem='{ "page": {} }'>
-    <!-- Блок user -->
+    <!-- Привязка HTML-элемента к JavaScript-экземпляру блока user -->
     <div class="user i-bem" data-bem='{ "user": {} }'></div>
 
     <!-- Библиотека bem-core -->
     <script src="https://yastatic.net/bem-core/latest/desktop/bem-core.no-autoinit.js"></script>
     <script>
-    // Модуль блока page
+    // Cоздание модуля ym, содержащий JavaScript-реализацию блока page
     modules.define('page', ['i-bem-dom'], function(provide, bemDom){
         provide(bemDom.declBlock(this.name, {
             onSetMod: {
@@ -187,7 +189,7 @@ document.body.appendChild(h1);
             }
         }));
     });
-    // Модуль блока user
+    // Cоздание модуля ym, содержащий JavaScript-реализацию блока user
     modules.define('user', ['i-bem-dom'], function(provide, bemDom){
         provide(bemDom.declBlock(this.name, {
             onSetMod: {
@@ -210,7 +212,7 @@ document.body.appendChild(h1);
 
 [Открыть в JSFiddle](https://jsfiddle.net/godfreyd/kmum6t4q/)
 
-JavaScript-реализацию каждого блока можно вынести в отдельные файлы и затем выполнить инициализацию модуля `i-bem-dom`:
+JavaScript-реализацию каждого блока можно вынести в отдельные файлы:
 
 ```html
 <!DOCTYPE html>
