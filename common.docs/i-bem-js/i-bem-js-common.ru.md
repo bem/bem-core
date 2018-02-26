@@ -89,7 +89,7 @@ document.body.appendChild(h1);
 
   ```js
   modules.define('page', ['i-bem'], function(provide, bem){
-      // Декларируем блок page в модуле i-bem
+      // Создаем JavaScript-экземпляр блока page в модуле i-bem
       provide(bem.declBlock(this.name, {
 
       }));
@@ -104,7 +104,7 @@ document.body.appendChild(h1);
 
   ```js
   modules.define('page', ['i-bem-dom'], function(provide, bemDom){
-       // Декларируем блок page в модуле i-bem-dom
+       // Создаем JavaScript-экземпляр блока page в модуле i-bem-dom
       provide(bemDom.declBlock(this.name, {
 
       }));
