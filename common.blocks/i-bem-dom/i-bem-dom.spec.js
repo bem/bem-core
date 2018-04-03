@@ -76,14 +76,14 @@ describe('i-bem-dom', function() {
         it('should enable to inherit elem to itself', function() {
             var spy1 = sinon.spy(),
                 spy2 = sinon.spy(),
-                Elem = bem.declElem('block', 'elem', {
+                Elem = bemDom.declElem('block', 'elem', {
                     onSetMod : {
                         js : {
                             inited : spy1
                         }
                     }
                 }),
-                Elem2 = bem.declElem('block', 'elem', {
+                Elem2 = bemDom.declElem('block', 'elem', {
                     onSetMod : {
                         js : {
                             inited : spy2
@@ -103,14 +103,14 @@ describe('i-bem-dom', function() {
         it('should enable to inherit elem to itself using entity class', function() {
             var spy1 = sinon.spy(),
                 spy2 = sinon.spy(),
-                Elem = bem.declElem('block', 'elem', {
+                Elem = bemDom.declElem('block', 'elem', {
                     onSetMod : {
                         js : {
                             inited : spy1
                         }
                     }
                 }),
-                Elem2 = bem.declElem(Elem, {
+                Elem2 = bemDom.declElem(Elem, {
                     onSetMod : {
                         js : {
                             inited : spy2
