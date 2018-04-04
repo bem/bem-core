@@ -168,8 +168,8 @@ function getEntityCls(entityName) {
 
     var splitted = entityName.split(ELEM_DELIM);
     return splitted[1]?
-        bemDom.declElem(splitted[0], splitted[1], {}, { lazyInit : true }, true) :
-        bemDom.declBlock(entityName, {}, { lazyInit : true }, true);
+        bemDom.declElem(splitted[0], splitted[1], {}, { lazyInit : true }) :
+        bemDom.declBlock(entityName, {}, { lazyInit : true });
 }
 
 /**
