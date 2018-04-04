@@ -68,9 +68,9 @@ If you used BEM before, check the [migration instructions](https://bem.info/libs
 
 ### Working copy
 
-1. Get the needed version code (e.g., `v2`):
+1. Get the needed version code (e.g., `v4`):
    ```shell
-   $ git clone -b v2 git://github.com/bem/bem-core.git
+   $ git clone -b v4 git://github.com/bem/bem-core.git
    $ cd bem-core
    ```
 
