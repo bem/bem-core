@@ -7,7 +7,7 @@ Documentation on `bem-core` in a much more informative way is also available at 
 `bem-core` is a base library for web interface development.
 It provides the minimal stack for coding client-side JavaScript and templating.
 
-## Use
+## Uses
 
 The easiest way to run a project with `bem-core` is to use
 the [project-stub](https://github.com/bem/project-stub).
