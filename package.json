@@ -48,7 +48,7 @@
     "jshint": "^2.9.1",
     "jshint-groups": "^0.8.0",
     "mocha": "^3.3.0",
-    "vow": "^0.4.12"
+    "vow": "^0.4.17"
   },
   "scripts": {
     "start": "magic server",
