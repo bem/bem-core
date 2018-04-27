@@ -1,0 +1,15 @@
+# Summary
+
+* [Введение](README.ru.md)
+    * [Общие сведения](common.docs/i-bem-js/i-bem-js-common.ru.md)
+    * [Привязка JS-блоков к HTML](common.docs/i-bem-js/i-bem-js-html-binding.ru.md)
+    * [Декларация блока](common.docs/i-bem-js/i-bem-js-decl.ru.md)
+    * [Передача параметров](common.docs/i-bem-js/i-bem-js-params.ru.md)
+    * [Работа с DOM-деревом](common.docs/i-bem-js/i-bem-js-dom.ru.md)
+    * [Состояния блока](common.docs/i-bem-js/i-bem-js-states.ru.md)
+    * [Коллекции](common.docs/i-bem-js/i-bem-js-collections.ru.md)
+    * [События](common.docs/i-bem-js/i-bem-js-events.ru.md)
+    * [Инициализация](common.docs/i-bem-js/i-bem-js-init.ru.md)
+    * [Взаимодействие блоков](common.docs/i-bem-js/i-bem-js-interact.ru.md)
+    * [Контекст](common.docs/i-bem-js/i-bem-js-context.ru.md)
+    * [Что дальше?](common.docs/i-bem-js/i-bem-js-extras.ru.md)
