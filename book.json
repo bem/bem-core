@@ -1,0 +1,10 @@
+{
+    "description":"bem-core library",
+    "plugins":[
+        "comment",
+        "theme-api",
+        "-sharing",
+        "search",
+        "collapsible-menu"
+    ]
+}

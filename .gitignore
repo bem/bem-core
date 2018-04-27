@@ -24,3 +24,5 @@ coverage.json
 /*.tmpl-specs
 /*.tests
 /*.sets
+
+_book
