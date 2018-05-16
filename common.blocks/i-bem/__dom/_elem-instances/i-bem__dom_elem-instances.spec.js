@@ -82,6 +82,32 @@ describe('i-bem__dom_elem-instances', function() {
     });
 
     describe('mods', function() {
+        it('should set element\'s modifier without val', function() {
+            DOM.decl('block', {}, {});
+            DOM.decl({ block : 'block', elem : 'elem' }, {}, {});
+
+            var rootNode = $(BEMHTML.apply({
+                    block : 'block',
+                    js : true,
+                    content : {
+                        elem : 'elem',
+                        mix : { block : 'i-bem' },
+                        js : true
+                    }
+                })),
+                block = rootNode.bem('block'),
+                elem = block.elemInstance('elem');
+
+            elem.hasMod('mod').should.be.false;
+
+            block.setMod(block.elem('elem'), 'mod');
+            elem.hasMod('mod').should.be.true;
+
+            DOM.destruct(rootNode);
+            delete DOM.blocks['block'];
+            delete DOM.blocks['block__elem'];
+        });
+
         it('should update element\'s modifier properly', function() {
             DOM.decl('block', {}, {});
             DOM.decl({ block : 'block', elem : 'elem' }, {}, {});

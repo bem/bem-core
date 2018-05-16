@@ -64,6 +64,10 @@ provide(BEMDOM.decl(/** @lends BEMDOM.prototype */{
     setMod : function(elem, modName, modVal) {
         var elemClass;
 
+        if(elem instanceof $ && typeof modVal === 'undefined') {
+            modVal = true;
+        }
+
         if(elem && typeof modVal !== 'undefined' && blocks[elemClass = this.__self._buildElemClass(elem)]) {
             this
                 .findBlocksOn(elem, elemClass)
