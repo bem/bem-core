@@ -655,7 +655,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     _findParentEntities : function(entity, onlyFirst) {
         return this._findEntities(entity, onlyFirst, function(domNode, _initEntity, className) {
             while(domNode = domNode.parentNode)
-                if(domNode.classList.contains(className) && !_initEntity(domNode))
+                if(domNode.classList && domNode.classList.contains(className) && !_initEntity(domNode))
                     return false;
         });
     },
