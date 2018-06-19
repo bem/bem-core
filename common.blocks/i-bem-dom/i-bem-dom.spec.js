@@ -164,6 +164,16 @@ describe('i-bem-dom', function() {
             block2.should.be.instanceOf(Block1);
             elem2.should.be.instanceOf(Elem1);
         });
+
+        it('should throw error if declMod contains lazyInit static property', function() {
+            var Block = bemDom.declBlock('block');
+
+            function mod() {
+                Block.declMod({ modName : 'mod' }, null, { lazyInit : true });
+            }
+
+            mod.should.throw(Error, 'declMod with lazyInit prop not allowed. Your need use \'lazyInit\' in data-bem params');
+        });
     });
 
     describe('getMod', function() {
