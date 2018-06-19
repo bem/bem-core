@@ -153,7 +153,7 @@ function initEntity(entityName, domElem, params, ignoreLazyInit, callback) {
 
     entityCls._processInit();
 
-    if(!entityCls.lazyInit || ignoreLazyInit || params.lazyInit === false) {
+    if(ignoreLazyInit || params.lazyInit === false || !entityCls.lazyInit && !params.lazyInit) {
         ignoreLazyInit && domElem.addClass(BEM_CLASS_NAME); // add css class for preventing memory leaks in further destructing
 
         entity = new entityCls(uniqIdToDomElems[uniqId], params, !!ignoreLazyInit);

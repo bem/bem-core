@@ -1686,6 +1686,27 @@ describe('i-bem-dom', function() {
             spy.should.have.been.called;
         });
 
+        it('should be possible to force lazy initialization', function() {
+            spy = sinon.spy();
+
+            bemDom.declBlock('block', {
+                onSetMod : {
+                    'js' : {
+                        'inited' : spy
+                    }
+                }
+            }, {
+                lazyInit : false
+            });
+
+            rootNode = initDom({
+                block : 'block',
+                js : { lazyInit : true }
+            });
+
+            spy.should.have.not.been.called;
+        });
+
         describe('on DOM events', function() {
             beforeEach(function() {
                 spy = sinon.spy();
