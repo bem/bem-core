@@ -534,6 +534,11 @@ describe('i-bem-dom', function() {
                     .params.id
                         .should.be.equal('1');
             });
+
+            it('should return null if block not found', function() {
+                var NotInDomBlock = bemDom.declBlock('notindom');
+                expect(leafBlock.findParentBlock(NotInDomBlock)).to.be.a('null');
+            });
         });
 
         describe('findMixedBlocks', function() {
