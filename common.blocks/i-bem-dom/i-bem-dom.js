@@ -153,7 +153,7 @@ function initEntity(entityName, domElem, params, ignoreLazyInit, callback) {
 
     entityCls._processInit();
 
-    if(ignoreLazyInit || params.lazyInit === false || !entityCls.lazyInit && !params.lazyInit) {
+    if(ignoreLazyInit || params.lazyInit === false || !entityCls._checkLazyInit(domElem[0]) && !params.lazyInit) {
         ignoreLazyInit && domElem.addClass(BEM_CLASS_NAME); // add css class for preventing memory leaks in further destructing
 
         entity = new entityCls(uniqIdToDomElems[uniqId], params, !!ignoreLazyInit);
@@ -339,6 +339,38 @@ function getEntityBase(baseCls, entityName, base) {
     }
 
     return base;
+}
+
+/**
+ * Extract lazyInit property from static props
+ * @param {Object} [staticProps]
+ * @returns {?Boolean}
+ */
+function extractLazyInitProp(staticProps) {
+    if(staticProps && staticProps.lazyInit !== undef) {
+        var lazyInit = staticProps.lazyInit;
+        delete staticProps.lazyInit;
+        return lazyInit;
+    }
+
+    return null;
+}
+
+/**
+ * Processing lazyInit rules for entity
+ * @param {Function} entity BemDomEntity
+ * @param {Object} mod mod declaration
+ * @param {Boolean} lazyInit lazyInit behavior
+ * @returns {?Boolean}
+ */
+function processLazyInitRule(entity, mod, lazyInit) {
+    var rules = entity._lazyInitRules;
+
+    rules.push({
+        check : entity._buildModValRE(mod.modName, mod.modVal),
+        modName : mod.modName,
+        lazyInit : lazyInit
+    });
 }
 
 /**
@@ -770,11 +802,12 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
     /** @override */
     declMod : function(mod, props, staticProps) {
-        if(staticProps && staticProps.lazyInit !== undef) {
-            throw Error('declMod with lazyInit prop not allowed. Your need use \'lazyInit\' in data-bem params');
-        }
+        var lazyInit = extractLazyInitProp(staticProps),
+            entity = this.__base.apply(this, arguments);
 
-        return this.__base.apply(this, arguments);
+        lazyInit !== null && processLazyInitRule(entity, mod, lazyInit);
+
+        return entity;
     },
 
     /** @override */
@@ -831,13 +864,16 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * Builds a regular expression for extracting modifier values from a DOM element of an entity
      * @private
      * @param {String} modName Modifier name
+     * @param {String} [modVal] Modifier value
      * @returns {RegExp}
      */
-    _buildModValRE : function(modName) {
+    _buildModValRE : function(modName, modVal) {
+        modVal = (modVal === '*' || modVal === undef)? NAME_PATTERN : modVal;
+
         return new RegExp(
             '(\\s|^)' +
             this._buildModClassNamePrefix(modName) +
-            '(?:' + MOD_DELIM + '(' + NAME_PATTERN + '))?(?=\\s|$)');
+            '(?:' + MOD_DELIM + '(' + modVal + '))?(?=\\s|$)');
     },
 
     /**
@@ -860,6 +896,33 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     _buildSelector : function(modName, modVal) {
         return '.' + this._buildClassName(modName, modVal);
+    },
+
+    /**
+     * Check domNode for lazy initialization entity
+     * @protected
+     * @param {HTMLElement} domNode
+     * @returns {Boolean|undefined}
+     */
+    _checkLazyInit : function(domNode) {
+        var rules = this._lazyInitRules,
+            len = rules.length,
+            rule,
+            lazyInit,
+            modName;
+
+        while(rule = rules[--len]) {
+            if(modName !== rule.modName && rule.check.test(domNode.className)) {
+                if(lazyInit === undef || lazyInit === true) {
+                    modName = rule.modName;
+                    lazyInit = rule.lazyInit;
+                }
+
+                if(lazyInit === false) return lazyInit;
+            }
+        }
+
+        return lazyInit !== undef? lazyInit : this.lazyInit;
     }
 });
 
@@ -874,6 +937,8 @@ var Block = inherit([bem.Block, BemDomEntity], /** @lends Block.prototype */{
     _block : function() {
         return this;
     }
+}, {
+    _lazyInitRules : []
 });
 
 /**
@@ -887,6 +952,8 @@ var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
     _block : function() {
         return this._blockInstance || (this._blockInstance = this.findParentBlock(getEntityCls(this.__self._blockName)));
     }
+}, {
+    _lazyInitRules : []
 });
 
 /**

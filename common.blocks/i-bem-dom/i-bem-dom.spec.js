@@ -164,16 +164,6 @@ describe('i-bem-dom', function() {
             block2.should.be.instanceOf(Block1);
             elem2.should.be.instanceOf(Elem1);
         });
-
-        it('should throw error if declMod contains lazyInit static property', function() {
-            var Block = bemDom.declBlock('block');
-
-            function mod() {
-                Block.declMod({ modName : 'mod' }, null, { lazyInit : true });
-            }
-
-            mod.should.throw(Error, 'declMod with lazyInit prop not allowed. Your need use \'lazyInit\' in data-bem params');
-        });
     });
 
     describe('getMod', function() {
@@ -1674,6 +1664,91 @@ describe('i-bem-dom', function() {
 
     describe('lazy init', function() {
         var spy;
+
+        ['block', 'elem'].forEach(function(entityType) {
+            it('should have different lazyInit for base ' + entityType + ' and modifiers', function() {
+                var spy1 = sinon.spy(),
+                    spy2 = sinon.spy(),
+                    spy3 = sinon.spy(),
+                    spy4 = sinon.spy(),
+                    spy5 = sinon.spy(),
+
+                    Entity = entityType === 'block'? bemDom.declBlock('block', {
+                        onSetMod : { js : { inited : spy1 } }
+                    }, {
+                        lazyInit : true
+                    }) : bemDom.declElem('block', 'elem', {
+                        onSetMod : { js : { inited : spy1 } }
+                    }, {
+                        lazyInit : true
+                    });
+
+                Entity.declMod({ modName : 'm1' }, {
+                    onSetMod : { js : { inited : spy2 } }
+                }, {
+                    lazyInit : false
+                });
+
+                Entity.declMod({ modName : 'm2', modVal : true }, {
+                    onSetMod : { js : { inited : spy3 } }
+                });
+
+                Entity.declMod({ modName : 'm3', modVal : '*' }, {
+                    onSetMod : { js : { inited : spy4 } }
+                }, {
+                    lazyInit : false
+                });
+
+                Entity.declMod({ modName : 'm3', modVal : 'v2' }, {
+                    onSetMod : { js : { inited : spy5 } }
+                }, {
+                    lazyInit : true
+                });
+
+                rootNode = initDom([
+                    { },
+                    { m1 : true },
+                    { m2 : true },
+                    { m3 : 'v1' },
+                    { m3 : 'v2' }
+                ].map(function(mods) {
+                    var bemjson = entityType === 'block'? { mods : mods }
+                        : { elem : 'elem', elemMods : mods };
+
+                    bemjson.block = 'block';
+                    bemjson.js = true;
+
+                    return bemjson;
+                }));
+
+                spy1.should.have.not.been.called;
+                spy2.should.have.been.called;
+                spy3.should.have.not.been.called;
+                spy4.should.have.been.called;
+                spy5.should.have.not.been.called;
+            });
+        });
+
+        it('should use force init priority on domNode between multiple mods', function() {
+            spy = sinon.spy();
+
+            var Block = bemDom.declBlock('block', {
+                onSetMod : { js : { inited : spy } }
+            }, {
+                lazyInit : false
+            });
+
+            Block.declMod({ modName : 'm1' }, null, { lazyInit : false });
+            Block.declMod({ modName : 'm2' }, null, { lazyInit : true });
+
+            rootNode = initDom([
+                { block : 'block', mods : { m1 : true, m2 : true }, js : true },
+                { block : 'block', mods : { m1 : true }, js : true },
+                { block : 'block', mods : { m2 : true }, js : true },
+            ]);
+
+            spy.should.have.calledTwice;
+        });
 
         it('should be possible to force initialization', function() {
             spy = sinon.spy();
