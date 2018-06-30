@@ -291,8 +291,8 @@ var undef,
             if(bindCtx) {
                 var typeOfCtx = typeof bindCtx;
 
-                if (bindCtx === winNode || bindCtx === docNode || bindCtx instanceof Element) {
-                    res.bindDomNodes = bindCtx === docNode ? [docNode.documentElement] : [bindCtx];
+                if(bindCtx === winNode || bindCtx === docNode || bindCtx instanceof Element) {
+                    res.bindDomNodes = bindCtx === docNode? [docNode.documentElement] : [bindCtx];
                     res.key = identify(bindCtx);
                     res.bindToArbitraryDomNode = true;
                 } else if(bindCtx.length && typeOfCtx !== 'string') { // NOTE: duck-typing check for collection of DOM nodes
