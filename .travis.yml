@@ -20,6 +20,7 @@ env:
 branches:
   only:
     - /^v\d+$/
+    - issues/1507@v5
 
 after_success:
   - npm install coveralls
