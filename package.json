@@ -13,8 +13,6 @@
   "author": "",
   "license": "MPL-2.0",
   "dependencies": {
-    "bem-environ": "^1.4.0",
-    "gitbook-api": "^3.0.2",
     "ym": "^0.1.2"
   },
   "devDependencies": {
@@ -42,6 +40,7 @@
     "enb-js": "^1.1.0",
     "enb-magic-factory": "^0.5.0",
     "enb-magic-platform": "0.6.0",
+    "gitbook-api": "^3.0.2",
     "git-hooks": "^1.0.2",
     "istanbul": "^0.4.3",
     "jscs": "^2.11.0",
