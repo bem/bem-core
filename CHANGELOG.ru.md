@@ -1,5 +1,31 @@
 # История изменений
 
+## 4.3.0
+
+### Крупные изменения
+
+- `jQuery` была обновлена до 3.2.1 и 1.12.4 ([#1587](https://github.com/bem/bem-core/pull/1587)).
+
+### В релиз вошли следующие исправления ошибок
+- Исправлена возможность форсировать lazy-инициализацию из разметки ([#1579](https://github.com/bem/bem-core/pull/1579)).
+- Исправлена возможность декларировать сущности с миксинами ([#1550](https://github.com/bem/bem-core/pull/1550)).
+- Теперь при попытке использования `lazyInit` при деклации модификатора будет выбрасываться исключение ([#1579](https://github.com/bem/bem-core/pull/1579)).
+- Исправлен баг в методе `isFunction` блока `functions`, который неправильно определял сложные функции ([#1577](https://github.com/bem/bem-core/pull/1577)).
+
+### Также в релиз вошли следующие изменения
+- Добавлен конфиг `.bemrc` ([#1568](https://github.com/bem/bem-core/pull/1568)).
+- Блок `vow` обновлен до версии 0.4.17 ([#1565](https://github.com/bem/bem-core/pull/1565)).
+- Блок `inherit` обновлен до версии 2.2.6 ([#1519](https://github.com/bem/bem-core/pull/1519)).
+- Удален приватный метод `_delInitedMod` блока `i-bem` ([#1523](https://github.com/bem/bem-core/pull/1523)).
+- Удален код, относящийся к старой версии `bem-tools` (https://github.com/bem/bem-core/commit/e57678b2d64a3b976a53af4a7fa09bf918685821).
+- Обновлены npm-зависимости ([#1589](https://github.com/bem/bem-core/pull/1589)).
+- Теперь тесты в CI запускаются и под Node.js 8 (https://github.com/bem/bem-core/commit/dd7e5344a64ad1595eab28febb2242134fcedbb3).
+- Добавлены недостающие тесты для блока `i-bem-dom` ([#1517](https://github.com/bem/bem-core/pull/1517)).
+- Добавлен gitbook ([#1569](https://github.com/bem/bem-core/pull/1569)).
+- Исправления JSDoc.
+- Исправления документации.
+
+
 ## 4.2.1
 
 ### В релиз вошли следующие исправления ошибок

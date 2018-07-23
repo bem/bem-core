@@ -1,5 +1,29 @@
 # Changelog
 
+## 4.3.0
+
+### Notable changes
+- `jQuery` was updated to 3.2.1 and 1.12.4 ([#1587](https://github.com/bem/bem-core/pull/1587)).
+
+### Bug fixes
+- Possibility to force `lazy` initialization from markup was fixed ([#1579](https://github.com/bem/bem-core/pull/1579)).
+- Possibility to declare entities with mixins was fixed ([#1550](https://github.com/bem/bem-core/pull/1550)).
+- Now `lazyInit` in `declMod` will throw an error ([#1579](https://github.com/bem/bem-core/pull/1579)).
+- With bug in `isFunction` method of `functions` block, which works wrong for special functions ([#1577](https://github.com/bem/bem-core/pull/1577)).
+
+### Other changes
+- `.bemrc` config was added ([#1568](https://github.com/bem/bem-core/pull/1568)).
+- `vow` was updated to 0.4.17 ([#1565](https://github.com/bem/bem-core/pull/1565)).
+- `inherit` was updated to 2.2.6 ([#1519](https://github.com/bem/bem-core/pull/1519)).
+- Private `_delInitedMod` method of `i-bem` block was removed ([#1523](https://github.com/bem/bem-core/pull/1523)).
+- Removed code for old `bem-tools` (https://github.com/bem/bem-core/commit/e57678b2d64a3b976a53af4a7fa09bf918685821).
+- npm dependencies were updated ([#1589](https://github.com/bem/bem-core/pull/1589)).
+- Now tests are executed also on Node.js 8 (https://github.com/bem/bem-core/commit/dd7e5344a64ad1595eab28febb2242134fcedbb3).
+- More specs for `i-bem-dom` were added ([#1517](https://github.com/bem/bem-core/pull/1517)).
+- `gitbook` was added ([#1569](https://github.com/bem/bem-core/pull/1569)).
+- JSDoc was fixed.
+- Documentation updates.
+
 ## 4.2.1
 
 ### Bug fixes
