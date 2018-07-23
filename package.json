@@ -52,6 +52,7 @@
   },
   "scripts": {
     "start": "magic server",
+    "postinstall": "npm i jsdoc",
     "lint": "jshint-groups && jscs .",
     "test": "npm run lint && npm run test-all",
     "test-all": "npm run test-i18n && npm run test-tmpl && npm run test-js && npm run test-dist",
