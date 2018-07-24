@@ -358,6 +358,10 @@ var undef,
             } else {
                 do {
                     if(!targetDomNode) {
+                        if(domNode === window) {
+                            return { instance : window, targetDomNode : window };
+                        }
+
                         if(domNode.classList.contains(params.bindClassName)) {
                             targetDomNode = domNode;
                         } else continue;

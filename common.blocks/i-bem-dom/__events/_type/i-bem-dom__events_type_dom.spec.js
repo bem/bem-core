@@ -7,7 +7,7 @@ var undef,
     expect = chai.expect;
 
 describe('DOM events', function() {
-    var Block1, Block2, Block3, block1, spy1, spy2, spy3, spy4, spy5, spy6, spy7, spy8,
+    var Block1, Block2, Block3, block1, spy1, spy2, spy3, spy4, spy5, spy6, spy7, spy8, spy9,
         wrapSpy = function(spy) {
             return function(e) {
                 // NOTE: we need to pass bemTarget and data explicitly, as `e` is being
@@ -26,6 +26,7 @@ describe('DOM events', function() {
         spy6 = sinon.spy();
         spy7 = sinon.spy();
         spy8 = sinon.spy();
+        spy9 = sinon.spy();
     });
 
     afterEach(function() {
@@ -1036,6 +1037,38 @@ describe('DOM events', function() {
                         spy3.should.have.been.called;
                     });
                 });
+            });
+        });
+
+        describe('window events', function() {
+            beforeEach(function() {
+                Block1 = bemDom.declBlock('block1', {}, {
+                    onInit : function() {
+                        this._domEvents(window).on('resize', spy9);
+                    }
+                });
+
+                block1 = initBemEntity({ block : 'block1' }, Block1);
+            });
+
+            it('should properly bind handlers', function() {
+                windowDispatchEvent('resize');
+
+                spy9.should.have.been.called;
+            });
+
+            it('should properly unbind all handlers', function() {
+                Block1._domEvents(window).un('resize');
+                windowDispatchEvent('resize');
+
+                spy9.should.not.have.been.called;
+            });
+
+            it('should properly unbind specified handler', function() {
+                Block1._domEvents(window).un('resize', spy9);
+                windowDispatchEvent('resize');
+
+                spy9.should.not.have.been.called;
             });
         });
     });
