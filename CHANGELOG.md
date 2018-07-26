@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.3.1
+
+### Bug fixes
+- Reverted change that led to error when `lazyInit` in `declMod` was used ([#1594](https://github.com/bem/bem-core/pull/1594)).
+
 ## 4.3.0
 
 ### Notable changes
