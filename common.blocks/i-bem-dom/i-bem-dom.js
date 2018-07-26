@@ -769,15 +769,6 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     },
 
     /** @override */
-    declMod : function(mod, props, staticProps) {
-        if(staticProps && staticProps.lazyInit !== undef) {
-            throw Error('declMod with lazyInit prop not allowed. Your need use \'lazyInit\' in data-bem params');
-        }
-
-        return this.__base.apply(this, arguments);
-    },
-
-    /** @override */
     _processInit : function(heedInit) {
         /* jshint eqeqeq: false */
         if(this.onInit && this._inited == heedInit) {
