@@ -1,4 +1,10 @@
-modules.define('spec', ['cookie', 'chai'], function(provide, cookie, chai) {
+modules.define('spec', [
+    'cookie',
+    'chai'
+], function(provide,
+    cookie,
+    chai
+) {
 
 var expect = chai.expect;
 

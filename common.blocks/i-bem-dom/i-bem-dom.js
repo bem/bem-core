@@ -2,34 +2,31 @@
  * @module i-bem-dom
  */
 
-modules.define(
-    'i-bem-dom',
-    [
-        'i-bem',
-        'i-bem__internal',
-        'i-bem-dom__collection',
-        'i-bem-dom__events_type_dom',
-        'i-bem-dom__events_type_bem',
-        'inherit',
-        'identify',
-        'objects',
-        'functions',
-        'jquery',
-        'dom'
-    ],
-    function(
-        provide,
-        bem,
-        bemInternal,
-        BemDomCollection,
-        domEvents,
-        bemEvents,
-        inherit,
-        identify,
-        objects,
-        functions,
-        $,
-        dom) {
+modules.define('i-bem-dom', [
+    'i-bem',
+    'i-bem__internal',
+    'i-bem-dom__collection',
+    'i-bem-dom__events_type_dom',
+    'i-bem-dom__events_type_bem',
+    'inherit',
+    'identify',
+    'objects',
+    'functions',
+    'jquery',
+    'dom'
+], function(provide,
+    bem,
+    bemInternal,
+    BemDomCollection,
+    domEvents,
+    bemEvents,
+    inherit,
+    identify,
+    objects,
+    functions,
+    $,
+    dom
+) {
 
 var undef,
     /**

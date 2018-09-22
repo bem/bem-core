@@ -1,7 +1,10 @@
-modules.define(
-    'spec',
-    ['jquery', 'sinon'],
-    function(provide, $, sinon) {
+modules.define('spec', [
+    'jquery',
+    'sinon'
+], function(provide,
+    $,
+    sinon
+) {
 
 describe.only('jquery__event_type_pointerpressrelease', function() {
     var elem;

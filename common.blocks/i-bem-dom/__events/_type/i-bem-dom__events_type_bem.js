@@ -1,26 +1,23 @@
 /**
  * @module i-bem-dom__events_type_bem
  */
-modules.define(
-    'i-bem-dom__events_type_bem',
-    [
-        'i-bem-dom__events',
-        'i-bem__internal',
-        'inherit',
-        'functions',
-        'jquery',
-        'identify',
-        'events'
-    ],
-    function(
-        provide,
-        bemDomEvents,
-        bemInternal,
-        inherit,
-        functions,
-        $,
-        identify,
-        events) {
+modules.define('i-bem-dom__events_type_bem', [
+    'i-bem-dom__events',
+    'i-bem__internal',
+    'inherit',
+    'functions',
+    'jquery',
+    'identify',
+    'events'
+], function(provide,
+    bemDomEvents,
+    bemInternal,
+    inherit,
+    functions,
+    $,
+    identify,
+    events
+) {
 
 var EVENT_PREFIX = '__bem__',
     MOD_CHANGE_EVENT = 'modchange',

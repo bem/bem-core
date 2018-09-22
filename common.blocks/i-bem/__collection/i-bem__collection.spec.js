@@ -1,7 +1,14 @@
-modules.define(
-    'spec',
-    ['i-bem', 'i-bem__collection', 'sinon', 'chai'],
-    function(provide, bem, BemCollection, sinon, chai) {
+modules.define('spec', [
+    'i-bem',
+    'i-bem__collection',
+    'sinon',
+    'chai'
+], function(provide,
+    bem,
+    BemCollection,
+    sinon,
+    chai
+) {
 
 var expect = chai.expect;
 

@@ -1,7 +1,10 @@
-modules.define(
-    'spec',
-    ['jquery', 'sinon'],
-    function(provide, $, sinon) {
+modules.define('spec', [
+    'jquery',
+    'sinon'
+], function(provide,
+    $,
+    sinon
+) {
 
 describe('jquery__event_type_pointerclick', function() {
     it('should trigger "pointerclick" event on click by left button', function() {

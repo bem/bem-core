@@ -2,7 +2,15 @@
  * @module idle
  */
 
-modules.define('idle', ['inherit', 'events', 'jquery'], function(provide, inherit, events, $) {
+modules.define('idle', [
+    'inherit',
+    'events',
+    'jquery'
+], function(provide,
+    inherit,
+    events,
+    $
+) {
 
 var IDLE_TIMEOUT = 3000,
     USER_EVENTS = 'mousemove keydown click',

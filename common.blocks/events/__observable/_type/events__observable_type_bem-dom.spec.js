@@ -1,17 +1,14 @@
-modules.define(
-    'spec',
-    [
-        'events__observable',
-        'sinon',
-        'i-bem-dom',
-        'BEMHTML'
-    ],
-    function(
-        provide,
-        observable,
-        sinon,
-        bemDom,
-        BEMHTML) {
+modules.define('spec', [
+    'events__observable',
+    'sinon',
+    'i-bem-dom',
+    'BEMHTML'
+], function(provide,
+    observable,
+    sinon,
+    bemDom,
+    BEMHTML
+) {
 
 describe('events__observable_type_bem-dom', function() {
     var spy1, spy2, spy3, block;

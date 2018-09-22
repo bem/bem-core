@@ -2,10 +2,7 @@
  * @module events__observable
  */
 
-modules.define(
-    'events__observable',
-    ['inherit'],
-    function(provide, inherit) {
+modules.define('events__observable', ['inherit'], function(provide, inherit) {
 
 /**
  * @class Observable

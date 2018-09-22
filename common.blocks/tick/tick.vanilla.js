@@ -3,7 +3,13 @@
  * @description Helpers for polling anything
  */
 
-modules.define('tick', ['inherit', 'events'], function(provide, inherit, events) {
+modules.define('tick', [
+    'inherit',
+    'events'
+], function(provide,
+    inherit,
+    events
+) {
 
 var TICK_INTERVAL = 50,
     global = this.global,

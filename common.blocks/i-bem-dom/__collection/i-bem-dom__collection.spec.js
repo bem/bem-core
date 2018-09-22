@@ -1,4 +1,16 @@
-modules.define('spec', ['i-bem', 'i-bem-dom', 'i-bem-dom__collection', 'objects', 'BEMHTML'], function(provide, bem, bemDom, BemDomCollection, objects, BEMHTML) {
+modules.define('spec', [
+    'i-bem',
+    'i-bem-dom',
+    'i-bem-dom__collection',
+    'objects',
+    'BEMHTML'
+], function(provide,
+    bem,
+    bemDom,
+    BemDomCollection,
+    objects,
+    BEMHTML
+) {
 
 describe('BEM collections', function() {
     var rootNode;

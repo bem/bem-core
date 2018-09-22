@@ -1,7 +1,24 @@
-modules.define(
-    'spec',
-    ['i-bem', 'i-bem-dom', 'i-bem-dom__collection', 'objects', 'functions', 'jquery', 'chai', 'sinon', 'BEMHTML'],
-    function(provide, bem, bemDom, BemDomCollection, objects, functions, $, chai, sinon, BEMHTML) {
+modules.define('spec', [
+    'i-bem',
+    'i-bem-dom',
+    'i-bem-dom__collection',
+    'objects',
+    'functions',
+    'jquery',
+    'chai',
+    'sinon',
+    'BEMHTML'
+], function(provide,
+    bem,
+    bemDom,
+    BemDomCollection,
+    objects,
+    functions,
+    $,
+    chai,
+    sinon,
+    BEMHTML
+) {
 
 var undef,
     expect = chai.expect;

@@ -2,10 +2,7 @@
  * @module events__observable
  */
 
-modules.define(
-    'events__observable',
-    ['i-bem-dom'],
-    function(provide, bemDom, observable) {
+modules.define('events__observable', ['i-bem-dom'], function(provide, bemDom, observable) {
 
 provide(
     /**

@@ -1,7 +1,13 @@
 /**
  * @module i-bem-dom__collection
  */
-modules.define('i-bem-dom__collection', ['inherit', 'i-bem__collection'], function(provide, inherit, BemCollection) {
+modules.define('i-bem-dom__collection', [
+    'inherit',
+    'i-bem__collection'
+], function(provide,
+    inherit,
+    BemCollection
+) {
 
 /**
  * @class BemDomCollection

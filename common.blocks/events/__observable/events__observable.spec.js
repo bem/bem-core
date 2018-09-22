@@ -1,15 +1,12 @@
-modules.define(
-    'spec',
-    [
-        'events__observable',
-        'sinon',
-        'events'
-    ],
-    function(
-        provide,
-        observable,
-        sinon,
-        events) {
+modules.define('spec', [
+    'events__observable',
+    'sinon',
+    'events'
+], function(provide,
+    observable,
+    sinon,
+    events
+) {
 
 describe('events__observable', function() {
     var spy1, spy2, spy3, emitter;

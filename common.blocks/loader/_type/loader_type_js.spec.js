@@ -1,4 +1,10 @@
-modules.define('spec', ['loader_type_js', 'sinon'], function(provide, loader, sinon) {
+modules.define('spec', [
+    'loader_type_js',
+    'sinon'
+], function(provide,
+    loader,
+    sinon
+) {
 
 describe('loader_type_js', function() {
     it('should call success callback', function(done) {

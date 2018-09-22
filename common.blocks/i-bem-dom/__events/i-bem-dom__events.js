@@ -1,26 +1,23 @@
 /**
  * @module i-bem-dom__events
  */
-modules.define(
-    'i-bem-dom__events',
-    [
-        'i-bem__internal',
-        'i-bem-dom__collection',
-        'inherit',
-        'identify',
-        'objects',
-        'jquery',
-        'functions'
-    ],
-    function(
-        provide,
-        bemInternal,
-        BemDomCollection,
-        inherit,
-        identify,
-        objects,
-        $,
-        functions) {
+modules.define('i-bem-dom__events', [
+    'i-bem__internal',
+    'i-bem-dom__collection',
+    'inherit',
+    'identify',
+    'objects',
+    'jquery',
+    'functions'
+], function(provide,
+    bemInternal,
+    BemDomCollection,
+    inherit,
+    identify,
+    objects,
+    $,
+    functions
+) {
 
 var undef,
     winNode = window,

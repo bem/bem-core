@@ -1,4 +1,12 @@
-modules.define('spec', ['i-bem', 'sinon', 'objects'], function(provide, bem, sinon, objects) {
+modules.define('spec', [
+    'i-bem',
+    'sinon',
+    'objects'
+], function(provide,
+    bem,
+    sinon,
+    objects
+) {
 
 describe('i-bem', function() {
     afterEach(function() {

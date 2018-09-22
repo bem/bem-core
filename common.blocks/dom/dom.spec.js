@@ -1,4 +1,10 @@
-modules.define('spec', ['dom', 'jquery'], function(provide, dom, $) {
+modules.define('spec', [
+    'dom',
+    'jquery'
+], function(provide,
+    dom,
+    $
+) {
 
 describe('dom', function() {
     describe('contains', function() {

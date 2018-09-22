@@ -2,24 +2,21 @@
  * @module i-bem
  */
 
-modules.define(
-    'i-bem',
-    [
-        'i-bem__internal',
-        'inherit',
-        'identify',
-        'next-tick',
-        'objects',
-        'functions'
-    ],
-    function(
-        provide,
-        bemInternal,
-        inherit,
-        identify,
-        nextTick,
-        objects,
-        functions) {
+modules.define('i-bem', [
+    'i-bem__internal',
+    'inherit',
+    'identify',
+    'next-tick',
+    'objects',
+    'functions'
+], function(provide,
+    bemInternal,
+    inherit,
+    identify,
+    nextTick,
+    objects,
+    functions
+) {
 
 var undef,
 

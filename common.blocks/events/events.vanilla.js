@@ -2,10 +2,15 @@
  * @module events
  */
 
-modules.define(
-    'events',
-    ['identify', 'inherit', 'functions'],
-    function(provide, identify, inherit, functions) {
+modules.define('events', [
+    'identify',
+    'inherit',
+    'functions'
+], function(provide,
+    identify,
+    inherit,
+    functions
+) {
 
 var undef,
     storageExpando = '__' + (+new Date) + 'storage',

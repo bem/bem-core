@@ -1,18 +1,15 @@
 /**
  * @module i-bem-dom__events_type_dom
  */
-modules.define(
-    'i-bem-dom__events_type_dom',
-    [
-        'i-bem-dom__events',
-        'inherit',
-        'jquery'
-    ],
-    function(
-        provide,
-        bemDomEvents,
-        inherit,
-        $) {
+modules.define('i-bem-dom__events_type_dom', [
+    'i-bem-dom__events',
+    'inherit',
+    'jquery'
+], function(provide,
+    bemDomEvents,
+    inherit,
+    $
+) {
 
 var eventBuilder = function(e) {
         return e;

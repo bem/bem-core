@@ -1,4 +1,10 @@
-modules.define('spec', ['tick', 'sinon'], function(provide, tick, sinon) {
+modules.define('spec', [
+    'tick',
+    'sinon'
+], function(provide,
+    tick,
+    sinon
+) {
 
 describe('tick', function() {
     describe('start/stop', function() {

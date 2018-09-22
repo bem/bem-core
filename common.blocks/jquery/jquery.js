@@ -3,10 +3,13 @@
  * @description Provide jQuery (load if it does not exist).
  */
 
-modules.define(
-    'jquery',
-    ['loader_type_js', 'jquery__config'],
-    function(provide, loader, cfg) {
+modules.define('jquery', [
+    'loader_type_js',
+    'jquery__config'
+], function(provide,
+    loader,
+    cfg
+) {
 
 /* global jQuery */
 

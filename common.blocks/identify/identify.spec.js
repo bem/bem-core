@@ -1,4 +1,10 @@
-modules.define('spec', ['identify', 'chai'], function(provide, identify, chai) {
+modules.define('spec', [
+    'identify',
+    'chai'
+], function(provide,
+    identify,
+    chai
+) {
 
 var should = chai.should();
 
