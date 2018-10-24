@@ -1,7 +1,6 @@
 language: node_js
 
 node_js:
-  - '4'
   - '8'
 
 # sudo=false to run builds inside container infrastructure
