@@ -43,7 +43,10 @@ function configure(helper, platform) {
         specSuffixes   : ['spec.js'],
         langs          : true,
         depsTech       : techs.bem.deps,
-        scripts        : ['https://yastatic.net/es5-shims/0.0.2/es5-shims.min.js'],
+        scripts        : [
+            'https://yastatic.net/es5-shims/0.0.2/es5-shims.min.js',
+            'https://yastatic.net/jquery/3.3.1/jquery.min.js'
+        ],
         templateEngine : {
             bemtreeTemplateTech : require('enb-bemxjst/techs/bemtree'),
             templateTech : require('enb-bemxjst/techs/bemhtml'),
