@@ -45,14 +45,15 @@
     "istanbul": "^0.4.3",
     "jscs": "^2.11.0",
     "jscs-bem": "^0.2.0",
+    "jsdoc": "^3.5.5",
     "jshint": "^2.9.1",
     "jshint-groups": "^0.8.0",
     "mocha": "^3.3.0",
+    "mocha-phantomjs": "^4.1.0",
     "vow": "^0.4.17"
   },
   "scripts": {
     "start": "magic server",
-    "postinstall": "npm i jsdoc mocha-phantomjs",
     "lint": "jshint-groups && jscs .",
     "test": "npm run lint && npm run test-all",
     "test-all": "npm run test-i18n && npm run test-tmpl && npm run test-js && npm run test-dist",
