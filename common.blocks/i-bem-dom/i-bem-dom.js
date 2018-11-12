@@ -1001,6 +1001,8 @@ bemDom = /** @exports */{
         return ctx;
     },
 
+    _initEntity : initEntity,
+
     /**
      * @param {jQuery} ctx Root DOM node
      * @param {Boolean} [excludeSelf=false] Exclude the main domElem
