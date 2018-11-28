@@ -218,7 +218,7 @@ describe('BEM events', function() {
         });
 
         describe('block instance events', function() {
-            var block2_1, block2_2;
+            var block1, block2_1, block2_2, block3_1, block3_2;
             beforeEach(function() {
                 Block1 = bemDom.declBlock('block1', {
                     onSetMod : {
@@ -237,14 +237,27 @@ describe('BEM events', function() {
                 });
 
                 Block2 = bemDom.declBlock('block2');
+                Block3 = bemDom.declBlock('block3');
 
-                block1 = initDom({
-                    block : 'block1',
-                    content : [
-                        { block : 'block2' },
-                        { block : 'block2' }
-                    ]
-                }).bem(Block1);
+                var dom = initDom([
+                    {
+                        block : 'block1',
+                        content : [
+                            { block : 'block2' },
+                            { block : 'block2' }
+                        ]
+                    },
+                    { block : 'block3' },
+                    { block : 'block3' },
+                ]);
+
+                block1 = dom.eq(0).bem(Block1);
+
+                block3_1 = dom.eq(1).bem(Block3);
+                block3_2 = dom.eq(2).bem(Block3);
+
+                block1._events(block3_1).on('click', spy6);
+                block1._events(block3_2).on('click', spy7);
             });
 
             it('should properly bind handlers', function() {
@@ -281,6 +294,15 @@ describe('BEM events', function() {
 
                 spy1.should.not.have.been.called;
                 spy3.should.have.been.called;
+            });
+
+            it('should properly unbind all handlers on block destruct', function() {
+                bemDom.destruct(block1.domElem);
+                block3_1._emit('click');
+                block3_2._emit('click');
+
+                spy6.should.have.not.been.called;
+                spy7.should.have.not.been.called;
             });
         });
 

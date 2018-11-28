@@ -758,9 +758,11 @@ describe('DOM events', function() {
             it('should properly unbind all handlers on block destruct', function() {
                 bemDom.destruct(block1.domElem);
                 rootNode.trigger('click');
+                rootNode.trigger('dblclick');
 
                 spy1.should.not.have.been.called;
                 spy2.should.not.have.been.called;
+                spy4.should.not.have.been.called;
             });
         });
     });

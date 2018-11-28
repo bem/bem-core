@@ -247,9 +247,10 @@ var undef,
                 ctxStorage = eventStorage[ctxId] = {};
                 if(isBindToInstance) {
                     ctx._events().on({ modName : 'js', modVal : '' }, function() {
-                        params.bindToArbitraryDomElem && ctxStorage[storageKey] &&
-                            ctxStorage[storageKey].un();
-                        delete ctxStorage[ctxId];
+                        objects.each(ctxStorage, function(eventManager) {
+                            eventManager.un();
+                        });
+                        delete eventStorage[ctxId];
                     });
                 }
             }
