@@ -198,7 +198,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             e = this.__self._buildModEventName(e);
         }
 
-        return this.__base.apply(this, arguments);
+        return this.__base(e, data, fn, ctx);
     },
 
     /**
@@ -213,7 +213,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             e = this.__self._buildModEventName(e);
         }
 
-        return this.__base.apply(this, arguments);
+        return this.__base(e, fn, ctx);
     },
 
     /**
@@ -700,7 +700,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             e = this._buildModEventName(e);
         }
 
-        return this.__base.apply(this, arguments);
+        return this.__base(e, data, fn, ctx);
     },
 
     /**
@@ -715,7 +715,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
             e = this._buildModEventName(e);
         }
 
-        return this.__base.apply(this, arguments);
+        return this.__base(e, fn, ctx);
     },
 
     _buildModEventName : function(modEvent) {
