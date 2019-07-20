@@ -699,10 +699,12 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /** @override */
     _extractModVal : function(modName) {
         var domNode = this.domElem[0],
+            className = domNode.localName === 'svg'? domNode.className.baseVal :
+                domNode.className,
             matches;
 
         domNode &&
-            (matches = domNode.className
+            (matches = className
                 .match(this.__self._buildModValRE(modName)));
 
         return matches? matches[2] || true : '';
