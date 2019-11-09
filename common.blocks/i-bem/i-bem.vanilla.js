@@ -195,7 +195,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     on : function(e, data, fn, ctx) {
         if(typeof e === 'object' && (functions.isFunction(data) || functions.isFunction(fn))) { // mod change event
-            e = this.__self._buildModEventName(e);
+            arguments[0] = this.__self._buildModEventName(e);
         }
 
         return this.__base.apply(this, arguments);
@@ -210,7 +210,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     un : function(e, fn, ctx) {
         if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
-            e = this.__self._buildModEventName(e);
+            arguments[0] = this.__self._buildModEventName(e);
         }
 
         return this.__base.apply(this, arguments);
@@ -697,7 +697,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     on : function(e, data, fn, ctx) {
         if(typeof e === 'object' && (functions.isFunction(data) || functions.isFunction(fn))) { // mod change event
-            e = this._buildModEventName(e);
+            arguments[0] = this._buildModEventName(e);
         }
 
         return this.__base.apply(this, arguments);
@@ -712,7 +712,7 @@ var BEM = inherit(events.Emitter, /** @lends BEM.prototype */ {
      */
     un : function(e, fn, ctx) {
         if(typeof e === 'object' && functions.isFunction(fn)) { // mod change event
-            e = this._buildModEventName(e);
+            arguments[0] = this._buildModEventName(e);
         }
 
         return this.__base.apply(this, arguments);
