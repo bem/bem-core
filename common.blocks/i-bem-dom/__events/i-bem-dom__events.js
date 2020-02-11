@@ -346,7 +346,7 @@ var undef,
 
                 if(params.bindClassName) {
                     do {
-                        if(domNode.classList.contains(params.bindClassName)) {
+                        if(ctx.hasClassName(domNode, params.bindClassName)) {
                             targetDomNode = domNode;
                             break;
                         }
@@ -358,12 +358,12 @@ var undef,
             } else {
                 do {
                     if(!targetDomNode) {
-                        if(domNode.classList.contains(params.bindClassName)) {
+                        if(ctx.hasClassName(domNode, params.bindClassName)) {
                             targetDomNode = domNode;
                         } else continue;
                     }
 
-                    if(domNode.classList.contains(params.ctxClassName)) {
+                    if(ctx.hasClassName(domNode, params.ctxClassName)) {
                         instance = getEntity(domNode, ctx);
                         break;
                     }

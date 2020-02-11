@@ -655,7 +655,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     _findParentEntities : function(entity, onlyFirst) {
         return this._findEntities(entity, onlyFirst, function(domNode, _initEntity, className) {
             while(domNode = domNode.parentNode)
-                if(domNode.classList && domNode.classList.contains(className) && !_initEntity(domNode))
+                if(domNode.classList && bemDom.hasClassName(domNode, className) && !_initEntity(domNode))
                     return false;
         });
     },
@@ -669,7 +669,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     _findMixedEntities : function(entity, onlyFirst) {
         return this._findEntities(entity, onlyFirst, function(domNode, _initEntity, className) {
-            if(!domNode.classList.contains(className)) return true;
+            if(!bemDom.hasClassName(domNode, className)) return true;
 
             return _initEntity(domNode);
         });
@@ -813,6 +813,20 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     getFromDom : function(domNode, params) {
         return getEntity(domNode, this, params);
+    },
+
+    /**
+     * Checks is dom node contains specified class name.
+     * Android 3-4.3 does not have support for classList on SVG or MathML elements.
+     * So we need to "polifill" it.
+     * @param {Element} domNode DOM node
+     * @param {String} className class name to check
+     * @returns {Boolean}
+     */
+    hasClassName : function(domNode, className) {
+        return domNode.classList?
+            domNode.classList.contains(className) :
+            domNode.className.split(' ').indexOf(className) > -1;
     },
 
     /** @override */
@@ -1039,7 +1053,7 @@ bemDom = /** @exports */{
             };
 
         dom.each(ctx, function(domNode) {
-            domNode.classList.contains(BEM_CLASS_NAME) &&
+            bemDom.hasClassName(domNode, BEM_CLASS_NAME) &&
                 _initEntities(domNode);
 
             dom.each(domNode.querySelectorAll(BEM_SELECTOR), _initEntities);
