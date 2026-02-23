@@ -1,18 +1,39 @@
 # vow
 
-This block provides the [Vow](https://github.com/dfilatov/vow) library.
+This block provides a thin compatibility wrapper around native `Promise`.
 
-Vow is a library for working with promises that implements the [Promises/A+](http://promisesaplus.com/) standard and supports the [ES6 Promises](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-promise-objects) specification.
+Starting from version 5.0, the full [Vow](https://github.com/dfilatov/vow) library has been replaced with native ES2024+ equivalents.
 
 ## Usage
 
 ```js
-modules.require(['vow'], function(vow) {
-    // ...
-});
+import vow from 'bem:vow';
+
+// Create a deferred
+const defer = vow.defer();
+defer.promise().then(value => console.log(value));
+defer.resolve('ok');
+
+// Promise.all
+vow.all([promise1, promise2]).then(results => { /* ... */ });
+
+// Check for thenable
+vow.isPromise(value); // true/false
 ```
 
-You can find the complete API for the library [here](http://dfilatov.github.io/vow/).
+## API
+
+| Method | Native equivalent |
+|--------|-------------------|
+| `vow.resolve(value)` | `Promise.resolve(value)` |
+| `vow.reject(reason)` | `Promise.reject(reason)` |
+| `vow.all(iterable)` | `Promise.all(iterable)` |
+| `vow.allResolved(iterable)` | `Promise.allSettled(iterable)` |
+| `vow.any(iterable)` | `Promise.any(iterable)` |
+| `vow.anyResolved(iterable)` | `Promise.race(iterable)` |
+| `vow.defer()` | `Promise.withResolvers()` |
+| `vow.when(value, fn)` | `Promise.resolve(value).then(fn)` |
+| `vow.invoke(fn, ...args)` | try/catch + `Promise.resolve()` |
 
 ## Public block technologies
 

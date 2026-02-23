@@ -18,10 +18,11 @@
     "jquery": "^4.0.0"
   },
   "devDependencies": {
+    "jsdoc": "^4.0.0",
     "vite": "^7.0.0"
   },
   "scripts": {
-    "test": "node --test build/plugins/vite-plugin-bem-levels.test.js",
+    "test": "node --test build/plugins/vite-plugin-bem-levels.test.js common.blocks/i18n/i18n.test.js",
     "build": "BEM_PLATFORM=desktop vite build --config build/vite.config.js && BEM_PLATFORM=touch vite build --config build/vite.config.js",
     "build:desktop": "BEM_PLATFORM=desktop vite build --config build/vite.config.js",
     "build:touch": "BEM_PLATFORM=touch vite build --config build/vite.config.js"
