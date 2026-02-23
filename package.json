@@ -13,6 +13,9 @@
   ],
   "author": "",
   "license": "MPL-2.0",
+  "engines": {
+    "node": ">=20"
+  },
   "peerDependencies": {
     "jquery": "^4.0.0"
   },
@@ -20,7 +23,9 @@
     "@eslint/js": "^10.0.1",
     "eslint": "^10.0.1",
     "globals": "^16.5.0",
+    "husky": "^9.1.7",
     "jsdoc": "^4.0.0",
+    "lint-staged": "^16.2.7",
     "vite": "^7.0.0"
   },
   "scripts": {
@@ -28,6 +33,10 @@
     "test": "node --test build/plugins/vite-plugin-bem-levels.test.js common.blocks/i18n/i18n.test.js",
     "build": "BEM_PLATFORM=desktop vite build --config build/vite.config.js && BEM_PLATFORM=touch vite build --config build/vite.config.js",
     "build:desktop": "BEM_PLATFORM=desktop vite build --config build/vite.config.js",
-    "build:touch": "BEM_PLATFORM=touch vite build --config build/vite.config.js"
+    "build:touch": "BEM_PLATFORM=touch vite build --config build/vite.config.js",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix"
   }
 }
