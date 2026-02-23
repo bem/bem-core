@@ -2,11 +2,8 @@
  * @module identify
  */
 
-modules.define('identify', function(provide) {
-
 var counter = 0,
     expando = '__' + (+new Date),
-    global = this.global,
     get = function() {
         return 'uniq' + (++counter);
     },
@@ -14,7 +11,7 @@ var counter = 0,
         if((typeof obj === 'object' && obj !== null) || typeof obj === 'function') {
             var key;
             if('uniqueID' in obj) {
-                obj === global.document && (obj = obj.documentElement);
+                obj === globalThis.document && (obj = obj.documentElement);
                 key = 'uniqueID';
             } else {
                 key = expando;
@@ -27,7 +24,7 @@ var counter = 0,
         return '';
     };
 
-provide(
+export default
     /**
      * Makes unique ID
      * @exports
@@ -48,7 +45,4 @@ provide(
         }
 
         return get();
-    }
-);
-
-});
+    };

@@ -2,11 +2,7 @@
  * @module functions__debounce
  */
 
-modules.define('functions__debounce', function(provide) {
-
-var global = this.global;
-
-provide(
+export default
     /**
      * Debounces given function
      * @exports
@@ -29,12 +25,11 @@ provide(
 
             invokeAsap && !timer && fn.apply(ctx, args);
 
-            global.clearTimeout(timer);
+            globalThis.clearTimeout(timer);
 
-            timer = global.setTimeout(function() {
+            timer = globalThis.setTimeout(function() {
                 invokeAsap || fn.apply(ctx, args);
                 timer = null;
             }, timeout);
         };
-    });
-});
+    };

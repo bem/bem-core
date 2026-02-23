@@ -80,21 +80,40 @@ function scanDirectory(dir, blockName, modules, levelDir) {
         if (!isVanillaJs && !isPlainJs) continue;
 
         const content = readFileSync(fullPath, 'utf8');
+
+        // Try parsing as ym module first (legacy format)
         const parsed = parseModulesDefine(content);
 
-        if (!parsed) continue;
+        if (parsed) {
+            const existing = modules.get(parsed.name) || [];
+            existing.push({
+                name: parsed.name,
+                deps: parsed.deps,
+                callbackParamCount: parsed.callbackParamCount,
+                isRedefinition: parsed.isRedefinition,
+                filePath: fullPath,
+                suffix: isVanillaJs ? '.vanilla.js' : '.js',
+                levelDir,
+            });
+            modules.set(parsed.name, existing);
+            continue;
+        }
 
-        const existing = modules.get(parsed.name) || [];
-        existing.push({
-            name: parsed.name,
-            deps: parsed.deps,
-            callbackParamCount: parsed.callbackParamCount,
-            isRedefinition: parsed.isRedefinition,
-            filePath: fullPath,
-            suffix: isVanillaJs ? '.vanilla.js' : '.js',
-            levelDir,
-        });
-        modules.set(parsed.name, existing);
+        // Try parsing as ES module (migrated format)
+        const esmParsed = parseEsModule(content, fullPath, levelDir);
+        if (esmParsed) {
+            const existing = modules.get(esmParsed.name) || [];
+            existing.push({
+                name: esmParsed.name,
+                deps: esmParsed.deps,
+                callbackParamCount: 0,
+                isRedefinition: esmParsed.isRedefinition,
+                filePath: fullPath,
+                suffix: isVanillaJs ? '.vanilla.js' : '.js',
+                levelDir,
+            });
+            modules.set(esmParsed.name, existing);
+        }
     }
 }
 
@@ -157,6 +176,61 @@ function parseModulesDefine(source) {
     const isRedefinition = callbackParamCount > 1 + deps.length;
 
     return { name, deps, callbackParamCount, isRedefinition };
+}
+
+/**
+ * Parses a migrated ES module file.
+ * Detects `export default` and derives the module name from the file path.
+ *
+ * For redefinitions (transformer functions), detects:
+ *   export default function(prev) { ... }
+ *
+ * Extracts `import ... from 'bem:...'` as dependencies.
+ *
+ * @param {string} source - file content
+ * @param {string} filePath - absolute path to the file
+ * @param {string} levelDir - absolute path to the level directory
+ * @returns {{ name: string, deps: string[], isRedefinition: boolean } | null}
+ */
+function parseEsModule(source, filePath, levelDir) {
+    // Must have export default
+    if (!/export\s+default\b/.test(source)) return null;
+
+    // Derive module name from file path using BEM naming
+    const name = filePathToModuleName(filePath, levelDir);
+    if (!name) return null;
+
+    // Extract bem: imports as dependencies
+    const deps = [];
+    const importPattern = /import\s+\w+\s+from\s+['"]bem:([^'"]+)['"]/g;
+    let m;
+    while ((m = importPattern.exec(source)) !== null) {
+        deps.push(m[1]);
+    }
+
+    // Detect if this is a transformer (redefinition):
+    // export default function(prev) { ... }
+    // The pattern is: export default function with exactly one parameter
+    const isRedefinition = /export\s+default\s+function\s*\([^)]+\)\s*\{/.test(source);
+
+    return { name, deps, isRedefinition };
+}
+
+/**
+ * Derives a BEM module name from a file path.
+ *
+ * common.blocks/objects/objects.vanilla.js → 'objects'
+ * common.blocks/i-bem/__internal/i-bem__internal.vanilla.js → 'i-bem__internal'
+ * common.blocks/functions/__debounce/functions__debounce.vanilla.js → 'functions__debounce'
+ * common.blocks/loader/_type/loader_type_js.js → 'loader_type_js'
+ */
+function filePathToModuleName(filePath, levelDir) {
+    const rel = relative(levelDir, filePath);
+    // Get the filename without extensions
+    const fileName = basename(rel);
+    // Strip .vanilla.js or .js
+    const name = fileName.replace(/\.(vanilla\.)?js$/, '');
+    return name || null;
 }
 
 /**
@@ -592,6 +666,8 @@ export default function bemLevels(options = {}) {
 export {
     scanLevel,
     parseModulesDefine,
+    parseEsModule,
+    filePathToModuleName,
     parseDepsFile,
     normalizeDeps,
     normalizeDep,

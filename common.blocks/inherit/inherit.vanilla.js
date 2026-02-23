@@ -5,8 +5,6 @@
  * @description This module provides some syntax sugar for "class" declarations, constructors, mixins, "super" calls and static members.
  */
 
-(function(global) {
-
 var noop = function() {},
     hasOwnProperty = Object.prototype.hasOwnProperty,
     objCreate = Object.create || function(ptp) {
@@ -167,27 +165,4 @@ inherit.self = function() {
     return base;
 };
 
-var defineAsGlobal = true;
-/* istanbul ignore next */
-if(typeof exports === 'object') {
-    module.exports = inherit;
-    defineAsGlobal = false;
-}
-/* istanbul ignore next */
-if(typeof modules === 'object' && typeof modules.define === 'function') {
-    modules.define('inherit', function(provide) {
-        provide(inherit);
-    });
-    defineAsGlobal = false;
-}
-/* istanbul ignore next */
-if(typeof define === 'function') {
-    define(function(require, exports, module) {
-        module.exports = inherit;
-    });
-    defineAsGlobal = false;
-}
-/* istanbul ignore next */
-defineAsGlobal && (global.inherit = inherit);
-
-})(this);
+export default inherit;

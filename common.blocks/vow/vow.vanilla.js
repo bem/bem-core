@@ -8,7 +8,7 @@
  *   * http://www.gnu.org/licenses/gpl.html
  */
 
-(function(global) {
+var global = globalThis;
 
     var undef,
         nextTick = (function() {
@@ -1348,26 +1348,4 @@
         TimedOutError : defineCustomErrorType('TimedOut')
     };
 
-    var defineAsGlobal = true;
-    if(typeof module === 'object' && typeof module.exports === 'object') {
-        module.exports = vow;
-        defineAsGlobal = false;
-    }
-
-    if(typeof modules === 'object' && isFunction(modules.define)) {
-        modules.define('vow', function(provide) {
-            provide(vow);
-        });
-        defineAsGlobal = false;
-    }
-
-    if(typeof define === 'function') {
-        define(function(require, exports, module) {
-            module.exports = vow;
-        });
-        defineAsGlobal = false;
-    }
-
-    defineAsGlobal && (global.vow = vow);
-
-    })(typeof window !== 'undefined'? window : global);
+    export default vow;

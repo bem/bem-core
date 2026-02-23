@@ -2,11 +2,7 @@
  * @module functions__throttle
  */
 
-modules.define('functions__throttle', function(provide) {
-
-var global = this.global;
-
-provide(
+export default
     /**
      * Throttle given function
      * @exports
@@ -30,7 +26,7 @@ provide(
                 if(needInvoke) {
                     fn.apply(ctx, args);
                     needInvoke = false;
-                    timer = global.setTimeout(wrapper, timeout);
+                    timer = globalThis.setTimeout(wrapper, timeout);
                 } else {
                     timer = null;
                 }
@@ -44,9 +40,7 @@ provide(
             if(!timer) {
                 invokeAsap?
                     wrapper() :
-                    timer = global.setTimeout(wrapper, timeout);
+                    timer = globalThis.setTimeout(wrapper, timeout);
             }
         };
-    });
-
-});
+    };

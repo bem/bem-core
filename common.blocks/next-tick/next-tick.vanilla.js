@@ -2,8 +2,6 @@
  * @module next-tick
  */
 
-modules.define('next-tick', function(provide) {
-
 /**
  * Executes given function on next tick.
  * @exports
@@ -11,8 +9,7 @@ modules.define('next-tick', function(provide) {
  * @param {Function} fn
  */
 
-var global = this.global,
-    fns = [],
+var fns = [],
     enqueueFn = function(fn) {
         fns.push(fn);
         return fns.length === 1;
@@ -25,51 +22,50 @@ var global = this.global,
         }
     };
 
-    /* global process */
-    if(typeof process === 'object' && process.nextTick) { // nodejs
-        return provide(function(fn) {
-            enqueueFn(fn) && process.nextTick(callFns);
-        });
+var nextTick;
+
+/* global process */
+if(typeof process === 'object' && process.nextTick) { // nodejs
+    nextTick = function(fn) {
+        enqueueFn(fn) && process.nextTick(callFns);
+    };
+} else if(globalThis.setImmediate) { // ie10
+    nextTick = function(fn) {
+        enqueueFn(fn) && globalThis.setImmediate(callFns);
+    };
+} else if(globalThis.postMessage) { // modern browsers
+    var isPostMessageAsync = true;
+    if(globalThis.attachEvent) {
+        var checkAsync = function() {
+                isPostMessageAsync = false;
+            };
+        globalThis.attachEvent('onmessage', checkAsync);
+        globalThis.postMessage('__checkAsync', '*');
+        globalThis.detachEvent('onmessage', checkAsync);
     }
 
-    if(global.setImmediate) { // ie10
-        return provide(function(fn) {
-            enqueueFn(fn) && global.setImmediate(callFns);
-        });
+    if(isPostMessageAsync) {
+        var msg = '__nextTick' + (+new Date),
+            onMessage = function(e) {
+                if(e.data === msg) {
+                    e.stopPropagation && e.stopPropagation();
+                    callFns();
+                }
+            };
+
+        globalThis.addEventListener?
+            globalThis.addEventListener('message', onMessage, true) :
+            globalThis.attachEvent('onmessage', onMessage);
+
+        nextTick = function(fn) {
+            enqueueFn(fn) && globalThis.postMessage(msg, '*');
+        };
     }
+}
 
-    if(global.postMessage) { // modern browsers
-        var isPostMessageAsync = true;
-        if(global.attachEvent) {
-            var checkAsync = function() {
-                    isPostMessageAsync = false;
-                };
-            global.attachEvent('onmessage', checkAsync);
-            global.postMessage('__checkAsync', '*');
-            global.detachEvent('onmessage', checkAsync);
-        }
-
-        if(isPostMessageAsync) {
-            var msg = '__nextTick' + (+new Date),
-                onMessage = function(e) {
-                    if(e.data === msg) {
-                        e.stopPropagation && e.stopPropagation();
-                        callFns();
-                    }
-                };
-
-            global.addEventListener?
-                global.addEventListener('message', onMessage, true) :
-                global.attachEvent('onmessage', onMessage);
-
-            return provide(function(fn) {
-                enqueueFn(fn) && global.postMessage(msg, '*');
-            });
-        }
-    }
-
-    var doc = global.document;
-    if('onreadystatechange' in doc.createElement('script')) { // ie6-ie8
+if(!nextTick) {
+    var doc = globalThis.document;
+    if(doc && 'onreadystatechange' in doc.createElement('script')) { // ie6-ie8
         var head = doc.getElementsByTagName('head')[0],
             createScript = function() {
                 var script = doc.createElement('script');
@@ -81,12 +77,14 @@ var global = this.global,
                 head.appendChild(script);
             };
 
-        return provide(function(fn) {
+        nextTick = function(fn) {
             enqueueFn(fn) && createScript();
-        });
+        };
+    } else {
+        nextTick = function(fn) { // old browsers
+            enqueueFn(fn) && globalThis.setTimeout(callFns, 0);
+        };
     }
+}
 
-    provide(function(fn) { // old browsers
-        enqueueFn(fn) && global.setTimeout(callFns, 0);
-    });
-});
+export default nextTick;
