@@ -285,20 +285,29 @@ test('returns empty map for non-existent directory', () => {
     assert.strictEqual(modules.size, 0);
 });
 
-test('scanLevel preserves isRedefinition from parser', () => {
-    const modules = scanLevel(resolve(ROOT, 'desktop.blocks'));
-    const jqConfig = modules.get('jquery__config');
-    assert.ok(jqConfig, 'jquery__config should exist on desktop');
-    assert.strictEqual(jqConfig[0].isRedefinition, true,
-        'desktop jquery__config should be detected as redefinition');
+test('scanLevel derives module name from filename, not file content', () => {
+    const modules = scanLevel(resolve(ROOT, 'common.blocks'));
+    // jquery__event_type_pointerclick.js → module 'jquery__event_type_pointerclick' (not 'jquery')
+    assert.ok(modules.has('jquery__event_type_pointerclick'),
+        'Should derive module name from filename');
+    // The old approach would have registered it as 'jquery' by parsing modules.define
+    const jqEntries = modules.get('jquery');
+    assert.ok(jqEntries, 'jquery base should still exist');
+    assert.strictEqual(jqEntries.length, 1,
+        'jquery should have exactly 1 entry (base only, no within-level redefinitions)');
 });
 
-test('scanLevel marks base modules as NOT redefinitions', () => {
+test('scanLevel finds new modules from BEM naming', () => {
     const modules = scanLevel(resolve(ROOT, 'common.blocks'));
-    const jqConfig = modules.get('jquery__config');
-    assert.ok(jqConfig, 'jquery__config should exist in common');
-    assert.strictEqual(jqConfig[0].isRedefinition, false,
-        'common jquery__config should be base, not redefinition');
+    // These were previously "redefinitions" of jquery, now separate modules
+    assert.ok(modules.has('jquery__event_type_pointernative'));
+    assert.ok(modules.has('jquery__event_type_pointerpressrelease'));
+    // This was a "redefinition" of events__observable, now separate
+    assert.ok(modules.has('events__observable_type_bem-dom'));
+    // Auto-start modules now visible as separate entities
+    assert.ok(modules.has('tick_start_auto'));
+    assert.ok(modules.has('idle_start_auto'));
+    assert.ok(modules.has('i-bem-dom__init_auto'));
 });
 
 // --- buildRegistry ---
@@ -317,55 +326,56 @@ test('builds registry for touch platform', () => {
     const reg = buildRegistry(['common.blocks', 'touch.blocks'], ROOT);
     assert.ok(reg.modules.has('ua'));
     const uaEntries = reg.modules.get('ua');
-    assert.ok(uaEntries.length >= 2, 'ua should have touch definition + redefinition');
+    assert.strictEqual(uaEntries.length, 1, 'ua has single touch definition');
+    assert.ok(reg.modules.has('ua__dom'), 'ua__dom is a separate module');
 });
 
-test('detects jquery redefinition chain on desktop', () => {
+test('jquery has single entry per level (BEM naming)', () => {
     const reg = buildRegistry(['common.blocks', 'desktop.blocks'], ROOT);
     const jquery = reg.modules.get('jquery');
     assert.ok(jquery, 'jquery should exist');
-    assert.ok(jquery.length >= 4, `jquery should have 4+ entries, got ${jquery.length}`);
-    // First entry is base (parser says NOT redefinition)
-    assert.strictEqual(jquery[0].isRedefinition, false, 'first entry should be base');
-    // Subsequent entries are redefinitions (parser confirms)
-    for (let i = 1; i < jquery.length; i++) {
-        assert.strictEqual(jquery[i].isRedefinition, true,
-            `entry ${i} (${jquery[i].filePath}) should be redefinition`);
-    }
+    assert.strictEqual(jquery.length, 1,
+        'jquery should have exactly 1 entry (only common.blocks/jquery/jquery.js)');
+    // Pointer event files are now separate modules by BEM naming
+    assert.ok(reg.modules.has('jquery__event_type_pointerclick'));
+    assert.ok(reg.modules.has('jquery__event_type_pointernative'));
+    assert.ok(reg.modules.has('jquery__event_type_pointerpressrelease'));
+    assert.ok(reg.modules.has('jquery__event_type_winresize'),
+        'desktop winresize should be a separate module');
 });
 
-test('detects jquery__config redefinition on desktop', () => {
+test('detects jquery__config cross-level redefinition on desktop', () => {
     const reg = buildRegistry(['common.blocks', 'desktop.blocks'], ROOT);
     assert.ok(reg.redefinitions.has('jquery__config'), 'jquery__config should have redefinitions');
     const entries = reg.redefinitions.get('jquery__config');
     assert.strictEqual(entries.length, 2);
     assert.ok(entries[0].filePath.includes('common.blocks'));
-    assert.strictEqual(entries[0].isRedefinition, false);
     assert.ok(entries[1].filePath.includes('desktop.blocks'));
-    assert.strictEqual(entries[1].isRedefinition, true);
 });
 
-test('detects events__observable redefinition', () => {
+test('events__observable has no cross-level redefinition (type_bem-dom is separate module)', () => {
     const reg = buildRegistry(['common.blocks', 'desktop.blocks'], ROOT);
-    assert.ok(reg.redefinitions.has('events__observable'),
-        'events__observable should have redefinitions');
-    const entries = reg.redefinitions.get('events__observable');
-    assert.strictEqual(entries.length, 2);
-    assert.strictEqual(entries[0].isRedefinition, false);
-    assert.strictEqual(entries[1].isRedefinition, true);
+    assert.ok(!reg.redefinitions.has('events__observable'),
+        'events__observable should NOT have redefinitions — type_bem-dom is a separate module');
+    assert.ok(reg.modules.has('events__observable_type_bem-dom'),
+        'events__observable_type_bem-dom should be its own module');
 });
 
-test('detects ua redefinition on touch', () => {
-    const reg = buildRegistry(['common.blocks', 'touch.blocks'], ROOT);
-    const ua = reg.redefinitions.get('ua');
-    assert.ok(ua, 'ua should have redefinitions on touch');
-    assert.ok(ua.length >= 2, `ua should have 2+ entries on touch, got ${ua ? ua.length : 0}`);
-});
+test('ua has single entry per platform (no common.blocks/ua/ua.js)', () => {
+    // ua exists only in platform-specific levels, not in common.blocks
+    const regDesktop = buildRegistry(['common.blocks', 'desktop.blocks'], ROOT);
+    const uaDesktop = regDesktop.modules.get('ua');
+    assert.ok(uaDesktop, 'ua should exist on desktop');
+    assert.strictEqual(uaDesktop.length, 1, 'desktop ua has 1 entry');
 
-test('does NOT detect ua redefinition on desktop (only one definition)', () => {
-    const reg = buildRegistry(['common.blocks', 'desktop.blocks'], ROOT);
-    const ua = reg.modules.get('ua');
-    assert.ok(ua, 'ua should exist on desktop');
+    const regTouch = buildRegistry(['common.blocks', 'touch.blocks'], ROOT);
+    const uaTouch = regTouch.modules.get('ua');
+    assert.ok(uaTouch, 'ua should exist on touch');
+    assert.strictEqual(uaTouch.length, 1, 'touch ua has 1 entry');
+
+    // ua__dom is a separate module on touch
+    assert.ok(regTouch.modules.has('ua__dom'),
+        'ua__dom should be its own module on touch');
 });
 
 test('detects i-bem-dom__init definition', () => {
@@ -375,19 +385,28 @@ test('detects i-bem-dom__init definition', () => {
     assert.ok(init.length >= 1, 'i-bem-dom__init should have at least base definition');
 });
 
-test('finds all expected modules (complete inventory)', () => {
+test('finds all expected modules (complete inventory, BEM naming)', () => {
     const reg = buildRegistry(['common.blocks', 'desktop.blocks'], ROOT);
     const expectedModules = [
+        // common.blocks .vanilla.js
         'objects', 'identify', 'functions', 'inherit', 'i-bem',
-        'tick', 'cookie', 'keyboard__codes', 'uri', 'next-tick',
-        'events', 'jquery', 'idle', 'functions__throttle',
-        'functions__debounce', 'dom', 'i-bem__internal',
-        'uri__querystring', 'loader_type_js',
-        'events__observable', 'i-bem__collection', 'strings__escape',
-        'i-bem-dom', 'i-bem-dom__collection', 'i-bem-dom__init',
-        'i-bem-dom__events', 'events__channels', 'jquery__config',
-        'i-bem-dom__events_type_bem', 'i-bem-dom__events_type_dom',
-        'ua', 'vow',
+        'tick', 'tick_start_auto', 'uri', 'next-tick',
+        'events', 'functions__throttle', 'functions__debounce',
+        'i-bem__internal', 'uri__querystring', 'strings__escape',
+        'events__channels', 'vow',
+        // common.blocks .js
+        'cookie', 'dom', 'jquery', 'idle', 'idle_start_auto',
+        'keyboard__codes', 'loader_type_js', 'loader_type_bundle',
+        'events__observable', 'events__observable_type_bem-dom',
+        'i-bem__collection', 'i-bem-dom', 'i-bem-dom__collection',
+        'i-bem-dom__init', 'i-bem-dom__init_auto',
+        'i-bem-dom__events', 'i-bem-dom__events_type_bem',
+        'i-bem-dom__events_type_dom', 'jquery__config',
+        'jquery__event_type_pointerclick',
+        'jquery__event_type_pointernative',
+        'jquery__event_type_pointerpressrelease',
+        // desktop.blocks .js
+        'ua', 'jquery__event_type_winresize',
     ];
 
     const missing = expectedModules.filter(m => !reg.modules.has(m));

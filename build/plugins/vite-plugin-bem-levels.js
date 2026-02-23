@@ -34,16 +34,22 @@ function scanLevel(levelDir) {
 
     for (const block of blocks) {
         const blockDir = join(levelDir, block);
-        scanDirectory(blockDir, block, modules, levelDir);
+        scanDirectory(blockDir, modules, levelDir);
     }
 
     return modules;
 }
 
 /**
- * Recursively scans a BEM entity directory for JS files with modules.define.
+ * Recursively scans a BEM entity directory for JS source files.
+ * Module names are derived from file names per BEM naming convention —
+ * file contents are never read during scanning.
+ *
+ * Only recurses into BEM-named subdirectories:
+ *   __elemName (element) or _modName (modifier).
+ * This automatically excludes .tests/, .examples/, .tmpl-specs/, etc.
  */
-function scanDirectory(dir, blockName, modules, levelDir) {
+function scanDirectory(dir, modules, levelDir) {
     let entries;
     try {
         entries = readdirSync(dir);
@@ -61,13 +67,16 @@ function scanDirectory(dir, blockName, modules, levelDir) {
         }
 
         if (stat.isDirectory()) {
-            scanDirectory(fullPath, blockName, modules, levelDir);
+            // Only recurse into BEM-named subdirectories: __elem or _mod
+            if (entry.startsWith('__') || entry.startsWith('_')) {
+                scanDirectory(fullPath, modules, levelDir);
+            }
             continue;
         }
 
         if (!stat.isFile()) continue;
 
-        // Check if this is a JS source file (not deps, spec, test, etc.)
+        // Only consider JS source files — skip deps, spec, test, templates, i18n, etc.
         const isVanillaJs = entry.endsWith('.vanilla.js');
         const isPlainJs = !isVanillaJs && entry.endsWith('.js')
             && !entry.endsWith('.deps.js')
@@ -75,45 +84,23 @@ function scanDirectory(dir, blockName, modules, levelDir) {
             && !entry.endsWith('.bemhtml.js')
             && !entry.endsWith('.bh.js')
             && !entry.endsWith('.bemjson.js')
-            && !entry.endsWith('.test.js');
+            && !entry.endsWith('.test.js')
+            && !entry.endsWith('.i18n.js');
 
         if (!isVanillaJs && !isPlainJs) continue;
 
-        const content = readFileSync(fullPath, 'utf8');
+        // Module name is derived from the filename per BEM naming convention
+        const name = filePathToModuleName(fullPath, levelDir);
+        if (!name) continue;
 
-        // Try parsing as ym module first (legacy format)
-        const parsed = parseModulesDefine(content);
-
-        if (parsed) {
-            const existing = modules.get(parsed.name) || [];
-            existing.push({
-                name: parsed.name,
-                deps: parsed.deps,
-                callbackParamCount: parsed.callbackParamCount,
-                isRedefinition: parsed.isRedefinition,
-                filePath: fullPath,
-                suffix: isVanillaJs ? '.vanilla.js' : '.js',
-                levelDir,
-            });
-            modules.set(parsed.name, existing);
-            continue;
-        }
-
-        // Try parsing as ES module (migrated format)
-        const esmParsed = parseEsModule(content, fullPath, levelDir);
-        if (esmParsed) {
-            const existing = modules.get(esmParsed.name) || [];
-            existing.push({
-                name: esmParsed.name,
-                deps: esmParsed.deps,
-                callbackParamCount: 0,
-                isRedefinition: esmParsed.isRedefinition,
-                filePath: fullPath,
-                suffix: isVanillaJs ? '.vanilla.js' : '.js',
-                levelDir,
-            });
-            modules.set(esmParsed.name, existing);
-        }
+        const existing = modules.get(name) || [];
+        existing.push({
+            name,
+            filePath: fullPath,
+            suffix: isVanillaJs ? '.vanilla.js' : '.js',
+            levelDir,
+        });
+        modules.set(name, existing);
     }
 }
 
@@ -448,22 +435,13 @@ function buildRegistry(levels, rootDir) {
         }
     }
 
-    // Mark redefinitions: first entry (lowest level index) per module is the base,
-    // subsequent entries are redefinitions
+    // Detect cross-level redefinitions: same module name from different levels.
+    // First entry (lowest level index) is the base, subsequent entries are redefinitions.
     const redefinitions = new Map();
     for (const [name, entries] of allModules) {
-        // Sort by level index, then by path depth (block < element < modifier)
-        entries.sort((a, b) => {
-            if (a.levelIndex !== b.levelIndex) return a.levelIndex - b.levelIndex;
-            // Within same level: shorter paths first (base definitions before redefinitions)
-            return a.filePath.length - b.filePath.length;
-        });
+        entries.sort((a, b) => a.levelIndex - b.levelIndex);
 
         if (entries.length > 1) {
-            entries[0].isRedefinition = false;
-            for (let i = 1; i < entries.length; i++) {
-                entries[i].isRedefinition = true;
-            }
             redefinitions.set(name, entries);
         }
     }
