@@ -2,21 +2,12 @@
  * @module i-bem
  */
 
-modules.define('i-bem', [
-    'i-bem__internal',
-    'inherit',
-    'identify',
-    'next-tick',
-    'objects',
-    'functions'
-], function(provide,
-    bemInternal,
-    inherit,
-    identify,
-    nextTick,
-    objects,
-    functions
-) {
+import bemInternal from 'bem:i-bem__internal';
+import inherit from 'bem:inherit';
+import identify from 'bem:identify';
+import nextTick from 'bem:next-tick';
+import objects from 'bem:objects';
+import functions from 'bem:functions';
 
 var undef,
 
@@ -532,7 +523,7 @@ var Elem = inherit(BemEntity, /** @lends Elem.prototype */ {
     }
 });
 
-provide(/** @exports */{
+export default /** @exports */{
     /**
      * Block class
      * @type Function
@@ -641,6 +632,4 @@ provide(/** @exports */{
             }
         }
     }
-});
-
-});
+};

@@ -3,16 +3,10 @@
  * @description Helpers for polling anything
  */
 
-modules.define('tick', [
-    'inherit',
-    'events'
-], function(provide,
-    inherit,
-    events
-) {
+import inherit from 'bem:inherit';
+import events from 'bem:events';
 
 var TICK_INTERVAL = 50,
-    global = this.global,
 
     /**
      * @class Tick
@@ -43,13 +37,13 @@ var TICK_INTERVAL = 50,
         stop : function() {
             if(this._isStarted) {
                 this._isStarted = false;
-                global.clearTimeout(this._timer);
+                globalThis.clearTimeout(this._timer);
             }
         },
 
         _scheduleTick : function() {
             var _this = this;
-            this._timer = global.setTimeout(
+            this._timer = globalThis.setTimeout(
                 function() {
                     _this._onTick();
                 },
@@ -63,11 +57,8 @@ var TICK_INTERVAL = 50,
         }
     });
 
-provide(
-    /**
-     * @exports
-     * @type Tick
-     */
-    new Tick());
-
-});
+/**
+ * @exports
+ * @type Tick
+ */
+export default new Tick();

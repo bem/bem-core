@@ -2,8 +2,6 @@
  * Automatically starts tick module
  */
 
-modules.require(['tick'], function(tick) {
+import tick from 'bem:tick';
 
 tick.start();
-
-});

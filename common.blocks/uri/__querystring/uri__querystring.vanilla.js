@@ -3,7 +3,7 @@
  * @description A set of helpers to work with query strings
  */
 
-modules.define('uri__querystring', ['uri'], function(provide, uri) {
+import uri from 'bem:uri';
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
@@ -12,7 +12,7 @@ function addParam(res, name, val) {
     res.push(encodeURIComponent(name) + '=' + (val == null? '' : encodeURIComponent(val)));
 }
 
-provide(/** @exports */{
+export default /** @exports */{
     /**
      * Parse a query string to an object
      * @param {String} str
@@ -74,6 +74,4 @@ provide(/** @exports */{
                 [])
             .join('&');
     }
-});
-
-});
+};

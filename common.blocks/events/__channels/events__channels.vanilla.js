@@ -2,12 +2,12 @@
  * @module events__channels
  */
 
-modules.define('events__channels', ['events'], function(provide, events) {
+import events from 'bem:events';
 
 var undef,
     channels = {};
 
-provide(
+export default
     /**
      * Returns/destroys a named communication channel
      * @exports
@@ -32,5 +32,4 @@ provide(
         }
 
         return channels[id] || (channels[id] = new events.Emitter());
-    });
-});
+    };
