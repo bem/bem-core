@@ -28,6 +28,10 @@ import 'bem:i-bem__collection';
 // DOM utilities
 import 'bem:jquery__config';
 import 'bem:jquery';
+import 'bem:jquery__event_type_pointernative';
+import 'bem:jquery__event_type_pointerclick';
+import 'bem:jquery__event_type_pointerpressrelease';
+import 'bem:jquery__event_type_winresize';
 import 'bem:dom';
 
 // i-bem-dom and its subsystems
@@ -37,14 +41,18 @@ import 'bem:i-bem-dom__events_type_bem';
 import 'bem:i-bem-dom__collection';
 import 'bem:i-bem-dom';
 import 'bem:i-bem-dom__init';
+import 'bem:i-bem-dom__init_auto';
 
 // Observable events (with BEM DOM support)
 import 'bem:events__observable';
+import 'bem:events__observable_type_bem-dom';
 
 // Browser APIs
 import 'bem:cookie';
 import 'bem:idle';
+import 'bem:idle_start_auto';
 import 'bem:tick';
+import 'bem:tick_start_auto';
 import 'bem:keyboard__codes';
 import 'bem:ua';
 
