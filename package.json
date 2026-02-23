@@ -14,7 +14,7 @@
   "license": "MPL-2.0",
   "dependencies": {},
   "peerDependencies": {
-    "jquery": "^3.7.0"
+    "jquery": "^4.0.0"
   },
   "devDependencies": {
     "bem-naming": "^1.0.1",

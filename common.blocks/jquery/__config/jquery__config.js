@@ -9,5 +9,5 @@ export default /** @exports */{
      * Required jQuery version range
      * @type {String}
      */
-    version : '>=3.7.0'
+    version : '>=4.0.0'
 };

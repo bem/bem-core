@@ -29,7 +29,8 @@ var IDLE_TIMEOUT = 3000,
             if(!this._isStarted) {
                 this._isStarted = true;
                 this._startTimer();
-                $(document).on(USER_EVENTS, $.proxy(this._onUserAction, this));
+                this._onUserActionBound = this._onUserAction.bind(this);
+                $(document).on(USER_EVENTS, this._onUserActionBound);
             }
         },
 
@@ -40,7 +41,7 @@ var IDLE_TIMEOUT = 3000,
             if(this._isStarted) {
                 this._isStarted = false;
                 this._stopTimer();
-                $(document).off(USER_EVENTS, this._onUserAction);
+                $(document).off(USER_EVENTS, this._onUserActionBound);
             }
         },
 
