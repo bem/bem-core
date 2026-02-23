@@ -3,7 +3,7 @@
  * @description some DOM utils
  */
 
-modules.define('dom', ['jquery'], function(provide, $) {
+import $ from 'bem:jquery';
 
 var EDITABLE_INPUT_TYPES = {
     'datetime-local' : true,
@@ -19,7 +19,7 @@ var EDITABLE_INPUT_TYPES = {
     week : true
 };
 
-provide(/** @exports */{
+export default /** @exports */{
     /**
      * Checks whether a DOM elem is in a context
      * @param {jQuery} ctx DOM elem where check is being performed
@@ -108,6 +108,4 @@ provide(/** @exports */{
                 return domNode.contentEditable === 'true';
         }
     }
-});
-
-});
+};

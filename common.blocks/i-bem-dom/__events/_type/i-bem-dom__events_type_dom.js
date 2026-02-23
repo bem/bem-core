@@ -1,15 +1,9 @@
 /**
  * @module i-bem-dom__events_type_dom
  */
-modules.define('i-bem-dom__events_type_dom', [
-    'i-bem-dom__events',
-    'inherit',
-    'jquery'
-], function(provide,
-    bemDomEvents,
-    inherit,
-    $
-) {
+import bemDomEvents from 'bem:i-bem-dom__events';
+import inherit from 'bem:inherit';
+import $ from 'bem:jquery';
 
 var eventBuilder = function(e) {
         return e;
@@ -45,6 +39,4 @@ var eventBuilder = function(e) {
         }
     });
 
-provide({ EventManagerFactory : EventManagerFactory });
-
-});
+export default { EventManagerFactory : EventManagerFactory };

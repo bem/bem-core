@@ -2,18 +2,10 @@
  * Auto initialization on DOM ready
  */
 
-modules.require([
-    'i-bem-dom__init',
-    'jquery',
-    'next-tick'
-], function(
-    init,
-    $,
-    nextTick
-) {
+import init from 'bem:i-bem-dom__init';
+import $ from 'bem:jquery';
+import nextTick from 'bem:next-tick';
 
 $(function() {
     nextTick(init);
-});
-
 });

@@ -2,31 +2,17 @@
  * @module i-bem-dom
  */
 
-modules.define('i-bem-dom', [
-    'i-bem',
-    'i-bem__internal',
-    'i-bem-dom__collection',
-    'i-bem-dom__events_type_dom',
-    'i-bem-dom__events_type_bem',
-    'inherit',
-    'identify',
-    'objects',
-    'functions',
-    'jquery',
-    'dom'
-], function(provide,
-    bem,
-    bemInternal,
-    BemDomCollection,
-    domEvents,
-    bemEvents,
-    inherit,
-    identify,
-    objects,
-    functions,
-    $,
-    dom
-) {
+import bem from 'bem:i-bem';
+import bemInternal from 'bem:i-bem__internal';
+import BemDomCollection from 'bem:i-bem-dom__collection';
+import domEvents from 'bem:i-bem-dom__events_type_dom';
+import bemEvents from 'bem:i-bem-dom__events_type_bem';
+import inherit from 'bem:inherit';
+import identify from 'bem:identify';
+import objects from 'bem:objects';
+import functions from 'bem:functions';
+import $ from 'bem:jquery';
+import dom from 'bem:dom';
 
 var undef,
     /**
@@ -888,26 +874,24 @@ $.fn.bem = function(BemDomEntity, params) {
     return entity? entity._setInitedMod() : null;
 };
 
-$(function() {
-
-bemDom = /** @exports */{
+var bemDom = /** @exports */{
     /**
-     * Scope
+     * Scope (set on DOM ready)
      * @type jQuery
      */
-    scope : $('body'),
+    scope : null,
 
     /**
      * Document shortcut
      * @type jQuery
      */
-    doc : $(document),
+    doc : null,
 
     /**
      * Window shortcut
      * @type jQuery
      */
-    win : $(window),
+    win : null,
 
     /**
      * Base bemDom block
@@ -1132,27 +1116,11 @@ bemDom = /** @exports */{
     }
 };
 
-provide(bemDom);
-
+// Initialize DOM-dependent properties on DOM ready
+$(function() {
+    bemDom.scope = $('body');
+    bemDom.doc = $(document);
+    bemDom.win = $(window);
 });
 
-});
-
-(function() {
-
-var origDefine = modules.define,
-    storedDeps = []; // NOTE: see https://github.com/bem/bem-core/issues/1446
-
-modules.define = function(name, deps, decl) {
-    origDefine.apply(modules, arguments);
-
-    if(name !== 'i-bem-dom__init' && arguments.length > 2 && ~deps.indexOf('i-bem-dom')) {
-        storedDeps.push(name);
-        storedDeps.length === 1 && modules.define('i-bem-dom__init', storedDeps, function(provide) {
-            provide(arguments[arguments.length - 1]);
-            storedDeps = [];
-        });
-    }
-};
-
-})();
+export default bemDom;

@@ -3,7 +3,7 @@
  * @description Detect some user agent features
  */
 
-modules.define('ua', ['jquery'], function(provide, $) {
+import $ from 'bem:jquery';
 
 var win = window,
     doc = document,
@@ -87,7 +87,7 @@ var lastOrient = win.innerWidth > win.innerHeight,
         }
     });
 
-provide(/** @exports */{
+export default /** @exports */{
     /**
      * User agent
      * @type String
@@ -201,6 +201,4 @@ provide(/** @exports */{
      * @type Boolean
      */
     landscape : lastOrient
-});
-
-});
+};

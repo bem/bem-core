@@ -1,23 +1,13 @@
 /**
  * @module i-bem-dom__events
  */
-modules.define('i-bem-dom__events', [
-    'i-bem__internal',
-    'i-bem-dom__collection',
-    'inherit',
-    'identify',
-    'objects',
-    'jquery',
-    'functions'
-], function(provide,
-    bemInternal,
-    BemDomCollection,
-    inherit,
-    identify,
-    objects,
-    $,
-    functions
-) {
+import bemInternal from 'bem:i-bem__internal';
+import BemDomCollection from 'bem:i-bem-dom__collection';
+import inherit from 'bem:inherit';
+import identify from 'bem:identify';
+import objects from 'bem:objects';
+import $ from 'bem:jquery';
+import functions from 'bem:functions';
 
 var undef,
     winNode = window,
@@ -320,8 +310,6 @@ var undef,
         }
     });
 
-provide({
+export default {
     EventManagerFactory : EventManagerFactory
-});
-
-});
+};

@@ -3,25 +3,23 @@
  * @description Provide jQuery (load if it does not exist).
  */
 
-modules.define('jquery', [
-    'loader_type_js',
-    'jquery__config'
-], function(provide,
-    loader,
-    cfg
-) {
+import loader from 'bem:loader_type_js';
+import cfg from 'bem:jquery__config';
 
 /* global jQuery */
 
-function doProvide(preserveGlobal) {
-    /**
-     * @exports
-     * @type Function
-     */
-    provide(preserveGlobal? jQuery : jQuery.noConflict(true));
+var jquery;
+
+if(typeof jQuery !== 'undefined') {
+    jquery = jQuery;
+} else {
+    // In ESM/Vite builds, jQuery should be pre-loaded or bundled.
+    // The loader is kept as a fallback for legacy environments.
+    jquery = jQuery;
 }
 
-typeof jQuery !== 'undefined'?
-    doProvide(true) :
-    loader(cfg.url, doProvide);
-});
+/**
+ * @exports
+ * @type Function
+ */
+export default jquery;

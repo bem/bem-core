@@ -1,9 +1,7 @@
 /**
  * @module keyboard__codes
  */
-modules.define('keyboard__codes', function(provide) {
-
-provide(/** @exports */{
+export default /** @exports */{
     /** @type {Number} */
     BACKSPACE : 8,
     /** @type {Number} */
@@ -36,6 +34,4 @@ provide(/** @exports */{
     INSERT : 45,
     /** @type {Number} */
     DELETE : 46
-});
-
-});
+};

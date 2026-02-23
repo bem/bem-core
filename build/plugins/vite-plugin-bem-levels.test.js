@@ -154,11 +154,11 @@ test('does NOT detect base as redefinition: events (3 deps, 4 params)', () => {
 
 console.log('\nparseModulesDefine (real file cross-check):');
 
-test('real file: jquery base is NOT redefinition', () => {
+test('real file: jquery base is now ESM (migrated)', () => {
     const source = readFileSync(resolve(ROOT, 'common.blocks/jquery/jquery.js'), 'utf8');
     const result = parseModulesDefine(source);
-    assert.strictEqual(result.name, 'jquery');
-    assert.strictEqual(result.isRedefinition, false);
+    assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
+    assert.ok(source.includes('export default'), 'should have export default');
 });
 
 test('real file: jquery pointerclick IS redefinition', () => {
@@ -179,13 +179,13 @@ test('real file: jquery pressrelease IS redefinition', () => {
     assert.strictEqual(result.isRedefinition, true);
 });
 
-test('real file: jquery__config base is NOT redefinition', () => {
+test('real file: jquery__config base is now ESM (migrated)', () => {
     const source = readFileSync(
         resolve(ROOT, 'common.blocks/jquery/__config/jquery__config.js'), 'utf8'
     );
     const result = parseModulesDefine(source);
-    assert.strictEqual(result.name, 'jquery__config');
-    assert.strictEqual(result.isRedefinition, false);
+    assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
+    assert.ok(source.includes('export default'), 'should have export default');
 });
 
 test('real file: jquery__config desktop IS redefinition', () => {
@@ -197,13 +197,13 @@ test('real file: jquery__config desktop IS redefinition', () => {
     assert.strictEqual(result.isRedefinition, true);
 });
 
-test('real file: events__observable base is NOT redefinition', () => {
+test('real file: events__observable base is now ESM (migrated)', () => {
     const source = readFileSync(
         resolve(ROOT, 'common.blocks/events/__observable/events__observable.js'), 'utf8'
     );
     const result = parseModulesDefine(source);
-    assert.strictEqual(result.name, 'events__observable');
-    assert.strictEqual(result.isRedefinition, false);
+    assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
+    assert.ok(source.includes('export default'), 'should have export default');
 });
 
 test('real file: events__observable type_bem-dom IS redefinition', () => {
@@ -215,13 +215,13 @@ test('real file: events__observable type_bem-dom IS redefinition', () => {
     assert.strictEqual(result.isRedefinition, true);
 });
 
-test('real file: ua touch base is NOT redefinition', () => {
+test('real file: ua touch base is now ESM (migrated)', () => {
     const source = readFileSync(
         resolve(ROOT, 'touch.blocks/ua/ua.js'), 'utf8'
     );
     const result = parseModulesDefine(source);
-    assert.strictEqual(result.name, 'ua');
-    assert.strictEqual(result.isRedefinition, false);
+    assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
+    assert.ok(source.includes('export default'), 'should have export default');
 });
 
 test('real file: ua__dom touch IS redefinition', () => {

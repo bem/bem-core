@@ -4,8 +4,6 @@
  * @see http://code.jquery.com/jquery-migrate-1.1.1.js
  */
 
-modules.define('ua', function(provide) {
-
 var ua = navigator.userAgent.toLowerCase(),
     match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
         /(webkit)[ \/]([\w.]+)/.exec(ua) ||
@@ -34,6 +32,4 @@ if(browser.chrome) {
  * @exports
  * @type Object
  */
-provide(browser);
-
-});
+export default browser;

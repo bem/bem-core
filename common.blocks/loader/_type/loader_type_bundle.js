@@ -3,10 +3,7 @@
  * @description Load BEM bundle (JS+CSS) from external URL.
  */
 
-modules.define('loader_type_bundle', function(provide) {
-
 var LOADING_TIMEOUT = 30000,
-    global = this.global,
     doc = document,
     head,
     bundles = {},
@@ -81,7 +78,7 @@ load._loaded = function(bundle) {
 
     clearTimeout(bundleDesc.timer);
 
-    bundle.js && bundle.js.call(global);
+    bundle.js && bundle.js.call(globalThis);
 
     bundle.css && appendCss(bundle.css);
 
@@ -107,11 +104,7 @@ load._loaded = function(bundle) {
         delete bundleDesc.successFns;
     }
 
-    modules.isDefined('i-bem__dom_init')?
-        modules.require(['i-bem__dom_init'], onSuccess) :
-        onSuccess();
+    onSuccess();
 };
 
-provide(load);
-
-});
+export default load;

@@ -3,8 +3,6 @@
  * @description Load JS from external URL.
  */
 
-modules.define('loader_type_js', function(provide) {
-
 var loading = {},
     loaded = {},
     head = document.getElementsByTagName('head')[0],
@@ -23,7 +21,7 @@ var loading = {},
         runCallbacks(path, 'error');
     };
 
-provide(
+export default
     /**
      * @exports
      * @param {String} path resource link
@@ -69,7 +67,4 @@ provide(
         }
 
         head.insertBefore(script, head.lastChild);
-    }
-);
-
-});
+    };

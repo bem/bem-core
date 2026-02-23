@@ -1,7 +1,7 @@
 /**
  * @module i-bem__collection
  */
-modules.define('i-bem__collection', ['inherit'], function(provide, inherit) {
+import inherit from 'bem:inherit';
 
 /**
  * @class BemCollection
@@ -228,6 +228,4 @@ function buildComplexProxyFn(arrayMethodName, entityMethodName) {
 var arrayConcat = Array.prototype.concat,
     arraySlice = Array.prototype.slice;
 
-provide(BemCollection);
-
-});
+export default BemCollection;

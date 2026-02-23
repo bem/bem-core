@@ -1,13 +1,8 @@
 /**
  * @module i-bem-dom__collection
  */
-modules.define('i-bem-dom__collection', [
-    'inherit',
-    'i-bem__collection'
-], function(provide,
-    inherit,
-    BemCollection
-) {
+import inherit from 'bem:inherit';
+import BemCollection from 'bem:i-bem__collection';
 
 /**
  * @class BemDomCollection
@@ -128,6 +123,4 @@ function buildProxyMethodForMany(methodName) {
     };
 }
 
-provide(BemDomCollection);
-
-});
+export default BemDomCollection;
