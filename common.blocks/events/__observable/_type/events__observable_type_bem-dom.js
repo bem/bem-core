@@ -1,12 +1,13 @@
 /**
- * @module events__observable
+ * @module events__observable_type_bem-dom
  */
 
-modules.define('events__observable', ['i-bem-dom'], function(provide, bemDom, observable) {
+import bemDom from 'bem:i-bem-dom';
+import observable from 'bem:events__observable';
 
-provide(
+export default
     /**
-     * Creates new observable
+     * Creates new observable with BEM DOM entity support
      * @exports
      * @param {i-bem-dom:Block|i-bem-dom:Elem|events:Emitter} bemEntity
      * @returns {Observable}
@@ -15,7 +16,4 @@ provide(
         return observable(bemDom.isEntity(bemEntity)?
             bemEntity._events() :
             bemEntity);
-    }
-);
-
-});
+    };

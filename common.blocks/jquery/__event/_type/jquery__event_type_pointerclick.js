@@ -1,4 +1,5 @@
-modules.define('jquery', ['next-tick'], function(provide, nextTick, $) {
+import nextTick from 'bem:next-tick';
+import $ from 'bem:jquery';
 
 var event = $.event.special.pointerclick = {
         setup : function() {
@@ -19,6 +20,4 @@ var event = $.event.special.pointerclick = {
         }
     };
 
-provide($);
-
-});
+export default $;

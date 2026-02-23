@@ -1,4 +1,4 @@
-modules.define('jquery', function(provide, $) {
+import $ from 'bem:jquery';
 
 $.each({
     pointerpress : 'pointerdown',
@@ -35,6 +35,4 @@ function cloneEvent(event) {
     return eventCopy;
 }
 
-provide($);
-
-});
+export default $;

@@ -161,22 +161,22 @@ test('real file: jquery base is now ESM (migrated)', () => {
     assert.ok(source.includes('export default'), 'should have export default');
 });
 
-test('real file: jquery pointerclick IS redefinition', () => {
+test('real file: jquery pointerclick is now ESM (migrated)', () => {
     const source = readFileSync(
         resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js'), 'utf8'
     );
     const result = parseModulesDefine(source);
-    assert.strictEqual(result.name, 'jquery');
-    assert.strictEqual(result.isRedefinition, true);
+    assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
+    assert.ok(source.includes('export default'), 'should have export default');
 });
 
-test('real file: jquery pressrelease IS redefinition', () => {
+test('real file: jquery pressrelease is now ESM (migrated)', () => {
     const source = readFileSync(
         resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.js'), 'utf8'
     );
     const result = parseModulesDefine(source);
-    assert.strictEqual(result.name, 'jquery');
-    assert.strictEqual(result.isRedefinition, true);
+    assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
+    assert.ok(source.includes('export default'), 'should have export default');
 });
 
 test('real file: jquery__config base is now ESM (migrated)', () => {
@@ -188,13 +188,13 @@ test('real file: jquery__config base is now ESM (migrated)', () => {
     assert.ok(source.includes('export default'), 'should have export default');
 });
 
-test('real file: jquery__config desktop IS redefinition', () => {
+test('real file: jquery__config desktop is now ESM (migrated)', () => {
     const source = readFileSync(
         resolve(ROOT, 'desktop.blocks/jquery/__config/jquery__config.js'), 'utf8'
     );
     const result = parseModulesDefine(source);
-    assert.strictEqual(result.name, 'jquery__config');
-    assert.strictEqual(result.isRedefinition, true);
+    assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
+    assert.ok(source.includes('export default'), 'should have export default');
 });
 
 test('real file: events__observable base is now ESM (migrated)', () => {
@@ -206,13 +206,13 @@ test('real file: events__observable base is now ESM (migrated)', () => {
     assert.ok(source.includes('export default'), 'should have export default');
 });
 
-test('real file: events__observable type_bem-dom IS redefinition', () => {
+test('real file: events__observable type_bem-dom is now ESM (migrated)', () => {
     const source = readFileSync(
         resolve(ROOT, 'common.blocks/events/__observable/_type/events__observable_type_bem-dom.js'), 'utf8'
     );
     const result = parseModulesDefine(source);
-    assert.strictEqual(result.name, 'events__observable');
-    assert.strictEqual(result.isRedefinition, true);
+    assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
+    assert.ok(source.includes('export default'), 'should have export default');
 });
 
 test('real file: ua touch base is now ESM (migrated)', () => {
@@ -224,22 +224,22 @@ test('real file: ua touch base is now ESM (migrated)', () => {
     assert.ok(source.includes('export default'), 'should have export default');
 });
 
-test('real file: ua__dom touch IS redefinition', () => {
+test('real file: ua__dom touch is now ESM (migrated)', () => {
     const source = readFileSync(
         resolve(ROOT, 'touch.blocks/ua/__dom/ua__dom.js'), 'utf8'
     );
     const result = parseModulesDefine(source);
-    assert.strictEqual(result.name, 'ua');
-    assert.strictEqual(result.isRedefinition, true);
+    assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
+    assert.ok(source.includes('export default'), 'should have export default');
 });
 
-test('real file: desktop winresize IS redefinition', () => {
+test('real file: desktop winresize is now ESM (migrated)', () => {
     const source = readFileSync(
         resolve(ROOT, 'desktop.blocks/jquery/__event/_type/jquery__event_type_winresize.js'), 'utf8'
     );
     const result = parseModulesDefine(source);
-    assert.strictEqual(result.name, 'jquery');
-    assert.strictEqual(result.isRedefinition, true);
+    assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
+    assert.ok(source.includes('export default'), 'should have export default');
 });
 
 // --- scanLevel ---
