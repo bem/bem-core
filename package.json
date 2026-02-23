@@ -17,8 +17,8 @@
     "jquery": "^4.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.3",
-    "eslint": "^9.39.3",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.1",
     "globals": "^16.5.0",
     "jsdoc": "^4.0.0",
     "vite": "^7.0.0"

@@ -34,6 +34,8 @@ export default [
             'no-prototype-builtins': 'off',
             'no-empty': ['error', { allowEmptyCatch: true }],
             'no-cond-assign': 'off',
+            'no-unassigned-vars': 'off',
+            'no-useless-assignment': 'off',
         },
     },
     {
