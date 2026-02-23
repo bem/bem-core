@@ -34,9 +34,11 @@ export default defineConfig(({ mode }) => {
             sourcemap: true,
             minify: mode === 'production' ? 'esbuild' : false,
             rollupOptions: {
-                external: [],
+                external: ['jquery'],
                 output: {
-                    globals: {},
+                    globals: {
+                        jquery: 'jQuery',
+                    },
                 },
             },
         },

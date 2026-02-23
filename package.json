@@ -12,8 +12,9 @@
   ],
   "author": "",
   "license": "MPL-2.0",
-  "dependencies": {
-    "ym": "^0.1.2"
+  "dependencies": {},
+  "peerDependencies": {
+    "jquery": "^3.7.0"
   },
   "devDependencies": {
     "bem-naming": "^1.0.1",
