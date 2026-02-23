@@ -1,4 +1,5 @@
 import { strict as assert } from 'node:assert';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
     scanLevel,
@@ -36,21 +37,29 @@ test('parses simple define without deps', () => {
     const result = parseModulesDefine(
         "modules.define('cookie', function(provide) { provide({}); });"
     );
-    assert.deepStrictEqual(result, { name: 'cookie', deps: [] });
+    assert.strictEqual(result.name, 'cookie');
+    assert.deepStrictEqual(result.deps, []);
+    assert.strictEqual(result.callbackParamCount, 1);
+    assert.strictEqual(result.isRedefinition, false);
 });
 
 test('parses define with dependency array', () => {
     const result = parseModulesDefine(
         "modules.define('i-bem', ['i-bem__internal', 'inherit'], function(provide, internal, inherit) {});"
     );
-    assert.deepStrictEqual(result, { name: 'i-bem', deps: ['i-bem__internal', 'inherit'] });
+    assert.strictEqual(result.name, 'i-bem');
+    assert.deepStrictEqual(result.deps, ['i-bem__internal', 'inherit']);
+    assert.strictEqual(result.callbackParamCount, 3); // provide + 2 deps
+    assert.strictEqual(result.isRedefinition, false);
 });
 
 test('parses define with double quotes', () => {
     const result = parseModulesDefine(
         'modules.define("jquery", ["loader_type_js"], function(provide, loader) {});'
     );
-    assert.deepStrictEqual(result, { name: 'jquery', deps: ['loader_type_js'] });
+    assert.strictEqual(result.name, 'jquery');
+    assert.deepStrictEqual(result.deps, ['loader_type_js']);
+    assert.strictEqual(result.isRedefinition, false);
 });
 
 test('returns null for non-module files', () => {
@@ -76,6 +85,161 @@ modules.define(
         'identify', 'objects', 'functions',
         'jquery', 'dom',
     ]);
+    assert.strictEqual(result.callbackParamCount, 9); // provide + 8 deps
+    assert.strictEqual(result.isRedefinition, false);
+});
+
+// --- parseModulesDefine: redefinition detection ---
+
+console.log('\nparseModulesDefine (redefinition detection):');
+
+test('detects redefinition: jquery__config on desktop (2 deps + prev)', () => {
+    // modules.define('jquery__config', ['ua', 'objects'], function(provide, ua, objects, base) {
+    const result = parseModulesDefine(
+        "modules.define('jquery__config', ['ua', 'objects'], function(provide, ua, objects, base) {});"
+    );
+    assert.strictEqual(result.name, 'jquery__config');
+    assert.deepStrictEqual(result.deps, ['ua', 'objects']);
+    assert.strictEqual(result.callbackParamCount, 4); // provide + 2 deps + prev
+    assert.strictEqual(result.isRedefinition, true);
+});
+
+test('detects redefinition: jquery pointerclick (1 dep + prev)', () => {
+    const result = parseModulesDefine(
+        "modules.define('jquery', ['next-tick'], function(provide, nextTick, $) {});"
+    );
+    assert.strictEqual(result.isRedefinition, true);
+    assert.strictEqual(result.callbackParamCount, 3); // provide + 1 dep + prev
+});
+
+test('detects redefinition: jquery pressrelease (0 deps + prev)', () => {
+    const result = parseModulesDefine(
+        "modules.define('jquery', function(provide, $) {});"
+    );
+    assert.strictEqual(result.isRedefinition, true);
+    assert.strictEqual(result.callbackParamCount, 2); // provide + prev
+});
+
+test('detects redefinition: events__observable type_bem-dom (1 dep + prev)', () => {
+    const result = parseModulesDefine(
+        "modules.define('events__observable', ['i-bem-dom'], function(provide, bemDom, observable) {});"
+    );
+    assert.strictEqual(result.isRedefinition, true);
+    assert.strictEqual(result.callbackParamCount, 3);
+});
+
+test('detects redefinition: ua__dom on touch (1 dep + prev)', () => {
+    const result = parseModulesDefine(
+        "modules.define('ua', ['i-bem-dom'], function(provide, bemDom, ua) {});"
+    );
+    assert.strictEqual(result.isRedefinition, true);
+});
+
+test('does NOT detect base as redefinition: cookie (0 deps, 1 param)', () => {
+    const result = parseModulesDefine(
+        "modules.define('cookie', function(provide) { provide({}); });"
+    );
+    assert.strictEqual(result.isRedefinition, false);
+});
+
+test('does NOT detect base as redefinition: events (3 deps, 4 params)', () => {
+    const result = parseModulesDefine(
+        "modules.define('events', ['identify', 'inherit', 'functions'], function(provide, identify, inherit, functions) {});"
+    );
+    assert.strictEqual(result.isRedefinition, false);
+    assert.strictEqual(result.callbackParamCount, 4); // provide + 3 deps, no extra
+});
+
+// --- parseModulesDefine: real file detection ---
+
+console.log('\nparseModulesDefine (real file cross-check):');
+
+test('real file: jquery base is NOT redefinition', () => {
+    const source = readFileSync(resolve(ROOT, 'common.blocks/jquery/jquery.js'), 'utf8');
+    const result = parseModulesDefine(source);
+    assert.strictEqual(result.name, 'jquery');
+    assert.strictEqual(result.isRedefinition, false);
+});
+
+test('real file: jquery pointerclick IS redefinition', () => {
+    const source = readFileSync(
+        resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js'), 'utf8'
+    );
+    const result = parseModulesDefine(source);
+    assert.strictEqual(result.name, 'jquery');
+    assert.strictEqual(result.isRedefinition, true);
+});
+
+test('real file: jquery pressrelease IS redefinition', () => {
+    const source = readFileSync(
+        resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.js'), 'utf8'
+    );
+    const result = parseModulesDefine(source);
+    assert.strictEqual(result.name, 'jquery');
+    assert.strictEqual(result.isRedefinition, true);
+});
+
+test('real file: jquery__config base is NOT redefinition', () => {
+    const source = readFileSync(
+        resolve(ROOT, 'common.blocks/jquery/__config/jquery__config.js'), 'utf8'
+    );
+    const result = parseModulesDefine(source);
+    assert.strictEqual(result.name, 'jquery__config');
+    assert.strictEqual(result.isRedefinition, false);
+});
+
+test('real file: jquery__config desktop IS redefinition', () => {
+    const source = readFileSync(
+        resolve(ROOT, 'desktop.blocks/jquery/__config/jquery__config.js'), 'utf8'
+    );
+    const result = parseModulesDefine(source);
+    assert.strictEqual(result.name, 'jquery__config');
+    assert.strictEqual(result.isRedefinition, true);
+});
+
+test('real file: events__observable base is NOT redefinition', () => {
+    const source = readFileSync(
+        resolve(ROOT, 'common.blocks/events/__observable/events__observable.js'), 'utf8'
+    );
+    const result = parseModulesDefine(source);
+    assert.strictEqual(result.name, 'events__observable');
+    assert.strictEqual(result.isRedefinition, false);
+});
+
+test('real file: events__observable type_bem-dom IS redefinition', () => {
+    const source = readFileSync(
+        resolve(ROOT, 'common.blocks/events/__observable/_type/events__observable_type_bem-dom.js'), 'utf8'
+    );
+    const result = parseModulesDefine(source);
+    assert.strictEqual(result.name, 'events__observable');
+    assert.strictEqual(result.isRedefinition, true);
+});
+
+test('real file: ua touch base is NOT redefinition', () => {
+    const source = readFileSync(
+        resolve(ROOT, 'touch.blocks/ua/ua.js'), 'utf8'
+    );
+    const result = parseModulesDefine(source);
+    assert.strictEqual(result.name, 'ua');
+    assert.strictEqual(result.isRedefinition, false);
+});
+
+test('real file: ua__dom touch IS redefinition', () => {
+    const source = readFileSync(
+        resolve(ROOT, 'touch.blocks/ua/__dom/ua__dom.js'), 'utf8'
+    );
+    const result = parseModulesDefine(source);
+    assert.strictEqual(result.name, 'ua');
+    assert.strictEqual(result.isRedefinition, true);
+});
+
+test('real file: desktop winresize IS redefinition', () => {
+    const source = readFileSync(
+        resolve(ROOT, 'desktop.blocks/jquery/__event/_type/jquery__event_type_winresize.js'), 'utf8'
+    );
+    const result = parseModulesDefine(source);
+    assert.strictEqual(result.name, 'jquery');
+    assert.strictEqual(result.isRedefinition, true);
 });
 
 // --- scanLevel ---
@@ -121,6 +285,22 @@ test('returns empty map for non-existent directory', () => {
     assert.strictEqual(modules.size, 0);
 });
 
+test('scanLevel preserves isRedefinition from parser', () => {
+    const modules = scanLevel(resolve(ROOT, 'desktop.blocks'));
+    const jqConfig = modules.get('jquery__config');
+    assert.ok(jqConfig, 'jquery__config should exist on desktop');
+    assert.strictEqual(jqConfig[0].isRedefinition, true,
+        'desktop jquery__config should be detected as redefinition');
+});
+
+test('scanLevel marks base modules as NOT redefinitions', () => {
+    const modules = scanLevel(resolve(ROOT, 'common.blocks'));
+    const jqConfig = modules.get('jquery__config');
+    assert.ok(jqConfig, 'jquery__config should exist in common');
+    assert.strictEqual(jqConfig[0].isRedefinition, false,
+        'common jquery__config should be base, not redefinition');
+});
+
 // --- buildRegistry ---
 
 console.log('\nbuildRegistry:');
@@ -145,8 +325,13 @@ test('detects jquery redefinition chain on desktop', () => {
     const jquery = reg.modules.get('jquery');
     assert.ok(jquery, 'jquery should exist');
     assert.ok(jquery.length >= 4, `jquery should have 4+ entries, got ${jquery.length}`);
+    // First entry is base (parser says NOT redefinition)
     assert.strictEqual(jquery[0].isRedefinition, false, 'first entry should be base');
-    assert.strictEqual(jquery[1].isRedefinition, true, 'second entry should be redefinition');
+    // Subsequent entries are redefinitions (parser confirms)
+    for (let i = 1; i < jquery.length; i++) {
+        assert.strictEqual(jquery[i].isRedefinition, true,
+            `entry ${i} (${jquery[i].filePath}) should be redefinition`);
+    }
 });
 
 test('detects jquery__config redefinition on desktop', () => {
@@ -155,7 +340,9 @@ test('detects jquery__config redefinition on desktop', () => {
     const entries = reg.redefinitions.get('jquery__config');
     assert.strictEqual(entries.length, 2);
     assert.ok(entries[0].filePath.includes('common.blocks'));
+    assert.strictEqual(entries[0].isRedefinition, false);
     assert.ok(entries[1].filePath.includes('desktop.blocks'));
+    assert.strictEqual(entries[1].isRedefinition, true);
 });
 
 test('detects events__observable redefinition', () => {
@@ -164,6 +351,8 @@ test('detects events__observable redefinition', () => {
         'events__observable should have redefinitions');
     const entries = reg.redefinitions.get('events__observable');
     assert.strictEqual(entries.length, 2);
+    assert.strictEqual(entries[0].isRedefinition, false);
+    assert.strictEqual(entries[1].isRedefinition, true);
 });
 
 test('detects ua redefinition on touch', () => {
@@ -175,8 +364,6 @@ test('detects ua redefinition on touch', () => {
 
 test('does NOT detect ua redefinition on desktop (only one definition)', () => {
     const reg = buildRegistry(['common.blocks', 'desktop.blocks'], ROOT);
-    // desktop has only one ua definition (in desktop.blocks/ua/ua.js)
-    // common.blocks does NOT have ua.js — it only exists on desktop.blocks and touch.blocks
     const ua = reg.modules.get('ua');
     assert.ok(ua, 'ua should exist on desktop');
 });
@@ -291,7 +478,7 @@ test('expands elems with nested mods', () => {
 
 console.log('\ngenerateBarrel:');
 
-test('generates barrel for module with redefinitions', () => {
+test('generates chained barrel for module with redefinitions', () => {
     const entries = [
         { filePath: resolve(ROOT, 'common.blocks/jquery/jquery.js'), isRedefinition: false },
         { filePath: resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointernative.js'), isRedefinition: true },
@@ -300,10 +487,92 @@ test('generates barrel for module with redefinitions', () => {
 
     const barrel = generateBarrel('jquery', entries, ROOT);
     assert.ok(barrel.includes('@generated'));
-    assert.ok(barrel.includes("import _jquery from './common.blocks/jquery/jquery.js'"));
-    assert.ok(barrel.includes("import './common.blocks/jquery/__event/_type/jquery__event_type_pointernative.js'"));
-    assert.ok(barrel.includes("import './common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js'"));
-    assert.ok(barrel.includes('export default _jquery'));
+    // Base import
+    assert.ok(barrel.includes("import _jquery_base from './common.blocks/jquery/jquery.js'"));
+    // Redefinition imports (as named transformers, not side-effects)
+    assert.ok(barrel.includes("import _jquery_redef0 from './common.blocks/jquery/__event/_type/jquery__event_type_pointernative.js'"));
+    assert.ok(barrel.includes("import _jquery_redef1 from './common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js'"));
+    // Chain application
+    assert.ok(barrel.includes('let _module = _jquery_base;'));
+    assert.ok(barrel.includes('_module = _jquery_redef0(_module);'));
+    assert.ok(barrel.includes('_module = _jquery_redef1(_module);'));
+    assert.ok(barrel.includes('export default _module;'));
+});
+
+test('generates barrel for jquery__config with desktop redefinition', () => {
+    const entries = [
+        { filePath: resolve(ROOT, 'common.blocks/jquery/__config/jquery__config.js'), isRedefinition: false },
+        { filePath: resolve(ROOT, 'desktop.blocks/jquery/__config/jquery__config.js'), isRedefinition: true },
+    ];
+
+    const barrel = generateBarrel('jquery__config', entries, ROOT);
+    assert.ok(barrel.includes("import _jquery__config_base from './common.blocks/jquery/__config/jquery__config.js'"));
+    assert.ok(barrel.includes("import _jquery__config_redef0 from './desktop.blocks/jquery/__config/jquery__config.js'"));
+    assert.ok(barrel.includes('let _module = _jquery__config_base;'));
+    assert.ok(barrel.includes('_module = _jquery__config_redef0(_module);'));
+    assert.ok(barrel.includes('export default _module;'));
+});
+
+test('generates barrel for events__observable with type redefinition', () => {
+    const entries = [
+        { filePath: resolve(ROOT, 'common.blocks/events/__observable/events__observable.js'), isRedefinition: false },
+        { filePath: resolve(ROOT, 'common.blocks/events/__observable/_type/events__observable_type_bem-dom.js'), isRedefinition: true },
+    ];
+
+    const barrel = generateBarrel('events__observable', entries, ROOT);
+    assert.ok(barrel.includes('_events__observable_base'));
+    assert.ok(barrel.includes('_events__observable_redef0'));
+    assert.ok(barrel.includes('_module = _events__observable_redef0(_module);'));
+});
+
+test('barrel does NOT use side-effect imports', () => {
+    const entries = [
+        { filePath: resolve(ROOT, 'common.blocks/jquery/jquery.js'), isRedefinition: false },
+        { filePath: resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js'), isRedefinition: true },
+    ];
+
+    const barrel = generateBarrel('jquery', entries, ROOT);
+    // Should NOT have bare side-effect imports like: import './path';
+    const sideEffectImport = /^import\s+'/m;
+    assert.ok(!sideEffectImport.test(barrel),
+        'barrel should not contain side-effect imports');
+});
+
+test('barrel with single redefinition produces correct chain', () => {
+    const entries = [
+        { filePath: '/root/common.blocks/foo/foo.js', isRedefinition: false },
+        { filePath: '/root/desktop.blocks/foo/foo.js', isRedefinition: true },
+    ];
+
+    const barrel = generateBarrel('foo', entries, '/root');
+    const expectedLines = [
+        "// @generated by vite-plugin-bem-levels",
+        "import _foo_base from './common.blocks/foo/foo.js';",
+        "import _foo_redef0 from './desktop.blocks/foo/foo.js';",
+        "",
+        "let _module = _foo_base;",
+        "_module = _foo_redef0(_module);",
+        "export default _module;",
+    ];
+    assert.strictEqual(barrel, expectedLines.join('\n'));
+});
+
+test('barrel with 4 redefinitions produces full chain', () => {
+    const entries = [
+        { filePath: '/root/a/m.js' },
+        { filePath: '/root/b/m.js' },
+        { filePath: '/root/c/m.js' },
+        { filePath: '/root/d/m.js' },
+        { filePath: '/root/e/m.js' },
+    ];
+
+    const barrel = generateBarrel('m', entries, '/root');
+    assert.ok(barrel.includes('_m_redef0'));
+    assert.ok(barrel.includes('_m_redef1'));
+    assert.ok(barrel.includes('_m_redef2'));
+    assert.ok(barrel.includes('_m_redef3'));
+    // 4 chain applications
+    assert.strictEqual((barrel.match(/_module = _m_redef/g) || []).length, 4);
 });
 
 // --- safeIdentifier ---
