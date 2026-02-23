@@ -6,7 +6,6 @@ import bemInternal from 'bem:i-bem__internal';
 import inherit from 'bem:inherit';
 import functions from 'bem:functions';
 import $ from 'bem:jquery';
-import identify from 'bem:identify';
 import events from 'bem:events';
 
 var EVENT_PREFIX = '__bem__',

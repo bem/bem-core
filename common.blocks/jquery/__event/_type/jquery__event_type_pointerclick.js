@@ -1,4 +1,3 @@
-import nextTick from 'bem:next-tick';
 import $ from 'bem:jquery';
 
 var event = $.event.special.pointerclick = {

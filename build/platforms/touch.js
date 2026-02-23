@@ -63,6 +63,3 @@ import 'bem:uri__querystring';
 // Loaders
 import 'bem:loader_type_js';
 import 'bem:loader_type_bundle';
-
-// Promises
-import 'bem:vow';

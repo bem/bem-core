@@ -1,10 +1,8 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
-import { join, resolve, relative, dirname, extname, basename } from 'node:path';
+import { join, resolve, relative, dirname, basename } from 'node:path';
 
 const BEM_PREFIX = 'bem:';
 const VIRTUAL_PREFIX = '\0bem:';
-
-const JS_SUFFIXES = ['.vanilla.js', '.js'];
 
 /**
  * Scans a BEM level directory and returns all BEM entities found.

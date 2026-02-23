@@ -6,7 +6,6 @@ import {
     scanLevel,
     parseModulesDefine,
     parseDepsFile,
-    normalizeDeps,
     expandBemEntity,
     buildRegistry,
     generateBarrel,
@@ -369,7 +368,7 @@ describe('buildRegistry', function() {
             'tick', 'tick_start_auto', 'uri', 'next-tick',
             'events', 'functions__throttle', 'functions__debounce',
             'i-bem__internal', 'uri__querystring', 'strings__escape',
-            'events__channels', 'vow',
+            'events__channels',
             // common.blocks .js
             'cookie', 'dom', 'jquery', 'idle', 'idle_start_auto',
             'keyboard__codes', 'loader_type_js', 'loader_type_bundle',

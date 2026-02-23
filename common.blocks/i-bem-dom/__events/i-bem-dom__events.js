@@ -12,8 +12,6 @@ import functions from 'bem:functions';
 var undef,
     winNode = window,
     docNode = document,
-    winId = identify(winNode),
-    docId = identify(docNode),
     eventStorage = {},
 
     /**

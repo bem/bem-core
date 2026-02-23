@@ -874,7 +874,7 @@ $.fn.bem = function(BemDomEntity, params) {
     return entity? entity._setInitedMod() : null;
 };
 
-var bemDom = /** @exports */{
+bemDom = /** @exports */{
     /**
      * Scope (set on DOM ready)
      * @type jQuery
