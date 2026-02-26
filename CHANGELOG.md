@@ -1,5 +1,43 @@
 # Changelog
 
+## 5.0.0
+
+### Breaking changes
+
+- **ESM-only**: The entire codebase has been migrated from the `ym` module system (`modules.define`/`modules.require`) to native ES modules (`import`/`export`). The `ym` runtime dependency has been removed.
+- **Vite build system**: ENB and all 17+ associated packages have been replaced with [Vite](https://vite.dev/). A custom `vite-plugin-bem-levels` plugin handles BEM level scanning, `bem:*` virtual module resolution, and redefinition chain barrel generation.
+- **jQuery 4.0**: The `jquery` peer dependency has been upgraded from `^3.x` to `^4.0.0`. Notable API change: `$.unique()` has been removed — use `$.uniqueSort()` instead.
+- **Node.js 20+**: The minimum supported Node.js version is now 20 (was 8).
+- **Native Promises**: `vow` has been removed. All code now uses native `Promise`.
+- **Native test runner**: Server-side tests now use `node:test` and `node:assert` instead of `mocha`/`chai`.
+- **Playwright**: Browser tests now use [Playwright](https://playwright.dev/) instead of `mocha-phantomjs` (PhantomJS is dead).
+- **ESLint 10**: Linting has been migrated from `jshint`/`jscs` to ESLint 10 with flat config (`eslint.config.js`).
+- **GitHub Actions CI**: Travis CI has been replaced with GitHub Actions.
+- **Husky + lint-staged**: `git-hooks` has been replaced with `husky` and `lint-staged`.
+
+### Notable changes
+
+- All `.vanilla.js` and `.js` source files have been converted to ES modules with `import`/`export` syntax.
+- Module redefinition chains (e.g., `jquery` with pointer event extensions) are now handled via auto-generated barrel files by `vite-plugin-bem-levels`.
+- The `i18n` block retains its API but uses native ES modules internally.
+- Browser spec tests (28 spec files, 500+ test cases) run via Vite dev server + Playwright.
+- Vite produces platform-specific builds (`desktop`, `touch`) with jQuery as an external dependency.
+
+### Removed packages
+
+- **Build**: `enb`, `enb-bem-techs`, `enb-magic-factory`, `enb-magic-platform`, `enb-bemxjst`, `enb-bemxjst-6x`, `enb-bemxjst-7x`, `enb-bemxjst-i18n`, `enb-bh`, `enb-bh-i18n`, `enb-borschik`, `enb-css`, `enb-js`, `enb-bem-docs`, `enb-bem-examples`, `enb-bem-specs`, `enb-bem-tmpl-specs`, `enb-bem-i18n`, `borschik`
+- **Linting**: `jscs`, `jscs-bem`, `jshint`, `jshint-groups`
+- **Testing**: `mocha-phantomjs`, `istanbul`, `chai-as-promised`
+- **Other**: `ym`, `vow`, `bower`, `git-hooks`, `gitbook-api`, `bem-naming`, `bem-walk`
+
+### Removed config files
+
+- `.enb/` directory (ENB build config)
+- `.jshintrc`, `.jscs.json`, `.jshint-groups.js` (linting configs)
+- `.bowerrc`, `bower.json` (Bower configs)
+- `.travis.yml` (Travis CI config)
+- `.githooks/` directory (git-hooks config)
+
 ## 4.3.1
 
 ### Bug fixes
