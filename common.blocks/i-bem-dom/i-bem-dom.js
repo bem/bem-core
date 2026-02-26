@@ -129,7 +129,7 @@ function initEntity(entityName, domElem, params, ignoreLazyInit, callback) {
 
     var parentDomNode = domNode.parentNode;
     if(!parentDomNode || parentDomNode.nodeType === 11) { // jquery doesn't unique disconnected node
-        $.unique(uniqIdToDomElems[uniqId]);
+        $.uniqueSort(uniqIdToDomElems[uniqId]);
     }
 
     var entityCls = getEntityCls(entityName);

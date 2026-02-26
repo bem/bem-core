@@ -1218,7 +1218,7 @@ describe('i-bem-dom', function() {
                     bemDom.destruct(b1e2DomElem);
 
                     b1Block._elems(B1E4Elem);
-                    spy.should.be.callOnce;
+                    spy.should.have.been.calledOnce;
                 });
 
                 it('should not drop elems cache on DOM update', function() {
@@ -1230,7 +1230,7 @@ describe('i-bem-dom', function() {
                     }));
 
                     b1Block._elems(B1E4Elem);
-                    spy.should.be.callOnce;
+                    spy.should.have.been.calledOnce;
                 });
 
                 it('should not drop elems cache on DOM replace', function() {
@@ -1242,7 +1242,7 @@ describe('i-bem-dom', function() {
                     }));
 
                     b1Block._elems(B1E4Elem);
-                    spy.should.be.callOnce;
+                    spy.should.have.been.calledOnce;
                 });
             });
         });

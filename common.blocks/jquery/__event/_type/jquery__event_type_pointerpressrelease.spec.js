@@ -6,7 +6,7 @@ modules.define('spec', [
     sinon
 ) {
 
-describe.only('jquery__event_type_pointerpressrelease', function() {
+describe('jquery__event_type_pointerpressrelease', function() {
     var elem;
 
     beforeEach(function() {
