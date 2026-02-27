@@ -5,7 +5,6 @@
 export default
     /**
      * Throttle given function
-     * @exports
      * @param {Function} fn function to throttle
      * @param {Number} timeout throttle interval
      * @param {Boolean} [invokeAsap=true] invoke before first interval

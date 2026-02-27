@@ -33,7 +33,6 @@ var LOADING_TIMEOUT = 30000,
 
     /**
      * Loads bundle
-     * @exports
      * @param {String} id
      * @param {String} url
      * @param {Function} onSuccess

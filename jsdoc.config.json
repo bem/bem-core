@@ -1,0 +1,21 @@
+{
+    "source": {
+        "include": [
+            "common.blocks",
+            "desktop.blocks",
+            "touch.blocks"
+        ],
+        "includePattern": ".+\\.(vanilla\\.js|js)$",
+        "excludePattern": "(spec|test|__tests__)\\.js$"
+    },
+    "opts": {
+        "destination": "docs/jsdoc",
+        "recurse": true,
+        "readme": "README.md"
+    },
+    "plugins": ["plugins/markdown"],
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": false
+    }
+}

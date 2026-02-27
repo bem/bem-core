@@ -523,7 +523,7 @@ var Elem = inherit(BemEntity, /** @lends Elem.prototype */ {
     }
 });
 
-export default /** @exports */{
+export default {
     /**
      * Block class
      * @type Function
@@ -545,7 +545,7 @@ export default /** @exports */{
     /**
      * Declares block and creates a block class
      * @param {String|Function} blockName Block name or block class
-     * @param {Function|Array[Function]} [base] base block + mixes
+     * @param {Function|Array.<Function>} [base] base block + mixes
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      * @returns {Function} Block class

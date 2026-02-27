@@ -3,7 +3,7 @@
  * @description Inspired from $.cookie plugin by Klaus Hartl (stilbuero.de)
  */
 
-export default /** @exports */{
+export default {
     /**
      * Returns cookie by given name
      * @param {String} name

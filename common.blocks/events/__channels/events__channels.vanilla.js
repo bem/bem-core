@@ -10,7 +10,6 @@ var undef,
 export default
     /**
      * Returns/destroys a named communication channel
-     * @exports
      * @param {String} [id='default'] Channel ID
      * @param {Boolean} [drop=false] Destroy the channel
      * @returns {events:Emitter|undefined} Communication channel

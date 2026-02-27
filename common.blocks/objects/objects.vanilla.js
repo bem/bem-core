@@ -5,7 +5,7 @@
 
 var hasOwnProp = Object.prototype.hasOwnProperty;
 
-export default /** @exports */{
+export default {
     /**
      * Extends a given target by
      * @param {Object} target object to extend

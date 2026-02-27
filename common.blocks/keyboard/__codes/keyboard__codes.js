@@ -1,7 +1,7 @@
 /**
  * @module keyboard__codes
  */
-export default /** @exports */{
+export default {
     /** @type {Number} */
     BACKSPACE : 8,
     /** @type {Number} */

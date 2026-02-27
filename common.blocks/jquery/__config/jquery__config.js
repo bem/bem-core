@@ -4,7 +4,7 @@
  * jQuery is now provided via npm package (peer dependency).
  */
 
-export default /** @exports */{
+export default {
     /**
      * Required jQuery version range
      * @type {String}

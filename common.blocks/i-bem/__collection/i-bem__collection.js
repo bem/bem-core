@@ -164,7 +164,7 @@ var BemCollection = inherit(/** @lends BemCollection.prototype */{
     /**
      * Returns a new collection comprised of collection on which it is called joined with
      * the collection(s) and/or array(s) and/or entity(es) provided as arguments.
-     * @param {?...(Collection|Array|BemEntity)} args
+     * @param {...(Collection|Array|BemEntity)} args
      * @returns {Collection}
      */
     concat : function() {

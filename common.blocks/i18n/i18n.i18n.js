@@ -4,7 +4,6 @@ export default {
             var data;
 
             /**
-             * @exports
              * @param {String} keyset
              * @param {String} key
              * @param {Object} [params]

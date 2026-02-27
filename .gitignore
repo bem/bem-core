@@ -17,6 +17,8 @@ coverage.json
 !*.bundles/*/*.bemjson.js
 
 /dist
+/docs/jsdoc
+/test-results
 /*desktop.docs
 /*touch.docs
 /*.examples

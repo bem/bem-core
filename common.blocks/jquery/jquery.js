@@ -6,7 +6,6 @@
 import jQuery from 'jquery';
 
 /**
- * @exports
  * @type Function
  */
 export default jQuery;

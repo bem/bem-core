@@ -8,7 +8,6 @@ import observable from 'bem:events__observable';
 export default
     /**
      * Creates new observable with BEM DOM entity support
-     * @exports
      * @param {i-bem-dom:Block|i-bem-dom:Elem|events:Emitter} bemEntity
      * @returns {Observable}
      */

@@ -34,7 +34,7 @@ function decode(fn,  str) {
     return decoded;
 }
 
-export default /** @exports */{
+export default {
     /**
      * Decodes URI string
      * @param {String} str

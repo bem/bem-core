@@ -83,7 +83,6 @@ var IDLE_TIMEOUT = 3000,
     });
 
 /**
- * @exports
  * @type Idle
  */
 export default new Idle();

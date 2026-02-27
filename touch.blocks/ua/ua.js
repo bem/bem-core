@@ -87,7 +87,7 @@ var lastOrient = win.innerWidth > win.innerHeight,
         }
     });
 
-export default /** @exports */{
+export default {
     /**
      * User agent
      * @type String

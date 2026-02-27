@@ -5,7 +5,6 @@
 export default
     /**
      * Debounces given function
-     * @exports
      * @param {Function} fn function to debounce
      * @param {Number} timeout debounce interval
      * @param {Boolean} [invokeAsap=false] invoke before first interval

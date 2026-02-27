@@ -58,7 +58,6 @@ var Observable = inherit(/** @lends Observable.prototype */{
 export default
     /**
      * Creates new observable
-     * @exports
      * @param {events:Emitter} emitter
      * @returns {Observable}
      */

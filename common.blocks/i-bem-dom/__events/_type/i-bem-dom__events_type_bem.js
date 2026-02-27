@@ -82,7 +82,7 @@ var EVENT_PREFIX = '__bem__',
         }
     });
 
-export default /** @exports */ {
+export default {
     /**
      * Emits BEM event
      * @augments i-bem-dom__events_type_bem

@@ -308,7 +308,7 @@ function validateBlockParam(Block) {
  * Returns base entities for declaration
  * @param {Function} baseCls block|elem class
  * @param {String} entityName entityName
- * @param {Function|Array[Function]} [base] base block|elem + mixes
+ * @param {Function|Array.<Function>} [base] base block|elem + mixes
  * @returns {Array<Function>}
  */
 function getEntityBase(baseCls, entityName, base) {
@@ -425,7 +425,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * Clears the cache for elements
      * @private
-     * @param {?...(Function|String|Object)} elems Nested elements names or description elem, modName, modVal
+     * @param {...(Function|String|Object)} elems Nested elements names or description elem, modName, modVal
      * @returns {BemDomEntity} this
      */
     _dropElemCache : function(elems) {
@@ -874,7 +874,7 @@ $.fn.bem = function(BemDomEntity, params) {
     return entity? entity._setInitedMod() : null;
 };
 
-bemDom = /** @exports */{
+bemDom = {
     /**
      * Scope (set on DOM ready)
      * @type jQuery
@@ -916,7 +916,7 @@ bemDom = /** @exports */{
     /**
      * Declares DOM-based block and creates block class
      * @param {String|Function} blockName Block name or block class
-     * @param {Function|Array[Function]} [base] base block + mixes
+     * @param {Function|Array.<Function>} [base] base block + mixes
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      * @returns {Function} Block class
@@ -939,7 +939,7 @@ bemDom = /** @exports */{
      * Declares elem and creates elem class
      * @param {String} blockName Block name
      * @param {String} elemName Elem name
-     * @param {Function|Array[Function]} [base] base elem + mixes
+     * @param {Function|Array.<Function>} [base] base elem + mixes
      * @param {Object} [props] Methods
      * @param {Object} [staticProps] Static methods
      * @returns {Function} Elem class

@@ -23,7 +23,6 @@ var loading = {},
 
 export default
     /**
-     * @exports
      * @param {String} path resource link
      * @param {Function} [success] to be called if the script succeeds
      * @param {Function} [error] to be called if the script fails

@@ -6,7 +6,7 @@
 import bemDom from 'bem:i-bem-dom';
 import ua from 'bem:ua';
 
-export default /** @exports */bemDom.declBlock('ua',
+export default bemDom.declBlock('ua',
     {
         onSetMod : {
             'js' : {

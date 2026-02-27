@@ -4,7 +4,6 @@
 
 /**
  * Executes given function on next tick.
- * @exports
  * @type Function
  * @param {Function} fn
  */

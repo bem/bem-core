@@ -58,7 +58,6 @@ var TICK_INTERVAL = 50,
     });
 
 /**
- * @exports
  * @type Tick
  */
 export default new Tick();

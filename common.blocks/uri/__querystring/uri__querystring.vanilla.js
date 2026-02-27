@@ -12,7 +12,7 @@ function addParam(res, name, val) {
     res.push(encodeURIComponent(name) + '=' + (val == null? '' : encodeURIComponent(val)));
 }
 
-export default /** @exports */{
+export default {
     /**
      * Parse a query string to an object
      * @param {String} str

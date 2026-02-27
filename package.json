@@ -43,6 +43,7 @@
     "build": "BEM_PLATFORM=desktop vite build --config build/vite.config.js && BEM_PLATFORM=touch vite build --config build/vite.config.js",
     "build:desktop": "BEM_PLATFORM=desktop vite build --config build/vite.config.js",
     "build:touch": "BEM_PLATFORM=touch vite build --config build/vite.config.js",
+    "docs": "jsdoc -c jsdoc.config.json",
     "prepare": "husky"
   },
   "lint-staged": {

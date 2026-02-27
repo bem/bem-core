@@ -29,7 +29,6 @@ if(browser.chrome) {
 }
 
 /**
- * @exports
  * @type Object
  */
 export default browser;

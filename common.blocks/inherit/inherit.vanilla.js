@@ -107,7 +107,6 @@ function applyMixins(mixins, res) {
 
 /**
 * Creates class
-* @exports
 * @param {Function|Array} [baseClass|baseClassAndMixins] class (or class and mixins) to inherit from
 * @param {Object} prototypeFields
 * @param {Object} [staticFields]
