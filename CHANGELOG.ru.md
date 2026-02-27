@@ -1,5 +1,43 @@
 # История изменений
 
+## 5.0.0
+
+### Несовместимые изменения
+
+- **Только ESM**: Вся кодовая база мигрирована с модульной системы `ym` (`modules.define`/`modules.require`) на нативные ES-модули (`import`/`export`). Зависимость `ym` удалена.
+- **Сборка через Vite**: ENB и все 17+ связанных пакетов заменены на [Vite](https://vite.dev/). Кастомный плагин `vite-plugin-bem-levels` обеспечивает сканирование BEM-уровней, разрешение виртуальных модулей `bem:*` и генерацию barrel-файлов для цепочек переопределений.
+- **jQuery 4.0**: Peer-зависимость `jquery` обновлена с `^3.x` до `^4.0.0`. Основное изменение API: `$.unique()` удалён — используйте `$.uniqueSort()`.
+- **Node.js 20+**: Минимальная поддерживаемая версия Node.js — 20 (было 8).
+- **Нативные промисы**: `vow` удалён. Весь код использует нативный `Promise`.
+- **Нативный тест-раннер**: Серверные тесты используют `node:test` и `node:assert` вместо `mocha`/`chai`.
+- **Playwright**: Браузерные тесты используют [Playwright](https://playwright.dev/) вместо `mocha-phantomjs` (PhantomJS мёртв).
+- **ESLint 10**: Линтинг мигрирован с `jshint`/`jscs` на ESLint 10 с flat-конфигурацией (`eslint.config.js`).
+- **GitHub Actions CI**: Travis CI заменён на GitHub Actions.
+- **Husky + lint-staged**: `git-hooks` заменён на `husky` и `lint-staged`.
+
+### Крупные изменения
+
+- Все `.vanilla.js` и `.js` файлы конвертированы в ES-модули с синтаксисом `import`/`export`.
+- Цепочки переопределений модулей (напр., `jquery` с расширениями pointer-событий) обрабатываются автоматически сгенерированными barrel-файлами через `vite-plugin-bem-levels`.
+- Блок `i18n` сохраняет свой API, но использует нативные ES-модули внутри.
+- Браузерные спек-тесты (28 файлов, 500+ тестов) запускаются через Vite dev server + Playwright.
+- Vite генерирует платформенно-специфичные сборки (`desktop`, `touch`) с jQuery как внешней зависимостью.
+
+### Удалённые пакеты
+
+- **Сборка**: `enb`, `enb-bem-techs`, `enb-magic-factory`, `enb-magic-platform`, `enb-bemxjst`, `enb-bemxjst-6x`, `enb-bemxjst-7x`, `enb-bemxjst-i18n`, `enb-bh`, `enb-bh-i18n`, `enb-borschik`, `enb-css`, `enb-js`, `enb-bem-docs`, `enb-bem-examples`, `enb-bem-specs`, `enb-bem-tmpl-specs`, `enb-bem-i18n`, `borschik`
+- **Линтинг**: `jscs`, `jscs-bem`, `jshint`, `jshint-groups`
+- **Тестирование**: `mocha-phantomjs`, `istanbul`, `chai-as-promised`
+- **Прочие**: `ym`, `vow`, `bower`, `git-hooks`, `gitbook-api`, `bem-naming`, `bem-walk`
+
+### Удалённые конфигурационные файлы
+
+- `.enb/` (конфигурация сборки ENB)
+- `.jshintrc`, `.jscs.json`, `.jshint-groups.js` (конфигурация линтинга)
+- `.bowerrc`, `bower.json` (конфигурация Bower)
+- `.travis.yml` (конфигурация Travis CI)
+- `.githooks/` (конфигурация git-hooks)
+
 ## 4.3.1
 
 ### В релиз вошли следующие исправления ошибок

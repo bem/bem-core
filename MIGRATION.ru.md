@@ -1,5 +1,121 @@
 # Миграция
 
+## 5.0.0
+
+### ym → ES-модули
+
+Модульная система `ym` (`modules.define`/`modules.require`) заменена на нативные ES-модули.
+
+Было:
+
+```js
+modules.define('my-block', ['i-bem-dom', 'events'], function(provide, bemDom, events) {
+
+provide(bemDom.declBlock(this.name, { /* ... */ }));
+
+});
+```
+
+Стало:
+
+```js
+import bemDom from 'bem:i-bem-dom';
+import events from 'bem:events';
+
+export default bemDom.declBlock('my-block', { /* ... */ });
+```
+
+Все `bem:*` импорты разрешаются на этапе сборки плагином `vite-plugin-bem-levels` в реальные пути файлов с учётом приоритетов уровней для конкретной платформы.
+
+### Переопределения модулей
+
+Переопределения модулей, которые ранее использовали `modules.define` с колбэком, получающим предыдущее значение модуля, теперь обрабатываются через barrel-файлы, генерируемые Vite-плагином.
+
+Было (переопределение ym):
+
+```js
+modules.define('jquery', function(provide, $) {
+    $.event.special.pointerclick = { /* ... */ };
+    provide($);
+});
+```
+
+Стало (side-effect импорт в barrel-файле):
+
+```js
+// Barrel-файл автоматически сгенерирован vite-plugin-bem-levels:
+import $ from '../../common.blocks/jquery/jquery.js';
+import '../../common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js';
+export default $;
+```
+
+### jQuery 3 → 4
+
+Peer-зависимость `jquery` теперь `^4.0.0`.
+
+Основные несовместимые изменения в jQuery 4:
+- `$.unique()` удалён. Используйте `$.uniqueSort()`.
+- Ряд устаревших методов удалён. См. [руководство по обновлению jQuery 4.0](https://jquery.com/upgrade-guide/4.0/).
+
+### vow → нативный Promise
+
+Зависимость `vow` удалена. Весь асинхронный код теперь использует нативный `Promise`.
+
+Было:
+
+```js
+var vow = require('vow');
+var promise = vow.resolve(value);
+```
+
+Стало:
+
+```js
+const promise = Promise.resolve(value);
+```
+
+### Система сборки: ENB → Vite
+
+Весь инструментарий ENB заменён на Vite.
+
+Было:
+
+```bash
+./node_modules/.bin/enb make
+```
+
+Стало:
+
+```bash
+npm run build           # обе платформы
+npm run build:desktop   # только desktop
+npm run build:touch     # только touch
+```
+
+Конфигурация Vite находится в `build/vite.config.js`. Кастомный плагин `vite-plugin-bem-levels` в `build/plugins/` обеспечивает сканирование BEM-уровней и разрешение модулей.
+
+### Node.js 20+
+
+Минимальная поддерживаемая версия Node.js — 20 (было 8). Обновите `.nvmrc` или конфигурацию CI.
+
+### Линтинг: jshint/jscs → ESLint 10
+
+Замените кастомные `.jshintrc` или `.jscs.json` правила на flat-конфигурацию ESLint (`eslint.config.js`).
+
+### Тестирование
+
+- **Серверные тесты**: `mocha`/`chai` заменены на `node:test`/`node:assert`.
+- **Браузерные тесты**: `mocha-phantomjs` заменён на Playwright. Запуск: `npm run test:browser`.
+- **Все тесты**: `npm run test:all` запускает серверные и браузерные тесты.
+
+### CI/CD: Travis → GitHub Actions
+
+Замените `.travis.yml` на `.github/workflows/ci.yml`. Новый CI запускает задачи lint, test, test:browser и build.
+
+### Git-хуки: git-hooks → husky
+
+Замените `.githooks/` на конфигурацию husky. Скрипт `prepare` в `package.json` автоматически настраивает husky при `npm install`.
+
 ## 4.0.0
 
 ### Изменения в блоке `i-bem`
