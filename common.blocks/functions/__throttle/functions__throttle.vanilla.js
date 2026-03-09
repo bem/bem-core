@@ -12,34 +12,34 @@ export default
      * @returns {Function} throttled function
      */
     function(fn, timeout, invokeAsap, ctx) {
-        var typeofInvokeAsap = typeof invokeAsap;
+        const typeofInvokeAsap = typeof invokeAsap
         if(typeofInvokeAsap === 'undefined') {
-            invokeAsap = true;
+            invokeAsap = true
         } else if(arguments.length === 3 && typeofInvokeAsap !== 'boolean') {
-            ctx = invokeAsap;
-            invokeAsap = true;
+            ctx = invokeAsap
+            invokeAsap = true
         }
 
-        var timer, args, needInvoke,
-            wrapper = function() {
+        let timer, args, needInvoke
+        const wrapper = function() {
                 if(needInvoke) {
-                    fn.apply(ctx, args);
-                    needInvoke = false;
-                    timer = globalThis.setTimeout(wrapper, timeout);
+                    fn.apply(ctx, args)
+                    needInvoke = false
+                    timer = globalThis.setTimeout(wrapper, timeout)
                 } else {
-                    timer = null;
+                    timer = null
                 }
-            };
+            }
 
         return function() {
-            args = arguments;
-            ctx || (ctx = this);
-            needInvoke = true;
+            args = arguments
+            ctx || (ctx = this)
+            needInvoke = true
 
             if(!timer) {
                 invokeAsap?
                     wrapper() :
-                    timer = globalThis.setTimeout(wrapper, timeout);
+                    timer = globalThis.setTimeout(wrapper, timeout)
             }
-        };
-    };
+        }
+    }

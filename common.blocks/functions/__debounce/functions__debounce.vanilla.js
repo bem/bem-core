@@ -13,22 +13,22 @@ export default
      */
     function(fn, timeout, invokeAsap, ctx) {
         if(arguments.length === 3 && typeof invokeAsap !== 'boolean') {
-            ctx = invokeAsap;
-            invokeAsap = false;
+            ctx = invokeAsap
+            invokeAsap = false
         }
 
-        var timer;
+        let timer
         return function() {
-            var args = arguments;
-            ctx || (ctx = this);
+            const args = arguments
+            ctx || (ctx = this)
 
-            invokeAsap && !timer && fn.apply(ctx, args);
+            invokeAsap && !timer && fn.apply(ctx, args)
 
-            globalThis.clearTimeout(timer);
+            globalThis.clearTimeout(timer)
 
-            timer = globalThis.setTimeout(function() {
-                invokeAsap || fn.apply(ctx, args);
-                timer = null;
-            }, timeout);
-        };
-    };
+            timer = globalThis.setTimeout(() => {
+                invokeAsap || fn.apply(ctx, args)
+                timer = null
+            }, timeout)
+        }
+    }
