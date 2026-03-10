@@ -1,13 +1,13 @@
 /**
  * @module i-bem-dom__collection
  */
-import inherit from 'bem:inherit';
-import BemCollection from 'bem:i-bem__collection';
+import inherit from 'bem:inherit'
+import BemCollection from 'bem:i-bem__collection'
 
 /**
  * @class BemDomCollection
  */
-var BemDomCollection = inherit(BemCollection, /** @lends BemDomCollection.prototype */{
+const BemDomCollection = inherit(BemCollection, /** @lends BemDomCollection.prototype */{
     /**
      * Finds the first child block for every entities in collection
      * @param {Function|Object} Block Block class or description (block, modName, modVal) of the block to find
@@ -95,32 +95,30 @@ var BemDomCollection = inherit(BemCollection, /** @lends BemDomCollection.protot
      * @returns {BemDomCollection}
      */
     findMixedElems : buildProxyMethodForMany('findMixedElems')
-});
+})
 
 function collectionMapMethod(collection, methodName, args) {
-    return collection.map(function(entity) {
-        return entity[methodName].apply(entity, args);
-    });
+    return collection.map((entity) => entity[methodName].apply(entity, args))
 }
 
 function buildProxyMethodForOne(methodName) {
     return function() {
-        return new BemDomCollection(collectionMapMethod(this, methodName, arguments));
-    };
+        return new BemDomCollection(collectionMapMethod(this, methodName, arguments))
+    }
 }
 
 function buildProxyMethodForMany(methodName) {
     return function() {
-        var res = [];
+        const res = []
 
-        collectionMapMethod(this, methodName, arguments).forEach(function(collection) {
-            collection.forEach(function(entity) {
-                res.push(entity);
-            });
-        });
+        collectionMapMethod(this, methodName, arguments).forEach((collection) => {
+            collection.forEach((entity) => {
+                res.push(entity)
+            })
+        })
 
-        return new BemDomCollection(res);
-    };
+        return new BemDomCollection(res)
+    }
 }
 
-export default BemDomCollection;
+export default BemDomCollection

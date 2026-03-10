@@ -3,9 +3,9 @@
  * @description Provide jQuery from npm package.
  */
 
-import jQuery from 'jquery';
+import jQuery from 'jquery'
 
 /**
  * @type Function
  */
-export default jQuery;
+export default jQuery

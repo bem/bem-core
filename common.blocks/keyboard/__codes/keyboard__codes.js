@@ -34,4 +34,4 @@ export default {
     INSERT : 45,
     /** @type {Number} */
     DELETE : 46
-};
+}
