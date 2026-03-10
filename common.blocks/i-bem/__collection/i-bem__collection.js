@@ -1,25 +1,25 @@
 /**
  * @module i-bem__collection
  */
-import inherit from 'bem:inherit';
+import inherit from 'bem:inherit'
 
 /**
  * @class BemCollection
  */
-var BemCollection = inherit(/** @lends BemCollection.prototype */{
+const BemCollection = inherit(/** @lends BemCollection.prototype */{
     /**
      * @constructor
      * @param {Array} entities BEM entities
      */
-    __constructor : function(entities) {
-        var _entities = this._entities = [],
-            uniq = {};
-        (Array.isArray(entities)? entities : arraySlice.call(arguments)).forEach(function(entity) {
+    __constructor(entities) {
+        const _entities = this._entities = []
+        const uniq = {}
+        ;(Array.isArray(entities) ? entities : [...arguments]).forEach((entity) => {
             if(!uniq[entity._uniqId]) {
-                uniq[entity._uniqId] = true;
-                _entities.push(entity);
+                uniq[entity._uniqId] = true
+                _entities.push(entity)
             }
-        });
+        })
     },
 
     /**
@@ -70,8 +70,8 @@ var BemCollection = inherit(/** @lends BemCollection.prototype */{
      * @param {Number} i Index
      * @returns {BemEntity}
      */
-    get : function(i) {
-        return this._entities[i];
+    get(i) {
+        return this._entities[i]
     },
 
     /**
@@ -113,8 +113,8 @@ var BemCollection = inherit(/** @lends BemCollection.prototype */{
      * @param {Object} ctx Callback context
      * @returns {Collection}
      */
-    filter : function() {
-        return new this.__self(buildEntitiesMethodProxyFn('filter').apply(this, arguments));
+    filter(...args) {
+        return new this.__self(buildEntitiesMethodProxyFn('filter').apply(this, args))
     },
 
     /**
@@ -138,8 +138,8 @@ var BemCollection = inherit(/** @lends BemCollection.prototype */{
      * @param {BemEntity} entity BEM entity
      * @returns {Boolean}
      */
-    has : function(entity) {
-        return this._entities.indexOf(entity) > -1;
+    has(entity) {
+        return this._entities.includes(entity)
     },
 
     /**
@@ -148,17 +148,8 @@ var BemCollection = inherit(/** @lends BemCollection.prototype */{
      * @param {Object} ctx Callback context
      * @returns {BemEntity}
      */
-    find : function(fn, ctx) {
-        ctx || (ctx = this);
-        var entities = this._entities,
-            i = 0,
-            entity;
-
-        while(entity = entities[i])
-            if(fn.call(ctx, entities[i], i++, this))
-                return entity;
-
-        return null;
+    find(fn, ctx) {
+        return this._entities.find((entity, i) => fn.call(ctx || this, entity, i, this)) || null
     },
 
     /**
@@ -167,65 +158,51 @@ var BemCollection = inherit(/** @lends BemCollection.prototype */{
      * @param {...(Collection|Array|BemEntity)} args
      * @returns {Collection}
      */
-    concat : function() {
-        var i = 0,
-            l = arguments.length,
-            arg,
-            argsForConcat = [];
+    concat(...args) {
+        const argsForConcat = args.map((arg) =>
+            arg instanceof BemCollection ? arg._entities : arg)
 
-        while(i < l) {
-            arg = arguments[i++];
-            argsForConcat.push(
-                arg instanceof BemCollection?  arg._entities : arg);
-        }
-
-        return new this.__self(arrayConcat.apply(this._entities, argsForConcat));
+        return new this.__self(this._entities.concat(...argsForConcat))
     },
 
     /**
      * Returns size of the collection.
      * @returns {Number}
      */
-    size : function() {
-        return this._entities.length;
+    size() {
+        return this._entities.length
     },
 
     /**
      * Converts the collection into array.
      * @returns {Array}
      */
-    toArray : function() {
-        return this._entities.slice();
+    toArray() {
+        return this._entities.slice()
     }
-});
+})
 
 function buildForEachEntityMethodProxyFn(methodName) {
-    return function() {
-        var args = arguments;
-        this._entities.forEach(function(entity) {
-            entity[methodName].apply(entity, args);
-        });
-        return this;
-    };
+    return function(...args) {
+        this._entities.forEach((entity) => {
+            entity[methodName].apply(entity, args)
+        })
+        return this
+    }
 }
 
 function buildEntitiesMethodProxyFn(methodName) {
-    return function() {
-        var entities = this._entities;
-        return entities[methodName].apply(entities, arguments);
-    };
+    return function(...args) {
+        const entities = this._entities
+        return entities[methodName].apply(entities, args)
+    }
 }
 
 function buildComplexProxyFn(arrayMethodName, entityMethodName) {
-    return function() {
-        var args = arguments;
-        return this._entities[arrayMethodName](function(entity) {
-            return entity[entityMethodName].apply(entity, args);
-        });
-    };
+    return function(...args) {
+        return this._entities[arrayMethodName]((entity) =>
+            entity[entityMethodName].apply(entity, args))
+    }
 }
 
-var arrayConcat = Array.prototype.concat,
-    arraySlice = Array.prototype.slice;
-
-export default BemCollection;
+export default BemCollection
