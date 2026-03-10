@@ -3,107 +3,105 @@
  * @description Load BEM bundle (JS+CSS) from external URL.
  */
 
-var LOADING_TIMEOUT = 30000,
-    doc = document,
-    head,
-    bundles = {},
+const LOADING_TIMEOUT = 30000
+const doc = document
+let head
+const bundles = new Map()
 
-    handleError = function(bundleId) {
-        var bundleDesc = bundles[bundleId];
+const handleError = (bundleId) => {
+    const bundleDesc = bundles.get(bundleId)
 
-        if(!bundleDesc) return;
+    if(!bundleDesc) return
 
-        var fns = bundleDesc.errorFns,
-            fn;
+    const fns = bundleDesc.errorFns
 
-        clearTimeout(bundleDesc.timer);
+    clearTimeout(bundleDesc.timer)
 
-        while(fn = fns.shift()) fn();
-        delete bundles[bundleId];
-    },
+    for(const fn of fns) fn()
+    bundles.delete(bundleId)
+}
 
-    appendCss = function(css) {
-        var style = doc.createElement('style');
-        style.type = 'text/css';
-        head.appendChild(style); // ie needs to insert style before setting content
-        style.styleSheet?
-            style.styleSheet.cssText = css :
-            style.appendChild(doc.createTextNode(css));
-    },
+const appendCss = (css) => {
+    const style = doc.createElement('style')
+    style.type = 'text/css'
+    head.appendChild(style)
+    style.appendChild(doc.createTextNode(css))
+}
 
-    /**
-     * Loads bundle
-     * @param {String} id
-     * @param {String} url
-     * @param {Function} onSuccess
-     * @param {Function} [onError]
-     */
-    load = function(id, url, onSuccess, onError) {
-        var bundle = bundles[id];
-        if(bundle) {
-            if(bundle.successFns) { // bundle is being loaded
-                bundle.successFns.push(onSuccess);
-                onError && bundle.errorFns.push(onError);
-            } else { // bundle was loaded before
-                setTimeout(onSuccess, 0);
-            }
-            return;
+/**
+ * Loads bundle
+ * @exports
+ * @param {String} id
+ * @param {String} url
+ * @param {Function} onSuccess
+ * @param {Function} [onError]
+ */
+const load = (id, url, onSuccess, onError) => {
+    const bundle = bundles.get(id)
+    if(bundle) {
+        if(bundle.successFns) { // bundle is being loaded
+            bundle.successFns.push(onSuccess)
+            onError && bundle.errorFns.push(onError)
+        } else { // bundle was loaded before
+            setTimeout(onSuccess, 0)
         }
+        return
+    }
 
-        var script = doc.createElement('script'),
-            errorFn = function() {
-                handleError(id);
-            };
+    const script = doc.createElement('script')
+    const errorFn = () => {
+        handleError(id)
+    }
 
-        script.type = 'text/javascript';
-        script.charset = 'utf-8';
-        script.src = url;
-        script.onerror = errorFn; // for browsers that support
-        setTimeout(function() {
-            (head || (head = doc.getElementsByTagName('head')[0])).insertBefore(script, head.firstChild);
-        }, 0);
+    script.type = 'text/javascript'
+    script.charset = 'utf-8'
+    script.src = url
+    script.onerror = errorFn // for browsers that support
+    setTimeout(() => {
+        (head || (head = doc.getElementsByTagName('head')[0])).insertBefore(script, head.firstChild)
+    }, 0)
 
-        bundles[id] = {
-            successFns : [onSuccess],
-            errorFns : onError? [onError] : [],
-            timer : setTimeout(errorFn, LOADING_TIMEOUT)
-        };
-    };
+    bundles.set(id, {
+        successFns : [onSuccess],
+        errorFns : onError? [onError] : [],
+        timer : setTimeout(errorFn, LOADING_TIMEOUT)
+    })
+}
 
-load._loaded = function(bundle) {
-    var bundleDesc = bundles[bundle.id];
+load._loaded = (bundle) => {
+    const bundleDesc = bundles.get(bundle.id)
 
-    if(!bundleDesc) return;
+    if(!bundleDesc) return
 
-    clearTimeout(bundleDesc.timer);
+    clearTimeout(bundleDesc.timer)
 
-    bundle.js && bundle.js.call(globalThis);
+    bundle.js && bundle.js.call(globalThis)
 
-    bundle.css && appendCss(bundle.css);
+    bundle.css && appendCss(bundle.css)
 
     if(bundle.hcss) {
-        var styles = [],
-            _ycssjs = window._ycssjs;
+        const styles = []
+        const _ycssjs = window._ycssjs
 
-        bundle.hcss.forEach(function(hsh) {
+        bundle.hcss.forEach((hsh) => {
             if(_ycssjs) {
-                if(hsh[0] in _ycssjs) return;
-                _ycssjs(hsh[0]);
+                if(hsh[0] in _ycssjs) return
+                _ycssjs(hsh[0])
             }
 
-            styles.push(hsh[1]);
-        });
+            styles.push(hsh[1])
+        })
 
-        styles.length && appendCss(styles.join(''));
+        styles.length && appendCss(styles.join(''))
     }
 
-    function onSuccess() {
-        var fns = bundleDesc.successFns, fn;
-        while(fn = fns.shift()) fn();
-        delete bundleDesc.successFns;
+    const onSuccess = () => {
+        const fns = bundleDesc.successFns
+        for(const fn of fns) fn()
+        delete bundleDesc.successFns
     }
 
-    onSuccess();
-};
+    onSuccess()
+}
 
-export default load;
+export default load

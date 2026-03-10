@@ -3,23 +3,26 @@
  * @description Load JS from external URL.
  */
 
-var loading = {},
-    loaded = {},
-    head = document.getElementsByTagName('head')[0],
-    runCallbacks = function(path, type) {
-        var cbs = loading[path], cb, i = 0;
-        delete loading[path];
-        while(cb = cbs[i++]) {
-            cb[type] && cb[type]();
-        }
-    },
-    onSuccess = function(path) {
-        loaded[path] = true;
-        runCallbacks(path, 'success');
-    },
-    onError = function(path) {
-        runCallbacks(path, 'error');
-    };
+const loading = new Map()
+const loaded = new Map()
+const head = document.getElementsByTagName('head')[0]
+
+const runCallbacks = (path, type) => {
+    const cbs = loading.get(path)
+    loading.delete(path)
+    for(const cb of cbs) {
+        cb[type] && cb[type]()
+    }
+}
+
+const onSuccess = (path) => {
+    loaded.set(path, true)
+    runCallbacks(path, 'success')
+}
+
+const onError = (path) => {
+    runCallbacks(path, 'error')
+}
 
 export default
     /**
@@ -27,43 +30,33 @@ export default
      * @param {Function} [success] to be called if the script succeeds
      * @param {Function} [error] to be called if the script fails
      */
-    function(path, success, error) {
-        if(loaded[path]) {
-            success && success();
-            return;
+    (path, success, error) => {
+        if(loaded.has(path)) {
+            success && success()
+            return
         }
 
-        if(loading[path]) {
-            loading[path].push({ success : success, error : error });
-            return;
+        if(loading.get(path)) {
+            loading.get(path).push({ success, error })
+            return
         }
 
-        loading[path] = [{ success : success, error : error }];
+        loading.set(path, [{ success, error }])
 
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.charset = 'utf-8';
-        script.src = (location.protocol === 'file:' && !path.indexOf('//')? 'http:' : '') + path;
+        const script = document.createElement('script')
+        script.type = 'text/javascript'
+        script.charset = 'utf-8'
+        script.src = (location.protocol === 'file:' && !path.indexOf('//')? 'http:' : '') + path
 
-        if('onload' in script) {
-            script.onload = function() {
-                script.onload = script.onerror = null;
-                onSuccess(path);
-            };
-
-            script.onerror = function() {
-                script.onload = script.onerror = null;
-                onError(path);
-            };
-        } else {
-            script.onreadystatechange = function() {
-                var readyState = this.readyState;
-                if(readyState === 'loaded' || readyState === 'complete') {
-                    script.onreadystatechange = null;
-                    onSuccess(path);
-                }
-            };
+        script.onload = () => {
+            script.onload = script.onerror = null
+            onSuccess(path)
         }
 
-        head.insertBefore(script, head.lastChild);
-    };
+        script.onerror = () => {
+            script.onload = script.onerror = null
+            onError(path)
+        }
+
+        head.insertBefore(script, head.lastChild)
+    }
