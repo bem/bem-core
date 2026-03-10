@@ -1,7 +1,7 @@
 export default {
     i18n : {
         i18n : function() {
-            var data;
+            let data;
 
             /**
              * @param {String} keyset
@@ -11,7 +11,7 @@ export default {
              */
             function i18n(keyset, key, params) {
                 if(!data) throw Error('i18n need to be filled with data');
-                var val = data[keyset] && data[keyset][key];
+                const val = data[keyset] && data[keyset][key];
                 return typeof val === 'undefined'?
                 keyset + ':' + key :
                     typeof val === 'string'?
@@ -25,11 +25,11 @@ export default {
                     return this;
                 }
 
-                for(var ks in i18nData) {
-                    var dataKs = data[ks] || (data[ks] = {}),
+                for(const ks in i18nData) {
+                    const dataKs = data[ks] || (data[ks] = {}),
                         i18nDataKs = i18nData[ks];
 
-                    for(var k in i18nDataKs)
+                    for(const k in i18nDataKs)
                         dataKs[k] = i18nDataKs[k];
                 }
 

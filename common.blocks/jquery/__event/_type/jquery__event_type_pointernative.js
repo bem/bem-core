@@ -2,7 +2,7 @@ import $ from 'bem:jquery';
 
 ;(function(window, $) {
 
-var jqEvent = $.event;
+const jqEvent = $.event;
 
 // NOTE: Remove jQuery special fixes for pointerevents – we fix them ourself
 delete jqEvent.special.pointerenter;
@@ -19,9 +19,8 @@ if(window.PointerEvent) {
  * and licensed under the BSD License.
  */
 
-var doc = document,
-    HAS_BITMAP_TYPE = window.MSPointerEvent && typeof window.MSPointerEvent.MSPOINTER_TYPE_MOUSE === 'number',
-    undef;
+const doc = document,
+    HAS_BITMAP_TYPE = window.MSPointerEvent && typeof window.MSPointerEvent.MSPOINTER_TYPE_MOUSE === 'number';
 
 /*!
  * Returns a snapshot of the event, with writable properties.
@@ -30,7 +29,7 @@ var doc = document,
  * @returns {Object} An object containing shallow copies of `inEvent`'s properties.
  */
 function cloneEvent(event) {
-    var eventCopy = $.extend(new $.Event(), event);
+    const eventCopy = $.extend(new $.Event(), event);
     if(event.preventDefault) {
         eventCopy.preventDefault = function() {
             event.preventDefault();
@@ -48,7 +47,7 @@ function dispatchEvent(event, target) {
         jqEvent.dispatch.call(target, event);
 }
 
-var MOUSE_PROPS = {
+const MOUSE_PROPS = {
         bubbles : false,
         cancelable : false,
         view : null,
@@ -82,11 +81,11 @@ var MOUSE_PROPS = {
 function PointerEvent(type, params) {
     params || (params = {});
 
-    var e = $.Event(type);
+    const e = $.Event(type);
 
     // define inherited MouseEvent properties
-    for(var i = 0, p; i < mousePropsLen; i++) {
-        p = mouseProps[i];
+    for(let i = 0; i < mousePropsLen; i++) {
+        const p = mouseProps[i];
         e[p] = params[p] || mouseDefaults[i];
     }
 
@@ -98,12 +97,7 @@ function PointerEvent(type, params) {
 
     // Spec requires that pointers without pressure specified use 0.5 for down
     // state and 0 for up state.
-    var pressure = 0;
-    if(params.pressure) {
-        pressure = params.pressure;
-    } else {
-        pressure = e.buttons? 0.5 : 0;
-    }
+    const pressure = params.pressure || (e.buttons? 0.5 : 0);
 
     // define the properties of the PointerEvent interface
     e.pointerId = params.pointerId || 0;
@@ -129,7 +123,7 @@ function SparseArrayMap() {
 
 SparseArrayMap.prototype = {
     set : function(k, v) {
-        if(v === undef) {
+        if(v === undefined) {
             return this['delete'](k);
         }
         if(!this.has(k)) {
@@ -139,7 +133,7 @@ SparseArrayMap.prototype = {
     },
 
     has : function(k) {
-        return this.array[k] !== undef;
+        return this.array[k] !== undefined;
     },
 
     'delete' : function(k) {
@@ -167,10 +161,10 @@ SparseArrayMap.prototype = {
 };
 
 // jscs:disable requireMultipleVarDecl
-var PointerMap = window.Map && window.Map.prototype.forEach? Map : SparseArrayMap,
+const PointerMap = window.Map && window.Map.prototype.forEach? Map : SparseArrayMap,
     pointerMap = new PointerMap();
 
-var dispatcher = {
+const dispatcher = {
     eventMap : {},
     eventSourceList : [],
 
@@ -178,7 +172,7 @@ var dispatcher = {
      * Add a new event source that will generate pointer events
      */
     registerSource : function(name, source) {
-        var newEvents = source.events;
+        const newEvents = source.events;
         if(newEvents) {
             newEvents.forEach(function(e) {
                 source[e] && (this.eventMap[e] = function() { source[e].apply(source, arguments) });
@@ -188,16 +182,14 @@ var dispatcher = {
     },
 
     register : function(element) {
-        var len = this.eventSourceList.length;
-        for(var i = 0, es; (i < len) && (es = this.eventSourceList[i]); i++) {
+        for(const es of this.eventSourceList) {
             // call eventsource register
             es.register.call(es, element);
         }
     },
 
     unregister : function(element) {
-        var l = this.eventSourceList.length;
-        for(var i = 0, es; (i < l) && (es = this.eventSourceList[i]); i++) {
+        for(const es of this.eventSourceList) {
             // call eventsource register
             es.unregister.call(es, element);
         }
@@ -254,8 +246,8 @@ var dispatcher = {
     },
 
     enterLeave : function(event, fn) {
-        var target = event.target,
-            relatedTarget = event.relatedTarget;
+        let target = event.target;
+        const relatedTarget = event.relatedTarget;
 
         if(!this.contains(target, relatedTarget)) {
             while(target && target !== relatedTarget) {
@@ -280,7 +272,8 @@ var dispatcher = {
             return;
         }
 
-        var type = e.type, fn;
+        const type = e.type;
+        let fn;
         (fn = this.eventMap && this.eventMap[type]) && fn(e);
 
         e._handledByPE = true;
@@ -320,7 +313,7 @@ var dispatcher = {
      * Creates a new Event of type `type`, based on the information in `event`
      */
     makeEvent : function(type, event) {
-        var e = new PointerEvent(type, event);
+        const e = new PointerEvent(type, event);
         if(event.preventDefault) {
             e.preventDefault = event.preventDefault;
         }
@@ -334,7 +327,7 @@ var dispatcher = {
      * Dispatches the event to its target
      */
     dispatchEvent : function(event) {
-        var target = this.getTarget(event);
+        const target = this.getTarget(event);
         if(target) {
             if(!event.target) {
                 event.target = target;
@@ -348,7 +341,7 @@ var dispatcher = {
      * Makes and dispatch an event in one call
      */
     fireEvent : function(type, event) {
-        var e = this.makeEvent(type, event);
+        const e = this.makeEvent(type, event);
         return this.dispatchEvent(e);
     }
 };
@@ -357,7 +350,7 @@ function boundHandler() {
     dispatcher.eventHandler.apply(dispatcher, arguments);
 }
 
-var CLICK_COUNT_TIMEOUT = 200,
+const CLICK_COUNT_TIMEOUT = 200,
     // Radius around touchend that swallows mouse events
     MOUSE_DEDUP_DIST = 25,
     MOUSE_POINTER_ID = 1,
@@ -367,7 +360,7 @@ var CLICK_COUNT_TIMEOUT = 200,
     TOUCHMOVE_HYSTERESIS = 20;
 
 // handler block for native mouse events
-var mouseEvents = {
+const mouseEvents = {
     POINTER_TYPE : 'mouse',
     events : [
         'mousedown',
@@ -389,13 +382,13 @@ var mouseEvents = {
 
     // collide with the global mouse listener
     isEventSimulatedFromTouch : function(event) {
-        var lts = this.lastTouches,
+        const lts = this.lastTouches,
             x = event.clientX,
             y = event.clientY;
 
-        for(var i = 0, l = lts.length, t; i < l && (t = lts[i]); i++) {
+        for(let i = 0, l = lts.length, t; i < l && (t = lts[i]); i++) {
             // simulated mouse events will be swallowed near a primary touchend
-            var dx = Math.abs(x - t.x), dy = Math.abs(y - t.y);
+            const dx = Math.abs(x - t.x), dy = Math.abs(y - t.y);
             if(dx <= MOUSE_DEDUP_DIST && dy <= MOUSE_DEDUP_DIST) {
                 return true;
             }
@@ -403,7 +396,7 @@ var mouseEvents = {
     },
 
     prepareEvent : function(event) {
-        var e = cloneEvent(event);
+        const e = cloneEvent(event);
         e.pointerId = MOUSE_POINTER_ID;
         e.isPrimary = true;
         e.pointerType = this.POINTER_TYPE;
@@ -419,23 +412,23 @@ var mouseEvents = {
 
             pointerMap.set(MOUSE_POINTER_ID, event);
 
-            var e = this.prepareEvent(event);
+            const e = this.prepareEvent(event);
             dispatcher.down(e);
         }
     },
 
     mousemove : function(event) {
         if(!this.isEventSimulatedFromTouch(event)) {
-            var e = this.prepareEvent(event);
+            const e = this.prepareEvent(event);
             dispatcher.move(e);
         }
     },
 
     mouseup : function(event) {
         if(!this.isEventSimulatedFromTouch(event)) {
-            var p = pointerMap.get(MOUSE_POINTER_ID);
+            const p = pointerMap.get(MOUSE_POINTER_ID);
             if(p && p.button === event.button) {
-                var e = this.prepareEvent(event);
+                const e = this.prepareEvent(event);
                 dispatcher.up(e);
                 this.cleanupMouse();
             }
@@ -444,20 +437,20 @@ var mouseEvents = {
 
     mouseover : function(event) {
         if(!this.isEventSimulatedFromTouch(event)) {
-            var e = this.prepareEvent(event);
+            const e = this.prepareEvent(event);
             dispatcher.enterOver(e);
         }
     },
 
     mouseout : function(event) {
         if(!this.isEventSimulatedFromTouch(event)) {
-            var e = this.prepareEvent(event);
+            const e = this.prepareEvent(event);
             dispatcher.leaveOut(e);
         }
     },
 
     cancel : function(inEvent) {
-        var e = this.prepareEvent(inEvent);
+        const e = this.prepareEvent(inEvent);
         dispatcher.cancel(e);
         this.cleanupMouse();
     },
@@ -467,7 +460,7 @@ var mouseEvents = {
     }
 };
 
-var touchEvents = {
+const touchEvents = {
     events : [
         'touchstart',
         'touchmove',
@@ -517,7 +510,7 @@ var touchEvents = {
     },
 
     resetClickCount : function() {
-        var _this = this;
+        const _this = this;
         this.resetId = setTimeout(function() {
             _this.clickCount = 0;
             _this.resetId = null;
@@ -538,7 +531,7 @@ var touchEvents = {
     },
 
     touchToPointer : function(touch) {
-        var cte = this.currentTouchEvent,
+        const cte = this.currentTouchEvent,
             e = cloneEvent(touch);
 
         // Spec specifies that pointerId 1 is reserved for Mouse.
@@ -558,7 +551,7 @@ var touchEvents = {
         e.pointerType = this.POINTER_TYPE;
 
         // forward touch preventDefaults
-        var _this = this;
+        const _this = this;
         e.preventDefault = function() {
             _this.scrolling = false;
             _this.firstXY = null;
@@ -569,10 +562,10 @@ var touchEvents = {
     },
 
     processTouches : function(event, fn) {
-        var tl = event.originalEvent.changedTouches;
+        const tl = event.originalEvent.changedTouches;
         this.currentTouchEvent = event;
-        for(var i = 0, t; i < tl.length; i++) {
-            t = tl[i];
+        for(let i = 0; i < tl.length; i++) {
+            const t = tl[i];
             fn.call(this, this.touchToPointer(t));
         }
     },
@@ -583,7 +576,7 @@ var touchEvents = {
     },
 
     findTouch : function(touches, pointerId) {
-        for(var i = 0, l = touches.length, t; i < l && (t = touches[i]); i++) {
+        for(let i = 0, l = touches.length, t; i < l && (t = touches[i]); i++) {
             if(t.identifier === pointerId) {
                 return true;
             }
@@ -600,11 +593,11 @@ var touchEvents = {
      * for this "abandoned" touch
      */
     vacuumTouches : function(touchEvent) {
-        var touches = touchEvent.touches;
+        const touches = touchEvent.touches;
         // `pointermap.size` should be less than length of touches here, as the touchstart has not
         // been processed yet.
         if(pointerMap.size >= touches.length) {
-            var d = [];
+            const d = [];
 
             pointerMap.forEach(function(pointer, pointerId) {
                 // Never remove pointerId == 1, which is mouse.
@@ -622,24 +615,24 @@ var touchEvents = {
      * Prevents synth mouse events from creating pointer events
      */
     dedupSynthMouse : function(touchEvent) {
-        var lts = mouseEvents.lastTouches,
+        const lts = mouseEvents.lastTouches,
             t = touchEvent.changedTouches[0];
 
         // only the primary finger will synth mouse events
         if(this.isPrimaryTouch(t)) {
             // remember x/y of last touch
-            var lt = { x : t.clientX, y : t.clientY };
+            const lt = { x : t.clientX, y : t.clientY };
             lts.push(lt);
 
             setTimeout(function() {
-                var i = lts.indexOf(lt);
+                const i = lts.indexOf(lt);
                 i > -1 && lts.splice(i, 1);
             }, TOUCH_DEDUP_TIMEOUT);
         }
     },
 
     touchstart : function(event) {
-        var touchEvent = event.originalEvent;
+        const touchEvent = event.originalEvent;
 
         this.vacuumTouches(touchEvent);
         this.setPrimaryTouch(touchEvent.changedTouches[0]);
@@ -652,7 +645,7 @@ var touchEvents = {
     },
 
     touchmove : function(event) {
-        var touchEvent = event.originalEvent;
+        const touchEvent = event.originalEvent;
         if(!this.scrolling) {
             if(this.scrolling === null && this.shouldScroll(touchEvent)) {
                 this.scrolling = true;
@@ -661,7 +654,7 @@ var touchEvents = {
                 this.processTouches(event, this.moveOverOut);
             }
         } else if(this.firstXY) {
-            var firstXY = this.firstXY,
+            const firstXY = this.firstXY,
                 touch = touchEvent.changedTouches[0],
                 dx = touch.clientX - firstXY.X,
                 dy = touch.clientY - firstXY.Y,
@@ -675,7 +668,7 @@ var touchEvents = {
     },
 
     touchend : function(event) {
-        var touchEvent = event.originalEvent;
+        const touchEvent = event.originalEvent;
         this.dedupSynthMouse(touchEvent);
         this.processTouches(event, this.upOut);
     },
@@ -685,7 +678,7 @@ var touchEvents = {
     },
 
     overDown : function(pEvent) {
-        var target = pEvent.target;
+        const target = pEvent.target;
         pointerMap.set(pEvent.pointerId, {
             target : target,
             outTarget : target,
@@ -697,7 +690,7 @@ var touchEvents = {
     },
 
     moveOverOut : function(pEvent) {
-        var pointer = pointerMap.get(pEvent.pointerId);
+        const pointer = pointerMap.get(pEvent.pointerId);
 
         // a finger drifted off the screen, ignore it
         if(!pointer) {
@@ -706,7 +699,7 @@ var touchEvents = {
 
         dispatcher.move(pEvent);
 
-        var outEvent = pointer.outEvent,
+        const outEvent = pointer.outEvent,
             outTarget = pointer.outTarget;
 
         if(outEvent && outTarget !== pEvent.target) {
@@ -751,7 +744,7 @@ var touchEvents = {
     }
 };
 
-var msEvents = {
+const msEvents = {
     events : [
         'MSPointerDown',
         'MSPointerMove',
@@ -778,40 +771,40 @@ var msEvents = {
     ],
 
     prepareEvent : function(event) {
-        var e = cloneEvent(event);
+        const e = cloneEvent(event);
         HAS_BITMAP_TYPE && (e.pointerType = this.POINTER_TYPES[event.pointerType]);
         return e;
     },
 
     MSPointerDown : function(event) {
         pointerMap.set(event.pointerId, event);
-        var e = this.prepareEvent(event);
+        const e = this.prepareEvent(event);
         dispatcher.down(e);
     },
 
     MSPointerMove : function(event) {
-        var e = this.prepareEvent(event);
+        const e = this.prepareEvent(event);
         dispatcher.move(e);
     },
 
     MSPointerUp : function(event) {
-        var e = this.prepareEvent(event);
+        const e = this.prepareEvent(event);
         dispatcher.up(e);
         this.cleanup(event.pointerId);
     },
 
     MSPointerOut : function(event) {
-        var e = this.prepareEvent(event);
+        const e = this.prepareEvent(event);
         dispatcher.leaveOut(e);
     },
 
     MSPointerOver : function(event) {
-        var e = this.prepareEvent(event);
+        const e = this.prepareEvent(event);
         dispatcher.enterOver(e);
     },
 
     MSPointerCancel : function(event) {
-        var e = this.prepareEvent(event);
+        const e = this.prepareEvent(event);
         dispatcher.cancel(e);
         this.cleanup(event.pointerId);
     },
@@ -821,7 +814,7 @@ var msEvents = {
     }
 };
 
-var navigator = window.navigator;
+const navigator = window.navigator;
 if(navigator.msPointerEnabled) {
     dispatcher.registerSource('ms', msEvents);
 } else {

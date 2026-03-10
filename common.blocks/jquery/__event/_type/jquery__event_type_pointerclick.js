@@ -1,5 +1,6 @@
 import $ from 'bem:jquery';
 
+// eslint-disable-next-line no-var -- var needed for hoisting within the object's own methods
 var event = $.event.special.pointerclick = {
         setup : function() {
             $(this).on('click', event.handler);
@@ -11,7 +12,7 @@ var event = $.event.special.pointerclick = {
 
         handler : function(e) {
             if(!e.button) {
-                var type = e.type;
+                const type = e.type;
                 e.type = 'pointerclick';
                 $.event.dispatch.apply(this, arguments);
                 e.type = type;

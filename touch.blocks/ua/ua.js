@@ -5,12 +5,12 @@
 
 import $ from 'bem:jquery';
 
-var win = window,
+const win = window,
     doc = document,
     ua = navigator.userAgent,
     platform = {},
-    device = {},
-    match;
+    device = {};
+let match;
 
 if(match = ua.match(/Android\s+([\d.]+)/)) {
     platform.android = match[1];
@@ -31,33 +31,33 @@ if(match = ua.match(/Android\s+([\d.]+)/)) {
     platform.other = true;
 }
 
-var browser = {};
+const browser = {};
 if(win.opera) {
     browser.opera = win.opera.version();
 } else if(match = ua.match(/\sCrMo\/([\d.]+)/)) {
     browser.chrome = match[1];
 }
 
-var support = {},
+const support = {},
     connection = navigator.connection;
 
 if(connection) {
-    var connections = {};
+    const connections = {};
     connections[connection.ETHERNET] = connections[connection.WIFI] = 'wifi';
     connections[connection.CELL_3G] = '3g';
     connections[connection.CELL_2G] = '2g';
     support.connection = connections[connection.type];
 }
 
-var videoElem = doc.createElement('video');
+const videoElem = doc.createElement('video');
 support.video = !!(videoElem.canPlayType && videoElem.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"').replace(/no/, ''));
 
 support.svg = !!(doc.createElementNS && doc.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect);
 
-var plugins = navigator.plugins,
-    i = plugins.length;
+const plugins = navigator.plugins;
+let i = plugins.length;
 if(plugins && i) {
-    var plugin;
+    let plugin;
     while(plugin = plugins[--i])
         if(plugin.name === 'Shockwave Flash' && (match = plugin.description.match(/Flash ([\d.]+)/))) {
             support.flash = match[1];
@@ -66,10 +66,10 @@ if(plugins && i) {
 }
 
 // http://stackoverflow.com/a/6603537
-var lastOrient = win.innerWidth > win.innerHeight,
-    lastWidth = win.innerWidth,
-    $win = $(win).bind('resize', function() {
-        var width = win.innerWidth,
+let lastOrient = win.innerWidth > win.innerHeight,
+    lastWidth = win.innerWidth;
+const $win = $(win).bind('resize', function() {
+        const width = win.innerWidth,
             height = win.innerHeight,
             landscape = width > height;
 

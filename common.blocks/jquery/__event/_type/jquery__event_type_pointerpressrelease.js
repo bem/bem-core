@@ -6,7 +6,7 @@ $.each({
 }, function(fix, origEvent) {
     function eventHandler(e) {
         if(e.which === 1) {
-            var fixedEvent = cloneEvent(e);
+            const fixedEvent = cloneEvent(e);
             fixedEvent.type = fix;
             fixedEvent.originalEvent = e;
             return $.event.dispatch.call(this, fixedEvent);
@@ -26,7 +26,7 @@ $.each({
 });
 
 function cloneEvent(event) {
-    var eventCopy = $.extend(new $.Event(), event);
+    const eventCopy = $.extend(new $.Event(), event);
     if(event.preventDefault) {
         eventCopy.preventDefault = function() {
             event.preventDefault();

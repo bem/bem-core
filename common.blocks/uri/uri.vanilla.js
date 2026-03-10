@@ -16,22 +16,18 @@ function convert(str) {
 }
 
 function decode(fn,  str) {
-    let decoded = ''
-
     // Try/catch block for getting the encoding of the source string.
     // Error is thrown if a non-UTF8 string is input.
     // If the string was not decoded, it is returned without changes.
     try {
-        decoded = fn(str)
+        return fn(str)
     } catch (e1) {
         try {
-            decoded = fn(convert(str))
+            return fn(convert(str))
         } catch (e2) {
-            decoded = str
+            return str
         }
     }
-
-    return decoded
 }
 
 export default {

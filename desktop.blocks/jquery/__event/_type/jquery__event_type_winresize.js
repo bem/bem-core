@@ -7,14 +7,14 @@ import $ from 'bem:jquery';
 
 // IE8 and below, https://msdn.microsoft.com/en-us/library/ie/ms536959%28v=vs.85%29.aspx
 if(ua.msie && document.documentMode < 9) {
-    var win = window,
-        $win = $(window),
-        winWidth = $win.width(),
+    const win = window,
+        $win = $(window);
+    let winWidth = $win.width(),
         winHeight = $win.height();
 
     ($.event.special.resize || ($.event.special.resize = {})).preDispatch = function(e) {
         if(e.target === win) {
-            var curWinWidth = $win.width(),
+            const curWinWidth = $win.width(),
                 curWinHeight = $win.height();
 
             if(curWinWidth === winWidth && curWinHeight === winHeight) {

@@ -8,7 +8,7 @@ import functions from 'bem:functions';
 import $ from 'bem:jquery';
 import events from 'bem:events';
 
-var EVENT_PREFIX = '__bem__',
+const EVENT_PREFIX = '__bem__',
     MOD_CHANGE_EVENT = 'modchange',
 
     specialEvents = $.event.special,
@@ -24,7 +24,7 @@ var EVENT_PREFIX = '__bem__',
     },
 
     eventBuilder = function(e, params) {
-        var event = EVENT_PREFIX + params.bindEntityCls.getEntityName() +
+        const event = EVENT_PREFIX + params.bindEntityCls.getEntityName() +
             (typeof e === 'object'?
                 e instanceof events.Event?
                     e.type :
@@ -49,7 +49,7 @@ var EVENT_PREFIX = '__bem__',
                 return function(e, data, flags, originalEvent) {
                     if(flags.fns[fnId]) return;
 
-                    var instance,
+                    let instance,
                         instanceDomElem;
 
                     if(isInstance) {
@@ -91,7 +91,7 @@ export default {
      * @param {Object} [data]
      */
     emit : function(ctx, e, data) {
-        var originalEvent;
+        let originalEvent;
         if(typeof e === 'string') {
             originalEvent = new events.Event(e, ctx);
         } else if(e.modName) {
@@ -101,7 +101,7 @@ export default {
             originalEvent = e;
         }
 
-        var event = eventBuilder(e, { bindEntityCls : ctx.__self });
+        const event = eventBuilder(e, { bindEntityCls : ctx.__self });
 
         specialEventsStorage[event] &&
             ctx.domElem.trigger(event, [data, { fns : {}, propagationStoppedDomNode : null }, originalEvent]);

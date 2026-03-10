@@ -7,7 +7,7 @@ import inherit from 'bem:inherit';
 /**
  * @class Observable
  */
-var Observable = inherit(/** @lends Observable.prototype */{
+const Observable = inherit(/** @lends Observable.prototype */{
     /**
      * @constructor
      * @param {Object} emitter

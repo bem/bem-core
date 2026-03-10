@@ -5,7 +5,7 @@ import bemDomEvents from 'bem:i-bem-dom__events';
 import inherit from 'bem:inherit';
 import $ from 'bem:jquery';
 
-var eventBuilder = function(e) {
+const eventBuilder = function(e) {
         return e;
     },
     /**
@@ -18,13 +18,13 @@ var eventBuilder = function(e) {
         _createEventManager : function(ctx, params, isInstance) {
             function wrapperFn(fn) {
                 return function(e) {
-                    var instance;
+                    let instance;
 
                     if(isInstance) {
                         instance = ctx;
                     } else {
                         // TODO: we could optimize all these "closest" to a single traversing
-                        var entityDomNode = $(e.target).closest(params.ctxSelector);
+                        const entityDomNode = $(e.target).closest(params.ctxSelector);
                         entityDomNode.length && (instance = entityDomNode.bem(ctx));
                     }
 

@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 
 import i18nModule from './i18n.i18n.js';
 
-var init = i18nModule.i18n.i18n;
+const init = i18nModule.i18n.i18n;
 
 describe('i18n', function() {
-    var i18n;
+    let i18n;
 
     beforeEach(function () {
         i18n = init();
@@ -25,7 +25,7 @@ describe('i18n', function() {
     });
 
     it('should throw exception without data', function() {
-        var empty = init();
+        const empty = init();
         assert.throws(function() { empty('keyset1', 'key1'); }, Error);
     });
 

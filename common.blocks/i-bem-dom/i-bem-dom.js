@@ -30,7 +30,7 @@ const uniqIdToEntity = new Map()
  * Storage for DOM element's parent nodes
  * @type Map
  */
-let domNodesToParents = new Map()
+const domNodesToParents = new Map()
 
 /**
  * Storage for block parameters
@@ -63,6 +63,7 @@ const reverse = Array.prototype.reverse
 const domEventManagerFactory = new domEvents.EventManagerFactory(getEntityCls)
 const bemEventManagerFactory = new bemEvents.EventManagerFactory(getEntityCls)
 
+// eslint-disable-next-line prefer-const -- assigned later as object literal
 let bemDom
 
 /**
