@@ -3,13 +3,10 @@
  * @description A set of helpers to work with query strings
  */
 
-import uri from 'bem:uri';
-
-var hasOwnProperty = Object.prototype.hasOwnProperty;
+import uri from 'bem:uri'
 
 function addParam(res, name, val) {
-    /* jshint eqnull: true */
-    res.push(encodeURIComponent(name) + '=' + (val == null? '' : encodeURIComponent(val)));
+    res.push(encodeURIComponent(name) + '=' + (val == null? '' : encodeURIComponent(val)))
 }
 
 export default {
@@ -18,40 +15,40 @@ export default {
      * @param {String} str
      * @returns {Object}
      */
-    parse : function(str) {
+    parse(str) {
         if(!str) {
-            return {};
+            return {}
         }
 
         return str.split('&').reduce(
-            function(res, pair) {
+            (res, pair) => {
                 if(!pair) {
-                    return res;
+                    return res
                 }
 
-                var eq = pair.indexOf('='),
-                    name, val;
+                const eq = pair.indexOf('=')
+                let name, val
 
                 if(eq >= 0) {
-                    name = pair.substr(0, eq);
-                    val = pair.substr(eq + 1);
+                    name = pair.substr(0, eq)
+                    val = pair.substr(eq + 1)
                 } else {
-                    name = pair;
-                    val = '';
+                    name = pair
+                    val = ''
                 }
 
-                name = uri.decodeURIComponent(name);
-                val = uri.decodeURIComponent(val);
+                name = uri.decodeURIComponent(name)
+                val = uri.decodeURIComponent(val)
 
-                hasOwnProperty.call(res, name)?
+                Object.hasOwn(res, name)?
                     Array.isArray(res[name])?
                         res[name].push(val) :
                         res[name] = [res[name], val] :
-                    res[name] = val;
+                    res[name] = val
 
-                return res;
+                return res
             },
-            {});
+            {})
     },
 
     /**
@@ -59,19 +56,19 @@ export default {
      * @param {Object} obj
      * @returns {String}
      */
-    stringify : function(obj) {
+    stringify(obj) {
         return Object.keys(obj)
             .reduce(
-                function(res, name) {
-                    var val = obj[name];
+                (res, name) => {
+                    const val = obj[name]
                     Array.isArray(val)?
                         val.forEach(function(val) {
-                            addParam(res, name, val);
+                            addParam(res, name, val)
                         }) :
-                        addParam(res, name, val);
-                    return res;
+                        addParam(res, name, val)
+                    return res
                 },
                 [])
-            .join('&');
+            .join('&')
     }
-};
+}
