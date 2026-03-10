@@ -3,21 +3,21 @@
  * @description some DOM utils
  */
 
-import $ from 'bem:jquery';
+import $ from 'bem:jquery'
 
-var EDITABLE_INPUT_TYPES = {
-    'datetime-local' : true,
-    date : true,
-    month : true,
-    number : true,
-    password : true,
-    search : true,
-    tel : true,
-    text : true,
-    time : true,
-    url : true,
-    week : true
-};
+const EDITABLE_INPUT_TYPES = new Set([
+    'datetime-local',
+    'date',
+    'month',
+    'number',
+    'password',
+    'search',
+    'tel',
+    'text',
+    'time',
+    'url',
+    'week'
+])
 
 export default {
     /**
@@ -26,28 +26,28 @@ export default {
      * @param {jQuery} domElem DOM elem to check
      * @returns {Boolean}
      */
-    contains : function(ctx, domElem) {
-        var res = false;
+    contains(ctx, domElem) {
+        let res = false
 
         domElem.each(function() {
-            var domNode = this;
+            let domNode = this
             do {
-                if(~ctx.index(domNode)) return !(res = true);
-            } while(domNode = domNode.parentNode);
+                if(~ctx.index(domNode)) return !(res = true)
+            } while(domNode = domNode.parentNode)
 
-            return res;
-        });
+            return res
+        })
 
-        return res;
+        return res
     },
 
     /**
      * Returns current focused DOM elem in document
      * @returns {jQuery}
      */
-    getFocused : function() {
+    getFocused() {
         // "Error: Unspecified error." in iframe in IE9
-        try { return $(document.activeElement); } catch(e) {}
+        try { return $(document.activeElement) } catch(e) {}
     },
 
     /**
@@ -55,8 +55,8 @@ export default {
      * @param {jQuery} domElem
      * @returns {Boolean}
      */
-    containsFocus : function(domElem) {
-        return this.contains(domElem, this.getFocused());
+    containsFocus(domElem) {
+        return this.contains(domElem, this.getFocused())
     },
 
     /**
@@ -64,27 +64,27 @@ export default {
     * @param {jQuery} domElem
     * @returns {Boolean}
     */
-    isFocusable : function(domElem) {
-        var domNode = domElem[0];
+    isFocusable(domElem) {
+        const domNode = domElem[0]
 
-        if(!domNode) return false;
-        if(domNode.hasAttribute('tabindex')) return true;
+        if(!domNode) return false
+        if(domNode.hasAttribute('tabindex')) return true
 
         switch(domNode.tagName.toLowerCase()) {
             case 'iframe':
-                return true;
+                return true
 
             case 'input':
             case 'button':
             case 'textarea':
             case 'select':
-                return !domNode.disabled;
+                return !domNode.disabled
 
             case 'a':
-                return !!domNode.href;
+                return !!domNode.href
         }
 
-        return false;
+        return false
     },
 
     /**
@@ -92,20 +92,20 @@ export default {
     * @param {jQuery} domElem
     * @returns {Boolean}
     */
-    isEditable : function(domElem) {
-        var domNode = domElem[0];
+    isEditable(domElem) {
+        const domNode = domElem[0]
 
-        if(!domNode) return false;
+        if(!domNode) return false
 
         switch(domNode.tagName.toLowerCase()) {
             case 'input':
-                return EDITABLE_INPUT_TYPES.hasOwnProperty(domNode.type) && !domNode.disabled && !domNode.readOnly;
+                return EDITABLE_INPUT_TYPES.has(domNode.type) && !domNode.disabled && !domNode.readOnly
 
             case 'textarea':
-                return !domNode.disabled && !domNode.readOnly;
+                return !domNode.disabled && !domNode.readOnly
 
             default:
-                return domNode.contentEditable === 'true';
+                return domNode.contentEditable === 'true'
         }
     }
-};
+}
