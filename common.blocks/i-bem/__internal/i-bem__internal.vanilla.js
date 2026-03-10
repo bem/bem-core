@@ -2,60 +2,58 @@
  * @module i-bem__internal
  */
 
-var undef,
-    /**
-     * Separator for modifiers and their values
-     * @const
-     * @type String
-     */
-    MOD_DELIM = '_',
+/**
+ * Separator for modifiers and their values
+ * @const
+ * @type String
+ */
+const MOD_DELIM = '_'
 
-    /**
-     * Separator between names of a block and a nested element
-     * @const
-     * @type String
-     */
-    ELEM_DELIM = '__',
+/**
+ * Separator between names of a block and a nested element
+ * @const
+ * @type String
+ */
+const ELEM_DELIM = '__'
 
-    /**
-     * Pattern for acceptable element and modifier names
-     * @const
-     * @type String
-     */
-    NAME_PATTERN = '[a-zA-Z0-9-]+';
+/**
+ * Pattern for acceptable element and modifier names
+ * @const
+ * @type String
+ */
+const NAME_PATTERN = '[a-zA-Z0-9-]+'
 
 function isSimple(obj) {
-    var typeOf = typeof obj;
-    return typeOf === 'string' || typeOf === 'number' || typeOf === 'boolean';
+    const typeOf = typeof obj
+    return typeOf === 'string' || typeOf === 'number' || typeOf === 'boolean'
 }
 
 function buildModPostfix(modName, modVal) {
-    var res = '';
-    /* jshint eqnull: true */
+    let res = ''
     if(modVal != null && modVal !== false) {
-        res += MOD_DELIM + modName;
-        modVal !== true && (res += MOD_DELIM + modVal);
+        res += MOD_DELIM + modName
+        modVal !== true && (res += MOD_DELIM + modVal)
     }
-    return res;
+    return res
 }
 
 function buildBlockClassName(name, modName, modVal) {
-    return name + buildModPostfix(modName, modVal);
+    return name + buildModPostfix(modName, modVal)
 }
 
 function buildElemClassName(block, name, modName, modVal) {
-    return buildBlockClassName(block, undef, undef) +
+    return buildBlockClassName(block, undefined, undefined) +
         ELEM_DELIM + name +
-        buildModPostfix(modName, modVal);
+        buildModPostfix(modName, modVal)
 }
 
-export default {
-    NAME_PATTERN : NAME_PATTERN,
+export default /** @exports */{
+    NAME_PATTERN,
 
-    MOD_DELIM : MOD_DELIM,
-    ELEM_DELIM : ELEM_DELIM,
+    MOD_DELIM,
+    ELEM_DELIM,
 
-    buildModPostfix : buildModPostfix,
+    buildModPostfix,
 
     /**
      * Builds the class name of a block or element with a modifier
@@ -65,26 +63,26 @@ export default {
      * @param {String|Number} [modVal] Modifier value
      * @returns {String} Class name
      */
-    buildClassName : function(block, elem, modName, modVal) {
+    buildClassName(block, elem, modName, modVal) {
         if(isSimple(modName)) {
             if(!isSimple(modVal)) {
-                modVal = modName;
-                modName = elem;
-                elem = undef;
+                modVal = modName
+                modName = elem
+                elem = undefined
             }
         } else if(typeof modName !== 'undefined') {
-            modName = undef;
+            modName = undefined
         } else if(elem && typeof elem !== 'string') {
-            elem = undef;
+            elem = undefined
         }
 
         if(!(elem || modName)) { // optimization for simple case
-            return block;
+            return block
         }
 
         return elem?
             buildElemClassName(block, elem, modName, modVal) :
-            buildBlockClassName(block, modName, modVal);
+            buildBlockClassName(block, modName, modVal)
     },
 
     /**
@@ -94,26 +92,26 @@ export default {
      * @param {Object} [mods] Modifiers
      * @returns {String} Class
      */
-    buildClassNames : function(block, elem, mods) {
+    buildClassNames(block, elem, mods) {
         if(elem && typeof elem !== 'string') {
-            mods = elem;
-            elem = undef;
+            mods = elem
+            elem = undefined
         }
 
-        var res = elem?
-            buildElemClassName(block, elem, undef, undef) :
-            buildBlockClassName(block, undef, undef);
+        let res = elem?
+            buildElemClassName(block, elem, undefined, undefined) :
+            buildBlockClassName(block, undefined, undefined)
 
         if(mods) {
-            for(var modName in mods) {
-                if(mods.hasOwnProperty(modName) && mods[modName]) {
+            for(const [modName, modVal] of Object.entries(mods)) {
+                if(modVal) {
                     res += ' ' + (elem?
-                        buildElemClassName(block, elem, modName, mods[modName]) :
-                        buildBlockClassName(block, modName, mods[modName]));
+                        buildElemClassName(block, elem, modName, modVal) :
+                        buildBlockClassName(block, modName, modVal))
                 }
             }
         }
 
-        return res;
+        return res
     }
-};
+}
