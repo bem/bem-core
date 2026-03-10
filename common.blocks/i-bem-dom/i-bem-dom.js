@@ -2,70 +2,68 @@
  * @module i-bem-dom
  */
 
-import bem from 'bem:i-bem';
-import bemInternal from 'bem:i-bem__internal';
-import BemDomCollection from 'bem:i-bem-dom__collection';
-import domEvents from 'bem:i-bem-dom__events_type_dom';
-import bemEvents from 'bem:i-bem-dom__events_type_bem';
-import inherit from 'bem:inherit';
-import identify from 'bem:identify';
-import objects from 'bem:objects';
-import functions from 'bem:functions';
-import $ from 'bem:jquery';
-import dom from 'bem:dom';
+import bem from 'bem:i-bem'
+import bemInternal from 'bem:i-bem__internal'
+import BemDomCollection from 'bem:i-bem-dom__collection'
+import domEvents from 'bem:i-bem-dom__events_type_dom'
+import bemEvents from 'bem:i-bem-dom__events_type_bem'
+import inherit from 'bem:inherit'
+import identify from 'bem:identify'
+import objects from 'bem:objects'
+import functions from 'bem:functions'
+import $ from 'bem:jquery'
+import dom from 'bem:dom'
 
-var undef,
-    /**
-     * Storage for DOM elements by unique key
-     * @type Object
-     */
-    uniqIdToDomElems = {},
+/**
+ * Storage for DOM elements by unique key
+ * @type Map
+ */
+const uniqIdToDomElems = new Map()
 
-    /**
-     * Storage for blocks by unique key
-     * @type Object
-     */
-    uniqIdToEntity = {},
+/**
+ * Storage for blocks by unique key
+ * @type Map
+ */
+const uniqIdToEntity = new Map()
 
-    /**
-    * Storage for DOM element's parent nodes
-    * @type Object
-    */
-    domNodesToParents = {},
+/**
+ * Storage for DOM element's parent nodes
+ * @type Map
+ */
+let domNodesToParents = new Map()
 
-    /**
-     * Storage for block parameters
-     * @type Object
-     */
-    domElemToParams = {},
+/**
+ * Storage for block parameters
+ * @type Map
+ */
+const domElemToParams = new Map()
 
-    /**
-     * Storage for DOM nodes that are being destructed
-     * @type Object
-     */
-    destructingDomNodes = {},
+/**
+ * Storage for DOM nodes that are being destructed
+ * @type Map
+ */
+const destructingDomNodes = new Map()
 
-    entities = bem.entities,
+const entities = bem.entities
 
-    BEM_CLASS_NAME = 'i-bem',
-    BEM_SELECTOR = '.' + BEM_CLASS_NAME,
-    BEM_PARAMS_ATTR = 'data-bem',
+const BEM_CLASS_NAME = 'i-bem'
+const BEM_SELECTOR = '.' + BEM_CLASS_NAME
+const BEM_PARAMS_ATTR = 'data-bem'
 
-    NAME_PATTERN = bemInternal.NAME_PATTERN,
+const NAME_PATTERN = bemInternal.NAME_PATTERN
 
-    MOD_DELIM = bemInternal.MOD_DELIM,
-    ELEM_DELIM = bemInternal.ELEM_DELIM,
+const MOD_DELIM = bemInternal.MOD_DELIM
+const ELEM_DELIM = bemInternal.ELEM_DELIM
 
-    buildModPostfix = bemInternal.buildModPostfix,
-    buildClassName = bemInternal.buildClassName,
+const buildModPostfix = bemInternal.buildModPostfix
+const buildClassName = bemInternal.buildClassName
 
-    reverse = Array.prototype.reverse,
-    slice = Array.prototype.slice,
+const reverse = Array.prototype.reverse
 
-    domEventManagerFactory = new domEvents.EventManagerFactory(getEntityCls),
-    bemEventManagerFactory = new bemEvents.EventManagerFactory(getEntityCls),
+const domEventManagerFactory = new domEvents.EventManagerFactory(getEntityCls)
+const bemEventManagerFactory = new bemEvents.EventManagerFactory(getEntityCls)
 
-    bemDom;
+let bemDom
 
 /**
  * Initializes entities on a DOM element
@@ -74,25 +72,21 @@ var undef,
  * @param {Object} [dropElemCacheQueue] queue of elems to be droped from cache
  */
 function initEntities(domElem, uniqInitId, dropElemCacheQueue) {
-    var domNode = domElem[0],
-        params = getParams(domNode),
-        entityName,
-        splitted,
-        blockName,
-        elemName;
+    const domNode = domElem[0]
+    const params = getParams(domNode)
 
-    for(entityName in params) {
-        splitted = entityName.split(ELEM_DELIM);
-        blockName = splitted[0];
-        elemName = splitted[1];
+    for(const entityName of Object.keys(params)) {
+        const splitted = entityName.split(ELEM_DELIM)
+        const blockName = splitted[0]
+        const elemName = splitted[1]
         elemName &&
             ((dropElemCacheQueue[blockName] ||
-                (dropElemCacheQueue[blockName] = {}))[elemName] = true);
+                (dropElemCacheQueue[blockName] = {}))[elemName] = true)
 
         initEntity(
             entityName,
             domElem,
-            processParams(params[entityName], entityName, uniqInitId));
+            processParams(params[entityName], entityName, uniqInitId))
     }
 }
 
@@ -105,54 +99,54 @@ function initEntities(domElem, uniqInitId, dropElemCacheQueue) {
  * @param {Function} [callback] Handler to call after complete initialization
  */
 function initEntity(entityName, domElem, params, ignoreLazyInit, callback) {
-    var domNode = domElem[0];
+    const domNode = domElem[0]
 
-    if(destructingDomNodes[identify(domNode)]) return;
+    if(destructingDomNodes.has(identify(domNode))) return
 
-    params || (params = processParams(getEntityParams(domNode, entityName), entityName));
+    params || (params = processParams(getEntityParams(domNode, entityName), entityName))
 
-    var uniqId = params.uniqId,
-        entity = uniqIdToEntity[uniqId];
+    const uniqId = params.uniqId
+    let entity = uniqIdToEntity.get(uniqId)
 
     if(entity) {
         if(entity.domElem.index(domNode) < 0) {
-            entity.domElem = entity.domElem.add(domElem);
-            objects.extend(entity.params, params);
+            entity.domElem = entity.domElem.add(domElem)
+            objects.extend(entity.params, params)
         }
 
-        return entity;
+        return entity
     }
 
-    uniqIdToDomElems[uniqId] = uniqIdToDomElems[uniqId]?
-        uniqIdToDomElems[uniqId].add(domElem) :
-        domElem;
+    uniqIdToDomElems.set(uniqId, uniqIdToDomElems.has(uniqId)?
+        uniqIdToDomElems.get(uniqId).add(domElem) :
+        domElem)
 
-    var parentDomNode = domNode.parentNode;
+    const parentDomNode = domNode.parentNode
     if(!parentDomNode || parentDomNode.nodeType === 11) { // jquery doesn't unique disconnected node
-        $.uniqueSort(uniqIdToDomElems[uniqId]);
+        $.uniqueSort(uniqIdToDomElems.get(uniqId))
     }
 
-    var entityCls = getEntityCls(entityName);
+    const entityCls = getEntityCls(entityName)
 
-    entityCls._processInit();
+    entityCls._processInit()
 
     if(ignoreLazyInit || params.lazyInit === false || !entityCls.lazyInit && !params.lazyInit) {
-        ignoreLazyInit && domElem.addClass(BEM_CLASS_NAME); // add css class for preventing memory leaks in further destructing
+        ignoreLazyInit && domElem.addClass(BEM_CLASS_NAME) // add css class for preventing memory leaks in further destructing
 
-        entity = new entityCls(uniqIdToDomElems[uniqId], params, !!ignoreLazyInit);
-        delete uniqIdToDomElems[uniqId];
-        callback && callback.apply(entity, slice.call(arguments, 4));
-        return entity;
+        entity = new entityCls(uniqIdToDomElems.get(uniqId), params, !!ignoreLazyInit)
+        uniqIdToDomElems.delete(uniqId)
+        callback && callback.apply(entity, [...arguments].slice(4))
+        return entity
     }
 }
 
 function getEntityCls(entityName) {
-    if(entities[entityName]) return entities[entityName];
+    if(entities[entityName]) return entities[entityName]
 
-    var splitted = entityName.split(ELEM_DELIM);
+    const splitted = entityName.split(ELEM_DELIM)
     return splitted[1]?
         bemDom.declElem(splitted[0], splitted[1], {}, { lazyInit : true }) :
-        bemDom.declBlock(entityName, {}, { lazyInit : true });
+        bemDom.declBlock(entityName, {}, { lazyInit : true })
 }
 
 /**
@@ -165,9 +159,9 @@ function processParams(params, entityName, uniqInitId) {
     params.uniqId ||
         (params.uniqId = (params.id?
             entityName + '-id-' + params.id :
-            identify()) + (uniqInitId || identify()));
+            identify()) + (uniqInitId || identify()))
 
-    return params;
+    return params
 }
 
 /**
@@ -178,10 +172,10 @@ function processParams(params, entityName, uniqInitId) {
  * @returns {jQuery}
  */
 function findDomElem(ctx, selector, excludeSelf) {
-    var res = ctx.find(selector);
+    const res = ctx.find(selector)
     return excludeSelf?
        res :
-       res.add(ctx.filter(selector));
+       res.add(ctx.filter(selector))
 }
 
 /**
@@ -190,9 +184,11 @@ function findDomElem(ctx, selector, excludeSelf) {
  * @returns {Object}
  */
 function getParams(domNode) {
-    var uniqId = identify(domNode);
-    return domElemToParams[uniqId] ||
-        (domElemToParams[uniqId] = extractParams(domNode));
+    const uniqId = identify(domNode)
+    if(domElemToParams.has(uniqId)) return domElemToParams.get(uniqId)
+    const params = extractParams(domNode)
+    domElemToParams.set(uniqId, params)
+    return params
 }
 
 /**
@@ -203,8 +199,8 @@ function getParams(domNode) {
  */
 
 function getEntityParams(domNode, entityName) {
-    var params = getParams(domNode);
-    return params[entityName] || (params[entityName] = {});
+    const params = getParams(domNode)
+    return params[entityName] || (params[entityName] = {})
 }
 
 /**
@@ -213,8 +209,8 @@ function getEntityParams(domNode, entityName) {
  * @returns {Object}
  */
 function extractParams(domNode) {
-    var attrVal = domNode.getAttribute(BEM_PARAMS_ATTR);
-    return attrVal? JSON.parse(attrVal) : {};
+    const attrVal = domNode.getAttribute(BEM_PARAMS_ATTR)
+    return attrVal? JSON.parse(attrVal) : {}
 }
 
 /**
@@ -224,10 +220,10 @@ function extractParams(domNode) {
  */
 function removeDomNodeFromEntity(entity, domNode) {
     if(entity.domElem.length === 1) {
-        entity.delMod('js');
-        delete uniqIdToEntity[entity._uniqId];
+        entity.delMod('js')
+        uniqIdToEntity.delete(entity._uniqId)
     } else {
-        entity.domElem = entity.domElem.not(domNode);
+        entity.domElem = entity.domElem.not(domNode)
     }
 }
 
@@ -237,8 +233,8 @@ function removeDomNodeFromEntity(entity, domNode) {
  */
 function storeDomNodeParents(domElem) {
     domElem.each(function() {
-        domNodesToParents[identify(this)] = this.parentNode;
-    });
+        domNodesToParents.set(identify(this), this.parentNode)
+    })
 }
 
 /**
@@ -246,17 +242,17 @@ function storeDomNodeParents(domElem) {
  * @param {jQuery} ctx
  */
 function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
-    ctx.add(ctx.parents()).each(function(_, domNode) {
-        var params = domElemToParams[identify(domNode)];
+    ctx.add(ctx.parents()).each((_, domNode) => {
+        const params = domElemToParams.get(identify(domNode))
 
-        params && objects.each(params, function(entityParams) {
-            var entity = uniqIdToEntity[entityParams.uniqId];
+        params && objects.each(params, (entityParams) => {
+            const entity = uniqIdToEntity.get(entityParams.uniqId)
             if(entity) {
-                var elemNames = dropElemCacheQueue[entity.__self._blockName];
-                elemNames && entity._dropElemCache(Object.keys(elemNames));
+                const elemNames = dropElemCacheQueue[entity.__self._blockName]
+                elemNames && entity._dropElemCache(Object.keys(elemNames))
             }
-        });
-    });
+        })
+    })
 }
 
 /**
@@ -266,20 +262,18 @@ function dropElemCacheForCtx(ctx, dropElemCacheQueue) {
  */
 function buildElemKey(elem) {
     if(typeof elem === 'string') {
-        elem = { elem : elem };
+        elem = { elem : elem }
     } else if(functions.isFunction(elem)) {
-        elem = { elem : elem.getName() };
+        elem = { elem : elem.getName() }
     } else if(functions.isFunction(elem.elem)) {
-        elem.elem = elem.elem.getName();
+        elem.elem = elem.elem.getName()
     }
 
     return {
         elem : elem.elem,
         mod : buildModPostfix(elem.modName, elem.modVal)
-    };
+    }
 }
-
-// jscs:disable requireMultipleVarDecl
 
 /**
  * Returns jQuery collection for provided HTML
@@ -287,7 +281,7 @@ function buildElemKey(elem) {
  * @returns {jQuery}
  */
 function getJqueryCollection(html) {
-    return $(typeof html === 'string'? $.parseHTML(html, null, true) : html);
+    return $(typeof html === 'string'? $.parseHTML(html, null, true) : html)
 }
 
 /**
@@ -300,7 +294,7 @@ function validateBlockParam(Block) {
         typeof Block === 'string' ||
         typeof Block === 'object' && typeof Block.block === 'string'
     ) {
-        throw new Error('Block must be a class or description (block, modName, modVal) of the block to find');
+        throw new Error('Block must be a class or description (block, modName, modVal) of the block to find')
     }
 }
 
@@ -312,23 +306,23 @@ function validateBlockParam(Block) {
  * @returns {Array<Function>}
  */
 function getEntityBase(baseCls, entityName, base) {
-    base || (base = entities[entityName] || baseCls);
+    base || (base = entities[entityName] || baseCls)
 
-    Array.isArray(base) || (base = [base]);
+    Array.isArray(base) || (base = [base])
 
     if(!base[0].__bemEntity) {
-        base = base.slice();
-        base.unshift(entities[entityName] || baseCls);
+        base = base.slice()
+        base.unshift(entities[entityName] || baseCls)
     }
 
-    return base;
+    return base
 }
 
 /**
  * @class BemDomEntity
  * @description Base mix for BEM entities that have DOM representation
  */
-var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
+const BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     /**
      * @constructor
      * @private
@@ -342,32 +336,32 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
          * @member {jQuery}
          * @readonly
          */
-        this.domElem = domElem;
+        this.domElem = domElem
 
         /**
          * Cache for elements collections
          * @member {Object}
          * @private
          */
-        this._elemsCache = {};
+        this._elemsCache = {}
 
         /**
          * Cache for elements
          * @member {Object}
          * @private
          */
-        this._elemCache = {};
+        this._elemCache = {}
 
         /**
          * References to parent entities which found current entity ever
          * @type {Array}
          * @private
          */
-        this._findBackRefs = [];
+        this._findBackRefs = []
 
-        uniqIdToEntity[params.uniqId || identify(this)] = this;
+        uniqIdToEntity.set(params.uniqId || identify(this), this)
 
-        this.__base(null, params, initImmediately);
+        this.__base(null, params, initImmediately)
     },
 
     /**
@@ -384,20 +378,20 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     _elems : function(Elem) {
-        var key = buildElemKey(Elem),
-            elemsCache = this._elemsCache[key.elem];
+        const key = buildElemKey(Elem)
+        const elemsCache = this._elemsCache[key.elem]
 
         if(elemsCache && key.mod in elemsCache)
-            return elemsCache[key.mod];
+            return elemsCache[key.mod]
 
-        var res = (elemsCache || (this._elemsCache[key.elem] = {}))[key.mod] =
-            this.findMixedElems(Elem).concat(this.findChildElems(Elem));
+        const res = (elemsCache || (this._elemsCache[key.elem] = {}))[key.mod] =
+            this.findMixedElems(Elem).concat(this.findChildElems(Elem))
 
         res.forEach(function(entity) {
-            entity._findBackRefs.push(this);
-        }, this);
+            entity._findBackRefs.push(this)
+        }, this)
 
-        return res;
+        return res
     },
 
     /**
@@ -407,19 +401,19 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Elem}
      */
     _elem : function(Elem) {
-        var key = buildElemKey(Elem),
-            elemCache = this._elemCache[key.elem];
+        const key = buildElemKey(Elem)
+        const elemCache = this._elemCache[key.elem]
 
         // NOTE: can use this._elemsCache but it's too rare case
         if(elemCache && key.mod in elemCache)
-            return elemCache[key.mod];
+            return elemCache[key.mod]
 
-        var res = (elemCache || (this._elemCache[key.elem] = {}))[key.mod] =
-            this.findMixedElem(Elem) || this.findChildElem(Elem);
+        const res = (elemCache || (this._elemCache[key.elem] = {}))[key.mod] =
+            this.findMixedElem(Elem) || this.findChildElem(Elem)
 
-        res && res._findBackRefs.push(this);
+        res && res._findBackRefs.push(this)
 
-        return res;
+        return res
     },
 
     /**
@@ -430,23 +424,23 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     _dropElemCache : function(elems) {
         if(!arguments.length) {
-            this._elemsCache = {};
-            this._elemCache = {};
-            return this;
+            this._elemsCache = {}
+            this._elemCache = {}
+            return this
         }
 
-        (Array.isArray(elems)? elems : slice.call(arguments)).forEach(function(elem) {
-            var key = buildElemKey(elem);
+        (Array.isArray(elems)? elems : [...arguments]).forEach(function(elem) {
+            const key = buildElemKey(elem)
             if(key.mod) {
-                this._elemsCache[key.elem] && delete this._elemsCache[key.elem][key.mod];
-                this._elemCache[key.elem] && delete this._elemCache[key.elem][key.mod];
+                this._elemsCache[key.elem] && delete this._elemsCache[key.elem][key.mod]
+                this._elemCache[key.elem] && delete this._elemCache[key.elem][key.mod]
             } else {
-                delete this._elemsCache[key.elem];
-                delete this._elemCache[key.elem];
+                delete this._elemsCache[key.elem]
+                delete this._elemCache[key.elem]
             }
-        }, this);
+        }, this)
 
-        return this;
+        return this
     },
 
     /**
@@ -455,9 +449,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Block}
      */
     findChildBlock : function(Block) {
-        validateBlockParam(Block);
+        validateBlockParam(Block)
 
-        return this._findEntities('find', Block, true);
+        return this._findEntities('find', Block, true)
     },
 
     /**
@@ -466,9 +460,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     findChildBlocks : function(Block) {
-        validateBlockParam(Block);
+        validateBlockParam(Block)
 
-        return this._findEntities('find', Block);
+        return this._findEntities('find', Block)
     },
 
     /**
@@ -477,9 +471,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Block}
      */
     findParentBlock : function(Block) {
-        validateBlockParam(Block);
+        validateBlockParam(Block)
 
-        return this._findEntities('parents', Block, true);
+        return this._findEntities('parents', Block, true)
     },
 
     /**
@@ -488,9 +482,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     findParentBlocks : function(Block) {
-        validateBlockParam(Block);
+        validateBlockParam(Block)
 
-        return this._findEntities('parents', Block);
+        return this._findEntities('parents', Block)
     },
 
     /**
@@ -499,9 +493,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Block}
      */
     findMixedBlock : function(Block) {
-        validateBlockParam(Block);
+        validateBlockParam(Block)
 
-        return this._findEntities('filter', Block, true);
+        return this._findEntities('filter', Block, true)
     },
 
     /**
@@ -510,9 +504,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     findMixedBlocks : function(Block) {
-        validateBlockParam(Block);
+        validateBlockParam(Block)
 
-        return this._findEntities('filter', Block);
+        return this._findEntities('filter', Block)
     },
 
     /**
@@ -524,7 +518,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     findChildElem : function(Elem, strictMode) {
         return strictMode?
             this._filterFindElemResults(this._findEntities('find', Elem)).get(0) :
-            this._findEntities('find', Elem, true);
+            this._findEntities('find', Elem, true)
     },
 
     /**
@@ -534,11 +528,11 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     findChildElems : function(Elem, strictMode) {
-        var res = this._findEntities('find', Elem);
+        const res = this._findEntities('find', Elem)
 
         return strictMode?
             this._filterFindElemResults(res) :
-            res;
+            res
     },
 
     /**
@@ -550,7 +544,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
     findParentElem : function(Elem, strictMode) {
         return strictMode?
             this._filterFindElemResults(this._findEntities('parents', Elem))[0] :
-            this._findEntities('parents', Elem, true);
+            this._findEntities('parents', Elem, true)
     },
 
     /**
@@ -560,8 +554,8 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     findParentElems : function(Elem, strictMode) {
-        var res = this._findEntities('parents', Elem);
-        return strictMode? this._filterFindElemResults(res) : res;
+        const res = this._findEntities('parents', Elem)
+        return strictMode? this._filterFindElemResults(res) : res
     },
 
     /**
@@ -570,7 +564,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Elem}
      */
     findMixedElem : function(Elem) {
-        return this._findEntities('filter', Elem, true);
+        return this._findEntities('filter', Elem, true)
     },
 
     /**
@@ -579,7 +573,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     findMixedElems : function(Elem) {
-        return this._findEntities('filter', Elem);
+        return this._findEntities('filter', Elem)
     },
 
     /**
@@ -589,10 +583,8 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {BemDomCollection}
      */
     _filterFindElemResults : function(res) {
-        var block = this._block();
-        return res.filter(function(elem) {
-            return elem._block() === block;
-        });
+        const block = this._block()
+        return res.filter((elem) => elem._block() === block)
     },
 
     /**
@@ -604,7 +596,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {*}
      */
     _findEntities : function(select, entity, onlyFirst) {
-        var entityName = functions.isFunction(entity)?
+        const entityName = functions.isFunction(entity)?
                 entity.getEntityName() :
                 typeof entity === 'object'?
                     entity.block?
@@ -612,8 +604,8 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
                         typeof entity.elem === 'string'?
                             this.__self._blockName + ELEM_DELIM + entity.elem :
                             entity.elem.getEntityName() :
-                    this.__self._blockName + ELEM_DELIM + entity,
-            selector = '.' +
+                    this.__self._blockName + ELEM_DELIM + entity
+        const selector = '.' +
                 (typeof entity === 'object'?
                     buildClassName(
                         entityName,
@@ -622,25 +614,25 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
                             true :
                             entity.modVal) :
                     entityName) +
-                (onlyFirst? ':first' : ''),
-            domElems = this.domElem[select](selector);
+                (onlyFirst? ':first' : '')
+        const domElems = this.domElem[select](selector)
 
         if(onlyFirst) return domElems[0]?
-            initEntity(entityName, domElems.eq(0), undef, true)._setInitedMod() :
-            null;
+            initEntity(entityName, domElems.eq(0), undefined, true)._setInitedMod() :
+            null
 
-        var res = [],
-            uniqIds = {};
+        const res = []
+        const uniqIds = {}
 
-        domElems.each(function(i, domElem) {
-            var block = initEntity(entityName, $(domElem), undef, true)._setInitedMod();
+        domElems.each((i, domElem) => {
+            const block = initEntity(entityName, $(domElem), undefined, true)._setInitedMod()
             if(!uniqIds[block._uniqId]) {
-                uniqIds[block._uniqId] = true;
-                res.push(block);
+                uniqIds[block._uniqId] = true
+                res.push(block)
             }
-        });
+        })
 
-        return new BemDomCollection(res);
+        return new BemDomCollection(res)
     },
 
     /**
@@ -652,7 +644,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {EventManager}
      */
     _domEvents : function(ctx) {
-        return domEventManagerFactory.getEventManager(this, ctx, this.domElem);
+        return domEventManagerFactory.getEventManager(this, ctx, this.domElem)
     },
 
     /**
@@ -664,7 +656,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {EventManager}
      */
     _events : function(ctx) {
-        return bemEventManagerFactory.getEventManager(this, ctx, this.domElem);
+        return bemEventManagerFactory.getEventManager(this, ctx, this.domElem)
     },
 
     /**
@@ -676,64 +668,64 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     _emit : function(e, data) {
         if((typeof e === 'object' && e.modName === 'js') || this.hasMod('js', 'inited')) {
-            bemEvents.emit(this, e, data);
+            bemEvents.emit(this, e, data)
         }
 
-        return this;
+        return this
     },
 
     /** @override */
     _extractModVal : function(modName) {
-        var domNode = this.domElem[0],
-            matches;
+        const domNode = this.domElem[0]
+        let matches
 
         domNode &&
             (matches = domNode.className
-                .match(this.__self._buildModValRE(modName)));
+                .match(this.__self._buildModValRE(modName)))
 
-        return matches? matches[2] || true : '';
+        return matches? matches[2] || true : ''
     },
 
     /** @override */
     _onSetMod : function(modName, modVal, oldModVal) {
-        var _self = this.__self,
-            name = _self.getName();
+        const _self = this.__self
+        const name = _self.getName()
 
         this._findBackRefs.forEach(function(ref) {
-            oldModVal === '' || ref._dropElemCache({ elem : name, modName : modName, modVal : oldModVal });
-            ref._dropElemCache(modVal === ''? name : { elem : name, modName : modName, modVal : modVal });
-        });
+            oldModVal === '' || ref._dropElemCache({ elem : name, modName : modName, modVal : oldModVal })
+            ref._dropElemCache(modVal === ''? name : { elem : name, modName : modName, modVal : modVal })
+        })
 
-        this.__base.apply(this, arguments);
+        this.__base.apply(this, arguments)
 
         if(modName !== 'js' || modVal !== '') {
-            var classNamePrefix = _self._buildModClassNamePrefix(modName),
-                classNameRE = _self._buildModValRE(modName),
-                needDel = modVal === '';
+            const classNamePrefix = _self._buildModClassNamePrefix(modName)
+            const classNameRE = _self._buildModValRE(modName)
+            const needDel = modVal === ''
 
             this.domElem.each(function() {
-                var className = this.className,
-                    modClassName = classNamePrefix;
+                const className = this.className
+                let modClassName = classNamePrefix
 
-                modVal !== true && (modClassName += MOD_DELIM + modVal);
+                modVal !== true && (modClassName += MOD_DELIM + modVal)
 
-                (oldModVal === true?
+                ;(oldModVal === true?
                     classNameRE.test(className) :
                     (' ' + className).indexOf(' ' + classNamePrefix + MOD_DELIM) > -1)?
                         this.className = className.replace(
                             classNameRE,
                             (needDel? '' : '$1' + modClassName)) :
-                        needDel || $(this).addClass(modClassName);
-            });
+                        needDel || $(this).addClass(modClassName)
+            })
         }
     },
 
     /** @override */
     _afterSetMod : function(modName, modVal, oldModVal) {
-        var eventData = { modName : modName, modVal : modVal, oldModVal : oldModVal };
+        const eventData = { modName, modVal, oldModVal }
         this
-            ._emit({ modName : modName, modVal : '*' }, eventData)
-            ._emit({ modName : modName, modVal : modVal }, eventData);
+            ._emit({ modName, modVal : '*' }, eventData)
+            ._emit({ modName, modVal }, eventData)
     },
 
     /**
@@ -742,30 +734,29 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {Boolean}
      */
     containsEntity : function(entity) {
-        return dom.contains(this.domElem, entity.domElem);
+        return dom.contains(this.domElem, entity.domElem)
     }
 
 }, /** @lends BemDomEntity */{
     /** @override */
     create : function() {
-        throw Error('bemDom entities can not be created otherwise than from DOM');
+        throw Error('bemDom entities can not be created otherwise than from DOM')
     },
 
     /** @override */
     _processInit : function(heedInit) {
-        /* jshint eqeqeq: false */
-        if(this.onInit && this._inited == heedInit) {
-            this.__base(heedInit);
+        if(this.onInit && this._inited == heedInit) {  
+            this.__base(heedInit)
 
-            this.onInit();
+            this.onInit()
 
-            var name = this.getName(),
-                origOnInit = this.onInit;
+            const name = this.getName()
+            const origOnInit = this.onInit
 
             // allow future calls of init only in case of inheritance in other block
             this.init = function() {
-                this.getName() === name && origOnInit.apply(this, arguments);
-            };
+                this.getName() === name && origOnInit.apply(this, arguments)
+            }
         }
     },
 
@@ -777,7 +768,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {EventManager}
      */
     _domEvents : function(ctx) {
-        return domEventManagerFactory.getEventManager(this, ctx, bemDom.scope);
+        return domEventManagerFactory.getEventManager(this, ctx, bemDom.scope)
     },
 
     /**
@@ -788,7 +779,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {EventManager}
      */
     _events : function(ctx) {
-        return bemEventManagerFactory.getEventManager(this, ctx, bemDom.scope);
+        return bemEventManagerFactory.getEventManager(this, ctx, bemDom.scope)
     },
 
     /**
@@ -798,7 +789,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {String}
      */
     _buildModClassNamePrefix : function(modName) {
-        return this.getEntityName() + MOD_DELIM + modName;
+        return this.getEntityName() + MOD_DELIM + modName
     },
 
     /**
@@ -811,7 +802,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         return new RegExp(
             '(\\s|^)' +
             this._buildModClassNamePrefix(modName) +
-            '(?:' + MOD_DELIM + '(' + NAME_PATTERN + '))?(?=\\s|$)');
+            '(?:' + MOD_DELIM + '(' + NAME_PATTERN + '))?(?=\\s|$)')
     },
 
     /**
@@ -822,7 +813,7 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {String}
      */
     _buildClassName : function(modName, modVal) {
-        return buildClassName(this.getEntityName(), modName, modVal);
+        return buildClassName(this.getEntityName(), modName, modVal)
     },
 
     /**
@@ -833,9 +824,9 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {String}
      */
     _buildSelector : function(modName, modVal) {
-        return '.' + this._buildClassName(modName, modVal);
+        return '.' + this._buildClassName(modName, modVal)
     }
-});
+})
 
 /**
  * @class Block
@@ -843,12 +834,12 @@ var BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
  * @augments i-bem:Block
  * @exports i-bem-dom:Block
  */
-var Block = inherit([bem.Block, BemDomEntity], /** @lends Block.prototype */{
+const Block = inherit([bem.Block, BemDomEntity], /** @lends Block.prototype */{
     /** @override */
     _block : function() {
-        return this;
+        return this
     }
-});
+})
 
 /**
  * @class Elem
@@ -856,12 +847,12 @@ var Block = inherit([bem.Block, BemDomEntity], /** @lends Block.prototype */{
  * @augments i-bem:Elem
  * @exports i-bem-dom:Elem
  */
-var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
+const Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
     /** @override */
     _block : function() {
-        return this._blockInstance || (this._blockInstance = this.findParentBlock(getEntityCls(this.__self._blockName)));
+        return this._blockInstance || (this._blockInstance = this.findParentBlock(getEntityCls(this.__self._blockName)))
     }
-});
+})
 
 /**
  * Returns a block on a DOM element and initializes it if necessary
@@ -870,9 +861,9 @@ var Elem = inherit([bem.Elem, BemDomEntity], /** @lends Elem.prototype */{
  * @returns {BemDomEntity|null}
  */
 $.fn.bem = function(BemDomEntity, params) {
-    var entity = initEntity(BemDomEntity.getEntityName(), this, params, true);
-    return entity? entity._setInitedMod() : null;
-};
+    const entity = initEntity(BemDomEntity.getEntityName(), this, params, true)
+    return entity? entity._setInitedMod() : null
+}
 
 bemDom = {
     /**
@@ -897,20 +888,20 @@ bemDom = {
      * Base bemDom block
      * @type Function
      */
-    Block : Block,
+    Block,
 
     /**
      * Base bemDom element
      * @type Function
      */
-    Elem : Elem,
+    Elem,
 
     /**
      * @param {*} entity
      * @returns {Boolean}
      */
     isEntity : function(entity) {
-        return entity instanceof Block || entity instanceof Elem;
+        return entity instanceof Block || entity instanceof Elem
     },
 
     /**
@@ -923,16 +914,16 @@ bemDom = {
      */
     declBlock : function(blockName, base, props, staticProps) {
         if(!base || (typeof base === 'object' && !Array.isArray(base))) {
-            staticProps = props;
-            props = base;
+            staticProps = props
+            props = base
             base = typeof blockName === 'string'?
                 entities[blockName] || Block :
-                blockName;
+                blockName
         }
 
-        base = getEntityBase(Block, blockName, base);
+        base = getEntityBase(Block, blockName, base)
 
-        return bem.declBlock(blockName, base, props, staticProps);
+        return bem.declBlock(blockName, base, props, staticProps)
     },
 
     /**
@@ -945,17 +936,17 @@ bemDom = {
      * @returns {Function} Elem class
      */
     declElem : function(blockName, elemName, base, props, staticProps) {
-        var entityName = blockName + ELEM_DELIM + elemName;
+        const entityName = blockName + ELEM_DELIM + elemName
 
         if(!base || (typeof base === 'object' && !Array.isArray(base))) {
-            staticProps = props;
-            props = base;
-            base = entities[entityName] || Elem;
+            staticProps = props
+            props = base
+            base = entities[entityName] || Elem
         }
 
-        base = getEntityBase(Elem, entityName, base);
+        base = getEntityBase(Elem, entityName, base)
 
-        return bem.declElem(blockName, elemName, base, props, staticProps);
+        return bem.declElem(blockName, elemName, base, props, staticProps)
     },
 
     declMixin : bem.declMixin,
@@ -968,21 +959,21 @@ bemDom = {
     init : function(ctx) {
         ctx = typeof ctx === 'string'?
             $(ctx) :
-            ctx || bemDom.scope;
+            ctx || bemDom.scope
 
-        var dropElemCacheQueue = {},
-            uniqInitId = identify();
+        const dropElemCacheQueue = {}
+        const uniqInitId = identify()
 
         // NOTE: we find only js-entities, so cahced elems without js can't be dropped from cache
         findDomElem(ctx, BEM_SELECTOR).each(function() {
-            initEntities($(this), uniqInitId, dropElemCacheQueue);
-        });
+            initEntities($(this), uniqInitId, dropElemCacheQueue)
+        })
 
-        bem._runInitFns();
+        bem._runInitFns()
 
-        dropElemCacheForCtx(ctx, dropElemCacheQueue);
+        dropElemCacheForCtx(ctx, dropElemCacheQueue)
 
-        return ctx;
+        return ctx
     },
 
     /**
@@ -992,39 +983,39 @@ bemDom = {
      * @private
      */
     _destruct : function(ctx, excludeSelf, destructDom) {
-        var _ctx,
-            currentDestructingDomNodes = [];
+        let _ctx
+        const currentDestructingDomNodes = []
 
-        storeDomNodeParents(_ctx = excludeSelf? ctx.children() : ctx);
+        storeDomNodeParents(_ctx = excludeSelf? ctx.children() : ctx)
 
-        reverse.call(findDomElem(_ctx, BEM_SELECTOR)).each(function(_, domNode) {
-            var params = getParams(domNode),
-                domNodeId = identify(domNode);
+        reverse.call(findDomElem(_ctx, BEM_SELECTOR)).each((_, domNode) => {
+            const params = getParams(domNode)
+            const domNodeId = identify(domNode)
 
-            destructingDomNodes[domNodeId] = true;
-            currentDestructingDomNodes.push(domNodeId);
+            destructingDomNodes.set(domNodeId, true)
+            currentDestructingDomNodes.push(domNodeId)
 
-            objects.each(params, function(entityParams) {
+            objects.each(params, (entityParams) => {
                 if(entityParams.uniqId) {
-                    var entity = uniqIdToEntity[entityParams.uniqId];
+                    const entity = uniqIdToEntity.get(entityParams.uniqId)
                     entity?
                         removeDomNodeFromEntity(entity, domNode) :
-                        delete uniqIdToDomElems[entityParams.uniqId];
+                        uniqIdToDomElems.delete(entityParams.uniqId)
                 }
-            });
-            delete domElemToParams[identify(domNode)];
-        });
+            })
+            domElemToParams.delete(identify(domNode))
+        })
 
         // NOTE: it was moved here as jquery events aren't triggered on detached DOM elements
         destructDom &&
-            (excludeSelf? ctx.empty() : ctx.remove());
+            (excludeSelf? ctx.empty() : ctx.remove())
 
         // flush parent nodes storage that has been filled above
-        domNodesToParents = {};
+        domNodesToParents.clear()
 
-        currentDestructingDomNodes.forEach(function(domNodeId) {
-            delete destructingDomNodes[domNodeId];
-        });
+        currentDestructingDomNodes.forEach((domNodeId) => {
+            destructingDomNodes.delete(domNodeId)
+        })
     },
 
     /**
@@ -1033,7 +1024,7 @@ bemDom = {
      * @param {Boolean} [excludeSelf=false] Exclude the main domElem
      */
     destruct : function(ctx, excludeSelf) {
-        this._destruct(ctx, excludeSelf, true);
+        this._destruct(ctx, excludeSelf, true)
     },
 
     /**
@@ -1042,7 +1033,7 @@ bemDom = {
      * @param {Boolean} [excludeSelf=false] Exclude the main domElem
      */
     detach : function(ctx, excludeSelf) {
-        this._destruct(ctx, excludeSelf);
+        this._destruct(ctx, excludeSelf)
     },
 
     /**
@@ -1052,8 +1043,8 @@ bemDom = {
      * @returns {jQuery} Updated root DOM node
      */
     update : function(ctx, content) {
-        this.destruct(ctx, true);
-        return this.init(ctx.html(content));
+        this.destruct(ctx, true)
+        return this.init(ctx.html(content))
     },
 
     /**
@@ -1063,16 +1054,16 @@ bemDom = {
      * @returns {jQuery} New content
      */
     replace : function(ctx, content) {
-        var prev = ctx.prev(),
-            parent = ctx.parent();
+        const prev = ctx.prev()
+        const parent = ctx.parent()
 
-        content = getJqueryCollection(content);
+        content = getJqueryCollection(content)
 
-        this.destruct(ctx);
+        this.destruct(ctx)
 
         return this.init(prev.length?
             content.insertAfter(prev) :
-            content.prependTo(parent));
+            content.prependTo(parent))
     },
 
     /**
@@ -1082,7 +1073,7 @@ bemDom = {
      * @returns {jQuery} New content
      */
     append : function(ctx, content) {
-        return this.init(getJqueryCollection(content).appendTo(ctx));
+        return this.init(getJqueryCollection(content).appendTo(ctx))
     },
 
     /**
@@ -1092,7 +1083,7 @@ bemDom = {
      * @returns {jQuery} New content
      */
     prepend : function(ctx, content) {
-        return this.init(getJqueryCollection(content).prependTo(ctx));
+        return this.init(getJqueryCollection(content).prependTo(ctx))
     },
 
     /**
@@ -1102,7 +1093,7 @@ bemDom = {
      * @returns {jQuery} New content
      */
     before : function(ctx, content) {
-        return this.init(getJqueryCollection(content).insertBefore(ctx));
+        return this.init(getJqueryCollection(content).insertBefore(ctx))
     },
 
     /**
@@ -1112,15 +1103,15 @@ bemDom = {
      * @returns {jQuery} New content
      */
     after : function(ctx, content) {
-        return this.init(getJqueryCollection(content).insertAfter(ctx));
+        return this.init(getJqueryCollection(content).insertAfter(ctx))
     }
-};
+}
 
 // Initialize DOM-dependent properties on DOM ready
 $(function() {
-    bemDom.scope = $('body');
-    bemDom.doc = $(document);
-    bemDom.win = $(window);
-});
+    bemDom.scope = $('body')
+    bemDom.doc = $(document)
+    bemDom.win = $(window)
+})
 
-export default bemDom;
+export default bemDom
