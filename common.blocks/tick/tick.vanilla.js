@@ -3,10 +3,10 @@
  * @description Helpers for polling anything
  */
 
-import inherit from 'bem:inherit';
-import events from 'bem:events';
+import inherit from 'bem:inherit'
+import events from 'bem:events'
 
-var TICK_INTERVAL = 50,
+const TICK_INTERVAL = 50,
 
     /**
      * @class Tick
@@ -17,8 +17,8 @@ var TICK_INTERVAL = 50,
          * @constructor
          */
         __constructor : function() {
-            this._timer = null;
-            this._isStarted = false;
+            this._timer = null
+            this._isStarted = false
         },
 
         /**
@@ -26,8 +26,8 @@ var TICK_INTERVAL = 50,
          */
         start : function() {
             if(!this._isStarted) {
-                this._isStarted = true;
-                this._scheduleTick();
+                this._isStarted = true
+                this._scheduleTick()
             }
         },
 
@@ -36,28 +36,25 @@ var TICK_INTERVAL = 50,
          */
         stop : function() {
             if(this._isStarted) {
-                this._isStarted = false;
-                globalThis.clearTimeout(this._timer);
+                this._isStarted = false
+                globalThis.clearTimeout(this._timer)
             }
         },
 
         _scheduleTick : function() {
-            var _this = this;
             this._timer = globalThis.setTimeout(
-                function() {
-                    _this._onTick();
-                },
-                TICK_INTERVAL);
+                () => this._onTick(),
+                TICK_INTERVAL)
         },
 
         _onTick : function() {
-            this.emit('tick');
+            this.emit('tick')
 
-            this._isStarted && this._scheduleTick();
+            this._isStarted && this._scheduleTick()
         }
-    });
+    })
 
 /**
  * @type Tick
  */
-export default new Tick();
+export default new Tick()

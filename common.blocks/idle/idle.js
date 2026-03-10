@@ -2,11 +2,11 @@
  * @module idle
  */
 
-import inherit from 'bem:inherit';
-import events from 'bem:events';
-import $ from 'bem:jquery';
+import inherit from 'bem:inherit'
+import events from 'bem:events'
+import $ from 'bem:jquery'
 
-var IDLE_TIMEOUT = 3000,
+const IDLE_TIMEOUT = 3000,
     USER_EVENTS = 'mousemove keydown click',
     /**
      * @class Idle
@@ -17,9 +17,9 @@ var IDLE_TIMEOUT = 3000,
          * @constructor
          */
         __constructor : function() {
-            this._timer = null;
-            this._isStarted = false;
-            this._isIdle = false;
+            this._timer = null
+            this._isStarted = false
+            this._isIdle = false
         },
 
         /**
@@ -27,10 +27,10 @@ var IDLE_TIMEOUT = 3000,
          */
         start : function() {
             if(!this._isStarted) {
-                this._isStarted = true;
-                this._startTimer();
-                this._onUserActionBound = this._onUserAction.bind(this);
-                $(document).on(USER_EVENTS, this._onUserActionBound);
+                this._isStarted = true
+                this._startTimer()
+                this._onUserActionBound = this._onUserAction.bind(this)
+                $(document).on(USER_EVENTS, this._onUserActionBound)
             }
         },
 
@@ -39,9 +39,9 @@ var IDLE_TIMEOUT = 3000,
          */
         stop : function() {
             if(this._isStarted) {
-                this._isStarted = false;
-                this._stopTimer();
-                $(document).off(USER_EVENTS, this._onUserActionBound);
+                this._isStarted = false
+                this._stopTimer()
+                $(document).off(USER_EVENTS, this._onUserActionBound)
             }
         },
 
@@ -50,39 +50,36 @@ var IDLE_TIMEOUT = 3000,
          * @returns {Boolean}
          */
         isIdle : function() {
-            return this._isIdle;
+            return this._isIdle
         },
 
         _onUserAction : function() {
             if(this._isIdle) {
-                this._isIdle = false;
-                this.emit('wakeup');
+                this._isIdle = false
+                this.emit('wakeup')
             }
 
-            this._stopTimer();
-            this._startTimer();
+            this._stopTimer()
+            this._startTimer()
         },
 
         _startTimer : function() {
-            var _this = this;
             this._timer = setTimeout(
-                function() {
-                    _this._onTimeout();
-                },
-                IDLE_TIMEOUT);
+                () => this._onTimeout(),
+                IDLE_TIMEOUT)
         },
 
         _stopTimer : function() {
-            this._timer && clearTimeout(this._timer);
+            this._timer && clearTimeout(this._timer)
         },
 
         _onTimeout : function() {
-            this._isIdle = true;
-            this.emit('idle');
+            this._isIdle = true
+            this.emit('idle')
         }
-    });
+    })
 
 /**
  * @type Idle
  */
-export default new Idle();
+export default new Idle()
