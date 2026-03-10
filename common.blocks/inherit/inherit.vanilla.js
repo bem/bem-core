@@ -2,107 +2,61 @@
  * @module inherit
  * @version 2.2.6
  * @author Filatov Dmitry <dfilatov@yandex-team.ru>
- * @description This module provides some syntax sugar for "class" declarations, constructors, mixins, "super" calls and static members.
  */
 
-var noop = function() {},
-    hasOwnProperty = Object.prototype.hasOwnProperty,
-    objCreate = Object.create || function(ptp) {
-        var inheritance = function() {};
-        inheritance.prototype = ptp;
-        return new inheritance();
-    },
-    objKeys = Object.keys || function(obj) {
-        var res = [];
-        for(var i in obj) {
-            hasOwnProperty.call(obj, i) && res.push(i);
-        }
-        return res;
-    },
-    extend = function(o1, o2) {
-        for(var i in o2) {
-            hasOwnProperty.call(o2, i) && (o1[i] = o2[i]);
-        }
-
-        return o1;
-    },
-    toStr = Object.prototype.toString,
-    isArray = Array.isArray || function(obj) {
-        return toStr.call(obj) === '[object Array]';
-    },
-    isFunction = function(obj) {
-        return toStr.call(obj) === '[object Function]';
-    },
-    needCheckProps = true,
-    testPropObj = { toString : '' };
-
-for(var i in testPropObj) { // It's a pity ie hasn't toString, valueOf in for
-    testPropObj.hasOwnProperty(i) && (needCheckProps = false);
-}
-
-var specProps = needCheckProps? ['toString', 'valueOf'] : null;
-
-function getPropList(obj) {
-    var res = objKeys(obj);
-    if(needCheckProps) {
-        var specProp, i = 0;
-        while(specProp = specProps[i++]) {
-            obj.hasOwnProperty(specProp) && res.push(specProp);
-        }
+const noop = () => {},
+  extend = (o1, o2) => {
+    if(o2) {
+      for(const [key, val] of Object.entries(o2))
+        o1[key] = val
     }
-
-    return res;
-}
+    return o1
+  },
+  toStr = Object.prototype.toString,
+  isFunction = obj => toStr.call(obj) === '[object Function]'
 
 function override(base, res, add) {
-    var addList = getPropList(add),
-        j = 0, len = addList.length,
-        name, prop;
-    while(j < len) {
-        if((name = addList[j++]) === '__self') {
-            continue;
-        }
-        prop = add[name];
-        if(isFunction(prop) &&
-                (!prop.prototype || !prop.prototype.__self) && // check to prevent wrapping of "class" functions
-                (prop.toString().indexOf('.__base') > -1)) {
-            res[name] = (function(name, prop) {
-                var baseMethod = base[name]?
-                        base[name] :
-                        name === '__constructor'? // case of inheritance from plain function
-                            res.__self.__parent :
-                            noop,
-                    result = function() {
-                        var baseSaved = this.__base;
+  for(const name of Object.keys(add)) {
+    if(name === '__self') continue
 
-                        this.__base = result.__base;
-                        var res = prop.apply(this, arguments);
-                        this.__base = baseSaved;
-
-                        return res;
-                    };
-                result.__base = baseMethod;
-
-                return result;
-            })(name, prop);
-        } else {
-            res[name] = prop;
-        }
+    const prop = add[name]
+    if(isFunction(prop) &&
+        (!prop.prototype || !prop.prototype.__self) &&
+        (prop.toString().indexOf('.__base') > -1)) {
+      res[name] = (name => {
+        const baseMethod = base[name]
+            ? base[name]
+            : name === '__constructor'
+              ? res.__self.__parent
+              : noop,
+          result = function() {
+            const baseSaved = this.__base
+            this.__base = result.__base
+            const res = prop.apply(this, arguments)
+            this.__base = baseSaved
+            return res
+          }
+        result.__base = baseMethod
+        return result
+      })(name)
+    } else {
+      res[name] = prop
     }
+  }
 }
 
 function applyMixins(mixins, res) {
-    var i = 1, mixin;
-    while(mixin = mixins[i++]) {
-        res?
-            isFunction(mixin)?
-                inherit.self(res, mixin.prototype, mixin) :
-                inherit.self(res, mixin) :
-            res = isFunction(mixin)?
-                inherit(mixins[0], mixin.prototype, mixin) :
-                inherit(mixins[0], mixin);
-    }
-    return res || mixins[0];
+  for(let i = 1; i < mixins.length; i++) {
+    const mixin = mixins[i]
+    res
+      ? isFunction(mixin)
+        ? inherit.self(res, mixin.prototype, mixin)
+        : inherit.self(res, mixin)
+      : res = isFunction(mixin)
+        ? inherit(mixins[0], mixin.prototype, mixin)
+        : inherit(mixins[0], mixin)
+  }
+  return res || mixins[0]
 }
 
 /**
@@ -113,55 +67,55 @@ function applyMixins(mixins, res) {
 * @returns {Function} class
 */
 function inherit() {
-    var args = arguments,
-        withMixins = isArray(args[0]),
-        hasBase = withMixins || isFunction(args[0]),
-        base = hasBase? withMixins? applyMixins(args[0]) : args[0] : noop,
-        props = args[hasBase? 1 : 0] || {},
-        staticProps = args[hasBase? 2 : 1],
-        res = props.__constructor || (hasBase && base.prototype && base.prototype.__constructor)?
-            function() {
-                return this.__constructor.apply(this, arguments);
-            } :
-            hasBase?
-                function() {
-                    return base.apply(this, arguments);
-                } :
-                function() {};
+  const args = arguments,
+    withMixins = Array.isArray(args[0]),
+    hasBase = withMixins || isFunction(args[0]),
+    base = hasBase ? withMixins ? applyMixins(args[0]) : args[0] : noop,
+    props = args[hasBase ? 1 : 0] || {},
+    staticProps = args[hasBase ? 2 : 1],
+    res = props.__constructor || (hasBase && base.prototype && base.prototype.__constructor)
+      ? function() {
+          return this.__constructor.apply(this, arguments)
+        }
+      : hasBase
+        ? function() {
+            return base.apply(this, arguments)
+          }
+        : function() {}
 
-    if(!hasBase) {
-        res.prototype = props;
-        res.prototype.__self = res.prototype.constructor = res;
-        return extend(res, staticProps);
-    }
+  if(!hasBase) {
+    res.prototype = props
+    res.prototype.__self = res.prototype.constructor = res
+    return extend(res, staticProps)
+  }
 
-    extend(res, base);
+  extend(res, base)
 
-    res.__parent = base;
+  res.__parent = base
 
-    var basePtp = base.prototype,
-        resPtp = res.prototype = objCreate(basePtp);
+  const basePtp = base.prototype,
+    resPtp = res.prototype = Object.create(basePtp)
 
-    resPtp.__self = resPtp.constructor = res;
+  resPtp.__self = resPtp.constructor = res
 
-    props && override(basePtp, resPtp, props);
-    staticProps && override(base, res, staticProps);
+  props && override(basePtp, resPtp, props)
+  staticProps && override(base, res, staticProps)
 
-    return res;
+  return res
 }
 
 inherit.self = function() {
-    var args = arguments,
-        withMixins = isArray(args[0]),
-        base = withMixins? applyMixins(args[0], args[0][0]) : args[0],
-        props = args[1],
-        staticProps = args[2],
-        basePtp = base.prototype;
+  const args = arguments,
+    withMixins = Array.isArray(args[0]),
+    base = withMixins ? applyMixins(args[0], args[0][0]) : args[0],
+    props = args[1],
+    staticProps = args[2],
+    basePtp = base.prototype
 
-    props && override(basePtp, basePtp, props);
-    staticProps && override(base, base, staticProps);
+  props && override(basePtp, basePtp, props)
+  staticProps && override(base, base, staticProps)
 
-    return base;
-};
+  return base
+}
 
-export default inherit;
+export default inherit
