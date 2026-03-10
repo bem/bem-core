@@ -2,7 +2,7 @@
  * @module i-bem-dom__init
  */
 
-import bemDom from 'bem:i-bem-dom';
+import bemDom from 'bem:i-bem-dom'
 
 export default
     /**
@@ -11,5 +11,5 @@ export default
      * @returns {jQuery} ctx Initialization context
      */
     function(ctx) {
-        return bemDom.init(ctx);
-    };
+        return bemDom.init(ctx)
+    }
