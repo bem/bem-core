@@ -1,9 +1,7 @@
-import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
-import { join, resolve, relative, dirname, basename } from 'node:path';
-
-const BEM_PREFIX = 'bem:';
-const VIRTUAL_PREFIX = '\0bem:';
-
+import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs'
+import { join, resolve, relative, dirname, basename } from 'node:path'
+const BEM_PREFIX = 'bem:'
+const VIRTUAL_PREFIX = '\0bem:'
 /**
  * Scans a BEM level directory and returns all BEM entities found.
  *
@@ -21,21 +19,18 @@ const VIRTUAL_PREFIX = '\0bem:';
  * @returns {Map<string, object[]>} moduleName → array of file entries
  */
 function scanLevel(levelDir) {
-    const modules = new Map();
-
-    if (!existsSync(levelDir)) return modules;
-
+    const modules = new Map()
+    if (!existsSync(levelDir)) return modules
     const blocks = readdirSync(levelDir).filter(name => {
-        const fullPath = join(levelDir, name);
-        return statSync(fullPath).isDirectory() && !name.startsWith('.');
-    });
-
+        const fullPath = join(levelDir, name)
+        return statSync(fullPath).isDirectory() && !name.startsWith('.')
+    })
     for (const block of blocks) {
-        const blockDir = join(levelDir, block);
-        scanDirectory(blockDir, modules, levelDir);
+        const blockDir = join(levelDir, block)
+        scanDirectory(blockDir, modules, levelDir)
     }
 
-    return modules;
+    return modules
 }
 
 /**
@@ -48,34 +43,33 @@ function scanLevel(levelDir) {
  * This automatically excludes .tests/, .examples/, .tmpl-specs/, etc.
  */
 function scanDirectory(dir, modules, levelDir) {
-    let entries;
+    let entries
     try {
-        entries = readdirSync(dir);
+        entries = readdirSync(dir)
     } catch {
-        return;
+        return
     }
 
     for (const entry of entries) {
-        const fullPath = join(dir, entry);
-        let stat;
+        const fullPath = join(dir, entry)
+        let stat
         try {
-            stat = statSync(fullPath);
+            stat = statSync(fullPath)
         } catch {
-            continue;
+            continue
         }
 
         if (stat.isDirectory()) {
             // Only recurse into BEM-named subdirectories: __elem or _mod
             if (entry.startsWith('__') || entry.startsWith('_')) {
-                scanDirectory(fullPath, modules, levelDir);
+                scanDirectory(fullPath, modules, levelDir)
             }
-            continue;
+            continue
         }
 
-        if (!stat.isFile()) continue;
-
+        if (!stat.isFile()) continue
         // Only consider JS source files — skip deps, spec, test, templates, i18n, etc.
-        const isVanillaJs = entry.endsWith('.vanilla.js');
+        const isVanillaJs = entry.endsWith('.vanilla.js')
         const isPlainJs = !isVanillaJs && entry.endsWith('.js')
             && !entry.endsWith('.deps.js')
             && !entry.endsWith('.spec.js')
@@ -83,22 +77,19 @@ function scanDirectory(dir, modules, levelDir) {
             && !entry.endsWith('.bh.js')
             && !entry.endsWith('.bemjson.js')
             && !entry.endsWith('.test.js')
-            && !entry.endsWith('.i18n.js');
-
-        if (!isVanillaJs && !isPlainJs) continue;
-
+            && !entry.endsWith('.i18n.js')
+        if (!isVanillaJs && !isPlainJs) continue
         // Module name is derived from the filename per BEM naming convention
-        const name = filePathToModuleName(fullPath, levelDir);
-        if (!name) continue;
-
-        const existing = modules.get(name) || [];
+        const name = filePathToModuleName(fullPath, levelDir)
+        if (!name) continue
+        const existing = modules.get(name) || []
         existing.push({
             name,
             filePath: fullPath,
             suffix: isVanillaJs ? '.vanilla.js' : '.js',
             levelDir,
-        });
-        modules.set(name, existing);
+        })
+        modules.set(name, existing)
     }
 }
 
@@ -119,25 +110,22 @@ function parseModulesDefine(source) {
     // Match modules.define('name'  or  modules.define("name"
     const defineMatch = source.match(
         /modules\.define\s*\(\s*(['"])([^'"]+)\1/
-    );
-    if (!defineMatch) return null;
-
-    const name = defineMatch[2];
-
+    )
+    if (!defineMatch) return null
+    const name = defineMatch[2]
     // Try to extract dependency array
     // Look for the pattern after the name: , ['dep1', 'dep2']
-    const afterName = source.slice(defineMatch.index + defineMatch[0].length);
+    const afterName = source.slice(defineMatch.index + defineMatch[0].length)
     const depsMatch = afterName.match(
         /^\s*,\s*\[([^\]]*)\]/
-    );
-
-    let deps = [];
+    )
+    const deps = []
     if (depsMatch) {
-        const depsStr = depsMatch[1];
-        const depPattern = /['"]([^'"]+)['"]/g;
-        let m;
+        const depsStr = depsMatch[1]
+        const depPattern = /['"]([^'"]+)['"]/g
+        let m
         while ((m = depPattern.exec(depsStr)) !== null) {
-            deps.push(m[1]);
+            deps.push(m[1])
         }
     }
 
@@ -145,22 +133,20 @@ function parseModulesDefine(source) {
     // Look for `function(` after the deps array (or after the name if no deps).
     const afterDeps = depsMatch
         ? afterName.slice(depsMatch[0].length)
-        : afterName;
+        : afterName
     const callbackMatch = afterDeps.match(
         /,\s*function\s*\(([^)]*)\)/
-    );
-
-    let callbackParamCount = 0;
+    )
+    let callbackParamCount = 0
     if (callbackMatch) {
-        const params = callbackMatch[1].trim();
-        callbackParamCount = params ? params.split(/\s*,\s*/).length : 0;
+        const params = callbackMatch[1].trim()
+        callbackParamCount = params ? params.split(/\s*,\s*/).length : 0
     }
 
     // A redefinition has more callback params than provide (1) + deps count.
     // The extra parameter receives the previous module value.
-    const isRedefinition = callbackParamCount > 1 + deps.length;
-
-    return { name, deps, callbackParamCount, isRedefinition };
+    const isRedefinition = callbackParamCount > 1 + deps.length
+    return { name, deps, callbackParamCount, isRedefinition }
 }
 
 /**
@@ -179,26 +165,23 @@ function parseModulesDefine(source) {
  */
 function parseEsModule(source, filePath, levelDir) {
     // Must have export default
-    if (!/export\s+default\b/.test(source)) return null;
-
+    if (!/export\s+default\b/.test(source)) return null
     // Derive module name from file path using BEM naming
-    const name = filePathToModuleName(filePath, levelDir);
-    if (!name) return null;
-
+    const name = filePathToModuleName(filePath, levelDir)
+    if (!name) return null
     // Extract bem: imports as dependencies
-    const deps = [];
-    const importPattern = /import\s+\w+\s+from\s+['"]bem:([^'"]+)['"]/g;
-    let m;
+    const deps = []
+    const importPattern = /import\s+\w+\s+from\s+['"]bem:([^'"]+)['"]/g
+    let m
     while ((m = importPattern.exec(source)) !== null) {
-        deps.push(m[1]);
+        deps.push(m[1])
     }
 
     // Detect if this is a transformer (redefinition):
     // export default function(prev) { ... }
     // The pattern is: export default function with exactly one parameter
-    const isRedefinition = /export\s+default\s+function\s*\([^)]+\)\s*\{/.test(source);
-
-    return { name, deps, isRedefinition };
+    const isRedefinition = /export\s+default\s+function\s*\([^)]+\)\s*\{/.test(source)
+    return { name, deps, isRedefinition }
 }
 
 /**
@@ -210,12 +193,12 @@ function parseEsModule(source, filePath, levelDir) {
  * common.blocks/loader/_type/loader_type_js.js → 'loader_type_js'
  */
 function filePathToModuleName(filePath, levelDir) {
-    const rel = relative(levelDir, filePath);
+    const rel = relative(levelDir, filePath)
     // Get the filename without extensions
-    const fileName = basename(rel);
+    const fileName = basename(rel)
     // Strip .vanilla.js or .js
-    const name = fileName.replace(/\.(vanilla\.)?js$/, '');
-    return name || null;
+    const name = fileName.replace(/\.(vanilla\.)?js$/, '')
+    return name || null
 }
 
 /**
@@ -227,18 +210,16 @@ function filePathToModuleName(filePath, levelDir) {
  *   ([{ shouldDeps: ... }, { ... }])
  */
 function parseDepsFile(filePath) {
-    if (!existsSync(filePath)) return null;
-
-    const content = readFileSync(filePath, 'utf8');
-
+    if (!existsSync(filePath)) return null
+    const content = readFileSync(filePath, 'utf8')
     try {
         // deps.js files are wrapped in parentheses: ({ ... }) or ([...])
         // Use Function constructor to evaluate (safer than eval, no access to scope)
-        const fn = new Function('return ' + content);
-        const result = fn();
-        return normalizeDeps(result);
+        const fn = new Function('return ' + content)
+        const result = fn()
+        return normalizeDeps(result)
     } catch {
-        return null;
+        return null
     }
 }
 
@@ -248,16 +229,16 @@ function parseDepsFile(filePath) {
 function normalizeDeps(raw) {
     if (Array.isArray(raw)) {
         // Array of dep declarations — merge them
-        const merged = { mustDeps: [], shouldDeps: [], noDeps: [] };
+        const merged = { mustDeps: [], shouldDeps: [], noDeps: [] }
         for (const item of raw) {
-            const norm = normalizeDeps(item);
+            const norm = normalizeDeps(item)
             if (norm) {
-                merged.mustDeps.push(...norm.mustDeps);
-                merged.shouldDeps.push(...norm.shouldDeps);
-                merged.noDeps.push(...norm.noDeps);
+                merged.mustDeps.push(...norm.mustDeps)
+                merged.shouldDeps.push(...norm.shouldDeps)
+                merged.noDeps.push(...norm.noDeps)
             }
         }
-        return merged;
+        return merged
     }
 
     if (raw && typeof raw === 'object') {
@@ -265,10 +246,10 @@ function normalizeDeps(raw) {
             mustDeps: normalizeDep(raw.mustDeps || []),
             shouldDeps: normalizeDep(raw.shouldDeps || []),
             noDeps: normalizeDep(raw.noDeps || []),
-        };
+        }
     }
 
-    return null;
+    return null
 }
 
 /**
@@ -276,14 +257,14 @@ function normalizeDeps(raw) {
  * Input can be: string | object | array
  */
 function normalizeDep(dep) {
-    if (!dep) return [];
-    if (typeof dep === 'string') return [{ block: dep }];
-    if (Array.isArray(dep)) return dep.flatMap(d => normalizeDep(d));
+    if (!dep) return []
+    if (typeof dep === 'string') return [{ block: dep }]
+    if (Array.isArray(dep)) return dep.flatMap(d => normalizeDep(d))
     if (typeof dep === 'object') {
         // Could be { block: 'name' } or { elem: 'name' } or { mods: {...} } etc.
-        return [dep];
+        return [dep]
     }
-    return [];
+    return []
 }
 
 /**
@@ -295,23 +276,20 @@ function normalizeDep(dep) {
  * but for the modules actually defined in bem-core, this covers all cases.
  */
 function bemEntityToModuleName(entity, contextBlock) {
-    if (typeof entity === 'string') return entity;
-
-    const block = entity.block || contextBlock;
-    if (!block) return null;
-
-    let name = block;
-
+    if (typeof entity === 'string') return entity
+    const block = entity.block || contextBlock
+    if (!block) return null
+    let name = block
     // Handle elem / elems
     if (entity.elem) {
-        name += '__' + entity.elem;
+        name += '__' + entity.elem
     }
 
     // Handle mod / mods
     if (entity.mod) {
-        name += '_' + entity.mod;
+        name += '_' + entity.mod
         if (entity.val && entity.val !== true) {
-            name += '_' + entity.val;
+            name += '_' + entity.val
         }
     }
     if (entity.mods) {
@@ -319,16 +297,16 @@ function bemEntityToModuleName(entity, contextBlock) {
             if (Array.isArray(vals)) {
                 // Multiple values → multiple modules (e.g., type: ['dom', 'bem'])
                 // Return only the first for now; caller should handle arrays
-                name += '_' + mod;
+                name += '_' + mod
             } else if (vals === true) {
-                name += '_' + mod;
+                name += '_' + mod
             } else {
-                name += '_' + mod + '_' + vals;
+                name += '_' + mod + '_' + vals
             }
         }
     }
 
-    return name;
+    return name
 }
 
 /**
@@ -336,76 +314,73 @@ function bemEntityToModuleName(entity, contextBlock) {
  * Handles elems (array) and mods (array values).
  */
 function expandBemEntity(entity, contextBlock) {
-    if (typeof entity === 'string') return [entity];
-
-    const block = entity.block || contextBlock;
-    if (!block) return [];
-
-    const results = [];
-
+    if (typeof entity === 'string') return [entity]
+    const block = entity.block || contextBlock
+    if (!block) return []
+    const results = []
     // If entity has elems (array of elements), expand each
     if (entity.elems) {
-        const elems = Array.isArray(entity.elems) ? entity.elems : [entity.elems];
+        const elems = Array.isArray(entity.elems) ? entity.elems : [entity.elems]
         for (const elem of elems) {
             if (typeof elem === 'string') {
-                results.push(block + '__' + elem);
+                results.push(block + '__' + elem)
             } else if (elem && typeof elem === 'object') {
                 // { elem: 'init', mods: { auto: true } }
-                const elemName = elem.elem;
-                results.push(block + '__' + elemName);
+                const elemName = elem.elem
+                results.push(block + '__' + elemName)
                 if (elem.mods) {
                     for (const [mod, vals] of Object.entries(elem.mods)) {
-                        const modVals = Array.isArray(vals) ? vals : [vals];
+                        const modVals = Array.isArray(vals) ? vals : [vals]
                         for (const val of modVals) {
                             if (val === true) {
-                                results.push(block + '__' + elemName + '_' + mod);
+                                results.push(block + '__' + elemName + '_' + mod)
                             } else {
-                                results.push(block + '__' + elemName + '_' + mod + '_' + val);
+                                results.push(block + '__' + elemName + '_' + mod + '_' + val)
                             }
                         }
                     }
                 }
             }
         }
-        return results;
+        return results
     }
 
     // If entity has elem (single)
     if (entity.elem) {
-        const base = block + '__' + entity.elem;
+        const base = block + '__' + entity.elem
         if (entity.mods) {
             for (const [mod, vals] of Object.entries(entity.mods)) {
-                const modVals = Array.isArray(vals) ? vals : [vals];
+                const modVals = Array.isArray(vals) ? vals : [vals]
                 for (const val of modVals) {
                     if (val === true) {
-                        results.push(base + '_' + mod);
+                        results.push(base + '_' + mod)
                     } else {
-                        results.push(base + '_' + mod + '_' + val);
+                        results.push(base + '_' + mod + '_' + val)
                     }
                 }
             }
-            return results;
+            return results
         }
-        return [base];
+        return [base]
     }
 
     // Block with mods
     if (entity.mods) {
         for (const [mod, vals] of Object.entries(entity.mods)) {
-            const modVals = Array.isArray(vals) ? vals : [vals];
+            const modVals = Array.isArray(vals) ? vals : [vals]
             for (const val of modVals) {
                 if (val === true) {
-                    results.push(block + '_' + mod);
+                    results.push(block + '_' + mod)
                 } else {
-                    results.push(block + '_' + mod + '_' + val);
+                    results.push(block + '_' + mod + '_' + val)
                 }
             }
         }
-        return results;
+        return results
     }
 
     // Simple block reference
-    return [block];
+    return [block]
 }
 
 /**
@@ -417,65 +392,61 @@ function expandBemEntity(entity, contextBlock) {
  */
 function buildRegistry(levels, rootDir) {
     // moduleName → [{ name, deps, filePath, suffix, levelDir, levelIndex }]
-    const allModules = new Map();
-
+    const allModules = new Map()
     for (let i = 0; i < levels.length; i++) {
-        const levelDir = resolve(rootDir, levels[i]);
-        const levelModules = scanLevel(levelDir);
-
+        const levelDir = resolve(rootDir, levels[i])
+        const levelModules = scanLevel(levelDir)
         for (const [name, entries] of levelModules) {
-            const existing = allModules.get(name) || [];
+            const existing = allModules.get(name) || []
             for (const entry of entries) {
-                entry.levelIndex = i;
+                entry.levelIndex = i
             }
-            existing.push(...entries);
-            allModules.set(name, existing);
+            existing.push(...entries)
+            allModules.set(name, existing)
         }
     }
 
     // Detect cross-level redefinitions: same module name from different levels.
     // First entry (lowest level index) is the base, subsequent entries are redefinitions.
-    const redefinitions = new Map();
+    const redefinitions = new Map()
     for (const [name, entries] of allModules) {
-        entries.sort((a, b) => a.levelIndex - b.levelIndex);
-
+        entries.sort((a, b) => a.levelIndex - b.levelIndex)
         if (entries.length > 1) {
-            redefinitions.set(name, entries);
+            redefinitions.set(name, entries)
         }
     }
 
     // Collect deps.js files
-    const depsMap = new Map();
+    const depsMap = new Map()
     for (const [name, entries] of allModules) {
         for (const entry of entries) {
             // Find corresponding .deps.js file
             // e.g., common.blocks/jquery/jquery.js → common.blocks/jquery/jquery.deps.js
-            const dir = dirname(entry.filePath);
+            const dir = dirname(entry.filePath)
             const possibleDepsFiles = [
                 // Same directory, same base name
                 entry.filePath.replace(/\.(vanilla\.)?js$/, '.deps.js'),
-            ];
-
+            ]
             // Also look for block-level deps.js
-            const blockDir = dirname(dir) === entry.levelDir ? dir : dirname(dir);
-            const blockName = basename(blockDir);
-            const blockDeps = join(blockDir, blockName + '.deps.js');
+            const blockDir = dirname(dir) === entry.levelDir ? dir : dirname(dir)
+            const blockName = basename(blockDir)
+            const blockDeps = join(blockDir, blockName + '.deps.js')
             if (!possibleDepsFiles.includes(blockDeps)) {
-                possibleDepsFiles.push(blockDeps);
+                possibleDepsFiles.push(blockDeps)
             }
 
             for (const depsFile of possibleDepsFiles) {
                 if (existsSync(depsFile) && !depsMap.has(depsFile)) {
-                    const parsed = parseDepsFile(depsFile);
+                    const parsed = parseDepsFile(depsFile)
                     if (parsed) {
-                        depsMap.set(depsFile, { ...parsed, forModule: name });
+                        depsMap.set(depsFile, { ...parsed, forModule: name })
                     }
                 }
             }
         }
     }
 
-    return { modules: allModules, deps: depsMap, redefinitions };
+    return { modules: allModules, deps: depsMap, redefinitions }
 }
 
 /**
@@ -489,13 +460,13 @@ function buildRegistry(levels, rootDir) {
  * - Redefinition file: `export default function(prev) { return newValue; }`
  *
  * The barrel chains them:
- *   import _base from './base.js';
- *   import _redef0 from './redef0.js';
- *   import _redef1 from './redef1.js';
- *   let _module = _base;
- *   _module = _redef0(_module);
- *   _module = _redef1(_module);
- *   export default _module;
+ *   import _base from './base.js'
+ *   import _redef0 from './redef0.js'
+ *   import _redef1 from './redef1.js'
+ *   let _module = _base
+ *   _module = _redef0(_module)
+ *   _module = _redef1(_module)
+ *   export default _module
  *
  * @param {string} name - module name
  * @param {object[]} entries - sorted array of file entries (base + redefinitions)
@@ -503,31 +474,28 @@ function buildRegistry(levels, rootDir) {
  * @returns {string} generated ES module source code
  */
 function generateBarrel(name, entries, rootDir) {
-    const lines = [`// @generated by vite-plugin-bem-levels`];
-    const base = entries[0];
-    const basePath = './' + relative(rootDir, base.filePath).replace(/\\/g, '/');
-    const baseId = safeIdentifier(name) + '_base';
-
-    lines.push(`import ${baseId} from '${basePath}';`);
-
+    const lines = [`// @generated by vite-plugin-bem-levels`]
+    const base = entries[0]
+    const basePath = './' + relative(rootDir, base.filePath).replace(/\\/g, '/')
+    const baseId = safeIdentifier(name) + '_base'
+    lines.push(`import ${baseId} from '${basePath}';`)
     // Import each redefinition as a named transformer
-    const redefIds = [];
+    const redefIds = []
     for (let i = 1; i < entries.length; i++) {
-        const redef = entries[i];
-        const redefPath = './' + relative(rootDir, redef.filePath).replace(/\\/g, '/');
-        const redefId = safeIdentifier(name) + '_redef' + (i - 1);
-        lines.push(`import ${redefId} from '${redefPath}';`);
-        redefIds.push(redefId);
+        const redef = entries[i]
+        const redefPath = './' + relative(rootDir, redef.filePath).replace(/\\/g, '/')
+        const redefId = safeIdentifier(name) + '_redef' + (i - 1)
+        lines.push(`import ${redefId} from '${redefPath}';`)
+        redefIds.push(redefId)
     }
 
-    lines.push('');
-    lines.push(`let _module = ${baseId};`);
+    lines.push('')
+    lines.push(`let _module = ${baseId};`)
     for (const redefId of redefIds) {
-        lines.push(`_module = ${redefId}(_module);`);
+        lines.push(`_module = ${redefId}(_module);`)
     }
-    lines.push(`export default _module;`);
-
-    return lines.join('\n');
+    lines.push(`export default _module;`)
+    return lines.join('\n')
 }
 
 /**
@@ -539,10 +507,10 @@ function safeIdentifier(name) {
     // Replace hyphens with camelCase, prefix with underscore
     let id = name
         .replace(/-([a-z])/g, (_, c) => c.toUpperCase())
-        .replace(/-/g, '_');
+        .replace(/-/g, '_')
     // Ensure starts with valid identifier char
-    if (/^[0-9]/.test(id)) id = '_' + id;
-    return '_' + id;
+    if (/^[0-9]/.test(id)) id = '_' + id
+    return '_' + id
 }
 
 /**
@@ -562,20 +530,18 @@ export default function bemLevels(options = {}) {
             touch: ['common.blocks', 'touch.blocks'],
         },
         rootDir = process.cwd(),
-    } = options;
-
-    const platformLevels = levels[platform];
+    } = options
+    const platformLevels = levels[platform]
     if (!platformLevels) {
-        throw new Error(`Unknown platform: ${platform}. Available: ${Object.keys(levels).join(', ')}`);
+        throw new Error(`Unknown platform: ${platform}. Available: ${Object.keys(levels).join(', ')}`)
     }
 
-    let registry = null;
-
+    let registry = null
     function getRegistry() {
         if (!registry) {
-            registry = buildRegistry(platformLevels, rootDir);
+            registry = buildRegistry(platformLevels, rootDir)
         }
-        return registry;
+        return registry
     }
 
     return {
@@ -583,45 +549,43 @@ export default function bemLevels(options = {}) {
 
         resolveId(id) {
             if (id.startsWith(BEM_PREFIX)) {
-                return VIRTUAL_PREFIX + id.slice(BEM_PREFIX.length);
+                return VIRTUAL_PREFIX + id.slice(BEM_PREFIX.length)
             }
-            return null;
+            return null
         },
 
         load(id) {
-            if (!id.startsWith(VIRTUAL_PREFIX)) return null;
-
-            const moduleName = id.slice(VIRTUAL_PREFIX.length);
-            const reg = getRegistry();
-            const entries = reg.modules.get(moduleName);
-
+            if (!id.startsWith(VIRTUAL_PREFIX)) return null
+            const moduleName = id.slice(VIRTUAL_PREFIX.length)
+            const reg = getRegistry()
+            const entries = reg.modules.get(moduleName)
             if (!entries || entries.length === 0) {
-                this.error(`BEM module not found: ${moduleName}`);
-                return null;
+                this.error(`BEM module not found: ${moduleName}`)
+                return null
             }
 
             // If the module has redefinitions, generate a barrel
             if (entries.length > 1) {
-                return generateBarrel(moduleName, entries, rootDir);
+                return generateBarrel(moduleName, entries, rootDir)
             }
 
             // Single definition — just re-export
-            const entry = entries[0];
-            const entryPath = './' + relative(rootDir, entry.filePath).replace(/\\/g, '/');
-            return `export { default } from '${entryPath}';\n`;
+            const entry = entries[0]
+            const entryPath = './' + relative(rootDir, entry.filePath).replace(/\\/g, '/')
+            return `export { default } from '${entryPath}';\n`
         },
 
         // Invalidate registry on file changes in BEM levels
         configureServer(server) {
-            const levelDirs = platformLevels.map(l => resolve(rootDir, l));
+            const levelDirs = platformLevels.map(l => resolve(rootDir, l))
             server.watcher.on('all', (event, filePath) => {
                 for (const levelDir of levelDirs) {
                     if (filePath.startsWith(levelDir)) {
                         registry = null; // invalidate cache
-                        break;
+                        break
                     }
                 }
-            });
+            })
         },
 
         // Expose registry for testing and introspection
@@ -635,7 +599,7 @@ export default function bemLevels(options = {}) {
             generateBarrel,
             buildRegistry,
         },
-    };
+    }
 }
 
 // Named exports for testing
@@ -652,4 +616,4 @@ export {
     buildRegistry,
     generateBarrel,
     safeIdentifier,
-};
+}
