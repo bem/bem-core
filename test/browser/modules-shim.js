@@ -5,9 +5,12 @@
  *   modules.define(name, deps, factory)   — normal definition
  *   modules.define(name, factory)          — redefinition (factory receives prev value as 2nd arg)
  *   modules.require(deps, factory)         — resolve deps synchronously, call factory
+ *
+ * Eagerly resolves first definitions when all deps are available (ym behavior).
+ * Supports incremental resolution: previously resolved entries are skipped on re-resolve.
  */
 export function createModulesShim(preRegistered) {
-    // name → [{deps, factory, isRedef}]
+    // name → [{deps, factory, isRedef, resolved}]
     const registry = new Map();
     // name → resolved value (cache)
     const resolved = new Map();
@@ -17,10 +20,13 @@ export function createModulesShim(preRegistered) {
     }
 
     function resolve(name) {
-        if (resolved.has(name)) return resolved.get(name);
-
         const entries = registry.get(name);
+        const hasUnresolved = entries && entries.some(e => !e.resolved);
+
+        if (resolved.has(name) && !hasUnresolved) return resolved.get(name);
+
         if (!entries || !entries.length) {
+            if (resolved.has(name)) return resolved.get(name);
             throw new Error(
                 `Module "${name}" is not defined.\nKnown: ${[
                     ...resolved.keys(),
@@ -29,16 +35,19 @@ export function createModulesShim(preRegistered) {
             );
         }
 
-        let value;
+        let value = resolved.get(name);
         let runCount = 0;
-        for (const { deps, factory, isRedef } of entries) {
+        for (const entry of entries) {
+            if (entry.resolved) continue;
             try {
-                const depVals = deps.map(d => resolve(d));
-                if (isRedef) {
-                    factory(v => { value = v; }, value, ...depVals);
+                const depVals = entry.deps.map(d => resolve(d));
+                const thisCtx = { name };
+                if (entry.isRedef) {
+                    entry.factory.call(thisCtx, v => { value = v; }, value, ...depVals);
                 } else {
-                    factory(v => { value = v; }, ...depVals);
+                    entry.factory.call(thisCtx, v => { value = v; }, ...depVals);
                 }
+                entry.resolved = true;
                 runCount++;
             } catch (err) {
                 // Log but continue — one failing spec factory must not block others
@@ -56,11 +65,14 @@ export function createModulesShim(preRegistered) {
             const deps = isRedef ? [] : depsOrFactory;
             const factory = isRedef ? depsOrFactory : factoryArg;
 
-            if (!registry.has(name)) registry.set(name, []);
-            registry.get(name).push({ deps, factory, isRedef });
+            const isFirst = !registry.has(name);
+            if (isFirst) registry.set(name, []);
+            registry.get(name).push({ deps, factory, isRedef, resolved: false });
 
-            // Clear cache if re-defining after resolution
-            resolved.delete(name);
+            // Eagerly resolve first non-redef definitions when all deps are available
+            if (isFirst && !isRedef && deps.every(d => resolved.has(d))) {
+                try { resolve(name); } catch (e) { /* ignore — will be resolved on require */ }
+            }
         },
 
         require(deps, factory) {

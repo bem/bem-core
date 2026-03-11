@@ -83,7 +83,7 @@ window.modules = createModulesShim({
     'next-tick': nextTick,
     'strings__escape': stringsEscape,
     events,
-    'events__observable': eventsObservable,
+    'events__observable': eventsObservableBemDom,
     'events__observable_type_bem-dom': eventsObservableBemDom,
     dom,
     cookie,

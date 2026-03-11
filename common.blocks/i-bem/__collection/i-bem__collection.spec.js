@@ -13,7 +13,7 @@ modules.define('spec', [
 var expect = chai.expect;
 
 describe('BEM collections', function() {
-    var Block = bem.declBlock('block');
+    var Block = bem.declBlock('collection-block');
 
     describe('constructor', function() {
         it('should create collection of unique entities', function() {

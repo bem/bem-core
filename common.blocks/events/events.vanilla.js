@@ -216,7 +216,7 @@ const Emitter = inherit(/** @lends Emitter.prototype */{
                         }
 
                         e.data = item.data
-                        const res = item.fn.apply(item.ctx || this, arguments)
+                        const res = item.fn.call(item.ctx || this, e, data)
                         if(res === false) {
                             e.preventDefault()
                             e.stopPropagation()

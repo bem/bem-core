@@ -18,8 +18,8 @@ describe('events__observable_type_bem-dom', function() {
         spy2 = sinon.spy();
         spy3 = sinon.spy();
         block = bemDom.init(BEMHTML.apply({
-            block : 'block'
-        })).appendTo('body').bem(bemDom.declBlock('block'));
+            block : 'obs-dom-block'
+        })).appendTo('body').bem(bemDom.declBlock('obs-dom-block'));
     });
 
     afterEach(function() {

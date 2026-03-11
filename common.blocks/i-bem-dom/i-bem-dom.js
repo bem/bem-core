@@ -746,7 +746,7 @@ const BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
 
     /** @override */
     _processInit : function(heedInit) {
-        if(this.onInit && this._inited == heedInit) {  
+        if(this.onInit && this._inited == heedInit) {
             this.__base(heedInit)
 
             this.onInit()

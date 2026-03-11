@@ -60,10 +60,10 @@ const BEMHTML = {
                     else if (v) classes.push(`${block}_${m}_${v}`);
                 }
             }
-            if (js !== false) {
+            if (js) {
                 needBemClass = true;
                 dataBem = dataBem || {};
-                dataBem[block] = js && typeof js === 'object' ? js : {};
+                dataBem[block] = typeof js === 'object' ? js : {};
             }
         } else if (block && elem) {
             // Element
@@ -76,10 +76,10 @@ const BEMHTML = {
                 }
             }
             // Elements get data-bem and i-bem if js is explicitly provided
-            if (js && typeof js === 'object') {
+            if (js) {
                 needBemClass = true;
                 dataBem = dataBem || {};
-                dataBem[elemName] = js;
+                dataBem[elemName] = typeof js === 'object' ? js : {};
             }
         }
 
@@ -88,7 +88,7 @@ const BEMHTML = {
             const mixes = Array.isArray(mix) ? mix : [mix];
             for (const m of mixes) {
                 if (!m) continue;
-                const mixBlock = m.block || ctx;
+                const mixBlock = m.block || block || ctx;
                 if (!mixBlock) continue;
                 const mixClass = m.elem
                     ? `${mixBlock}__${m.elem}`
@@ -112,10 +112,10 @@ const BEMHTML = {
                     dataBem = dataBem || {};
                     dataBem[mixBlock] =
                         m.js && typeof m.js === 'object' ? m.js : {};
-                } else if (m.elem && m.js && typeof m.js === 'object') {
+                } else if (m.elem && m.js) {
                     needBemClass = true;
                     dataBem = dataBem || {};
-                    dataBem[mixClass] = m.js;
+                    dataBem[mixClass] = typeof m.js === 'object' ? m.js : {};
                 }
             }
         }

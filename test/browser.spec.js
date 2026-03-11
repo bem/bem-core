@@ -1,15 +1,18 @@
 import { test, expect } from '@playwright/test';
 
-// Known failures that are expected and acceptable:
-// - 11 pointer event polyfill tests (modern browsers have native Pointer Events)
-// - 2 pointerpressrelease timeout tests (done() not called — polyfill not active)
-// - ~19 edge cases in BEMHTML/modules shim or jQuery 4.0 compatibility
-const MAX_ALLOWED_FAILURES = 35;
+// Known failures: 13 pointer event polyfill tests — modern browsers have native
+// Pointer Events, so the polyfill doesn't activate and its tests fail.
+const MAX_ALLOWED_FAILURES = 13;
 
 test('bem-core browser spec tests', async ({ page }) => {
     const pageErrors = [];
     page.on('pageerror', err => {
         pageErrors.push(`[pageerror] ${err.message}`);
+    });
+    page.on('console', msg => {
+        if (msg.type() === 'warn' || msg.type() === 'error') {
+            console.log(`[browser:${msg.type()}] ${msg.text()}`);
+        }
     });
 
     await page.goto('/test/browser/index.html');
