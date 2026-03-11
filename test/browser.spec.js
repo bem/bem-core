@@ -1,8 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-// Known failures: 13 pointer event polyfill tests — modern browsers have native
-// Pointer Events, so the polyfill doesn't activate and its tests fail.
-const MAX_ALLOWED_FAILURES = 13;
+const MAX_ALLOWED_FAILURES = 0;
 
 test('bem-core browser spec tests', async ({ page }) => {
     const pageErrors = [];

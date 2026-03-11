@@ -41,9 +41,6 @@ import eventsObservable from 'bem:events__observable';
 
 import $ from 'jquery';
 import 'bem:jquery__config';
-import 'bem:jquery__event_type_pointernative';
-import 'bem:jquery__event_type_pointerclick';
-import 'bem:jquery__event_type_pointerpressrelease';
 
 import dom from 'bem:dom';
 import cookie from 'bem:cookie';

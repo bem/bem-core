@@ -28,9 +28,6 @@ import 'bem:i-bem__collection';
 // DOM utilities
 import 'bem:jquery__config';
 import 'bem:jquery';
-import 'bem:jquery__event_type_pointernative';
-import 'bem:jquery__event_type_pointerclick';
-import 'bem:jquery__event_type_pointerpressrelease';
 import 'bem:dom';
 
 // i-bem-dom and its subsystems
