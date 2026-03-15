@@ -31,6 +31,13 @@ const BemCollection = inherit(/** @lends BemCollection.prototype */{
     setMod : buildForEachEntityMethodProxyFn('setMod'),
 
     /**
+     * Sets multiple modifiers at once for entities in Collection.
+     * @param {Object} mods Hash of modifiers (modName: modVal)
+     * @returns {Collection} this
+     */
+    setMods : buildForEachEntityMethodProxyFn('setMods'),
+
+    /**
      * Removes the modifier from entities in Collection.
      * @param {String} modName Modifier name
      * @returns {Collection} this

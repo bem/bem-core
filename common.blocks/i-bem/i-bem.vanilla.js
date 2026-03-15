@@ -295,6 +295,17 @@ const BemEntity = inherit(/** @lends BemEntity.prototype */ {
     },
 
     /**
+     * Sets multiple modifiers at once
+     * @param {Object} mods Hash of modifiers (modName: modVal)
+     * @returns {BemEntity} this
+     */
+    setMods : function(mods) {
+        for(const modName of Object.keys(mods))
+            this.setMod(modName, mods[modName])
+        return this
+    },
+
+    /**
      * @protected
      * @param {String} modName Modifier name
      * @param {String} modVal Modifier value
