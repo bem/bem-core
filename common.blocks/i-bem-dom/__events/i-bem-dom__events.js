@@ -252,8 +252,9 @@ const EventManagerFactory = inherit(/** @lends EventManagerFactory.prototype */{
             eventStorage.set(ctxId, ctxStorage)
             if(isBindToInstance) {
                 ctx._events().on({ modName : 'js', modVal : '' }, () => {
-                    params.bindToArbitraryDomElem && ctxStorage[storageKey] &&
-                        ctxStorage[storageKey].un()
+                    Object.keys(ctxStorage).forEach(key => {
+                        ctxStorage[key] && ctxStorage[key].un()
+                    })
                     eventStorage.delete(ctxId)
                 })
             }
