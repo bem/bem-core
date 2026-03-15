@@ -277,12 +277,14 @@ function buildElemKey(elem) {
 }
 
 /**
- * Returns jQuery collection for provided HTML
- * @param {jQuery|String} html
+ * Returns jQuery collection for provided HTML or BEM entity
+ * @param {jQuery|String|BemDomEntity} html
  * @returns {jQuery}
  */
 function getJqueryCollection(html) {
-    return $(typeof html === 'string'? $.parseHTML(html, null, true) : html)
+    if(typeof html === 'string') return $($.parseHTML(html, null, true))
+    if(html && html.domElem) return html.domElem
+    return $(html)
 }
 
 /**
@@ -737,6 +739,51 @@ const BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      */
     containsEntity : function(entity) {
         return dom.contains(this.domElem, entity.domElem)
+    },
+
+    /**
+     * Replaces the content of the entity's DOM element
+     * @param {jQuery|String|BemDomEntity} content New content
+     * @returns {jQuery}
+     */
+    update : function(content) {
+        return bemDom.update(this.domElem, content)
+    },
+
+    /**
+     * Appends content to the entity's DOM element
+     * @param {jQuery|String|BemDomEntity} content Content to be added
+     * @returns {jQuery}
+     */
+    append : function(content) {
+        return bemDom.append(this.domElem, content)
+    },
+
+    /**
+     * Prepends content to the entity's DOM element
+     * @param {jQuery|String|BemDomEntity} content Content to be added
+     * @returns {jQuery}
+     */
+    prepend : function(content) {
+        return bemDom.prepend(this.domElem, content)
+    },
+
+    /**
+     * Adds content before the entity's DOM element
+     * @param {jQuery|String|BemDomEntity} content Content to be added
+     * @returns {jQuery}
+     */
+    before : function(content) {
+        return bemDom.before(this.domElem, content)
+    },
+
+    /**
+     * Adds content after the entity's DOM element
+     * @param {jQuery|String|BemDomEntity} content Content to be added
+     * @returns {jQuery}
+     */
+    after : function(content) {
+        return bemDom.after(this.domElem, content)
     }
 
 }, /** @lends BemDomEntity */{
@@ -867,6 +914,22 @@ $.fn.bem = function(BemDomEntity, params) {
     return entity? entity._setInitedMod() : null
 }
 
+/**
+ * Returns an existing BEM entity instance from a DOM node without initialization
+ * @param {HTMLElement} domNode DOM node
+ * @param {Function} BemDomEntity entity class
+ * @returns {BemDomEntity|null}
+ */
+function getEntityFromDom(domNode, BemDomEntity) {
+    const entityName = BemDomEntity.getEntityName()
+    const params = getParams(domNode)
+    const entityParams = params[entityName]
+
+    return entityParams && entityParams.uniqId?
+        uniqIdToEntity.get(entityParams.uniqId) || null :
+        null
+}
+
 bemDom = {
     /**
      * Scope (set on DOM ready)
@@ -938,6 +1001,20 @@ bemDom = {
      * @returns {Function} Elem class
      */
     declElem : function(blockName, elemName, base, props, staticProps) {
+        if(typeof blockName === 'function') {
+            if(typeof elemName !== 'string') {
+                // declElem(ElemClass, base?, props?, staticProps?) — redeclaration of elem class
+                staticProps = props
+                props = base
+                base = elemName
+                elemName = blockName._name
+                blockName = blockName._blockName
+            } else {
+                // declElem(BlockClass, 'elemName', ...) — block class as first arg
+                blockName = blockName.getName()
+            }
+        }
+
         const entityName = blockName + ELEM_DELIM + elemName
 
         if(!base || (typeof base === 'object' && !Array.isArray(base))) {
@@ -1106,6 +1183,16 @@ bemDom = {
      */
     after : function(ctx, content) {
         return this.init(getJqueryCollection(content).insertAfter(ctx))
+    },
+
+    /**
+     * Returns an existing BEM entity instance from a DOM node without initialization
+     * @param {HTMLElement} domNode DOM node
+     * @param {Function} BemDomEntity entity class
+     * @returns {BemDomEntity|null}
+     */
+    getFromDom : function(domNode, BemDomEntity) {
+        return getEntityFromDom(domNode, BemDomEntity)
     }
 }
 
