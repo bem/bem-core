@@ -969,6 +969,41 @@ describe('BEM events', function() {
     });
 });
 
+describe('same-type nested blocks destruct (#1525)', function() {
+    var ParentBlock, rootNode;
+
+    beforeEach(function() {
+        ParentBlock = bemDom.declBlock('nested-same', {
+            onInit : function() {
+                this._events().on({ modName : 'js', modVal : '' }, this._onDestruct);
+            },
+            _onDestruct : function() {}
+        });
+
+        rootNode = createDomNode({
+            block : 'nested-same',
+            js : true,
+            content : {
+                block : 'nested-same',
+                js : true
+            }
+        });
+    });
+
+    afterEach(function() {
+        bemDom.destruct(rootNode);
+    });
+
+    it('should not fire parent destruct handler when child of same type is destructed', function() {
+        var parent = rootNode.bem(ParentBlock),
+            child = parent.findChildBlock(ParentBlock),
+            spy = sinon.spy(parent, '_onDestruct');
+
+        bemDom.destruct(child.domElem);
+        spy.should.not.have.been.called;
+    });
+});
+
 provide();
 
 function createDomNode(bemjson) {

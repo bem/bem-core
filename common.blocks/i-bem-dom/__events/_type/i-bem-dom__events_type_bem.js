@@ -61,6 +61,10 @@ const EVENT_PREFIX = '__bem__',
                         instanceDomElem.length && (instance = instanceDomElem.bem(ctx));
                     }
 
+                    // Skip events that bubbled up from nested blocks of the same type (#1525)
+                    if(!params.bindSelector &&
+                        params.bindDomElem.index(e.target) < 0) return
+
                     if(instance &&
                         (!flags.propagationStoppedDomNode ||
                             !$.contains(instanceDomElem[0], flags.propagationStoppedDomNode))) {
