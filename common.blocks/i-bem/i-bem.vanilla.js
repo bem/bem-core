@@ -319,13 +319,19 @@ const BemEntity = inherit(/** @lends BemEntity.prototype */ {
      * @returns {BemEntity} this
      */
     toggleMod : function(modName, modVal1, modVal2, condition) {
-        typeof modVal1 === 'undefined' && (modVal1 = true) // boolean mod
+        if(typeof modVal1 === 'undefined') {
+            modVal1 = true // boolean mod
+        } else if(typeof modVal1 !== 'boolean') {
+            modVal1 = modVal1.toString()
+        }
 
         if(typeof modVal2 === 'undefined') {
             modVal2 = ''
         } else if(typeof modVal2 === 'boolean') {
             condition = modVal2
             modVal2 = ''
+        } else {
+            modVal2 = modVal2.toString()
         }
 
         const modVal = this.getMod(modName)

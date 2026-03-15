@@ -438,6 +438,39 @@ describe('i-bem', function() {
                     .hasMod('mod1')
                         .should.be.false;
             });
+
+            it('should work with numeric modVal', function() {
+                block.delMod('mod1');
+
+                block
+                    .toggleMod('mod1', 1)
+                    .hasMod('mod1', '1')
+                        .should.be.true;
+
+                block
+                    .toggleMod('mod1', 1)
+                    .hasMod('mod1')
+                        .should.be.false;
+
+                block
+                    .toggleMod('mod1', 1)
+                    .hasMod('mod1', '1')
+                        .should.be.true;
+            });
+
+            it('should switch numeric modVal values', function() {
+                block.setMod('mod1', 1);
+
+                block
+                    .toggleMod('mod1', 1, 2)
+                    .hasMod('mod1', '2')
+                        .should.be.true;
+
+                block
+                    .toggleMod('mod1', 1, 2)
+                    .hasMod('mod1', '1')
+                        .should.be.true;
+            });
         });
     });
 
