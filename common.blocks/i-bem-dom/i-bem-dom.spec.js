@@ -1045,6 +1045,22 @@ describe('i-bem-dom', function() {
                 spy.should.be.calledTwice;
             });
 
+            it('should find elems by boolean mod without modVal', function() {
+                getEntityIds(b1Block._elems({ elem : B1E1Elem, modName : 'bool' }))
+                    .should.be.eql([8]);
+            });
+
+            it('should cache found elems with respect to boolean mod without modVal', function() {
+                b1Block._elems({ elem : B1E1Elem, modName : 'bool' });
+                spy.should.be.calledOnce;
+
+                b1Block._elems({ elem : B1E1Elem, modName : 'bool' });
+                spy.should.be.calledOnce;
+
+                b1Block._elems(B1E1Elem);
+                spy.should.be.calledTwice;
+            });
+
             it('should not drop elems cache in case elem mods change', function() {
                 var elem = b1Block._elems(B1E1Elem).get(0);
                 spy.should.be.calledOnce;

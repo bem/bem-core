@@ -272,7 +272,7 @@ function buildElemKey(elem) {
 
     return {
         elem : elem.elem,
-        mod : buildModPostfix(elem.modName, elem.modVal)
+        mod : buildModPostfix(elem.modName, typeof elem.modVal === 'undefined' ? true : elem.modVal)
     }
 }
 
