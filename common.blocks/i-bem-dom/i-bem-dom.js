@@ -1193,6 +1193,20 @@ bemDom = {
      */
     getFromDom : function(domNode, BemDomEntity) {
         return getEntityFromDom(domNode, BemDomEntity)
+    },
+
+    /**
+     * Initializes a BEM entity on a DOM node and returns the instance
+     * @param {HTMLElement|jQuery} domNode DOM node or jQuery element
+     * @param {Function|String} Entity Entity class or entity name
+     * @param {Object} [params] Initialization parameters
+     * @returns {BemDomEntity|null}
+     */
+    initOnDom : function(domNode, Entity, params) {
+        const domElem = domNode.jquery ? domNode : $(domNode)
+        const entityName = typeof Entity === 'string' ? Entity : Entity.getEntityName()
+        const entity = initEntity(entityName, domElem, params, true)
+        return entity ? entity._setInitedMod() : null
     }
 }
 
