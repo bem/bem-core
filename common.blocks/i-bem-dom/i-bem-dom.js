@@ -645,7 +645,8 @@ const BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
      * @returns {EventManager}
      */
     _domEvents : function(ctx) {
-        return domEventManagerFactory.getEventManager(this, ctx, this.domElem)
+        const bindScope = ctx === document || ctx === window ? $(ctx) : this.domElem
+        return domEventManagerFactory.getEventManager(this, ctx, bindScope)
     },
 
     /**
@@ -681,7 +682,7 @@ const BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
         let matches
 
         domNode &&
-            (matches = domNode.className
+            (matches = String(domNode.className)
                 .match(this.__self._buildModValRE(modName)))
 
         return matches? matches[2] || true : ''
@@ -705,7 +706,7 @@ const BemDomEntity = inherit(/** @lends BemDomEntity.prototype */{
             const needDel = modVal === ''
 
             this.domElem.each(function() {
-                const className = this.className
+                const className = String(this.className)
                 let modClassName = classNamePrefix
 
                 modVal !== true && (modClassName += MOD_DELIM + modVal)
