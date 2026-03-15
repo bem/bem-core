@@ -39,6 +39,28 @@ describe('tick', function() {
             clock.tick(TICK_INTERVAL);
         });
 
+        it('should continue ticking after exception in callback', function(done) {
+            var spy = sinon.spy();
+
+            tick
+                .on('tick', function() {
+                    if(!spy.called) {
+                        spy();
+                        throw new Error('test error');
+                    }
+                    spy();
+                    tick.stop();
+                    done();
+                })
+                .start();
+
+            setTimeout(function() {
+                clock.tick(TICK_INTERVAL);
+            }, TICK_INTERVAL);
+
+            clock.tick(TICK_INTERVAL);
+        });
+
         it('should not emit tick event after .stop() in callback', function(done) {
             var spy = sinon.spy();
 

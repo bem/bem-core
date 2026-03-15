@@ -48,9 +48,11 @@ const TICK_INTERVAL = 50,
         },
 
         _onTick : function() {
-            this.emit('tick')
-
-            this._isStarted && this._scheduleTick()
+            try {
+                this.emit('tick')
+            } finally {
+                this._isStarted && this._scheduleTick()
+            }
         }
     })
 
