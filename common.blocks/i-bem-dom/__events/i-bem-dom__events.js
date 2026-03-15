@@ -47,6 +47,15 @@ const EventManager = inherit(/** @lends EventManager.prototype */{
             data = undefined
         }
 
+        const events = typeof event === 'string' ? event.split(/\s+/) : [event]
+        events.forEach(singleEvent => {
+            this._bindSingle(singleEvent, e, data, fn, _fnCtx, _isOnce, params)
+        })
+
+        return this
+    },
+
+    _bindSingle(event, origEvent, data, fn, _fnCtx, _isOnce, params) {
         let fnStorage = this._storage.get(event)
         if(!fnStorage) {
             fnStorage = new Map()
@@ -61,7 +70,7 @@ const EventManager = inherit(/** @lends EventManager.prototype */{
             const handler = this._fnWrapper(
                 _isOnce?
                     function() {
-                        _this.un(e, fn, _fnCtx)
+                        _this.un(origEvent, fn, _fnCtx)
                         fn.apply(this, arguments)
                     } :
                     fn,
@@ -73,8 +82,6 @@ const EventManager = inherit(/** @lends EventManager.prototype */{
             bindSelector && bindDomElem.is(bindSelector) && bindDomElem.on(event, data, handler)
             // FIXME: "once" won't properly work in case of nested and mixed elem with the same name
         }
-
-        return this
     },
 
     /**
@@ -105,24 +112,27 @@ const EventManager = inherit(/** @lends EventManager.prototype */{
         if(argsLen) {
             const params = this._params
             const event = this._eventBuilder(e, params)
+            const events = typeof event === 'string' ? event.split(/\s+/) : [event]
 
-            if(argsLen === 1) {
-                this._unbindByEvent(this._storage.get(event), event)
-            } else {
-                const fnId = identify(fn, _fnCtx)
-                const fnStorage = this._storage.get(event)
-                const bindDomElem = params.bindDomElem
-                const bindSelector = params.bindSelector
+            events.forEach(singleEvent => {
+                if(argsLen === 1) {
+                    this._unbindByEvent(this._storage.get(singleEvent), singleEvent)
+                } else {
+                    const fnId = identify(fn, _fnCtx)
+                    const fnStorage = this._storage.get(singleEvent)
+                    const bindDomElem = params.bindDomElem
+                    const bindSelector = params.bindSelector
 
-                let wrappedFn
-                if(wrappedFn = fnStorage && fnStorage.get(fnId))
-                    fnStorage.delete(fnId)
+                    let wrappedFn
+                    if(wrappedFn = fnStorage && fnStorage.get(fnId))
+                        fnStorage.delete(fnId)
 
-                const handler = wrappedFn || fn
+                    const handler = wrappedFn || fn
 
-                bindDomElem.off(event, params.bindSelector, handler)
-                bindSelector && bindDomElem.is(bindSelector) && bindDomElem.off(event, handler)
-            }
+                    bindDomElem.off(singleEvent, params.bindSelector, handler)
+                    bindSelector && bindDomElem.is(bindSelector) && bindDomElem.off(singleEvent, handler)
+                }
+            })
         } else {
             this._storage.forEach((fnStorage, e) => this._unbindByEvent(fnStorage, e))
         }

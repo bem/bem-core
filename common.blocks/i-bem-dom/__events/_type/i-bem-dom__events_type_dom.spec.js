@@ -157,6 +157,18 @@ describe('DOM events', function() {
                 block1.domElem.trigger('click');
                 spy4.should.not.have.been.called;
             });
+
+            it('should unbind single event from multi-event subscription', function() {
+                var multiSpy = sinon.spy();
+                block1._domEvents().on('click keypress', multiSpy);
+
+                block1._domEvents().un('click', multiSpy);
+                block1.domElem.trigger('click');
+                multiSpy.should.not.have.been.called;
+
+                block1.domElem.trigger('keypress');
+                multiSpy.should.have.been.calledOnce;
+            });
         });
 
         describe('block elems events', function() {
