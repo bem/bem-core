@@ -16,7 +16,7 @@ const symbols = {
     return str => ('' + str).replace(regexp, mapSymbol)
   }
 
-export default /** @exports */{
+export default {
   /**
    * Escape string to use in XML
    * @type Function

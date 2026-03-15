@@ -3,7 +3,7 @@
  * @description A set of helpers to work with JavaScript objects
  */
 
-export default /** @exports */{
+export default {
   /**
    * Extends a given target by
    * @param {Object} target object to extend

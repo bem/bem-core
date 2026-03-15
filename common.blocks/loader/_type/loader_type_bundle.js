@@ -30,7 +30,6 @@ const appendCss = (css) => {
 
 /**
  * Loads bundle
- * @exports
  * @param {String} id
  * @param {String} url
  * @param {Function} onSuccess

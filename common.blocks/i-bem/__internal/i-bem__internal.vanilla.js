@@ -47,7 +47,7 @@ function buildElemClassName(block, name, modName, modVal) {
         buildModPostfix(modName, modVal)
 }
 
-export default /** @exports */{
+export default {
     NAME_PATTERN,
 
     MOD_DELIM,

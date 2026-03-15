@@ -3,7 +3,7 @@
  * @description A set of helpers to work with JavaScript functions
  */
 
-export default /** @exports */{
+export default {
   /**
    * Checks whether a given object is function
    * @param {*} obj
