@@ -87,7 +87,7 @@ describe('parseModulesDefine (redefinition detection)', function() {
         assert.strictEqual(result.isRedefinition, true);
     });
 
-    it('detects redefinition: jquery pointerclick (1 dep + prev)', function() {
+    it('detects redefinition: jquery extension (1 dep + prev)', function() {
         const result = parseModulesDefine(
             "modules.define('jquery', ['next-tick'], function(provide, nextTick, $) {});"
         );
@@ -95,7 +95,7 @@ describe('parseModulesDefine (redefinition detection)', function() {
         assert.strictEqual(result.callbackParamCount, 3);
     });
 
-    it('detects redefinition: jquery pressrelease (0 deps + prev)', function() {
+    it('detects redefinition: jquery extension (0 deps + prev)', function() {
         const result = parseModulesDefine(
             "modules.define('jquery', function(provide, $) {});"
         );
@@ -139,24 +139,6 @@ describe('parseModulesDefine (redefinition detection)', function() {
 describe('parseModulesDefine (real file cross-check)', function() {
     it('real file: jquery base is now ESM (migrated)', function() {
         const source = readFileSync(resolve(ROOT, 'common.blocks/jquery/jquery.js'), 'utf8');
-        const result = parseModulesDefine(source);
-        assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
-        assert.ok(source.includes('export default'), 'should have export default');
-    });
-
-    it('real file: jquery pointerclick is now ESM (migrated)', function() {
-        const source = readFileSync(
-            resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js'), 'utf8'
-        );
-        const result = parseModulesDefine(source);
-        assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
-        assert.ok(source.includes('export default'), 'should have export default');
-    });
-
-    it('real file: jquery pressrelease is now ESM (migrated)', function() {
-        const source = readFileSync(
-            resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.js'), 'utf8'
-        );
         const result = parseModulesDefine(source);
         assert.strictEqual(result, null, 'migrated ESM file has no modules.define');
         assert.ok(source.includes('export default'), 'should have export default');
@@ -270,7 +252,7 @@ describe('scanLevel', function() {
 
     it('derives module name from filename, not file content', function() {
         const modules = scanLevel(resolve(ROOT, 'common.blocks'));
-        assert.ok(modules.has('jquery__event_type_pointerclick'),
+        assert.ok(modules.has('events__observable_type_bem-dom'),
             'Should derive module name from filename');
         const jqEntries = modules.get('jquery');
         assert.ok(jqEntries, 'jquery base should still exist');
@@ -280,8 +262,6 @@ describe('scanLevel', function() {
 
     it('finds new modules from BEM naming', function() {
         const modules = scanLevel(resolve(ROOT, 'common.blocks'));
-        assert.ok(modules.has('jquery__event_type_pointernative'));
-        assert.ok(modules.has('jquery__event_type_pointerpressrelease'));
         assert.ok(modules.has('events__observable_type_bem-dom'));
         assert.ok(modules.has('tick_start_auto'));
         assert.ok(modules.has('idle_start_auto'));
@@ -314,11 +294,6 @@ describe('buildRegistry', function() {
         assert.ok(jquery, 'jquery should exist');
         assert.strictEqual(jquery.length, 1,
             'jquery should have exactly 1 entry (only common.blocks/jquery/jquery.js)');
-        assert.ok(reg.modules.has('jquery__event_type_pointerclick'));
-        assert.ok(reg.modules.has('jquery__event_type_pointernative'));
-        assert.ok(reg.modules.has('jquery__event_type_pointerpressrelease'));
-        assert.ok(reg.modules.has('jquery__event_type_winresize'),
-            'desktop winresize should be a separate module');
     });
 
     it('detects jquery__config cross-level redefinition on desktop', function() {
@@ -377,9 +352,6 @@ describe('buildRegistry', function() {
             'i-bem-dom__init', 'i-bem-dom__init_auto',
             'i-bem-dom__events', 'i-bem-dom__events_type_bem',
             'i-bem-dom__events_type_dom', 'jquery__config',
-            'jquery__event_type_pointerclick',
-            'jquery__event_type_pointernative',
-            'jquery__event_type_pointerpressrelease',
             // desktop.blocks .js
             'ua', 'jquery__event_type_winresize',
         ];
@@ -401,7 +373,7 @@ describe('parseDepsFile', function() {
 
     it('parses mustDeps', function() {
         const result = parseDepsFile(
-            resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.deps.js')
+            resolve(ROOT, 'touch.blocks/ua/__dom/ua__dom.deps.js')
         );
         assert.ok(result);
         assert.ok(result.mustDeps.length > 0);
@@ -474,19 +446,16 @@ describe('expandBemEntity', function() {
 describe('generateBarrel', function() {
     it('generates chained barrel for module with redefinitions', function() {
         const entries = [
-            { filePath: resolve(ROOT, 'common.blocks/jquery/jquery.js'), isRedefinition: false },
-            { filePath: resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointernative.js'), isRedefinition: true },
-            { filePath: resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js'), isRedefinition: true },
+            { filePath: resolve(ROOT, 'common.blocks/jquery/__config/jquery__config.js'), isRedefinition: false },
+            { filePath: resolve(ROOT, 'desktop.blocks/jquery/__config/jquery__config.js'), isRedefinition: true },
         ];
 
-        const barrel = generateBarrel('jquery', entries, ROOT);
+        const barrel = generateBarrel('jquery__config', entries, ROOT);
         assert.ok(barrel.includes('@generated'));
-        assert.ok(barrel.includes("import _jquery_base from './common.blocks/jquery/jquery.js'"));
-        assert.ok(barrel.includes("import _jquery_redef0 from './common.blocks/jquery/__event/_type/jquery__event_type_pointernative.js'"));
-        assert.ok(barrel.includes("import _jquery_redef1 from './common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js'"));
-        assert.ok(barrel.includes('let _module = _jquery_base;'));
-        assert.ok(barrel.includes('_module = _jquery_redef0(_module);'));
-        assert.ok(barrel.includes('_module = _jquery_redef1(_module);'));
+        assert.ok(barrel.includes("import _jquery__config_base from './common.blocks/jquery/__config/jquery__config.js'"));
+        assert.ok(barrel.includes("import _jquery__config_redef0 from './desktop.blocks/jquery/__config/jquery__config.js'"));
+        assert.ok(barrel.includes('let _module = _jquery__config_base;'));
+        assert.ok(barrel.includes('_module = _jquery__config_redef0(_module);'));
         assert.ok(barrel.includes('export default _module;'));
     });
 
@@ -518,11 +487,11 @@ describe('generateBarrel', function() {
 
     it('barrel does NOT use side-effect imports', function() {
         const entries = [
-            { filePath: resolve(ROOT, 'common.blocks/jquery/jquery.js'), isRedefinition: false },
-            { filePath: resolve(ROOT, 'common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js'), isRedefinition: true },
+            { filePath: resolve(ROOT, 'common.blocks/jquery/__config/jquery__config.js'), isRedefinition: false },
+            { filePath: resolve(ROOT, 'desktop.blocks/jquery/__config/jquery__config.js'), isRedefinition: true },
         ];
 
-        const barrel = generateBarrel('jquery', entries, ROOT);
+        const barrel = generateBarrel('jquery__config', entries, ROOT);
         const sideEffectImport = /^import\s+'/m;
         assert.ok(!sideEffectImport.test(barrel),
             'barrel should not contain side-effect imports');
