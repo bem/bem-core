@@ -28,7 +28,8 @@ const EVENT_PREFIX = '__bem__',
             (typeof e === 'object'?
                 e instanceof events.Event?
                     e.type :
-                    bemInternal.buildModPostfix(e.modName, e.modVal) :
+                    /* treat modVal: false as modVal: '' (modifier removal) — #1457 */
+                    bemInternal.buildModPostfix(e.modName, e.modVal === false? '' : e.modVal) :
                 e);
 
         specialEvents[event] ||

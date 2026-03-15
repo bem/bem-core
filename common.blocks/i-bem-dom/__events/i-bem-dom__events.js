@@ -302,7 +302,8 @@ const EventManagerFactory = inherit(/** @lends EventManagerFactory.prototype */{
                         bindCtx.elem.getName() :
                         bindCtx.elem
                     modName = bindCtx.modName
-                    modVal = bindCtx.modVal
+                    /* treat modVal: false as modVal: '' (modifier removal) — #1457 */
+                    modVal = bindCtx.modVal === false? '' : bindCtx.modVal
                 } else if(bindCtx.getName() === bindCtx.getEntityName()) { // block class
                     blockName = bindCtx.getName()
                 } else { // elem class

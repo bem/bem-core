@@ -107,7 +107,9 @@ function modFnsToProps(prefix, modFns, props) {
 }
 
 function buildCheckMod(modName, modVal) {
-    return modVal?
+    /* treat modVal: false as modVal: '' (modifier removal) — #1457 */
+    if(modVal === false) modVal = ''
+    return modVal != null?
         Array.isArray(modVal)?
             function(block) {
                 for(const val of modVal)
