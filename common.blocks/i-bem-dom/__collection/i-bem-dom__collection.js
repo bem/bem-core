@@ -94,7 +94,29 @@ const BemDomCollection = inherit(BemCollection, /** @lends BemDomCollection.prot
      * @param {Function|String|Object} Elem Element class or name or description elem, modName, modVal
      * @returns {BemDomCollection}
      */
-    findMixedElems : buildProxyMethodForMany('findMixedElems')
+    findMixedElems : buildProxyMethodForMany('findMixedElems'),
+
+    /**
+     * Checks whether any entity in collection has a modifier.
+     * @param {String} modName Modifier name
+     * @param {String|Boolean} [modVal] Modifier value
+     * @returns {Boolean}
+     */
+    hasMod : buildAggregateProxyFn('some', 'hasMod'),
+
+    /**
+     * Returns an array of modifier values from all entities in collection.
+     * @param {String} modName Modifier name
+     * @returns {Array}
+     */
+    getMod : buildMapProxyFn('getMod'),
+
+    /**
+     * Checks whether any entity in collection contains the specified entity.
+     * @param {BemDomEntity} entity entity to check
+     * @returns {Boolean}
+     */
+    containsEntity : buildAggregateProxyFn('some', 'containsEntity')
 })
 
 function collectionMapMethod(collection, methodName, args) {
@@ -104,6 +126,20 @@ function collectionMapMethod(collection, methodName, args) {
 function buildProxyMethodForOne(methodName) {
     return function() {
         return new BemDomCollection(collectionMapMethod(this, methodName, arguments))
+    }
+}
+
+function buildAggregateProxyFn(arrayMethodName, entityMethodName) {
+    return function(...args) {
+        return this._entities[arrayMethodName]((entity) =>
+            entity[entityMethodName].apply(entity, args))
+    }
+}
+
+function buildMapProxyFn(entityMethodName) {
+    return function(...args) {
+        return this._entities.map((entity) =>
+            entity[entityMethodName].apply(entity, args))
     }
 }
 
