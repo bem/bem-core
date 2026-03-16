@@ -68,7 +68,8 @@ function scanDirectory(dir, modules, levelDir) {
         }
 
         if (!stat.isFile()) continue
-        // Only consider JS source files — skip deps, spec, test, templates, i18n, etc.
+        // Consider JS source files and .post.css files
+        const isPostCss = entry.endsWith('.post.css')
         const isVanillaJs = entry.endsWith('.vanilla.js')
         const isPlainJs = !isVanillaJs && entry.endsWith('.js')
             && !entry.endsWith('.deps.js')
@@ -78,15 +79,16 @@ function scanDirectory(dir, modules, levelDir) {
             && !entry.endsWith('.bemjson.js')
             && !entry.endsWith('.test.js')
             && !entry.endsWith('.i18n.js')
-        if (!isVanillaJs && !isPlainJs) continue
+        if (!isVanillaJs && !isPlainJs && !isPostCss) continue
         // Module name is derived from the filename per BEM naming convention
         const name = filePathToModuleName(fullPath, levelDir)
         if (!name) continue
+        const suffix = isPostCss ? '.post.css' : (isVanillaJs ? '.vanilla.js' : '.js')
         const existing = modules.get(name) || []
         existing.push({
             name,
             filePath: fullPath,
-            suffix: isVanillaJs ? '.vanilla.js' : '.js',
+            suffix,
             levelDir,
         })
         modules.set(name, existing)
@@ -196,8 +198,8 @@ function filePathToModuleName(filePath, levelDir) {
     const rel = relative(levelDir, filePath)
     // Get the filename without extensions
     const fileName = basename(rel)
-    // Strip .vanilla.js or .js
-    const name = fileName.replace(/\.(vanilla\.)?js$/, '')
+    // Strip .vanilla.js, .js, or .post.css
+    const name = fileName.replace(/\.(vanilla\.js|js|post\.css)$/, '')
     return name || null
 }
 
@@ -446,7 +448,32 @@ function buildRegistry(levels, rootDir) {
         }
     }
 
-    return { modules: allModules, deps: depsMap, redefinitions }
+    // Separate CSS entries from JS entries.
+    // CSS files are side-effect imports, not module redefinitions.
+    const cssModules = new Map()
+    for (const [name, entries] of allModules) {
+        const cssEntries = entries.filter(e => e.suffix === '.post.css')
+        const jsEntries = entries.filter(e => e.suffix !== '.post.css')
+        if (cssEntries.length > 0) {
+            cssModules.set(name, cssEntries)
+        }
+        if (jsEntries.length > 0) {
+            allModules.set(name, jsEntries)
+        } else if (cssEntries.length > 0) {
+            // CSS-only module — keep in allModules so it can be resolved
+            allModules.set(name, [])
+        }
+    }
+
+    // Recompute redefinitions after removing CSS entries
+    redefinitions.clear()
+    for (const [name, entries] of allModules) {
+        if (entries.length > 1) {
+            redefinitions.set(name, entries)
+        }
+    }
+
+    return { modules: allModules, deps: depsMap, redefinitions, cssModules }
 }
 
 /**
@@ -559,20 +586,44 @@ export default function bemLevels(options = {}) {
             const moduleName = id.slice(VIRTUAL_PREFIX.length)
             const reg = getRegistry()
             const entries = reg.modules.get(moduleName)
-            if (!entries || entries.length === 0) {
+            const cssEntries = reg.cssModules ? reg.cssModules.get(moduleName) : null
+
+            if ((!entries || entries.length === 0) && !cssEntries) {
                 this.error(`BEM module not found: ${moduleName}`)
                 return null
             }
 
-            // If the module has redefinitions, generate a barrel
-            if (entries.length > 1) {
-                return generateBarrel(moduleName, entries, rootDir)
+            // Generate CSS side-effect imports
+            const cssImports = []
+            if (cssEntries) {
+                for (const cssEntry of cssEntries) {
+                    const cssPath = './' + relative(rootDir, cssEntry.filePath).replace(/\\/g, '/')
+                    cssImports.push(`import '${cssPath}';`)
+                }
             }
 
-            // Single definition — just re-export
+            // CSS-only module (no JS)
+            if (!entries || entries.length === 0) {
+                return cssImports.join('\n') + '\n'
+            }
+
+            // If the module has redefinitions, generate a barrel
+            if (entries.length > 1) {
+                const barrel = generateBarrel(moduleName, entries, rootDir)
+                if (cssImports.length > 0) {
+                    return cssImports.join('\n') + '\n' + barrel
+                }
+                return barrel
+            }
+
+            // Single definition — just re-export, plus CSS
             const entry = entries[0]
             const entryPath = './' + relative(rootDir, entry.filePath).replace(/\\/g, '/')
-            return `export { default } from '${entryPath}';\n`
+            const jsExport = `export { default } from '${entryPath}';\n`
+            if (cssImports.length > 0) {
+                return cssImports.join('\n') + '\n' + jsExport
+            }
+            return jsExport
         },
 
         // Invalidate registry on file changes in BEM levels

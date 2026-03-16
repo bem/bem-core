@@ -16,6 +16,11 @@
   "engines": {
     "node": ">=20"
   },
+  "exports": {
+    ".": "./dist/desktop/bem-core.mjs",
+    "./build/plugins/*": "./build/plugins/*",
+    "./*": "./*"
+  },
   "peerDependencies": {
     "jquery": "^4.0.0"
   },
