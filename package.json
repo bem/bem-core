@@ -37,7 +37,7 @@
     "mocha": "^11.7.5",
     "sinon": "^21.0.1",
     "sinon-chai": "^4.0.1",
-    "vite": "^7.0.0"
+    "vite": "^8.0.1"
   },
   "scripts": {
     "lint": "eslint .",

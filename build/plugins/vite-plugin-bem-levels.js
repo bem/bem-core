@@ -616,14 +616,18 @@ export default function bemLevels(options = {}) {
                 return barrel
             }
 
-            // Single definition — just re-export, plus CSS
+            // Single definition — re-export or side-effect import
             const entry = entries[0]
             const entryPath = './' + relative(rootDir, entry.filePath).replace(/\\/g, '/')
-            const jsExport = `export { default } from '${entryPath}';\n`
+            const source = readFileSync(entry.filePath, 'utf8')
+            const hasDefaultExport = /export\s+default\b/.test(source)
+            const jsCode = hasDefaultExport
+                ? `export { default } from '${entryPath}';\n`
+                : `import '${entryPath}';\n`
             if (cssImports.length > 0) {
-                return cssImports.join('\n') + '\n' + jsExport
+                return cssImports.join('\n') + '\n' + jsCode
             }
-            return jsExport
+            return jsCode
         },
 
         // Invalidate registry on file changes in BEM levels
